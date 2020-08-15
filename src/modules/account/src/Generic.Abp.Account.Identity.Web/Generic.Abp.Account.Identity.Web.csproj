@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+	<Import Project="..\..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFramework>netcoreapp3.1</TargetFramework>
+		<OutputType>Library</OutputType>
+		<IsPackable>true</IsPackable>
+		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Bootstrap" Version="3.0.5" />
+		<PackageReference Include="Volo.Abp.AutoMapper" Version="3.0.5" />
+		<PackageReference Include="Volo.Abp.Identity.HttpApi" Version="3.0.5" />
+		<PackageReference Include="Volo.Abp.PermissionManagement.Web" Version="3.0.5" />
+	</ItemGroup>
+
+
+	<ItemGroup>
+		<EmbeddedResource Include="Pages\**\*.css" />
+		<EmbeddedResource Include="Pages\**\*.js" />
+		<Compile Remove="wwwroot\**" />
+		<Content Remove="wwwroot\**" />
+		<EmbeddedResource Remove="wwwroot\**" />
+		<None Remove="wwwroot\**" />
+	</ItemGroup>
+
+
+	<ItemGroup>
+		<None Include="Pages\Identity\Roles\CreateModal.cshtml" />
+		<None Include="Pages\Identity\Roles\EditModal.cshtml" />
+		<None Include="Pages\Identity\Roles\Index.cshtml" />
+		<None Include="Pages\Identity\Users\CreateModal.cshtml" />
+		<None Include="Pages\Identity\Users\EditModal.cshtml" />
+		<None Include="Pages\Identity\Users\Index.cshtml" />
+		<None Include="Pages\Identity\_ViewImports.cshtml" />
+	</ItemGroup>
+
+</Project>

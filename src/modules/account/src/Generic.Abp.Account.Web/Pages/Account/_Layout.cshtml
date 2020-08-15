@@ -1,0 +1,15 @@
+﻿@using Volo.Abp.AspNetCore.Mvc.UI.Theming
+@inject IThemeManager ThemeManager
+@{ Layout = ThemeManager.CurrentTheme.GetAccountLayout(); }
+
+<div class="container">
+    <div class="row">
+        <div class="col mx-auto" style="max-width: 440px">
+            @RenderBody()
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    @await RenderSectionAsync("innerScripts", false)
+}

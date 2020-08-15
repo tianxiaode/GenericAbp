@@ -1,0 +1,48 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+	<Import Project="..\..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFramework>netcoreapp3.1</TargetFramework>
+		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+		<OutputType>Library</OutputType>
+		<IsPackable>true</IsPackable>
+		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.AutoMapper" Version="3.0.5" />
+		<PackageReference Include="Volo.Abp.Identity.AspNetCore" Version="3.0.5" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Include="Pages\**\*.css" />
+		<EmbeddedResource Include="Pages\**\*.js" />
+		<Compile Remove="wwwroot\**" />
+		<Content Remove="wwwroot\**" />
+		<EmbeddedResource Remove="wwwroot\**" />
+		<None Remove="wwwroot\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="Modules\Account\Components\Toolbar\UserLoginLink\Default.cshtml" />
+		<None Include="Pages\Account\Index.cshtml" />
+		<None Include="Pages\Account\LoggedOut.cshtml" />
+		<None Include="Pages\Account\Login.cshtml" />
+		<None Include="Pages\Account\Logout.cshtml" />
+		<None Include="Pages\Account\Manage.cshtml" />
+		<None Include="Pages\Account\Register.cshtml" />
+		<None Include="Pages\Account\SendSecurityCode.cshtml" />
+		<None Include="Pages\Account\_Layout.cshtml" />
+		<None Include="Pages\Account\_ViewImports.cshtml" />
+		<None Include="Pages\Account\_ViewStart.cshtml" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Generic.Abp.Account.HttpApi\Generic.Abp.Account.HttpApi.csproj" />
+		<ProjectReference Include="..\Generic.Abp.Account.Identity.Web\Generic.Abp.Account.Identity.Web.csproj" />
+	</ItemGroup>
+
+
+</Project>
