@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="..\..\..\..\common.props" />
+
+	<PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+		<RootNamespace />
+  </PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.AspNetCore.Mvc" Version="3.0.5" />
+
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Generic.Abp.ExtMenu.Application\Generic.Abp.ExtMenu.Application.csproj" />
+	</ItemGroup>
+
+</Project>

@@ -13,13 +13,13 @@ namespace Generic.Abp.Themes
             switch (name)
             {
                 case StandardLayouts.Application:
-                    return "~/Themes/Layouts/Application.cshtml";
+                    return "~/Themes/Generic/Layouts/Application.cshtml";
                 case StandardLayouts.Account:
-                    return "~/Themes/Layouts/Account.cshtml";
+                    return "~/Themes/Generic/Layouts/Account.cshtml";
                 case StandardLayouts.Empty:
-                    return "~/Themes/Layouts/Empty.cshtml";
+                    return "~/Themes/Generic/Layouts/Empty.cshtml";
                 default:
-                    return fallbackToDefault ? "~/Themes/Layouts/Application.cshtml" : null;
+                    return fallbackToDefault ? "~/Themes/Generic/Layouts/Application.cshtml" : null;
             }
         }
     }

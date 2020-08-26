@@ -1,0 +1,4 @@
+﻿@model Generic.Abp.Themes.Shared.Toolbars.Toolbar
+@foreach (var toolbarItem in Model.Items.OrderBy(i => i.Order))
+{
+<li class="nav-item">@(await Component.InvokeAsync(toolbarItem.ComponentType))</li>}

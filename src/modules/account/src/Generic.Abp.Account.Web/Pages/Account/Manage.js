@@ -2,7 +2,7 @@
 
     var l = abp.localization.getResource('AbpAccount');
 
-    var _profileService = volo.abp.identity.profile;
+    var profileService = volo.abp.identity.profile;
 
     $("#ChangePasswordForm").submit(function (e) {
         e.preventDefault();
@@ -22,7 +22,7 @@
             return;
         }
 
-        _profileService.changePassword(
+        profileService.changePassword(
             input
         ).then(function (result) {
             abp.message.success(l("PasswordChanged"));
@@ -39,7 +39,7 @@
 
         var input = $("#PersonalSettingsForm").serializeFormToObject().personalSettingsInfoModel;
 
-        _profileService.update(
+        profileService.update(
             input
         ).then(function (result) {
             abp.notify.success(l("PersonalSettingsSaved"));

@@ -23,17 +23,17 @@ namespace Generic.Abp.Account.Identity.Web.Navigation
 
                 var l = context.GetLocalizer<IdentityResource>();
 
-                var identityMenuItem = new ApplicationMenuItem(IdentityMenuNames.GroupName, l["Menu:IdentityManagement"], icon: "fa fa-id-card-o");
-                administrationMenu.AddItem(identityMenuItem);
+                //var identityMenuItem = new ApplicationMenuItem(IdentityMenuNames.GroupName, l["Menu:IdentityManagement"], icon: "fa fa-id-card-o");
+                //administrationMenu.AddItem(identityMenuItem);
 
                 if (hasRolePermission)
                 {
-                    identityMenuItem.AddItem(new ApplicationMenuItem(IdentityMenuNames.Roles, l["Roles"], url: "~/Identity/Roles"));
+                    administrationMenu.AddItem(new ApplicationMenuItem(IdentityMenuNames.Roles, l["Roles"], url: "~/Identity/Roles"));
                 }
 
                 if (hasUserPermission)
                 {
-                    identityMenuItem.AddItem(new ApplicationMenuItem(IdentityMenuNames.Users, l["Users"], url: "~/Identity/Users"));
+                    administrationMenu.AddItem(new ApplicationMenuItem(IdentityMenuNames.Users, l["Users"], url: "~/Identity/Users"));
                 }
             }
         }

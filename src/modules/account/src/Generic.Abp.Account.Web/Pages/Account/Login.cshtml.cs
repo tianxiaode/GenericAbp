@@ -125,7 +125,8 @@ namespace Generic.Abp.Account.Web.Pages.Account
 
             //TODO: Find a way of getting user's id from the logged in user and do not query it again like that!
             var user = await UserManager.FindByNameAsync(LoginInput.UserNameOrEmailAddress) ??
-                       await UserManager.FindByEmailAsync(LoginInput.UserNameOrEmailAddress);
+                       await UserManager.FindByEmailAsync(LoginInput.UserNameOrEmailAddress) ??
+                    UserManager.Users.FirstOrDefault(m => m.PhoneNumber == LoginInput.UserNameOrEmailAddress);
 
             Debug.Assert(user != null, nameof(user) + " != null");
 

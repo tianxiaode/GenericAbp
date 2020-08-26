@@ -9,7 +9,7 @@ using Volo.Abp.VirtualFileSystem;
 namespace Generic.Abp.Account.IdentityServer.Web
 {
     [DependsOn(
-        typeof(AccountWebModule),
+        typeof(GenericAccountWebModule),
         typeof(AbpIdentityServerDomainModule)
         )]
     public class GenericAbpAccountWebIdentityServerModule : AbpModule
@@ -31,7 +31,7 @@ namespace Generic.Abp.Account.IdentityServer.Web
         {
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
-                options.FileSets.AddEmbedded<GenericAbpAccountWebIdentityServerModule>("Generic.Abp.Account.Web");
+                options.FileSets.AddEmbedded<GenericAbpAccountWebIdentityServerModule>("Generic.Abp.Account.IdentityServer.Web");
             });
 
             //TODO: Try to reuse from AbpIdentityAspNetCoreModule

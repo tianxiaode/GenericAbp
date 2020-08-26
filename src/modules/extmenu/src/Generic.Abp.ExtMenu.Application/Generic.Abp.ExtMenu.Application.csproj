@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="..\..\..\..\common.props" />
+
+	<PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+		<RootNamespace />
+  </PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.PermissionManagement.Application" Version="3.0.5" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Generic.Abp.ExtMenu.Application.Contracts\Generic.Abp.ExtMenu.Application.Contracts.csproj" />
+	</ItemGroup>
+
+</Project>

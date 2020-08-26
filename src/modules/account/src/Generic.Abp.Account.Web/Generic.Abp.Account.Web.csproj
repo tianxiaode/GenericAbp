@@ -14,35 +14,30 @@
 	<ItemGroup>
 		<PackageReference Include="Volo.Abp.AutoMapper" Version="3.0.5" />
 		<PackageReference Include="Volo.Abp.Identity.AspNetCore" Version="3.0.5" />
+		<PackageReference Include="Volo.Abp.Emailing" Version="3.0.5" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<EmbeddedResource Include="Pages\**\*.css" />
+		<EmbeddedResource Include="Modules\**\*.js" />
+		<EmbeddedResource Include="Modules\**\*.css" />
 		<EmbeddedResource Include="Pages\**\*.js" />
-		<Compile Remove="wwwroot\**" />
-		<Content Remove="wwwroot\**" />
-		<EmbeddedResource Remove="wwwroot\**" />
-		<None Remove="wwwroot\**" />
+		<EmbeddedResource Include="Pages\**\*.css" />
+		<Content Remove="Modules\**\*.js" />
+		<Content Remove="Modules\**\*.css" />
+		<Content Remove="Pages\**\*.js" />
+		<Content Remove="Pages\**\*.css" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Include="Modules\Account\Components\Toolbar\UserLoginLink\Default.cshtml" />
-		<None Include="Pages\Account\Index.cshtml" />
-		<None Include="Pages\Account\LoggedOut.cshtml" />
-		<None Include="Pages\Account\Login.cshtml" />
-		<None Include="Pages\Account\Logout.cshtml" />
-		<None Include="Pages\Account\Manage.cshtml" />
-		<None Include="Pages\Account\Register.cshtml" />
-		<None Include="Pages\Account\SendSecurityCode.cshtml" />
-		<None Include="Pages\Account\_Layout.cshtml" />
-		<None Include="Pages\Account\_ViewImports.cshtml" />
-		<None Include="Pages\Account\_ViewStart.cshtml" />
+	  <None Remove="Pages\Account\ForgotPassword.js" />
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\..\theme\src\Generic.Abp.Themes.Shared\Generic.Abp.Themes.Shared.csproj" />
 		<ProjectReference Include="..\Generic.Abp.Account.HttpApi\Generic.Abp.Account.HttpApi.csproj" />
-		<ProjectReference Include="..\Generic.Abp.Account.Identity.Web\Generic.Abp.Account.Identity.Web.csproj" />
 	</ItemGroup>
+
+
 
 
 </Project>

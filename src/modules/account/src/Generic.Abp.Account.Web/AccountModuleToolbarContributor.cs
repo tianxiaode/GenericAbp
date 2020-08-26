@@ -1,4 +1,4 @@
-﻿using Generic.Abp.Themes.Toolbars;
+﻿using Generic.Abp.Themes.Shared.Toolbars;
 using System.Threading.Tasks;
 
 namespace Generic.Abp.Account.Web

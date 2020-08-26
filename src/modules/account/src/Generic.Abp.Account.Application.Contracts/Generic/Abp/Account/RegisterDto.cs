@@ -22,6 +22,9 @@ namespace Generic.Abp.Account
         [DisableAuditing]
         public string Password { get; set; }
 
+        [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxPhoneNumberLength))]
+        public string PhoneNumber { get; set; }
+
         [Required]
         public string AppName { get; set; }
     }

@@ -11,14 +11,34 @@
         <abp-modal-body>
             <abp-input asp-for="Role.Id" />
             <abp-input asp-for="Role.ConcurrencyStamp" />
-            @if (Model.Role.IsStatic)
-            {
-<abp-input asp-for="Role.Name" readonly="true" /> }
-else
-{
-<abp-input asp-for="Role.Name" />}
-            <abp-input asp-for="Role.IsDefault" />
-            <abp-input asp-for="Role.IsPublic" />
+            <div class="mb-3 mt-3 row">
+                <label class="col-sm-3 col-form-label">@L["DisplayName:RoleName"]<span class="text-danger">*</span></label>
+                <div class="col-sm-9">
+                    <input type="text" asp-for="Role.Name" class="form-control" readonly="@Model.Role.IsStatic">
+                    <div class="valid-feedback d-flex">
+                        <span asp-validation-for="Role.Name" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-check m-3">
+                        <input class="form-check-input" type="checkbox" asp-for="Role.IsDefault">
+                        <label class="form-check-label">
+                            @L["DisplayName:IsDefault"]
+                        </label>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-check m-3">
+                        <input class="form-check-input" type="checkbox" asp-for="Role.IsPublic">
+                        <label class="form-check-label">
+                            @L["DisplayName:IsPublic"]
+                        </label>
+                    </div>
+                </div>
+            </div>
+
         </abp-modal-body>
         <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)"></abp-modal-footer>
     </abp-modal>

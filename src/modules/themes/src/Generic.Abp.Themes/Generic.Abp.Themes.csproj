@@ -18,35 +18,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Include="Areas\_ViewStart.cshtml" />
-		<None Include="Pages\Account\_ViewStart.cshtml" />
-		<None Include="Pages\Shared\Components\AbpApplicationPath\Default.cshtml" />
-		<None Include="Pages\Shared\Components\AbpPageSearchBox\Default.cshtml" />
-		<None Include="Pages\Shared\Components\AbpPageSearchBox\_ViewImports.cshtml" />
-		<None Include="Pages\Shared\Components\AbpPageToolbar\Button\Default.cshtml" />
-		<None Include="Pages\Shared\Components\AbpPageToolbar\Default.cshtml" />
-		<None Include="Pages\Shared\Components\AbpPageToolbar\_ViewImports.cshtml" />
-		<None Include="Pages\_ViewStart.cshtml" />
-		<None Include="Themes\Components\Brand\Default.cshtml" />
-		<None Include="Themes\Components\MainNavbar\Default.cshtml" />
-		<None Include="Themes\Components\Menu\Default.cshtml" />
-		<None Include="Themes\Components\Menu\_MenuItem.cshtml" />
-		<None Include="Themes\Components\PageAlerts\Default.cshtml" />
-		<None Include="Themes\Components\Toolbar\Default.cshtml" />
-		<None Include="Themes\Components\Toolbar\LanguageSwitch\Default.cshtml" />
-		<None Include="Themes\Components\Toolbar\UserMenu\Default.cshtml" />
-		<None Include="Themes\Layouts\Account.cshtml" />
-		<None Include="Themes\Layouts\Application.cshtml" />
-		<None Include="Themes\Layouts\Empty.cshtml" />
-		<None Include="Views\Error\Default.cshtml" />
-		<None Include="Views\_ViewStart.cshtml" />
+		<Content Remove="wwwroot\**\*.*" />
 	</ItemGroup>
-
 
 	<ItemGroup>
-		<PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Bundling" Version="3.0.5" />
-		<PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy" Version="3.0.5" />
-		<PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Widgets" Version="3.0.5" />
+		<ProjectReference Include="..\Generic.Abp.Themes.Shared\Generic.Abp.Themes.Shared.csproj" />
 	</ItemGroup>
+
 
 </Project>

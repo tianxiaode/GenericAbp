@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="..\..\..\..\common.props" />
+
+	<PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+		<RootNamespace />
+  </PropertyGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Include="Generic\Abp\ExtMenu\Localization\ExtMenu\*.json" />
+		<Content Remove="Generic\Abp\ExtMenu\Localization\ExtMenu\*.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Ddd.Application.Contracts" Version="3.0.5" />
+	</ItemGroup>
+
+
+</Project>

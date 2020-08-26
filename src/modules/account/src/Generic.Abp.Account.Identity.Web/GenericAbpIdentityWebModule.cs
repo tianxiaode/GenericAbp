@@ -1,4 +1,5 @@
 ﻿using Generic.Abp.Account.Identity.Web.Navigation;
+using Generic.Abp.Themes.Shared;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.Localization;
@@ -10,16 +11,20 @@ using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.Web;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
-using Generic.Abp.Themes;
 
 namespace Generic.Abp.Account.Identity.Web
 {
     [DependsOn(typeof(AbpIdentityHttpApiModule),
         typeof(AbpAspNetCoreMvcUiBootstrapModule),
         typeof(AbpAutoMapperModule),
-        typeof(GenericAbpThemesModule),
-        typeof(AbpPermissionManagementWebModule)
+        typeof(AbpPermissionManagementWebModule),
+        typeof(GenericAbpThemeSharedModule)
     )]
+    //[DependsOn(typeof(AbpIdentityHttpApiModule))]
+    //[DependsOn(typeof(AbpAspNetCoreMvcUiBootstrapModule))]
+    //[DependsOn(typeof(AbpAutoMapperModule))]
+    //[DependsOn(typeof(AbpPermissionManagementWebModule))]
+    //[DependsOn(typeof(AbpAspNetCoreMvcUiThemeSharedModule))]
     public class GenericAbpIdentityWebModule : AbpModule
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)
@@ -44,7 +49,7 @@ namespace Generic.Abp.Account.Identity.Web
 
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
-                options.FileSets.AddEmbedded<GenericAbpIdentityWebModule>("Generic.Abp.Identity.Web");
+                options.FileSets.AddEmbedded<GenericAbpIdentityWebModule>("Generic.Abp.Account.Identity.Web");
             });
 
             context.Services.AddAutoMapperObjectMapper<GenericAbpIdentityWebModule>();

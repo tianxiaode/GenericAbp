@@ -78,7 +78,7 @@ namespace Generic.Abp.Account.Identity.Web.Pages.Identity.Users
             [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxPhoneNumberLength))]
             public string PhoneNumber { get; set; }
 
-            public bool TwoFactorEnabled { get; set; } = true;
+            public bool TwoFactorEnabled { get; set; } = false;
 
             public bool LockoutEnabled { get; set; } = true;
         }

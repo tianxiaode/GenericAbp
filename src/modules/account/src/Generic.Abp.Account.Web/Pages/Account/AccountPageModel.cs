@@ -19,7 +19,7 @@ namespace Generic.Abp.Account.Web.Pages.Account
         protected AccountPageModel()
         {
             LocalizationResourceType = typeof(AccountResource);
-            ObjectMapperContext = typeof(AccountWebModule);
+            ObjectMapperContext = typeof(GenericAccountWebModule);
         }
 
         protected virtual RedirectResult RedirectSafely(string returnUrl, string returnUrlHash = null)

@@ -6,11 +6,7 @@ namespace Generic.Abp.Themes.Bundling
     {
         public override void ConfigureBundle(BundleConfigurationContext context)
         {
-            context.Files.AddRange(new[]
-            {
-                "/libs/fontawesome/css/all.min.css",
-                "/libs/bootstrap5/css/bootstrap.min.css"
-            });
+            context.Files.Add("/themes/generic/layout.css");
         }
     }
 }

@@ -12,6 +12,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="3.1.5" />
 		<PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Bootstrap" Version="3.0.5" />
 		<PackageReference Include="Volo.Abp.AutoMapper" Version="3.0.5" />
 		<PackageReference Include="Volo.Abp.Identity.HttpApi" Version="3.0.5" />
@@ -20,23 +21,23 @@
 
 
 	<ItemGroup>
-		<EmbeddedResource Include="Pages\**\*.css" />
 		<EmbeddedResource Include="Pages\**\*.js" />
-		<Compile Remove="wwwroot\**" />
-		<Content Remove="wwwroot\**" />
-		<EmbeddedResource Remove="wwwroot\**" />
-		<None Remove="wwwroot\**" />
+		<EmbeddedResource Include="Pages\**\*.css" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Remove="Pages\**\*.js" />
+		<Content Remove="Pages\**\*.css" />
+		<Content Remove="compilerconfig.json" />
+		<Content Remove="compilerconfig.json.defaults" />
+		<None Include="compilerconfig.json" />
 	</ItemGroup>
 
 
 	<ItemGroup>
-		<None Include="Pages\Identity\Roles\CreateModal.cshtml" />
-		<None Include="Pages\Identity\Roles\EditModal.cshtml" />
-		<None Include="Pages\Identity\Roles\Index.cshtml" />
-		<None Include="Pages\Identity\Users\CreateModal.cshtml" />
-		<None Include="Pages\Identity\Users\EditModal.cshtml" />
-		<None Include="Pages\Identity\Users\Index.cshtml" />
-		<None Include="Pages\Identity\_ViewImports.cshtml" />
+		<ProjectReference Include="..\..\..\theme\src\Generic.Abp.Themes.Shared\Generic.Abp.Themes.Shared.csproj" />
 	</ItemGroup>
+
+
 
 </Project>
