@@ -4,11 +4,14 @@
 @using Generic.Abp.Account.Localization
 @using Generic.Abp.Account.Settings
 @using Volo.Abp.AspNetCore.Mvc.UI.Layout
+@using Volo.Abp.AspNetCore.Mvc.UI.Theming
+@inject IThemeManager ThemeManager
 @model Generic.Abp.Account.Web.Pages.Account.LoginModel
 @inject IHtmlLocalizer<AccountResource> L
 @inject ISettingProvider SettingProvider
 @inject IPageLayout PageLayout
-@{ PageLayout.Content.Title = L["Login"].Value; }
+@{ PageLayout.Content.Title = L["Login"].Value; 
+	Layout = ThemeManager.CurrentTheme.GetAccountLayout(); }
 
 @if (Model.EnableLocalLogin)
 {

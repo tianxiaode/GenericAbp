@@ -7,7 +7,6 @@ namespace Generic.Abp.Helper
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<FileUploadOption>(context.Services.GetConfiguration().GetSection("Settings"));
 
 
         }

@@ -7,7 +7,9 @@ namespace Generic.Abp.Enumeration
 {
     public class Enumeration: IEnumeration
     {
-        public string Name { get; private set; }
+        public string Name { get; }
+
+        public string ResourceName { get; set; }
 
         public int Id { get; }
 

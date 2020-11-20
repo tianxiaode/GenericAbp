@@ -1,12 +1,10 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Options;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using Generic.Abp.Enumeration.Localization;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 
@@ -20,7 +18,6 @@ namespace Generic.Abp.Enumeration
             IOptions<EnumerationOptions> enumOptions
             )
         {
-            LocalizationResource = typeof(EnumerationResource);
             Options = enumOptions.Value;
         }
 
@@ -29,7 +26,6 @@ namespace Generic.Abp.Enumeration
             var list = new List<EnumDto>();
             foreach (var type in Options.Resources)
             {
-                Logger.LogInformation($"{type.FullName}");
                 var fieldInfo = type.GetFields(BindingFlags.Public | BindingFlags.Static).Where(m =>
                 {
                     var fi = (Enumeration)m.GetValue(null);
@@ -53,7 +49,8 @@ namespace Generic.Abp.Enumeration
                         Type = type.Name.ToCamelCase(),
                         Text = $"{type.Name}.{info.Name}",
                         Value = e.Id,
-                        IsDefault = e.IsDefault
+                        IsDefault = e.IsDefault,
+                        ResourceName = e.ResourceName
                     }
 
                 );

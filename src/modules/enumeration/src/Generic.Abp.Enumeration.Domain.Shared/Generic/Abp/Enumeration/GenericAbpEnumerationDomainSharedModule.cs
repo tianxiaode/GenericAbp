@@ -1,19 +1,15 @@
-﻿using Generic.Abp.Enumeration.Localization;
-using Volo.Abp.Localization;
-using Volo.Abp.Modularity;
+﻿using Volo.Abp.Modularity;
+using Volo.Abp.Validation;
 
 namespace Generic.Abp.Enumeration
 {
-    [DependsOn(typeof(AbpLocalizationModule))]
+    [DependsOn(
+            typeof(AbpValidationModule)
+        )]
     public class GenericAbpEnumerationDomainSharedModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<AbpLocalizationOptions>(options =>
-            {
-                options.Resources
-                    .Add<EnumerationResource>("en");
-            });
 
             Configure<EnumerationOptions>(options =>
             {

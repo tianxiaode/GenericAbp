@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Generic.Abp.Enumeration.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.DataAnnotations;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Modularity;
 
@@ -6,7 +9,7 @@ namespace Generic.Abp.Enumeration
 {
     [DependsOn(
         typeof(AbpAspNetCoreMvcModule),
-        typeof(GenericAbpEnumerationApplicationModule))]
+        typeof(GenericAbpEnumerationApplicationContractsModule))]
 
     public class GenericAbpEnumerationHttpApiModule : AbpModule
     {

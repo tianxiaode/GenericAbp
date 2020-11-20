@@ -3,11 +3,12 @@
 
 	<PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
 		<RootNamespace />
   </PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Volo.Abp.AspNetCore.Mvc" Version="3.0.5" />
+		<PackageReference Include="Volo.Abp.AspNetCore.Mvc" Version="3.3.0" />
 
 	</ItemGroup>
 

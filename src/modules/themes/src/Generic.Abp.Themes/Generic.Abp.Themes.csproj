@@ -1,14 +1,10 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+<Project Sdk="Microsoft.NET.Sdk.Razor">
 
 	<Import Project="..\..\..\..\common.props" />
 
 	<PropertyGroup>
 		<TargetFramework>netcoreapp3.1</TargetFramework>
 		<AddRazorSupportForMvc>true</AddRazorSupportForMvc>
-		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
-		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
-		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
 		<IsPackable>true</IsPackable>
 		<OutputType>Library</OutputType>
 	</PropertyGroup>

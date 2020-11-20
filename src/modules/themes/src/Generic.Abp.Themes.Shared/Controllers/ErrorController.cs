@@ -45,7 +45,7 @@ namespace Generic.Abp.Themes.Shared.Controllers
 
             await _exceptionNotifier.NotifyAsync(new ExceptionNotificationContext(exception));
 
-            var errorInfo = _errorInfoConverter.Convert(exception);
+            var errorInfo = _errorInfoConverter.Convert(exception, true);
 
             if (httpStatusCode == 0)
             {

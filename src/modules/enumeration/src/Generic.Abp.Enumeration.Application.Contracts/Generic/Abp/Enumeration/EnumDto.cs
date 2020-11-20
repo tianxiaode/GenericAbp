@@ -16,5 +16,7 @@ namespace Generic.Abp.Enumeration
 
         public string Key { get; set; }
 
+        public string ResourceName { get; set; }
+
     }
 }
