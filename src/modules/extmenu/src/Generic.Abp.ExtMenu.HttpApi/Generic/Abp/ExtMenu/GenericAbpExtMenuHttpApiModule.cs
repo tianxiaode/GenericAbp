@@ -1,7 +1,5 @@
-﻿using Generic.Abp.ExtMenu.Localization;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc;
-using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 
 namespace Generic.Abp.ExtMenu
@@ -23,14 +21,6 @@ namespace Generic.Abp.ExtMenu
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<AbpLocalizationOptions>(options =>
-            {
-                options.Resources
-                    .Get<ExtMenuResource>();
-                // .AddBaseTypes(
-                //     typeof(AbpUiResource)
-                // );
-            });
         }
 
     }

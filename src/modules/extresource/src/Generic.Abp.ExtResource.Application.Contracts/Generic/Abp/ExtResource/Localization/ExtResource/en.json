@@ -190,6 +190,11 @@
     "Undefined": "Undefined",
     "History": "History",
     "ImportSuccess": "The import was successful.",
-    "Value": "Value" 
+    "Value": "Value",
+    "Permissions": "Permissions",
+    "Permission:Create": "Create",
+    "Permission:Edit": "Edit",
+    "Permission:Update": "Update",
+    "Permission:Delete": "Delete"
   }
 }

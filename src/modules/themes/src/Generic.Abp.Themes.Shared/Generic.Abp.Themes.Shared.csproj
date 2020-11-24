@@ -2,7 +2,7 @@
 	<Import Project="..\..\..\..\common.props" />
 
 	<PropertyGroup>
-		<TargetFramework>netcoreapp3.1</TargetFramework>
+		<TargetFramework>net5.0</TargetFramework>
 		<AddRazorSupportForMvc>true</AddRazorSupportForMvc>
 		<IsPackable>true</IsPackable>
 		<OutputType>Library</OutputType>
@@ -20,8 +20,8 @@
 
 
 	<ItemGroup>
-		<PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Bundling" Version="3.3.0" />
-		<PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Widgets" Version="3.3.0" />
+		<PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Bundling" Version="4.0.0-rc.3" />
+		<PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Widgets" Version="4.0.0-rc.3" />
 	</ItemGroup>
 
 </Project>

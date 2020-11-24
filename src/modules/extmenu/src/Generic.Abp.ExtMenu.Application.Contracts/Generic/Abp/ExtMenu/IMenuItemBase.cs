@@ -1,10 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
 
 namespace Generic.Abp.ExtMenu
 {
-    public interface IMenuItemBase : IMenuItemBaseDto
+    public interface IMenuItemBase
     {
+        int Id { get; set; }
+        string LangText { get; set; }
+        string IconCls { get; set; }
+        string ViewType { get; set; }
 
-        List<string> RequiredPermissionNames { get; set; }
     }
 }

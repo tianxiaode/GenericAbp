@@ -2,13 +2,13 @@
 	<Import Project="..\..\..\..\common.props" />
 
 	<PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
 		<RootNamespace />
   </PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Volo.Abp.Core" Version="3.3.0" />
-		<PackageReference Include="Volo.Abp.Validation" Version="3.3.0" />
+		<PackageReference Include="Volo.Abp.Core" Version="4.0.0-rc.3" />
+		<PackageReference Include="Volo.Abp.Validation" Version="4.0.0-rc.3" />
 	</ItemGroup>
 
 </Project>

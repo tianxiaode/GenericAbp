@@ -16,8 +16,10 @@ using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Identity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Settings;
+using Volo.Abp.Identity.AspNetCore;
 
 namespace Generic.Abp.Account.IdentityServer.Web.Pages.Account
 {
@@ -34,7 +36,7 @@ namespace Generic.Abp.Account.IdentityServer.Web.Pages.Account
             IIdentityServerInteractionService interaction,
             IClientStore clientStore,
             IEventService identityServerEvents)
-            : base(
+            :base(
                 schemeProvider,
                 accountOptions)
         {
@@ -51,6 +53,8 @@ namespace Generic.Abp.Account.IdentityServer.Web.Pages.Account
 
             if (context != null)
             {
+                //ShowCancelButton = true;
+
                 LoginInput.UserNameOrEmailAddress = context.LoginHint;
 
                 //TODO: Reference AspNetCore MultiTenancy module and use options to get the tenant key!
@@ -74,9 +78,9 @@ namespace Generic.Abp.Account.IdentityServer.Web.Pages.Account
 
             EnableLocalLogin = await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin);
 
-            if (context?.ClientId != null)
+            if (context?.Client?.ClientId != null)
             {
-                var client = await ClientStore.FindEnabledClientByIdAsync(context.ClientId);
+                var client = await ClientStore.FindEnabledClientByIdAsync(context?.Client?.ClientId);
                 if (client != null)
                 {
                     EnableLocalLogin = client.EnableLocalLogin;
@@ -106,7 +110,10 @@ namespace Generic.Abp.Account.IdentityServer.Web.Pages.Account
                     return Redirect("~/");
                 }
 
-                await Interaction.GrantConsentAsync(context, ConsentResponse.Denied);
+                await Interaction.GrantConsentAsync(context, new ConsentResponse()
+                {
+                    Error = AuthorizationError.AccessDenied
+                });
 
                 return Redirect(ReturnUrl);
             }
@@ -128,15 +135,17 @@ namespace Generic.Abp.Account.IdentityServer.Web.Pages.Account
                 true
             );
 
-            if (result.RequiresTwoFactor)
+            await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
             {
-                return RedirectToPage("./SendSecurityCode", new
-                {
-                    returnUrl = ReturnUrl,
-                    returnUrlHash = ReturnUrlHash,
-                    rememberMe = LoginInput.RememberMe
-                });
-            }
+                Identity = IdentitySecurityLogIdentityConsts.Identity,
+                Action = result.ToIdentitySecurityLogAction(),
+                UserName = LoginInput.UserNameOrEmailAddress
+            });
+
+            // if (result.RequiresTwoFactor)
+            // {
+            //     return await TwoFactorLoginResultAsync();
+            // }
 
             if (result.IsLockedOut)
             {

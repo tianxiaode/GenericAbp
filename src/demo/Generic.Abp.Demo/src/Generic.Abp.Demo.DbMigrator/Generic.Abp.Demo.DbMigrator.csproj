@@ -4,7 +4,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
@@ -26,7 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Volo.Abp.Autofac" Version="3.3.0" />
+    <PackageReference Include="Volo.Abp.Autofac" Version="4.0.0-rc.3" />
     <ProjectReference Include="..\Generic.Abp.Demo.Application.Contracts\Generic.Abp.Demo.Application.Contracts.csproj" />
     <ProjectReference Include="..\Generic.Abp.Demo.EntityFrameworkCore.DbMigrations\Generic.Abp.Demo.EntityFrameworkCore.DbMigrations.csproj" />
   </ItemGroup>

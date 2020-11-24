@@ -5,7 +5,7 @@ using System.ComponentModel;
 namespace Generic.Abp.ExtMenu
 {
     [Serializable]
-    public class DesktopMenuItem : MenuItemBase
+    public class DesktopMenuItem :MenuItem
     {
         //        "Id": 500000,
         //        "Text": "MainMenu.OrganizationUnit",
@@ -17,16 +17,8 @@ namespace Generic.Abp.ExtMenu
 
         public int? ParentId { get; set; }
 
-        public IEnumerable<DesktopMenuItem> Children { get; set; }
+        public List<DesktopMenuItem> Children { get; set; }
 
-        [DefaultValue(true)]
-        public bool Selectable { get; set; }
-
-        [DefaultValue(true)]
-        public bool IsActive { get; set; }
-
-        [DefaultValue(true)]
-        public bool Leaf { get; set; }
 
     }
 }

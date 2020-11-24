@@ -192,6 +192,11 @@
     "Undefined": "未定义",
     "History": "历史记录",
     "ImportSuccess": "导入成功",
-    "Value": "值"
+    "Value": "值",
+    "Permissions": "权限",
+    "Permission:Create": "创建",
+    "Permission:Edit": "编辑",
+    "Permission:Update": "编辑",
+    "Permission:Delete": "删除"
   }
 }

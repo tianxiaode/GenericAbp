@@ -1,0 +1,8 @@
+{
+  "culture": "en",
+  "texts": {
+    "Generic.Abp.BusinessException:000001": "{Name} '{Value}' is already taken.",
+    "Generic.Abp.BusinessException:000002": "{ObjectName} '{ObjectValue}' with children cannot be deleted",
+    "Generic.Abp.BusinessException:000003": "The value '{0}' has exceeded the field allowed length of '{1}'."
+  }
+}

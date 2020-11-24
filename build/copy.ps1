@@ -11,6 +11,11 @@ foreach($project in $projects) {
 	$dllFolder = Join-Path $projectFolder $framework
 	if(!(Test-Path $dllFolder))
 		{
+			$framework = "netstandard2.1"
+			$dllFolder = Join-Path $projectFolder $framework
+		} 
+	if(!(Test-Path $dllFolder))
+		{
 			$framework = "netcoreapp3.1"
 			$dllFolder = Join-Path $projectFolder $framework
 		} 

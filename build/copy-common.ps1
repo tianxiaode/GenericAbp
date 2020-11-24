@@ -4,6 +4,8 @@ $rootFolder = Join-Path $packFolder "../src/"
 
 # List of projects
 $projects = (
+    # modules/businessexception
+    "modules/businessexception/src/Generic.Abp.BusinessException",
 
     # modules/helper
     "modules/helper/src/Generic.Abp.Helper.File",

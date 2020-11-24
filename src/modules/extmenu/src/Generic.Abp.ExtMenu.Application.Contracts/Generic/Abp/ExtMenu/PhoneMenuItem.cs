@@ -3,7 +3,7 @@
 namespace Generic.Abp.ExtMenu
 {
     [Serializable]
-    public class PhoneMenuItem : MenuItemBase
+    public class PhoneMenuItem : MenuItem
     {
 
 

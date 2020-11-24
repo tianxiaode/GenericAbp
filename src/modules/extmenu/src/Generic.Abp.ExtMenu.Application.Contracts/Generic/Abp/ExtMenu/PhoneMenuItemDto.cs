@@ -1,6 +1,6 @@
 ﻿namespace Generic.Abp.ExtMenu
 {
-    public class PhoneMenuItemDto : MenuItemBaseDto
+    public class PhoneMenuItemDto : MenuItemDto
     {
         public string Category { get; set; }
 

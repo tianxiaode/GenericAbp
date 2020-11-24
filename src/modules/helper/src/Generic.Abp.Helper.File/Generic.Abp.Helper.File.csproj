@@ -3,15 +3,15 @@
 	<Import Project="..\..\..\..\common.props" />
 
 	<PropertyGroup>
-		<TargetFramework>netstandard2.0</TargetFramework>
+		<TargetFramework>netstandard2.1</TargetFramework>
 		<RootNamespace></RootNamespace>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="JetBrains.Annotations" Version="2020.1.0" />
-		<PackageReference Include="Volo.Abp.Core" Version="3.3.0" />
-		<PackageReference Include="Volo.Abp.Guids" Version="3.3.0" />
-		<PackageReference Include="Volo.Abp.Timing" Version="3.3.0" />
+		<PackageReference Include="Volo.Abp.Core" Version="4.0.0-rc.3" />
+		<PackageReference Include="Volo.Abp.Guids" Version="4.0.0-rc.3" />
+		<PackageReference Include="Volo.Abp.Timing" Version="4.0.0-rc.3" />
 		<PackageReference Include="EPPlus" Version="5.3.0" />
 	</ItemGroup>
 

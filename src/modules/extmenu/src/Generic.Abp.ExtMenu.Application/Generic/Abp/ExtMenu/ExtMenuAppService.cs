@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Options;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Generic.Abp.ExtMenu.Localization;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Authorization;
 
@@ -21,33 +19,24 @@ namespace Generic.Abp.ExtMenu
             IAuthorizationService authorizationService
             )
         {
-            LocalizationResource = typeof(ExtMenuResource);
             _abpAuthorizationPolicyProvider = abpAuthorizationPolicyProvider;
             _menus = menuOptions.Value;
             _authorizationService = authorizationService;
         }
 
         [Authorize]
-        public async Task<List<IMenuItemBaseDto>> GetMenusAsync(bool isPhone = false)
-        {
-            Logger.LogInformation($"{CurrentUser.IsAuthenticated}");
-            return isPhone ? await GetPhoneMenusAsync() : await GetDesktopMenusAsync();
-        }
-
-        protected virtual async Task<List<IMenuItemBaseDto>> GetDesktopMenusAsync()
+        public virtual async Task<ListResultDto<DesktopMenuItemDto>> GetDesktopMenusAsync()
         {
             var predicate = await BuildPredicate<DesktopMenuItem>();
             var menus = _menus.Desktop.Where(m =>
                 m.ParentId == null).Where(predicate).Select(m => new DesktopMenuItemDto
-                {
-                    Id = m.Id,
-                    IconCls = m.IconCls,
-                    IsActive = m.IsActive,
-                    LangText = m.LangText,
-                    ParentId = m.ParentId,
-                    Selectable = m.Selectable,
-                    ViewType = m.ViewType
-                }).ToList();
+            {
+                Id = m.Id,
+                IconCls = m.IconCls,
+                LangText = m.LangText,
+                ParentId = m.ParentId,
+                ViewType = m.ViewType,
+            }).ToList();
             foreach (var menu in menus)
             {
                 menu.Children = _menus.Desktop.Where(c => c.ParentId == menu.Id).Where(predicate).OrderBy(c => c.Id)
@@ -56,23 +45,20 @@ namespace Generic.Abp.ExtMenu
                         Id = c.Id,
                         Children = null,
                         IconCls = c.IconCls,
-                        IsActive = c.IsActive,
                         LangText = c.LangText,
                         Leaf = true,
                         ParentId = c.ParentId,
-                        Selectable = c.Selectable,
                         ViewType = c.ViewType
                     })
                     .ToList();
                 menu.Leaf = !menu.Children.Any();
+                menu.Selectable = menu.Leaf;
             }
-            return await Task.FromResult(new List<IMenuItemBaseDto>(menus.OrderBy(m => m.Id).ToList()));
-
-
+            return new ListResultDto<DesktopMenuItemDto>(menus.OrderBy(m => m.Id).ToList());
         }
 
 
-        protected virtual async Task<Func<T, bool>> BuildPredicate<T>() where T : IMenuItemBase
+        protected virtual async Task<Func<T, bool>> BuildPredicate<T>() where T : IMenuItem
         {
             var policyNames = await _abpAuthorizationPolicyProvider.GetPoliciesNamesAsync();
             var predicate = new Func<T, bool>(m =>
@@ -83,10 +69,11 @@ namespace Generic.Abp.ExtMenu
 
         }
 
-        protected virtual async Task<List<IMenuItemBaseDto>> GetPhoneMenusAsync()
+        [Authorize]
+        public virtual async Task<ListResultDto<PhoneMenuItemDto>> GetPhoneMenusAsync()
         {
             var predicate = await BuildPredicate<PhoneMenuItem>();
-            var menus = _menus.Mobile.Where(predicate).Select(m => new PhoneMenuItem
+            var menus = _menus.Mobile.Where(predicate).Select(m => new PhoneMenuItemDto()
             {
                 Id = m.Id,
                 IconCls = m.IconCls,
@@ -96,7 +83,7 @@ namespace Generic.Abp.ExtMenu
                 Color = m.Color
             });
 
-            return await Task.FromResult(new List<IMenuItemBaseDto>(menus));
+            return new ListResultDto<PhoneMenuItemDto>(menus.ToList());
 
         }
 

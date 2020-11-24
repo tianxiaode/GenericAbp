@@ -15,6 +15,7 @@ namespace Generic.Abp.Account.Web.Pages.Account
     {
         public SignInManager<IdentityUser> SignInManager { get; set; }
         public IdentityUserManager UserManager { get; set; }
+        public IdentitySecurityLogManager IdentitySecurityLogManager { get; set; }
 
         protected AccountPageModel()
         {
