@@ -1,9 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<Import Project="..\..\..\..\common.props" />
 
-	<PropertyGroup>
+  <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
-		<RootNamespace />
+	  <RootNamespace />
   </PropertyGroup>
 
 	<ItemGroup>
@@ -11,7 +11,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\Generic.Abp.ExtMenu.Application.Contracts\Generic.Abp.ExtMenu.Application.Contracts.csproj" />
+		<ProjectReference Include="..\Generic.Abp.ExtResource.Application.Contracts\Generic.Abp.ExtResource.Application.Contracts.csproj" />
 	</ItemGroup>
 
 </Project>

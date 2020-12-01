@@ -19,6 +19,11 @@ foreach($project in $projects) {
 			$framework = "netcoreapp3.1"
 			$dllFolder = Join-Path $projectFolder $framework
 		} 
+	if(!(Test-Path $dllFolder))
+		{
+			$framework = "net5.0"
+			$dllFolder = Join-Path $projectFolder $framework
+		} 
 	$projectName = $project.Substring($project.LastIndexOf("/") + 1)
 	$dllFile = Join-Path $dllFolder ($projectName + ".dll")
 	$pdbFile = Join-Path $dllFolder ($projectName + ".pdb")

@@ -6,7 +6,7 @@ $rootFolder = Join-Path $packFolder "../src/"
 $solutions = (
     "modules/businessexception",
     "modules/helper",
-    "modules/extmenu",
+    # "modules/extmenu",
     "modules/extresource",
     "modules/texttemplate",
     "modules/enumeration",
@@ -24,12 +24,14 @@ $projects = (
     "modules/helper/src/Generic.Abp.Helper.File",
 
     # modules/extmenu
-    "modules/extmenu/src/Generic.Abp.ExtMenu.Application.Contracts",
-    "modules/extmenu/src/Generic.Abp.ExtMenu.Application",
-    "modules/extmenu/src/Generic.Abp.ExtMenu.HttpApi",
+    # "modules/extmenu/src/Generic.Abp.ExtMenu.Application.Contracts",
+    # "modules/extmenu/src/Generic.Abp.ExtMenu.Application",
+    # "modules/extmenu/src/Generic.Abp.ExtMenu.HttpApi",
 
     # modules/extresource
     "modules/extresource/src/Generic.Abp.ExtResource.Application.Contracts",
+    "modules/extresource/src/Generic.Abp.ExtResource.Application",
+    "modules/extresource/src/Generic.Abp.ExtResource.HttpApi",
 
     # modules/texttemplate
     "modules/texttemplate/src/Generic.Abp.TextTemplate",

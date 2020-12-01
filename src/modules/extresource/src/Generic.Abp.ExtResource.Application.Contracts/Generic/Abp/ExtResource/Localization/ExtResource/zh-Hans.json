@@ -197,6 +197,11 @@
     "Permission:Create": "创建",
     "Permission:Edit": "编辑",
     "Permission:Update": "编辑",
-    "Permission:Delete": "删除"
+    "Permission:Delete": "删除",
+    "Country": "国家",
+    "Province": "省份",
+    "City": "城市",
+    "District": "地区",
+    "NotBeDeleted": "{0} '{1}' 不能删除"
   }
 }

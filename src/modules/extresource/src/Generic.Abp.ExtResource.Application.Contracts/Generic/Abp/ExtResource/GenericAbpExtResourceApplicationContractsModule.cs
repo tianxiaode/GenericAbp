@@ -1,7 +1,9 @@
-﻿using Volo.Abp.Application;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.Application;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
+using Generic.Abp.ExtResource;
 
 namespace Generic.Abp.ExtResource
 {
@@ -13,6 +15,7 @@ namespace Generic.Abp.ExtResource
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
+        	Configure<MenuOptions>(context.Services.GetConfiguration().GetSection("Menus"));
 
             Configure<AbpVirtualFileSystemOptions>(options =>
             {

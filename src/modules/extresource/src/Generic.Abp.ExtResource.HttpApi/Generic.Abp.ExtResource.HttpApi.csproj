@@ -1,19 +1,18 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<Import Project="..\..\..\..\common.props" />
 
-	<PropertyGroup>
+  <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-		<RootNamespace />
+	  <RootNamespace />
   </PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Volo.Abp.AspNetCore.Mvc" Version="4.0.0-rc.5" />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.DataAnnotations" Version="2.2.0" />
+
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\Generic.Abp.Enumeration.Application.Contracts\Generic.Abp.Enumeration.Application.Contracts.csproj" />
+		<ProjectReference Include="..\Generic.Abp.ExtResource.Application\Generic.Abp.ExtResource.Application.csproj" />
 	</ItemGroup>
-
 
 </Project>

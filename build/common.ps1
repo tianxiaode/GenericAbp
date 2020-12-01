@@ -7,7 +7,7 @@ $rootFolder = (Get-Item -Path "./" -Verbose).FullName
 $solutionPaths = (
 	"../src/modules/businessexception",
     "../src/modules/helper",
-    "../src/modules/extmenu",
+    # "../src/modules/extmenu",
     "../src/modules/extresource",
     "../src/modules/texttemplate",
     "../src/modules/enumeration",

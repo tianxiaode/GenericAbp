@@ -195,6 +195,11 @@
     "Permission:Create": "Create",
     "Permission:Edit": "Edit",
     "Permission:Update": "Update",
-    "Permission:Delete": "Delete"
+    "Permission:Delete": "Delete",
+    "Country": "Country",
+    "Province": "Province",
+    "City": "City",
+    "District": "District",
+    "NotBeDeleted": "{0} '{1}' can not be deleted"
   }
 }
