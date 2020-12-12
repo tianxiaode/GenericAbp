@@ -44,14 +44,14 @@
     <ProjectReference Include="..\Generic.Abp.Demo.Application\Generic.Abp.Demo.Application.csproj" />
     <ProjectReference Include="..\Generic.Abp.Demo.HttpApi\Generic.Abp.Demo.HttpApi.csproj" />
     <ProjectReference Include="..\Generic.Abp.Demo.EntityFrameworkCore.DbMigrations\Generic.Abp.Demo.EntityFrameworkCore.DbMigrations.csproj" />
-    <PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic" Version="4.0.0-rc.3" />
-    <PackageReference Include="Volo.Abp.Autofac" Version="4.0.0-rc.3" />
-    <PackageReference Include="Volo.Abp.AspNetCore.Authentication.JwtBearer" Version="4.0.0-rc.3" />
-    <PackageReference Include="Volo.Abp.AspNetCore.Serilog" Version="4.0.0-rc.3" />
-    <PackageReference Include="Volo.Abp.Identity.Web" Version="4.0.0-rc.3" />
-    <PackageReference Include="Volo.Abp.Account.Web.IdentityServer" Version="4.0.0-rc.3" />
-    <PackageReference Include="Volo.Abp.TenantManagement.Web" Version="4.0.0-rc.3" />
-    <PackageReference Include="Volo.Abp.FeatureManagement.Web" Version="4.0.0-rc.3" />
+    <PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic" Version="4.0.0" />
+    <PackageReference Include="Volo.Abp.Autofac" Version="4.0.0" />
+    <PackageReference Include="Volo.Abp.AspNetCore.Authentication.JwtBearer" Version="4.0.0" />
+    <PackageReference Include="Volo.Abp.AspNetCore.Serilog" Version="4.0.0" />
+    <PackageReference Include="Volo.Abp.Identity.Web" Version="4.0.0" />
+    <PackageReference Include="Volo.Abp.Account.Web.IdentityServer" Version="4.0.0" />
+    <PackageReference Include="Volo.Abp.TenantManagement.Web" Version="4.0.0" />
+    <PackageReference Include="Volo.Abp.FeatureManagement.Web" Version="4.0.0" />
   </ItemGroup>
 
 </Project>

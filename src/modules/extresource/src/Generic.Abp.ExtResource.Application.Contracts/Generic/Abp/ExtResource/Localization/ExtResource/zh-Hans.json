@@ -182,7 +182,9 @@
     "Browse": "浏览",
     "InvalidFile": "不是有效文件",
     "MaxFileSize": "只允许上传大小为 '{0}'的文件",
+    "ExceedsAllowedSize": "文件 {0} 超出了允许的大小({1})",
     "AllowedFileType": "只允许上传类型为 '{0}' 的文件",
+    "NotInAllowedFileType": "文件 {0} 不在允许的文件类型({1})中",
     "FileSizeNotAvailable": "文件大小不符合要求",
     "Uploading": "{0} 已上传",
     "UploadComplete": "<span class='text-success'>已上传</span>",
@@ -190,6 +192,7 @@
     "TapToCancel": "单击图标可取消",
     "TapToAbort": "单击图标可中止",
     "Undefined": "未定义",
+    "NoFilesToUpload": "没有要上传的文件",
     "History": "历史记录",
     "ImportSuccess": "导入成功",
     "Value": "值",
@@ -202,6 +205,7 @@
     "Province": "省份",
     "City": "城市",
     "District": "地区",
-    "NotBeDeleted": "{0} '{1}' 不能删除"
+    "NotBeDeleted": "{0} '{1}' 不能删除",
+    "Select": "选择"
   }
 }

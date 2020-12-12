@@ -13,7 +13,7 @@ namespace Generic.Abp.Helper
         /// 使用Guid生产文件名
         /// </summary>
         /// <returns></returns>
-        public Task<string> CreateFileNameAsync()
+        public virtual Task<string> CreateFileNameAsync()
         {
             return Task.FromResult(Guid.NewGuid().ToString("N"));
         }
@@ -24,10 +24,24 @@ namespace Generic.Abp.Helper
         /// </summary>
         /// <param name="filename"></param>
         /// <returns></returns>
-        public Task<string> GetPathByNameAsync(string filename)
+        public virtual Task<string> GetPathByNameAsync(string filename)
         {
-            var path = Path.Combine(filename.Substring(0, 2), filename.Substring(2, 2), filename.Substring(4, 2));
+            var path = Path.Combine(filename.Substring(0, 2), filename.Substring(2, 2), filename.Substring(4, 2))
+                .Replace("\\", "/");
             return Task.FromResult(path);
+        }
+
+        /// <summary>
+        /// 根据访问路径和文件名获取删除路径
+        /// </summary>
+        /// <param name="accessPath"></param>
+        /// <param name="filename"></param>
+        /// <returns></returns>
+        public virtual async Task<string> GetDeletePathAsync(string accessPath, string filename)
+        {
+            var fileNamePath = await GetPathByNameAsync(filename);
+            var first = filename.Substring(0, 2);
+            return Path.Combine(accessPath.Replace(fileNamePath, "").Replace("//", "/"), first).Replace("\\", "/");
         }
 
         /// <summary>
@@ -38,14 +52,14 @@ namespace Generic.Abp.Helper
         /// <param name="savePath">保存路径</param>
         /// <param name="datePath">日期格式路径</param>
         /// <returns></returns>
-        public async Task<string> GetStorageDirectoryAsync(string uploadPath, string filenamePath , string savePath = null ,  string datePath = null)
+        public virtual async Task<string> GetStorageDirectoryAsync(string uploadPath, string filenamePath , string savePath = null ,  string datePath = null)
         {
             var path = Path.Combine(Directory.GetCurrentDirectory(), uploadPath);
             if (!string.IsNullOrEmpty(savePath)) path = Path.Combine(path, savePath);
             if (!string.IsNullOrEmpty(datePath)) path = Path.Combine(path, datePath);
             if (!string.IsNullOrEmpty(filenamePath)) path = Path.Combine(path, filenamePath);
             if (!Directory.Exists(path)) Directory.CreateDirectory(path);
-            return await Task.FromResult(path);
+            return await Task.FromResult(path.Replace("\\", "/"));
 
         }
 
@@ -57,10 +71,12 @@ namespace Generic.Abp.Helper
         /// <param name="filename">文件名</param>
         /// <returns></returns>
 
-        public async Task SaveFileAsync(MemoryStream file, string storageDirectory, string filename)
+        public virtual async Task SaveFileAsync(MemoryStream file, string storageDirectory, string filename)
         {
-            var path = Path.Combine(storageDirectory, filename);
-            using var fileStream = new FileStream(path, FileMode.Create);
+            storageDirectory = storageDirectory.Replace("\\", "/");
+            if(!Directory.Exists(storageDirectory)) Directory.CreateDirectory(storageDirectory);
+            var path = Path.Combine(storageDirectory, filename).Replace("\\", "/");
+            await using var fileStream = new FileStream(path, FileMode.Create);
             await file.CopyToAsync(fileStream);
         }
 
@@ -71,11 +87,38 @@ namespace Generic.Abp.Helper
         /// <param name="storageDirectory">存储路径</param>
         /// <param name="filename">文件名</param>
         /// <returns></returns>
-        public async Task SaveFileAsync(byte[] file, string storageDirectory, string filename)
+        public virtual async Task SaveFileAsync(byte[] file, string storageDirectory, string filename)
         {
             var stream = new MemoryStream(file);
             await SaveFileAsync(stream, storageDirectory, filename);
         }
+
+        /// <summary>
+        /// 删除文件及路径
+        /// </summary>
+        /// <param name="dir">要删除的路径</param>
+        /// <returns></returns>
+        public virtual async Task DeleteFolderAsync(string dir)
+        {
+            dir = dir.Replace("\\", "/");
+            if (!Directory.Exists(dir)) return ;
+            //如果存在这个文件夹,执行递归删除
+            foreach (var d in Directory.GetFileSystemEntries(dir))
+            {
+                if (File.Exists(d))
+                {
+                    //直接删除其中的文件
+                    File.Delete(d); 
+
+                }
+                else
+                {
+                    await DeleteFolderAsync(d); //递归删除子文件夹 
+                }
+            }
+            Directory.Delete(dir, true); //删除已空文件夹                 
+        }
+
 
     }
 }

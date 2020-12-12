@@ -181,7 +181,9 @@
     "Browse": "Browse",
     "InvalidFile": "Is not a valid file",
     "MaxFileSize": "Only files with a size of `{0}` are allowed to be uploaded.",
+    "ExceedsAllowedSize": "File {0} exceeds the allowed size ({1}).",
     "AllowedFileType": "Only files of type `{0}` are allowed to be uploaded.",
+    "NotInAllowedFileType": "File {0} is not in the allowed upload type({1}).",
     "Uploading": "{0} upload",
     "UploadComplete": "<span class='text-success'>Uploaded</span>",
     "UploadError": "<span class='text-danger'>Upload failed: {0}</span>",
@@ -189,6 +191,7 @@
     "TapToAbort": "Click the icon to abort.",
     "Undefined": "Undefined",
     "History": "History",
+    "NoFilesToUpload": "There are no files to upload",
     "ImportSuccess": "The import was successful.",
     "Value": "Value",
     "Permissions": "Permissions",
@@ -200,6 +203,7 @@
     "Province": "Province",
     "City": "City",
     "District": "District",
-    "NotBeDeleted": "{0} '{1}' can not be deleted"
+    "NotBeDeleted": "{0} '{1}' can not be deleted",
+    "Select": "Select"
   }
 }

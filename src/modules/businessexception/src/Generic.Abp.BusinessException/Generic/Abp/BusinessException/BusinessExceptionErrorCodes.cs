@@ -20,5 +20,18 @@
         public const string ValueExceedsFieldLengthParamValue = "Value";
 
         public const string ValueExceedsFieldLengthParamLength = "Length";
+
+        public const string NoPermissionAccess = "Generic.Abp.BusinessException:000004" ;
+
+        public const string NoPermissionEdit = "Generic.Abp.BusinessException:000005" ;
+
+        public const string NoPermissionDelete = "Generic.Abp.BusinessException:000006" ;
+
+        public const string NoPermissionParamName =  "Name";
+
+        public const string NoPermissionParamValue =  "Value";
+
+        public const string UnknownOrganization = "Generic.Abp.BusinessException:000007" ;
+
     }
 }

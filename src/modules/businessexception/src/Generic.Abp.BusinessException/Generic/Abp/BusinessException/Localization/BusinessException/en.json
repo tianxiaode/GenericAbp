@@ -3,6 +3,10 @@
   "texts": {
     "Generic.Abp.BusinessException:000001": "{Name} '{Value}' is already taken.",
     "Generic.Abp.BusinessException:000002": "{ObjectName} '{ObjectValue}' with children cannot be deleted",
-    "Generic.Abp.BusinessException:000003": "The value '{0}' has exceeded the field allowed length of '{1}'."
+    "Generic.Abp.BusinessException:000003": "The value '{Value}' has exceeded the field allowed length of '{Length}'.",
+    "Generic.Abp.BusinessException:000004": "You do not have permission to access the {Name}  `{Value}`.",
+    "Generic.Abp.BusinessException:000005": "You do not have permission to edit the {Name}  `{Value}`.",
+    "Generic.Abp.BusinessException:000006": "You do not have permission to delete the {Name}  `{Value}`.",
+    "Generic.Abp.BusinessException:000007": "The organization could not be determined."
   }
 }

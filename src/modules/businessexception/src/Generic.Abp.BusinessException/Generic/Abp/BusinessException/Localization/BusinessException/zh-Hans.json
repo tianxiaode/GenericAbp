@@ -3,6 +3,10 @@
   "texts": {
     "Generic.Abp.BusinessException:000001": "{Name} '{Value}' 已存在",
     "Generic.Abp.BusinessException:000002": "带有子对象的{Name} '{Value}' 不能被删除",
-    "Generic.Abp.BusinessException:000003": "值 '{Value}' 已超过了字段允许长度 '{Length}'"
+    "Generic.Abp.BusinessException:000003": "值 '{Value}' 已超过了字段允许长度 '{Length}'",
+    "Generic.Abp.BusinessException:000004": "没有权限访问{Name} `{Value}`",
+    "Generic.Abp.BusinessException:000005": "没有权限编辑{Name} `{Value}`",
+    "Generic.Abp.BusinessException:000006": "没有权限删除{Name} `{Value}`",
+    "Generic.Abp.BusinessException:000007": "无法确定所在组织"
   }
 }
