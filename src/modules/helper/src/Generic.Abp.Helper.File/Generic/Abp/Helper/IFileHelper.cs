@@ -5,7 +5,7 @@ namespace Generic.Abp.Helper
 {
     public interface IFileHelper
     {
-        Task<string> CreateFileNameAsync();
+        Task<string> CreateFilenameAsync();
         //Task<string> GetUploadPathAsync();
         Task<string> GetPathByNameAsync(string filename);
         Task<string> GetDeletePathAsync(string accessPath, string filename);

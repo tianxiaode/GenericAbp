@@ -23,7 +23,7 @@ namespace Generic.Abp.BusinessException
                 options.Resources
                     .Add<BusinessExceptionResource>("en")
                     .AddBaseTypes(typeof(AbpValidationResource))
-                    .AddVirtualJson("/WoEasy/BusinessException/Localization/BusinessException");
+                    .AddVirtualJson("/Generic/Abp/BusinessException/Localization/BusinessException");
             });
 
             Configure<AbpExceptionLocalizationOptions>(options =>

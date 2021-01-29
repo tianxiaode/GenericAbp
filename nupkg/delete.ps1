@@ -37,5 +37,5 @@ $packages = (
 	
 foreach($package in $packages) {
 	Write-Host("Delete package:" + $package)
-    dotnet nuget delete $package 0.0.6 --non-interactive -s http://localhost:1234/v3/index.json --api-key "$apiKey"
+    dotnet nuget delete $package 0.0.6 --non-interactive -s http://192.168.0.23/v3/index.json --api-key "$apiKey"
 }

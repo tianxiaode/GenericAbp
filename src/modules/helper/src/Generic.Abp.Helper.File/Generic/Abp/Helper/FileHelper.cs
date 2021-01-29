@@ -13,7 +13,7 @@ namespace Generic.Abp.Helper
         /// 使用Guid生产文件名
         /// </summary>
         /// <returns></returns>
-        public virtual Task<string> CreateFileNameAsync()
+        public virtual Task<string> CreateFilenameAsync()
         {
             return Task.FromResult(Guid.NewGuid().ToString("N"));
         }
@@ -83,14 +83,18 @@ namespace Generic.Abp.Helper
         /// <summary>
         /// 保存文件
         /// </summary>
-        /// <param name="file">文件</param>
+        /// <param name="bytes">文件字节</param>
         /// <param name="storageDirectory">存储路径</param>
         /// <param name="filename">文件名</param>
         /// <returns></returns>
-        public virtual async Task SaveFileAsync(byte[] file, string storageDirectory, string filename)
+        public virtual async Task SaveFileAsync(byte[] bytes, string storageDirectory, string filename)
         {
-            var stream = new MemoryStream(file);
-            await SaveFileAsync(stream, storageDirectory, filename);
+            storageDirectory = storageDirectory.Replace("\\", "/");
+            if(!Directory.Exists(storageDirectory)) Directory.CreateDirectory(storageDirectory);
+            var path = Path.Combine(storageDirectory, filename).Replace("\\", "/");
+            using(var file = File.Create(path)){
+                await file.WriteAsync(bytes);
+            }
         }
 
         /// <summary>
