@@ -17,7 +17,7 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.6.1" />
     <ProjectReference Include="..\Generic.Abp.Demo.Application.Tests\Generic.Abp.Demo.Application.Tests.csproj" />
     <ProjectReference Include="..\..\src\Generic.Abp.Demo.Web\Generic.Abp.Demo.Web.csproj" />
-    <PackageReference Include="Volo.Abp.AspNetCore.TestBase" Version="4.2.0" />
+    <PackageReference Include="Volo.Abp.AspNetCore.TestBase" Version="$(AbpVersion)" />
   </ItemGroup>
 
   <ItemGroup>
