@@ -1,0 +1,58 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32422.2
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{C37DB156-45F1-4F98-A3C4-8AB504B17946}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Generic.Abp.FileManagement.Domain.Shared", "src\Generic.Abp.FileManagement.Domain.Shared\Generic.Abp.FileManagement.Domain.Shared.csproj", "{FE814E2F-E296-4459-B1F5-17E1F7AE89B1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Generic.Abp.FileManagement.Domain", "src\Generic.Abp.FileManagement.Domain\Generic.Abp.FileManagement.Domain.csproj", "{AF021970-B8C4-4CAD-B95B-5F201E2460D6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Generic.Abp.FileManagement.Application.Contracts", "src\Generic.Abp.FileManagement.Application.Contracts\Generic.Abp.FileManagement.Application.Contracts.csproj", "{9AC6EC78-1D17-4856-9700-3AEFF4A16DAA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Generic.Abp.FileManagement.Application", "src\Generic.Abp.FileManagement.Application\Generic.Abp.FileManagement.Application.csproj", "{75DDF7F5-453D-4212-91FF-FE2E7AE73FE9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Generic.Abp.FileManagement.EntityFrameworkCore", "src\Generic.Abp.FileManagement.EntityFrameworkCore\Generic.Abp.FileManagement.EntityFrameworkCore.csproj", "{A0A6BE3D-B9FE-4AAF-A727-FF5D8EE37203}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FE814E2F-E296-4459-B1F5-17E1F7AE89B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE814E2F-E296-4459-B1F5-17E1F7AE89B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE814E2F-E296-4459-B1F5-17E1F7AE89B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE814E2F-E296-4459-B1F5-17E1F7AE89B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF021970-B8C4-4CAD-B95B-5F201E2460D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF021970-B8C4-4CAD-B95B-5F201E2460D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF021970-B8C4-4CAD-B95B-5F201E2460D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF021970-B8C4-4CAD-B95B-5F201E2460D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9AC6EC78-1D17-4856-9700-3AEFF4A16DAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9AC6EC78-1D17-4856-9700-3AEFF4A16DAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9AC6EC78-1D17-4856-9700-3AEFF4A16DAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9AC6EC78-1D17-4856-9700-3AEFF4A16DAA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75DDF7F5-453D-4212-91FF-FE2E7AE73FE9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75DDF7F5-453D-4212-91FF-FE2E7AE73FE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75DDF7F5-453D-4212-91FF-FE2E7AE73FE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75DDF7F5-453D-4212-91FF-FE2E7AE73FE9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A0A6BE3D-B9FE-4AAF-A727-FF5D8EE37203}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0A6BE3D-B9FE-4AAF-A727-FF5D8EE37203}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0A6BE3D-B9FE-4AAF-A727-FF5D8EE37203}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0A6BE3D-B9FE-4AAF-A727-FF5D8EE37203}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{FE814E2F-E296-4459-B1F5-17E1F7AE89B1} = {C37DB156-45F1-4F98-A3C4-8AB504B17946}
+		{AF021970-B8C4-4CAD-B95B-5F201E2460D6} = {C37DB156-45F1-4F98-A3C4-8AB504B17946}
+		{9AC6EC78-1D17-4856-9700-3AEFF4A16DAA} = {C37DB156-45F1-4F98-A3C4-8AB504B17946}
+		{75DDF7F5-453D-4212-91FF-FE2E7AE73FE9} = {C37DB156-45F1-4F98-A3C4-8AB504B17946}
+		{A0A6BE3D-B9FE-4AAF-A727-FF5D8EE37203} = {C37DB156-45F1-4F98-A3C4-8AB504B17946}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9324F37E-998C-45A0-A7DD-3F56955CC2C1}
+	EndGlobalSection
+EndGlobal

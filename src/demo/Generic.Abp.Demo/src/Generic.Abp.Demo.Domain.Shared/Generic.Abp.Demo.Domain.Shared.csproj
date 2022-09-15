@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <RootNamespace>Generic.Abp.Demo</RootNamespace>
+    <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="Volo.Abp.Identity.Domain.Shared" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.IdentityServer.Domain.Shared" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.BackgroundJobs.Domain.Shared" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.AuditLogging.Domain.Shared" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.TenantManagement.Domain.Shared" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.FeatureManagement.Domain.Shared" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.PermissionManagement.Domain.Shared" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.SettingManagement.Domain.Shared" Version="$(AbpVersion)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Localization\Demo\*.json" />
+    <Content Remove="Localization\Demo\*.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="3.1.5" />
+  </ItemGroup>
+
+</Project>

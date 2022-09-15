@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="..\..\..\..\common.props" />
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+	  <RootNamespace />
+  </PropertyGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Generic\Abp\BusinessException\Localization\BusinessException\*.json" />
+    <Content Remove="Generic\Abp\BusinessException\Localization\BusinessException\*.json" />
+  </ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Validation" Version="$(AbpVersion)" />
+		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="$(FileProvidersEmbeddedVersion)" />
+	</ItemGroup>
+
+</Project>

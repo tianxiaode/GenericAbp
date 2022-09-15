@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\..\..\common.props" />
+  
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+     <RootNamespace />
+  </PropertyGroup>
+
+  <ItemGroup>
+  	<PackageReference Include="Volo.Abp.Identity.Domain.Shared" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.SettingManagement.Domain.Shared" Version="$(AbpVersion)" />
+    <ProjectReference Include="..\..\..\ddd\src\Generic.Abp.DDD.Domain.Shared\Generic.Abp.DDD.Domain.Shared.csproj" />
+    <ProjectReference Include="..\..\..\businessexception\src\Generic.Abp.BusinessException\Generic.Abp.BusinessException.csproj" />
+    <ProjectReference Include="..\..\..\enumeration\src\Generic.Abp.Enumeration.Domain.Shared\Generic.Abp.Enumeration.Domain.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Generic\Abp\Identity\Localization\Identity\*.json" />
+    <Content Remove="Generic\Abp\Identity\Localization\Identity\*.json" />
+  </ItemGroup>
+
+</Project>

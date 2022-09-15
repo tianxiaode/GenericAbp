@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="..\..\..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+	  <RootNamespace />
+  </PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.PermissionManagement.Application" Version="$(AbpVersion)" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Generic.Abp.ExtResource.Application.Contracts\Generic.Abp.ExtResource.Application.Contracts.csproj" />
+	</ItemGroup>
+
+</Project>

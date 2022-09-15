@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+	<Import Project="..\..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<OutputType>Library</OutputType>
+		<IsPackable>true</IsPackable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.IdentityServer.Domain" Version="$(AbpVersion)" />
+		<PackageReference Include="System.Security.Principal.Windows" Version="4.7.0" />
+		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="5.0.2" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Include="Pages\**\*.css" />
+		<EmbeddedResource Include="Pages\**\*.js" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Generic.Abp.Account.Web\Generic.Abp.Account.Web.csproj" />
+	</ItemGroup>
+
+</Project>

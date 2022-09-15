@@ -1,0 +1,17 @@
+{
+  "culture": "en",
+  "texts": {
+    "File": "File",
+    "Files": "Files",
+    "DisplayName:Filename": "Filename",
+    "DisplayName:MimeType": "Mime type",
+    "DisplayName:FileType": "File type",
+    "DisplayName:Size": "Size",
+    "DisplayName:Description": "Description",
+    "DisplayName:Hash": "Hash",
+    "Generic.Abp.FileManagement:000001": "The file name cannot be empty.",
+    "Generic.Abp.FileManagement:000002": "File chunk error.",
+    "Generic.Abp.FileManagement:000003": "Invalid file type.",
+    "Generic.Abp.FileManagement:000004": "File size `{Value}` has exceeded `{Max}`"
+  }
+}

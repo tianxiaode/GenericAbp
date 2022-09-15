@@ -1,0 +1,82 @@
+﻿@page
+@using System.Net
+@using Generic.Abp.IdentityServer.Permissions
+@using Generic.Abp.IdentityServer.Web.Navigation
+@using Generic.Abp.IdentityServer.Web.Pages.IdentityServer.ApiResources
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
+@using Volo.Abp.IdentityServer.Localization
+@model IndexModel
+@inject IHtmlLocalizer<AbpIdentityServerResource> _l
+@inject IAuthorizationService _authorization
+@inject IPageLayout _pageLayout
+@{
+    _pageLayout.Content.Title = _l["ApiResources"].Value;
+    _pageLayout.Content.BreadCrumb.Add(_l["Menu:IdentityServerManagement"].Value);
+    _pageLayout.Content.MenuItemName = IdentityServerMenuNames.ApiResources;
+}
+
+@section scripts {
+    <abp-script-bundle name="@typeof(IndexModel).FullName">
+        <abp-script src="/Pages/identityServer/ApiResources/index.js" />
+    </abp-script-bundle>
+}
+
+<abp-card id="apiResourcesWrapper">
+    <abp-card-header>
+        <abp-row>
+            <abp-column size-md="_6">
+                <abp-card-title>@_l["ApiResources"]</abp-card-title>
+            </abp-column>
+            <abp-column size-md="_6" class="text-right">
+                @if (await _authorization.IsGrantedAsync(IdentityServerPermissions.ApiResources.Create))
+                {
+                    <abp-button button-type="Primary" name="CreateApiResource" text="@_l["NewApiResource"].Value" icon="plus" />
+                }
+            </abp-column>
+        </abp-row>
+    </abp-card-header>
+    <abp-card-body>
+        <table class="display nowrap" style="width:100%">
+            <thead>
+            <tr>
+                <th>@_l["ApiResource:Name"]</th>
+                <th>@_l["ApiResource:DisplayName"]</th>
+                <th>@_l["ApiResource:Description"]</th>
+                <th>@_l["ApiResource:Enabled"]</th>
+                <th>@_l["ApiResource:AllowedAccessTokenSigningAlgorithms"]</th>
+                <th>@_l["ApiResource:ShowInDiscoveryDocument"]</th>
+                <th>@_l["Actions"]</th>
+            </tr>
+            </thead>
+        </table>
+    </abp-card-body>
+</abp-card>
+
+<abp-card id="claimsWrapper" style="display: none">
+    <abp-card-header>
+        <abp-row>
+            <abp-column size-md="_6">
+                <abp-card-title id="claimsTitle">@_l["Claims"]</abp-card-title>
+            </abp-column>
+            <abp-column size-md="_6" class="text-right">
+                <abp-button button-type="Secondary" name="ClaimsReturnButton" text="@_l["Return"].Value" icon="chevron-left" />
+                @if (await _authorization.IsGrantedAsync(IdentityServerPermissions.ApiResources.Update))
+                {
+                    <abp-button button-type="Primary" name="CreateApiResourceCalim" text="@_l["Claims"].Value" icon="plus" />
+                }
+            </abp-column>
+        </abp-row>
+    </abp-card-header>
+    <abp-card-body>
+        <table class="display nowrap" style="width:100%">
+            <thead>
+            <tr>
+                <th>@_l["UserClaim:Type"]</th>
+                <th>@_l["Actions"]</th>
+            </tr>
+            </thead>
+        </table>
+    </abp-card-body>
+</abp-card>

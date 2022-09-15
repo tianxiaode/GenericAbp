@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+     <RootNamespace />
+  </PropertyGroup>
+
+  <ItemGroup>
+  	<PackageReference Include="Volo.Abp.AutoMapper" Version="$(AbpVersion)" />
+  	<PackageReference Include="Volo.Abp.Ddd.Application" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.IdentityServer.Domain" Version="$(AbpVersion)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Generic.Abp.IdentityServer.Application.Contracts\Generic.Abp.IdentityServer.Application.Contracts.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Generic\Abp\IdentityServer\IdentityResources\" />
+    <Folder Include="Generic\Abp\IdentityServer\Clients\" />
+  </ItemGroup>
+
+</Project>

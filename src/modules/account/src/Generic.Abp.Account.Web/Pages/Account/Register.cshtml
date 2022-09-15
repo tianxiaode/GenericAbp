@@ -1,0 +1,71 @@
+﻿@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Generic.Abp.Account.Localization
+@using Generic.Abp.Account.Web.Pages.Account
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
+@using Volo.Abp.AspNetCore.Mvc.UI.Theming
+@model RegisterModel
+@inject IThemeManager ThemeManager
+@inject IHtmlLocalizer<AccountResource> L
+@inject IPageLayout PageLayout
+@{ PageLayout.Content.Title = L["Register"].Value;
+    Layout = ThemeManager.CurrentTheme.GetAccountLayout(); }
+@section scripts {
+    <abp-script-bundle name="@typeof(ManageModel).FullName">
+        <abp-script src="/Pages/Account/Register.js" />
+    </abp-script-bundle>
+}
+<div class="card mt-3 shadow-sm rounded">
+    <div class="card-body p-5">
+        <h4>@PageLayout.Content.Title</h4>
+        <form method="post" class="mt-4" id="RegisterForm">
+            <input type="hidden" asp-for="RegisterInfoModel.AppName" value="Mvc" />
+            <div class="input-group mb-3 input-group-lg">
+                <span class="input-group-text"><i class="fa fa-user"></i></span>
+                <input type="text" class="form-control" placeholder="@L["DisplayName:UserName"]*" asp-for="RegisterInfoModel.UserName" auto-focus="true" />
+                <div class="valid-feedback d-flex">
+                    <span asp-validation-for="RegisterInfoModel.UserName" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="input-group mb-3 input-group-lg">
+                <span class="input-group-text"><i class="fa fa-envelope"></i></span>
+                <input type="text" class="form-control" placeholder="@L["DisplayName:EmailAddress"]*" asp-for="RegisterInfoModel.EmailAddress" />
+                <div class="valid-feedback d-flex">
+                    <span asp-validation-for="RegisterInfoModel.EmailAddress" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="input-group mb-3 input-group-lg">
+                <span class="input-group-text"><i class="fa fa-lock"></i></span>
+                <input asp-for="RegisterInfoModel.Password" class="form-control" placeholder="@L["DisplayName:Password"]*" />
+                <div class="valid-feedback d-flex">
+                    <span asp-validation-for="RegisterInfoModel.Password" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="input-group mb-3 input-group-lg">
+                <span class="input-group-text"><i class="fa fa-lock"></i></span>
+                <input asp-for="RegisterInfoModel.PasswordConfirm" class="form-control" placeholder="@L["DisplayName:PasswordConfirm"]*" />
+                <div class="valid-feedback d-flex">
+                    <span asp-validation-for="RegisterInfoModel.PasswordConfirm" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="input-group mb-3 input-group-lg">
+                <span class="input-group-text"><i class="fa fa-phone-alt"></i></span>
+                <input type="text" class="form-control" placeholder="@L["DisplayName:PhoneNumber"]" asp-for="RegisterInfoModel.PhoneNumber" />
+                <div class="valid-feedback d-flex">
+                    <span asp-validation-for="RegisterInfoModel.PhoneNumber" class="text-danger"></span>
+                </div>
+            </div>
+            <abp-button type="submit" button-type="Primary" text="@L["Register"].Value" class="btn-block btn-lg mt-3" />
+
+        </form>
+    </div>
+    <div class="card-footer text-center border-0">
+        <p class="text-right m-0 p-0">
+            <strong>
+                @L["AlreadyRegistered"]
+                <a href="@Url.Page("./Login", new {returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash})" class="text-decoration-none">@L["Login"]</a>
+            </strong>
+
+        </p>
+    </div>
+</div>

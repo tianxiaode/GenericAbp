@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Huang Dengqiao",
+  "classifications": [
+    "Common",
+    "Code"
+  ],
+  "identity": "GenericAbpTemplate",
+  "name": "GenericAbpTemplate",
+  "shortName": "GenericAbpTemplate",
+  "sourceName": "MyProjectName",
+  "tags": {
+    "language": "C#",
+    "type": "project"
+  },
+  "preferNameDirectory": false,
+  "symbols": {
+    "pName": {
+      "type": "parameter",
+      "datatype": "string",
+      "replaces": "MyProjectName",
+      "fileRename": "MyProjectName"
+    }
+  }
+}

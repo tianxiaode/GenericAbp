@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="..\..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.1</TargetFramework>
+		<RootNamespace></RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Autofac" Version="$(AbpVersion)" />
+		<PackageReference Include="Volo.Abp.TextTemplating" Version="$(AbpVersion)" />
+		<PackageReference Include="Volo.Abp.Localization" Version="$(AbpVersion)" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Include="Generic\Abp\TextTemplate\**\*.tpl" />
+		<Content Remove="Generic\Abp\TextTemplate\**\*.tpl" />
+		<EmbeddedResource Include="Generic\Abp\TextTemplate\GenericTextTemplate\Localization\*.json" />
+		<Content Remove="Generic\Abp\TextTemplate\GenericTextTemplate\Localization\*.json" />
+	</ItemGroup>
+
+
+</Project>

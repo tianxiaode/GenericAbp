@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="..\..\..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <Nullable>enable</Nullable>
+	  <RootNamespace />
+  </PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Ddd.Domain" Version="$(AbpVersion)" />
+		<PackageReference Include="Volo.Abp.AutoMapper" Version="$(AbpVersion)" />
+		<ProjectReference Include="..\Generic.Abp.Ddd.Domain.Shared\Generic.Abp.Ddd.Domain.Shared.csproj" />
+	</ItemGroup>
+
+
+
+</Project>

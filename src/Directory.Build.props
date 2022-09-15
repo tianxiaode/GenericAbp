@@ -1,0 +1,10 @@
+﻿<Project>
+  <PropertyGroup>
+
+    <AbpVersion>5.3.4</AbpVersion>
+    <JetBrainsAnnotationsVersion>2021.3.3</JetBrainsAnnotationsVersion>
+		<FileProvidersEmbeddedVersion>6.0.5</FileProvidersEmbeddedVersion>
+		<SkiaSharpVersion>2.80.3</SkiaSharpVersion>
+		
+  </PropertyGroup>
+</Project>

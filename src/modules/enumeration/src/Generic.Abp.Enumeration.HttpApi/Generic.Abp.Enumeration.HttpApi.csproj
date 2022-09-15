@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="..\..\..\..\common.props" />
+
+	<PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+		<RootNamespace />
+  </PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.AspNetCore.Mvc" Version="$(AbpVersion)" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.DataAnnotations" Version="2.2.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Generic.Abp.Enumeration.Application.Contracts\Generic.Abp.Enumeration.Application.Contracts.csproj" />
+	</ItemGroup>
+
+
+</Project>

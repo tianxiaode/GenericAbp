@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+     <RootNamespace />
+  </PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Authorization" Version="$(AbpVersion)" />
+		<PackageReference Include="Volo.Abp.Ddd.Application.Contracts" Version="$(AbpVersion)" />
+		<PackageReference Include="Volo.Abp.SettingManagement.Application.Contracts" Version="$(AbpVersion)" />
+	</ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Generic.Abp.FileManagement.Domain.Shared\Generic.Abp.FileManagement.Domain.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Generic\Abp\FileManagement\Files\" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,17 @@
+{
+  "culture": "zh-Hans",
+  "texts": {
+    "File": "文件",
+    "Files": "文件",
+    "DisplayName:Filename": "文件名",
+    "DisplayName:MimeType": "Mime类型",
+    "DisplayName:FileType": "文件类型",
+    "DisplayName:Size": "文件大小",
+    "DisplayName:Description": "详细信息",
+    "DisplayName:Hash": "散列值",
+    "Generic.Abp.FileManagement:000001": "文件名不能为空",
+    "Generic.Abp.FileManagement:000002": "文件块错误",
+    "Generic.Abp.FileManagement:000003": "无效的文件类型",
+    "Generic.Abp.FileManagement:000004": "文件大小 `{Value}` 已超出 `{Max}`"
+  }
+}

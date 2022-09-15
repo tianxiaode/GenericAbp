@@ -1,0 +1,25 @@
+﻿@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@using Volo.Abp.IdentityServer.Localization
+@model Generic.Abp.IdentityServer.Web.Pages.IdentityServer.ApiResources.EditModalModel
+@inject IHtmlLocalizer<AbpIdentityServerResource> _l
+@{
+    Layout = null;
+}
+<form method="post" asp-page="/IdentityServer/ApiResources/EditModal">
+    <abp-modal>
+        <abp-modal-header title="@_l["Edit"].Value"></abp-modal-header>
+        <abp-modal-body>
+            <input type="hidden" asp-for="ApiResource.Id"/>
+            <input type="hidden" asp-for="ApiResource.ConcurrencyStamp"/>
+            <abp-input asp-for="ApiResource.Name" label="@_l["ApiResource:Name"].Value"/>
+            <abp-input asp-for="ApiResource.DisplayName" label="@_l["ApiResource:DisplayName"].Value"/>
+            <abp-input asp-for="ApiResource.Description" label="@_l["ApiResource:Description"].Value"/>
+            <abp-input asp-for="ApiResource.AllowedAccessTokenSigningAlgorithms" label="@_l["ApiResource:AllowedAccessTokenSigningAlgorithms"].Value"/>
+            <abp-input asp-for="ApiResource.Enabled" label="@_l["ApiResource:Enabled"].Value"/>
+            <abp-input asp-for="ApiResource.ShowInDiscoveryDocument" label="@_l["ApiResource:ShowInDiscoveryDocument"].Value"/>
+        </abp-modal-body>
+        <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)"></abp-modal-footer>
+    </abp-modal>
+</form>

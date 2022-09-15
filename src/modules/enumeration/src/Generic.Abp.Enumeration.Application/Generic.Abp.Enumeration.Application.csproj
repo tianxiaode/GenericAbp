@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="..\..\..\..\common.props" />
+
+	<PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+		<RootNamespace />
+  </PropertyGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Generic.Abp.Enumeration.Application.Contracts\Generic.Abp.Enumeration.Application.Contracts.csproj" />
+	</ItemGroup>
+
+</Project>

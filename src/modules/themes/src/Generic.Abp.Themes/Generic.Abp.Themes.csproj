@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+	<Import Project="..\..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+		<IsPackable>true</IsPackable>
+		<OutputType>Library</OutputType>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Include="wwwroot\**\*.*" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Remove="wwwroot\**\*.*" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Generic.Abp.Themes.Shared\Generic.Abp.Themes.Shared.csproj" />
+	</ItemGroup>
+
+
+</Project>

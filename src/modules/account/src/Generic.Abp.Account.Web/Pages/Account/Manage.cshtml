@@ -1,0 +1,109 @@
+﻿@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.Identity.Settings
+@using Volo.Abp.Settings
+@using Volo.Abp.AspNetCore.Mvc.UI.Theming
+@using Generic.Abp.Account.Web.Pages.Account
+@using Generic.Abp.Account.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
+@inject ISettingProvider SettingManager
+@inject IThemeManager ThemeManager
+@inject IHtmlLocalizer<AccountResource> L
+@model ManageModel
+@inject IPageLayout PageLayout
+@{ PageLayout.Content.Title = L["PersonalSettings"].Value; }
+
+@{ Layout = ThemeManager.CurrentTheme.GetApplicationLayout();
+    var isUserNameUpdateDisabled = !string.Equals(await SettingManager.GetOrNullAsync(IdentitySettingNames.User.IsUserNameUpdateEnabled), "true",
+        StringComparison.OrdinalIgnoreCase);
+
+    var isEmailUpdateDisabled = !string.Equals(await SettingManager.GetOrNullAsync(IdentitySettingNames.User.IsEmailUpdateEnabled), "true",
+        StringComparison.OrdinalIgnoreCase); }
+@section scripts {
+    <abp-script-bundle name="@typeof(ManageModel).FullName">
+        <abp-script src="/Pages/Account/Manage.js" />
+    </abp-script-bundle>
+}
+<abp-card>
+    <abp-card-body>
+        <abp-tabs tab-style="PillVertical">
+            <abp-tab title="@L["ChangePassword"].Value">
+                <h4>@L["ChangePassword"].Value</h4><hr />
+                <form method="post" class="mt-4" id="ChangePasswordForm">
+                    <div class="mb-3 mt-3 row">
+                        <label class="col-sm-3 col-form-label">@L["DisplayName:CurrentPassword"]<span class="text-danger">*</span></label>
+                        <div class="col-sm-9">
+                            <input type="password" asp-for="ChangePasswordInfoModel.CurrentPassword" class="form-control">
+                            <div class="valid-feedback d-flex">
+                                <span asp-validation-for="ChangePasswordInfoModel.CurrentPassword" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label class="col-sm-3 col-form-label">@L["DisplayName:NewPassword"]<span class="text-danger">*</span></label>
+                        <div class="col-sm-9">
+                            <input type="password" asp-for="ChangePasswordInfoModel.NewPassword" class="form-control">
+                            <div class="valid-feedback d-flex">
+                                <span asp-validation-for="ChangePasswordInfoModel.NewPassword" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label class="col-sm-3 col-form-label">@L["DisplayName:NewPasswordConfirm"]<span class="text-danger">*</span></label>
+                        <div class="col-sm-9">
+                            <input type="password" asp-for="ChangePasswordInfoModel.NewPasswordConfirm" class="form-control">
+                            <div class="valid-feedback d-flex">
+                                <span asp-validation-for="ChangePasswordInfoModel.NewPasswordConfirm" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <abp-button type="submit" class="mt-3" button-type="Primary" text="@L["Submit"].Value" />
+                </form>
+            </abp-tab>
+            <abp-tab title="@L["PersonalSettings"].Value">
+                <h4>@L["PersonalSettings"].Value</h4><hr />
+                <form method="post" id="PersonalSettingsForm">
+                    <div class="mb-3 row">
+                        <label class="col-sm-3 col-form-label">@L["DisplayName:UserName"]<span class="text-danger">*</span></label>
+                        <div class="col-sm-9">
+                            <input type="text" asp-for="PersonalSettingsInfoModel.UserName" class="form-control" readonly="@isUserNameUpdateDisabled">
+                            <span asp-validation-for="PersonalSettingsInfoModel.UserName" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label class="col-sm-3 col-form-label">@L["DisplayName:Name"]</label>
+                        <div class="col-sm-9">
+                            <input type="text" asp-for="PersonalSettingsInfoModel.Name" class="form-control">
+                            <span asp-validation-for="PersonalSettingsInfoModel.Name" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label class="col-sm-3 col-form-label">@L["DisplayName:Surname"]</label>
+                        <div class="col-sm-9">
+                            <input type="text" asp-for="PersonalSettingsInfoModel.Surname" class="form-control">
+                            <span asp-validation-for="PersonalSettingsInfoModel.Surname" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3 row">
+                        <label class="col-sm-3 col-form-label">@L["DisplayName:Email"]<span class="text-danger">*</span></label>
+                        <div class="col-sm-9">
+                            <input type="text" asp-for="PersonalSettingsInfoModel.Email" class="form-control" readonly="@isEmailUpdateDisabled">
+                            <span asp-validation-for="PersonalSettingsInfoModel.Email" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label class="col-sm-3 col-form-label">@L["DisplayName:PhoneNumber"]</label>
+                        <div class="col-sm-9">
+                            <input type="text" asp-for="PersonalSettingsInfoModel.PhoneNumber" class="form-control">
+                            <span asp-validation-for="PersonalSettingsInfoModel.PhoneNumber" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <abp-button type="submit" button-type="Primary" text="@L["Submit"].Value" />
+                </form>
+            </abp-tab>
+        </abp-tabs>
+    </abp-card-body>
+</abp-card>

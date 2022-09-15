@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <RootNamespace>Generic.Abp.MyProjectName</RootNamespace>
+  </PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.EntityFrameworkCore" Version="$(AbpVersion)" />
+	</ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Generic.Abp.MyProjectName.Domain\Generic.Abp.MyProjectName.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

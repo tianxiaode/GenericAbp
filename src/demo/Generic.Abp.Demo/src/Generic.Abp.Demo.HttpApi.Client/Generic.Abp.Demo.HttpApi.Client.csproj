@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <RootNamespace>Generic.Abp.Demo</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Generic.Abp.Demo.Application.Contracts\Generic.Abp.Demo.Application.Contracts.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Volo.Abp.Account.HttpApi.Client" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.Identity.HttpApi.Client" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.PermissionManagement.HttpApi.Client" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.TenantManagement.HttpApi.Client" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.FeatureManagement.HttpApi.Client" Version="$(AbpVersion)" />
+  </ItemGroup>
+
+</Project>

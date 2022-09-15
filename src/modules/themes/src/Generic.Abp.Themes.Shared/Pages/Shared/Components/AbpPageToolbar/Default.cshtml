@@ -1,0 +1,3 @@
+﻿@model Generic.Abp.Themes.Shared.PageToolbars.PageToolbarItem[]
+@foreach (var toolbarItem in Model)
+{@(await Component.InvokeAsync(toolbarItem.ComponentType, toolbarItem.Arguments))}

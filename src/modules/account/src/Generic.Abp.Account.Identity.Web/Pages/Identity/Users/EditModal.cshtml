@@ -1,0 +1,87 @@
+﻿@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@using Volo.Abp.Identity.Localization
+@model Generic.Abp.Account.Identity.Web.Pages.Identity.Users.EditModalModel
+@inject IHtmlLocalizer<IdentityResource> L
+@{ Layout = null; }
+<form method="post" asp-page="/Identity/Users/EditModal">
+    <abp-modal>
+        <abp-modal-header title="@L["Edit"].Value"></abp-modal-header>
+        <abp-modal-body>
+            <abp-tabs name="create-user-modal-tabs">
+                <abp-tab title="@L["UserInformations"].Value">
+                    @* TODO: Can we use dynamic form? *@
+                    <input asp-for="UserInfo.Id" />
+                    <input asp-for="UserInfo.ConcurrencyStamp" />
+                    <div class="mb-3 mt-3 row">
+                        <label class="col-sm-3 col-form-label">@L["DisplayName:UserName"]<span class="text-danger">*</span></label>
+                        <div class="col-sm-9">
+                            <input type="text" asp-for="UserInfo.UserName" class="form-control">
+                            <div class="valid-feedback d-flex">
+                                <span asp-validation-for="UserInfo.UserName" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label class="col-sm-3 col-form-label">@L["DisplayName:Name"]</label>
+                        <div class="col-sm-9">
+                            <input type="text" asp-for="UserInfo.Name" class="form-control">
+                            <div class="valid-feedback d-flex">
+                                <span asp-validation-for="UserInfo.Name" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label class="col-sm-3 col-form-label">@L["DisplayName:Surname"]</label>
+                        <div class="col-sm-9">
+                            <input type="text" asp-for="UserInfo.Surname" class="form-control">
+                            <div class="valid-feedback d-flex">
+                                <span asp-validation-for="UserInfo.Surname" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label class="col-sm-3 col-form-label">@L["DisplayName:Password"]</label>
+                        <div class="col-sm-9">
+                            <input type="password" asp-for="UserInfo.Password" class="form-control">
+                            <div class="valid-feedback d-flex">
+                                <span asp-validation-for="UserInfo.Password" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label class="col-sm-3 col-form-label">@L["DisplayName:Email"]<span class="text-danger">*</span></label>
+                        <div class="col-sm-9">
+                            <input type="text" asp-for="UserInfo.Email" class="form-control">
+                            <div class="valid-feedback d-flex">
+                                <span asp-validation-for="UserInfo.Email" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label class="col-sm-3 col-form-label">@L["DisplayName:PhoneNumber"]</label>
+                        <div class="col-sm-9">
+                            <input type="text" asp-for="UserInfo.PhoneNumber" class="form-control">
+                            <div class="valid-feedback d-flex">
+                                <span asp-validation-for="UserInfo.PhoneNumber" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </abp-tab>
+                <abp-tab title="@L["Roles"].Value">
+                    @for (var i = 0; i < Model.Roles.Length; i++)
+                    {
+        <div class="form-check m-3">
+            <input class="form-check-input" type="checkbox" asp-for="@Model.Roles[i].IsAssigned">
+            <label class="form-check-label">
+                @Model.Roles[i].Name
+            </label>
+            <input asp-for="@Model.Roles[i].Name" />
+        </div>}
+                </abp-tab>
+            </abp-tabs>
+        </abp-modal-body>
+        <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)"></abp-modal-footer>
+    </abp-modal>
+</form>
