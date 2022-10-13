@@ -1,7 +1,7 @@
 ﻿using Generic.Abp.IdentityServer.Permissions;
 using Generic.Abp.IdentityServer.Web.Navigation;
+using Generic.Abp.Jspreadsheet;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AutoMapper;
@@ -17,7 +17,8 @@ namespace Generic.Abp.IdentityServer.Web
         typeof(AbpPermissionManagementWebModule),
         typeof(AbpAutoMapperModule),
         typeof(AbpAspNetCoreMvcUiThemeSharedModule),
-        typeof(GenericAbpIdentityServerHttpApiModule)
+        typeof(GenericAbpIdentityServerHttpApiModule),
+        typeof(GenericAbpJspreadsheetModule)
     )]
     public class GenericAbpIdentityServerWebModule : AbpModule
     {

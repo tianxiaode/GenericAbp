@@ -3,6 +3,9 @@
 # List of projects
 $packages = (
 
+    # modules/jspreadsheet
+    "Generic.Abp.Jspreadsheet",
+
     # modules/businessexception
     "Generic.Abp.BusinessException",
 

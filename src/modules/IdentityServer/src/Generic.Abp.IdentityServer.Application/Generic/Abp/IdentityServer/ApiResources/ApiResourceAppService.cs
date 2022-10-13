@@ -139,14 +139,10 @@ public class ApiResourceAppService: IdentityServerAppService, IApiResourceAppSer
     [Authorize(IdentityServerPermissions.ApiResources.Default)]
     public virtual async Task<ListResultDto<ApiResourceScopeDto>> GetScopesAsync(Guid id)
     {
-        var scopes = await ApiScopeRepository.GetListAsync();
-        var list = scopes.Select(m => new ApiResourceScopeDto(m.Name, m.DisplayName)).ToList();
+        //var scopes = await ApiScopeRepository.GetListAsync();
+        //var list = scopes.Select(m => new ApiResourceScopeDto(m.Name, m.DisplayName)).ToList();
         var entity = await Repository.GetAsync(id);
-        foreach (var dto in list)
-        {
-            dto.IsSelected = entity.Scopes.Any(m =>
-                m.Scope.Equals(dto.ScopeName, StringComparison.InvariantCultureIgnoreCase));
-        }
+        var list = entity.Scopes.Select(m=>new ApiResourceScopeDto(m.Scope)).ToList();
 
         return new ListResultDto<ApiResourceScopeDto>(list);
     }
@@ -156,8 +152,8 @@ public class ApiResourceAppService: IdentityServerAppService, IApiResourceAppSer
     public virtual async Task AddScopeAsync(Guid id, ApiResourceScopeCreateInput input)
     {
         var scopeName = input.Name;
-        var scope = await ApiScopeRepository.FindByNameAsync(scopeName);
-        if (scope == null) throw new EntityNotFoundException(typeof(ApiScope), scopeName);
+        //var scope = await ApiScopeRepository.FindByNameAsync(scopeName);
+        //if (scope == null) throw new EntityNotFoundException(typeof(ApiScope), scopeName);
         var entity = await Repository.GetAsync(id);
         entity.AddScope(scopeName);
         await Repository.UpdateAsync(entity);
@@ -168,7 +164,7 @@ public class ApiResourceAppService: IdentityServerAppService, IApiResourceAppSer
     public virtual async Task RemoveScopeAsync(Guid id, ApiResourceScopeDeleteInput input)
     {
         var entity = await Repository.GetAsync(id);
-        entity.RemoveScope(input.Name);
+        entity.RemoveScope(input.Scope);
         await Repository.UpdateAsync(entity);
     }
     

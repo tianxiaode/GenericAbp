@@ -3,6 +3,7 @@
 @using Generic.Abp.IdentityServer.Permissions
 @using Generic.Abp.IdentityServer.Web.Navigation
 @using Generic.Abp.IdentityServer.Web.Pages.IdentityServer.ApiResources
+@using Generic.Abp.Jspreadsheet;
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Volo.Abp.AspNetCore.Mvc.UI.Layout
@@ -17,10 +18,15 @@
     _pageLayout.Content.MenuItemName = IdentityServerMenuNames.ApiResources;
 }
 
+@section styles {
+    <abp-style-bundle name="Jspreadsheet"></abp-style-bundle>
+}
+
 @section scripts {
     <abp-script-bundle name="@typeof(IndexModel).FullName">
         <abp-script src="/Pages/identityServer/ApiResources/index.js" />
     </abp-script-bundle>
+    <abp-script-bundle name="Jspreadsheet"></abp-script-bundle>
 }
 
 <abp-card id="apiResourcesWrapper">
@@ -54,17 +60,17 @@
     </abp-card-body>
 </abp-card>
 
-<abp-card id="claimsWrapper" style="display: none">
+<abp-card id="ClaimsWrapper" style="display: none">
     <abp-card-header>
         <abp-row>
             <abp-column size-md="_6">
-                <abp-card-title id="claimsTitle">@_l["Claims"]</abp-card-title>
+                <abp-card-title id="ClaimsTitle">@_l["Claims"]</abp-card-title>
             </abp-column>
             <abp-column size-md="_6" class="text-right">
-                <abp-button button-type="Secondary" name="ClaimsReturnButton" text="@_l["Return"].Value" icon="chevron-left" />
+                <abp-button button-type="Secondary" name="returnButton" text="@_l["Return"].Value" icon="chevron-left" />
                 @if (await _authorization.IsGrantedAsync(IdentityServerPermissions.ApiResources.Update))
                 {
-                    <abp-button button-type="Primary" name="CreateApiResourceCalim" text="@_l["Claims"].Value" icon="plus" />
+                    <abp-button button-type="Primary" name="createButton" text="@_l["Claims"].Value" icon="plus" />
                 }
             </abp-column>
         </abp-row>
@@ -76,6 +82,63 @@
                 <th>@_l["UserClaim:Type"]</th>
                 <th>@_l["Actions"]</th>
             </tr>
+            </thead>
+        </table>
+    </abp-card-body>
+</abp-card>
+
+<abp-card id="ScopesWrapper" style="display: none">
+    <abp-card-header>
+        <abp-row>
+            <abp-column size-md="_6">
+                <abp-card-title id="ScopesTitle">@_l["Claims"]</abp-card-title>
+            </abp-column>
+            <abp-column size-md="_6" class="text-right">
+                <abp-button button-type="Secondary" name="returnButton" text="@_l["Return"].Value" icon="chevron-left" />
+                @if (await _authorization.IsGrantedAsync(IdentityServerPermissions.ApiResources.Update))
+                {
+                    <abp-button button-type="Primary" name="createButton" text="@_l["Scopes"].Value" icon="plus" />
+                }
+            </abp-column>
+        </abp-row>
+    </abp-card-header>
+    <abp-card-body>
+        <table class="display nowrap" style="width:100%">
+            <thead>
+                <tr>
+                    <th>@_l["Scopes"]</th>
+                    <th>@_l["Actions"]</th>
+                </tr>
+            </thead>
+        </table>
+    </abp-card-body>
+</abp-card>
+
+<abp-card id="SecretsWrapper" style="display: none">
+    <abp-card-header>
+        <abp-row>
+            <abp-column size-md="_6">
+                <abp-card-title id="SecretsTitle">@_l["Secrets"]</abp-card-title>
+            </abp-column>
+            <abp-column size-md="_6" class="text-right">
+                <abp-button button-type="Secondary" name="returnButton" text="@_l["Return"].Value" icon="chevron-left" />
+                @if (await _authorization.IsGrantedAsync(IdentityServerPermissions.ApiResources.Update))
+                {
+                    <abp-button button-type="Primary" name="createButton" text="@_l["Secret"].Value" icon="plus" />
+                }
+            </abp-column>
+        </abp-row>
+    </abp-card-header>
+    <abp-card-body>
+        <table class="display nowrap" style="width:100%">
+            <thead>
+                <tr>
+                    <th>@_l["Secrets:Type"]</th>
+                    <th>@_l["Secrets:Value"]</th>
+                    <th>@_l["Secrets:Description"]</th>
+                    <th>@_l["Secrets:Expiration"]</th>
+                    <th>@_l["Actions"]</th>
+                </tr>
             </thead>
         </table>
     </abp-card-body>

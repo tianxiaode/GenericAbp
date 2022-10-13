@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{54FA65DF-9284-4B11-8068-0DC3C34E15B2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Generic.Abp.Jspreadsheet", "src\Generic.Abp.Jspreadsheet\Generic.Abp.Jspreadsheet.csproj", "{7ABC537B-46A8-4E39-8781-ED00850D26BE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7ABC537B-46A8-4E39-8781-ED00850D26BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7ABC537B-46A8-4E39-8781-ED00850D26BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7ABC537B-46A8-4E39-8781-ED00850D26BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7ABC537B-46A8-4E39-8781-ED00850D26BE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7ABC537B-46A8-4E39-8781-ED00850D26BE} = {54FA65DF-9284-4B11-8068-0DC3C34E15B2}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {38CC1A28-E88B-4477-AD9E-130A97AA1CE0}
+	EndGlobalSection
+EndGlobal

@@ -147,24 +147,9 @@
             });
         });
 
-        var $claimsWrapper = $("#claimsWrapper");
-        var $claimsTable = $claimsWrapper.find('table');
-        var allowClaimsDelete = window.abp.auth.isGranted('IdentityServer.ApiResources.Update') && `<button class="btn btn-danger btn-sm Delete ml-1 mr-1"><i class="fa fa-trash"></i></button>`;
-        var claimCreateModal = new window.abp.ModalManager(window.abp.appPath + 'IdentityServer/ApiResources/CreateClaimsModal');
 
-        var claimsTable = null;
-
-        function initClaimsTable(url) {
-            console.log(claimsTable);
-            if (claimsTable) return;
-            claimsTable = $claimsTable.DataTable({
-                order: [[0, "asc"]],
-                processing: true,
-                serverSide: true,
-                searching: false,
-                scrollX: true,
-                paging: false,
-                ajax:url,
+        var details = {
+            Claims: {
                 columnDefs: [
                     {
                         data: 'type',
@@ -174,10 +159,84 @@
                         targets: 1,
                         data: null,
                         orderable: false,
-                        defaultContent: `${allowClaimsDelete}`,
+                        //defaultContent: `${detail.delete}`,
                         width: 40
                     }
-                ],
+                    ]
+            },
+            Scopes: {
+                columnDefs: [
+                    {
+                        data: 'scope',
+                        targets: 0
+                    },
+                    {
+                        targets: 1,
+                        data: null,
+                        orderable: false,
+                        //defaultContent: `${detail.delete}`,
+                        width: 40
+                    }
+                ]
+
+            },
+            Secrets: {
+                columnDefs: [
+                    {
+                        data: 'type',
+                        targets: 0
+                    },
+                    {
+                        data: 'value',
+                        targets: 1
+                    },
+                    {
+                        data: 'description',
+                        targets: 2
+                    },
+                    {
+                        data: 'expiration',
+                        targets: 3
+                    },
+                    {
+                        targets: 4,
+                        data: null,
+                        orderable: false,
+                        //defaultContent: `${detail.delete}`,
+                        width: 40
+                    }
+                ]
+            }
+        };
+
+        function initDetail(name, url) {
+            let removes = {
+                Claims: apiResourceAppService.removeClaim,
+                Scopes: apiResourceAppService.removeScope,
+                Secrets: apiResourceAppService.removeSecrets
+            };
+            let detail = details[name];            
+            let wrapper = detail.wrapper = $(`#${name}Wrapper`);
+
+            wrapper.show();
+            detail.remove = removes[name];
+            detail.tableDiv = wrapper.find('table');
+            detail.delete = window.abp.auth.isGranted('IdentityServer.ApiResources.Update') && `<button class="btn btn-danger btn-sm Delete ml-1 mr-1"><i class="fa fa-trash"></i></button>`;
+            detail.createModal = new window.abp.ModalManager(window.abp.appPath + `IdentityServer/ApiResources/Create${name}Modal`);
+            
+
+            let columns = detail.columnDefs;
+            columns[columns.length - 1].defaultContent = detail.delete;
+
+            detail.table = detail.tableDiv.DataTable({
+                order: [[0, "asc"]],
+                processing: true,
+                serverSide: true,
+                searching: false,
+                scrollX: true,
+                paging: false,
+                ajax: url,
+                columnDefs: columns,
                 "language": {
                     "info": "显示 _TOTAL_ 个条目中的 _START_ 到 _END_ 个.",
                     "infoFiltered": "(从 _MAX_ 总条目中过滤掉)",
@@ -196,47 +255,80 @@
                 }
             });
 
+            wrapper.find(`button[name=returnButton]`).click(e => {
+                $currentActivity = null;
+                wrapper.hide();
+                $apiResourcesWrapper.show();
+            });
+
+
+            wrapper.find('button[name=createButton]').click(e => {
+                detail.createModal.open({
+                    id: $currentEntity.id
+                });
+            });
+
+            detail.createModal.onResult(function () {
+                detail.table.ajax.reload();
+            });
+
+            wrapper.delegate('button.Delete', 'click', (e) => {
+                e.preventDefault();
+                let data = getRowData(e.target, detail.table);
+                if (!data) return;
+                let title = window.abp.utils.formatString(l('DeleteConfirmTitle'), l(`${name}`));
+                let message = data.type || data.scope;
+
+                window.abp.message.confirm(message, title, function (confirm) {
+
+                    if (confirm) {
+                        detail.remove($currentEntity.id, data)
+                            .then(function () {
+                                detail.table.ajax.reload();
+                            });
+                    }
+                });
+            });
+
+
         }
 
-        $('button[name=ClaimsReturnButton]').click(e => {
-            $currentActivity = null;
-            $claimsWrapper.hide();
-            $apiResourcesWrapper.show();
-        });
 
-
-        $('button[name=CreateApiResourceCalim]').click(e => {
-            claimCreateModal.open({
-                id: $currentEntity.id
-            });
-        });
-
-        claimCreateModal.onResult(function () {
-            claimsTable.ajax.reload();
-        });
-
-
-
-        $claimsWrapper.delegate('.more li', 'click', (e) => {
+        $apiResourcesWrapper.delegate('.more li', 'click', (e) => {
             e.preventDefault();
             var target = e.target,
                 data = getRowData(target,dataTable),
                 classname = target.className;
             if (!data) return;
             $currentEntity = data;
+            var name = null;
+            var url = null;
             if (classname.includes('claims')) {
-                $apiResourcesWrapper.hide();
-                $claimsWrapper.show();
-                $('#claimsTitle').html(`${l('Claims')}:${data.name}`);
-                var url = window.abp.libs.datatables.createAjax(apiResourceAppService.getClaims,
+                name = "Claims";
+                url = window.abp.libs.datatables.createAjax(apiResourceAppService.getClaims,
                     () => { return [$currentEntity.id] });
-                if (claimsTable) {
-                    claimsTable.ajax.url = url;
-                        ;
-                    claimsTable.ajax.reload();
-                } else {
-                    initClaimsTable(url);
+            }
+            if (classname.includes('scopes')) {
+                name = "Scopes";
+                url = window.abp.libs.datatables.createAjax(apiResourceAppService.getScopes,
+                    () => { return [$currentEntity.id] });
+            }
+            if (classname.includes('secrets')) {
+                name = "Secrets";
+                url = window.abp.libs.datatables.createAjax(apiResourceAppService.getClientSecrets,
+                    () => { return [$currentEntity.id] });
+            }
+
+            if (name) {
+                $apiResourcesWrapper.hide();
+                var detail = details[name];
+                if (!detail.table) {
+                    detail = initDetail(name, url);
+                    return;
                 }
+                var table = detail.table;
+                table.ajax.url = url;
+                table.ajax.reload();
             }
         });
 

@@ -16,7 +16,8 @@
 		<PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared" Version="$(AbpVersion)" />
 		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="$(FileProvidersEmbeddedVersion)" />
 		<ProjectReference Include="..\Generic.Abp.IdentityServer.HttpApi\Generic.Abp.IdentityServer.HttpApi.csproj" />
-	</ItemGroup>
+    <ProjectReference Include="..\..\..\jspreadsheet\src\Generic.Abp.Jspreadsheet\Generic.Abp.Jspreadsheet.csproj" />
+  </ItemGroup>
 
 	<ItemGroup>
 		<EmbeddedResource Include="Pages\**\*.js" />

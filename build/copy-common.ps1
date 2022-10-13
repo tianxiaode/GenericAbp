@@ -4,6 +4,9 @@ $rootFolder = Join-Path $packFolder "../src/"
 
 # List of projects
 $projects = (
+    # modules/jspreadsheet
+    "modules/jspreadsheet/src/Generic.Abp.Jspreadsheet",
+
     # modules/businessexception
     "modules/businessexception/src/Generic.Abp.BusinessException",
 

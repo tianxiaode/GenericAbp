@@ -5,14 +5,10 @@ namespace Generic.Abp.IdentityServer.ApiResources;
 [Serializable]
 public class ApiResourceScopeDto
 {
-    public string ScopeName { get; set; }
-    public string ScopeDisplayName { get; set; }
-    public bool IsSelected { get; set; }
+    public string Scope { get; set; }
 
-    public ApiResourceScopeDto(string scopeName, string scopeDisplayName)
+    public ApiResourceScopeDto(string scope)
     {
-        ScopeName = scopeName;
-        ScopeDisplayName = scopeDisplayName;
-        IsSelected = false;
+        Scope = scope;
     }
 }
