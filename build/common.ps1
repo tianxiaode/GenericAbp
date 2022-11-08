@@ -5,6 +5,7 @@ $rootFolder = (Get-Item -Path "./" -Verbose).FullName
 # List of solutions
 
 $solutionPaths = (
+		"../src/modules/w2ui",
 		"../src/modules/jspreadsheet",
 		"../src/modules/businessexception",
    	"../src/modules/helper",

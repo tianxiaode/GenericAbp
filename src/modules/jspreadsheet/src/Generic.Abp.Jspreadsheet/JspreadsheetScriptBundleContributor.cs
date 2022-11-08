@@ -8,6 +8,8 @@ namespace Generic.Abp.Jspreadsheet
          public override void ConfigureBundle(BundleConfigurationContext context)
         {
             context.Files.AddIfNotContains("/libs/jspreadsheet/jexcel.js");
+            context.Files.AddIfNotContains("/libs/jsuites/jsuites.js");
+            
         }
 
     }

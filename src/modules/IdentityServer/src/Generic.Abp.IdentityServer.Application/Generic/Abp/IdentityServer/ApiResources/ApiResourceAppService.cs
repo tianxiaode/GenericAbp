@@ -1,6 +1,8 @@
 ﻿using Generic.Abp.BusinessException.Exceptions;
 using Generic.Abp.IdentityServer.Permissions;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +13,7 @@ using Volo.Abp.Domain.Entities;
 using Volo.Abp.IdentityServer.ApiResources;
 using Volo.Abp.IdentityServer.ApiScopes;
 using Volo.Abp.Uow;
+using Newtonsoft.Json;
 
 namespace Generic.Abp.IdentityServer.ApiResources;
 
@@ -40,6 +43,7 @@ public class ApiResourceAppService: IdentityServerAppService, IApiResourceAppSer
     {
         var sorting = input.Sorting;
         if (string.IsNullOrEmpty(sorting)) sorting = $"{nameof(ApiResource.Name)}";
+        Logger.LogInformation($"api get list: {System.Text.Json.JsonSerializer.Serialize(input)}");
         var list = await Repository.GetPagedListAsync(input.SkipCount, input.MaxResultCount,sorting);
         var count = await Repository.GetCountAsync();
         return new PagedResultDto<ApiResourceDto>(count,

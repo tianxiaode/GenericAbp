@@ -107,6 +107,7 @@
     "Edit": "编辑",
     "DeleteConfirmTitle": "确定要删除以下{0}？",
     "Scopes": "范围",
-    "Return": "返回"
+    "Return": "返回",
+    "Detail":  "详细信息"
   }
 }

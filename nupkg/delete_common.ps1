@@ -3,6 +3,9 @@
 # List of projects
 $packages = (
 
+    # modules/w2ui
+    "Generic.Abp.W2Ui",
+    
     # modules/jspreadsheet
     "Generic.Abp.Jspreadsheet",
 

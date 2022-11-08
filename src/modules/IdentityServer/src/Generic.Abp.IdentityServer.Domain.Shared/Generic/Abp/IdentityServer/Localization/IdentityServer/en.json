@@ -108,6 +108,7 @@
     "Edit": "Edit",
     "DeleteConfirmTitle": "Are you sure you want to delete the following {0}?",
     "Scopes": "Scopes",
-    "Return": "Return"
+    "Return": "Return",
+    "Detail": "Detail"
   }
 }

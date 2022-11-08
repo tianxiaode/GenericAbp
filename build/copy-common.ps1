@@ -4,6 +4,9 @@ $rootFolder = Join-Path $packFolder "../src/"
 
 # List of projects
 $projects = (
+    # modules/w2ui
+    "modules/w2ui/src/Generic.Abp.W2Ui",
+
     # modules/jspreadsheet
     "modules/jspreadsheet/src/Generic.Abp.Jspreadsheet",
 
