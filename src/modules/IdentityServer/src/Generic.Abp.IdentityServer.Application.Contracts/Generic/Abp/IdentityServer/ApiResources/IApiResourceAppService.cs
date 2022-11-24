@@ -12,6 +12,7 @@ public interface IApiResourceAppService: IApplicationService
     Task<PagedResultDto<ApiResourceDto>> GetListAsync(ApiResourceGetListDto input);
     Task<ApiResourceDto> CreateAsync(ApiResourceCreateInput input);
     Task<ApiResourceDto> UpdateAsync(Guid id, ApiResourceUpdateInput input);
+    Task UpdateEnableAsync(Guid id, bool enable);
     Task<ListResultDto<ApiResourceDto>> DeleteAsync(List<Guid> ids);
     Task<ListResultDto<ApiResourceClaimDto>> GetClaimsAsync(Guid id);
     Task AddClaimAsync(Guid id, ApiResourceClaimCreateInput input);
@@ -22,4 +23,5 @@ public interface IApiResourceAppService: IApplicationService
     Task<ListResultDto<ApiResourceSecretDto>> GetClientSecretsAsync(Guid id);
     Task AddSecretAsync(Guid id, ApiResourceSecretCreateInput input);
     Task RemoveSecretAsync(Guid id, ApiResourceSecretDeleteInput input);
+
 }

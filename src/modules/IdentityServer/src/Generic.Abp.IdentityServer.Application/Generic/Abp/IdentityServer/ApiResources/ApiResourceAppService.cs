@@ -100,7 +100,18 @@ public class ApiResourceAppService: IdentityServerAppService, IApiResourceAppSer
             result.Add(ObjectMapper.Map<ApiResource, ApiResourceDto>(entity));
         }
 
+        
+
         return new ListResultDto<ApiResourceDto>(result);
+    }
+
+    [UnitOfWork]
+    [Authorize(IdentityServerPermissions.ApiResources.Update)]
+    public virtual async Task UpdateEnableAsync(Guid id, bool enable)
+    {
+        var entity = await Repository.GetAsync(id);
+        entity.Enabled = enable;
+        await Repository.UpdateAsync(entity);
     }
 
     #region Claims

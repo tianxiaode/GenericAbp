@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 
 namespace Generic.Abp.IdentityServer.ApiResources;
@@ -43,6 +44,26 @@ public class ApiResourceController: IdentityServerController, IApiResourceAppSer
     public Task<ApiResourceDto> UpdateAsync(Guid id,[FromBody] ApiResourceUpdateInput input)
     {
         return ApiResourceAppService.UpdateAsync(id, input);
+    }
+
+    [RemoteService(false)]
+    public Task UpdateEnableAsync(Guid id, bool enable)
+    {
+        return Task.CompletedTask;
+    }
+
+    [HttpPut]
+    [Route("{id:guid}/enable")]
+    public Task Enable(Guid id)
+    {
+        return ApiResourceAppService.UpdateEnableAsync(id, true);
+    }
+
+    [HttpPut]
+    [Route("{id:guid}/disable")]
+    public Task Disable(Guid id)
+    {
+        return ApiResourceAppService.UpdateEnableAsync(id, false);
     }
 
     [HttpDelete]

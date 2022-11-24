@@ -12,16 +12,8 @@
     var createModal = new window.abp.ModalManager(
         window.abp.appPath + 'IdentityServer/ApiResources/CreateModal'
     );
-    var boolValueRender = function(data) {
-        let cls = data ? "fa-check-square" : "fa-square";
-        return `<i class="far ${cls}"></i>`;
 
-    }
-
-    var getRowData = function (target, dataTable) {
-        var row = dataTable.row($(target).closest('tr'));
-        return row.data();
-    }
+    var currentRecord;
 
     let layout = $("#layout").w2layout({
         name: 'layout',
@@ -69,7 +61,10 @@
         columns: [
             { field: 'name', text: l("ApiResource:Name"), size: '30%' },
             { field: 'displayName', text: l("ApiResource:DisplayName"), size: '30%' },
-            { field: 'description', text: l("ApiResource:Description"), size: '40%' },
+            { field: 'description', text: l("ApiResource:Description"), size: '30%' },
+            { field: 'enabled', text: l("ApiResource:Enabled"), size: '10%', style: 'text-align: center',
+                editable: { type: 'checkbox', style: 'text-align: center' } 
+            },
         ],
         onRequest(event) {
             let postData = event.postData;
@@ -82,23 +77,29 @@
             return data;
         },
         onSelect(event) {
-            console.log(this.getSelection());
-            console.log(event)
-        //    let id = event.recid;
-        //    console.log(event, id);
-        //    if (!id) return;
-        //    let rec = this.records.find(m => m.recid === id);
-        //    if (rec) {
-        //        updateTab(rec);
-        //        return;
-        //    };
-        //    clearTab();
+            let grid = w2ui.apiResources,
+                recid = event.recid;
+            currentRecord = getCurrentRecord(grid, recid);
+            onRefreshDetail();
+        },
+        onUnselect(event){
+            let grid = w2ui.apiResources,
+                recid = event.recid,
+                selections =  grid.getSelection(),
+                ln = selections.length;
+            if(ln <= 1){
+                onClearDetail();
+                return;
+            }
+            recid = selections[ln-2];
+            currentRecord = getCurrentRecord(grid, recid);
+            onRefreshDetail();
         },
         onAdd(event) {
             createModal.open();
         },
         onEdit(event) {
-            let record = getCurrentRecord(w2ui.apiResources);
+            let record = getCurrentRecord(w2ui.apiResources, event.recid);
             if(!record) return;
             editModal.open({
                 id: record.id
@@ -123,10 +124,14 @@
                         .then(function () {
                             grid.clear();
                             grid.reload();
+                            onClearDetail();
                         });
                 }
             });
         },
+        onChange(event){
+            console.log('onChange', event);
+        }
     }));
 
     createModal.onResult(function () {
@@ -137,18 +142,30 @@
         w2ui.apiResources.reload();
     });
 
-    function getCurrentRecord(grid) {
-        let selection = grid.getSelection(),
-            record = grid.get(selection && selection[0]);
+    function getCurrentRecord(grid, recid) {
+        let record = grid.get(recid);
         return record;
     };
 
-    function updateTab(rec) {
-        let tabs = layout.get('right').tabs;
+    function onRefreshDetail() {
+        let tabs = layout.get('right').tabs,
+            active = tabs.get(tabs.active);
+        console.log(active);
+        resetDetialTitle();
     };
 
-    function clearTab() {
-        let tabs = layout.get('right').tabs;
+    function onClearDetail() {
+        currentRecord = null;
+        let tabs = layout.get('right').tabs,
+            active = tabs.get(tabs.active);
+        resetDetialTitle();
+    };
+
+    function resetDetialTitle(){
+        let title = l("Detail"),
+            el = $('#layout_layout_panel_right > div.w2ui-panel-title');
+        if(currentRecord) title = `${title} - ${currentRecord.name}`;
+        el.html(title);
     }
 
     
