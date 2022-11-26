@@ -22,7 +22,7 @@
     "Permission:Delete": "删除",
     "Permission:Clients": "客户端",
     "Permission:ApiResources": "Api资源",
-    "Permission:ApiScopes": "Api范围",
+    "Permission:ClaimTypes": "声明",
     "Permission:ChangePermissions": "更改权限",
     "IdentityResource:Name": "资源名称",
     "IdentityResource:DisplayName": "显示名称",
@@ -43,7 +43,7 @@
     "ApiScope:DisplayName": "显示名称",
     "ApiScope:Description": "描述",
     "ApiScope:Enabled": "启用",
-    "ApiScope:Required": "必须的",
+    "ApiScope:Required": "必要",
     "ApiScope:Emphasize": "强调",
     "ApiScope:ShowInDiscoveryDocument": "在发现文档显示",
     "Client:ClientId": "客户端id",
@@ -103,11 +103,12 @@
     "ClientRedirectUri:RedirectUri": "跳转地址",
     "Menu:IdentityServerManagement": "Identity server管理",
     "NewApiResource": "新Api资源",
-    "Actions": "操作", 
+    "Actions": "操作",
     "Edit": "编辑",
     "DeleteConfirmTitle": "确定要删除以下{0}？",
     "Scopes": "范围",
     "Return": "返回",
-    "Detail":  "详细信息"
+    "Detail": "详细信息",
+    "OwnedClaims": "拥有声明"
   }
 }

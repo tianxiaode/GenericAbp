@@ -66,6 +66,26 @@ public class ApiResourceController: IdentityServerController, IApiResourceAppSer
         return ApiResourceAppService.UpdateEnableAsync(id, false);
     }
 
+    [RemoteService(false)]
+    public Task UpdateShowInDiscoveryDocumentAsync(Guid id, bool enable)
+    {
+        return Task.CompletedTask;
+    }
+
+    [HttpPut]
+    [Route("{id:guid}/show")]
+    public Task Show(Guid id)
+    {
+        return ApiResourceAppService.UpdateShowInDiscoveryDocumentAsync(id, true);
+    }
+
+    [HttpPut]
+    [Route("{id:guid}/hide")]
+    public Task Hide(Guid id)
+    {
+        return ApiResourceAppService.UpdateShowInDiscoveryDocumentAsync(id, false);
+    }
+
     [HttpDelete]
     public Task<ListResultDto<ApiResourceDto>> DeleteAsync([FromBody]List<Guid> ids)
     {
@@ -91,27 +111,6 @@ public class ApiResourceController: IdentityServerController, IApiResourceAppSer
     public Task RemoveClaimAsync(Guid id, [FromBody] ApiResourceClaimDeleteInput input)
     {
         return ApiResourceAppService.RemoveClaimAsync(id, input);
-    }
-
-    [HttpGet]
-    [Route("{id:guid}/scopes")]
-    public Task<ListResultDto<ApiResourceScopeDto>> GetScopesAsync(Guid id)
-    {
-        return ApiResourceAppService.GetScopesAsync(id);
-    }
-
-    [HttpPut]
-    [Route("{id:guid}/scopes")]
-    public Task AddScopeAsync(Guid id,[FromBody] ApiResourceScopeCreateInput input)
-    {
-        return ApiResourceAppService.AddScopeAsync(id, input);
-    }
-
-    [HttpDelete]
-    [Route("{id:guid}/scopes")]
-    public Task RemoveScopeAsync(Guid id, [FromBody] ApiResourceScopeDeleteInput input)
-    {
-        return ApiResourceAppService.RemoveScopeAsync(id, input);
     }
 
     [HttpGet]

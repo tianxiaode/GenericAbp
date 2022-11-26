@@ -28,11 +28,7 @@ namespace Generic.Abp.IdentityServer.Permissions
             apiResourcesPermission.AddChild(IdentityServerPermissions.ApiResources.Delete, L("Permission:Delete"));
             apiResourcesPermission.AddChild(IdentityServerPermissions.ApiResources.ManagePermissions, L("Permission:ChangePermissions"));
 
-            var apiScopesPermission = identityServerGroup.AddPermission(IdentityServerPermissions.ApiScopes.Default, L("Permission:ApiScopes"));
-            apiScopesPermission.AddChild(IdentityServerPermissions.ApiScopes.Create, L("Permission:Create"));
-            apiScopesPermission.AddChild(IdentityServerPermissions.ApiScopes.Update, L("Permission:Edit"));
-            apiScopesPermission.AddChild(IdentityServerPermissions.ApiScopes.Delete, L("Permission:Delete"));
-            apiScopesPermission.AddChild(IdentityServerPermissions.ApiScopes.ManagePermissions, L("Permission:ChangePermissions"));
+            var apiScopesPermission = identityServerGroup.AddPermission(IdentityServerPermissions.ClaimTypes.Default, L("Permission:ClaimTypes"));
         }
 
         private static LocalizableString L(string name)

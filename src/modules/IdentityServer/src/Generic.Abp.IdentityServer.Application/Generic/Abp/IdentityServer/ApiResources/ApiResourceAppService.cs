@@ -96,6 +96,10 @@ public class ApiResourceAppService: IdentityServerAppService, IApiResourceAppSer
         {
             var entity = await Repository.FindAsync(guid);
             if(entity == null) continue;
+            entity.RemoveAllUserClaims();
+            entity.RemoveAllScopes();
+            entity.RemoveAllProperties();
+            entity.RemoveAllSecrets();
             await Repository.DeleteAsync(entity);
             result.Add(ObjectMapper.Map<ApiResource, ApiResourceDto>(entity));
         }
@@ -111,6 +115,15 @@ public class ApiResourceAppService: IdentityServerAppService, IApiResourceAppSer
     {
         var entity = await Repository.GetAsync(id);
         entity.Enabled = enable;
+        await Repository.UpdateAsync(entity);
+    }
+
+    [UnitOfWork]
+    [Authorize(IdentityServerPermissions.ApiResources.Update)]
+    public virtual async Task UpdateShowInDiscoveryDocumentAsync(Guid id, bool isShow)
+    {
+        var entity = await Repository.GetAsync(id);
+        entity.ShowInDiscoveryDocument = isShow;
         await Repository.UpdateAsync(entity);
     }
 

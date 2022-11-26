@@ -24,7 +24,7 @@ public class ApiScopeAppService: IdentityServerAppService, IApiScopeAppService
     protected IApiScopeRepository Repository { get; }
 
     [UnitOfWork]
-    [Authorize(IdentityServerPermissions.ApiScopes.Default)]
+    [Authorize(IdentityServerPermissions.ApiResources.Default)]
     public virtual async Task<ApiScopeDto> GetAsync(Guid id)
     {
         var entity = await Repository.GetAsync(id);
@@ -32,7 +32,7 @@ public class ApiScopeAppService: IdentityServerAppService, IApiScopeAppService
     }
 
     [UnitOfWork]
-    [Authorize(IdentityServerPermissions.ApiScopes.Default)]
+    [Authorize(IdentityServerPermissions.ApiResources.Default)]
     public virtual async Task<PagedResultDto<ApiScopeDto>> GetListAsync(ApiScopeGetListDto input)
     {
         var sorting = input.Sorting;
@@ -44,7 +44,7 @@ public class ApiScopeAppService: IdentityServerAppService, IApiScopeAppService
     }
 
     [UnitOfWork]
-    [Authorize(IdentityServerPermissions.ApiScopes.Create)]
+    [Authorize(IdentityServerPermissions.ApiResources.Update)]
     public virtual async Task<ApiScopeDto> CreateAsync(ApiScopeCreateInput input)
     {
         var entity = new ApiScope(GuidGenerator.Create(), input.Name, input.DisplayName, input.Description) 
@@ -66,7 +66,7 @@ public class ApiScopeAppService: IdentityServerAppService, IApiScopeAppService
     }
 
     [UnitOfWork]
-    [Authorize(IdentityServerPermissions.ApiScopes.Update)]
+    [Authorize(IdentityServerPermissions.ApiResources.Update)]
     public virtual async Task<ApiScopeDto> UpdateAsync(Guid id,ApiScopeUpdateInput input)
     {
         var entity = await Repository.GetAsync(id, false);
@@ -83,7 +83,7 @@ public class ApiScopeAppService: IdentityServerAppService, IApiScopeAppService
     }
 
     [UnitOfWork]
-    [Authorize(IdentityServerPermissions.ApiScopes.Delete)]
+    [Authorize(IdentityServerPermissions.ApiResources.Delete)]
     public virtual async Task<ListResultDto<ApiScopeDto>> DeleteAsync(List<Guid> ids)
     {
         var result = new List<ApiScopeDto>();
@@ -99,7 +99,7 @@ public class ApiScopeAppService: IdentityServerAppService, IApiScopeAppService
     }
 
     [UnitOfWork]
-    [Authorize(IdentityServerPermissions.ApiScopes.Default)]
+    [Authorize(IdentityServerPermissions.ApiResources.Default)]
     public virtual async Task<ListResultDto<ApiScopeClaimDto>> GetClaimsAsync(Guid id)
     {
         var entity = await Repository.GetAsync(id);
@@ -108,7 +108,7 @@ public class ApiScopeAppService: IdentityServerAppService, IApiScopeAppService
     }
 
     [UnitOfWork]
-    [Authorize(IdentityServerPermissions.ApiScopes.Update)]
+    [Authorize(IdentityServerPermissions.ApiResources.Update)]
     public virtual async Task AddClaimAsync(Guid id, ApiScopeClaimCrateInput input)
     {
         var entity = await Repository.GetAsync(id);
@@ -118,7 +118,7 @@ public class ApiScopeAppService: IdentityServerAppService, IApiScopeAppService
     }
 
     [UnitOfWork]
-    [Authorize(IdentityServerPermissions.ApiScopes.Update)]
+    [Authorize(IdentityServerPermissions.ApiResources.Update)]
     public virtual async Task RemoveClaimAsync(Guid id, ApiScopeClaimDeleteInput input)
     {
         var entity = await Repository.GetAsync(id);

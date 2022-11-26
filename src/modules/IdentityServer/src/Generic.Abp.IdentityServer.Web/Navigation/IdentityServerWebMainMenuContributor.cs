@@ -21,9 +21,6 @@ public class IdentityServerWebMainMenuContributor: IMenuContributor
             new ApplicationMenuItem(IdentityServerMenuNames.ApiResources, l["ApiResources"],
                 url: "~/IdentityServer/ApiResources").RequirePermissions(IdentityServerPermissions.ApiResources.Default));
         identityServerMenuItem.AddItem(
-            new ApplicationMenuItem(IdentityServerMenuNames.ApiScopes, l["ApiScopes"], url: "~/IdentityServer/ApiScopes")
-                .RequirePermissions(IdentityServerPermissions.ApiScopes.Default));
-        identityServerMenuItem.AddItem(
             new ApplicationMenuItem(IdentityServerMenuNames.Clients, l["Clients"], url: "~/IdentityServer/Clients")
                 .RequirePermissions(IdentityServerPermissions.Clients.Default));
         identityServerMenuItem.AddItem(

@@ -22,7 +22,7 @@
     "Permission:Delete": "Delete",
     "Permission:Clients": "Clients",
     "Permission:ApiResources": "Api resources",
-    "Permission:ApiScopes": "Api scopes",
+    "Permission:ClaimTypes": "Claim types",
     "Permission:ChangePermissions": "Change permissions",
     "IdentityResource:Name": "Resource Name",
     "IdentityResource:DisplayName": "Display name",
@@ -109,6 +109,7 @@
     "DeleteConfirmTitle": "Are you sure you want to delete the following {0}?",
     "Scopes": "Scopes",
     "Return": "Return",
-    "Detail": "Detail"
+    "Detail": "Detail",
+    "OwnedClaims": "Owned claims"
   }
 }

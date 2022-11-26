@@ -38,13 +38,9 @@ namespace Generic.Abp.IdentityServer.Permissions
             public const string ManagePermissions = Default + ".ManagePermissions";
         }
 
-        public static class ApiScopes
+        public static class ClaimTypes
         {
-            public const string Default = GroupName + ".ApiScopes";
-            public const string Create = Default + ".Create";
-            public const string Update = Default + ".Update";
-            public const string Delete = Default + ".Delete";
-            public const string ManagePermissions = Default + ".ManagePermissions";
+            public const string Default = GroupName + ".ClaimTypes";
         }
     }
 }
