@@ -1,0 +1,26 @@
+﻿@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@using Volo.Abp.IdentityServer.Localization
+@model Generic.Abp.IdentityServer.Web.Pages.IdentityServer.ApiScopes.CreateModalModel
+@inject IHtmlLocalizer<AbpIdentityServerResource> _l
+@{
+    Layout = null;
+}
+
+<form method="post" asp-page="/IdentityServer/ApiScopes/CreateModal">
+    <abp-modal>
+        <abp-modal-header title="@_l["NewApScope"].Value"></abp-modal-header>
+        <abp-modal-body>
+            <abp-input asp-for="ApiScope.Name" label="@_l["ApiScope:Name"].Value" />
+            <abp-input asp-for="ApiScope.DisplayName" label="@_l["ApiScope:DisplayName"].Value" />
+            <abp-input asp-for="ApiScope.Description" label="@_l["ApiScope:Description"].Value" />
+            <abp-input asp-for="ApiScope.Enabled" label="@_l["ApiScope:Enabled"].Value" />
+            <abp-input asp-for="ApiScope.Required" label="@_l["ApiScope:Required"].Value" />
+            <abp-input asp-for="ApiScope.Emphasize" label="@_l["ApiScope:Emphasize"].Value" />
+            <abp-input asp-for="ApiScope.ShowInDiscoveryDocument" label="@_l["ApiScope:ShowInDiscoveryDocument"].Value" />
+        </abp-modal-body>
+        <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)"></abp-modal-footer>
+    </abp-modal>
+</form>
+

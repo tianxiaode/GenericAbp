@@ -31,6 +31,8 @@ public class ApiScopeAppService: IdentityServerAppService, IApiScopeAppService
         return ObjectMapper.Map<ApiScope, ApiScopeDto>(entity);
     }
 
+
+
     [UnitOfWork]
     [Authorize(IdentityServerPermissions.ApiResources.Default)]
     public virtual async Task<PagedResultDto<ApiScopeDto>> GetListAsync(ApiScopeGetListDto input)

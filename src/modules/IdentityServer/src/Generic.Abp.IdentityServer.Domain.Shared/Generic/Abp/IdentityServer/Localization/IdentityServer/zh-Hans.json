@@ -109,6 +109,7 @@
     "Scopes": "范围",
     "Return": "返回",
     "Detail": "详细信息",
-    "OwnedClaims": "拥有声明"
+    "OwnedClaims": "拥有声明",
+    "Owned": "拥有"
   }
 }

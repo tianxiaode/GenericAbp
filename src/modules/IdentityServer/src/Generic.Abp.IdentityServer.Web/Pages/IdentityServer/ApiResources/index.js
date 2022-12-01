@@ -1,7 +1,4 @@
 ﻿(function ($) {
-    if (abp.localization.currentCulture.cultureName === 'zh-Hans') {
-        w2utils.locale('/libs/w2ui/locale/zh-cn.json');
-    }
 
     var claimTypes;
 
@@ -256,9 +253,9 @@
 
     function resetDetialTitle(){
         let title = l("Detail"),
-            el = $('#layout_layout_panel_right div.w2ui-panel-title');
+            el = $('#layout_layout_panel_right div.w2ui-panel-title')[0];
         if(currentRecord) title = `${title} - ${currentRecord.name}`;
-        el.html(title);
+        $(el).html(title);
     }
 
     function onRefreshDetailPanel(){
@@ -275,162 +272,23 @@
         ])
     }
 
+    var currentClaim;
+
     function onRefreshClaimsPanel(){
-        let record = currentRecord || {},
-            grid = w2ui.claimsGrid;
-        if(!grid) {            
-            grid = $('#claimsTab').w2grid({
-                name: 'claimsGrid',
-                columns: [
-                    { field: 'name', text: l("Claims"), size: '150px', style: 'background-color: #efefef; border-bottom: 1px solid white; padding-right: 5px;', attr: "align=right" },
-                    { field: 'value', text: l("OwnedClaims"), size: '100%', 
-                        editable: { type: 'checkbox', style: 'text-align: center' } 
-                    },
-                ],
-                onChange(event){
-                    let grid = this,
-                        claim = grid.get(event.recid);
-                    if(claim.value){
-                        apiResourceAppService
-                            .removeClaim(currentRecord.id, { type: claim.name } )
-                            .then(function () {
-                                grid.mergeChanges();
-                            });
-                    }else{
-                        apiResourceAppService
-                            .addClaim(currentRecord.id, { type: claim.name })
-                            .then(function () {
-                                grid.mergeChanges();
-                            });
-                    }        
+        let record = currentRecord || {};
         
-                }        
-            });
-        }
-
-        let processing = function(data){
-            let recs = [],
-                index = 0;
-            claimTypes.forEach(c=>{
-                let rec = { recid: index, name: c.name, value: data.find(d=>d.type === c.name) };
-                index++;
-                recs.push(rec);
-            });
-            grid.add(recs);
-
-        };
-        grid.clear();
-        if(record.id){
-            apiResourceAppService.getClaims(record.id).then((ret)=>{
-                let data = ret.items;
-                processing(data);
-            })
-        }else{
-            processing([]);
-        }
+        if(!currentClaim) currentClaim = new Claims('#claimsTab', claimTypes, apiResourceAppService);
+        currentClaim.refresh(record);
     };
 
+    var currentScope;
+
     function onRefreshScopePanel(){
-        let record = currentRecord || {},
-            grid = w2ui.scopesGrid,
-            claimGrid = w2ui.scopeClaimGrid;
+        let record = currentRecord || {};
         
-        if(!grid) {
-            $('#scopesTab').w2layout({
-                name: 'scopesLayout',
-                panels: [
-                    { type: 'main', },
-                    { type: 'bottom', title: l("Claims"), size: '45%', resizable: true}
-                ]
-            });
-
-            grid= $('#layout_scopesLayout_panel_main div.w2ui-panel-content').w2grid({
-                name: 'scopeGrid',
-                toolbar: true,
-                multiSelect: true,
-                show: {
-                    selectColumn: true,
-                    toolbar: true,
-                    toolbarSearch: false,
-                    toolbarColumns: false,
-                    toolbarInput: false,
-                    toolbarAdd: { text: null},   // indicates if toolbar add new button is visible
-                    toolbarEdit: true,   // indicates if toolbar edit button is visible
-                    toolbarDelete: true,   // indicates if toolbar delete button is visible
-                    skipRecords: false,    // indicates if skip records should be visible,
-                    lineNumbers: true,
-                 },
-                columns: [
-                    { field: 'name', text: l("ApiScope:Name"), size: '20%', tooltip: l("ApiScope:Name"), },
-                    { field: 'displayName', text: l("ApiScope:DisplayName"), size: '20%',tooltip: l("ApiScope:DisplayName"), },
-                    { field: 'description', text: l("ApiScope:Description"), size: '20%', tooltip: l("ApiScope:Description"), },
-                    { field: 'enabled', text: l("ApiScope:Enabled"), size: '10%', style: 'text-align: center',
-                        tooltip: l("ApiScope:Enabled"),
-                        editable: { type: 'checkbox', style: 'text-align: center' }                         
-                    },
-                    { field: 'required', text: l("ApiScope:Required"), size: '10%', style: 'text-align: center',
-                        tooltip: l("ApiScope:Required"),
-                        editable: { type: 'checkbox', style: 'text-align: center' } 
-                    },
-                    { field: 'emphasize', text: l("ApiScope:Emphasize"), size: '10%', style: 'text-align: center',
-                        tooltip: l("ApiScope:Emphasize"),
-                        editable: { type: 'checkbox', style: 'text-align: center' } 
-                    },
-                    { field: 'showInDiscoveryDocument', text: l("ApiScope:ShowInDiscoveryDocument"), size: '10%', style: 'text-align: center',
-                        tooltip: l("ApiScope:ShowInDiscoveryDocument"),
-                        editable: { type: 'checkbox', style: 'text-align: center' } 
-                    },
-                ],
-            });
-            claimGrid = $('##layout_scopesLayout_panel_bottom div.w2ui-panel-content').w2grid({
-                name: 'scopeClaimsGrid',
-                header: true,
-                columns: [
-                    { field: 'name', text: l("Claims"), size: '150px', style: 'background-color: #efefef; border-bottom: 1px solid white; padding-right: 5px;', attr: "align=right" },
-                    { field: 'value', text: l("OwnedClaims"), size: '100%', 
-                        editable: { type: 'checkbox', style: 'text-align: center' } 
-                    },
-                ],
-                onChange(event){
-                    let grid = this,
-                        claim = grid.get(event.recid);
-                    if(claim.value){
-                        apiResourceAppService
-                            .removeClaim(currentRecord.id, { type: claim.name } )
-                            .then(function () {
-                                grid.mergeChanges();
-                            });
-                    }else{
-                        apiResourceAppService
-                            .addClaim(currentRecord.id, { type: claim.name })
-                            .then(function () {
-                                grid.mergeChanges();
-                            });
-                    }        
-        
-                }        
-            });
-        }
-
-        let processing = function(data){
-            let recs = [],
-                index = 0;
-            claimTypes.forEach(c=>{
-                let rec = { recid: index, name: c.name, value: data.find(d=>d.type === c.name) };
-                index++;
-                recs.push(rec);
-            });
-            grid.add(recs);
-
-        };
-        grid.clear();
-        claimGrid.clear();
-        if(record.id){
-            grid.url = 
-        }else{
-            processing([]);
-        }
-        
+        if(!currentScope) currentScope = new ApiScope();
+        currentScope.refresh(record);
+       
     }
 
     

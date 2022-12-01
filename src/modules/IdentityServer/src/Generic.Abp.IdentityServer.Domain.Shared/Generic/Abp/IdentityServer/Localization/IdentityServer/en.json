@@ -110,6 +110,7 @@
     "Scopes": "Scopes",
     "Return": "Return",
     "Detail": "Detail",
-    "OwnedClaims": "Owned claims"
+    "OwnedClaims": "Owned claims",
+    "Owned": "Owned"
   }
 }

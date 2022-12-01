@@ -40,7 +40,6 @@
 
 	<ItemGroup>
 	  <Folder Include="Navigation\" />
-	  <Folder Include="Pages\IdentityServer\ApiScopes\" />
 	  <Folder Include="Pages\IdentityServer\Clients\" />
 	  <Folder Include="Pages\IdentityServer\IdentityResources\" />
 	</ItemGroup>

@@ -23,9 +23,13 @@
 
 @section scripts {
     <abp-script-bundle name="W2Ui"></abp-script-bundle>
-    <abp-script-bundle name="@typeof(IndexModel).FullName">
+    <abp-script-bundle name="@typeof(IndexModel).FullName" type="module">
+        <abp-script src="/Pages/identityServer/global.js"   />
+        <abp-script src="/Pages/identityServer/ApiResources/claims.js"   />
+        <abp-script src="/Pages/identityServer/ApiResources/apiscope.js"   />
         <abp-script src="/Pages/identityServer/ApiResources/index.js" />
     </abp-script-bundle>
+    
 }
 
 <div id="layout" style="height:calc( 100vh - 160px)"></div>
