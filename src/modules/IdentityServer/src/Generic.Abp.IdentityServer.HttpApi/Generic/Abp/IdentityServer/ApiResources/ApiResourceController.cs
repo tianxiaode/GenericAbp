@@ -133,4 +133,26 @@ public class ApiResourceController: IdentityServerController, IApiResourceAppSer
     {
         return ApiResourceAppService.RemoveSecretAsync(id, input);
     }
+
+        [HttpGet]
+    [Route("{id:guid}/scopes")]
+    public Task<ListResultDto<ApiResourceScopeDto>> GetScopesAsync(Guid id)
+    {
+        return ApiResourceAppService.GetScopesAsync(id);
+    }
+
+    [HttpPut]
+    [Route("{id:guid}/scopes")]
+    public Task AddScopeAsync(Guid id, [FromBody] ApiResourceScopeCreateInput input)
+    {
+        return ApiResourceAppService.AddScopeAsync(id, input);
+    }
+
+    [HttpDelete]
+    [Route("{id:guid}/scopes")]
+    public Task RemoveScopeAsync(Guid id, [FromBody] ApiResourceScopeDeleteInput input)
+    {
+        return ApiResourceAppService.RemoveScopeAsync(id, input);
+    }
+
 }

@@ -111,6 +111,9 @@
     "Return": "Return",
     "Detail": "Detail",
     "OwnedClaims": "Owned claims",
-    "Owned": "Owned"
+    "Owned": "Owned",
+    "Generic.Abp.IdentityServer.BusinessException:000001": "Api scopes are already in use and cannot be deleted.",
+    "Generic.Abp.IdentityServer.BusinessException:000002": "Removing the default scope is not allowed."
+
   }
 }

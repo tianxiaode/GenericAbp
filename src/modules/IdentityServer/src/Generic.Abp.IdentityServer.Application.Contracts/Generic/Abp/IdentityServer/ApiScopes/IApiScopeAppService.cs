@@ -9,7 +9,7 @@ namespace Generic.Abp.IdentityServer.ApiScopes;
 public interface IApiScopeAppService: IApplicationService
 {
     Task<ApiScopeDto> GetAsync(Guid id);
-    Task<PagedResultDto<ApiScopeDto>> GetListAsync(ApiScopeGetListDto input);
+    Task<PagedResultDto<ApiScopeDto>> GetListAsync();
     Task<ApiScopeDto> CreateAsync(ApiScopeCreateInput input);
     Task<ApiScopeDto> UpdateAsync(Guid id, ApiScopeUpdateInput input);
     Task<ListResultDto<ApiScopeDto>> DeleteAsync(List<Guid> ids);

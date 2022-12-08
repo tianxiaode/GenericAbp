@@ -1,4 +1,6 @@
 ﻿using Generic.Abp.BusinessException.Exceptions;
+using Generic.Abp.IdentityServer.ApiResources;
+using Generic.Abp.IdentityServer.Exceptions;
 using Generic.Abp.IdentityServer.Permissions;
 using Microsoft.AspNetCore.Authorization;
 using System;
@@ -7,6 +9,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Domain.Entities;
+using Volo.Abp.IdentityServer.ApiResources;
 using Volo.Abp.IdentityServer.ApiScopes;
 using Volo.Abp.IdentityServer.IdentityResources;
 using Volo.Abp.Uow;
@@ -16,12 +20,14 @@ namespace Generic.Abp.IdentityServer.ApiScopes;
 [RemoteService(false)]
 public class ApiScopeAppService: IdentityServerAppService, IApiScopeAppService
 {
-    public ApiScopeAppService(IApiScopeRepository repository)
+    public ApiScopeAppService(IApiScopeRepository repository, IApiResourceRepository apiResourceRepository)
     {
         Repository = repository;
+        ApiResourceRepository = apiResourceRepository;
     }
 
     protected IApiScopeRepository Repository { get; }
+    protected IApiResourceRepository ApiResourceRepository { get; }
 
     [UnitOfWork]
     [Authorize(IdentityServerPermissions.ApiResources.Default)]
@@ -35,11 +41,10 @@ public class ApiScopeAppService: IdentityServerAppService, IApiScopeAppService
 
     [UnitOfWork]
     [Authorize(IdentityServerPermissions.ApiResources.Default)]
-    public virtual async Task<PagedResultDto<ApiScopeDto>> GetListAsync(ApiScopeGetListDto input)
+    public virtual async Task<PagedResultDto<ApiScopeDto>> GetListAsync()
     {
-        var sorting = input.Sorting;
-        if (string.IsNullOrEmpty(sorting)) sorting = $"{nameof(ApiScope.Name)}";
-        var list = await Repository.GetPagedListAsync(input.SkipCount, input.MaxResultCount,sorting);
+        var sorting = $"{nameof(ApiScope.Name)}";
+        var list = await Repository.GetPagedListAsync(0, 1000,sorting);
         var count = await Repository.GetCountAsync();
         return new PagedResultDto<ApiScopeDto>(count,
             ObjectMapper.Map<List<ApiScope>, List<ApiScopeDto>>(list));
@@ -89,12 +94,20 @@ public class ApiScopeAppService: IdentityServerAppService, IApiScopeAppService
     public virtual async Task<ListResultDto<ApiScopeDto>> DeleteAsync(List<Guid> ids)
     {
         var result = new List<ApiScopeDto>();
+        var deletes = new List<ApiScope>();
         foreach (var guid in ids)
         {
             var entity = await Repository.FindAsync(guid);
             if(entity == null) continue;
-            await Repository.DeleteAsync(entity);
-            result.Add(ObjectMapper.Map<ApiScope, ApiScopeDto>(entity));
+            deletes.Add(entity);
+        }
+        var scopeNames = deletes.Select(x => x.Name).ToArray();
+        var apiResources = await ApiResourceRepository.GetListByScopesAsync(scopeNames);
+        if(apiResources.Any()) throw new ApiScopesInUseBusinessException();
+        foreach (var delete in deletes)
+        {
+            await Repository.DeleteAsync(delete);
+            result.Add(ObjectMapper.Map<ApiScope, ApiScopeDto>(delete));
         }
 
         return new ListResultDto<ApiScopeDto>(result);

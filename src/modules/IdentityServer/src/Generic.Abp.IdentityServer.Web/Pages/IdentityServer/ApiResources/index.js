@@ -1,11 +1,5 @@
 ﻿(function ($) {
 
-    var claimTypes;
-
-    window.generic.abp.identityServer.claimTypes.claimType.getList().then((d)=>{
-        claimTypes = d.items;
-    })
-
     var l = window.abp.localization.getResource('AbpIdentityServer');
 
     var apiResourceAppService = window.generic.abp.identityServer.apiResources.apiResource;
@@ -277,7 +271,7 @@
     function onRefreshClaimsPanel(){
         let record = currentRecord || {};
         
-        if(!currentClaim) currentClaim = new Claims('#claimsTab', claimTypes, apiResourceAppService);
+        if(!currentClaim) currentClaim = new Claims('#claimsTab', 'resourceClaims', apiResourceAppService);
         currentClaim.refresh(record);
     };
 

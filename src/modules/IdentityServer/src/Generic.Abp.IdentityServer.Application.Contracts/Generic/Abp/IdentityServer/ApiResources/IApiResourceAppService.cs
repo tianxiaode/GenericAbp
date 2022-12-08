@@ -21,5 +21,9 @@ public interface IApiResourceAppService: IApplicationService
     Task<ListResultDto<ApiResourceSecretDto>> GetClientSecretsAsync(Guid id);
     Task AddSecretAsync(Guid id, ApiResourceSecretCreateInput input);
     Task RemoveSecretAsync(Guid id, ApiResourceSecretDeleteInput input);
+    Task<ListResultDto<ApiResourceScopeDto>> GetScopesAsync(Guid id);
+    Task AddScopeAsync(Guid id, ApiResourceScopeCreateInput input);
+    Task RemoveScopeAsync(Guid id, ApiResourceScopeDeleteInput input);
+
 
 }

@@ -27,9 +27,9 @@ public class ApiScopeController: IdentityServerController, IApiScopeAppService
     }
 
     [HttpGet]
-    public Task<PagedResultDto<ApiScopeDto>> GetListAsync(ApiScopeGetListDto input)
+    public Task<PagedResultDto<ApiScopeDto>> GetListAsync()
     {
-        return ApiScopeAppService.GetListAsync(input);
+        return ApiScopeAppService.GetListAsync();
     }
 
     [HttpPost]

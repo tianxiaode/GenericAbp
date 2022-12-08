@@ -1,8 +1,8 @@
 function ApiScope(){
     let me = this;
     me.service = window.generic.abp.identityServer.apiScopes.apiScope;
+    me.apiResourceService = window.generic.abp.identityServer.apiResources.apiResource;
     me.localization = window.abp.localization.getResource('AbpIdentityServer');
-
     me.initLayout();
     me.initGrid();
     me.initCreateAndEditModal();
@@ -31,7 +31,7 @@ ApiScope.prototype = {
             name: 'scopeGrid',
             toolbar: true,
             multiSelect: true,
-            url: '/api/api-scopes',
+            //url: '/api/api-scopes',
             show: {
                 selectColumn: true,
                 toolbar: true,
@@ -98,7 +98,8 @@ ApiScope.prototype = {
             grid = me.grid,
             recid = event.recid,
             selections =  grid.getSelection(),
-            ln = selections.length;
+            ln = selections.length,
+            currentRecord = me.current;
         if(ln <= 1){
             me.current = null;
             me.onRefreshClaim();
@@ -142,8 +143,10 @@ ApiScope.prototype = {
             message.push(`${rec.name}`);
             ids.push(rec.id);
         })
+        if(!allow) return;
         window.abp.message.confirm(message.join(','), title, function (confirm) {
             if (!confirm) retrun ;
+
             me.apiResource
                 .delete(ids)
                 .then(function () {
@@ -163,14 +166,14 @@ ApiScope.prototype = {
             record = grid.get(event.recid);
         if(column.field === 'enabled'){
             if(record[column.field]){
-                apiResourceAppService
+                me.service
                     .disable(record.id)
                     .then(function () {
                         grid.mergeChanges();
                         onRefreshDetail();
                     });
             }else{
-                apiResourceAppService
+                me.service
                     .enable(record.id)
                     .then(function () {
                         grid.mergeChanges();
@@ -181,14 +184,14 @@ ApiScope.prototype = {
 
         if(column.field === 'showInDiscoveryDocument'){
             if(record[column.field]){
-                apiResourceAppService
+                me.service
                     .hide(record.id)
                     .then(function () {
                         grid.mergeChanges();
                         onRefreshDetail();
                     });
             }else{
-                apiResourceAppService
+                me.service
                     .show(record.id)
                     .then(function () {
                         grid.mergeChanges();
@@ -201,36 +204,8 @@ ApiScope.prototype = {
     },
     
     initClaimGrid(){
-        let me = this,
-            l = me.localization;
-        me.claimGrid =  $('#layout_scopesLayout_panel_bottom div.w2ui-panel-content').w2grid({
-            name: 'scopeClaimsGrid',
-            header: true,
-            columns: [
-                { field: 'name', text: l("Claims"), size: '150px', style: 'background-color: #efefef; border-bottom: 1px solid white; padding-right: 5px;', attr: "align=right" },
-                { field: 'value', text: l("OwnedClaims"), size: '100%', 
-                    editable: { type: 'checkbox', style: 'text-align: center' } 
-                },
-            ],
-            onChange(event){
-                let grid = this,
-                    claim = grid.get(event.recid);
-                if(claim.value){
-                    apiScopeAppService
-                        .removeClaim(currentRecord.id, { type: claim.name } )
-                        .then(function () {
-                            grid.mergeChanges();
-                        });
-                }else{
-                    apiScopeAppService
-                        .addClaim(currentRecord.id, { type: claim.name })
-                        .then(function () {
-                            grid.mergeChanges();
-                        });
-                }        
-    
-            }        
-        });     
+        let me = this;
+        me.claimGrid =  new Claims('#layout_scopesLayout_panel_bottom div.w2ui-panel-content', 'scopeClaims', me.service);
     },
 
     initCreateAndEditModal(){
@@ -253,6 +228,9 @@ ApiScope.prototype = {
     },
 
     onRefreshClaim(){
+        let me = this;
+        me.claimGrid.refresh(me.current);
+        me.onRefreshClaimTitle();
 
     },
 
@@ -267,18 +245,92 @@ ApiScope.prototype = {
 
     },
 
+    getScopes(){
+        window.generic.abp.identityServer.apiScopes.apiScope.getList()
+        .then((d)=>{
+            d.items.forEach(c=>[
+                me.scopes[c.name] = {
+                    recid: index, 
+                    name: c.name,
+                    displayName: c.displayName,
+                    description: c.description,
+                    enabled: c.enabled,
+                    required: c.required,
+                    emphasize: c.emphasize,
+                    showInDiscoveryDocument: c.showInDiscoveryDocument,
+                    owned: false    
+                }
+            ])
+            this.scopes = d.items;
+            this.onRefresh();
+        })
+
+    },
+
+    onRefresh(){
+        let me = this,
+            recs = {},
+            data = me.data,
+            scopes = me.scopes,
+            ln = 0;
+
+        if(!scopes){
+            me.getScopes();
+            return;        
+        }
+        if(!data) return;
+        scopes.forEach((c, index)=>{
+            recs[c.name] = { 
+                recid: index, 
+                name: c.name,
+                displayName: c.displayName,
+                description: c.description,
+                enabled: c.enabled,
+                required: c.required,
+                emphasize: c.emphasize,
+                showInDiscoveryDocument: c.showInDiscoveryDocument,
+                owned: false
+            };
+            ln++;
+        });
+        data.forEach(c=>{
+            let exits = recs[c.scope];
+            if(exits) {
+                exits.owned = true;
+            }else{
+                // recs[c] = {
+                //     recid: ln, 
+                //     name: c.name,
+                //     displayName: '',
+                //     description: '',
+                //     enabled: false,
+                //     required: false,
+                //     emphasize: false,
+                //     showInDiscoveryDocument: false,
+                //     owned: true    
+                // };
+                // ln++;
+            };
+            
+        })
+        me.grid.add(Object.values(recs));
+
+    },
+
 
     refresh(apiResource){
         let me = this;
         me.apiResource = apiResource;
-        console.log(apiResource.id);
-        if(apiResource.id){
-
+        me.claimGrid.refresh();
+        me.onRefreshClaimTitle();
+        if(apiResource && apiResource.id){            
+            me.apiResourceService.getScopes(apiResource.id).then((ret)=>{
+                me.data = ret.items;
+                me.onRefresh();
+            })
         }else{
             me.current = null;
-            me.grid.clear(true);
-            me.claimGrid.clear();
-            me.onRefreshClaimTitle();
+            me.grid.clear();
         }
     }
 

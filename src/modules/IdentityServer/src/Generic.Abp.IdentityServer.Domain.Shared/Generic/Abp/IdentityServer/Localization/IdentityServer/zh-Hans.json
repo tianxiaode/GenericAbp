@@ -110,6 +110,8 @@
     "Return": "返回",
     "Detail": "详细信息",
     "OwnedClaims": "拥有声明",
-    "Owned": "拥有"
+    "Owned": "拥有",
+    "Generic.Abp.IdentityServer.BusinessException:000001": "Api范围已在使用，不允许删除",
+    "Generic.Abp.IdentityServer.BusinessException:000002": "不能移除默认Api范围"
   }
 }

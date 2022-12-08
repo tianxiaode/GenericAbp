@@ -1,4 +1,5 @@
 ﻿using Generic.Abp.BusinessException.Exceptions;
+using Generic.Abp.IdentityServer.Exceptions;
 using Generic.Abp.IdentityServer.Permissions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
@@ -40,7 +41,6 @@ public class ApiResourceAppService: IdentityServerAppService, IApiResourceAppSer
     {
         var sorting = input.Sorting;
         if (string.IsNullOrEmpty(sorting)) sorting = $"{nameof(ApiResource.Name)}";
-        Logger.LogInformation($"api get list: {System.Text.Json.JsonSerializer.Serialize(input)}");
         var list = await Repository.GetPagedListAsync(input.SkipCount, input.MaxResultCount,sorting);
         var count = await Repository.GetCountAsync();
         return new PagedResultDto<ApiResourceDto>(count,
@@ -64,6 +64,11 @@ public class ApiResourceAppService: IdentityServerAppService, IApiResourceAppSer
         }
 
         await Repository.InsertAsync(entity);
+
+        var scope  = await ApiScopeRepository.FindByNameAsync(entity.Name);
+        scope ??= new ApiScope(GuidGenerator.Create(), entity.Name);
+        await ApiScopeRepository.InsertAsync(scope);
+
         return ObjectMapper.Map<ApiResource, ApiResourceDto>(entity);
 
     }
@@ -189,6 +194,7 @@ public class ApiResourceAppService: IdentityServerAppService, IApiResourceAppSer
     public virtual async Task RemoveScopeAsync(Guid id, ApiResourceScopeDeleteInput input)
     {
         var entity = await Repository.GetAsync(id);
+        if(entity.Name.Equals(input.Scope, StringComparison.CurrentCultureIgnoreCase)) throw new RemovingTheDefaultScopeIsNotAllowedBusinessException();
         entity.RemoveScope(input.Scope);
         await Repository.UpdateAsync(entity);
     }
