@@ -8,6 +8,11 @@ namespace Generic.Abp.IdentityServer.Web.Pages.IdentityServer.ApiResources
         public CreateModalModel(IApiResourceAppService apiResourceAppService)
         {
             ApiResourceAppService = apiResourceAppService;
+            ApiResource = new ApResourceViewModel()
+            {
+                Enabled = true,
+                ShowInDiscoveryDocument = true
+            };
         }
 
         [BindProperty]
@@ -16,11 +21,6 @@ namespace Generic.Abp.IdentityServer.Web.Pages.IdentityServer.ApiResources
         protected IApiResourceAppService ApiResourceAppService { get; }
         public async Task<IActionResult> OnGetAsync()
         {
-            ApiResource = new ApResourceViewModel()
-            {
-                Enabled = true,
-                ShowInDiscoveryDocument = true
-            };
 
             return await Task.FromResult(Page()) ;
 

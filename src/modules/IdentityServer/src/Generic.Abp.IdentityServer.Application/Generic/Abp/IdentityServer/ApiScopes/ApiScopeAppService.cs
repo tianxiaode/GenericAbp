@@ -114,6 +114,45 @@ public class ApiScopeAppService: IdentityServerAppService, IApiScopeAppService
     }
 
     [UnitOfWork]
+    [Authorize(IdentityServerPermissions.ApiResources.Update)]
+    public virtual async Task UpdateEnableAsync(Guid id, bool enable)
+    {
+        var entity = await Repository.GetAsync(id);
+        entity.Enabled = enable;
+        await Repository.UpdateAsync(entity);
+    }
+
+    [UnitOfWork]
+    [Authorize(IdentityServerPermissions.ApiResources.Update)]
+    public virtual async Task UpdateShowInDiscoveryDocumentAsync(Guid id, bool isShow)
+    {
+        var entity = await Repository.GetAsync(id);
+        entity.ShowInDiscoveryDocument = isShow;
+        await Repository.UpdateAsync(entity);
+    }
+
+    [UnitOfWork]
+    [Authorize(IdentityServerPermissions.ApiResources.Update)]
+    public virtual async Task UpdateEmphasizeAsync(Guid id, bool isEmphasize)
+    {
+        var entity = await Repository.GetAsync(id);
+        entity.Emphasize = isEmphasize;
+        await Repository.UpdateAsync(entity);
+    }
+
+        [UnitOfWork]
+    [Authorize(IdentityServerPermissions.ApiResources.Update)]
+    public virtual async Task UpdateRequiredAsync(Guid id, bool isEmphasize)
+    {
+        var entity = await Repository.GetAsync(id);
+        entity.Required = isEmphasize;
+        await Repository.UpdateAsync(entity);
+    }
+
+
+    #region claims
+
+    [UnitOfWork]
     [Authorize(IdentityServerPermissions.ApiResources.Default)]
     public virtual async Task<ListResultDto<ApiScopeClaimDto>> GetClaimsAsync(Guid id)
     {
@@ -141,4 +180,6 @@ public class ApiScopeAppService: IdentityServerAppService, IApiScopeAppService
         entity.RemoveClaim(input.Type);
         await Repository.UpdateAsync(entity);
     }
+
+    #endregion
 }

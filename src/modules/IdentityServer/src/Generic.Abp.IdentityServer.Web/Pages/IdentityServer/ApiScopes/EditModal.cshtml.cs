@@ -9,6 +9,7 @@ namespace Generic.Abp.IdentityServer.Web.Pages.IdentityServer.ApiScopes
         public EditModalModel(IApiScopeAppService apiScopeAppService)
         {
             ApiScopeAppService = apiScopeAppService;
+            ApiScope = new ApiScopeViewModel();
         }
 
         [BindProperty]
@@ -52,14 +53,16 @@ namespace Generic.Abp.IdentityServer.Web.Pages.IdentityServer.ApiScopes
         }
         public class ApiScopeViewModel : ApiScopeUpdateInput
         {
+            public ApiScopeViewModel()
+            {
+                Id = Guid.NewGuid();
+                Name = "";
+            }
+
             public ApiScopeViewModel(Guid id, string name)
             {
                 Id = id;
                 Name = name;
-            }
-
-            public ApiScopeViewModel()
-            {
             }
 
             public Guid Id { get; set; }

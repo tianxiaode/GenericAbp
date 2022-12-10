@@ -9,6 +9,7 @@ namespace Generic.Abp.IdentityServer.Web.Pages.IdentityServer.ApiResources
         public EditModalModel(IApiResourceAppService apiResourceAppService)
         {
             ApiResourceAppService = apiResourceAppService;
+            ApiResource = new ApResourceViewModel();
         }
 
         [BindProperty]
@@ -50,14 +51,16 @@ namespace Generic.Abp.IdentityServer.Web.Pages.IdentityServer.ApiResources
         }
         public class ApResourceViewModel : ApiResourceUpdateInput
         {
+            public ApResourceViewModel()
+            {
+                Id = Guid.NewGuid();
+                Name = "";
+            }
+
             public ApResourceViewModel(Guid id, string name)
             {
                 Id = id;
                 Name = name;
-            }
-
-            public ApResourceViewModel()
-            {
             }
 
             public Guid Id { get; set; }

@@ -31,7 +31,6 @@ ApiScope.prototype = {
             name: 'scopeGrid',
             toolbar: true,
             multiSelect: true,
-            //url: '/api/api-scopes',
             show: {
                 selectColumn: true,
                 toolbar: true,
@@ -83,8 +82,16 @@ ApiScope.prototype = {
             onAdd: me.onScopeAdd.bind(me),
             onEdit: me.onScopeEdit.bind(me) ,
             delete: me.onScopeDelete.bind(me),
-            onChange: me.onScopeChange.bind(me)
+            onChange: me.onScopeChange.bind(me),
+            onReload: me.onReoloadClick.bind(me)
         });
+    },
+
+    onReoloadClick(){
+        let me = this;
+        if(me.grid) me.grid.clear();
+        me.scopes = null;
+        me.onRefresh();
     },
 
     onScopeSelect(event){
@@ -143,18 +150,19 @@ ApiScope.prototype = {
             message.push(`${rec.name}`);
             ids.push(rec.id);
         })
-        if(!allow) return;
         window.abp.message.confirm(message.join(','), title, function (confirm) {
             if (!confirm) retrun ;
 
-            me.apiResource
+            me.service
                 .delete(ids)
                 .then(function () {
                     grid.clear();
-                    grid.reload();
+                    me.scopes = null;
                     me.current = null;
+                    me.onRefresh();
                     me.onRefreshClaim();
-                });
+                },
+                me.updateFailure.bind(me))
         });
 
     },
@@ -165,43 +173,50 @@ ApiScope.prototype = {
             column = grid.columns[event.column],
             record = grid.get(event.recid);
         if(column.field === 'enabled'){
-            if(record[column.field]){
-                me.service
-                    .disable(record.id)
-                    .then(function () {
-                        grid.mergeChanges();
-                        onRefreshDetail();
-                    });
-            }else{
-                me.service
-                    .enable(record.id)
-                    .then(function () {
-                        grid.mergeChanges();
-                        onRefreshDetail();
-                    });
-            }
+            me.onUpdateValue(record[column.field] ? 'disbale': 'enable', record.id);
         }
 
         if(column.field === 'showInDiscoveryDocument'){
-            if(record[column.field]){
-                me.service
-                    .hide(record.id)
-                    .then(function () {
-                        grid.mergeChanges();
-                        onRefreshDetail();
-                    });
-            }else{
-                me.service
-                    .show(record.id)
-                    .then(function () {
-                        grid.mergeChanges();
-                        onRefreshDetail();
-                    });
-            }
+            me.onUpdateValue(record[column.field] ? 'hide': 'show', record.id);
         }
 
+        if(column.field === 'emphasize'){
+            me.onUpdateValue(record[column.field] ? 'understate': 'emphasize', record.id);
+        }
 
+        if(column.field === 'required'){
+            me.onUpdateValue(record[column.field] ? 'optional': 'required', record.id);
+        }
+
+        if(column.field === 'owned'){
+            let apiResource = me.apiResource,
+                method = record[column.field] ? 'removeScope' :'addScope',
+                fn = me.apiResourceService[method];
+            if(!fn) return;
+            fn.apply(me, [apiResource.id, { name: record.name }])
+                .then( me.updateSuccess.bind(me) , me.updateFailure.bind(me));
+        }
     },
+
+    onUpdateValue(method, id){
+        let me= this,
+            fn = me.service[method];
+        if(!fn) return;
+        fn.apply(me, [id])
+            .then( me.updateSuccess.bind(me) , me.updateFailure.bind(me));
+    },
+
+    updateSuccess(){
+        this.grid.mergeChanges();
+    },
+
+    updateFailure(error){
+        if(error.code){
+            abp.message.error(this.localization(error.code));
+        }
+        this.grid.rejectChanges();
+    },
+
     
     initClaimGrid(){
         let me = this;
@@ -218,11 +233,15 @@ ApiScope.prototype = {
         );
     
         me.createModal.onResult(function () {
-            me.grid.reload();
+            me.grid.clear();
+            me.scopes = null;
+            me.onRefresh();
         });
     
         me.editModal.onResult(function () {
-            me.grid.reload();
+            me.grid.clear();
+            me.scopes = null;
+            me.onRefresh();
         });
     
     },
@@ -248,19 +267,6 @@ ApiScope.prototype = {
     getScopes(){
         window.generic.abp.identityServer.apiScopes.apiScope.getList()
         .then((d)=>{
-            d.items.forEach(c=>[
-                me.scopes[c.name] = {
-                    recid: index, 
-                    name: c.name,
-                    displayName: c.displayName,
-                    description: c.description,
-                    enabled: c.enabled,
-                    required: c.required,
-                    emphasize: c.emphasize,
-                    showInDiscoveryDocument: c.showInDiscoveryDocument,
-                    owned: false    
-                }
-            ])
             this.scopes = d.items;
             this.onRefresh();
         })
@@ -271,7 +277,7 @@ ApiScope.prototype = {
         let me = this,
             recs = {},
             data = me.data,
-            scopes = me.scopes,
+            scopes = me.scopes
             ln = 0;
 
         if(!scopes){
@@ -281,6 +287,7 @@ ApiScope.prototype = {
         if(!data) return;
         scopes.forEach((c, index)=>{
             recs[c.name] = { 
+                id: c.id,
                 recid: index, 
                 name: c.name,
                 displayName: c.displayName,
@@ -297,19 +304,6 @@ ApiScope.prototype = {
             let exits = recs[c.scope];
             if(exits) {
                 exits.owned = true;
-            }else{
-                // recs[c] = {
-                //     recid: ln, 
-                //     name: c.name,
-                //     displayName: '',
-                //     description: '',
-                //     enabled: false,
-                //     required: false,
-                //     emphasize: false,
-                //     showInDiscoveryDocument: false,
-                //     owned: true    
-                // };
-                // ln++;
             };
             
         })
@@ -318,14 +312,16 @@ ApiScope.prototype = {
     },
 
 
-    refresh(apiResource){
+    refresh(apiResource,isRefreshScope){
         let me = this;
         me.apiResource = apiResource;
         me.claimGrid.refresh();
         me.onRefreshClaimTitle();
-        if(apiResource && apiResource.id){            
+        if(isRefreshScope) me.scopes = null;
+        if(apiResource && apiResource.id){
             me.apiResourceService.getScopes(apiResource.id).then((ret)=>{
                 me.data = ret.items;
+                me.grid.clear();
                 me.onRefresh();
             })
         }else{

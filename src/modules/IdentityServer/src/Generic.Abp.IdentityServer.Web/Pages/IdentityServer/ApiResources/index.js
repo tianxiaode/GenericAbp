@@ -12,6 +12,8 @@
 
     var currentRecord;
 
+    var isRefreshScope;
+
     var boolValueRender = function(v){
         let cls = v ? 'fa-check-square' : 'fa-square';
         return `<i class="far ${cls}"></i>`;
@@ -184,7 +186,7 @@
                         .then(function () {
                             grid.mergeChanges();
                             onRefreshDetail();
-                        });
+                        }, function(){console.log("error", arguments)});
                 }else{
                     apiResourceAppService
                         .show(record.id)
@@ -221,10 +223,14 @@
 
     createModal.onResult(function () {
         w2ui.apiResources.reload();
+        isRefreshScope = true;
+        onRefreshDetail();
     });
 
     editModal.onResult(function () {
         w2ui.apiResources.reload();
+        isRefreshScope = true;
+        onRefreshDetail();
     });
 
     function getCurrentRecord(grid, recid) {
@@ -281,7 +287,8 @@
         let record = currentRecord || {};
         
         if(!currentScope) currentScope = new ApiScope();
-        currentScope.refresh(record);
+        currentScope.refresh(record, isRefreshScope);
+        isRefreshScope = false;
        
     }
 

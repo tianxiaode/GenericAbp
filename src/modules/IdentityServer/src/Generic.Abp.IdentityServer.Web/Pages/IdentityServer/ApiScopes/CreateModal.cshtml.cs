@@ -8,6 +8,7 @@ namespace Generic.Abp.IdentityServer.Web.Pages.IdentityServer.ApiScopes
         public CreateModalModel(IApiScopeAppService apiScopeAppService)
         {
             ApiScopeAppService = apiScopeAppService;
+            ApiScope = new ApScopeViewModel();
         }
 
         [BindProperty]

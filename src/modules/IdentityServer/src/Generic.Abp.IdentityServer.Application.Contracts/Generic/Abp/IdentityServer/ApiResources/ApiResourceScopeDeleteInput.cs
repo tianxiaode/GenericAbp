@@ -5,5 +5,5 @@ namespace Generic.Abp.IdentityServer.ApiResources;
 [Serializable]
 public class ApiResourceScopeDeleteInput
 {
-    public string Scope { get; set; }
+    public string Name { get; set; }
 }

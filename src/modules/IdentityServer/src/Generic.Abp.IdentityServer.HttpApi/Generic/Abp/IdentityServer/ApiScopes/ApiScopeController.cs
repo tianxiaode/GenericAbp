@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 
 namespace Generic.Abp.IdentityServer.ApiScopes;
@@ -71,4 +72,87 @@ public class ApiScopeController: IdentityServerController, IApiScopeAppService
     {
         return ApiScopeAppService.RemoveClaimAsync(id, input);
     }
+
+    [RemoteService(false)]
+    public Task UpdateEnableAsync(Guid id, bool enable)
+    {
+        throw new NotImplementedException();
+    }
+
+    [HttpPut]
+    [Route("{id:guid}/enable")]
+    public Task Enable(Guid id)
+    {
+        return ApiScopeAppService.UpdateEnableAsync(id, true);
+    }
+
+    [HttpPut]
+    [Route("{id:guid}/disable")]
+    public Task Disable(Guid id)
+    {
+        return ApiScopeAppService.UpdateEnableAsync(id, false);
+    }
+
+
+    [RemoteService(false)]
+    public Task UpdateShowInDiscoveryDocumentAsync(Guid id, bool isShow)
+    {
+        throw new NotImplementedException();
+    }
+
+    [HttpPut]
+    [Route("{id:guid}/show")]
+    public Task Show(Guid id)
+    {
+        return ApiScopeAppService.UpdateShowInDiscoveryDocumentAsync(id, true);
+    }
+
+    [HttpPut]
+    [Route("{id:guid}/hide")]
+    public Task Hide(Guid id)
+    {
+        return ApiScopeAppService.UpdateShowInDiscoveryDocumentAsync(id, false);
+    }
+
+
+    [RemoteService(false)]
+    public Task UpdateEmphasizeAsync(Guid id, bool isEmphasize)
+    {
+        throw new NotImplementedException();
+    }
+
+    [HttpPut]
+    [Route("{id:guid}/emphasize")]
+    public Task Emphasize(Guid id)
+    {
+        return ApiScopeAppService.UpdateEmphasizeAsync(id, true);
+    }
+
+    [HttpPut]
+    [Route("{id:guid}/understate")]
+    public Task Understate(Guid id)
+    {
+        return ApiScopeAppService.UpdateEmphasizeAsync(id, false);
+    }
+
+    [RemoteService(false)]
+    public Task UpdateRequiredAsync(Guid id, bool isEmphasize)
+    {
+        throw new NotImplementedException();
+    }
+
+        [HttpPut]
+    [Route("{id:guid}/required")]
+    public Task Required(Guid id)
+    {
+        return ApiScopeAppService.UpdateRequiredAsync(id, true);
+    }
+
+    [HttpPut]
+    [Route("{id:guid}/optional")]
+    public Task Optional(Guid id)
+    {
+        return ApiScopeAppService.UpdateRequiredAsync(id, false);
+    }
+
 }

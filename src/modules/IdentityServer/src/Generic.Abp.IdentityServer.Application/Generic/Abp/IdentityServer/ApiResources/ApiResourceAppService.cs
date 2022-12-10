@@ -66,8 +66,11 @@ public class ApiResourceAppService: IdentityServerAppService, IApiResourceAppSer
         await Repository.InsertAsync(entity);
 
         var scope  = await ApiScopeRepository.FindByNameAsync(entity.Name);
-        scope ??= new ApiScope(GuidGenerator.Create(), entity.Name);
-        await ApiScopeRepository.InsertAsync(scope);
+        if(scope == null)
+        {
+            scope = new ApiScope(GuidGenerator.Create(), entity.Name);
+            await ApiScopeRepository.InsertAsync(scope);
+        }
 
         return ObjectMapper.Map<ApiResource, ApiResourceDto>(entity);
 
@@ -182,8 +185,8 @@ public class ApiResourceAppService: IdentityServerAppService, IApiResourceAppSer
     public virtual async Task AddScopeAsync(Guid id, ApiResourceScopeCreateInput input)
     {
         var scopeName = input.Name;
-        //var scope = await ApiScopeRepository.FindByNameAsync(scopeName);
-        //if (scope == null) throw new EntityNotFoundException(typeof(ApiScope), scopeName);
+        var scope = await ApiScopeRepository.FindByNameAsync(scopeName);
+        if (scope == null) throw new EntityNotFoundBusinessException(nameof(ApiScope), scopeName);
         var entity = await Repository.GetAsync(id);
         entity.AddScope(scopeName);
         await Repository.UpdateAsync(entity);
@@ -194,8 +197,8 @@ public class ApiResourceAppService: IdentityServerAppService, IApiResourceAppSer
     public virtual async Task RemoveScopeAsync(Guid id, ApiResourceScopeDeleteInput input)
     {
         var entity = await Repository.GetAsync(id);
-        if(entity.Name.Equals(input.Scope, StringComparison.CurrentCultureIgnoreCase)) throw new RemovingTheDefaultScopeIsNotAllowedBusinessException();
-        entity.RemoveScope(input.Scope);
+        if(entity.Name.Equals(input.Name, StringComparison.CurrentCultureIgnoreCase)) throw new RemovingTheDefaultScopeIsNotAllowedBusinessException();
+        entity.RemoveScope(input.Name);
         await Repository.UpdateAsync(entity);
     }
     

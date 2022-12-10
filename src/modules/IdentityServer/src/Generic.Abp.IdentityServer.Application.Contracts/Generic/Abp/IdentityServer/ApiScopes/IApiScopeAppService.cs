@@ -16,4 +16,8 @@ public interface IApiScopeAppService: IApplicationService
     Task<ListResultDto<ApiScopeClaimDto>> GetClaimsAsync(Guid id);
     Task AddClaimAsync(Guid id, ApiScopeClaimCrateInput input);
     Task RemoveClaimAsync(Guid id, ApiScopeClaimDeleteInput input);
+    Task UpdateEnableAsync(Guid id, bool enable);
+    Task UpdateShowInDiscoveryDocumentAsync(Guid id, bool isShow);
+    Task UpdateEmphasizeAsync(Guid id, bool isEmphasize);
+    Task UpdateRequiredAsync(Guid id, bool isEmphasize);
 }
