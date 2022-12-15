@@ -155,4 +155,25 @@ public class ApiResourceController: IdentityServerController, IApiResourceAppSer
         return ApiResourceAppService.RemoveScopeAsync(id, input);
     }
 
+    [HttpGet]
+    [Route("{id:guid}/properties")]
+    public Task<ListResultDto<ApiResourcePropertyDto>> GetPropertiesAsync(Guid id)
+    {
+        return ApiResourceAppService.GetPropertiesAsync(id);
+    }
+
+    [HttpPut]
+    [Route("{id:guid}/properties")]
+    public Task AddPropertyAsync(Guid id,[FromBody] ApiResourcePropertyCreateInput input)
+    {
+        return ApiResourceAppService.AddPropertyAsync(id, input);
+    }
+
+    [HttpDelete]
+    [Route("{id:guid}/properties")]
+    public Task RemovePropertyAsync(Guid id, ApiResourcePropertyDeleteInput input)
+    {
+        return ApiResourceAppService.RemovePropertyAsync(id, input);
+    }
+
 }

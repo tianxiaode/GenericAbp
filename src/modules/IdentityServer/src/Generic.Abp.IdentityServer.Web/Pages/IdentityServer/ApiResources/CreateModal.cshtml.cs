@@ -40,5 +40,6 @@ namespace Generic.Abp.IdentityServer.Web.Pages.IdentityServer.ApiResources
 
         }
 
+
     }
 }

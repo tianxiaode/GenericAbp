@@ -103,6 +103,7 @@
     "ClientRedirectUri:RedirectUri": "跳转地址",
     "Menu:IdentityServerManagement": "Identity server管理",
     "NewApiResource": "新Api资源",
+    "NewSecret": "新秘密",
     "Actions": "操作",
     "Edit": "编辑",
     "DeleteConfirmTitle": "确定要删除以下{0}？",
@@ -112,6 +113,9 @@
     "OwnedClaims": "拥有声明",
     "Owned": "拥有",
     "Generic.Abp.IdentityServer.BusinessException:000001": "Api范围已在使用，不允许删除",
-    "Generic.Abp.IdentityServer.BusinessException:000002": "不能移除默认Api范围"
+    "Generic.Abp.IdentityServer.BusinessException:000002": "不能移除默认Api范围",
+    "Properties": "Properties",
+    "Properties:Key": "Key",
+    "Properties:Value": "Value"
   }
 }

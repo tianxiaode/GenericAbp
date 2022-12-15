@@ -24,6 +24,9 @@ public interface IApiResourceAppService: IApplicationService
     Task<ListResultDto<ApiResourceScopeDto>> GetScopesAsync(Guid id);
     Task AddScopeAsync(Guid id, ApiResourceScopeCreateInput input);
     Task RemoveScopeAsync(Guid id, ApiResourceScopeDeleteInput input);
+    Task<ListResultDto<ApiResourcePropertyDto>> GetPropertiesAsync(Guid id);
+    Task AddPropertyAsync(Guid id, ApiResourcePropertyCreateInput input);
+    Task RemovePropertyAsync(Guid id, ApiResourcePropertyDeleteInput input);
 
 
 }

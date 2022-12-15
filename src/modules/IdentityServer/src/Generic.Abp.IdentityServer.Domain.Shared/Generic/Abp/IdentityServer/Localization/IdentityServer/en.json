@@ -113,7 +113,10 @@
     "OwnedClaims": "Owned claims",
     "Owned": "Owned",
     "Generic.Abp.IdentityServer.BusinessException:000001": "Api scopes are already in use and cannot be deleted.",
-    "Generic.Abp.IdentityServer.BusinessException:000002": "Removing the default scope is not allowed."
+    "Generic.Abp.IdentityServer.BusinessException:000002": "Removing the default scope is not allowed.",
+    "Properties": "属性",
+    "Properties:Key": "键",
+    "Properties:Value": "值"
 
   }
 }

@@ -2,7 +2,6 @@
 using Generic.Abp.IdentityServer.Exceptions;
 using Generic.Abp.IdentityServer.Permissions;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -186,7 +185,7 @@ public class ApiResourceAppService: IdentityServerAppService, IApiResourceAppSer
     {
         var scopeName = input.Name;
         var scope = await ApiScopeRepository.FindByNameAsync(scopeName);
-        if (scope == null) throw new EntityNotFoundBusinessException(nameof(ApiScope), scopeName);
+        if (scope == null) throw new EntityNotFoundBusinessException(nameof(Volo.Abp.IdentityServer.ApiScopes.ApiScope), scopeName);
         var entity = await Repository.GetAsync(id);
         entity.AddScope(scopeName);
         await Repository.UpdateAsync(entity);
@@ -220,10 +219,14 @@ public class ApiResourceAppService: IdentityServerAppService, IApiResourceAppSer
     public virtual async Task AddSecretAsync(Guid id, ApiResourceSecretCreateInput input)
     {
         var entity = await Repository.GetAsync(id);
+        var value = IdentityServer4.Models.HashExtensions.Sha256(input.Value);
         if (entity.Secrets.Any(m =>
                 m.Type.Equals(input.Type, StringComparison.InvariantCultureIgnoreCase) &&
-                m.Value.Equals(input.Value, StringComparison.InvariantCultureIgnoreCase))) return;
-        entity.AddSecret(input.Value, input.Expiration, input.Type, input.Description);
+                m.Value.Equals(value, StringComparison.InvariantCultureIgnoreCase))) 
+        { 
+            throw new DuplicateWarningBusinessException(nameof(ApiResourceSecret), input.Value);
+        };
+        entity.AddSecret(value, input.Expiration, input.Type, input.Description);
         await Repository.UpdateAsync(entity);
     }
 
@@ -240,5 +243,39 @@ public class ApiResourceAppService: IdentityServerAppService, IApiResourceAppSer
     }
 
 
+    #endregion
+
+    #region Properties
+        [UnitOfWork]
+    [Authorize(IdentityServerPermissions.ApiResources.Default)]
+    public virtual async Task<ListResultDto<ApiResourcePropertyDto>> GetPropertiesAsync(Guid id)
+    {
+        var entity = await Repository.GetAsync(id);
+        return new ListResultDto<ApiResourcePropertyDto>(
+            ObjectMapper.Map<List<ApiResourceProperty>, List<ApiResourcePropertyDto>>(entity.Properties));
+    }
+
+    [UnitOfWork]
+    [Authorize(IdentityServerPermissions.ApiResources.Update)]
+    public virtual async Task AddPropertyAsync(Guid id, ApiResourcePropertyCreateInput input)
+    {
+        var entity = await Repository.GetAsync(id);
+        if(entity.Properties.Any(m=>m.Key.Equals(input.Key, StringComparison.InvariantCultureIgnoreCase)))
+        {
+            throw new DuplicateWarningBusinessException(nameof(ApiResourceProperty), input.Key);
+        };
+        entity.AddProperty(input.Key,input.Value);
+        await Repository.UpdateAsync(entity);
+    }
+
+    [UnitOfWork]
+    [Authorize(IdentityServerPermissions.ApiResources.Update)]
+    public virtual async Task RemovePropertyAsync(Guid id, ApiResourcePropertyDeleteInput input)
+    {
+        var entity = await Repository.GetAsync(id);
+        if(!entity.Properties.Any(m=>m.Key.Equals(input.Key, StringComparison.InvariantCultureIgnoreCase))) return;
+        entity.RemoveProperty(input.Key);
+        await Repository.UpdateAsync(entity);
+    }
     #endregion
 }
