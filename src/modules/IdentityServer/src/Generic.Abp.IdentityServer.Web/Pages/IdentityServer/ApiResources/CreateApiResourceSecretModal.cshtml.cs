@@ -25,9 +25,9 @@ namespace Generic.Abp.IdentityServer.Web.Pages.IdentityServer.ApiResources
         protected IApiResourceAppService ApiResourceAppService { get; }
 
 
-        public async Task<IActionResult> OnGetAsync(Guid id)
+        public async Task<IActionResult> OnGetAsync(Guid foreignKeyId)
         {
-            ApiResourceSecret.ApiResourceId = id;
+            ApiResourceSecret.ForeignKeyId = foreignKeyId;
             SecretTypes.Add(new SelectListItem("Shared Secret" ,IdentityServerConstants.SecretTypes.SharedSecret ));
             SecretTypes.Add(new SelectListItem("X509 Thumbprint",IdentityServerConstants.SecretTypes.X509CertificateThumbprint));
             return await Task.FromResult(Page()) ;
@@ -38,7 +38,7 @@ namespace Generic.Abp.IdentityServer.Web.Pages.IdentityServer.ApiResources
         {
             ValidateModel();
 
-            await ApiResourceAppService.AddSecretAsync(ApiResourceSecret.ApiResourceId, new ApiResourceSecretCreateInput
+            await ApiResourceAppService.AddSecretAsync(ApiResourceSecret.ForeignKeyId, new ApiResourceSecretCreateInput
             {
                 Type = ApiResourceSecret.Type,
                 Description = ApiResourceSecret.Description,
@@ -51,19 +51,9 @@ namespace Generic.Abp.IdentityServer.Web.Pages.IdentityServer.ApiResources
 
         public class ApiResourceSecretViewModel: ApiResourceSecretCreateInput
         {
-            public Guid ApiResourceId { get; set; }
+            public Guid ForeignKeyId { get; set; }
         }
 
-        public class SecretType
-        {
-            public SecretType(string text, string value)
-            {
-                Text = text;
-                Value = value;
-            }
-            public string Text { get; set; }
-            public string Value { get; set; }
-        }
 
     }
 }

@@ -27,7 +27,7 @@ ApiScope.prototype = {
         let me = this,
             l = me.localization,
             grid;
-        gird = me.grid = $('#layout_scopesLayout_panel_main div.w2ui-panel-content').w2grid({
+        grid = me.grid = $('#layout_scopesLayout_panel_main div.w2ui-panel-content').w2grid({
             name: 'scopeGrid',
             toolbar: true,
             multiSelect: true,
@@ -67,16 +67,6 @@ ApiScope.prototype = {
                     editable: { type: 'checkbox', style: 'text-align: center' } 
                 },
             ],
-            onRequest(event) {
-                let postData = event.postData;
-                postData.skipCount = postData.offset;
-                postData.MaxResultCount = postData.limit;
-            },
-            parser(data) {
-                data.total = data.totalCount;
-                data.records = data.items;
-                return data;
-            },
             onSelect: me.onScopeSelect.bind(me),
             onUnselect: me.onScopeUnselect.bind(me),
             onAdd: me.onScopeAdd.bind(me),
