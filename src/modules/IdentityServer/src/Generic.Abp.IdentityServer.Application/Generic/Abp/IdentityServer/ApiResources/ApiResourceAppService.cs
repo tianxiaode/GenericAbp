@@ -2,6 +2,7 @@
 using Generic.Abp.IdentityServer.Exceptions;
 using Generic.Abp.IdentityServer.Permissions;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -207,7 +208,7 @@ public class ApiResourceAppService: IdentityServerAppService, IApiResourceAppSer
 
     [UnitOfWork]
     [Authorize(IdentityServerPermissions.ApiResources.Default)]
-    public virtual async Task<ListResultDto<ApiResourceSecretDto>> GetClientSecretsAsync(Guid id)
+    public virtual async Task<ListResultDto<ApiResourceSecretDto>> GetSecretsAsync(Guid id)
     {
         var entity = await Repository.GetAsync(id);
         return new ListResultDto<ApiResourceSecretDto>(
@@ -219,11 +220,15 @@ public class ApiResourceAppService: IdentityServerAppService, IApiResourceAppSer
     public virtual async Task AddSecretAsync(Guid id, ApiResourceSecretCreateInput input)
     {
         var entity = await Repository.GetAsync(id);
+        if(input.Type != IdentityServerConstants.SecretTypes.SharedSecret && input.Type != IdentityServerConstants.SecretTypes.X509CertificateThumbprint)
+        {
+            throw new SecretTypeErrorBusinessException();
+        }
         var value = IdentityServer4.Models.HashExtensions.Sha256(input.Value);
         if (entity.Secrets.Any(m =>
                 m.Type.Equals(input.Type, StringComparison.InvariantCultureIgnoreCase) &&
-                m.Value.Equals(value, StringComparison.InvariantCultureIgnoreCase))) 
-        { 
+                m.Value.Equals(value, StringComparison.InvariantCultureIgnoreCase)))
+        {
             throw new DuplicateWarningBusinessException(nameof(ApiResourceSecret), input.Value);
         };
         entity.AddSecret(value, input.Expiration, input.Type, input.Description);

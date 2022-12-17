@@ -115,9 +115,9 @@ public class ApiResourceController: IdentityServerController, IApiResourceAppSer
 
     [HttpGet]
     [Route("{id:guid}/secrets")]
-    public Task<ListResultDto<ApiResourceSecretDto>> GetClientSecretsAsync(Guid id)
+    public Task<ListResultDto<ApiResourceSecretDto>> GetSecretsAsync(Guid id)
     {
-        return ApiResourceAppService.GetClientSecretsAsync(id);
+        return ApiResourceAppService.GetSecretsAsync(id);
     }
 
     [HttpPut]

@@ -4,7 +4,10 @@ using Volo.Abp.Application.Dtos;
 
 namespace Generic.Abp.IdentityServer.ClaimTypes
 {
-    public class ClaimTypeController:IdentityServerController,IClaimTypeAppService
+    [Area("IdentityServer")]
+    [ControllerName("IdentityServer")]
+    [Route("api/claim-types")]
+    public class ClaimTypeController : IdentityServerController, IClaimTypeAppService
     {
         public IClaimTypeAppService ApplicationService { get; }
         public ClaimTypeController(IClaimTypeAppService claimTypeAppService)

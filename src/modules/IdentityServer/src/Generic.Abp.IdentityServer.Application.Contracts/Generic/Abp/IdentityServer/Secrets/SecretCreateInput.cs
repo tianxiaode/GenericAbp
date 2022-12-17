@@ -13,7 +13,6 @@ public class SecretCreateInput
     [Required]
     [DisplayName("Secrets:Type")]
     [DynamicStringLength(typeof(ClientSecretConsts),nameof(ClientSecretConsts.TypeMaxLength))]
-    [EnumValue(typeof(SecretType))]
     public string Type { get; set; }
 
     [Required]
@@ -21,12 +20,10 @@ public class SecretCreateInput
     [DynamicStringLength(typeof(ClientSecretConsts),nameof(ClientSecretConsts.ValueMaxLength))]
     public string Value { get; set; }
 
-    [Required]
     [DisplayName("Secrets:Description")]
     [DynamicStringLength(typeof(ClientSecretConsts),nameof(ClientSecretConsts.DescriptionMaxLength))]
     public string Description { get; set; }
 
-    [Required]
     [DisplayName("Secrets:Expiration")]
     public DateTime? Expiration { get; set; }
 

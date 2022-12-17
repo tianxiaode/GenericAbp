@@ -7,7 +7,7 @@
 @{
     Layout = null;
 }
-<form method="post" asp-page="/IdentityServer/Properties/CreateApiResourcePropertyModal">
+<form method="post" asp-page="/IdentityServer/ApiResources/CreateApiResourcePropertyModal">
     <abp-modal>
         <abp-modal-header title="@_l["NewProperty"].Value"></abp-modal-header>
         <abp-modal-body>
@@ -18,3 +18,4 @@
         <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)"></abp-modal-footer>
     </abp-modal>
 </form>
+

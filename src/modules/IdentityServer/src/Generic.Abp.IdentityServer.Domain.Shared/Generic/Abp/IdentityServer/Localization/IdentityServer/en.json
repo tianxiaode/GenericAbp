@@ -114,11 +114,13 @@
     "Owned": "Owned",
     "Generic.Abp.IdentityServer.BusinessException:000001": "Api scopes are already in use and cannot be deleted.",
     "Generic.Abp.IdentityServer.BusinessException:000002": "Removing the default scope is not allowed.",
+    "Generic.Abp.IdentityServer.BusinessException:000003": "Wrong secret type",
     "Properties": "Properties",
     "NewProperty": "New property",
     "Properties:Key": "Key",
     "Properties:Value": "Value",
-    "Details": "Details"
+    "Details": "Details",
+    "Records": "Records"
 
   }
 }

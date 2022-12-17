@@ -1,8 +1,16 @@
-function inheritPrototype(subType, superType){
-    let prototype = Object(superType.prototype);
-    prototype.constructor = subType;
-    subType.prototype = prototype;
-}
+function inherits(ctor, superCtor){
+    if (superCtor) {
+        ctor.super_ = superCtor
+        ctor.prototype = Object.create(superCtor.prototype, {
+          constructor: {
+            value: ctor,
+            enumerable: false,
+            writable: true,
+            configurable: true
+          }
+        })
+      }
+  }
 
 window.isFunction =
         // Safari 3.x and 4.x returns 'function' for typeof <NodeList>, hence we need to fall back

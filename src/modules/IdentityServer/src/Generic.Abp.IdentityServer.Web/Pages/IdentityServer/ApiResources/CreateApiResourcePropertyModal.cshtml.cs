@@ -2,6 +2,7 @@ using Generic.Abp.IdentityServer.ApiResources;
 using Generic.Abp.IdentityServer.Properties;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using static Generic.Abp.IdentityServer.Web.Pages.IdentityServer.ApiResources.CreateApiResourceSecretModalModel;
 
 namespace Generic.Abp.IdentityServer.Web.Pages.IdentityServer.ApiResources
 {
@@ -20,6 +21,7 @@ namespace Generic.Abp.IdentityServer.Web.Pages.IdentityServer.ApiResources
 
         public async Task<IActionResult> OnGetAsync(Guid foreignKeyId)
         {
+            Property = new PropertyViewModel(foreignKeyId);
             Property.ForeignKeyId = foreignKeyId;
             return await Task.FromResult(Page()) ;
 
@@ -41,6 +43,20 @@ namespace Generic.Abp.IdentityServer.Web.Pages.IdentityServer.ApiResources
 
         public class PropertyViewModel: PropertyCreateInput
         {
+            public PropertyViewModel()
+            {
+                ForeignKeyId = Guid.NewGuid();
+                Key = "";
+                Value = "";
+            }
+
+            public PropertyViewModel(Guid foreignKeyId)
+            {
+                ForeignKeyId = foreignKeyId;
+                Key = "";
+                Value = "";
+            }
+
             public Guid ForeignKeyId { get; set; }
         }
     }

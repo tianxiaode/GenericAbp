@@ -114,10 +114,12 @@
     "Owned": "拥有",
     "Generic.Abp.IdentityServer.BusinessException:000001": "Api范围已在使用，不允许删除",
     "Generic.Abp.IdentityServer.BusinessException:000002": "不能移除默认Api范围",
+    "Generic.Abp.IdentityServer.BusinessException:000003": "错误的秘密类型",
     "Properties": "属性",
     "NewProperty": "新属性",
     "Properties:Key": "键",
     "Properties:Value": "值",
-    "Details": "详情"
+    "Details": "详情",
+    "Records": "数据"
   }
 }

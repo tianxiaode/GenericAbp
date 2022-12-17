@@ -26,6 +26,7 @@ namespace Generic.Abp.IdentityServer
             CreateMap<ApiResource, ApiResourceDto>();
             CreateMap<ApiResourceClaim, ApiResourceClaimDto>();
             CreateMap<ApiResourceSecret, ApiResourceSecretDto>();
+            CreateMap<ApiResourceProperty, ApiResourcePropertyDto>();
             CreateMap<ApiScope, ApiScopeDto>();
             CreateMap<ApiScopeClaim, ApiScopeClaimDto>();
             CreateMap<Client, ClientDto>();

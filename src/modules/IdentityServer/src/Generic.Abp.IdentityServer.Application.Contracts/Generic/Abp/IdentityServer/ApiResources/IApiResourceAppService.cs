@@ -18,7 +18,7 @@ public interface IApiResourceAppService: IApplicationService
     Task<ListResultDto<ApiResourceClaimDto>> GetClaimsAsync(Guid id);
     Task AddClaimAsync(Guid id, ApiResourceClaimCreateInput input);
     Task RemoveClaimAsync(Guid id, ApiResourceClaimDeleteInput input);
-    Task<ListResultDto<ApiResourceSecretDto>> GetClientSecretsAsync(Guid id);
+    Task<ListResultDto<ApiResourceSecretDto>> GetSecretsAsync(Guid id);
     Task AddSecretAsync(Guid id, ApiResourceSecretCreateInput input);
     Task RemoveSecretAsync(Guid id, ApiResourceSecretDeleteInput input);
     Task<ListResultDto<ApiResourceScopeDto>> GetScopesAsync(Guid id);
