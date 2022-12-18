@@ -13,12 +13,13 @@ using Volo.Abp.Domain.Entities;
 using Volo.Abp.IdentityServer.ApiResources;
 using Volo.Abp.IdentityServer.ApiScopes;
 using Volo.Abp.IdentityServer.IdentityResources;
+using Volo.Abp.ObjectMapping;
 using Volo.Abp.Uow;
 
 namespace Generic.Abp.IdentityServer.ApiScopes;
 
 [RemoteService(false)]
-public class ApiScopeAppService: IdentityServerAppService, IApiScopeAppService
+public class ApiScopeAppService : IdentityServerAppService, IApiScopeAppService
 {
     public ApiScopeAppService(IApiScopeRepository repository, IApiResourceRepository apiResourceRepository)
     {
@@ -41,20 +42,18 @@ public class ApiScopeAppService: IdentityServerAppService, IApiScopeAppService
 
     [UnitOfWork]
     [Authorize(IdentityServerPermissions.ApiResources.Default)]
-    public virtual async Task<PagedResultDto<ApiScopeDto>> GetListAsync()
+    public virtual async Task<ListResultDto<ApiScopeDto>> GetListAsync()
     {
         var sorting = $"{nameof(ApiScope.Name)}";
-        var list = await Repository.GetPagedListAsync(0, 1000,sorting);
-        var count = await Repository.GetCountAsync();
-        return new PagedResultDto<ApiScopeDto>(count,
-            ObjectMapper.Map<List<ApiScope>, List<ApiScopeDto>>(list));
+        var list = await Repository.GetListAsync(sorting, 0, 1000);
+        return new ListResultDto<ApiScopeDto>(ObjectMapper.Map<List<ApiScope>, List<ApiScopeDto>>(list));
     }
 
     [UnitOfWork]
     [Authorize(IdentityServerPermissions.ApiResources.Update)]
     public virtual async Task<ApiScopeDto> CreateAsync(ApiScopeCreateInput input)
     {
-        var entity = new ApiScope(GuidGenerator.Create(), input.Name, input.DisplayName, input.Description) 
+        var entity = new ApiScope(GuidGenerator.Create(), input.Name, input.DisplayName, input.Description)
         {
             Enabled = input.Enabled,
             Emphasize = input.Emphasize,
@@ -74,7 +73,7 @@ public class ApiScopeAppService: IdentityServerAppService, IApiScopeAppService
 
     [UnitOfWork]
     [Authorize(IdentityServerPermissions.ApiResources.Update)]
-    public virtual async Task<ApiScopeDto> UpdateAsync(Guid id,ApiScopeUpdateInput input)
+    public virtual async Task<ApiScopeDto> UpdateAsync(Guid id, ApiScopeUpdateInput input)
     {
         var entity = await Repository.GetAsync(id, false);
         entity.DisplayName = input.DisplayName;
@@ -98,12 +97,12 @@ public class ApiScopeAppService: IdentityServerAppService, IApiScopeAppService
         foreach (var guid in ids)
         {
             var entity = await Repository.FindAsync(guid);
-            if(entity == null) continue;
+            if (entity == null) continue;
             deletes.Add(entity);
         }
         var scopeNames = deletes.Select(x => x.Name).ToArray();
         var apiResources = await ApiResourceRepository.GetListByScopesAsync(scopeNames);
-        if(apiResources.Any()) throw new ApiScopesInUseBusinessException();
+        if (apiResources.Any()) throw new ApiScopesInUseBusinessException();
         foreach (var delete in deletes)
         {
             await Repository.DeleteAsync(delete);
@@ -140,7 +139,7 @@ public class ApiScopeAppService: IdentityServerAppService, IApiScopeAppService
         await Repository.UpdateAsync(entity);
     }
 
-        [UnitOfWork]
+    [UnitOfWork]
     [Authorize(IdentityServerPermissions.ApiResources.Update)]
     public virtual async Task UpdateRequiredAsync(Guid id, bool isEmphasize)
     {
@@ -166,7 +165,7 @@ public class ApiScopeAppService: IdentityServerAppService, IApiScopeAppService
     public virtual async Task AddClaimAsync(Guid id, ApiScopeClaimCrateInput input)
     {
         var entity = await Repository.GetAsync(id);
-        if(entity.UserClaims.Any(m=>m.Type.Equals(input.Type, StringComparison.InvariantCultureIgnoreCase))) return;
+        if (entity.UserClaims.Any(m => m.Type.Equals(input.Type, StringComparison.InvariantCultureIgnoreCase))) return;
         entity.AddUserClaim(input.Type);
         await Repository.UpdateAsync(entity);
     }
@@ -176,10 +175,45 @@ public class ApiScopeAppService: IdentityServerAppService, IApiScopeAppService
     public virtual async Task RemoveClaimAsync(Guid id, ApiScopeClaimDeleteInput input)
     {
         var entity = await Repository.GetAsync(id);
-        if(!entity.UserClaims.Any(m=>m.Type.Equals(input.Type, StringComparison.InvariantCultureIgnoreCase))) return;
+        if (!entity.UserClaims.Any(m => m.Type.Equals(input.Type, StringComparison.InvariantCultureIgnoreCase))) return;
         entity.RemoveClaim(input.Type);
         await Repository.UpdateAsync(entity);
     }
 
     #endregion
+
+    #region Properties
+    [UnitOfWork]
+    [Authorize(IdentityServerPermissions.ApiResources.Default)]
+    public virtual async Task<ListResultDto<ApiScopePropertyDto>> GetPropertiesAsync(Guid id)
+    {
+        var entity = await Repository.GetAsync(id);
+        return new ListResultDto<ApiScopePropertyDto>(
+            ObjectMapper.Map<List<ApiScopeProperty>, List<ApiScopePropertyDto>>(entity.Properties));
+    }
+
+    [UnitOfWork]
+    [Authorize(IdentityServerPermissions.ApiResources.Update)]
+    public virtual async Task AddPropertyAsync(Guid id, ApiScopePropertyCreateInput input)
+    {
+        var entity = await Repository.GetAsync(id);
+        if (entity.Properties.Any(m => m.Key.Equals(input.Key, StringComparison.InvariantCultureIgnoreCase)))
+        {
+            throw new DuplicateWarningBusinessException(nameof(ApiResourceProperty), input.Key);
+        };
+        entity.AddProperty(input.Key, input.Value);
+        await Repository.UpdateAsync(entity);
+    }
+
+    [UnitOfWork]
+    [Authorize(IdentityServerPermissions.ApiResources.Update)]
+    public virtual async Task RemovePropertyAsync(Guid id, ApiScopePropertyDeleteInput input)
+    {
+        var entity = await Repository.GetAsync(id);
+        if (!entity.Properties.Any(m => m.Key.Equals(input.Key, StringComparison.InvariantCultureIgnoreCase))) return;
+        entity.RemoveProperty(input.Key);
+        await Repository.UpdateAsync(entity);
+    }
+    #endregion
+
 }

@@ -104,6 +104,7 @@
     "Menu:IdentityServerManagement": "Identity server管理",
     "NewApiResource": "新Api资源",
     "NewSecret": "新秘密",
+    "NewApiScope": "新范围",
     "Actions": "操作",
     "Edit": "编辑",
     "DeleteConfirmTitle": "确定要删除以下{0}？",

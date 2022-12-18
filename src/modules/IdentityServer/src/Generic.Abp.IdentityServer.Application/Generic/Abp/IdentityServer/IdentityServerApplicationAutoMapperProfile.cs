@@ -29,6 +29,7 @@ namespace Generic.Abp.IdentityServer
             CreateMap<ApiResourceProperty, ApiResourcePropertyDto>();
             CreateMap<ApiScope, ApiScopeDto>();
             CreateMap<ApiScopeClaim, ApiScopeClaimDto>();
+            CreateMap<ApiScopeProperty, ApiScopePropertyDto>();
             CreateMap<Client, ClientDto>();
             CreateMap<ClientCreateInput, Client>()
                 .Ignore(m => m.Id)

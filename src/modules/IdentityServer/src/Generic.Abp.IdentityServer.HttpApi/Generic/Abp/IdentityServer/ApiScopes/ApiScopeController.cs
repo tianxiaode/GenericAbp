@@ -28,7 +28,7 @@ public class ApiScopeController: IdentityServerController, IApiScopeAppService
     }
 
     [HttpGet]
-    public Task<PagedResultDto<ApiScopeDto>> GetListAsync()
+    public Task<ListResultDto<ApiScopeDto>> GetListAsync()
     {
         return ApiScopeAppService.GetListAsync();
     }
@@ -155,4 +155,24 @@ public class ApiScopeController: IdentityServerController, IApiScopeAppService
         return ApiScopeAppService.UpdateRequiredAsync(id, false);
     }
 
+     [HttpGet]
+    [Route("{id:guid}/properties")]
+   public Task<ListResultDto<ApiScopePropertyDto>> GetPropertiesAsync(Guid id)
+    {
+        return ApiScopeAppService.GetPropertiesAsync(id);
+    }
+
+    [HttpPut]
+    [Route("{id:guid}/properties")]
+    public Task AddPropertyAsync(Guid id, [FromBody] ApiScopePropertyCreateInput input)
+    {
+        return ApiScopeAppService.AddPropertyAsync(id, input);
+    }
+
+    [HttpDelete]
+    [Route("{id:guid}/properties")]
+    public Task RemovePropertyAsync(Guid id,[FromBody] ApiScopePropertyDeleteInput input)
+    {
+        return ApiScopeAppService.RemovePropertyAsync(id, input);
+    }
 }

@@ -104,6 +104,8 @@
     "ClientRedirectUri:RedirectUri": "Redirect uri",
     "Menu:IdentityServerManagement": "Identity server management",
     "NewApiResource": "New api resource",
+    "NewSecret": "New api secret",
+    "NewApiScope": "New api scope",
     "Actions": "Actions",
     "Edit": "Edit",
     "DeleteConfirmTitle": "Are you sure you want to delete the following {0}?",

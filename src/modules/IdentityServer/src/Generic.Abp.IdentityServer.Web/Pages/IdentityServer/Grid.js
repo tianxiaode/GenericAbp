@@ -61,7 +61,6 @@ Grid.prototype.getColumns = function(){
 
 Grid.prototype.initGrid = function(){
     let me = this,
-        hasAction = false,
         config = {};
     Object.assign(config, me.getGridConfig());
     if(me.name) config.name = me.name;
@@ -76,7 +75,9 @@ Grid.prototype.initGrid = function(){
         onEdit: me.onEdit.bind(me),
         delete: me.onDelete.bind(me),
         onChange: me.onChange.bind(me),
-        onColumnClick: me.onColumnClick.bind(me)
+        onColumnClick: me.onColumnClick.bind(me),
+        onRelaod: me.onReload.bind(me),
+        onLoad: me.onReload.bind(me),
     })
     me.grid = me.el.w2grid(config);
 
@@ -197,7 +198,8 @@ Grid.prototype.mergeChanges = function(){
     this.grid.mergeChanges();
 }
 
-Grid.prototype.rejectChanges = function(){
+Grid.prototype.rejectChanges = function(error){
+    if(error) this.ajaxFailure(error);
     this.grid.rejectChanges();
 },
 
@@ -206,6 +208,8 @@ Grid.prototype.ajaxFailure = function(error){
         abp.message.error(this.localization(error.code));
     }
 }
+
+Grid.prototype.onReload = function(){}
 
 Grid.prototype.onSelect = function(){}
 

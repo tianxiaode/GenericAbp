@@ -16,7 +16,7 @@ using Volo.Abp.Uow;
 namespace Generic.Abp.IdentityServer.ApiResources;
 
 [RemoteService(false)]
-public class ApiResourceAppService: IdentityServerAppService, IApiResourceAppService
+public class ApiResourceAppService : IdentityServerAppService, IApiResourceAppService
 {
     public ApiResourceAppService(IApiResourceRepository repository, IApiScopeRepository apiScopeRepository)
     {
@@ -41,7 +41,7 @@ public class ApiResourceAppService: IdentityServerAppService, IApiResourceAppSer
     {
         var sorting = input.Sorting;
         if (string.IsNullOrEmpty(sorting)) sorting = $"{nameof(ApiResource.Name)}";
-        var list = await Repository.GetPagedListAsync(input.SkipCount, input.MaxResultCount,sorting);
+        var list = await Repository.GetPagedListAsync(input.SkipCount, input.MaxResultCount, sorting);
         var count = await Repository.GetCountAsync();
         return new PagedResultDto<ApiResourceDto>(count,
             ObjectMapper.Map<List<ApiResource>, List<ApiResourceDto>>(list));
@@ -51,7 +51,7 @@ public class ApiResourceAppService: IdentityServerAppService, IApiResourceAppSer
     [Authorize(IdentityServerPermissions.ApiResources.Create)]
     public virtual async Task<ApiResourceDto> CreateAsync(ApiResourceCreateInput input)
     {
-        var entity = new ApiResource(GuidGenerator.Create(), input.Name, input.DisplayName, input.Description) 
+        var entity = new ApiResource(GuidGenerator.Create(), input.Name, input.DisplayName, input.Description)
         {
             Enabled = input.Enabled,
             AllowedAccessTokenSigningAlgorithms = input.AllowedAccessTokenSigningAlgorithms,
@@ -65,8 +65,8 @@ public class ApiResourceAppService: IdentityServerAppService, IApiResourceAppSer
 
         await Repository.InsertAsync(entity);
 
-        var scope  = await ApiScopeRepository.FindByNameAsync(entity.Name);
-        if(scope == null)
+        var scope = await ApiScopeRepository.FindByNameAsync(entity.Name);
+        if (scope == null)
         {
             scope = new ApiScope(GuidGenerator.Create(), entity.Name);
             await ApiScopeRepository.InsertAsync(scope);
@@ -78,7 +78,7 @@ public class ApiResourceAppService: IdentityServerAppService, IApiResourceAppSer
 
     [UnitOfWork]
     [Authorize(IdentityServerPermissions.ApiResources.Update)]
-    public virtual async Task<ApiResourceDto> UpdateAsync(Guid id,ApiResourceUpdateInput input)
+    public virtual async Task<ApiResourceDto> UpdateAsync(Guid id, ApiResourceUpdateInput input)
     {
         var entity = await Repository.GetAsync(id);
         entity.DisplayName = input.DisplayName;
@@ -100,7 +100,7 @@ public class ApiResourceAppService: IdentityServerAppService, IApiResourceAppSer
         foreach (var guid in ids)
         {
             var entity = await Repository.FindAsync(guid);
-            if(entity == null) continue;
+            if (entity == null) continue;
             entity.RemoveAllUserClaims();
             entity.RemoveAllScopes();
             entity.RemoveAllProperties();
@@ -109,7 +109,7 @@ public class ApiResourceAppService: IdentityServerAppService, IApiResourceAppSer
             result.Add(ObjectMapper.Map<ApiResource, ApiResourceDto>(entity));
         }
 
-        
+
 
         return new ListResultDto<ApiResourceDto>(result);
     }
@@ -149,7 +149,7 @@ public class ApiResourceAppService: IdentityServerAppService, IApiResourceAppSer
     public virtual async Task AddClaimAsync(Guid id, ApiResourceClaimCreateInput input)
     {
         var entity = await Repository.GetAsync(id);
-        if(entity.UserClaims.Any(m=>m.Type.Equals(input.Type, StringComparison.InvariantCultureIgnoreCase))) return;
+        if (entity.UserClaims.Any(m => m.Type.Equals(input.Type, StringComparison.InvariantCultureIgnoreCase))) return;
         entity.AddUserClaim(input.Type);
         await Repository.UpdateAsync(entity);
     }
@@ -159,7 +159,7 @@ public class ApiResourceAppService: IdentityServerAppService, IApiResourceAppSer
     public virtual async Task RemoveClaimAsync(Guid id, ApiResourceClaimDeleteInput input)
     {
         var entity = await Repository.GetAsync(id);
-        if(!entity.UserClaims.Any(m=>m.Type.Equals(input.Type, StringComparison.InvariantCultureIgnoreCase))) return;
+        if (!entity.UserClaims.Any(m => m.Type.Equals(input.Type, StringComparison.InvariantCultureIgnoreCase))) return;
         entity.RemoveClaim(input.Type);
         await Repository.UpdateAsync(entity);
     }
@@ -175,7 +175,7 @@ public class ApiResourceAppService: IdentityServerAppService, IApiResourceAppSer
         //var scopes = await ApiScopeRepository.GetListAsync();
         //var list = scopes.Select(m => new ApiResourceScopeDto(m.Name, m.DisplayName)).ToList();
         var entity = await Repository.GetAsync(id);
-        var list = entity.Scopes.Select(m=>new ApiResourceScopeDto(m.Scope)).ToList();
+        var list = entity.Scopes.Select(m => new ApiResourceScopeDto(m.Scope)).ToList();
 
         return new ListResultDto<ApiResourceScopeDto>(list);
     }
@@ -197,11 +197,11 @@ public class ApiResourceAppService: IdentityServerAppService, IApiResourceAppSer
     public virtual async Task RemoveScopeAsync(Guid id, ApiResourceScopeDeleteInput input)
     {
         var entity = await Repository.GetAsync(id);
-        if(entity.Name.Equals(input.Name, StringComparison.CurrentCultureIgnoreCase)) throw new RemovingTheDefaultScopeIsNotAllowedBusinessException();
+        if (entity.Name.Equals(input.Name, StringComparison.CurrentCultureIgnoreCase)) throw new RemovingTheDefaultScopeIsNotAllowedBusinessException();
         entity.RemoveScope(input.Name);
         await Repository.UpdateAsync(entity);
     }
-    
+
     #endregion
 
     #region secrets
@@ -220,7 +220,7 @@ public class ApiResourceAppService: IdentityServerAppService, IApiResourceAppSer
     public virtual async Task AddSecretAsync(Guid id, ApiResourceSecretCreateInput input)
     {
         var entity = await Repository.GetAsync(id);
-        if(input.Type != IdentityServerConstants.SecretTypes.SharedSecret && input.Type != IdentityServerConstants.SecretTypes.X509CertificateThumbprint)
+        if (input.Type != IdentityServerConstants.SecretTypes.SharedSecret && input.Type != IdentityServerConstants.SecretTypes.X509CertificateThumbprint)
         {
             throw new SecretTypeErrorBusinessException();
         }
@@ -251,7 +251,7 @@ public class ApiResourceAppService: IdentityServerAppService, IApiResourceAppSer
     #endregion
 
     #region Properties
-        [UnitOfWork]
+    [UnitOfWork]
     [Authorize(IdentityServerPermissions.ApiResources.Default)]
     public virtual async Task<ListResultDto<ApiResourcePropertyDto>> GetPropertiesAsync(Guid id)
     {
@@ -265,11 +265,11 @@ public class ApiResourceAppService: IdentityServerAppService, IApiResourceAppSer
     public virtual async Task AddPropertyAsync(Guid id, ApiResourcePropertyCreateInput input)
     {
         var entity = await Repository.GetAsync(id);
-        if(entity.Properties.Any(m=>m.Key.Equals(input.Key, StringComparison.InvariantCultureIgnoreCase)))
+        if (entity.Properties.Any(m => m.Key.Equals(input.Key, StringComparison.InvariantCultureIgnoreCase)))
         {
             throw new DuplicateWarningBusinessException(nameof(ApiResourceProperty), input.Key);
         };
-        entity.AddProperty(input.Key,input.Value);
+        entity.AddProperty(input.Key, input.Value);
         await Repository.UpdateAsync(entity);
     }
 
@@ -278,7 +278,7 @@ public class ApiResourceAppService: IdentityServerAppService, IApiResourceAppSer
     public virtual async Task RemovePropertyAsync(Guid id, ApiResourcePropertyDeleteInput input)
     {
         var entity = await Repository.GetAsync(id);
-        if(!entity.Properties.Any(m=>m.Key.Equals(input.Key, StringComparison.InvariantCultureIgnoreCase))) return;
+        if (!entity.Properties.Any(m => m.Key.Equals(input.Key, StringComparison.InvariantCultureIgnoreCase))) return;
         entity.RemoveProperty(input.Key);
         await Repository.UpdateAsync(entity);
     }

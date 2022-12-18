@@ -37,17 +37,15 @@
               </ul>
               <div class="tab-content" style="height: calc(100% - 41px);">
                 <div class="tab-pane fade h-100 show active" id="detailTab" role="tabpanel" aria-labelledby="detailTab" tabindex="0"></div>
-                <div class="tab-pane fade h-100" id="claimsTab" role="tabpanel" aria-labelledby="profile-tab" tabindex="0"></div>
-                <div class="tab-pane fade h-100" id="scopesTab" role="tabpanel" aria-labelledby="contact-tab" tabindex="0"></div>
-                <div class="tab-pane fade h-100" id="secretsTab" role="tabpanel" aria-labelledby="disabled-tab" tabindex="0"></div>
-                <div class="tab-pane fade h-100" id="propertyTab" role="tabpanel" aria-labelledby="disabled-tab" tabindex="0"></div>
+                <div class="tab-pane fade h-100" id="claimsTab" role="tabpanel" aria-labelledby="claimsTab" tabindex="0"></div>
+                <div class="tab-pane fade h-100" id="scopesTab" role="tabpanel" aria-labelledby="scopesTab" tabindex="0"></div>
+                <div class="tab-pane fade h-100" id="secretsTab" role="tabpanel" aria-labelledby="secretsTab" tabindex="0"></div>
+                <div class="tab-pane fade h-100" id="propertyTab" role="tabpanel" aria-labelledby="propertyTab" tabindex="0"></div>
               </div>
               `,
               onShow(){
                   let record = w2ui.layout.currentRecord;
                   $('#detailTitle').html(`${l('Details')} - ${record.name}`);
-                //   $('#tabList button.active').removeClass("active");                  
-                //   $('#tabList button[data-bs-target="#detailTab"]').addClass('active');
                   switchTab();
               }
             },
@@ -102,7 +100,11 @@
         }
         
         if(active.includes('scopes')){
-            
+            let grid = window.apiResourceScopesGrid;
+            if(!grid){
+                grid = window.apiResourceScopesGrid = new ApiResourceScopeGrid();
+            }
+            grid.refresh(record);
             return;
         }
         
