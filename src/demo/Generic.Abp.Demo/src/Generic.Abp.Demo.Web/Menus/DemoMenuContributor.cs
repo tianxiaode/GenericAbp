@@ -18,7 +18,7 @@ namespace Generic.Abp.Demo.Web.Menus
             }
         }
 
-        private async Task ConfigureMainMenuAsync(MenuConfigurationContext context)
+        private Task ConfigureMainMenuAsync(MenuConfigurationContext context)
         {
             if (!MultiTenancyConsts.IsEnabled)
             {
@@ -29,6 +29,8 @@ namespace Generic.Abp.Demo.Web.Menus
             var l = context.GetLocalizer<DemoResource>();
 
             context.Menu.Items.Insert(0, new ApplicationMenuItem("Demo.Home", l["Menu:Home"], "~/"));
+
+            return Task.CompletedTask;
         }
     }
 }

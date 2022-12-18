@@ -65,7 +65,7 @@ RelationalGrid.prototype.refresh = function(record){
 }
 
 
-Grid.prototype.onAdd = function(event){
+RelationalGrid.prototype.onAdd = function(event){
     let me = this;
     me.createModal.open({
         foreignKeyId: me.currentRecord.id

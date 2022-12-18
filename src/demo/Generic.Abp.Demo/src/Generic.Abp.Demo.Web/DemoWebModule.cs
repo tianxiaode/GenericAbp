@@ -11,6 +11,7 @@ using Generic.Abp.Demo.EntityFrameworkCore;
 using Generic.Abp.Demo.Localization;
 using Generic.Abp.Demo.MultiTenancy;
 using Generic.Abp.Demo.Web.Menus;
+using Generic.Abp.IdentityServer;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
@@ -36,6 +37,7 @@ using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.UI;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
+using Generic.Abp.IdentityServer.Web;
 
 namespace Generic.Abp.Demo.Web
 {
@@ -45,6 +47,7 @@ namespace Generic.Abp.Demo.Web
         typeof(DemoEntityFrameworkCoreDbMigrationsModule),
         typeof(AbpAutofacModule),
         typeof(AbpIdentityWebModule),
+        typeof(GenericAbpIdentityServerWebModule),
         typeof(AbpAccountWebIdentityServerModule),
         typeof(AbpAspNetCoreMvcUiBasicThemeModule),
         typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
@@ -130,12 +133,6 @@ namespace Generic.Abp.Demo.Web
         {
             Configure<AbpLocalizationOptions>(options =>
             {
-                options.Resources
-                    .Get<DemoResource>()
-                    .AddBaseTypes(
-                        typeof(AbpUiResource)
-                    );
-
                 options.Languages.Add(new LanguageInfo("ar", "ar", "العربية"));
                 options.Languages.Add(new LanguageInfo("cs", "cs", "Čeština"));
                 options.Languages.Add(new LanguageInfo("en", "en", "English"));
@@ -190,7 +187,7 @@ namespace Generic.Abp.Demo.Web
             }
 
             app.UseCorrelationId();
-            app.UseVirtualFiles();
+            app.UseStaticFiles();
             app.UseRouting();
             app.UseAuthentication();
             app.UseJwtTokenMiddleware();
@@ -200,6 +197,7 @@ namespace Generic.Abp.Demo.Web
                 app.UseMultiTenancy();
             }
 
+            app.UseUnitOfWork();
             app.UseAbpRequestLocalization();
             app.UseIdentityServer();
             app.UseAuthorization();

@@ -1,4 +1,6 @@
 ﻿using Generic.Abp.Demo.Localization;
+using Generic.Abp.Identity;
+using Generic.Abp.IdentityServer;
 using Volo.Abp.AuditLogging;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.FeatureManagement;
@@ -22,8 +24,12 @@ namespace Generic.Abp.Demo
         typeof(AbpIdentityServerDomainSharedModule),
         typeof(AbpPermissionManagementDomainSharedModule),
         typeof(AbpSettingManagementDomainSharedModule),
-        typeof(AbpTenantManagementDomainSharedModule)
+        typeof(AbpTenantManagementDomainSharedModule),
+        typeof(GenericAbpIdentityDomainSharedModule),
+        typeof(GenericAbpIdentityServerDomainSharedModule)
         )]
+
+
     public class DemoDomainSharedModule : AbpModule
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)

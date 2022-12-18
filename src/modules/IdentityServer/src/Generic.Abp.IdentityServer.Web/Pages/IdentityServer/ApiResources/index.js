@@ -102,6 +102,7 @@
         }
         
         if(active.includes('scopes')){
+            
             return;
         }
         

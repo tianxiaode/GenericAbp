@@ -3,7 +3,6 @@ using Volo.Abp.Application;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
-using Generic.Abp.ExtResource;
 
 namespace Generic.Abp.ExtResource
 {

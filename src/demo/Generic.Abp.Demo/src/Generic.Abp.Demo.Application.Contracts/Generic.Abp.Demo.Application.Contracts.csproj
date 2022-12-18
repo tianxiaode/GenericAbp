@@ -1,13 +1,16 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <RootNamespace>Generic.Abp.Demo</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\modules\extresource\src\Generic.Abp.ExtResource.Application.Contracts\Generic.Abp.ExtResource.Application.Contracts.csproj" />
+    <ProjectReference Include="..\..\..\..\modules\IdentityServer\src\Generic.Abp.IdentityServer.Application.Contracts\Generic.Abp.IdentityServer.Application.Contracts.csproj" />
+    <ProjectReference Include="..\..\..\..\modules\identity\src\Generic.Abp.Identity.Application.Contracts\Generic.Abp.Identity.Application.Contracts.csproj" />
     <ProjectReference Include="..\Generic.Abp.Demo.Domain.Shared\Generic.Abp.Demo.Domain.Shared.csproj" />
   </ItemGroup>
 

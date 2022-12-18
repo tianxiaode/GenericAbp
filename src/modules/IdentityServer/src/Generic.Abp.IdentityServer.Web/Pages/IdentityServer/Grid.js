@@ -51,15 +51,10 @@ Grid.prototype.getColumns = function(){
     me.columns.forEach(c=>{
         if(c.isMessage) me.messageField = c.field;
         if(c.isAction) me.hasActionColumn = true;
-        columns.push({
-            field: c.field,
-            text: l(c.text),
-            size: c.size,
-            tooltip: l(c.text),
-            style: c.style,
-            editable: c.editable,
-            render: c.render
-        })
+        let config = Object.assign({}, c);
+        config.text = l(c.text);
+        config.tooltip = config.text;
+        columns.push(config);
     })
     return columns;
 }
@@ -161,10 +156,33 @@ Grid.prototype.onDelete = function(event){
             .then(me.updateSuccess.bind(me), me.ajaxFailure.bind(me));
     });
 
-},
+}
 
-Grid.prototype.updateCheckChange = function(apiName, id){
+Grid.prototype.onChange = function(event){
     let me = this,
+        grid = me.grid,
+        column = grid.columns[event.column],
+        record = grid.get(event.recid),
+        action = column.action;
+
+    if(!action) return;
+    if(typeof action === 'string'){
+        let fn = me[action];
+        if(isFunction(fn)) fn.call(me, record, column);
+        return
+    }
+    if(typeof action === 'object' && action.check){
+        me.updateCheckChange(record , column);
+        return;
+    }
+
+}
+
+
+Grid.prototype.updateCheckChange = function( record, column){
+    let me = this,
+        id = record.id,
+        apiName = record[column.field] ? column.action.check : column.action.uncheck,
         fn = this.api[apiName];
     if(!isFunction(fn)) return;
     fn.call(null,id).then(me.mergeChanges.bind(me),me.rejectChanges.bind(me));
@@ -193,7 +211,6 @@ Grid.prototype.onSelect = function(){}
 
 Grid.prototype.onDeselect = function(){}
 
-Grid.prototype.onChange = function(){}
 
 Grid.prototype.onColumnClick = function(){}
 

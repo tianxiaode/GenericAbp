@@ -14,9 +14,11 @@ function ApiResourceGrid(config){
             { field: 'description', text: "ApiResource:Description", size: '20%'  },
             { field: 'allowedAccessTokenSigningAlgorithms', text: "ApiResource:AllowedAccessTokenSigningAlgorithms", size: '20%'  },
             { field: 'enabled', text: "ApiResource:Enabled", size: '10%', style: 'text-align: center',
+                action:{ check: 'disable', uncheck: 'enable' },
                 editable: { type: 'checkbox', style: 'text-align: center' } 
             },
             { field: 'showInDiscoveryDocument', text: "ApiResource:ShowInDiscoveryDocument", size: '10%', style: 'text-align: center',
+                action:{ check: 'hide', uncheck: 'show' },
                 editable: { type: 'checkbox', style: 'text-align: center' }  
             },
             {
@@ -36,27 +38,6 @@ function ApiResourceGrid(config){
 }
 
 inherits(ApiResourceGrid, Grid);
-
-ApiResourceGrid.prototype.onChange = function(event){
-    let me = this,
-        grid = me.grid,
-        column = grid.columns[event.column],
-        record = grid.get(event.recid),
-        id = record.id,
-        fnName;
-    if(column.field === 'enabled'){
-        fnName = record[column.field] ? "disable": "enable";
-    }
-
-    if(column.field === 'showInDiscoveryDocument'){
-        fnName = record[column.field] ? "hide": "show";
-    }
-
-    console.log(fnName)
-
-    if(fnName) me.updateCheckChange(fnName, id);
-
-}
 
 
 ApiResourceGrid.prototype.onActionClick = function(event){
