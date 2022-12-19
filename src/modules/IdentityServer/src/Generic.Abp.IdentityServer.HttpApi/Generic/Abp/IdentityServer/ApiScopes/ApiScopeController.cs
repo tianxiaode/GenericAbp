@@ -11,14 +11,14 @@ namespace Generic.Abp.IdentityServer.ApiScopes;
 [ControllerName("IdentityServer")]
 [Route("api/api-scopes")]
 
-public class ApiScopeController: IdentityServerController, IApiScopeAppService
+public class ApiScopeController : IdentityServerController, IApiScopeAppService
 {
     public ApiScopeController(IApiScopeAppService apiScopeAppService)
     {
         ApiScopeAppService = apiScopeAppService;
     }
 
-    protected IApiScopeAppService ApiScopeAppService { get;  }
+    protected IApiScopeAppService ApiScopeAppService { get; }
 
     [HttpGet]
     [Route("{id:guid}")]
@@ -41,13 +41,13 @@ public class ApiScopeController: IdentityServerController, IApiScopeAppService
 
     [HttpPut]
     [Route("{id:guid}")]
-    public Task<ApiScopeDto> UpdateAsync(Guid id,[FromBody] ApiScopeUpdateInput input)
+    public Task<ApiScopeDto> UpdateAsync(Guid id, [FromBody] ApiScopeUpdateInput input)
     {
         return ApiScopeAppService.UpdateAsync(id, input);
     }
 
     [HttpDelete]
-    public Task<ListResultDto<ApiScopeDto>> DeleteAsync([FromBody]List<Guid> ids)
+    public Task<ListResultDto<ApiScopeDto>> DeleteAsync([FromBody] List<Guid> ids)
     {
         return ApiScopeAppService.DeleteAsync(ids);
     }
@@ -141,7 +141,7 @@ public class ApiScopeController: IdentityServerController, IApiScopeAppService
         throw new NotImplementedException();
     }
 
-        [HttpPut]
+    [HttpPut]
     [Route("{id:guid}/required")]
     public Task Required(Guid id)
     {
@@ -155,9 +155,9 @@ public class ApiScopeController: IdentityServerController, IApiScopeAppService
         return ApiScopeAppService.UpdateRequiredAsync(id, false);
     }
 
-     [HttpGet]
+    [HttpGet]
     [Route("{id:guid}/properties")]
-   public Task<ListResultDto<ApiScopePropertyDto>> GetPropertiesAsync(Guid id)
+    public Task<ListResultDto<ApiScopePropertyDto>> GetPropertiesAsync(Guid id)
     {
         return ApiScopeAppService.GetPropertiesAsync(id);
     }
@@ -171,7 +171,7 @@ public class ApiScopeController: IdentityServerController, IApiScopeAppService
 
     [HttpDelete]
     [Route("{id:guid}/properties")]
-    public Task RemovePropertyAsync(Guid id,[FromBody] ApiScopePropertyDeleteInput input)
+    public Task RemovePropertyAsync(Guid id, [FromBody] ApiScopePropertyDeleteInput input)
     {
         return ApiScopeAppService.RemovePropertyAsync(id, input);
     }

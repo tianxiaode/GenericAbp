@@ -21,7 +21,6 @@ namespace Generic.Abp.IdentityServer.Web.Pages.IdentityServer.ApiScopes
         public async Task<IActionResult> OnGetAsync(Guid foreignKeyId)
         {
             Property = new PropertyViewModel(foreignKeyId);
-            Property.ForeignKeyId = foreignKeyId;
             return await Task.FromResult(Page()) ;
 
         }

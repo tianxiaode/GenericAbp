@@ -23,6 +23,7 @@ namespace Generic.Abp.IdentityServer
              * into multiple profile classes for a better organization. */
             CreateMap<IdentityResource, IdentityResourceDto>();
             CreateMap<IdentityResourceClaim, IdentityResourceClaimDto>();
+            CreateMap<IdentityResourceProperty, IdentityResourcePropertyDto>();
             CreateMap<ApiResource, ApiResourceDto>();
             CreateMap<ApiResourceClaim, ApiResourceClaimDto>();
             CreateMap<ApiResourceSecret, ApiResourceSecretDto>();
@@ -60,6 +61,8 @@ namespace Generic.Abp.IdentityServer
             CreateMap<ClientClaim, ClientClaimDto>();
             CreateMap<ClientPostLogoutRedirectUri, ClientPostLogoutRedirectUriDto>();
             CreateMap<ClientRedirectUri, ClientRedirectUriDto>();
+            CreateMap<ClientProperty, ClientPropertyDto>();
+            CreateMap<ClientIdPRestriction, ClientIdentityProviderRestrictionDto>();
         }
     }
 }

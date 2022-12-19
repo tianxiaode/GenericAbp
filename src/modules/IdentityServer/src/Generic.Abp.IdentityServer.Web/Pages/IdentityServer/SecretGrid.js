@@ -28,7 +28,7 @@ function SecretGrid(config){
 
 inherits(SecretGrid, RelationalGrid);
 
-RelationalGrid.prototype.onDelete = function(event){
+SecretGrid.prototype.onDelete = function(event){
     let me = this,
         l = me.localization,
         grid = me.grid,

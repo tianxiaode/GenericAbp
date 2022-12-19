@@ -41,6 +41,9 @@ public class ClientCreateOrUpdateInput
     [DisplayName("Client:RequireClientSecret")]
     public bool RequireClientSecret { get; set; }
 
+    [DisplayName("Client:RequireRequestObject")]
+    public bool RequireRequestObject { get; set; }
+
     [DisplayName("Client:RequireConsent")]
     public bool RequireConsent { get; set; }
 
@@ -78,6 +81,11 @@ public class ClientCreateOrUpdateInput
 
     [DisplayName("Client:IdentityTokenLifetime")]
     public int IdentityTokenLifetime { get; set; }
+
+    
+    [DynamicStringLength(typeof(ClientConsts), nameof(ClientConsts.AllowedIdentityTokenSigningAlgorithms))]
+    [DisplayName("Client:AllowedIdentityTokenSigningAlgorithms")]
+    public string AllowedIdentityTokenSigningAlgorithms { get; set; }
 
     [DisplayName("Client:AccessTokenLifetime")]
     public int AccessTokenLifetime { get; set; }

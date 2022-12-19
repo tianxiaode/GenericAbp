@@ -71,3 +71,36 @@ RelationalGrid.prototype.onAdd = function(event){
         foreignKeyId: me.currentRecord.id
     });
 }
+
+RelationalGrid.prototype.onDelete = function(event){
+    let me = this,
+        l = me.localization,
+        grid = me.grid,
+        data = grid.getSelection(),
+        title = window.abp.utils.formatString(l('DeleteConfirmTitle'), l("Records")),
+        messageField = me.messageField,
+        message = [],
+        id = me.currentRecord.id,
+        records = [];
+    data.forEach(m => {
+        let rec = grid.get(m);
+        if (!rec) return;
+        records.push(rec);
+        message.push(`${rec[messageField]}`);
+    })
+    window.abp.message.confirm(message.join(','), title, function (confirm) {
+        if (!confirm) retrun ;
+        let fn = me.api[me.apiDeleteName];
+        if(!isFunction(fn)) return;
+        records.forEach(m=>{
+            let data = {};
+            data[messageField] = m[messageField];
+            console.log(data);
+            fn.call(null, id, data)
+                .then(me.updateSuccess.bind(me), me.ajaxFailure.bind(me));
+
+        })
+    });
+
+}
+

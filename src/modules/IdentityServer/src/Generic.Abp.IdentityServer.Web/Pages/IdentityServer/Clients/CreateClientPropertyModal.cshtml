@@ -1,0 +1,21 @@
+﻿@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@using Volo.Abp.IdentityServer.Localization
+@model Generic.Abp.IdentityServer.Web.Pages.IdentityServer.Clients.CreateClientPropertyModalModel
+@inject IHtmlLocalizer<AbpIdentityServerResource> _l
+@{
+    Layout = null;
+}
+<form method="post" asp-page="/IdentityServer/Clients/CreateClientPropertyModalModel">
+    <abp-modal>
+        <abp-modal-header title="@_l["NewProperty"].Value"></abp-modal-header>
+        <abp-modal-body>
+            <input type="hidden" asp-for="Property.ForeignKeyId" />
+            <abp-input asp-for="Property.Key" label="@_l["Properties:Key"].Value" />
+            <abp-input asp-for="Property.Value" label="@_l["Properties:Value"].Value" />
+        </abp-modal-body>
+        <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)"></abp-modal-footer>
+    </abp-modal>
+</form>
+

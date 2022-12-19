@@ -1,0 +1,89 @@
+﻿@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@using Volo.Abp.IdentityServer.Localization
+@model Generic.Abp.IdentityServer.Web.Pages.IdentityServer.Clients.EditModalModel
+@inject IHtmlLocalizer<AbpIdentityServerResource> _l
+@{
+    Layout = null;
+}
+<form method="post" asp-page="/IdentityServer/Clients/EditModal">
+    <abp-modal size="Large">
+        <abp-modal-header title="@_l["Edit"].Value"></abp-modal-header>
+        <abp-modal-body>
+            <input type="hidden" asp-for="Client.Id" />
+            <input type="hidden" asp-for="Client.ConcurrencyStamp" />
+            <ul class="nav nav-tabs" id="client-tabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#nav-basics" type="button" role="tab" aria-controls="nav-basics" aria-selected="true">@_l["Basics"].Value</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#nav-authentication-tab" type="button" role="tab" aria-controls="nav-authentication-tab" aria-selected="false">@_l["Authentication"].Value</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#nav-token-tab" type="button" role="tab" aria-controls="nav-token-tab" aria-selected="false">@_l["Token"].Value</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#nav-consent-tab" type="button" role="tab" aria-controls="nav-consent-tab" aria-selected="false">@_l["Consent"].Value</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#nav-deviceflow-tab" type="button" role="tab" aria-controls="nav-deviceflow-tab" aria-selected="false">@_l["DeviceFlow"].Value</button>
+                </li>
+            </ul>
+            <div class="tab-content" style="height: calc(100% - 41px);">
+                <div class="tab-pane fade h-100 show active" id="nav-basics" role="tabpanel" aria-labelledby="nav-basics" tabindex="0">
+                    <abp-input asp-for="Client.ClientId" label="@_l["Client:ClientId"].Value" />
+                    <abp-input asp-for="Client.ClientName" label="@_l["Client:ClientName"].Value" />
+                    <abp-input asp-for="Client.Enabled" label="@_l["Client:Enabled"].Value" />
+                    <abp-input asp-for="Client.Description" label="@_l["Client:Description"].Value" />
+                    <abp-select asp-for="Client.ProtocolType" label="@_l["Client:ProtocolType"].Value" asp-items="@Model.ProtocolTypes" />
+                    <abp-input asp-for="Client.RequireClientSecret" label="@_l["Client:RequireClientSecret"].Value" />
+                    <abp-input asp-for="Client.RequireRequestObject" label="@_l["Client:RequireRequestObject"].Value" />
+                    <abp-input asp-for="Client.RequirePkce" label="@_l["Client:RequirePkce"].Value" />
+                    <abp-input asp-for="Client.AllowPlainTextPkce" label="@_l["Client:AllowPlainTextPkce"].Value" />
+                    <abp-input asp-for="Client.AllowOfflineAccess" label="@_l["Client:AllowOfflineAccess"].Value" />
+                    <abp-input asp-for="Client.AllowAccessTokensViaBrowser" label="@_l["Client:AllowAccessTokensViaBrowser"].Value" />
+                </div>
+                <div class="tab-pane fade h-100" id="nav-authentication-tab" role="tabpanel" aria-labelledby="nav-authentication-tab" tabindex="0">
+                    <abp-input asp-for="Client.FrontChannelLogoutUri" label="@_l["Client:FrontChannelLogoutUri"].Value" />
+                    <abp-input asp-for="Client.FrontChannelLogoutSessionRequired" label="@_l["Client:FrontChannelLogoutSessionRequired"].Value" />
+                    <abp-input asp-for="Client.BackChannelLogoutUri" label="@_l["Client:BackChannelLogoutUri"].Value" />
+                    <abp-input asp-for="Client.BackChannelLogoutSessionRequired" label="@_l["Client:BackChannelLogoutSessionRequired"].Value" />
+                    <abp-input asp-for="Client.EnableLocalLogin" label="@_l["Client:EnableLocalLogin"].Value" />
+                    <abp-input asp-for="Client.UserSsoLifetime" label="@_l["Client:UserSsoLifetime"].Value" />
+                </div>
+                <div class="tab-pane fade h-100" id="nav-token-tab" role="tabpanel" aria-labelledby="nav-token-tab" tabindex="0">
+                    <abp-input asp-for="Client.IdentityTokenLifetime" label="@_l["Client:IdentityTokenLifetime"].Value" />
+                    <abp-input asp-for="Client.AllowedIdentityTokenSigningAlgorithms" label="@_l["Client:AllowedIdentityTokenSigningAlgorithms"].Value" />
+                    <abp-input asp-for="Client.AccessTokenLifetime" label="@_l["Client:AccessTokenLifetime"].Value" />
+                    <abp-input asp-for="Client.AccessTokenType" label="@_l["Client:AccessTokenType"].Value" />
+                    <abp-input asp-for="Client.AuthorizationCodeLifetime" label="@_l["Client:AuthorizationCodeLifetime"].Value" />
+                    <abp-input asp-for="Client.AbsoluteRefreshTokenLifetime" label="@_l["Client:AbsoluteRefreshTokenLifetime"].Value" />
+                    <abp-input asp-for="Client.SlidingRefreshTokenLifetime" label="@_l["Client:SlidingRefreshTokenLifetime"].Value" />
+                    <abp-input asp-for="Client.RefreshTokenUsage" label="@_l["Client:RefreshTokenUsage"].Value" />
+                    <abp-input asp-for="Client.RefreshTokenExpiration" label="@_l["Client:RefreshTokenExpiration"].Value" />
+                    <abp-input asp-for="Client.UpdateAccessTokenClaimsOnRefresh" label="@_l["Client:UpdateAccessTokenClaimsOnRefresh"].Value" />
+                    <abp-input asp-for="Client.IncludeJwtId" label="@_l["Client:IncludeJwtId"].Value" />
+                    <abp-input asp-for="Client.AlwaysSendClientClaims" label="@_l["Client:AlwaysSendClientClaims"].Value" />
+                    <abp-input asp-for="Client.AlwaysIncludeUserClaimsInIdToken" label="@_l["Client:AlwaysIncludeUserClaimsInIdToken"].Value" />
+                    <abp-input asp-for="Client.ClientClaimsPrefix" label="@_l["Client:ClientClaimsPrefix"].Value" />
+                    <abp-input asp-for="Client.PairWiseSubjectSalt" label="@_l["Client:PairWiseSubjectSalt"].Value" />
+                </div>
+                <div class="tab-pane fade h-100" id="nav-consent-tab" role="tabpanel" aria-labelledby="nav-consent-tab" tabindex="0">
+                    <abp-input asp-for="Client.RequireConsent" label="@_l["Client:RequireConsent"].Value" />
+                    <abp-input asp-for="Client.ConsentLifetime" label="@_l["Client:ConsentLifetime"].Value" />
+                    <abp-input asp-for="Client.AllowRememberConsent" label="@_l["Client:AllowRememberConsent"].Value" />
+                    <abp-input asp-for="Client.ClientUri" label="@_l["Client:ClientUri"].Value" />
+                    <abp-input asp-for="Client.LogoUri" label="@_l["Client:LogoUri"].Value" />
+                </div>
+                <div class="tab-pane fade h-100" id="nav-deviceflow-tab" role="tabpanel" aria-labelledby="nav-deviceflow-tab" tabindex="0">
+                    <abp-input asp-for="Client.UserCodeType" label="@_l["Client:UserCodeType"].Value" />
+                    <abp-input asp-for="Client.DeviceCodeLifetime" label="@_l["Client:DeviceCodeLifetime"].Value" />
+                </div>
+            </div>
+
+        </abp-modal-body>
+        <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)"></abp-modal-footer>
+    </abp-modal>
+</form>
+

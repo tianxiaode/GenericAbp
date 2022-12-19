@@ -1,0 +1,25 @@
+﻿@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@using Volo.Abp.IdentityServer.Localization
+@model Generic.Abp.IdentityServer.Web.Pages.IdentityServer.IdentityResources.EditModalModel
+@inject IHtmlLocalizer<AbpIdentityServerResource> _l
+@{
+    Layout = null;
+}
+<form method="post" asp-page="/IdentityServer/IdentityResources/EditModal">
+    <abp-modal>
+        <abp-modal-header title="@_l["NewIdentityResource"].Value"></abp-modal-header>
+        <abp-modal-body>
+            <abp-input asp-for="IdentityResource.Name" label="@_l["IdentityResource:Name"].Value" />
+            <abp-input asp-for="IdentityResource.DisplayName" label="@_l["IdentityResource:DisplayName"].Value" />
+            <abp-input asp-for="IdentityResource.Description" label="@_l["IdentityResource:Description"].Value" />
+            <abp-input asp-for="IdentityResource.Enabled" label="@_l["IdentityResource:Enabled"].Value" />
+            <abp-input asp-for="IdentityResource.Required" label="@_l["IdentityResource:Required"].Value" />
+            <abp-input asp-for="IdentityResource.Emphasize" label="@_l["IdentityResource:Emphasize"].Value" />
+            <abp-input asp-for="IdentityResource.ShowInDiscoveryDocument" label="@_l["IdentityResource:ShowInDiscoveryDocument"].Value" />
+        </abp-modal-body>
+        <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)"></abp-modal-footer>
+    </abp-modal>
+</form>
+

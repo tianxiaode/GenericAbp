@@ -22,7 +22,7 @@ public class ClientDto : AuditedEntityDto<Guid>, IHasConcurrencyStamp
     public string ProtocolType { get; set; }
 
     public bool RequireClientSecret { get; set; }
-
+    public bool RequireRequestObject { get; set; }
     public bool RequireConsent { get; set; }
 
     public bool AllowRememberConsent { get; set; }
@@ -46,6 +46,7 @@ public class ClientDto : AuditedEntityDto<Guid>, IHasConcurrencyStamp
     public bool AllowOfflineAccess { get; set; }
 
     public int IdentityTokenLifetime { get; set; }
+    public string AllowedIdentityTokenSigningAlgorithms { get; set; }
 
     public int AccessTokenLifetime { get; set; }
 

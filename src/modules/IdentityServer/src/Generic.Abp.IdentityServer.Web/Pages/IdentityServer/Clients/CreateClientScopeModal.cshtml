@@ -1,0 +1,20 @@
+﻿@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@using Volo.Abp.IdentityServer.Localization
+@model Generic.Abp.IdentityServer.Web.Pages.IdentityServer.Clients.CreateClientScopeModalModel
+@inject IHtmlLocalizer<AbpIdentityServerResource> _l
+@{
+    Layout = null;
+}
+<form method="post" asp-page="/IdentityServer/Clients/CreateClientScopeModal">
+    <abp-modal>
+        <abp-modal-header title="@_l["NewApiScope"].Value"></abp-modal-header>
+        <abp-modal-body>
+            <input type="hidden" asp-for="Scope.ForeignKeyId" />
+            <abp-input asp-for="Scope.Scope" label="@_l["ClientScope:Scope"].Value" />
+        </abp-modal-body>
+        <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)"></abp-modal-footer>
+    </abp-modal>
+</form>
+

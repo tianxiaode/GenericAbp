@@ -34,4 +34,28 @@ public interface IClientAppService: IApplicationService
     Task<ListResultDto<ClientRedirectUriDto>> GetRedirectUrisAsync(Guid id);
     Task AddRedirectUriAsync(Guid id, ClientRedirectUriCreateInput input);
     Task RemoveRedirectUriAsync(Guid id, ClientRedirectUriDeleteInput input);
+    Task<ListResultDto<ClientPropertyDto>> GetPropertiesAsync(Guid id);
+    Task AddPropertyAsync(Guid id, ClientPropertyCreateInput input);
+    Task RemovePropertyAsync(Guid id, ClientPropertyDeleteInput input);
+    Task<ListResultDto<ClientIdentityProviderRestrictionDto>> GetIdentityProviderRestrictionsAsync(Guid id);
+    Task AddIdentityProviderRestrictionAsync(Guid id, ClientIdentityProviderRestrictionCreateInput input);
+    Task RemoveIdentityProviderRestrictionAsync(Guid id, ClientIdentityProviderRestrictionDeleteInput input);
+    Task UpdateEnabledAsync(Guid id, bool value);
+    Task UpdateRequireClientSecretAsync(Guid id, bool value);
+    Task UpdateRequireRequestObjectAsync(Guid id, bool value);
+    Task UpdateRequireConsentAsync(Guid id, bool value);
+    Task UpdateAllowRememberConsentAsync(Guid id, bool value);
+    Task UpdateAlwaysIncludeUserClaimsInIdTokenAsync(Guid id, bool value);
+    Task UpdateAlwaysRequirePkceAsync(Guid id, bool value);
+    Task UpdateAllowPlainTextPkceAsync(Guid id, bool value);
+    Task UpdateAllowAccessTokensViaBrowserAsync(Guid id, bool value);
+    Task UpdateFrontChannelLogoutSessionRequiredAsync(Guid id, bool value);
+    Task UpdateBackChannelLogoutSessionRequiredAsync(Guid id, bool value);
+    Task UpdateAllowOfflineAccessAsync(Guid id, bool value);
+    Task UpdateUpdateAccessTokenClaimsOnRefreshAsync(Guid id, bool value);
+    Task UpdateEnableLocalLoginAsync(Guid id, bool value);
+    Task UpdateIncludeJwtIdAsync(Guid id, bool value);
+    Task UpdateAlwaysSendClientClaimsAsync(Guid id, bool value);
+
+
 }

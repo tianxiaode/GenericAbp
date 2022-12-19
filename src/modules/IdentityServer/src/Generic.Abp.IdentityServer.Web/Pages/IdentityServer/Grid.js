@@ -183,8 +183,9 @@ Grid.prototype.onChange = function(event){
 Grid.prototype.updateCheckChange = function( record, column){
     let me = this,
         id = record.id,
-        apiName = record[column.field] ? column.action.check : column.action.uncheck,
-        fn = this.api[apiName];
+        apiName = uncapitalize(record[column.field] ? column.action.check : column.action.uncheck),
+        fn = me.api[apiName];
+    console.log(me.api, apiName, fn)
     if(!isFunction(fn)) return;
     fn.call(null,id).then(me.mergeChanges.bind(me),me.rejectChanges.bind(me));
 

@@ -53,12 +53,29 @@ namespace Generic.Abp.IdentityServer.Web
                 options.Conventions.AuthorizePage("/IdentityServer/ApiResources/Index", IdentityServerPermissions.ApiResources.Default);
                 options.Conventions.AuthorizePage("/IdentityServer/ApiResources/CreateModal", IdentityServerPermissions.ApiResources.Create);
                 options.Conventions.AuthorizePage("/IdentityServer/ApiResources/EditModal", IdentityServerPermissions.ApiResources.Update);
-                // options.Conventions.AuthorizePage("/PlotAreas/Index", ActivityPermissions.PlotAreas.Default);
-                // options.Conventions.AuthorizePage("/PlotAreas/CreateModal", ActivityPermissions.PlotAreas.Create);
-                // options.Conventions.AuthorizePage("/PlotAreas//EditModal", ActivityPermissions.PlotAreas.Update);
-                // options.Conventions.AuthorizePage("/Rankings/CreateModal", ActivityPermissions.Activities.Update);
-                // options.Conventions.AuthorizePage("/Rankings//EditModal", ActivityPermissions.Activities.Update);
-                // options.Conventions.AuthorizePage("/Rankings//ImportModal", ActivityPermissions.Activities.Update);
+                options.Conventions.AuthorizePage("/IdentityServer/ApiResources/CreateApiResourcePropertyModal", IdentityServerPermissions.ApiResources.Update);
+                options.Conventions.AuthorizePage("/IdentityServer/ApiResources/CreateApiResourceSecretModal", IdentityServerPermissions.ApiResources.Update);
+
+                options.Conventions.AuthorizePage("/IdentityServer/ApiScopes/CreateApiScopePropertyModal", IdentityServerPermissions.ApiResources.Update);
+                options.Conventions.AuthorizePage("/IdentityServer/ApiScopes/CreateModal", IdentityServerPermissions.ApiResources.Update);
+                options.Conventions.AuthorizePage("/IdentityServer/ApiScopes/EditModal", IdentityServerPermissions.ApiResources.Update);
+
+                options.Conventions.AuthorizePage("/IdentityServer/Clients/Index", IdentityServerPermissions.Clients.Default);
+                options.Conventions.AuthorizePage("/IdentityServer/Clients/CreateModal", IdentityServerPermissions.Clients.Create);
+                options.Conventions.AuthorizePage("/IdentityServer/Clients/EditModal", IdentityServerPermissions.Clients.Update);
+                options.Conventions.AuthorizePage("/IdentityServer/Clients/CreateClientCorsOriginModal", IdentityServerPermissions.Clients.Update);
+                options.Conventions.AuthorizePage("/IdentityServer/Clients/CreateClientGrantTypeModal", IdentityServerPermissions.Clients.Update);
+                options.Conventions.AuthorizePage("/IdentityServer/Clients/CreateClientIdentityProviderRestrictionModal", IdentityServerPermissions.Clients.Update);
+                options.Conventions.AuthorizePage("/IdentityServer/Clients/CreateClientPostLogoutRedirectUriModal", IdentityServerPermissions.Clients.Update);
+                options.Conventions.AuthorizePage("/IdentityServer/Clients/CreateClientRedirectUriModal", IdentityServerPermissions.Clients.Update);
+                options.Conventions.AuthorizePage("/IdentityServer/Clients/CreateClientPropertyModalModel", IdentityServerPermissions.Clients.Update);
+                options.Conventions.AuthorizePage("/IdentityServer/Clients/CreateClientScopeModal", IdentityServerPermissions.Clients.Update);
+                options.Conventions.AuthorizePage("/IdentityServer/Clients/CreateClientSecretModal", IdentityServerPermissions.Clients.Update);
+
+                options.Conventions.AuthorizePage("/IdentityServer/IdentityResources/Index", IdentityServerPermissions.IdentityResources.Default);
+                options.Conventions.AuthorizePage("/IdentityServer/IdentityResources/CreateModal", IdentityServerPermissions.IdentityResources.Create);
+                options.Conventions.AuthorizePage("/IdentityServer/IdentityResources/EditModal", IdentityServerPermissions.IdentityResources.Update);
+                options.Conventions.AuthorizePage("/IdentityServer/IdentityResources/CreateIdentityResourcePropertyModal", IdentityServerPermissions.IdentityResources.Update);
 
             });
         }
