@@ -95,7 +95,6 @@ RelationalGrid.prototype.onDelete = function(event){
         forEachAsync(records, (m)=>{
             let data = {};
             data[messageField] = m[messageField];
-            console.log(data);
             return fn.call(null, id, data);
         }).then(me.updateSuccess.bind(me), me.ajaxFailure.bind(me));
     });
