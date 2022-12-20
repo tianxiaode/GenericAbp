@@ -25,7 +25,7 @@ public interface IClientAppService: IApplicationService
     Task<ListResultDto<ClientScopeDto>> GetScopesAsync(Guid id);
     Task AddScopeAsync(Guid id, ClientScopeCreateInput input);
     Task RemoveScopeAsync(Guid id, ClientScopeDeleteInput input);
-    Task<ListResultDto<ClientSecretDto>> GetClientSecretsAsync(Guid id);
+    Task<ListResultDto<ClientSecretDto>> GetSecretsAsync(Guid id);
     Task AddSecretAsync(Guid id, ClientSecretCreateInput input);
     Task RemoveSecretAsync(Guid id, ClientSecretDeleteInput input);
     Task<ListResultDto<ClientPostLogoutRedirectUriDto>> GetPostLogoutRedirectUrisAsync(Guid id);

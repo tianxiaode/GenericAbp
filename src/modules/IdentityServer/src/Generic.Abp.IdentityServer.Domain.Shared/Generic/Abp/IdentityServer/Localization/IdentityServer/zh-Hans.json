@@ -141,6 +141,7 @@
     "NewIdentityProviderRestriction": "新身份提供方",
     "IdentityProviderRestrictions": "身份提供方",
     "NewPostLogoutRedirectUri": "新注销跳转地址",
-    "NewRedirectUri": "新跳转地址"
+    "NewRedirectUri": "新跳转地址",
+    "CorsOrigin:Origin": "域名"
   }
 }

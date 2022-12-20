@@ -141,6 +141,7 @@
     "NewIdentityProviderRestriction": "New identity provider restriction",
     "IdentityProviderRestrictions": "Identity provider restrictions",
     "NewPostLogoutRedirectUri": "New post logout redirect uri",
-    "NewRedirectUri": "New redirect uri"
+    "NewRedirectUri": "New redirect uri",
+    "CorsOrigin:Origin": "Origin"
   }
 }

@@ -91,7 +91,7 @@ public class ClientController: IdentityServerController,IClientAppService
     [Route("{id:guid}/cors-origins")]
     public Task RemoveCorsOriginAsync(Guid id,[FromBody] ClientCorsOriginDeleteInput input)
     {
-                return ClientAppService.GetAsync(id);
+                return ClientAppService.RemoveCorsOriginAsync(id, input);
     }
 
     [HttpGet]
@@ -138,9 +138,9 @@ public class ClientController: IdentityServerController,IClientAppService
 
     [HttpGet]
     [Route("{id:guid}/secrets")]
-    public Task<ListResultDto<ClientSecretDto>> GetClientSecretsAsync(Guid id)
+    public Task<ListResultDto<ClientSecretDto>> GetSecretsAsync(Guid id)
     {
-        return ClientAppService.GetClientSecretsAsync(id);
+        return ClientAppService.GetSecretsAsync(id);
     }
 
     [HttpPut]
@@ -158,21 +158,21 @@ public class ClientController: IdentityServerController,IClientAppService
     }
 
     [HttpGet]
-    [Route("{id:guid}/logout-redirect-uris")]
+    [Route("{id:guid}/post-logout-redirect-uris")]
     public Task<ListResultDto<ClientPostLogoutRedirectUriDto>> GetPostLogoutRedirectUrisAsync(Guid id)
     {
         return ClientAppService.GetPostLogoutRedirectUrisAsync(id);
     }
 
     [HttpPut]
-    [Route("{id:guid}/logout-redirect-uris")]
+    [Route("{id:guid}/post-logout-redirect-uris")]
     public Task AddPostLogoutRedirectUriAsync(Guid id, [FromBody] ClientPostLogoutRedirectUriCreateInput input)
     {
         return ClientAppService.AddPostLogoutRedirectUriAsync(id, input);
     }
 
     [HttpDelete]
-    [Route("{id:guid}/logout-redirect-uris")]
+    [Route("{id:guid}/post-logout-redirect-uris")]
     public Task RemovePostLogoutRedirectUriAsync(Guid id,[FromBody] ClientPostLogoutRedirectUriDeleteInput input)
     {
         return ClientAppService.RemovePostLogoutRedirectUriAsync(id, input);

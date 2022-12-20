@@ -28,11 +28,9 @@ ResourcePropertyGrid.prototype.onDelete = function(event){
     })
     window.abp.message.confirm(message.join(','), title, function (confirm) {
         if (!confirm) retrun ;
-        records.forEach(m=>{
-            me.api.removeProperty(id, { key: m.key})
-                .then(me.updateSuccess.bind(me), me.ajaxFailure.bind(me));
-
-        })
+        forEachAsync(records, (m)=>{
+            return me.api.removeProperty(id, {key: m.key});
+        }).then(me.updateSuccess.bind(me), me.ajaxFailure.bind(me));
     });
 
 }

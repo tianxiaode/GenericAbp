@@ -45,11 +45,9 @@ SecretGrid.prototype.onDelete = function(event){
     })
     window.abp.message.confirm(message.join(','), title, function (confirm) {
         if (!confirm) retrun ;
-        records.forEach(m=>{
-            me.api.removeSecret(id, { type: m.type, value: m.value })
-                .then(me.updateSuccess.bind(me), me.ajaxFailure.bind(me));
-
-        })
+        forEachAsync(records, (m)=>{
+            return me.api.removeSecret(id, { type: m.type, value: m.value });
+        }).then(me.updateSuccess.bind(me), me.ajaxFailure.bind(me));
     });
 
 }

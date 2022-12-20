@@ -167,14 +167,115 @@
             return;
         }
 
+        if(active.includes('redirectUris')){
+            let grid = window.clientRedirectUrisGrid;
+            if(!grid){
+                grid = window.clientRedirectUrisGrid = new RelationalGrid({
+                    el: '#redirectUrisTab',
+                    api: api,
+                    name: 'clientRedirectUrisGrid',
+                    apiGetName: 'getRedirectUris',
+                    apiDeleteName: 'removeRedirectUri',
+                    modal:{
+                        create: 'IdentityServer/Clients/CreateClientRedirectUriModal'
+                    },
+                    columns:[
+                        { text: 'RedirectUris', field: 'redirectUri', isMessage: true },
+                    ]
+                });
+            }
+            grid.refresh(record);
+            return;
+        }
+
+        if(active.includes('grantTypes')){
+            let grid = window.clientGrantTypesGrid;
+            if(!grid){
+                grid = window.clientGrantTypesGrid = new RelationalGrid({
+                    el: '#grantTypesTab',
+                    api: api,
+                    name: 'clientGrantTypesGrid',
+                    apiGetName: 'getGrantTypes',
+                    apiDeleteName: 'removeGrantType',
+                    modal:{
+                        create: 'IdentityServer/Clients/CreateClientGrantTypeModal'
+                    },
+                    columns:[
+                        { text: 'ClientGrantType:GrantType', field: 'grantType', isMessage: true },
+                    ]
+                });
+            }
+            grid.refresh(record);
+            return;
+        }
+
+        if(active.includes('postLogoutRedirectUris')){
+            let grid = window.clientPostLogoutRedirectUrisGrid;
+            if(!grid){
+                grid = window.clientPostLogoutRedirectUrisGrid = new RelationalGrid({
+                    el: '#postLogoutRedirectUrisTab',
+                    api: api,
+                    name: 'clientPostLogoutRedirectUrisGrid',
+                    apiGetName: 'getPostLogoutRedirectUris',
+                    apiDeleteName: 'removePostLogoutRedirectUri',
+                    modal:{
+                        create: 'IdentityServer/Clients/CreateClientPostLogoutRedirectUriModal'
+                    },
+                    columns:[
+                        { text: 'ClientPostLogoutRedirectUri', field: 'postLogoutRedirectUri', isMessage: true },
+                    ]
+                });
+            }
+            grid.refresh(record);
+            return;
+        }
+
+        if(active.includes('identityProviderRestriction')){
+            let grid = window.clientIdentityProviderRestrictionGrid;
+            if(!grid){
+                grid = window.clientIdentityProviderRestrictionGrid = new RelationalGrid({
+                    el: '#identityProviderRestrictionTab',
+                    api: api,
+                    name: 'clientIdentityProviderRestrictionGrid',
+                    apiGetName: 'getIdentityProviderRestrictions',
+                    apiDeleteName: 'removeIdentityProviderRestriction',
+                    modal:{
+                        create: 'IdentityServer/Clients/CreateClientIdentityProviderRestrictionModal'
+                    },
+                    columns:[
+                        { text: 'IdentityProviderRestriction:Provider', field: 'provider', isMessage: true },
+                    ]
+                });
+            }
+            grid.refresh(record);
+            return;
+        }
+
+        if(active.includes('corsOrigins')){
+            let grid = window.clientCorsOriginsGrid;
+            if(!grid){
+                grid = window.clientCorsOriginsGrid = new RelationalGrid({
+                    el: '#corsOriginsTab',
+                    api: api,
+                    name: 'clientCorsOriginsGrid',
+                    apiGetName: 'getCorsOrigins',
+                    apiDeleteName: 'removeCorsOrigin',
+                    modal:{
+                        create: 'IdentityServer/Clients/CreateClientCorsOriginModal'
+                    },
+                    columns:[
+                        { text: 'CorsOrigin:Origin', field: 'origin', isMessage: true },
+                    ]
+                });
+            }
+            grid.refresh(record);
+            return;
+        }
+
         if(active.includes('claims')){
             let grid = window.clientClaimsGrid;
             if(!grid){
-                grid = window.clientClaimsGrid = new ClaimGrid({
-                    el: '#claimsTab',
-                    api: api,
-                    name: 'clientClaimsGrid'
-                });
+                grid = window.clientClaimsGrid = new ClientClaimGrid();
             }
             grid.refresh(record);
             return;
@@ -182,14 +283,14 @@
         
         
         if(active.includes('secrets')){
-            let grid = window.apiResourceSecretGrid;
+            let grid = window.cleintSecretGrid;
             if(!grid){
-                grid = window.apiResourceSecretGrid = new SecretGrid({
+                grid = window.cleintSecretGrid = new SecretGrid({
                     el: '#secretsTab',
                     api: api,
-                    name: 'apiResourceSecretGrid',
+                    name: 'cleintSecretGrid',
                     modal:{
-                        create: "IdentityServer/ApiResources/CreateApiResourceSecretModal"
+                        create: "IdentityServer/Clients/CreateClientSecretModal"
                     },
                 });
             }
@@ -199,14 +300,14 @@
         }
 
         if(active.includes('property')){
-            let grid = window.apiResourcePropertyGrid;
+            let grid = window.clientPropertyGrid;
             if(!grid){
-                grid = window.apiResourcePropertyGrid = new ResourcePropertyGrid({
+                grid = window.clientPropertyGrid = new ResourcePropertyGrid({
                     el: '#propertyTab',
                     api: api,
-                    name: 'apiResourcePropertyGrid',
+                    name: 'clientPropertyGrid',
                     modal:{
-                        create: "IdentityServer/ApiResources/CreateApiResourcePropertyModal"
+                        create: "IdentityServer/Clients/CreateClientPropertyModal"
                     },
                 });
             }

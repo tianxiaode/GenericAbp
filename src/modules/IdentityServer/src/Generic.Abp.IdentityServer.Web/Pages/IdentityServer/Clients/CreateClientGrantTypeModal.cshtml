@@ -13,6 +13,18 @@
         <abp-modal-body>
             <input type="hidden" asp-for="GrantType.ForeignKeyId" />
             <abp-input asp-for="GrantType.GrantType" label="@_l["ClientGrantType:GrantType"].Value" />
+            <div class="d-flex flex-row">
+                <div class="flex-fill text-center"><a href="javascript:setGrantType('authorization_code')">authorization_code</a></div>
+                <div class="flex-fill text-center"><a href="javascript:setGrantType('implicit')">implicit</a></div>
+                <div class="flex-fill text-center"><a href="javascript:setGrantType('password')">password</a></div>
+                <div class="flex-fill text-center"><a href="javascript:setGrantType('client_credentials')">client_credentials</a></div>
+                <script>
+                    function setGrantType(value){
+                        let el = document.getElementById('GrantType_GrantType');
+                        el.value = value;
+                    }
+                </script>
+            </div>
         </abp-modal-body>
         <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)"></abp-modal-footer>
     </abp-modal>

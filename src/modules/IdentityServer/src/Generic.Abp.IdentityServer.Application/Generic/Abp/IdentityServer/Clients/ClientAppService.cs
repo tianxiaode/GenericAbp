@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Identity;
 using Volo.Abp.IdentityServer.Clients;
 using Volo.Abp.Uow;
 
@@ -16,12 +17,14 @@ namespace Generic.Abp.IdentityServer.Clients;
 [RemoteService(false)]
 public class ClientAppService : IdentityServerAppService, IClientAppService
 {
-    public ClientAppService(IClientRepository repository)
+    public ClientAppService(IClientRepository repository, IIdentityClaimTypeRepository identityClaimTypeRepository)
     {
         Repository = repository;
+        IdentityClaimTypeRepository = identityClaimTypeRepository;
     }
 
     protected IClientRepository Repository { get; }
+    protected IIdentityClaimTypeRepository IdentityClaimTypeRepository { get; }
 
     [UnitOfWork]
     [Authorize(IdentityServerPermissions.Clients.Default)]
@@ -304,6 +307,10 @@ public class ClientAppService : IdentityServerAppService, IClientAppService
     public virtual async Task AddClaimAsync(Guid id, ClientClaimCreateInput input)
     {
         var entity = await Repository.GetAsync(id);
+        if (!await IdentityClaimTypeRepository.AnyAsync(input.Type))
+        {
+            throw new EntityNotFoundBusinessException(nameof(IdentityClaim.ClaimType),input.Type);
+        }
         if (entity.Claims.Any(m =>
                 m.Type.Equals(input.Type, StringComparison.InvariantCultureIgnoreCase) &&
                 m.Value.Equals(input.Value, StringComparison.InvariantCultureIgnoreCase))) return;
@@ -426,7 +433,7 @@ public class ClientAppService : IdentityServerAppService, IClientAppService
 
     [UnitOfWork]
     [Authorize(IdentityServerPermissions.Clients.Default)]
-    public virtual async Task<ListResultDto<ClientSecretDto>> GetClientSecretsAsync(Guid id)
+    public virtual async Task<ListResultDto<ClientSecretDto>> GetSecretsAsync(Guid id)
     {
         var entity = await Repository.GetAsync(id);
         return new ListResultDto<ClientSecretDto>(

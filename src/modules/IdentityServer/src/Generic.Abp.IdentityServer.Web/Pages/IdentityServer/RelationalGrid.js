@@ -92,14 +92,12 @@ RelationalGrid.prototype.onDelete = function(event){
         if (!confirm) retrun ;
         let fn = me.api[me.apiDeleteName];
         if(!isFunction(fn)) return;
-        records.forEach(m=>{
+        forEachAsync(records, (m)=>{
             let data = {};
             data[messageField] = m[messageField];
             console.log(data);
-            fn.call(null, id, data)
-                .then(me.updateSuccess.bind(me), me.ajaxFailure.bind(me));
-
-        })
+            return fn.call(null, id, data);
+        }).then(me.updateSuccess.bind(me), me.ajaxFailure.bind(me));
     });
 
 }

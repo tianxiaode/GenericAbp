@@ -1,0 +1,21 @@
+﻿@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@using Volo.Abp.IdentityServer.Localization
+@model Generic.Abp.IdentityServer.Web.Pages.IdentityServer.Clients.CreateClientClaimModalModel
+@inject IHtmlLocalizer<AbpIdentityServerResource> _l
+@{
+    Layout = null;
+}
+<form method="post" asp-page="/IdentityServer/Clients/CreateClientClaimModal">
+    <abp-modal>
+        <abp-modal-header title="@_l["NewCorsOrigin"].Value"></abp-modal-header>
+        <abp-modal-body>
+            <input type="hidden" asp-for="Claim.ForeignKeyId" />
+            <abp-select asp-for="Claim.Type" asp-items="@Model.ClaimTypes" label="@_l["ClientClaim:Type"].Value"></abp-select>
+            <abp-input asp-for="Claim.Value" label="@_l["ClientClaim:Value"].Value" />
+        </abp-modal-body>
+        <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)"></abp-modal-footer>
+    </abp-modal>
+</form>
+
