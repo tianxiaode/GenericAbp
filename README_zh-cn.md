@@ -108,7 +108,7 @@ Generic Abp是一套适用于[ABP Framework](https://github.com/abpframework/abp
 
 为[ABP Framework](https://github.com/abpframework/abp#readme)添加[W2Ui](https://github.com/vitmalina/w2ui/).
 
-## References
+## 引用
 
 - [Sencha](https://www.sencha.com)
 - [ABP Framework](https://github.com/abpframework/abp#readme)
