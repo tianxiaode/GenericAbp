@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\modules\enumeration\src\Generic.Abp.Enumeration.Application.Contracts\Generic.Abp.Enumeration.Application.Contracts.csproj" />
     <ProjectReference Include="..\..\..\..\modules\extresource\src\Generic.Abp.ExtResource.Application.Contracts\Generic.Abp.ExtResource.Application.Contracts.csproj" />
     <ProjectReference Include="..\..\..\..\modules\IdentityServer\src\Generic.Abp.IdentityServer.Application.Contracts\Generic.Abp.IdentityServer.Application.Contracts.csproj" />
     <ProjectReference Include="..\..\..\..\modules\identity\src\Generic.Abp.Identity.Application.Contracts\Generic.Abp.Identity.Application.Contracts.csproj" />

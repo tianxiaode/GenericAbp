@@ -1,4 +1,5 @@
 ﻿using Generic.Abp.Demo.Localization;
+using Generic.Abp.Enumeration;
 using Generic.Abp.Identity;
 using Generic.Abp.IdentityServer;
 using Volo.Abp.AuditLogging;
@@ -26,7 +27,8 @@ namespace Generic.Abp.Demo
         typeof(AbpSettingManagementDomainSharedModule),
         typeof(AbpTenantManagementDomainSharedModule),
         typeof(GenericAbpIdentityDomainSharedModule),
-        typeof(GenericAbpIdentityServerDomainSharedModule)
+        typeof(GenericAbpIdentityServerDomainSharedModule),
+        typeof(GenericAbpEnumerationDomainSharedModule)
         )]
 
 
@@ -53,6 +55,15 @@ namespace Generic.Abp.Demo
                 
                 options.DefaultResourceType = typeof(DemoResource);
             });
+
+            Configure<EnumerationOptions>(options =>
+            {
+                options
+                    .Resources
+                    .Add(typeof(MyEnum));
+
+            });
+
         }
     }
 }

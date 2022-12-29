@@ -1,5 +1,6 @@
 ﻿using Generic.Abp.Application;
 using Generic.Abp.Demo.Localization;
+using Generic.Abp.Enumeration;
 using Generic.Abp.ExtResource;
 using Generic.Abp.Identity;
 using Generic.Abp.IdentityServer;
@@ -24,7 +25,8 @@ namespace Generic.Abp.Demo
         typeof(GenericAbpExtResourceHttpApiModule),
         typeof(GenericAbpIdentityHttpApiModule),
         typeof(GenericAbpIdentityServerHttpApiModule),
-        typeof(GenericAbpApplicationModule)
+        typeof(GenericAbpApplicationModule),
+        typeof(GenericAbpEnumerationHttpApiModule)
         )]
     public class DemoHttpApiModule : AbpModule
     {
