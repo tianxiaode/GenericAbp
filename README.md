@@ -1,5 +1,5 @@
 # Generic Abp
-[中文](README_zh-cn.md) &nbsp;&nbsp;&nbsp; [English](README_zh-cn.md)
+[中文](README_zh-cn.md) &nbsp;&nbsp;&nbsp; [English](README.md)
 
 Generic Abp is a set of modules for the [ABP Framework](https://github.com/abpframework/abp#readme).
 
