@@ -23,7 +23,6 @@ namespace Generic.Abp.Demo
         typeof(GenericAbpEnumerationDomainSharedModule),
         typeof(GenericAbpExtResourceApplicationContractsModule),
         typeof(GenericAbpIdentityApplicationContractsModule),
-        typeof(GenericAbpIdentityServerApplicationContractsModule),
         typeof(GenericAbpEnumerationApplicationContractsModule)
     )]
     public class DemoApplicationContractsModule : AbpModule

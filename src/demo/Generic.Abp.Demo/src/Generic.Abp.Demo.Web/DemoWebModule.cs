@@ -1,43 +1,32 @@
-using System;
-using System.IO;
-using Localization.Resources.AbpUi;
-using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Generic.Abp.Demo.EntityFrameworkCore;
 using Generic.Abp.Demo.Localization;
 using Generic.Abp.Demo.MultiTenancy;
 using Generic.Abp.Demo.Web.Menus;
-using Generic.Abp.IdentityServer;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.Swagger;
+using OpenIddict.Validation.AspNetCore;
+using System.IO;
 using Volo.Abp;
 using Volo.Abp.Account.Web;
-using Volo.Abp.AspNetCore.Authentication.JwtBearer;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.Localization;
-using Volo.Abp.AspNetCore.Mvc.UI;
-using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
-using Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
-using Volo.Abp.FeatureManagement;
 using Volo.Abp.Identity.Web;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
-using Volo.Abp.PermissionManagement.Web;
 using Volo.Abp.TenantManagement.Web;
-using Volo.Abp.UI.Navigation.Urls;
-using Volo.Abp.UI;
 using Volo.Abp.UI.Navigation;
+using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.VirtualFileSystem;
-using Generic.Abp.IdentityServer.Web;
 
 namespace Generic.Abp.Demo.Web
 {
@@ -47,10 +36,8 @@ namespace Generic.Abp.Demo.Web
         typeof(DemoEntityFrameworkCoreDbMigrationsModule),
         typeof(AbpAutofacModule),
         typeof(AbpIdentityWebModule),
-        typeof(GenericAbpIdentityServerWebModule),
-        typeof(AbpAccountWebIdentityServerModule),
         typeof(AbpAspNetCoreMvcUiBasicThemeModule),
-        typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
+        typeof(AbpAccountWebOpenIddictModule),
         typeof(AbpTenantManagementWebModule),
         typeof(AbpAspNetCoreSerilogModule)
         )]
@@ -68,6 +55,16 @@ namespace Generic.Abp.Demo.Web
                     typeof(DemoApplicationContractsModule).Assembly,
                     typeof(DemoWebModule).Assembly
                 );
+            });
+
+            PreConfigure<OpenIddictBuilder>(builder =>
+            {
+                builder.AddValidation(options =>
+                {
+                    options.AddAudiences("Demos"); // Replace with your application name
+                    options.UseLocalServer();
+                    options.UseAspNetCore();
+                });
             });
         }
 
@@ -96,13 +93,7 @@ namespace Generic.Abp.Demo.Web
 
         private void ConfigureAuthentication(ServiceConfigurationContext context, IConfiguration configuration)
         {
-            context.Services.AddAuthentication()
-                .AddIdentityServerAuthentication(options =>
-                {
-                    options.Authority = configuration["AuthServer:Authority"];
-                    options.RequireHttpsMetadata = false;
-                    options.ApiName = "Demo";
-                });
+            context.Services.ForwardIdentityAuthenticationForBearer(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme);
         }
 
         private void ConfigureAutoMapper()
@@ -190,7 +181,7 @@ namespace Generic.Abp.Demo.Web
             app.UseStaticFiles();
             app.UseRouting();
             app.UseAuthentication();
-            app.UseJwtTokenMiddleware();
+            app.UseAbpOpenIddictValidation();
 
             if (MultiTenancyConsts.IsEnabled)
             {
@@ -199,7 +190,7 @@ namespace Generic.Abp.Demo.Web
 
             app.UseUnitOfWork();
             app.UseAbpRequestLocalization();
-            app.UseIdentityServer();
+            app.UseAbpOpenIddictValidation();
             app.UseAuthorization();
             app.UseSwagger();
             app.UseSwaggerUI(options =>
@@ -211,4 +202,5 @@ namespace Generic.Abp.Demo.Web
             app.UseConfiguredEndpoints();
         }
     }
+
 }

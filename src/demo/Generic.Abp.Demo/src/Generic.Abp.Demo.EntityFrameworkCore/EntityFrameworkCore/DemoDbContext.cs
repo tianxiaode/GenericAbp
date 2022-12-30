@@ -5,6 +5,7 @@ using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.Modeling;
 using Volo.Abp.Identity;
 using Volo.Abp.Users.EntityFrameworkCore;
+using Volo.Abp.OpenIddict.EntityFrameworkCore;
 
 namespace Generic.Abp.Demo.EntityFrameworkCore
 {

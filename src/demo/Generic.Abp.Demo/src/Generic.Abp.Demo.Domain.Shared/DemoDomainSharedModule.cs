@@ -9,6 +9,7 @@ using Volo.Abp.Identity;
 using Volo.Abp.IdentityServer;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
+using Volo.Abp.OpenIddict;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.TenantManagement;
@@ -27,7 +28,7 @@ namespace Generic.Abp.Demo
         typeof(AbpSettingManagementDomainSharedModule),
         typeof(AbpTenantManagementDomainSharedModule),
         typeof(GenericAbpIdentityDomainSharedModule),
-        typeof(GenericAbpIdentityServerDomainSharedModule),
+        typeof(AbpOpenIddictDomainSharedModule),
         typeof(GenericAbpEnumerationDomainSharedModule)
         )]
 

@@ -23,7 +23,6 @@ namespace Generic.Abp.Demo
         typeof(GenericAbpEnumerationApplicationModule),
         typeof(GenericAbpExtResourceApplicationModule),
         typeof(GenericAbpIdentityApplicationModule),
-        typeof(GenericAbpIdentityServerApplicationModule),
         typeof(GenericAbpEnumerationApplicationModule)
         )]
     public class DemoApplicationModule : AbpModule
