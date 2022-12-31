@@ -1,8 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using Generic.Abp.Enumeration.Validation;
-using Generic.Abp.IdentityServer.Enumerations;
 using Volo.Abp.IdentityServer.Clients;
 using Volo.Abp.Validation;
 
@@ -12,16 +10,16 @@ public class SecretCreateInput
 {
     [Required]
     [DisplayName("Secrets:Type")]
-    [DynamicStringLength(typeof(ClientSecretConsts),nameof(ClientSecretConsts.TypeMaxLength))]
+    [DynamicStringLength(typeof(ClientSecretConsts), nameof(ClientSecretConsts.TypeMaxLength))]
     public string Type { get; set; }
 
     [Required]
     [DisplayName("Secrets:Value")]
-    [DynamicStringLength(typeof(ClientSecretConsts),nameof(ClientSecretConsts.ValueMaxLength))]
+    [DynamicStringLength(typeof(ClientSecretConsts), nameof(ClientSecretConsts.ValueMaxLength))]
     public string Value { get; set; }
 
     [DisplayName("Secrets:Description")]
-    [DynamicStringLength(typeof(ClientSecretConsts),nameof(ClientSecretConsts.DescriptionMaxLength))]
+    [DynamicStringLength(typeof(ClientSecretConsts), nameof(ClientSecretConsts.DescriptionMaxLength))]
     public string Description { get; set; }
 
     [DisplayName("Secrets:Expiration")]

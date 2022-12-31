@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="..\..\common.props" />
 
@@ -13,6 +13,7 @@
     <ProjectReference Include="..\..\..\..\modules\extresource\src\Generic.Abp.ExtResource.HttpApi\Generic.Abp.ExtResource.HttpApi.csproj" />
     <ProjectReference Include="..\..\..\..\modules\identity\src\Generic.Abp.Identity.Application\Generic.Abp.Identity.Application.csproj" />
     <ProjectReference Include="..\..\..\..\modules\identity\src\Generic.Abp.Identity.HttpApi\Generic.Abp.Identity.HttpApi.csproj" />
+    <ProjectReference Include="..\..\..\..\modules\openiddict\src\Generic.Abp.OpenIddict.HttpApi\Generic.Abp.OpenIddict.HttpApi.csproj" />
     <ProjectReference Include="..\Generic.Abp.Demo.Application.Contracts\Generic.Abp.Demo.Application.Contracts.csproj" />
   </ItemGroup>
 

@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{033328A5-A0E1-40D0-A4E4-332D9B851B6C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Generic.Abp.OpenIddict.Domain.Shared", "src\Generic.Abp.OpenIddict.Domain.Shared\Generic.Abp.OpenIddict.Domain.Shared.csproj", "{E3364CA2-DF49-41E8-9FA5-35347B4ED813}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Generic.Abp.OpenIddict.Application.Contracts", "src\Generic.Abp.OpenIddict.Application.Contracts\Generic.Abp.OpenIddict.Application.Contracts.csproj", "{C0ADC3A2-3FD0-4815-B80B-87F09EA115BE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Generic.Abp.OpenIddict.Application", "src\Generic.Abp.OpenIddict.Application\Generic.Abp.OpenIddict.Application.csproj", "{7C9DBD9C-99DA-4FED-A849-A40D15444A0A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Generic.Abp.OpenIddict.HttpApi", "src\Generic.Abp.OpenIddict.HttpApi\Generic.Abp.OpenIddict.HttpApi.csproj", "{0E3FE886-CDE6-4C43-AF89-4715FE84101D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Generic.Abp.OpenIddict.Web", "src\Generic.Abp.OpenIddict.Web\Generic.Abp.OpenIddict.Web.csproj", "{C573BDBF-BDB2-4598-A864-CEB9234A5752}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E3364CA2-DF49-41E8-9FA5-35347B4ED813}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E3364CA2-DF49-41E8-9FA5-35347B4ED813}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E3364CA2-DF49-41E8-9FA5-35347B4ED813}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E3364CA2-DF49-41E8-9FA5-35347B4ED813}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0ADC3A2-3FD0-4815-B80B-87F09EA115BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0ADC3A2-3FD0-4815-B80B-87F09EA115BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0ADC3A2-3FD0-4815-B80B-87F09EA115BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0ADC3A2-3FD0-4815-B80B-87F09EA115BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C9DBD9C-99DA-4FED-A849-A40D15444A0A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C9DBD9C-99DA-4FED-A849-A40D15444A0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C9DBD9C-99DA-4FED-A849-A40D15444A0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C9DBD9C-99DA-4FED-A849-A40D15444A0A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E3FE886-CDE6-4C43-AF89-4715FE84101D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E3FE886-CDE6-4C43-AF89-4715FE84101D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E3FE886-CDE6-4C43-AF89-4715FE84101D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E3FE886-CDE6-4C43-AF89-4715FE84101D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C573BDBF-BDB2-4598-A864-CEB9234A5752}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C573BDBF-BDB2-4598-A864-CEB9234A5752}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C573BDBF-BDB2-4598-A864-CEB9234A5752}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C573BDBF-BDB2-4598-A864-CEB9234A5752}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E3364CA2-DF49-41E8-9FA5-35347B4ED813} = {033328A5-A0E1-40D0-A4E4-332D9B851B6C}
+		{C0ADC3A2-3FD0-4815-B80B-87F09EA115BE} = {033328A5-A0E1-40D0-A4E4-332D9B851B6C}
+		{7C9DBD9C-99DA-4FED-A849-A40D15444A0A} = {033328A5-A0E1-40D0-A4E4-332D9B851B6C}
+		{0E3FE886-CDE6-4C43-AF89-4715FE84101D} = {033328A5-A0E1-40D0-A4E4-332D9B851B6C}
+		{C573BDBF-BDB2-4598-A864-CEB9234A5752} = {033328A5-A0E1-40D0-A4E4-332D9B851B6C}
+	EndGlobalSection
+EndGlobal

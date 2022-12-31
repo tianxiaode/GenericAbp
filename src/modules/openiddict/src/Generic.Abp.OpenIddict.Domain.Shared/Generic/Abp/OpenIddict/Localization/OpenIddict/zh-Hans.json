@@ -1,0 +1,20 @@
+{
+  "culture": "zh-Hans",
+  "texts": {
+    "Permission:OpenIddict": "OpenIddict",
+    "Permission:Applications": "应用程序",
+    "Permission:Scopes": "范围",
+    "Permission:Create": "创建",
+    "Permission:Edit": "编辑",
+    "Permission:Delete": "删除",
+    "Permission:ManagePermissions": "管理权限",
+    "Scopes": "范围",
+    "Scope:Name": "范围名称",
+    "Scope:DisplayName": "显示名称",
+    "Scope:Description": "描述",
+    "Scope:Properties": "属性",
+    "Scope:Resources": "资源",
+    "Applications": "应用程序",
+    "Menu:OpenIddictManagement": "OpenIddict管理"
+  }
+}

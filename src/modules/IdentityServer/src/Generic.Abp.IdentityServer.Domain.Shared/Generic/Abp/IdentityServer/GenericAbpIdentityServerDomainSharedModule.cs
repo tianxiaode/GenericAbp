@@ -1,7 +1,5 @@
 ﻿using Generic.Abp.BusinessException;
 using Generic.Abp.BusinessException.Localization;
-using Generic.Abp.Enumeration;
-using Generic.Abp.IdentityServer.Enumerations;
 using Volo.Abp.IdentityServer;
 using Volo.Abp.IdentityServer.Localization;
 using Volo.Abp.Localization;
@@ -13,8 +11,7 @@ namespace Generic.Abp.IdentityServer
 {
     [DependsOn(
         typeof(AbpIdentityServerDomainSharedModule),
-        typeof(GenericAbpBusinessExceptionModule),
-        typeof(GenericAbpEnumerationDomainSharedModule)
+        typeof(GenericAbpBusinessExceptionModule)
     )]
     public class GenericAbpIdentityServerDomainSharedModule : AbpModule
     {
@@ -38,10 +35,6 @@ namespace Generic.Abp.IdentityServer
                 options.MapCodeNamespace("Generic.Abp.IdentityServer", typeof(AbpIdentityServerResource));
             });
 
-            Configure<EnumerationOptions>(options =>
-            {
-                options.Resources.Add(typeof(SecretType));
-            });
         }
     }
 }

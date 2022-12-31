@@ -17,7 +17,8 @@ $solutionPaths = (
     "../src/modules/application",
     "../src/modules/identity",
     "../src/modules/IdentityServer",
-    "../src/modules/FileManagement"
+    "../src/modules/FileManagement",
+    "../src/modules/openiddict"
     # "../src/modules/themes",
     # "../src/modules/account"
 )

@@ -1,0 +1,19 @@
+{
+  "culture": "en",
+  "texts": {
+    "Permission:Applications": "Applications",
+    "Permission:Scopes": "Scopes",
+    "Permission:Create": "Create",
+    "Permission:Edit": "Edit",
+    "Permission:Delete": "Delete",
+    "Permission:ManagePermissions": "Manage",
+    "Scopes": "Scopes",
+    "Scope:Name": "Name",
+    "Scope:DisplayName": "DisplayName",
+    "Scope:Description": "Description",
+    "Scope:Properties": "Properties",
+    "Scope:Resources": "Resources",
+    "Applications": "Applications",
+    "Menu:OpenIddictManagement": "OpenIddict management"
+  }
+}

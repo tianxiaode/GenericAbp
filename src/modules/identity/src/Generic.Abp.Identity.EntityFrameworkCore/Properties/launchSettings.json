@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "Generic.Abp.Identity.EntityFrameworkCore": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:57189;http://localhost:57190"
+    }
+  }
+}

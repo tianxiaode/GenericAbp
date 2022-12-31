@@ -1,7 +1,7 @@
 ﻿using Generic.Abp.Demo.Localization;
 using Generic.Abp.Enumeration;
 using Generic.Abp.Identity;
-using Generic.Abp.IdentityServer;
+using Generic.Abp.OpenIddict;
 using Volo.Abp.AuditLogging;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.FeatureManagement;
@@ -29,7 +29,8 @@ namespace Generic.Abp.Demo
         typeof(AbpTenantManagementDomainSharedModule),
         typeof(GenericAbpIdentityDomainSharedModule),
         typeof(AbpOpenIddictDomainSharedModule),
-        typeof(GenericAbpEnumerationDomainSharedModule)
+        typeof(GenericAbpEnumerationDomainSharedModule),
+        typeof(GenericAbpOpenIddictDomainSharedModule)
         )]
 
 
@@ -53,7 +54,7 @@ namespace Generic.Abp.Demo
                     .Add<DemoResource>("en")
                     .AddBaseTypes(typeof(AbpValidationResource))
                     .AddVirtualJson("/Localization/Demo");
-                
+
                 options.DefaultResourceType = typeof(DemoResource);
             });
 

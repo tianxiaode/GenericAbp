@@ -62,7 +62,14 @@ $packages = (
     "Generic.Abp.FileManagement.Domain",
     "Generic.Abp.FileManagement.EntityFrameworkCore",
     "Generic.Abp.FileManagement.Application.Contracts",
-    "Generic.Abp.FileManagement.Application"
+    "Generic.Abp.FileManagement.Application",
+
+    # modules/openiddict
+    "Generic.Abp.OpenIddict.Domain.Shared",
+    "Generic.Abp.OpenIddict.Application.Contracts",
+    "Generic.Abp.OpenIddict.Application"
+    "Generic.Abp.OpenIddict.HttpApi",
+    "Generic.Abp.OpenIddict.Web"
 
 
     # modules/themes

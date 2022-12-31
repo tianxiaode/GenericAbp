@@ -1,12 +1,12 @@
 ﻿@page
 @using Generic.Abp.IdentityServer.Permissions
 @using Generic.Abp.IdentityServer.Web.Navigation
-@using Generic.Abp.IdentityServer.Web.Pages.IdentityServer.ApiResources
+@using Generic.Abp.IdentityServer.Web.Pages.IdentityServer.Clients
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Volo.Abp.AspNetCore.Mvc.UI.Layout
 @using Volo.Abp.IdentityServer.Localization
-@model Generic.Abp.IdentityServer.Web.Pages.IdentityServer.Clients.IndexModel
+@model IndexModel
 @inject IHtmlLocalizer<AbpIdentityServerResource> _l
 @inject IAuthorizationService _authorization
 @inject IPageLayout _pageLayout
@@ -21,7 +21,7 @@
 
 @section scripts {
     <abp-script-bundle name="W2Ui"></abp-script-bundle>
-    <abp-script-bundle name="@typeof(IndexModel).FullName" type="module">
+    <abp-script-bundle name="@typeof(IndexModel).FullName">
         <abp-script src="/Pages/identityServer/global.js" />
         <abp-script src="/Pages/identityServer/Function.js" />
         <abp-script src="/Pages/identityServer/forEachAsync.js" />

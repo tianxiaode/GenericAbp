@@ -1,3 +1,4 @@
+using Generic.Abp.OpenIddict.Web;
 using Generic.Abp.Demo.EntityFrameworkCore;
 using Generic.Abp.Demo.Localization;
 using Generic.Abp.Demo.MultiTenancy;
@@ -39,7 +40,8 @@ namespace Generic.Abp.Demo.Web
         typeof(AbpAspNetCoreMvcUiBasicThemeModule),
         typeof(AbpAccountWebOpenIddictModule),
         typeof(AbpTenantManagementWebModule),
-        typeof(AbpAspNetCoreSerilogModule)
+        typeof(AbpAspNetCoreSerilogModule),
+        typeof(GenericAbpOpenIddictWebModule)
         )]
     public class DemoWebModule : AbpModule
     {

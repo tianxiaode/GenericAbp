@@ -63,7 +63,14 @@ $projects = (
     "modules/FileManagement/src/Generic.Abp.FileManagement.Domain",
     "modules/FileManagement/src/Generic.Abp.FileManagement.EntityFrameworkCore",
     "modules/FileManagement/src/Generic.Abp.FileManagement.Application.Contracts",
-    "modules/FileManagement/src/Generic.Abp.FileManagement.Application"
+    "modules/FileManagement/src/Generic.Abp.FileManagement.Application",
+
+    # modules/openiddict
+    "modules/openiddict/src/Generic.Abp.OpenIddict.Domain.Shared",
+    "modules/openiddict/src/Generic.Abp.OpenIddict.Application.Contracts",
+    "modules/openiddict/src/Generic.Abp.OpenIddict.Application"
+    "modules/openiddict/src/Generic.Abp.OpenIddict.HttpApi",
+    "modules/openiddict/src/Generic.Abp.OpenIddict.Web"
 
     # modules/themes
     # "modules/themes/src/Generic.Abp.Themes.Shared",
