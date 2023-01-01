@@ -1,12 +1,13 @@
 ﻿
 
+using System;
 using System.Collections.Generic;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Domain.Entities;
 
 namespace Generic.Abp.OpenIddict.Scopes
 {
-    public class ScopeDto : ExtensibleAuditedEntityDto, IHasConcurrencyStamp
+    public class ScopeDto : ExtensibleAuditedEntityDto<Guid>, IHasConcurrencyStamp
     {
         public string Name { get; set; }
         public string Description { get; set; }

@@ -16,8 +16,4 @@
     <ProjectReference Include="..\Generic.Abp.OpenIddict.Domain.Shared\Generic.Abp.OpenIddict.Domain.Shared.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Generic\Abp\OpenIddict\Applications\" />
-  </ItemGroup>
-
 </Project>

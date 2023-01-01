@@ -1,7 +1,7 @@
 ﻿@page
 @using Generic.Abp.OpenIddict.Permissions
 @using Generic.Abp.OpenIddict.Web.Menus;
-@using Generic.Abp.OpenIddict.Web.Pages.OpenIddict.Scopes;
+@using Generic.Abp.OpenIddict.Web.Pages.OpenIddict.Applications;
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Volo.Abp.AspNetCore.Mvc.UI.Layout
@@ -11,9 +11,9 @@
 @inject IAuthorizationService _authorization
 @inject IPageLayout _pageLayout
 @{
-    _pageLayout.Content.Title = _l["Scopes"].Value;
+    _pageLayout.Content.Title = _l["Application"].Value;
     _pageLayout.Content.BreadCrumb.Add(_l["Menu:OpenIddictManagement"].Value);
-    _pageLayout.Content.MenuItemName = OpenIddictMenus.Scopes;
+    _pageLayout.Content.MenuItemName = OpenIddictMenus.Applications;
 }
 @section styles{
     <abp-style-bundle name="W2Ui"></abp-style-bundle>
@@ -26,7 +26,7 @@
         <abp-script src="/Pages/OpenIddict/Function.js" />
         <abp-script src="/Pages/OpenIddict/forEachAsync.js" />
         <abp-script src="/Pages/OpenIddict/Grid.js" />
-        <abp-script src="/Pages/OpenIddict/Scopes/index.js" />
+        <abp-script src="/Pages/OpenIddict/Applications/index.js" />
     </abp-script-bundle>
 
 }

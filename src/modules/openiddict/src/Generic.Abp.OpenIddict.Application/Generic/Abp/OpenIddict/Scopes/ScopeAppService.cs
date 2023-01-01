@@ -70,15 +70,21 @@ namespace Generic.Abp.OpenIddict.Scopes
         protected virtual async Task UpdateByInputAsync(OpenIddictScope entity, ScopeCreateOrUpdateInput input)
         {
             var exits = await Repository.FindByNameAsync(input.Name);
-            if (entity.Id != exits.Id)
+            if (exits != null && (entity.Id != exits.Id))
             {
                 throw new DuplicateWarningBusinessException(nameof(OpenIddictScope.Name), input.Name);
             }
             entity.DisplayName = input.DisplayName;
             entity.Description = input.Description;
             entity.Name = input.Name;
-            entity.Properties = System.Text.Json.JsonSerializer.Serialize(input.Properties);
-            entity.Resources = System.Text.Json.JsonSerializer.Serialize(input.Resources);
+            if (!input.Properties.IsNullOrEmpty())
+            {
+                entity.Properties = System.Text.Json.JsonSerializer.Serialize(input.Properties);
+            }
+            if (!input.Resources.IsNullOrEmpty())
+            {
+                entity.Resources = System.Text.Json.JsonSerializer.Serialize(input.Resources);
+            }
 
         }
 

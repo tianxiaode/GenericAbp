@@ -20,7 +20,7 @@ Grid.prototype.render = {
 }
 
 Grid.prototype.getGridConfig = function () {
-    return {
+    let config = {
         dataType: 'HTTP',
         limit: 25,
         header: true,
@@ -40,7 +40,12 @@ Grid.prototype.getGridConfig = function () {
             skipRecords: false,
             lineNumbers: true,
         }
+    };
+    if (this.header) {
+        config.header = this.header;
+        config.show.header = true;
     }
+    return config;
 
 }
 
@@ -67,7 +72,6 @@ Grid.prototype.initGrid = function () {
     if (me.url) config.url = me.url;
     config.columns = me.getColumns();
     Object.assign(config, {
-        title: me.localization(me.name),
         onRequest: me.onRequest.bind(me),
         parser: me.onParser.bind(me),
         onSelect: me.onSelect.bind(me),

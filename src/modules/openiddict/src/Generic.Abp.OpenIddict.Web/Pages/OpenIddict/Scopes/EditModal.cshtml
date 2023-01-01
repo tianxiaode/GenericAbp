@@ -1,0 +1,174 @@
+﻿@page
+@using Generic.Abp.OpenIddict.Localization;
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@using Volo.Abp.OpenIddict.Localization
+@model Generic.Abp.OpenIddict.Web.Pages.OpenIddict.Scopes.EditModalModel
+@inject IHtmlLocalizer<OpenIddictResource> _l
+@{
+    Layout = null;
+    var properties = Model.Scope.Properties;
+    var resources = Model.Scope.Resources;
+}
+<form method="post" asp-page="/OpenIddict/Scopes/EditModal">
+    <abp-modal>
+        <abp-modal-header title="@_l["NewScope"].Value"></abp-modal-header>
+        <abp-modal-body>
+            <ul class="nav nav-tabs" id="client-tabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#nav-basics" type="button"
+                        role="tab" aria-controls="nav-basics" aria-selected="true">
+                        @_l["Basics"].Value
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#nav-authentication-tab" type="button"
+                        role="tab" aria-controls="nav-authentication-tab" aria-selected="false">
+                        @_l["Scope:Properties"].Value
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#nav-token-tab" type="button"
+                        role="tab" aria-controls="nav-token-tab" aria-selected="false">
+                        @_l["Scope:Resources"].Value
+                    </button>
+                </li>
+            </ul>
+            <div class="tab-content" style="height: calc(100% - 41px);">
+                <div class="tab-pane fade h-100 show active" id="nav-basics" role="tabpanel"
+                    aria-labelledby="nav-basics" tabindex="0">
+                    <input type="hidden" asp-for="Scope.Id" />
+                    <input type="hidden" asp-for="Scope.ConcurrencyStamp" />
+                    <abp-input asp-for="Scope.Name" label="@_l["Scope:Name"].Value" />
+                    <abp-input asp-for="Scope.DisplayName" label="@_l["Scope:DisplayName"].Value" />
+                    <abp-input asp-for="Scope.Description" label="@_l["Scope:Description"].Value" />
+                </div>
+                <div class="tab-pane fade h-100 p-1" id="nav-authentication-tab" role="tabpanel"
+                    aria-labelledby="nav-authentication-tab" tabindex="0">
+                    <input type="hidden" id="propertiesInput" asp-for="Scope.PropertiesStr" />
+                    <div>
+                        <input type="text" id="propertyInput" /><button type="button" id="propertyAdd">
+                            @_l["AddNewProperty"].Value
+                        </button>
+                    </div>
+                    <ul class="list-group p-1" id="propertiesList">
+                        @if (properties.Count == 0)
+                        {
+                            <div>@_l["EmptyText"].Value</div>
+                        }
+                        else
+                        {
+                            foreach (var p in properties)
+                            {
+                                <li class="list-group-item d-flex" aria-current="true">
+                                    <div class="flex-fill">@p</div><a href="#" class="width:30px" data-value="@p"><i
+                                    class="fa fa-times text-danger"></i></a>
+                                </li>
+
+                            }
+                        }
+                    </ul>
+                </div>
+                <div class="tab-pane fade h-100  p-1" id="nav-token-tab" role="tabpanel" aria-labelledby="nav-token-tab"
+                    tabindex="0">
+                    <input type="hidden" id="resourcesInput" asp-for="Scope.ResourcesStr" />
+                    <div>
+                        <input type="text" id="resourceInput" /><button type="button" id="resourceAdd">
+                            @_l["AddNewResource"].Value
+                        </button>
+                    </div>
+                    <ul class="list-group p-1" id="resourcesList">
+                        @if (resources.Count == 0)
+                        {
+                            <div>@_l["EmptyText"].Value</div>
+                        }
+                        else
+                        {
+                            foreach (var r in resources)
+                            {
+                                <li class="list-group-item d-flex" aria-current="true">
+                                    <div class="flex-fill">@r</div><a href="#" class="width:30px" data-value="@r"><i
+                                    class="fa fa-times text-danger"></i></a>
+                                </li>
+
+                            }
+                        }
+                    </ul>
+                </div>
+            </div>
+
+        </abp-modal-body>
+        <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)"></abp-modal-footer>
+    </abp-modal>
+</form>
+
+<script>
+    (function ($) {
+        var l = window.abp.localization.getResource('OpenIddict');
+
+        function removeItemOnce(arr, value) {
+            var index = arr.indexOf(value);
+            if (index > -1) {
+                arr.splice(index, 1);
+            }
+            return arr;
+        }
+
+        function refreshList(values, el) {
+            el.html();
+            if (values.length === 0) {
+                el.html(l("EmptyText"));
+                return;
+            }
+            let html = [];
+            values.forEach(v => {
+                html.push(`
+                    <li class="list-group-item d-flex" aria-current="true">
+                        <div class="flex-fill">${v}</div><a href="#" class="width:30px" data-value="${v}"><i class="fa fa-times text-danger"></i></a>
+                    </li>
+                `);
+            })
+            el.html(html.join(""));
+        }
+
+        function addListItem(input, listInput, listEl) {
+            let value = input.val();
+            if (value) {
+                let listStr = listInput.val(),
+                    list = listStr === "" ? [] : listStr.split(",");
+                if (list.includes(value)) return;
+                list.push(value);
+                listInput.val(list.join(","));
+                input.val("");
+                refreshList(list, listEl);
+            }
+        }
+
+        function removeListItem(el, listInput, listEl) {
+            let value = el.currentTarget.getAttribute('data-value'),
+                listStr = listInput.val(),
+                list = listStr === "" ? [] : listStr.split(",");
+            list = removeItemOnce(list, value);
+            listInput.val(list.join(","));
+            refreshList(list, listEl);
+        }
+
+        $('#propertyAdd').click(() => {
+            addListItem($("#propertyInput"), $("#propertiesInput"), $("#propertiesList"));
+        })
+
+        $('#propertiesList').delegate('a', 'click', (el) => {
+            removeListItem(el, $("#propertiesInput"), $("#propertiesList"));
+        })
+
+        $('#resourceAdd').click(() => {
+            addListItem($("#resourceInput"), $("#resourcesInput"), $("#resourcesList"));
+        })
+
+        $('#resourcesList').delegate('a', 'click', (el) => {
+            removeListItem(el, $("resourcesInput"), $("#resourcesList"));
+        })
+
+
+    })(jQuery);
+</script>
