@@ -48,5 +48,11 @@ namespace Generic.Abp.OpenIddict.Applications
             return AppService.DeleteAsync(ids);
         }
 
+        [HttpGet]
+        [Route("permisions")]
+        public Task<Dictionary<string, Dictionary<string, string>>> GetAllPermisions()
+        {
+            return AppService.GetAllPermisions();
+        }
     }
 }

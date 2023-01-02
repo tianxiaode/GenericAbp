@@ -24,6 +24,7 @@
     <None Remove="Pages\OpenIddict\Function.js" />
     <None Remove="Pages\OpenIddict\global.js" />
     <None Remove="Pages\OpenIddict\Grid.js" />
+    <None Remove="Pages\OpenIddict\PropertyGrid.js" />
     <None Remove="Pages\OpenIddict\Scopes\index.js" />
   </ItemGroup>
 
@@ -33,6 +34,7 @@
     <EmbeddedResource Include="Pages\OpenIddict\Function.js" />
     <EmbeddedResource Include="Pages\OpenIddict\global.js" />
     <EmbeddedResource Include="Pages\OpenIddict\Grid.js" />
+    <EmbeddedResource Include="Pages\OpenIddict\PropertyGrid.js" />
     <EmbeddedResource Include="Pages\OpenIddict\Scopes\index.js" />
   </ItemGroup>
 

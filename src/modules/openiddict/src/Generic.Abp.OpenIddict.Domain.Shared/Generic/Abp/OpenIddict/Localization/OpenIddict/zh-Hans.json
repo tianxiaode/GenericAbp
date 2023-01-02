@@ -36,6 +36,7 @@
     "Application:ClientUri": "客户端链接",
     "Application:LogoUri": "Logo链接",
     "Generic.Abp.OpenIddict.BusinessException:000001": "错误的类型",
-    "Generic.Abp.OpenIddict.BusinessException:000002": "错误的同意类型"
+    "Generic.Abp.OpenIddict.BusinessException:000002": "错误的同意类型",
+    "Details": "详情"
   }
 }

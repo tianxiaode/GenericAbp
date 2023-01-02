@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Domain.Entities;
 
@@ -17,8 +14,6 @@ namespace Generic.Abp.OpenIddict.Applications
         public string ConsentType { get; set; }
 
         public string DisplayName { get; set; }
-
-        public string DisplayNames { get; set; }
 
         public List<string> Permissions { get; set; }
 

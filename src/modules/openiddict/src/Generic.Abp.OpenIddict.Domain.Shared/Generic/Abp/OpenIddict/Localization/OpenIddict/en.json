@@ -35,6 +35,7 @@
     "Application:ClientUri": "Client uri",
     "Application:LogoUri": "Logo uri",
     "Generic.Abp.OpenIddict.BusinessException:000001": "Wrong client type",
-    "Generic.Abp.OpenIddict.BusinessException:000002": "Wrong consent type"
+    "Generic.Abp.OpenIddict.BusinessException:000002": "Wrong consent type",
+    "Details": "Details"
   }
 }

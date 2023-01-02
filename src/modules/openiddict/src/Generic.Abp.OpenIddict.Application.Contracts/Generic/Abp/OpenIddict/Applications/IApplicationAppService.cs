@@ -13,6 +13,7 @@ namespace Generic.Abp.OpenIddict.Applications
         Task<ApplicationDto> CreateAsync(ApplicationCreateInput input);
         Task<ApplicationDto> UpdateAsync(Guid id, ApplicationUpdateInput input);
         Task<ListResultDto<ApplicationDto>> DeleteAsync(List<Guid> ids);
+        Task<Dictionary<string, Dictionary<string, string>>> GetAllPermisions();
 
     }
 }

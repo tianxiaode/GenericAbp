@@ -15,7 +15,6 @@ PropertyGrid.prototype.initGrid = function () {
             { field: 'value', text: 'Value', size: '100%' }
         ],
     });
-
 }
 
 
