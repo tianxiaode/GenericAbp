@@ -1,7 +1,7 @@
 ﻿
 namespace Generic.Abp.OpenIddict.Applications
 {
-    internal class ApplicationPermissionDeleteInput : ApplicationItemInput
+    public class ApplicationPermissionDeleteInput : ApplicationItemInput
     {
     }
 }

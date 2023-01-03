@@ -207,7 +207,7 @@ namespace Generic.Abp.OpenIddict.Applications
         public virtual async Task<List<string>> GetPermissionsAsync(Guid id)
         {
             var entity = await Repository.GetAsync(id);
-            var permissions = System.Text.Json.JsonSerializer.Deserialize<List<string>>(entity.Permissions, new System.Text.Json.JsonSerializerOptions());
+            var permissions = entity.Permissions.IsNullOrEmpty() ? new List<string>() : System.Text.Json.JsonSerializer.Deserialize<List<string>>(entity.Permissions, new System.Text.Json.JsonSerializerOptions());
             return permissions;
         }
 
@@ -216,7 +216,7 @@ namespace Generic.Abp.OpenIddict.Applications
         public virtual async Task AddPermissionAsync(Guid id, ApplicationPermissionCreateInput input)
         {
             var entity = await Repository.GetAsync(id);
-            var permissions = System.Text.Json.JsonSerializer.Deserialize<List<string>>(entity.Permissions, new System.Text.Json.JsonSerializerOptions());
+            var permissions = entity.Permissions.IsNullOrEmpty() ? new List<string>() : System.Text.Json.JsonSerializer.Deserialize<List<string>>(entity.Permissions, new System.Text.Json.JsonSerializerOptions());
             if (permissions.Any(m => m.Equals(input.Value))) return;
             permissions.Add(input.Value);
             entity.Permissions = System.Text.Json.JsonSerializer.Serialize(permissions);
@@ -228,12 +228,151 @@ namespace Generic.Abp.OpenIddict.Applications
         public virtual async Task RemovePermissionAsync(Guid id, ApplicationPermissionDeleteInput input)
         {
             var entity = await Repository.GetAsync(id);
-            var permissions = System.Text.Json.JsonSerializer.Deserialize<List<string>>(entity.Permissions, new System.Text.Json.JsonSerializerOptions());
+            var permissions = entity.Permissions.IsNullOrEmpty() ? new List<string>() : System.Text.Json.JsonSerializer.Deserialize<List<string>>(entity.Permissions, new System.Text.Json.JsonSerializerOptions());
             permissions.Remove(input.Value);
             entity.Permissions = System.Text.Json.JsonSerializer.Serialize(permissions);
             await Repository.UpdateAsync(entity);
         }
         #endregion
 
+        #region PostLogoutRedirectUris
+
+        [UnitOfWork]
+        [Authorize(OpenIddictPermissions.Applications.Default)]
+        public virtual async Task<List<string>> GetPostLogoutRedirectUrisAsync(Guid id)
+        {
+            var entity = await Repository.GetAsync(id);
+            var list = entity.PostLogoutRedirectUris.IsNullOrEmpty() ? new List<string>() : System.Text.Json.JsonSerializer.Deserialize<List<string>>(entity.PostLogoutRedirectUris, new System.Text.Json.JsonSerializerOptions());
+            return list;
+        }
+
+        [UnitOfWork]
+        [Authorize(OpenIddictPermissions.Applications.Update)]
+        public virtual async Task AddPostLogoutRedirectUriAsync(Guid id, ApplicationPostLogoutRedirectUriCreateInput input)
+        {
+            var entity = await Repository.GetAsync(id);
+            var list = entity.PostLogoutRedirectUris.IsNullOrEmpty() ? new List<string>() : System.Text.Json.JsonSerializer.Deserialize<List<string>>(entity.PostLogoutRedirectUris, new System.Text.Json.JsonSerializerOptions());
+            if (list.Any(m => m.Equals(input.Value))) return;
+            list.Add(input.Value);
+            entity.PostLogoutRedirectUris = System.Text.Json.JsonSerializer.Serialize(list);
+            await Repository.UpdateAsync(entity);
+        }
+
+        [UnitOfWork]
+        [Authorize(OpenIddictPermissions.Applications.Update)]
+        public virtual async Task RemovePostLogoutRedirectUriAsync(Guid id, ApplicationPostLogoutRedirectUriDeleteInput input)
+        {
+            var entity = await Repository.GetAsync(id);
+            var list = entity.PostLogoutRedirectUris.IsNullOrEmpty() ? new List<string>() : System.Text.Json.JsonSerializer.Deserialize<List<string>>(entity.PostLogoutRedirectUris, new System.Text.Json.JsonSerializerOptions());
+            list.Remove(input.Value);
+            entity.PostLogoutRedirectUris = System.Text.Json.JsonSerializer.Serialize(list);
+            await Repository.UpdateAsync(entity);
+        }
+        #endregion
+
+        #region Properties
+
+        [UnitOfWork]
+        [Authorize(OpenIddictPermissions.Applications.Default)]
+        public virtual async Task<List<string>> GetPropertiesAsync(Guid id)
+        {
+            var entity = await Repository.GetAsync(id);
+            var list = entity.Properties.IsNullOrEmpty() ? new List<string>() : System.Text.Json.JsonSerializer.Deserialize<List<string>>(entity.Properties, new System.Text.Json.JsonSerializerOptions());
+            return list;
+        }
+
+        [UnitOfWork]
+        [Authorize(OpenIddictPermissions.Applications.Update)]
+        public virtual async Task AddPropertyAsync(Guid id, ApplicationPropertyCreateInput input)
+        {
+            var entity = await Repository.GetAsync(id);
+            var list = entity.Properties.IsNullOrEmpty() ? new List<string>() : System.Text.Json.JsonSerializer.Deserialize<List<string>>(entity.Properties, new System.Text.Json.JsonSerializerOptions());
+            if (list.Any(m => m.Equals(input.Value))) return;
+            list.Add(input.Value);
+            entity.Properties = System.Text.Json.JsonSerializer.Serialize(list);
+            await Repository.UpdateAsync(entity);
+        }
+
+        [UnitOfWork]
+        [Authorize(OpenIddictPermissions.Applications.Update)]
+        public virtual async Task RemovePropertyAsync(Guid id, ApplicationPropertyDeleteInput input)
+        {
+            var entity = await Repository.GetAsync(id);
+            var list = entity.Properties.IsNullOrEmpty() ? new List<string>() : System.Text.Json.JsonSerializer.Deserialize<List<string>>(entity.Properties, new System.Text.Json.JsonSerializerOptions());
+            list.Remove(input.Value);
+            entity.Properties = System.Text.Json.JsonSerializer.Serialize(list);
+            await Repository.UpdateAsync(entity);
+        }
+        #endregion
+
+        #region RedirectUris
+
+        [UnitOfWork]
+        [Authorize(OpenIddictPermissions.Applications.Default)]
+        public virtual async Task<List<string>> GetRedirectUrisAsync(Guid id)
+        {
+            var entity = await Repository.GetAsync(id);
+            var list = entity.RedirectUris.IsNullOrEmpty() ? new List<string>() : System.Text.Json.JsonSerializer.Deserialize<List<string>>(entity.RedirectUris, new System.Text.Json.JsonSerializerOptions());
+            return list;
+        }
+
+        [UnitOfWork]
+        [Authorize(OpenIddictPermissions.Applications.Update)]
+        public virtual async Task AddRedirectUriAsync(Guid id, ApplicationRedirectUriCreateInput input)
+        {
+            var entity = await Repository.GetAsync(id);
+            var list = entity.RedirectUris.IsNullOrEmpty() ? new List<string>() : System.Text.Json.JsonSerializer.Deserialize<List<string>>(entity.RedirectUris, new System.Text.Json.JsonSerializerOptions());
+            if (list.Any(m => m.Equals(input.Value))) return;
+            list.Add(input.Value);
+            entity.RedirectUris = System.Text.Json.JsonSerializer.Serialize(list);
+            await Repository.UpdateAsync(entity);
+        }
+
+        [UnitOfWork]
+        [Authorize(OpenIddictPermissions.Applications.Update)]
+        public virtual async Task RemoveRedirectUriAsync(Guid id, ApplicationRedirectUriDeleteInput input)
+        {
+            var entity = await Repository.GetAsync(id);
+            var list = entity.RedirectUris.IsNullOrEmpty() ? new List<string>() : System.Text.Json.JsonSerializer.Deserialize<List<string>>(entity.RedirectUris, new System.Text.Json.JsonSerializerOptions());
+            list.Remove(input.Value);
+            entity.RedirectUris = System.Text.Json.JsonSerializer.Serialize(list);
+            await Repository.UpdateAsync(entity);
+        }
+        #endregion
+
+        #region Requirements
+
+        [UnitOfWork]
+        [Authorize(OpenIddictPermissions.Applications.Default)]
+        public virtual async Task<List<string>> GetRequirementsAsync(Guid id)
+        {
+            var entity = await Repository.GetAsync(id);
+            var list = entity.Requirements.IsNullOrEmpty() ? new List<string>() : System.Text.Json.JsonSerializer.Deserialize<List<string>>(entity.Requirements, new System.Text.Json.JsonSerializerOptions());
+            return list;
+        }
+
+        [UnitOfWork]
+        [Authorize(OpenIddictPermissions.Applications.Update)]
+        public virtual async Task AddRequirementAsync(Guid id, ApplicationRequirementCreateInput input)
+        {
+            var entity = await Repository.GetAsync(id);
+            var list = entity.Requirements.IsNullOrEmpty() ? new List<string>() : System.Text.Json.JsonSerializer.Deserialize<List<string>>(entity.Requirements, new System.Text.Json.JsonSerializerOptions());
+            if (list.Any(m => m.Equals(input.Value))) return;
+            list.Add(input.Value);
+            entity.Requirements = System.Text.Json.JsonSerializer.Serialize(list);
+            await Repository.UpdateAsync(entity);
+        }
+
+        [UnitOfWork]
+        [Authorize(OpenIddictPermissions.Applications.Update)]
+        public virtual async Task RemoveRequirementAsync(Guid id, ApplicationRequirementDeleteInput input)
+        {
+            var entity = await Repository.GetAsync(id);
+            var list = entity.Requirements.IsNullOrEmpty() ? new List<string>() : System.Text.Json.JsonSerializer.Deserialize<List<string>>(entity.Requirements, new System.Text.Json.JsonSerializerOptions());
+            list.Remove(input.Value);
+            entity.Requirements = System.Text.Json.JsonSerializer.Serialize(list);
+            await Repository.UpdateAsync(entity);
+        }
+        #endregion
     }
 }

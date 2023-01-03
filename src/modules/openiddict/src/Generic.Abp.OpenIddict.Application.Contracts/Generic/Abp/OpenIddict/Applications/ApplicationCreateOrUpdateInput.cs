@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Volo.Abp.OpenIddict.Applications;
-using Volo.Abp.OpenIddict.Scopes;
 using Volo.Abp.Validation;
 
 namespace Generic.Abp.OpenIddict.Applications

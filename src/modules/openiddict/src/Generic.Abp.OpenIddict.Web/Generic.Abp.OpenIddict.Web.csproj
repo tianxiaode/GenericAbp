@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <None Remove="Pages\OpenIddict\Applications\index.js" />
+    <None Remove="Pages\OpenIddict\Applications\ItemGrid.js" />
     <None Remove="Pages\OpenIddict\forEachAsync.js" />
     <None Remove="Pages\OpenIddict\Function.js" />
     <None Remove="Pages\OpenIddict\global.js" />
@@ -30,6 +31,7 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Pages\OpenIddict\Applications\index.js" />
+    <EmbeddedResource Include="Pages\OpenIddict\Applications\ItemGrid.js" />
     <EmbeddedResource Include="Pages\OpenIddict\forEachAsync.js" />
     <EmbeddedResource Include="Pages\OpenIddict\Function.js" />
     <EmbeddedResource Include="Pages\OpenIddict\global.js" />

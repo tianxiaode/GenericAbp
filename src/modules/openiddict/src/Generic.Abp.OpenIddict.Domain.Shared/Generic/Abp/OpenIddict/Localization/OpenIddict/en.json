@@ -36,6 +36,18 @@
     "Application:LogoUri": "Logo uri",
     "Generic.Abp.OpenIddict.BusinessException:000001": "Wrong client type",
     "Generic.Abp.OpenIddict.BusinessException:000002": "Wrong consent type",
-    "Details": "Details"
+    "Details": "Details",
+    "RedirectUris": "Redirect uris",
+    "PostLogoutRedirectUris": "Post logout redirect uris",
+    "Requirements": "Requirements",
+    "Permissions": "Permissions",
+    "Properties": "Properties",
+    "RedirectUri": "Redirect uri",
+    "PostLogoutRedirectUri": "Post logout redirect uri",
+    "Requirement": "Requirement",
+    "Permission": "Permission",
+    "Property": "Property",
+    "SaveSuccessfully": "Save successfully.",
+    "DataDeleted": "Data deleted."
   }
 }

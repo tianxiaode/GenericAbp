@@ -37,6 +37,18 @@
     "Application:LogoUri": "Logo链接",
     "Generic.Abp.OpenIddict.BusinessException:000001": "错误的类型",
     "Generic.Abp.OpenIddict.BusinessException:000002": "错误的同意类型",
-    "Details": "详情"
+    "Details": "详情",
+    "RedirectUris": "重定向 URI",
+    "PostLogoutRedirectUris": "注销后重定向 URI",
+    "Requirements": "需求",
+    "Permissions": "权限",
+    "Properties": "属性",
+    "RedirectUri": "重定向 URI",
+    "PostLogoutRedirectUri": "注销后重定向 URI",
+    "Requirement": "需求",
+    "Permission": "权限",
+    "Property": "属性",
+    "SaveSuccessfully": "保存成功",
+    "DataDeleted": "数据已删除"
   }
 }

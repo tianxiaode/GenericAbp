@@ -192,10 +192,15 @@ Grid.prototype.updateCheckChange = function (record, column) {
         fn = me.api[apiName];
     if (!isFunction(fn)) return;
     fn.call(null, id).then(me.mergeChanges.bind(me), me.rejectChanges.bind(me));
-
 }
 
 Grid.prototype.updateSuccess = function () {
+    toastr.success(this.localization('SaveSuccessfully'));
+    this.grid.reload();
+}
+
+Grid.prototype.deleteSuccess = function () {
+    toastr.success(this.localization('DataDeleted'));
     this.grid.reload();
 }
 
