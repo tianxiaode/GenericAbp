@@ -92,32 +92,13 @@ namespace Generic.Abp.OpenIddict.Applications
             {
                 throw new ConsentTypeErrorBusinessException();
             }
+            entity.ClientId = input.ClientId;
             entity.DisplayName = input.DisplayName;
             entity.ClientSecret = input.ClientSecret;
             entity.ConsentType = input.ConsentType;
             entity.ClientUri = input.ClientUri;
             entity.LogoUri = input.LogoUri;
             entity.Type = input.Type;
-            if (!input.Permissions.IsNullOrEmpty())
-            {
-                entity.Permissions = System.Text.Json.JsonSerializer.Serialize(input.Permissions);
-            }
-            if (!input.PostLogoutRedirectUris.IsNullOrEmpty())
-            {
-                entity.PostLogoutRedirectUris = System.Text.Json.JsonSerializer.Serialize(input.PostLogoutRedirectUris);
-            }
-            if (!input.Properties.IsNullOrEmpty())
-            {
-                entity.Properties = System.Text.Json.JsonSerializer.Serialize(input.Properties);
-            }
-            if (!input.RedirectUris.IsNullOrEmpty())
-            {
-                entity.RedirectUris = System.Text.Json.JsonSerializer.Serialize(input.RedirectUris);
-            }
-            if (!input.Requirements.IsNullOrEmpty())
-            {
-                entity.Requirements = System.Text.Json.JsonSerializer.Serialize(input.Requirements);
-            }
         }
 
         [UnitOfWork]

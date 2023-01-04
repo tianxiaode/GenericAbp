@@ -22,15 +22,15 @@ namespace Generic.Abp.OpenIddict.Applications
         [DisplayName("Application:DisplayName")]
         public string DisplayName { get; set; }
 
-        public List<string> Permissions { get; set; }
+        //public List<string> Permissions { get; set; }
 
-        public List<string> PostLogoutRedirectUris { get; set; }
+        //public List<string> PostLogoutRedirectUris { get; set; }
 
-        public List<string> Properties { get; set; }
+        //public List<string> Properties { get; set; }
 
-        public List<string> RedirectUris { get; set; }
+        //public List<string> RedirectUris { get; set; }
 
-        public List<string> Requirements { get; set; }
+        //public List<string> Requirements { get; set; }
 
         [DisplayName("Application:Type")]
         public string Type { get; set; }

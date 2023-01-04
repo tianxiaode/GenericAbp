@@ -1,0 +1,25 @@
+﻿@page
+@using Generic.Abp.OpenIddict.Localization;
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@using Volo.Abp.OpenIddict.Localization
+@model Generic.Abp.OpenIddict.Web.Pages.OpenIddict.Applications.CreateModalModel
+@inject IHtmlLocalizer<OpenIddictResource> _l
+@{
+    Layout = null;
+}
+<form method="post" asp-page="/OpenIddict/Applications/CreateModal">
+    <abp-modal>
+        <abp-modal-header title="@_l["NewScope"].Value"></abp-modal-header>
+        <abp-modal-body>
+            <abp-input asp-for="Application.ClientId" label="@_l["Application:ClientId"].Value" />
+            <abp-input asp-for="Application.DisplayName" label="@_l["Application:DisplayName"].Value" />
+            <abp-input asp-for="Application.ClientSecret" label="@_l["Application:ClientSecret"].Value" />
+            <abp-select asp-for="Application.Type" label="@_l["Application:Type"].Value" asp-items="@Model.ApplicationTypes" />
+            <abp-select asp-for="Application.ConsentType" label="@_l["Application:Type"].Value" asp-items="@Model.ApplicationConsentType" />
+            <abp-input asp-for="Application.ClientUri" label="@_l["Application:ClientUri"].Value" />
+            <abp-input asp-for="Application.LogoUri" label="@_l["Application:LogoUri"].Value" />
+        </abp-modal-body>
+        <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)"></abp-modal-footer>
+    </abp-modal>
+</form>

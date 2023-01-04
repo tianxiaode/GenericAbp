@@ -108,6 +108,13 @@ Generic Abp是一套适用于[ABP Framework](https://github.com/abpframework/abp
 
 为[ABP Framework](https://github.com/abpframework/abp#readme)添加[W2Ui](https://github.com/vitmalina/w2ui/).
 
+### Generic.Abp.OpenIddict
+
+为[ABP Framework](https://github.com/abpframework/abp#readme)添加`OpenIddict`管理功能.
+
+![Clients](docs/images/openiddict.png)
+
+
 ## 引用
 
 - [Sencha](https://www.sencha.com)

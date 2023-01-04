@@ -19,12 +19,12 @@ namespace Generic.Abp.OpenIddict
                 .ForMember(m => m.Properties, opts => opts.MapFrom(m => System.Text.Json.JsonSerializer.Deserialize<List<string>>(m.Properties, new System.Text.Json.JsonSerializerOptions())))
                 .ForMember(m => m.Resources, opts => opts.MapFrom(m => System.Text.Json.JsonSerializer.Deserialize<List<string>>(m.Resources, new System.Text.Json.JsonSerializerOptions())));
 
-            CreateMap<OpenIddictApplication, ApplicationDto>()
-                .ForMember(m => m.Properties, opts => opts.MapFrom(m => System.Text.Json.JsonSerializer.Deserialize<List<string>>(m.Properties, new System.Text.Json.JsonSerializerOptions())))
-                .ForMember(m => m.PostLogoutRedirectUris, opts => opts.MapFrom(m => System.Text.Json.JsonSerializer.Deserialize<List<string>>(m.PostLogoutRedirectUris, new System.Text.Json.JsonSerializerOptions())))
-                .ForMember(m => m.RedirectUris, opts => opts.MapFrom(m => System.Text.Json.JsonSerializer.Deserialize<List<string>>(m.RedirectUris, new System.Text.Json.JsonSerializerOptions())))
-                .ForMember(m => m.Requirements, opts => opts.MapFrom(m => System.Text.Json.JsonSerializer.Deserialize<List<string>>(m.Requirements, new System.Text.Json.JsonSerializerOptions())))
-                .ForMember(m => m.Permissions, opts => opts.MapFrom(m => System.Text.Json.JsonSerializer.Deserialize<List<string>>(m.Permissions, new System.Text.Json.JsonSerializerOptions())));
+            CreateMap<OpenIddictApplication, ApplicationDto>();
+            //.ForMember(m => m.Properties, opts => opts.MapFrom(m => System.Text.Json.JsonSerializer.Deserialize<List<string>>(m.Properties, new System.Text.Json.JsonSerializerOptions())))
+            //.ForMember(m => m.PostLogoutRedirectUris, opts => opts.MapFrom(m => System.Text.Json.JsonSerializer.Deserialize<List<string>>(m.PostLogoutRedirectUris, new System.Text.Json.JsonSerializerOptions())))
+            //.ForMember(m => m.RedirectUris, opts => opts.MapFrom(m => System.Text.Json.JsonSerializer.Deserialize<List<string>>(m.RedirectUris, new System.Text.Json.JsonSerializerOptions())))
+            //.ForMember(m => m.Requirements, opts => opts.MapFrom(m => System.Text.Json.JsonSerializer.Deserialize<List<string>>(m.Requirements, new System.Text.Json.JsonSerializerOptions())))
+            //.ForMember(m => m.Permissions, opts => opts.MapFrom(m => System.Text.Json.JsonSerializer.Deserialize<List<string>>(m.Permissions, new System.Text.Json.JsonSerializerOptions())));
         }
     }
 }
