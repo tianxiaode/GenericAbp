@@ -136,15 +136,11 @@
         if (active.includes('permissions')) {
             let grid = window.applicationPermissionsGrid;
             if (!grid) {
-                grid = window.applicationPermissionsGrid = new RelationalGrid({
+                grid = window.applicationPermissionsGrid = new PermissionGrid({
                     el: '#permissionsTab',
                     api: api,
                     name: 'applicationPermissionsGrid',
                     apiGetName: 'getPermissions',
-                    apiDeleteName: 'removeScope',
-                    columns: [
-                        { text: 'ClientScope:Scope', field: 'scope', isMessage: true },
-                    ]
                 });
             }
             grid.refresh(record);

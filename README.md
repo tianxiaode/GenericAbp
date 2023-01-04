@@ -108,6 +108,12 @@ Added `Identity Server 4` management capabilities to [ABP Framework] (https://gi
 
 Add [W2Ui](https://github.com/vitmalina/w2ui/) to [ABP Framework](https://github.com/abpframework/abp#readme).
 
+### Generic.Abp.OpenIddict
+
+Added `OpenIddict` management capabilities to [ABP Framework] (https://github.com/abpframework/abp#readme).
+
+![Clients](docs/images/openiddict.png)
+
 ## References
 
 - [Sencha](https://www.sencha.com)

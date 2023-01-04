@@ -49,28 +49,28 @@ namespace Generic.Abp.OpenIddict.Applications
         }
 
         [HttpGet]
-        [Route("permisions")]
+        [Route("permissions")]
         public Task<Dictionary<string, Dictionary<string, string>>> GetAllPermisions()
         {
             return AppService.GetAllPermisions();
         }
 
         [HttpGet]
-        [Route("{id:guid}/permisions")]
+        [Route("{id:guid}/permissions")]
         public Task<List<string>> GetPermissionsAsync(Guid id)
         {
             return AppService.GetPermissionsAsync(id);
         }
 
         [HttpPut]
-        [Route("{id:guid}/permisions")]
+        [Route("{id:guid}/permissions")]
         public Task AddPermissionAsync(Guid id, [FromBody] ApplicationPermissionCreateInput input)
         {
             return AppService.AddPermissionAsync(id, input);
         }
 
         [HttpDelete]
-        [Route("{id:guid}/permisions")]
+        [Route("{id:guid}/permissions")]
         public Task RemovePermissionAsync(Guid id, [FromBody] ApplicationPermissionDeleteInput input)
         {
             return AppService.RemovePermissionAsync(id, input);

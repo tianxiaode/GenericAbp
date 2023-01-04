@@ -112,14 +112,14 @@ Grid.prototype.initCreateAndEditModal = function () {
     }
 
 
-},
+}
 
 
-    Grid.prototype.onRequest = function (event) {
-        let postData = event.postData;
-        postData.skipCount = postData.offset;
-        postData.MaxResultCount = postData.limit;
-    }
+Grid.prototype.onRequest = function (event) {
+    let postData = event.postData;
+    postData.skipCount = postData.offset;
+    postData.MaxResultCount = postData.limit;
+}
 
 Grid.prototype.onParser = function (data) {
     data.total = data.totalCount;
@@ -129,17 +129,17 @@ Grid.prototype.onParser = function (data) {
 
 Grid.prototype.onAdd = function (event) {
     if (this.createModal) this.createModal.open();
-},
+}
 
-    Grid.prototype.onEdit = function (event) {
-        let me = this,
-            record = me.grid.get(event.recid);
-        if (!record || !me.editModal) return;
-        me.editModal.open({
-            id: record.id
-        });
+Grid.prototype.onEdit = function (event) {
+    let me = this,
+        record = me.grid.get(event.recid);
+    if (!record || !me.editModal) return;
+    me.editModal.open({
+        id: record.id
+    });
 
-    }
+}
 
 Grid.prototype.onDelete = function (event) {
     let me = this,
@@ -211,13 +211,13 @@ Grid.prototype.mergeChanges = function () {
 Grid.prototype.rejectChanges = function (error) {
     if (error) this.ajaxFailure(error);
     this.grid.rejectChanges();
-},
+}
 
-    Grid.prototype.ajaxFailure = function (error) {
-        if (error.code) {
-            abp.message.error(this.localization(error.code));
-        }
+Grid.prototype.ajaxFailure = function (error) {
+    if (error.code) {
+        abp.message.error(this.localization(error.code));
     }
+}
 
 Grid.prototype.onReload = function () { }
 
