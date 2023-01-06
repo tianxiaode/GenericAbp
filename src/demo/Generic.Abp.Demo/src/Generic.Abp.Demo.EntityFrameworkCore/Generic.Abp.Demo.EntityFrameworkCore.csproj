@@ -3,10 +3,10 @@
   <Import Project="..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <RootNamespace>Generic.Abp.Demo</RootNamespace>
   </PropertyGroup>
-  
+
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\modules\identity\src\Generic.Abp.Identity.EntityFrameworkCore\Generic.Abp.Identity.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\Generic.Abp.Demo.Domain\Generic.Abp.Demo.Domain.csproj" />

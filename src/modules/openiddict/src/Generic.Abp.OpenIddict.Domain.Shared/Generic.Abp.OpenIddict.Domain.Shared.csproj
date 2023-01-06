@@ -9,7 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\businessexception\src\Generic.Abp.BusinessException\Generic.Abp.BusinessException.csproj" />
-    <PackageReference Include="Volo.Abp.OpenIddict.Domain.Shared" Version="$(GenericAbpVersion)" />
+    <PackageReference Include="Volo.Abp.OpenIddict.Domain.Shared" Version="$(AbpVersion)" />
   </ItemGroup>
 
   <ItemGroup>
