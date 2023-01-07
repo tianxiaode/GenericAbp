@@ -8,6 +8,7 @@ using Volo.Abp.FeatureManagement;
 using Volo.Abp.Identity;
 using Volo.Abp.IdentityServer;
 using Volo.Abp.Localization;
+using Volo.Abp.Localization.ExceptionHandling;
 using Volo.Abp.Modularity;
 using Volo.Abp.OpenIddict;
 using Volo.Abp.PermissionManagement;
@@ -38,7 +39,8 @@ namespace Generic.Abp.Demo
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            DemoModulePropertyConfigurator.Configure();
+            DemoGlobalFeatureConfigurator.Configure();
+            DemoModuleExtensionConfigurator.Configure();
         }
 
         public override void ConfigureServices(ServiceConfigurationContext context)
@@ -56,6 +58,11 @@ namespace Generic.Abp.Demo
                     .AddVirtualJson("/Localization/Demo");
 
                 options.DefaultResourceType = typeof(DemoResource);
+            });
+
+            Configure<AbpExceptionLocalizationOptions>(options =>
+            {
+                options.MapCodeNamespace("Demo", typeof(DemoResource));
             });
 
             Configure<EnumerationOptions>(options =>
