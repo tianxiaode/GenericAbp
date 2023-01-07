@@ -1,6 +1,8 @@
 ﻿using System;
-using Microsoft.AspNetCore.Hosting;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Serilog.Events;
 
@@ -8,24 +10,32 @@ namespace Generic.Abp.Demo.Web
 {
     public class Program
     {
-        public static int Main(string[] args)
+        public async static Task<int> Main(string[] args)
         {
             Log.Logger = new LoggerConfiguration()
 #if DEBUG
                 .MinimumLevel.Debug()
 #else
-                .MinimumLevel.Information()
+            .MinimumLevel.Information()
 #endif
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
                 .MinimumLevel.Override("Microsoft.EntityFrameworkCore", LogEventLevel.Warning)
                 .Enrich.FromLogContext()
                 .WriteTo.Async(c => c.File("Logs/logs.txt"))
+                .WriteTo.Async(c => c.Console())
                 .CreateLogger();
 
             try
             {
                 Log.Information("Starting web host.");
-                CreateHostBuilder(args).Build().Run();
+                var builder = WebApplication.CreateBuilder(args);
+                builder.Host.AddAppSettingsSecretsJson()
+                    .UseAutofac()
+                    .UseSerilog();
+                await builder.AddApplicationAsync<DemoWebModule>();
+                var app = builder.Build();
+                await app.InitializeApplicationAsync();
+                await app.RunAsync();
                 return 0;
             }
             catch (Exception ex)
@@ -37,15 +47,8 @@ namespace Generic.Abp.Demo.Web
             {
                 Log.CloseAndFlush();
             }
+
         }
 
-        internal static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                })
-                .UseAutofac()
-                .UseSerilog();
     }
 }

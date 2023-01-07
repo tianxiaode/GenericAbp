@@ -1,7 +1,6 @@
 ﻿using Generic.Abp.Enumeration;
 using Generic.Abp.ExtResource;
 using Generic.Abp.Identity;
-using Generic.Abp.IdentityServer;
 using Generic.Abp.OpenIddict;
 using Volo.Abp.Account;
 using Volo.Abp.AutoMapper;

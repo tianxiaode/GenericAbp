@@ -11,26 +11,26 @@
 @inject IAuthorizationService _authorization
 @inject IPageLayout _pageLayout
 @{
-    _pageLayout.Content.Title = _l["Application"].Value;
-    _pageLayout.Content.BreadCrumb.Add(_l["Menu:OpenIddictManagement"].Value);
-    _pageLayout.Content.MenuItemName = OpenIddictMenus.Applications;
+    //_pageLayout.Content.Title = _l["Applications"].Value;
+    //_pageLayout.Content.BreadCrumb.Add(_l["Menu:OpenIddictManagement"].Value);
+    //_pageLayout.Content.MenuItemName = OpenIddictMenus.Applications;
 }
 @section styles{
-<abp-style-bundle name="W2Ui"></abp-style-bundle>
+    <abp-style-bundle name="W2Ui"></abp-style-bundle>
 }
 
 @section scripts {
-<abp-script-bundle name="W2Ui"></abp-script-bundle>
-<abp-script-bundle name="@typeof(IndexModel).FullName">
-    <abp-script src="/Pages/OpenIddict/global.js" />
-    <abp-script src="/Pages/OpenIddict/Function.js" />
-    <abp-script src="/Pages/OpenIddict/forEachAsync.js" />
-    <abp-script src="/Pages/OpenIddict/Grid.js" />
-    <abp-script src="/Pages/OpenIddict/PropertyGrid.js" />
-    <abp-script src="/Pages/OpenIddict/Applications/ItemGrid.js" />
-    <abp-script src="/Pages/OpenIddict/Applications/PermissionGrid.js" />
-    <abp-script src="/Pages/OpenIddict/Applications/index.js" />
-</abp-script-bundle>
+    <abp-script-bundle name="W2Ui"></abp-script-bundle>
+    <abp-script-bundle name="@typeof(IndexModel).FullName">
+        <abp-script src="/Pages/OpenIddict/global.js" />
+        <abp-script src="/Pages/OpenIddict/Function.js" />
+        <abp-script src="/Pages/OpenIddict/forEachAsync.js" />
+        <abp-script src="/Pages/OpenIddict/Grid.js" />
+        <abp-script src="/Pages/OpenIddict/PropertyGrid.js" />
+        <abp-script src="/Pages/OpenIddict/Applications/ItemGrid.js" />
+        <abp-script src="/Pages/OpenIddict/Applications/PermissionGrid.js" />
+        <abp-script src="/Pages/OpenIddict/Applications/index.js" />
+    </abp-script-bundle>
 
 }
 

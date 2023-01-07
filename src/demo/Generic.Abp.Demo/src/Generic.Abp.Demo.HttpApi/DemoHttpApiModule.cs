@@ -24,7 +24,7 @@ namespace Generic.Abp.Demo
         typeof(AbpFeatureManagementHttpApiModule),
         typeof(GenericAbpExtResourceHttpApiModule),
         typeof(GenericAbpIdentityHttpApiModule),
-        typeof(GenericAbpApplicationModule),
+        //typeof(GenericAbpApplicationModule),
         typeof(GenericAbpEnumerationHttpApiModule),
         typeof(GenericAbpOpenIddictHttpApiModule)
         )]

@@ -1,9 +1,10 @@
 (function ($) {
-    if (abp.localization.currentCulture.cultureName === 'zh-Hans') {
+
+    if (abp.localization.currentCulture.cultureName === 'zh-CN') {
         w2utils.locale('/libs/w2ui/locale/zh-cn.json');
     }
 
-    w2obj.grid.prototype.rejectChanges = function(){
+    w2obj.grid.prototype.rejectChanges = function () {
         var changes = this.getChanges();
         for (var c = 0; c < changes.length; c++) {
             var record = this.get(changes[c][this.recid || 'recid']);

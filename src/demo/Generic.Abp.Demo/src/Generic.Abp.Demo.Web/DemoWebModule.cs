@@ -91,6 +91,8 @@ namespace Generic.Abp.Demo.Web
             ConfigureNavigationServices();
             ConfigureAutoApiControllers();
             ConfigureSwaggerServices(context.Services);
+
+
         }
 
         private void ConfigureAuthentication(ServiceConfigurationContext context)
@@ -105,7 +107,6 @@ namespace Generic.Abp.Demo.Web
                 options.Applications["MVC"].RootUrl = configuration["App:SelfUrl"];
             });
         }
-
 
 
         private void ConfigureAutoMapper()
