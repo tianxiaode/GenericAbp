@@ -3,14 +3,14 @@
   <Import Project="..\..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-     <RootNamespace />
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <RootNamespace />
   </PropertyGroup>
 
-	<ItemGroup>
-		<PackageReference Include="Volo.Abp.Identity.Application.Contracts" Version="$(AbpVersion)" />
-		<PackageReference Include="Volo.Abp.SettingManagement.Application.Contracts" Version="$(AbpVersion)" />
-	</ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Volo.Abp.Identity.Application.Contracts" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.SettingManagement.Application.Contracts" Version="$(AbpVersion)" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Generic.Abp.Identity.Domain.Shared\Generic.Abp.Identity.Domain.Shared.csproj" />

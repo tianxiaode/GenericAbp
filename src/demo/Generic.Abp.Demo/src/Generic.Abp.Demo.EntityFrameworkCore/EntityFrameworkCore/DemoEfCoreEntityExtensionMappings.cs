@@ -10,7 +10,7 @@ namespace Generic.Abp.Demo.EntityFrameworkCore
 
         public static void Configure()
         {
-            DemoModulePropertyConfigurator.Configure();
+            DemoModuleExtensionConfigurator.Configure();
             
             OneTimeRunner.Run(() =>
             {

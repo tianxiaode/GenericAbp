@@ -102,9 +102,8 @@ public class GenericAbpApplicationConfigurationAppService : ApplicationService, 
 
             var dictionary = new Dictionary<string, string>();
 
-            var localizer = _serviceProvider.GetRequiredService(
-                typeof(IStringLocalizer<>).MakeGenericType(resource.ResourceType)
-            ) as IStringLocalizer;
+            var localizer = await StringLocalizerFactory
+                .CreateByResourceNameOrNullAsync(resource.ResourceName);
 
             if (localizer == null) continue;
 
@@ -119,7 +118,7 @@ public class GenericAbpApplicationConfigurationAppService : ApplicationService, 
 
         var permissionResource = new Dictionary<string, string>();
 
-        foreach (var group in _permissionDefinitionManager.GetGroups())
+        foreach (var group in await _permissionDefinitionManager.GetGroupsAsync())
         {
             permissionResource.Add(group.Name, group.DisplayName.Localize(StringLocalizerFactory));
             foreach (var permission in group.GetPermissionsWithChildren())
@@ -203,7 +202,7 @@ public class GenericAbpApplicationConfigurationAppService : ApplicationService, 
     {
         var result = new ApplicationFeatureConfigurationDto();
 
-        foreach (var featureDefinition in _featureDefinitionManager.GetAll())
+        foreach (var featureDefinition in await _featureDefinitionManager.GetAllAsync())
         {
             if (!featureDefinition.IsVisibleToClients)
             {
@@ -224,7 +223,7 @@ public class GenericAbpApplicationConfigurationAppService : ApplicationService, 
 
         foreach (var policyName in policyNames)
         {
-            authConfig.Policies[policyName] = true;
+            authConfig.GrantedPolicies[policyName] = true;
 
             if (await AuthorizationService.IsGrantedAsync(policyName))
             {

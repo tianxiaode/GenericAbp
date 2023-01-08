@@ -6,8 +6,8 @@ using Volo.Abp.AuditLogging;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.Identity;
-using Volo.Abp.IdentityServer;
 using Volo.Abp.Localization;
+using Volo.Abp.Localization.ExceptionHandling;
 using Volo.Abp.Modularity;
 using Volo.Abp.OpenIddict;
 using Volo.Abp.PermissionManagement;
@@ -23,12 +23,11 @@ namespace Generic.Abp.Demo
         typeof(AbpBackgroundJobsDomainSharedModule),
         typeof(AbpFeatureManagementDomainSharedModule),
         typeof(AbpIdentityDomainSharedModule),
-        typeof(AbpIdentityServerDomainSharedModule),
+        typeof(AbpOpenIddictDomainSharedModule),
         typeof(AbpPermissionManagementDomainSharedModule),
         typeof(AbpSettingManagementDomainSharedModule),
         typeof(AbpTenantManagementDomainSharedModule),
         typeof(GenericAbpIdentityDomainSharedModule),
-        typeof(AbpOpenIddictDomainSharedModule),
         typeof(GenericAbpEnumerationDomainSharedModule),
         typeof(GenericAbpOpenIddictDomainSharedModule)
         )]
@@ -38,7 +37,8 @@ namespace Generic.Abp.Demo
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            DemoModulePropertyConfigurator.Configure();
+            DemoGlobalFeatureConfigurator.Configure();
+            DemoModuleExtensionConfigurator.Configure();
         }
 
         public override void ConfigureServices(ServiceConfigurationContext context)
@@ -58,13 +58,18 @@ namespace Generic.Abp.Demo
                 options.DefaultResourceType = typeof(DemoResource);
             });
 
-            Configure<EnumerationOptions>(options =>
+            Configure<AbpExceptionLocalizationOptions>(options =>
             {
-                options
-                    .Resources
-                    .Add(typeof(MyEnum));
-
+                options.MapCodeNamespace("Demo", typeof(DemoResource));
             });
+
+            //Configure<EnumerationOptions>(options =>
+            //{
+            //    options
+            //        .Resources
+            //        .Add(typeof(MyEnum));
+
+            //});
 
         }
     }

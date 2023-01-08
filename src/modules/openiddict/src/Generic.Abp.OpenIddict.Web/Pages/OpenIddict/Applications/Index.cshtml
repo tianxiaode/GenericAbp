@@ -11,12 +11,12 @@
 @inject IAuthorizationService _authorization
 @inject IPageLayout _pageLayout
 @{
-    _pageLayout.Content.Title = _l["Application"].Value;
-    _pageLayout.Content.BreadCrumb.Add(_l["Menu:OpenIddictManagement"].Value);
-    _pageLayout.Content.MenuItemName = OpenIddictMenus.Applications;
+    //_pageLayout.Content.Title = _l["Applications"].Value;
+    //_pageLayout.Content.BreadCrumb.Add(_l["Menu:OpenIddictManagement"].Value);
+    //_pageLayout.Content.MenuItemName = OpenIddictMenus.Applications;
 }
 @section styles{
-<abp-style-bundle name="W2Ui"></abp-style-bundle>
+    <abp-style-bundle name="W2Ui"></abp-style-bundle>
 }
 
 @section scripts {

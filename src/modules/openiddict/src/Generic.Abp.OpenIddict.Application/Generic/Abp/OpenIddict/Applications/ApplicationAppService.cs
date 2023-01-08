@@ -1,20 +1,17 @@
 ﻿using Generic.Abp.BusinessException.Exceptions;
-using Generic.Abp.OpenIddict.Permissions;
 using Generic.Abp.OpenIddict.Exceptions;
+using Generic.Abp.OpenIddict.Permissions;
 using Microsoft.AspNetCore.Authorization;
 using OpenIddict.Abstractions;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.OpenIddict.Applications;
 using Volo.Abp.OpenIddict.Scopes;
 using Volo.Abp.Uow;
-using System.Reflection;
-using Newtonsoft.Json.Linq;
-using System.Linq;
-using Volo.Abp.Identity;
 
 namespace Generic.Abp.OpenIddict.Applications
 {
