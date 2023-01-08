@@ -114,6 +114,11 @@ Generic Abp是一套适用于[ABP Framework](https://github.com/abpframework/abp
 
 ![Clients](docs/images/openiddict.png)
 
+### Generic.Abp.Identity
+
+- 为角色添加了多语言支持
+- 为用户添加了锁定策略和密码策略的配置接口
+- 增加了一些用户管理接口
 
 ## 引用
 

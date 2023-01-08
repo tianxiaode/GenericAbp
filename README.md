@@ -114,6 +114,12 @@ Added `OpenIddict` management capabilities to [ABP Framework] (https://github.co
 
 ![Clients](docs/images/openiddict.png)
 
+### Generic.Abp.Identity
+
+- Added multilingual support for roles
+- Added configuration interfaces for lockout policy and password policy for users
+- Added some user management interfaces
+
 ## References
 
 - [Sencha](https://www.sencha.com)
