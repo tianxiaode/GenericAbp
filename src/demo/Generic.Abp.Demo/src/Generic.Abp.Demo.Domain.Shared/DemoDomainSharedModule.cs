@@ -23,11 +23,11 @@ namespace Generic.Abp.Demo
         typeof(AbpBackgroundJobsDomainSharedModule),
         typeof(AbpFeatureManagementDomainSharedModule),
         typeof(AbpIdentityDomainSharedModule),
+        typeof(AbpOpenIddictDomainSharedModule),
         typeof(AbpPermissionManagementDomainSharedModule),
         typeof(AbpSettingManagementDomainSharedModule),
         typeof(AbpTenantManagementDomainSharedModule),
         typeof(GenericAbpIdentityDomainSharedModule),
-        typeof(AbpOpenIddictDomainSharedModule),
         typeof(GenericAbpEnumerationDomainSharedModule),
         typeof(GenericAbpOpenIddictDomainSharedModule)
         )]
@@ -63,13 +63,13 @@ namespace Generic.Abp.Demo
                 options.MapCodeNamespace("Demo", typeof(DemoResource));
             });
 
-            Configure<EnumerationOptions>(options =>
-            {
-                options
-                    .Resources
-                    .Add(typeof(MyEnum));
+            //Configure<EnumerationOptions>(options =>
+            //{
+            //    options
+            //        .Resources
+            //        .Add(typeof(MyEnum));
 
-            });
+            //});
 
         }
     }

@@ -11,6 +11,7 @@ using Volo.Abp.Identity;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.HttpApi;
+using Volo.Abp.SettingManagement;
 using Volo.Abp.TenantManagement;
 
 namespace Generic.Abp.Demo
@@ -22,9 +23,10 @@ namespace Generic.Abp.Demo
         typeof(AbpPermissionManagementHttpApiModule),
         typeof(AbpTenantManagementHttpApiModule),
         typeof(AbpFeatureManagementHttpApiModule),
+        typeof(AbpSettingManagementHttpApiModule),
         typeof(GenericAbpExtResourceHttpApiModule),
         typeof(GenericAbpIdentityHttpApiModule),
-        //typeof(GenericAbpApplicationModule),
+        typeof(GenericAbpApplicationModule),
         typeof(GenericAbpEnumerationHttpApiModule),
         typeof(GenericAbpOpenIddictHttpApiModule)
         )]

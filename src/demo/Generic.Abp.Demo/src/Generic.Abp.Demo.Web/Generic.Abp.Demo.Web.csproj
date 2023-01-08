@@ -31,6 +31,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Components\_ViewImports.cshtml" />
     <None Include="Themes\Basic\Layouts\Account.cshtml" />
     <None Include="Themes\Basic\Layouts\Application.cshtml" />
     <None Include="Themes\Basic\Layouts\Empty.cshtml" />

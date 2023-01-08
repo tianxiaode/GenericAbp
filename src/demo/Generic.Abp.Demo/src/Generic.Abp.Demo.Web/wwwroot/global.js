@@ -1,6 +1,9 @@
 (function ($) {
 
-    console.log(abp.localization)
+    abp.auth.isGranted = function (policyName) {
+        return abp.auth.grantedPolicies[policyName] != undefined;
+    }
+
     abp.localization.localize = function (key, sourceName) {
         if (sourceName === '_') {
             //A convention to suppress the localization

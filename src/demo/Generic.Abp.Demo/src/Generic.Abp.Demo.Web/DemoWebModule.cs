@@ -1,4 +1,4 @@
-using Generic.Abp.Demo.Localization;
+﻿using Generic.Abp.Demo.Localization;
 using Generic.Abp.Demo.EntityFrameworkCore;
 using Generic.Abp.Demo.Web.Menus;
 using Generic.Abp.OpenIddict.Web;
@@ -46,10 +46,12 @@ namespace Generic.Abp.Demo.Web
         typeof(DemoEntityFrameworkCoreModule),
         typeof(AbpAutofacModule),
         typeof(AbpIdentityWebModule),
+        typeof(AbpSettingManagementWebModule),
         typeof(AbpAccountWebOpenIddictModule),
         typeof(AbpAspNetCoreMvcUiBasicThemeModule),
         typeof(AbpTenantManagementWebModule),
         typeof(AbpAspNetCoreSerilogModule),
+        typeof(AbpSwashbuckleModule),
         typeof(GenericAbpOpenIddictWebModule)
         )]
     public class DemoWebModule : AbpModule
@@ -88,6 +90,7 @@ namespace Generic.Abp.Demo.Web
             ConfigureUrls(configuration);
             ConfigureAutoMapper();
             ConfigureVirtualFileSystem(hostingEnvironment);
+            //ConfigureLocalizationServices();
             ConfigureNavigationServices();
             ConfigureAutoApiControllers();
             ConfigureSwaggerServices(context.Services);
@@ -161,6 +164,21 @@ namespace Generic.Abp.Demo.Web
             );
         }
 
+        private void ConfigureLocalizationServices()
+        {
+            Configure<AbpLocalizationOptions>(options =>
+            {
+                options.Languages.Add(new LanguageInfo("ar", "ar", "العربية"));
+                options.Languages.Add(new LanguageInfo("cs", "cs", "Čeština"));
+                options.Languages.Add(new LanguageInfo("en", "en", "English"));
+                options.Languages.Add(new LanguageInfo("pt-BR", "pt-BR", "Português"));
+                options.Languages.Add(new LanguageInfo("ru", "ru", "Русский"));
+                options.Languages.Add(new LanguageInfo("tr", "tr", "Türkçe"));
+                options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
+                options.Languages.Add(new LanguageInfo("zh-Hant", "zh-Hant", "繁體中文"));
+            });
+        }
+
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             var app = context.GetApplicationBuilder();
@@ -170,7 +188,10 @@ namespace Generic.Abp.Demo.Web
             {
                 app.UseDeveloperExceptionPage();
             }
-            else
+
+            app.UseAbpRequestLocalization();
+
+            if (!env.IsDevelopment())
             {
                 app.UseErrorPage();
             }

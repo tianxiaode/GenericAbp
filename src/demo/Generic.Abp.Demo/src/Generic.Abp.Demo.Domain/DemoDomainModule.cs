@@ -22,12 +22,11 @@ namespace Generic.Abp.Demo
         typeof(AbpBackgroundJobsDomainModule),
         typeof(AbpFeatureManagementDomainModule),
         typeof(AbpIdentityDomainModule),
-        typeof(AbpPermissionManagementDomainIdentityModule),
         typeof(AbpOpenIddictDomainModule),
         typeof(AbpPermissionManagementDomainOpenIddictModule),
+        typeof(AbpPermissionManagementDomainIdentityModule),
         typeof(AbpSettingManagementDomainModule),
         typeof(AbpTenantManagementDomainModule),
-        typeof(GenericAbpEnumerationDomainSharedModule),
         typeof(GenericAbpIdentityDomainModule)
         )]
     public class DemoDomainModule : AbpModule

@@ -9,6 +9,7 @@ using Volo.Abp.Identity;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.TenantManagement;
+using Volo.Abp.SettingManagement;
 
 namespace Generic.Abp.Demo
 {
@@ -20,10 +21,10 @@ namespace Generic.Abp.Demo
         typeof(AbpPermissionManagementApplicationModule),
         typeof(AbpTenantManagementApplicationModule),
         typeof(AbpFeatureManagementApplicationModule),
+        typeof(AbpSettingManagementApplicationModule),
         typeof(GenericAbpEnumerationApplicationModule),
         typeof(GenericAbpExtResourceApplicationModule),
         typeof(GenericAbpIdentityApplicationModule),
-        typeof(GenericAbpEnumerationApplicationModule),
         typeof(GenericAbpOpenIddictApplicationModule)
         )]
     public class DemoApplicationModule : AbpModule
