@@ -14,7 +14,7 @@ using Volo.Abp.VirtualFileSystem;
 namespace Generic.Abp.MyProjectName.Web;
 
 [DependsOn(
-    typeof(MyProjectNameHttpApiModule),
+    typeof(GenericAbpMyProjectNameHttpApiModule),
     typeof(AbpPermissionManagementWebModule),
     typeof(AbpAutoMapperModule),
     typeof(AbpAspNetCoreMvcUiThemeSharedModule)
