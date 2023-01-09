@@ -139,6 +139,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Generic.Abp.OpenIddict.Web"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Generic.Abp.IdentityServer.Application", "modules\IdentityServer\src\Generic.Abp.IdentityServer.Application\Generic.Abp.IdentityServer.Application.csproj", "{E924DEB3-19B6-4695-B5D4-E5087F962434}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "phonelogin", "phonelogin", "{CADC631A-5813-4936-893B-EB1419984319}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Generic.Abp.PhoneLogin.Domain", "modules\phonelogin\src\Generic.Abp.PhoneLogin.Domain\Generic.Abp.PhoneLogin.Domain.csproj", "{63DB6D61-A9EA-40E7-A679-1882B03A761E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -653,6 +657,18 @@ Global
 		{E924DEB3-19B6-4695-B5D4-E5087F962434}.Release|x64.Build.0 = Release|Any CPU
 		{E924DEB3-19B6-4695-B5D4-E5087F962434}.Release|x86.ActiveCfg = Release|Any CPU
 		{E924DEB3-19B6-4695-B5D4-E5087F962434}.Release|x86.Build.0 = Release|Any CPU
+		{63DB6D61-A9EA-40E7-A679-1882B03A761E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63DB6D61-A9EA-40E7-A679-1882B03A761E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63DB6D61-A9EA-40E7-A679-1882B03A761E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{63DB6D61-A9EA-40E7-A679-1882B03A761E}.Debug|x64.Build.0 = Debug|Any CPU
+		{63DB6D61-A9EA-40E7-A679-1882B03A761E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{63DB6D61-A9EA-40E7-A679-1882B03A761E}.Debug|x86.Build.0 = Debug|Any CPU
+		{63DB6D61-A9EA-40E7-A679-1882B03A761E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63DB6D61-A9EA-40E7-A679-1882B03A761E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{63DB6D61-A9EA-40E7-A679-1882B03A761E}.Release|x64.ActiveCfg = Release|Any CPU
+		{63DB6D61-A9EA-40E7-A679-1882B03A761E}.Release|x64.Build.0 = Release|Any CPU
+		{63DB6D61-A9EA-40E7-A679-1882B03A761E}.Release|x86.ActiveCfg = Release|Any CPU
+		{63DB6D61-A9EA-40E7-A679-1882B03A761E}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -724,6 +740,8 @@ Global
 		{D61F4989-187C-41C0-852F-F6F7EE7AE15B} = {D646D3E0-C42F-4780-92C4-2606E50CEF58}
 		{11981E1D-37C5-458C-84CB-76A708ACB758} = {D646D3E0-C42F-4780-92C4-2606E50CEF58}
 		{E924DEB3-19B6-4695-B5D4-E5087F962434} = {59AB868A-4EE5-4C3A-86B3-FA94411CB1B9}
+		{CADC631A-5813-4936-893B-EB1419984319} = {334C2CC9-4833-4DEA-833A-8D5FD88961B3}
+		{63DB6D61-A9EA-40E7-A679-1882B03A761E} = {CADC631A-5813-4936-893B-EB1419984319}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {11F1E32E-A8BF-442B-94DB-FE8C30C1FB2A}

@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{FFC6B7B8-4287-49F8-A9AE-83FDD8648A94}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Generic.Abp.PhoneLogin.Domain", "src\Generic.Abp.PhoneLogin.Domain\Generic.Abp.PhoneLogin.Domain.csproj", "{92728AE4-7B13-48A6-99EA-9B2257C2A9D1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{92728AE4-7B13-48A6-99EA-9B2257C2A9D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92728AE4-7B13-48A6-99EA-9B2257C2A9D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92728AE4-7B13-48A6-99EA-9B2257C2A9D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92728AE4-7B13-48A6-99EA-9B2257C2A9D1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{92728AE4-7B13-48A6-99EA-9B2257C2A9D1} = {FFC6B7B8-4287-49F8-A9AE-83FDD8648A94}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EB74D00B-3F71-46D4-9A9E-35449B3C55C1}
+	EndGlobalSection
+EndGlobal

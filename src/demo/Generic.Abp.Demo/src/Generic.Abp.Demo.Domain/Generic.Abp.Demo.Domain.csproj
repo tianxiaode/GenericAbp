@@ -10,6 +10,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\modules\identity\src\Generic.Abp.Identity.Domain\Generic.Abp.Identity.Domain.csproj" />
     <ProjectReference Include="..\Generic.Abp.Demo.Domain.Shared\Generic.Abp.Demo.Domain.Shared.csproj" />
+    <ProjectReference Include="..\..\..\..\modules\phonelogin\src\Generic.Abp.PhoneLogin.Domain\Generic.Abp.PhoneLogin.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>

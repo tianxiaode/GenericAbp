@@ -1,6 +1,7 @@
 ﻿using Generic.Abp.Demo.MultiTenancy;
 using Generic.Abp.Enumeration;
 using Generic.Abp.Identity;
+using Generic.Abp.PhoneLogin;
 using Volo.Abp.AuditLogging;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.FeatureManagement;
@@ -27,6 +28,7 @@ namespace Generic.Abp.Demo
         typeof(AbpPermissionManagementDomainIdentityModule),
         typeof(AbpSettingManagementDomainModule),
         typeof(AbpTenantManagementDomainModule),
+        typeof(GenericAbpPhoneLoginDomainModule),
         typeof(GenericAbpIdentityDomainModule)
         )]
     public class DemoDomainModule : AbpModule
