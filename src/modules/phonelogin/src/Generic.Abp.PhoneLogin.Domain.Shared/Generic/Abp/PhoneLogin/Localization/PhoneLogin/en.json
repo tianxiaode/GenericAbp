@@ -1,5 +1,7 @@
 {
   "culture": "en",
   "texts": {
+    "DuplicatePhoneNumber": "Phone number '{0}' is already taken.",
+    "InvalidPhoneNumber": "Phone number '{0}' is invalid.."
   }
 }

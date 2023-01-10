@@ -102,16 +102,20 @@ namespace Generic.Abp.PhoneLogin
         private async Task<List<IdentityError>?> ValidatePhone(PhoneLoginUserManager manager, IdentityUser user, List<IdentityError>? errors)
         {
             var phone = await manager.GetPhoneNumberAsync(user).ConfigureAwait(false);
+            var invalidPhoneNumber = new IdentityError()
+            {
+                Code = "InvalidPhoneNumber"
+            };
             if (string.IsNullOrWhiteSpace(phone))
             {
                 errors ??= new List<IdentityError>();
-                errors.Add(Describer.InvalidEmail(phone));
+                errors.Add(invalidPhoneNumber);
                 return errors;
             }
             if (!new EmailAddressAttribute().IsValid(phone))
             {
                 errors ??= new List<IdentityError>();
-                errors.Add(Describer.InvalidEmail(phone));
+                errors.Add(invalidPhoneNumber);
                 return errors;
             }
             var owner = await manager.FindByEmailAsync(phone).ConfigureAwait(false);
@@ -119,7 +123,10 @@ namespace Generic.Abp.PhoneLogin
                 !string.Equals(await manager.GetUserIdAsync(owner).ConfigureAwait(false), await manager.GetUserIdAsync(user).ConfigureAwait(false)))
             {
                 errors ??= new List<IdentityError>();
-                errors.Add(Describer.DuplicateEmail(phone));
+                errors.Add(new IdentityError()
+                {
+                    Code = "DuplicatePhoneNumber"
+                });
             }
             return errors;
         }

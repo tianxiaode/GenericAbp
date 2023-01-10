@@ -1,5 +1,7 @@
 {
   "culture": "zh-Hans",
   "texts": {
+    "DuplicatePhoneNumber": "手机 '{0}' 已存在.",
+    "InvalidPhoneNumber": "手机 '{0}' 无效."
   }
 }

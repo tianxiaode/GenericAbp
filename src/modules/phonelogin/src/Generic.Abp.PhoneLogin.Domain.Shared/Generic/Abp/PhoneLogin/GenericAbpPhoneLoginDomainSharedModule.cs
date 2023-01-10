@@ -1,6 +1,6 @@
-﻿using Volo.Abp.Modularity;
+﻿using Generic.Abp.PhoneLogin.Localization;
 using Volo.Abp.Localization;
-using Generic.Abp.PhoneLogin.Localization;
+using Volo.Abp.Modularity;
 using Volo.Abp.Localization.ExceptionHandling;
 using Volo.Abp.Validation;
 using Volo.Abp.Validation.Localization;
@@ -9,8 +9,7 @@ using Volo.Abp.VirtualFileSystem;
 namespace Generic.Abp.PhoneLogin
 {
     [DependsOn(
-        typeof(GenericAbpBusinessExceptionModule),
-        typeof(GenericAbpDddDomainSharedModule)
+        typeof(AbpValidationModule)
     )]
     public class GenericAbpPhoneLoginDomainSharedModule : AbpModule
     {
@@ -25,7 +24,6 @@ namespace Generic.Abp.PhoneLogin
             {
                 options.Resources
                     .Add<PhoneLoginResource>("en")
-                    .AddBaseTypes(typeof(BusinessExceptionResource))
                     .AddVirtualJson("/Generic/Abp/PhoneLogin/Localization/PhoneLogin");
             });
 

@@ -1,20 +1,21 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="..\..\..\..\common.props" />
-  
+
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
-     <RootNamespace />
+    <RootNamespace />
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Generic.Abp.BusinessException" Version="$(GenericAbpVersion)" />
-  	<PackageReference Include="Generic.Abp.DDD.Domain.Shared" Version="$(GenericAbpVersion)" />
-  </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Generic\Abp\PhoneLogin\Localization\PhoneLogin\*.json" />
     <Content Remove="Generic\Abp\PhoneLogin\Localization\PhoneLogin\*.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Volo.Abp.Validation" Version="$(AbpVersion)" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="$(FileProvidersEmbeddedVersion)" />
   </ItemGroup>
 
 </Project>
