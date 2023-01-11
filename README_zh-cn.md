@@ -132,7 +132,13 @@ Generic Abp是一套适用于[ABP Framework](https://github.com/abpframework/abp
 
 #### IdenttityServer
 
+- 在应用的`Domain.Shared`模块引用`Generic.Abp.PhoneLogin.Domain.Shared`
+- 在应用的`Domain`模块引用`Generic.Abp.PhoneLogin.Domain`和`Generic.Abp.PhoneLogin.IdentityServer.Domain`
+- 在应用的`Web`模块引用`Generic.Abp.PhoneLogin.Account.Web`
 
+具体示例可查看分支`测试identtiyServer4手机登录`
+
+![验证获取token](docs/images/IdentityServer_phone_login.png)
 
 ## 引用
 

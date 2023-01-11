@@ -120,6 +120,25 @@ Added `OpenIddict` management capabilities to [ABP Framework] (https://github.co
 - Added configuration interfaces for lockout policy and password policy for users
 - Added some user management interfaces
 
+### Generic.Abp.PhoneLogin
+
+为应用添加手机验证。
+
+#### OpenIddict
+
+- Reference `Generic.Abp.PhoneLogin.Domain.Shared` in the application's `Domain.Shared` module
+- Reference `Generic.Abp.PhoneLogin.Domain` in the application's `Domain` module
+- Reference `Generic.Abp.PhoneLogin.Account.Web` and `Generic.Abp.PhoneLogin.OpenIddict.AspNetCore` in the application's `Web` module
+
+#### IdenttityServer
+
+- Reference `Generic.Abp.PhoneLogin.Domain.Shared` in the application's `Domain.Shared` module
+- Reference `Generic.Abp.PhoneLogin.Domain` amd `Generic.Abp.PhoneLogin.IdentityServer.Domain` in the application's `Domain` module
+- Reference `Generic.Abp.PhoneLogin.Account.Web` in the application's `Web` module
+
+For a specific example, please see the branch `测试identtiyServer4手机登录`
+
+![Verify the token](docs/images/IdentityServer_phone_login.png)
 ## References
 
 - [Sencha](https://www.sencha.com)
