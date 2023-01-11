@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "Generic.Abp.PhoneLogin.Web.Account": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:50401;http://localhost:50402"
+    }
+  }
+}

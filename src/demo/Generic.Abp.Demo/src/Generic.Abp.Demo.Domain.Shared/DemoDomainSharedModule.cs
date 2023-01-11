@@ -2,6 +2,7 @@
 using Generic.Abp.Enumeration;
 using Generic.Abp.Identity;
 using Generic.Abp.OpenIddict;
+using Generic.Abp.PhoneLogin;
 using Volo.Abp.AuditLogging;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.FeatureManagement;
@@ -29,7 +30,8 @@ namespace Generic.Abp.Demo
         typeof(AbpTenantManagementDomainSharedModule),
         typeof(GenericAbpIdentityDomainSharedModule),
         typeof(GenericAbpEnumerationDomainSharedModule),
-        typeof(GenericAbpOpenIddictDomainSharedModule)
+        typeof(GenericAbpOpenIddictDomainSharedModule),
+        typeof(GenericAbpPhoneLoginDomainSharedModule)
         )]
 
 
