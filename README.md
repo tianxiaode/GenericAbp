@@ -139,6 +139,9 @@ Add phone verification to your app.
 For a specific example, please see the branch `测试identtiyServer4手机登录`
 
 ![Verify the token](docs/images/IdentityServer_phone_login.png)
+
+Note: Authenticating to acquire a token using `REST Client` requires adding a `RedirectUris` (`https://localhost:44350/signin-oidc`) and a `CorsOrigins` (`https://localhost`) for 'Demo_App'.
+
 ## References
 
 - [Sencha](https://www.sencha.com)

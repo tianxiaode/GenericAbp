@@ -140,6 +140,8 @@ Generic Abp是一套适用于[ABP Framework](https://github.com/abpframework/abp
 
 ![验证获取token](docs/images/IdentityServer_phone_login.png)
 
+注意：使用`REST Client`验证获取令牌需要为`Demo_App`添加跳转地址(`edirectUris`，`https://localhost:44350/signin-oidc`)和跨域地址(`CorsOrigins`, `https://localhost`)。
+
 ## 引用
 
 - [Sencha](https://www.sencha.com)
