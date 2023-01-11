@@ -1,0 +1,20 @@
+@hostname = localhost
+@port = 44350
+@host = {{hostname}}:{{port}}
+@contentType = application/x-www-form-urlencoded
+
+###
+# @prompt username
+# @prompt password Your one-time password in your mailbox
+POST https://{{host}}/connect/token HTTP/1.1
+Content-Type: {{contentType}}
+
+username={{username}}
+&password={{password}}
+&grant_type=password
+&client_id=Demo_App
+# {
+#     "username": "{{username}}",
+#     "password": "{{password}}",
+#     "grant_type" : "password"
+# }
