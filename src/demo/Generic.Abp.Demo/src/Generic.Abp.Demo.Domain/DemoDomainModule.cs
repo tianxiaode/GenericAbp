@@ -1,17 +1,16 @@
 ﻿using Generic.Abp.Demo.MultiTenancy;
-using Generic.Abp.Enumeration;
-using Generic.Abp.Identity;
 using Generic.Abp.PhoneLogin;
+using Generic.Abp.PhoneLogin.IdentityServer;
 using Volo.Abp.AuditLogging;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.Identity;
+using Volo.Abp.IdentityServer;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
-using Volo.Abp.OpenIddict;
 using Volo.Abp.PermissionManagement.Identity;
-using Volo.Abp.PermissionManagement.OpenIddict;
+using Volo.Abp.PermissionManagement.IdentityServer;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.TenantManagement;
 
@@ -23,13 +22,13 @@ namespace Generic.Abp.Demo
         typeof(AbpBackgroundJobsDomainModule),
         typeof(AbpFeatureManagementDomainModule),
         typeof(AbpIdentityDomainModule),
-        typeof(AbpOpenIddictDomainModule),
-        typeof(AbpPermissionManagementDomainOpenIddictModule),
+        typeof(AbpIdentityServerDomainModule),
+        typeof(AbpPermissionManagementDomainIdentityServerModule),
         typeof(AbpPermissionManagementDomainIdentityModule),
         typeof(AbpSettingManagementDomainModule),
         typeof(AbpTenantManagementDomainModule),
         typeof(GenericAbpPhoneLoginDomainModule),
-        typeof(GenericAbpIdentityDomainModule)
+        typeof(GenericAbpPhoneLoginIdentityServerDomainModule)
         )]
     public class DemoDomainModule : AbpModule
     {

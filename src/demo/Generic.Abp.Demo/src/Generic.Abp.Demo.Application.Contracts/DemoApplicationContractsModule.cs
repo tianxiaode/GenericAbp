@@ -1,7 +1,7 @@
 ﻿using Generic.Abp.Enumeration;
 using Generic.Abp.ExtResource;
 using Generic.Abp.Identity;
-using Generic.Abp.OpenIddict;
+using Generic.Abp.IdentityServer;
 using Volo.Abp.Account;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.Identity;
@@ -25,7 +25,7 @@ namespace Generic.Abp.Demo
         typeof(GenericAbpExtResourceApplicationContractsModule),
         typeof(GenericAbpIdentityApplicationContractsModule),
         typeof(GenericAbpEnumerationApplicationContractsModule),
-        typeof(GenericAbpOpenIddictApplicationContractsModule)
+        typeof(GenericAbpIdentityServerApplicationContractsModule)
     )]
     public class DemoApplicationContractsModule : AbpModule
     {

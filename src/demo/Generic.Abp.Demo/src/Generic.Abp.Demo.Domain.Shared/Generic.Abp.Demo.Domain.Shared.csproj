@@ -10,7 +10,6 @@
 
   <ItemGroup>
     <PackageReference Include="Volo.Abp.Identity.Domain.Shared" Version="$(AbpVersion)" />
-    <PackageReference Include="Volo.Abp.OpenIddict.Domain.Shared" Version="$(AbpVersion)" />
     <PackageReference Include="Volo.Abp.BackgroundJobs.Domain.Shared" Version="$(AbpVersion)" />
     <PackageReference Include="Volo.Abp.AuditLogging.Domain.Shared" Version="$(AbpVersion)" />
     <PackageReference Include="Volo.Abp.TenantManagement.Domain.Shared" Version="$(AbpVersion)" />
@@ -31,7 +30,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\modules\enumeration\src\Generic.Abp.Enumeration.Domain.Shared\Generic.Abp.Enumeration.Domain.Shared.csproj" />
     <ProjectReference Include="..\..\..\..\modules\identity\src\Generic.Abp.Identity.Domain.Shared\Generic.Abp.Identity.Domain.Shared.csproj" />
-    <ProjectReference Include="..\..\..\..\modules\openiddict\src\Generic.Abp.OpenIddict.Domain.Shared\Generic.Abp.OpenIddict.Domain.Shared.csproj" />
+    <ProjectReference Include="..\..\..\..\modules\IdentityServer\src\Generic.Abp.IdentityServer.Domain.Shared\Generic.Abp.IdentityServer.Domain.Shared.csproj" />
     <ProjectReference Include="..\..\..\..\modules\phonelogin\src\Generic.Abp.PhoneLogin.Domain.Shared\Generic.Abp.PhoneLogin.Domain.Shared.csproj" />
   </ItemGroup>
 

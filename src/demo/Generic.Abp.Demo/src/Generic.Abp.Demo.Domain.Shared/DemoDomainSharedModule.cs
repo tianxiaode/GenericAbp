@@ -1,7 +1,7 @@
 ﻿using Generic.Abp.Demo.Localization;
 using Generic.Abp.Enumeration;
 using Generic.Abp.Identity;
-using Generic.Abp.OpenIddict;
+using Generic.Abp.IdentityServer;
 using Generic.Abp.PhoneLogin;
 using Volo.Abp.AuditLogging;
 using Volo.Abp.BackgroundJobs;
@@ -10,7 +10,6 @@ using Volo.Abp.Identity;
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.ExceptionHandling;
 using Volo.Abp.Modularity;
-using Volo.Abp.OpenIddict;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.TenantManagement;
@@ -24,13 +23,12 @@ namespace Generic.Abp.Demo
         typeof(AbpBackgroundJobsDomainSharedModule),
         typeof(AbpFeatureManagementDomainSharedModule),
         typeof(AbpIdentityDomainSharedModule),
-        typeof(AbpOpenIddictDomainSharedModule),
         typeof(AbpPermissionManagementDomainSharedModule),
         typeof(AbpSettingManagementDomainSharedModule),
         typeof(AbpTenantManagementDomainSharedModule),
         typeof(GenericAbpIdentityDomainSharedModule),
         typeof(GenericAbpEnumerationDomainSharedModule),
-        typeof(GenericAbpOpenIddictDomainSharedModule),
+        typeof(GenericAbpIdentityServerDomainSharedModule),
         typeof(GenericAbpPhoneLoginDomainSharedModule)
         )]
 

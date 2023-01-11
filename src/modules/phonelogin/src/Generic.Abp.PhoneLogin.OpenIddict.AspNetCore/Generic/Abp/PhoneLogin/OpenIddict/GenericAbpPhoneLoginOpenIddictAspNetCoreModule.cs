@@ -1,5 +1,4 @@
-﻿using Generic.Abp.PhoneLogin;
-using Volo.Abp.Modularity;
+﻿using Volo.Abp.Modularity;
 using Volo.Abp.OpenIddict;
 
 namespace Generic.Abp.PhoneLogin.OpenIddict
