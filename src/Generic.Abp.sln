@@ -151,8 +151,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Generic.Abp.PhoneLogin.Iden
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Generic.Abp.PhoneLogin.OpenIddict.AspNetCore", "modules\phonelogin\src\Generic.Abp.PhoneLogin.OpenIddict.AspNetCore\Generic.Abp.PhoneLogin.OpenIddict.AspNetCore.csproj", "{13CA9A34-3471-4C2B-AA57-3BC03C8C42CF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Generic.Abp.PhoneLogin.Web.IdentityServer", "modules\phonelogin\src\Generic.Abp.PhoneLogin.Web.IdentityServer\Generic.Abp.PhoneLogin.Web.IdentityServer.csproj", "{B3C89604-665E-45DD-9A07-63E6A1713216}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -727,18 +725,6 @@ Global
 		{13CA9A34-3471-4C2B-AA57-3BC03C8C42CF}.Release|x64.Build.0 = Release|Any CPU
 		{13CA9A34-3471-4C2B-AA57-3BC03C8C42CF}.Release|x86.ActiveCfg = Release|Any CPU
 		{13CA9A34-3471-4C2B-AA57-3BC03C8C42CF}.Release|x86.Build.0 = Release|Any CPU
-		{B3C89604-665E-45DD-9A07-63E6A1713216}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B3C89604-665E-45DD-9A07-63E6A1713216}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B3C89604-665E-45DD-9A07-63E6A1713216}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{B3C89604-665E-45DD-9A07-63E6A1713216}.Debug|x64.Build.0 = Debug|Any CPU
-		{B3C89604-665E-45DD-9A07-63E6A1713216}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{B3C89604-665E-45DD-9A07-63E6A1713216}.Debug|x86.Build.0 = Debug|Any CPU
-		{B3C89604-665E-45DD-9A07-63E6A1713216}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B3C89604-665E-45DD-9A07-63E6A1713216}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B3C89604-665E-45DD-9A07-63E6A1713216}.Release|x64.ActiveCfg = Release|Any CPU
-		{B3C89604-665E-45DD-9A07-63E6A1713216}.Release|x64.Build.0 = Release|Any CPU
-		{B3C89604-665E-45DD-9A07-63E6A1713216}.Release|x86.ActiveCfg = Release|Any CPU
-		{B3C89604-665E-45DD-9A07-63E6A1713216}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -816,7 +802,6 @@ Global
 		{3323FD39-75D1-4769-B042-2FD63E1DFD12} = {CADC631A-5813-4936-893B-EB1419984319}
 		{6858C9C5-0D7C-47F8-9025-E2F00F9EB7A3} = {CADC631A-5813-4936-893B-EB1419984319}
 		{13CA9A34-3471-4C2B-AA57-3BC03C8C42CF} = {CADC631A-5813-4936-893B-EB1419984319}
-		{B3C89604-665E-45DD-9A07-63E6A1713216} = {CADC631A-5813-4936-893B-EB1419984319}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {11F1E32E-A8BF-442B-94DB-FE8C30C1FB2A}

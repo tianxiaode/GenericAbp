@@ -120,6 +120,20 @@ Generic Abp是一套适用于[ABP Framework](https://github.com/abpframework/abp
 - 为用户添加了锁定策略和密码策略的配置接口
 - 增加了一些用户管理接口
 
+### Generic.Abp.PhoneLogin
+
+为应用添加手机验证。
+
+#### OpenIddict
+
+- 在应用的`Domain.Shared`模块引用`Generic.Abp.PhoneLogin.Domain.Shared`
+- 在应用的`Domain`模块引用`Generic.Abp.PhoneLogin.Domain`
+- 在应用的`Web`模块引用`Generic.Abp.PhoneLogin.Account.Web`和`Generic.Abp.PhoneLogin.OpenIddict.AspNetCore`
+
+#### IdenttityServer
+
+
+
 ## 引用
 
 - [Sencha](https://www.sencha.com)

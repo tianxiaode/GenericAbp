@@ -10,6 +10,7 @@ using Volo.Abp.Identity;
 using Volo.Abp.IdentityServer.AspNetIdentity;
 using Volo.Abp.IdentityServer.Localization;
 using Volo.Abp.Validation;
+using IdentityUser = Volo.Abp.Identity.IdentityUser;
 
 namespace Generic.Abp.PhoneLogin.IdentityServer.AspNetIdentity
 {
@@ -17,26 +18,21 @@ namespace Generic.Abp.PhoneLogin.IdentityServer.AspNetIdentity
     {
         public PhoneLoginResourceOwnerPasswordValidator(
             PhoneLoginUserManager userManager,
-            SignInManager<Volo.Abp.Identity.IdentityUser> signInManager,
+            SignInManager<IdentityUser> signInManager,
             IdentitySecurityLogManager identitySecurityLogManager,
-            ILogger<ResourceOwnerPasswordValidator<Volo.Abp.Identity.IdentityUser>> logger,
+            ILogger<ResourceOwnerPasswordValidator<IdentityUser>> logger,
             IStringLocalizer<AbpIdentityServerResource> localizer,
             IOptions<AbpIdentityOptions> abpIdentityOptions,
             IServiceScopeFactory serviceScopeFactory,
             IOptions<IdentityOptions> identityOptions) :
-           base(
-               userManager, signInManager, identitySecurityLogManager, logger, localizer, abpIdentityOptions, serviceScopeFactory, identityOptions)
+            base(userManager, signInManager, identitySecurityLogManager, logger, localizer, abpIdentityOptions, serviceScopeFactory, identityOptions)
         {
             PhoneLoginUserManager = userManager;
         }
-
         protected PhoneLoginUserManager PhoneLoginUserManager { get; }
+
         protected override async Task ReplaceEmailToUsernameOfInputIfNeeds(ResourceOwnerPasswordValidationContext context)
         {
-            if (!ValidationHelper.IsValidEmailAddress(context.UserName))
-            {
-                return;
-            }
 
             var userByUsername = await UserManager.FindByNameAsync(context.UserName);
             if (userByUsername != null)
@@ -44,23 +40,25 @@ namespace Generic.Abp.PhoneLogin.IdentityServer.AspNetIdentity
                 return;
             }
 
-            var userByEmail = await UserManager.FindByEmailAsync(context.UserName);
-            if (userByEmail != null)
-            {
-                context.UserName = userByEmail.UserName;
-                return;
-            }
-
             var userByPhone = await PhoneLoginUserManager.FindByPhoneAsync(context.UserName);
             if (userByPhone != null)
             {
-                context.UserName = userByPhone.PhoneNumber;
+                context.UserName = userByPhone.UserName;
                 return;
             }
 
-            return;
+            if (!ValidationHelper.IsValidEmailAddress(context.UserName))
+            {
+                return;
+            }
 
+            var userByEmail = await UserManager.FindByEmailAsync(context.UserName);
+            if (userByEmail == null)
+            {
+                return;
+            }
 
+            context.UserName = userByEmail.UserName;
         }
 
     }

@@ -68,9 +68,16 @@ $projects = (
     # modules/openiddict
     "modules/openiddict/src/Generic.Abp.OpenIddict.Domain.Shared",
     "modules/openiddict/src/Generic.Abp.OpenIddict.Application.Contracts",
-    "modules/openiddict/src/Generic.Abp.OpenIddict.Application"
+    "modules/openiddict/src/Generic.Abp.OpenIddict.Application",
     "modules/openiddict/src/Generic.Abp.OpenIddict.HttpApi",
-    "modules/openiddict/src/Generic.Abp.OpenIddict.Web"
+    "modules/openiddict/src/Generic.Abp.OpenIddict.Web",
+
+    # modules/phonelogin
+    "modules/phonelogin/src/Generic.Abp.PhoneLogin.Domain.Shared",
+    "modules/phonelogin/src/Generic.Abp.PhoneLogin.Domain",
+    "modules/phonelogin/src/Generic.Abp.PhoneLogin.IdentityServer.Domain",
+    "modules/phonelogin/src/Generic.Abp.PhoneLogin.Account.Web",
+    "modules/phonelogin/src/Generic.Abp.PhoneLogin.OpenIddict.AspNetCore"
 
     # modules/themes
     # "modules/themes/src/Generic.Abp.Themes.Shared",

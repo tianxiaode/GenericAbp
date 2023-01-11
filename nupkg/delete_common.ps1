@@ -71,6 +71,12 @@ $packages = (
     "Generic.Abp.OpenIddict.HttpApi",
     "Generic.Abp.OpenIddict.Web"
 
+    # modules/phonelogin
+    "Generic.Abp.PhoneLogin.Domain.Shared",
+    "Generic.Abp.PhoneLogin.Domain",
+    "Generic.Abp.PhoneLogin.IdentityServer.Domain",
+    "Generic.Abp.PhoneLogin.Account.Web",
+    "Generic.Abp.PhoneLogin.OpenIddict.AspNetCore"
 
     # modules/themes
     #"Generic.Abp.Themes.Shared",

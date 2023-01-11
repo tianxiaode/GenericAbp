@@ -18,7 +18,8 @@ $solutionPaths = (
     "../src/modules/identity",
     "../src/modules/IdentityServer",
     "../src/modules/FileManagement",
-    "../src/modules/openiddict"
+    "../src/modules/openiddict",
+    "../src/modules/phonelogin"
     # "../src/modules/themes",
     # "../src/modules/account"
 )

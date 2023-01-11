@@ -11,11 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Generic.Abp.PhoneLogin.Doma
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Generic.Abp.PhoneLogin.OpenIddict.AspNetCore", "src\Generic.Abp.PhoneLogin.OpenIddict.AspNetCore\Generic.Abp.PhoneLogin.OpenIddict.AspNetCore.csproj", "{4FB636C9-852B-4BFB-A507-C09E5C804C43}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Generic.Abp.PhoneLogin.IdentityServer", "src\Generic.Abp.PhoneLogin.IdentityServer\Generic.Abp.PhoneLogin.IdentityServer.csproj", "{27B7EAB4-45E3-49FC-B75D-68AFE14B8E1E}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Generic.Abp.PhoneLogin.Web.IdentityServer", "src\Generic.Abp.PhoneLogin.Web.IdentityServer\Generic.Abp.PhoneLogin.Web.IdentityServer.csproj", "{99DE75D3-E84B-44F0-9351-6E70F4F80164}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Generic.Abp.PhoneLogin.Account.Web", "src\Generic.Abp.PhoneLogin.Account.Web\Generic.Abp.PhoneLogin.Account.Web.csproj", "{5C9B9A42-F755-4E4C-AB76-974C9043EF11}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Generic.Abp.PhoneLogin.IdentityServer.Domain", "src\Generic.Abp.PhoneLogin.IdentityServer.Domain\Generic.Abp.PhoneLogin.IdentityServer.Domain.csproj", "{C13AF224-E7E5-4185-B0B1-C36584096BFB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,18 +33,14 @@ Global
 		{4FB636C9-852B-4BFB-A507-C09E5C804C43}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4FB636C9-852B-4BFB-A507-C09E5C804C43}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4FB636C9-852B-4BFB-A507-C09E5C804C43}.Release|Any CPU.Build.0 = Release|Any CPU
-		{27B7EAB4-45E3-49FC-B75D-68AFE14B8E1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{27B7EAB4-45E3-49FC-B75D-68AFE14B8E1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{27B7EAB4-45E3-49FC-B75D-68AFE14B8E1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{27B7EAB4-45E3-49FC-B75D-68AFE14B8E1E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{99DE75D3-E84B-44F0-9351-6E70F4F80164}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{99DE75D3-E84B-44F0-9351-6E70F4F80164}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{99DE75D3-E84B-44F0-9351-6E70F4F80164}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{99DE75D3-E84B-44F0-9351-6E70F4F80164}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5C9B9A42-F755-4E4C-AB76-974C9043EF11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5C9B9A42-F755-4E4C-AB76-974C9043EF11}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5C9B9A42-F755-4E4C-AB76-974C9043EF11}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5C9B9A42-F755-4E4C-AB76-974C9043EF11}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C13AF224-E7E5-4185-B0B1-C36584096BFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C13AF224-E7E5-4185-B0B1-C36584096BFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C13AF224-E7E5-4185-B0B1-C36584096BFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C13AF224-E7E5-4185-B0B1-C36584096BFB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -55,9 +49,8 @@ Global
 		{92728AE4-7B13-48A6-99EA-9B2257C2A9D1} = {FFC6B7B8-4287-49F8-A9AE-83FDD8648A94}
 		{4D07B136-34F8-4EE6-85A5-95714EF40E4F} = {FFC6B7B8-4287-49F8-A9AE-83FDD8648A94}
 		{4FB636C9-852B-4BFB-A507-C09E5C804C43} = {FFC6B7B8-4287-49F8-A9AE-83FDD8648A94}
-		{27B7EAB4-45E3-49FC-B75D-68AFE14B8E1E} = {FFC6B7B8-4287-49F8-A9AE-83FDD8648A94}
-		{99DE75D3-E84B-44F0-9351-6E70F4F80164} = {FFC6B7B8-4287-49F8-A9AE-83FDD8648A94}
 		{5C9B9A42-F755-4E4C-AB76-974C9043EF11} = {FFC6B7B8-4287-49F8-A9AE-83FDD8648A94}
+		{C13AF224-E7E5-4185-B0B1-C36584096BFB} = {FFC6B7B8-4287-49F8-A9AE-83FDD8648A94}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EB74D00B-3F71-46D4-9A9E-35449B3C55C1}
