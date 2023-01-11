@@ -27,15 +27,14 @@ namespace Generic.Abp.PhoneLogin.Account.Web.Areas.Account.Controllers
     {
         public PhoneLoginAccountController(
             SignInManager<IdentityUser> signInManager,
-            IdentityUserManager userManager,
+            PhoneLoginUserManager userManager,
             ISettingProvider settingProvider,
             IdentitySecurityLogManager identitySecurityLogManager,
-            IOptions<IdentityOptions> identityOptions,
-            PhoneLoginUserManager phoneLoginUserManager) :
+            IOptions<IdentityOptions> identityOptions) :
         base(signInManager, userManager, settingProvider, identitySecurityLogManager, identityOptions)
         {
             LocalizationResource = typeof(AccountResource);
-            PhoneLoginUserManager = phoneLoginUserManager;
+            PhoneLoginUserManager = userManager;
         }
 
         protected PhoneLoginUserManager PhoneLoginUserManager { get; }
