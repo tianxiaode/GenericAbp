@@ -122,7 +122,7 @@ Added `OpenIddict` management capabilities to [ABP Framework] (https://github.co
 
 ### Generic.Abp.PhoneLogin
 
-为应用添加手机验证。
+Add phone verification to your app.
 
 #### OpenIddict
 
