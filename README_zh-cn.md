@@ -149,3 +149,9 @@ Generic Abp是一套适用于[ABP Framework](https://github.com/abpframework/abp
 - [W2Ui](https://github.com/vitmalina/w2ui/) 
 - [SmartEnum](https://github.com/ardalis/SmartEnum)
 - [Mime Detective](https://github.com/Muraad/Mime-Detective)
+
+## 感谢
+
+<a href="https://www.jetbrains.com/?from=GenericAbp">
+    <img src="https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.png" width="200" alt="JetBrains Logo (Main) logo">
+</a>
