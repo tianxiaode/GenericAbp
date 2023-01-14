@@ -56,6 +56,7 @@
     <ProjectReference Include="..\..\..\..\modules\openiddict\src\Generic.Abp.OpenIddict.Web\Generic.Abp.OpenIddict.Web.csproj" />
     <ProjectReference Include="..\..\..\..\modules\phonelogin\src\Generic.Abp.PhoneLogin.Account.Web\Generic.Abp.PhoneLogin.Account.Web.csproj" />
     <ProjectReference Include="..\..\..\..\modules\phonelogin\src\Generic.Abp.PhoneLogin.OpenIddict.AspNetCore\Generic.Abp.PhoneLogin.OpenIddict.AspNetCore.csproj" />
+    <ProjectReference Include="..\..\..\..\modules\phonelogin\src\Generic.Abp.PhoneLogin.Web\Generic.Abp.PhoneLogin.Web.csproj" />
     <ProjectReference Include="..\Generic.Abp.Demo.Application\Generic.Abp.Demo.Application.csproj" />
     <ProjectReference Include="..\Generic.Abp.Demo.EntityFrameworkCore\Generic.Abp.Demo.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\Generic.Abp.Demo.HttpApi\Generic.Abp.Demo.HttpApi.csproj" />

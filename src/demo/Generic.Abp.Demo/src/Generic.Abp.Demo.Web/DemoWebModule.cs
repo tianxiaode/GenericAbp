@@ -39,6 +39,7 @@ using Volo.Abp.VirtualFileSystem;
 using Microsoft.AspNetCore.Extensions.DependencyInjection;
 using Generic.Abp.PhoneLogin.Web.Account;
 using Generic.Abp.PhoneLogin.OpenIddict;
+using Generic.Abp.PhoneLogin.Web;
 
 namespace Generic.Abp.Demo.Web
 {
@@ -56,7 +57,8 @@ namespace Generic.Abp.Demo.Web
         typeof(AbpSwashbuckleModule),
         typeof(GenericAbpOpenIddictWebModule),
         typeof(GenericAbpPhoneLoginAccountWebModule),
-        typeof(GenericAbpPhoneLoginOpenIddictAspNetCoreModule)
+        typeof(GenericAbpPhoneLoginOpenIddictAspNetCoreModule),
+        typeof(GenericAbpPhoneLoginWebModule)
         )]
     public class DemoWebModule : AbpModule
     {

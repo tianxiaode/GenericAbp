@@ -1,7 +1,7 @@
 {
   "culture": "en",
   "texts": {
-    "DuplicatePhoneNumber": "Phone number '{0}' is already taken.",
-    "InvalidPhoneNumber": "Phone number '{0}' is invalid.."
+    "Generic.Abp.PhoneLogin:DuplicatePhoneNumber": "Phone number '{PhoneNumber}' is already taken.",
+    "Generic.Abp.PhoneLogin:InvalidPhoneNumber": "Phone number '{PhoneNumber}' is invalid.."
   }
 }

@@ -1,7 +1,7 @@
 {
   "culture": "zh-Hans",
   "texts": {
-    "DuplicatePhoneNumber": "手机 '{0}' 已存在.",
-    "InvalidPhoneNumber": "手机 '{0}' 无效."
+    "Generic.Abp.PhoneLogin:DuplicatePhoneNumber": "手机 '{PhoneNumber}' 已存在.",
+    "Generic.Abp.PhoneLogin:InvalidPhoneNumber": "手机 '{PhoneNumber}' 无效."
   }
 }
