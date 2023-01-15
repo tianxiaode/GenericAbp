@@ -8,7 +8,6 @@ using Volo.Abp.ObjectExtending;
 namespace Generic.Abp.Identity;
 
 [Dependency(ReplaceServices = true)]
-//[ExposeServices(typeof(IdentityUserAppService), IncludeSelf = true)]
 [ExposeServices(typeof(IIdentityUserAppService), typeof(IdentityUserAppService), typeof(PhoneLoginUserAppService))]
 public class PhoneLoginUserAppService : IdentityUserAppService
 {

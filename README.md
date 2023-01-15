@@ -142,7 +142,7 @@ For a specific example, please see the branch `测试identtiyServer4手机登录
 
 Note: Authenticating to acquire a token using `REST Client` requires adding a `RedirectUris` (`https://localhost:44350/signin-oidc`) and a `CorsOrigins` (`https://localhost`) for 'Demo_App'.
 
-#### 输入验证
+#### Validation
 
 - Reference `Generic.Abp.PhoneLogin.Application` in the application's `Application` module
 - Reference `Generic.Abp.PhoneLogin.Domain` in the application's `Domain` module
