@@ -1,45 +1,27 @@
-﻿using Generic.Abp.Demo.Localization;
-using Generic.Abp.Demo.EntityFrameworkCore;
-using Generic.Abp.Demo.Web.Menus;
-using Generic.Abp.OpenIddict.Web;
+﻿using Generic.Abp.Demo.EntityFrameworkCore;
+using Generic.Abp.Demo.Localization;
 using Generic.Abp.Demo.MultiTenancy;
+using Generic.Abp.Demo.Web.Menus;
+using Generic.Abp.Metro.UI.Theme.Basic;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System.IO;
 using Microsoft.OpenApi.Models;
-using OpenIddict.Validation.AspNetCore;
+using System.IO;
+using Generic.Abp.Metro.UI.Theme.Shared;
 using Volo.Abp;
-using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.Localization;
-using Volo.Abp.AspNetCore.Mvc.UI;
-using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
-using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
-using Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy;
-using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Serilog;
-using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
-using Volo.Abp.FeatureManagement;
-using Volo.Abp.Identity.Web;
-using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
-using Volo.Abp.PermissionManagement.Web;
-using Volo.Abp.SettingManagement.Web;
 using Volo.Abp.Swashbuckle;
-using Volo.Abp.TenantManagement.Web;
-using Volo.Abp.UI.Navigation.Urls;
-using Volo.Abp.UI;
 using Volo.Abp.UI.Navigation;
+using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.VirtualFileSystem;
-using Microsoft.AspNetCore.Extensions.DependencyInjection;
-using Generic.Abp.PhoneLogin.Web.Account;
-using Generic.Abp.PhoneLogin.OpenIddict;
-using Generic.Abp.PhoneLogin.Web;
 
 namespace Generic.Abp.Demo.Web
 {
@@ -48,17 +30,9 @@ namespace Generic.Abp.Demo.Web
         typeof(DemoApplicationModule),
         typeof(DemoEntityFrameworkCoreModule),
         typeof(AbpAutofacModule),
-        typeof(AbpIdentityWebModule),
-        typeof(AbpSettingManagementWebModule),
-        typeof(AbpAccountWebOpenIddictModule),
-        typeof(AbpAspNetCoreMvcUiBasicThemeModule),
-        typeof(AbpTenantManagementWebModule),
+        typeof(GenericAbpMetroUiThemeBasicModule),
         typeof(AbpAspNetCoreSerilogModule),
-        typeof(AbpSwashbuckleModule),
-        typeof(GenericAbpOpenIddictWebModule),
-        typeof(GenericAbpPhoneLoginAccountWebModule),
-        typeof(GenericAbpPhoneLoginOpenIddictAspNetCoreModule),
-        typeof(GenericAbpPhoneLoginWebModule)
+        typeof(AbpSwashbuckleModule)
         )]
     public class DemoWebModule : AbpModule
     {
@@ -78,12 +52,12 @@ namespace Generic.Abp.Demo.Web
 
             PreConfigure<OpenIddictBuilder>(builder =>
             {
-                builder.AddValidation(options =>
-                {
-                    options.AddAudiences("Demos"); // Replace with your application name
-                    options.UseLocalServer();
-                    options.UseAspNetCore();
-                });
+                //builder.AddValidation(options =>
+                //{
+                //    options.AddAudiences("Demos"); // Replace with your application name
+                //    options.UseLocalServer();
+                //    options.UseAspNetCore();
+                //});
             });
         }
 
@@ -106,7 +80,7 @@ namespace Generic.Abp.Demo.Web
 
         private void ConfigureAuthentication(ServiceConfigurationContext context)
         {
-            context.Services.ForwardIdentityAuthenticationForBearer(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme);
+            //context.Services.ForwardIdentityAuthenticationForBearer(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme);
         }
 
         private void ConfigureUrls(IConfiguration configuration)
@@ -170,21 +144,6 @@ namespace Generic.Abp.Demo.Web
             );
         }
 
-        private void ConfigureLocalizationServices()
-        {
-            Configure<AbpLocalizationOptions>(options =>
-            {
-                options.Languages.Add(new LanguageInfo("ar", "ar", "العربية"));
-                options.Languages.Add(new LanguageInfo("cs", "cs", "Čeština"));
-                options.Languages.Add(new LanguageInfo("en", "en", "English"));
-                options.Languages.Add(new LanguageInfo("pt-BR", "pt-BR", "Português"));
-                options.Languages.Add(new LanguageInfo("ru", "ru", "Русский"));
-                options.Languages.Add(new LanguageInfo("tr", "tr", "Türkçe"));
-                options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
-                options.Languages.Add(new LanguageInfo("zh-Hant", "zh-Hant", "繁體中文"));
-            });
-        }
-
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             var app = context.GetApplicationBuilder();
@@ -206,11 +165,11 @@ namespace Generic.Abp.Demo.Web
             app.UseStaticFiles();
             app.UseRouting();
             app.UseAuthentication();
-            app.UseAbpOpenIddictValidation();
+            //app.UseAbpOpenIddictValidation();
 
             if (MultiTenancyConsts.IsEnabled)
             {
-                app.UseMultiTenancy();
+                //app.UseMultiTenancy();
             }
 
             app.UseUnitOfWork();

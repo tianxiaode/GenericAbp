@@ -32,10 +32,11 @@
 
   <ItemGroup>
     <None Include="Components\_ViewImports.cshtml" />
-    <None Include="Themes\Basic\Layouts\Account.cshtml" />
-    <None Include="Themes\Basic\Layouts\Application.cshtml" />
-    <None Include="Themes\Basic\Layouts\Empty.cshtml" />
-    <None Include="Themes\Basic\_ViewImports.cshtml" />
+    <None Include="wwwroot\libs\abp\core\abp.js" />
+    <None Include="wwwroot\libs\abp\utils\abp-utils.umd.js" />
+    <None Include="wwwroot\libs\abp\utils\abp-utils.umd.js.map" />
+    <None Include="wwwroot\libs\abp\utils\abp-utils.umd.min.js" />
+    <None Include="wwwroot\libs\abp\utils\abp-utils.umd.min.js.map" />
   </ItemGroup>
 
   <ItemGroup>
@@ -53,10 +54,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\modules\openiddict\src\Generic.Abp.OpenIddict.Web\Generic.Abp.OpenIddict.Web.csproj" />
-    <ProjectReference Include="..\..\..\..\modules\phonelogin\src\Generic.Abp.PhoneLogin.Account.Web\Generic.Abp.PhoneLogin.Account.Web.csproj" />
-    <ProjectReference Include="..\..\..\..\modules\phonelogin\src\Generic.Abp.PhoneLogin.OpenIddict.AspNetCore\Generic.Abp.PhoneLogin.OpenIddict.AspNetCore.csproj" />
-    <ProjectReference Include="..\..\..\..\modules\phonelogin\src\Generic.Abp.PhoneLogin.Web\Generic.Abp.PhoneLogin.Web.csproj" />
+    <ProjectReference Include="..\..\..\..\modules\metroui\src\Generic.Abp.Metro.UI.Theme.Basic\Generic.Abp.Metro.UI.Theme.Basic.csproj" />
     <ProjectReference Include="..\Generic.Abp.Demo.Application\Generic.Abp.Demo.Application.csproj" />
     <ProjectReference Include="..\Generic.Abp.Demo.EntityFrameworkCore\Generic.Abp.Demo.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\Generic.Abp.Demo.HttpApi\Generic.Abp.Demo.HttpApi.csproj" />
@@ -64,13 +62,8 @@
 
   <ItemGroup>
     <PackageReference Include="Volo.Abp.Autofac" Version="$(AbpVersion)" />
-    <PackageReference Include="Volo.Abp.Identity.Web" Version="$(AbpVersion)" />
-    <PackageReference Include="Volo.Abp.Account.Web.OpenIddict" Version="$(AbpVersion)" />
-    <PackageReference Include="Volo.Abp.TenantManagement.Web" Version="$(AbpVersion)" />
-    <PackageReference Include="Volo.Abp.FeatureManagement.Web" Version="$(AbpVersion)" />
     <PackageReference Include="Volo.Abp.AspNetCore.Serilog" Version="$(AbpVersion)" />
     <PackageReference Include="Volo.Abp.Swashbuckle" Version="$(AbpVersion)" />
-    <PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic" Version="$(AbpVersion)" />
   </ItemGroup>
 
 

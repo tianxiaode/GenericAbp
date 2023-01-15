@@ -1,0 +1,43 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <Import Project="..\..\..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+    <AssemblyName>Generic.Abp.Metro.UI.Theme.Basic</AssemblyName>
+    <PackageId>Generic.Abp.Metro.UI.Theme.Basic</PackageId>
+    <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <IsPackable>true</IsPackable>
+    <OutputType>Library</OutputType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="wwwroot\**\*.*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Pages\_ViewImports.cshtml" />
+    <None Include="Themes\Basic\Components\Brand\Default.cshtml" />
+    <None Include="Themes\Basic\Components\ContentTitle\Default.cshtml" />
+    <None Include="Themes\Basic\Components\MainNavbar\Default.cshtml" />
+    <None Include="Themes\Basic\Components\Menu\Default.cshtml" />
+    <None Include="Themes\Basic\Components\Menu\_MenuItem.cshtml" />
+    <None Include="Themes\Basic\Components\Toolbar\Default.cshtml" />
+    <None Include="Themes\Basic\Components\Toolbar\LanguageSwitch\Default.cshtml" />
+    <None Include="Themes\Basic\Components\Toolbar\UserMenu\Default.cshtml" />
+    <None Include="Themes\Basic\Layouts\Account.cshtml" />
+    <None Include="Themes\Basic\Layouts\Application.cshtml" />
+    <None Include="Themes\Basic\Layouts\Empty.cshtml" />
+    <None Include="Themes\Basic\_ViewImports.cshtml" />
+    <None Include="Views\_ViewImports.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Generic.Abp.Metro.UI.Theme.Shared\Generic.Abp.Metro.UI.Theme.Shared.csproj" />
+  </ItemGroup>
+
+</Project>

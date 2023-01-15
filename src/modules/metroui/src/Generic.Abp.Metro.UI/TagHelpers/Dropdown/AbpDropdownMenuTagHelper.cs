@@ -1,0 +1,12 @@
+﻿namespace Generic.Abp.Metro.UI.TagHelpers.Dropdown;
+
+public class AbpDropdownMenuTagHelper : AbpTagHelper<AbpDropdownMenuTagHelper, AbpDropdownMenuTagHelperService>
+{
+    public DropdownAlign Align { get; set; } = DropdownAlign.Start;
+
+    public AbpDropdownMenuTagHelper(AbpDropdownMenuTagHelperService tagHelperService)
+        : base(tagHelperService)
+    {
+
+    }
+}
