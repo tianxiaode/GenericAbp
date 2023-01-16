@@ -1,4 +1,6 @@
-﻿namespace Generic.Abp.Metro.UI.Theme.Shared;
+﻿using System.Collections.Generic;
+
+namespace Generic.Abp.Metro.UI.Theme.Shared;
 
 public class MetroErrorPageOptions
 {

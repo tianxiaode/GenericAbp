@@ -1,9 +1,10 @@
+using System;
+using System.Threading.Tasks;
 using Generic.Abp.Metro.UI.MultiTenancy.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.MultiTenancy;
-using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 using Volo.Abp.MultiTenancy;
 
@@ -61,7 +62,6 @@ public class TenantSwitchModalModel : AbpPageModel
 
     public class TenantInfoModel
     {
-        [InputInfoText("SwitchTenantHint")]
         public string Name { get; set; }
     }
 }

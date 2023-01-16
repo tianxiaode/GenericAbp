@@ -1,5 +1,5 @@
 ﻿@model Generic.Abp.Metro.UI.Theme.Shared.Pages.Shared.Components.AbpPageToolbar.Button.MetroPageToolbarButtonViewComponent.MetroPageToolbarButtonViewModel
-<button class="button @Model.Type" name="@Model.Name" icon="@Model.Icon" id="@Model.Id" busy-text="@Model.BusyText" disabled="@Model.Disabled">
+<button class="button @Model.Type @Model.Size" name="@Model.Name" icon="@Model.Icon" id="@Model.Id" busy-text="@Model.BusyText" disabled="@Model.Disabled">
     @if (!Model.Icon.IsNullOrWhiteSpace())
     {
         <span class="@Model.Icon"></span>

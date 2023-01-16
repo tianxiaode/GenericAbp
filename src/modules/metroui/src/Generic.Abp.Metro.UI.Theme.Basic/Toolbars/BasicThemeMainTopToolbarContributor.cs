@@ -1,4 +1,5 @@
-﻿using Generic.Abp.Metro.UI.Theme.Basic.Themes.Basic.Components.Toolbar.LanguageSwitch;
+﻿using System.Threading.Tasks;
+using Generic.Abp.Metro.UI.Theme.Basic.Themes.Basic.Components.Toolbar.LanguageSwitch;
 using Generic.Abp.Metro.UI.Theme.Basic.Themes.Basic.Components.Toolbar.UserMenu;
 using Generic.Abp.Metro.UI.Theme.Shared.Toolbars;
 using Microsoft.Extensions.DependencyInjection;

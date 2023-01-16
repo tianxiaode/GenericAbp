@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Threading.Tasks;
+using Generic.Abp.Metro.UI.TagHelpers;
+using Generic.Abp.Metro.UI.TagHelpers.Button;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc;
-using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers;
-using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Button;
 using Volo.Abp.Localization;
 
 namespace Generic.Abp.Metro.UI.Theme.Shared.Pages.Shared.Components.AbpPageToolbar.Button;
@@ -22,10 +23,10 @@ public class MetroPageToolbarButtonViewComponent : AbpViewComponent
         string name,
         string icon,
         string id,
-        ILocalizableString? busyText,
+        ILocalizableString busyText,
         FontIconType iconType,
-        AbpButtonType type,
-        AbpButtonSize size,
+        MetroButtonType type,
+        MetroButtonSize size,
         bool disabled)
     {
         Check.NotNull(text, nameof(text));
@@ -54,8 +55,8 @@ public class MetroPageToolbarButtonViewComponent : AbpViewComponent
         public string Id { get; }
         public string BusyText { get; }
         public FontIconType IconType { get; }
-        public AbpButtonType Type { get; }
-        public AbpButtonSize Size { get; }
+        public MetroButtonType Type { get; }
+        public MetroButtonSize Size { get; }
         public bool Disabled { get; }
 
         public MetroPageToolbarButtonViewModel(
@@ -65,8 +66,8 @@ public class MetroPageToolbarButtonViewComponent : AbpViewComponent
             string id,
             string busyText,
             FontIconType iconType,
-            AbpButtonType type,
-            AbpButtonSize size,
+            MetroButtonType type,
+            MetroButtonSize size,
             bool disabled)
         {
             Text = text;

@@ -4,10 +4,9 @@
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
+    <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
     <IsPackable>true</IsPackable>
     <OutputType>Library</OutputType>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
     <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
     <RootNamespace />
   </PropertyGroup>

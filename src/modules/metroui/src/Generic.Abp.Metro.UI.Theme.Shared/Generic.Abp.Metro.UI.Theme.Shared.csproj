@@ -4,10 +4,9 @@
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
+    <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
     <IsPackable>true</IsPackable>
     <OutputType>Library</OutputType>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
     <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
   </PropertyGroup>
 
@@ -23,12 +22,10 @@
     <None Include="Views\_ViewStart.cshtml" />
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Widgets" Version="$(AbpVersion)" />
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Generic.Abp.Metro.UI.Packages\Generic.Abp.Metro.UI.Packages.csproj" />
+    <ProjectReference Include="..\Generic.Abp.Metro.UI.Widgets\Generic.Abp.Metro.UI.Widgets.csproj" />
     <ProjectReference Include="..\Generic.Abp.Metro.UI\Generic.Abp.Metro.UI.csproj" />
   </ItemGroup>
 

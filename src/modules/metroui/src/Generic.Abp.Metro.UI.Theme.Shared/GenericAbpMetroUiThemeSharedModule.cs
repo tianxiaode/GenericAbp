@@ -1,9 +1,9 @@
-﻿using Generic.Abp.Metro.UI.Packages;
+﻿using Generic.Abp.Metro.UI.Bundling;
+using Generic.Abp.Metro.UI.Packages;
 using Generic.Abp.Metro.UI.Theme.Shared.Bundling;
 using Generic.Abp.Metro.UI.Theme.Shared.ProxyScripting.Generators;
+using Generic.Abp.Metro.UI.Widgets;
 using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
-using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
 using Volo.Abp.Http.ProxyScripting.Configuration;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
@@ -11,9 +11,9 @@ using Volo.Abp.VirtualFileSystem;
 namespace Generic.Abp.Metro.UI.Theme.Shared;
 
 [DependsOn(
-    typeof(AbpAspNetCoreMvcUiWidgetsModule),
+    typeof(GenericAbpMetroUiModule),
     typeof(GenericAbpMetroUiPackagesModule),
-    typeof(GenericAbpMetroUiModule)
+typeof(GenericAbpMetroUiWidgetsModule)
 
     )]
 public class GenericAbpMetroUiThemeSharedModule : AbpModule
@@ -43,11 +43,17 @@ public class GenericAbpMetroUiThemeSharedModule : AbpModule
         {
             options
                 .StyleBundles
-                .Add(StandardBundles.Styles.Global, bundle => { bundle.AddContributors(typeof(SharedThemeGlobalStyleContributor)); });
+                .Add(StandardBundles.Styles.Global, bundle =>
+                    {
+                        bundle.AddContributors(typeof(SharedThemeGlobalStyleContributor));
+
+                    }
+                );
 
             options
                 .ScriptBundles
-                .Add(StandardBundles.Scripts.Global, bundle => bundle.AddContributors(typeof(SharedThemeGlobalScriptContributor)));
+                .Add(StandardBundles.Scripts.Global,
+                    bundle => bundle.AddContributors(typeof(SharedThemeGlobalScriptContributor)));
         });
     }
 }
