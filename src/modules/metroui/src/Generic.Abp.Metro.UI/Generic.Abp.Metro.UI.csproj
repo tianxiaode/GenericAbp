@@ -4,17 +4,21 @@
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
-    <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
-    <AssemblyName>Generic.Abp.Metro.UI</AssemblyName>
-    <PackageId>Generic.Abp.Metro.UI</PackageId>
-    <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
     <IsPackable>true</IsPackable>
     <OutputType>Library</OutputType>
-
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Bundling.Abstractions" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.Minify" Version="$(AbpVersion)" />
     <PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI" Version="$(AbpVersion)" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Folder Include="TagHelpers\" />
   </ItemGroup>
 
 </Project>

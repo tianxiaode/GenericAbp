@@ -185,7 +185,6 @@ namespace Generic.Abp.Helper.MimeDetective
         ///     GetFileType(() => bytes); 
         ///     
         /// </remarks>
-        /// <param name="file">The FileInfo object.</param>
         /// <param name="bytes"></param>
         /// <param name="allowFileTypes">允许的文件类型</param>
         /// <returns>FileType or null not identified</returns>
@@ -200,7 +199,6 @@ namespace Generic.Abp.Helper.MimeDetective
         /// Return null in case when the file type is not identified. 
         /// Throws Application exception if the file can not be read or does not exist
         /// </summary>
-        /// <param name="file">The FileInfo object.</param>
         /// <param name="stream"></param>
         /// <param name="allowFileTypes">允许的文件类型</param>
         /// <returns>FileType or null not identified</returns>
@@ -314,7 +312,7 @@ namespace Generic.Abp.Helper.MimeDetective
         /// where list of files provided by string with Comma-Separated-Values of extensions
         /// </summary>
         /// <param name="file">The file.</param>
-        /// <param name="requiredTypes">The required types.</param>
+        /// <param name="CSV"></param>
         /// <returns>
         ///   <c>true</c> if file of the one of the provided types; otherwise, <c>false</c>.
         /// </returns>

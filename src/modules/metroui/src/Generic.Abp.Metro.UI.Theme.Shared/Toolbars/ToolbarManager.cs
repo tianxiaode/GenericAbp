@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc.UI.Theming;
 using Volo.Abp.Authorization.Permissions;
@@ -14,12 +10,12 @@ namespace Generic.Abp.Metro.UI.Theme.Shared.Toolbars;
 public class ToolbarManager : IToolbarManager, ITransientDependency
 {
     protected IThemeManager ThemeManager { get; }
-    protected AbpToolbarOptions Options { get; }
+    protected MetroToolbarOptions Options { get; }
     protected IServiceProvider ServiceProvider { get; }
     protected ISimpleStateCheckerManager<ToolbarItem> SimpleStateCheckerManager { get; }
 
     public ToolbarManager(
-        IOptions<AbpToolbarOptions> options,
+        IOptions<MetroToolbarOptions> options,
         IServiceProvider serviceProvider,
         IThemeManager themeManager,
         ISimpleStateCheckerManager<ToolbarItem> simpleStateCheckerManager)
@@ -54,10 +50,10 @@ public class ToolbarManager : IToolbarManager, ITransientDependency
 
     protected virtual async Task CheckPermissionsAsync(IServiceProvider serviceProvider, Toolbar toolbar)
     {
-        foreach (var item in toolbar.Items.Where(x => !x.RequiredPermissionName.IsNullOrWhiteSpace()))
-        {
-            item.RequirePermissions(item.RequiredPermissionName);
-        }
+        //foreach (var item in toolbar.Items.Where(x => !x.RequiredPermissionName.IsNullOrWhiteSpace()))
+        //{
+        //    item.RequirePermissions(item.RequiredPermissionName);
+        //}
 
         var checkPermissionsToolbarItems = toolbar.Items.Where(x => x.StateCheckers.Any()).ToArray();
         if (checkPermissionsToolbarItems.Any())

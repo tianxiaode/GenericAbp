@@ -22,9 +22,9 @@ public static class AbpTagHelperAttributeListExtensions
         }
         else
         {
-            var existingClasses = classAttribute.Value.ToString().Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+            var existingClasses = classAttribute.Value.ToString()?.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).ToList();
             existingClasses.AddIfNotContains(className);
-            attributes.SetAttribute("class", string.Join(" ", existingClasses));
+            if (existingClasses != null) attributes.SetAttribute("class", string.Join(" ", existingClasses));
         }
     }
 
@@ -41,8 +41,8 @@ public static class AbpTagHelperAttributeListExtensions
             return;
         }
 
-        var classList = classAttribute.Value.ToString().Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).ToList();
-        classList.RemoveAll(c => c == className);
+        var classList = classAttribute.Value.ToString()?.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+        classList?.RemoveAll(c => c == className);
 
         attributes.SetAttribute("class", classList.JoinAsString(" "));
     }

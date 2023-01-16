@@ -27,7 +27,7 @@ namespace Generic.Abp.Metro.UI.Theme.Shared.ProxyScripting.Generators
             }
         }
 
-        public static string GenerateHeaders(ActionApiDescriptionModel action, int indent = 0)
+        public static string? GenerateHeaders(ActionApiDescriptionModel action, int indent = 0)
         {
             var parameters = action
                 .Parameters
@@ -42,7 +42,7 @@ namespace Generic.Abp.Metro.UI.Theme.Shared.ProxyScripting.Generators
             return ProxyScriptingJsFuncHelper.CreateJsObjectLiteral(parameters, indent);
         }
 
-        public static string GenerateBody(ActionApiDescriptionModel action)
+        public static string? GenerateBody(ActionApiDescriptionModel action)
         {
             var parameters = action
                 .Parameters
@@ -64,7 +64,7 @@ namespace Generic.Abp.Metro.UI.Theme.Shared.ProxyScripting.Generators
             return ProxyScriptingJsFuncHelper.GetParamNameInJsFunc(parameters[0]);
         }
 
-        public static string GenerateFormPostData(ActionApiDescriptionModel action, int indent = 0)
+        public static string? GenerateFormPostData(ActionApiDescriptionModel action, int indent = 0)
         {
             var parameters = action
                 .Parameters

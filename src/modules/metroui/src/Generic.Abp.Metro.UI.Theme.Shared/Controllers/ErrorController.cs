@@ -18,14 +18,14 @@ public class ErrorController : AbpController
     private readonly IExceptionToErrorInfoConverter _errorInfoConverter;
     private readonly IHttpExceptionStatusCodeFinder _statusCodeFinder;
     private readonly IStringLocalizer<AbpUiResource> _localizer;
-    private readonly AbpErrorPageOptions _abpErrorPageOptions;
+    private readonly MetroErrorPageOptions _abpMetroErrorPageOptions;
     private readonly IExceptionNotifier _exceptionNotifier;
     private readonly AbpExceptionHandlingOptions _exceptionHandlingOptions;
 
     public ErrorController(
         IExceptionToErrorInfoConverter exceptionToErrorInfoConverter,
         IHttpExceptionStatusCodeFinder httpExceptionStatusCodeFinder,
-        IOptions<AbpErrorPageOptions> abpErrorPageOptions,
+        IOptions<MetroErrorPageOptions> abpErrorPageOptions,
         IStringLocalizer<AbpUiResource> localizer,
         IExceptionNotifier exceptionNotifier,
         IOptions<AbpExceptionHandlingOptions> exceptionHandlingOptions)
@@ -35,7 +35,7 @@ public class ErrorController : AbpController
         _localizer = localizer;
         _exceptionNotifier = exceptionNotifier;
         _exceptionHandlingOptions = exceptionHandlingOptions.Value;
-        _abpErrorPageOptions = abpErrorPageOptions.Value;
+        _abpMetroErrorPageOptions = abpErrorPageOptions.Value;
     }
 
     public async Task<IActionResult> Index(int httpStatusCode)
@@ -63,7 +63,7 @@ public class ErrorController : AbpController
 
         var page = GetErrorPageUrl(httpStatusCode);
 
-        return View(page, new AbpErrorViewModel
+        return View(page, new MetroErrorViewModel
         {
             ErrorInfo = errorInfo,
             HttpStatusCode = httpStatusCode
@@ -72,7 +72,7 @@ public class ErrorController : AbpController
 
     private string GetErrorPageUrl(int statusCode)
     {
-        var page = _abpErrorPageOptions.ErrorViewUrls.GetOrDefault(statusCode.ToString());
+        var page = _abpMetroErrorPageOptions.ErrorViewUrls.GetOrDefault(statusCode.ToString());
 
         if (string.IsNullOrWhiteSpace(page))
         {

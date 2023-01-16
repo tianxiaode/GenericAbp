@@ -5,16 +5,16 @@ using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
 using Volo.Abp.Http.ProxyScripting.Configuration;
-using Volo.Abp.Http.ProxyScripting.Generators.JQuery;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
 
 namespace Generic.Abp.Metro.UI.Theme.Shared;
 
 [DependsOn(
-    typeof(GenericAbpMetroUiModule),
+    typeof(AbpAspNetCoreMvcUiWidgetsModule),
     typeof(GenericAbpMetroUiPackagesModule),
-    typeof(AbpAspNetCoreMvcUiWidgetsModule)
+    typeof(GenericAbpMetroUiModule)
+
     )]
 public class GenericAbpMetroUiThemeSharedModule : AbpModule
 {

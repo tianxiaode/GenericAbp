@@ -2,7 +2,6 @@
 using Generic.Abp.Demo.Localization;
 using Generic.Abp.Demo.MultiTenancy;
 using Generic.Abp.Demo.Web.Menus;
-using Generic.Abp.Metro.UI.Theme.Basic;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -10,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using System.IO;
+using Generic.Abp.Metro.UI.Theme.Basic;
 using Generic.Abp.Metro.UI.Theme.Shared;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc;
@@ -169,7 +169,7 @@ namespace Generic.Abp.Demo.Web
 
             if (MultiTenancyConsts.IsEnabled)
             {
-                //app.UseMultiTenancy();
+                app.UseMultiTenancy();
             }
 
             app.UseUnitOfWork();

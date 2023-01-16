@@ -133,10 +133,10 @@ namespace Generic.Abp.Metro.UI.Theme.Shared.ProxyScripting.Generators
             script.AppendLine("    };");
         }
 
-        private static string FindBestApiVersion(ActionApiDescriptionModel action)
+        private static string? FindBestApiVersion(ActionApiDescriptionModel action)
         {
             //var configuredVersion = GetConfiguredApiVersion(); //TODO: Implement
-            string configuredVersion = null;
+            string? configuredVersion = null;
 
             if (action.SupportedVersions.IsNullOrEmpty())
             {

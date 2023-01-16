@@ -12,7 +12,8 @@ namespace Generic.Abp.IdentityServer.Web.Pages.IdentityServer.Clients
         {
             ClientAppService = clientAppService;
             ClaimTypeAppService = claimTypeAppService;
-            Claim = new ClaimViewModel(){};
+            ClaimTypes = new List<SelectListItem>();
+            Claim = new ClaimViewModel() { };
         }
 
         [BindProperty]
@@ -26,8 +27,8 @@ namespace Generic.Abp.IdentityServer.Web.Pages.IdentityServer.Clients
         public async Task<IActionResult> OnGetAsync(Guid foreignKeyId)
         {
             Claim = new ClaimViewModel(foreignKeyId);
-            ClaimTypes = (await ClaimTypeAppService.GetListAsync()).Items.Select(m=>new SelectListItem(m.Name, m.Name)).ToList();
-            return await Task.FromResult(Page()) ;
+            ClaimTypes = (await ClaimTypeAppService.GetListAsync()).Items.Select(m => new SelectListItem(m.Name, m.Name)).ToList();
+            return await Task.FromResult(Page());
 
         }
 
@@ -37,15 +38,15 @@ namespace Generic.Abp.IdentityServer.Web.Pages.IdentityServer.Clients
 
             await ClientAppService.AddClaimAsync(Claim.ForeignKeyId, new ClientClaimCreateInput
             {
-                Type =Claim.Type,
+                Type = Claim.Type,
                 Value = Claim.Value
             });
 
             return NoContent();
         }
 
-        public class ClaimViewModel: ClientClaimCreateInput
-        {           
+        public class ClaimViewModel : ClientClaimCreateInput
+        {
             public ClaimViewModel()
             {
                 ForeignKeyId = Guid.NewGuid();

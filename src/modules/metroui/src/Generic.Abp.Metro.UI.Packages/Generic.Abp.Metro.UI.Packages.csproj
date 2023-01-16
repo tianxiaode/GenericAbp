@@ -4,11 +4,11 @@
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
-    <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
-    <AssemblyName>Generic.Abp.Metro.UI.Packages</AssemblyName>
-    <PackageId>Generic.Abp.Metro.UI.Packages</PackageId>
     <IsPackable>true</IsPackable>
     <OutputType>Library</OutputType>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
     <RootNamespace />
   </PropertyGroup>
 

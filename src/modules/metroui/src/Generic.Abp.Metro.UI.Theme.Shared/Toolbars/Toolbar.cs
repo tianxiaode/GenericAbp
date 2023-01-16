@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 using Volo.Abp;
 
 namespace Generic.Abp.Metro.UI.Theme.Shared.Toolbars;

@@ -9,6 +9,8 @@ namespace Generic.Abp.OpenIddict.Web.Pages.OpenIddict.Applications
     {
         public EditModalModel(IApplicationAppService applicationAppService)
         {
+            ApplicationTypes = new List<SelectListItem>();
+            ApplicationConsentType = new List<SelectListItem>();
             ApplicationAppService = applicationAppService;
             Application = new ApplicationVieModel();
         }

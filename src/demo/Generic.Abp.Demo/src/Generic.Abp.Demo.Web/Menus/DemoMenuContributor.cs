@@ -1,5 +1,6 @@
 ﻿using Generic.Abp.Demo.Localization;
 using System.Threading.Tasks;
+using Generic.Abp.Demo.MultiTenancy;
 using Volo.Abp.UI.Navigation;
 
 namespace Generic.Abp.Demo.Web.Menus
@@ -30,14 +31,14 @@ namespace Generic.Abp.Demo.Web.Menus
                 )
             );
 
-            //if (MultiTenancyConsts.IsEnabled)
-            //{
-            //    administration.SetSubItemOrder(TenantManagementMenuNames.GroupName, 1);
-            //}
-            //else
-            //{
-            //    administration.TryRemoveMenuItem(TenantManagementMenuNames.GroupName);
-            //}
+            if (MultiTenancyConsts.IsEnabled)
+            {
+                //administration.SetSubItemOrder(TenantManagementMenuNames.GroupName, 1);
+            }
+            else
+            {
+                //administration.TryRemoveMenuItem(TenantManagementMenuNames.GroupName);
+            }
 
             //administration.SetSubItemOrder(IdentityMenuNames.GroupName, 2);
             //administration.SetSubItemOrder(SettingManagementMenuNames.GroupName, 3);

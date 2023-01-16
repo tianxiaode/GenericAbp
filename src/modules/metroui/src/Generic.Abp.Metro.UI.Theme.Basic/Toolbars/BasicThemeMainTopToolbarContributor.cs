@@ -1,8 +1,7 @@
 ﻿using Generic.Abp.Metro.UI.Theme.Basic.Themes.Basic.Components.Toolbar.LanguageSwitch;
 using Generic.Abp.Metro.UI.Theme.Basic.Themes.Basic.Components.Toolbar.UserMenu;
-using Microsoft.Extensions.DependencyInjection;
-using System.Threading.Tasks;
 using Generic.Abp.Metro.UI.Theme.Shared.Toolbars;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Localization;
 using Volo.Abp.Users;
 
@@ -17,7 +16,7 @@ public class BasicThemeMainTopToolbarContributor : IToolbarContributor
             return;
         }
 
-        if (!(context.Theme is BasicTheme))
+        if (context.Theme is not BasicTheme)
         {
             return;
         }
@@ -25,7 +24,7 @@ public class BasicThemeMainTopToolbarContributor : IToolbarContributor
         var languageProvider = context.ServiceProvider.GetService<ILanguageProvider>();
 
         //TODO: This duplicates GetLanguages() usage. Can we eleminate this?
-        var languages = await languageProvider.GetLanguagesAsync();
+        var languages = await languageProvider?.GetLanguagesAsync()!;
         if (languages.Count > 1)
         {
             context.Toolbar.Items.Add(new ToolbarItem(typeof(LanguageSwitchViewComponent)));

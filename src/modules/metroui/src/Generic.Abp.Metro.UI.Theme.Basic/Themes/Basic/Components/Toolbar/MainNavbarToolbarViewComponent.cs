@@ -1,6 +1,5 @@
 ﻿using Generic.Abp.Metro.UI.Theme.Shared.Toolbars;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Mvc;
 
 namespace Generic.Abp.Metro.UI.Theme.Basic.Themes.Basic.Components.Toolbar;

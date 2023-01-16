@@ -1,4 +1,5 @@
-﻿using Generic.Abp.Metro.UI.Theme.Basic.Bundling;
+﻿using Generic.Abp.Metro.UI.MultiTenancy;
+using Generic.Abp.Metro.UI.Theme.Basic.Bundling;
 using Generic.Abp.Metro.UI.Theme.Basic.Toolbars;
 using Generic.Abp.Metro.UI.Theme.Shared;
 using Generic.Abp.Metro.UI.Theme.Shared.Bundling;
@@ -12,7 +13,7 @@ using Volo.Abp.VirtualFileSystem;
 namespace Generic.Abp.Metro.UI.Theme.Basic;
 
 [DependsOn(
-    typeof(GenericAbpMetroUiThemeSharedModule)
+    typeof(GenericAbpMetroUiMultiTenancyModule)
     )]
 public class GenericAbpMetroUiThemeBasicModule : AbpModule
 {
@@ -41,7 +42,7 @@ public class GenericAbpMetroUiThemeBasicModule : AbpModule
             options.FileSets.AddEmbedded<GenericAbpMetroUiThemeBasicModule>("Generic.Abp.Metro.UI.Theme.Basic");
         });
 
-        Configure<AbpToolbarOptions>(options =>
+        Configure<MetroToolbarOptions>(options =>
         {
             options.Contributors.Add(new BasicThemeMainTopToolbarContributor());
         });

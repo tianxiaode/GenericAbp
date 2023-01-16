@@ -4,15 +4,11 @@
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
-    <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
-    <AssemblyName>Generic.Abp.Metro.UI.Theme.Basic</AssemblyName>
-    <PackageId>Generic.Abp.Metro.UI.Theme.Basic</PackageId>
-    <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
-    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
-    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
-    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <IsPackable>true</IsPackable>
     <OutputType>Library</OutputType>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
   </PropertyGroup>
 
   <ItemGroup>
@@ -32,12 +28,10 @@
     <None Include="Themes\Basic\Layouts\Account.cshtml" />
     <None Include="Themes\Basic\Layouts\Application.cshtml" />
     <None Include="Themes\Basic\Layouts\Empty.cshtml" />
-    <None Include="Themes\Basic\_ViewImports.cshtml" />
-    <None Include="Views\_ViewImports.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Generic.Abp.Metro.UI.Theme.Shared\Generic.Abp.Metro.UI.Theme.Shared.csproj" />
+    <ProjectReference Include="..\Generic.Abp.Metro.UI.MultiTenancy\Generic.Abp.Metro.UI.MultiTenancy.csproj" />
   </ItemGroup>
 
 </Project>
