@@ -10,13 +10,13 @@
     {
         if (menuItem.Url != null)
         {
-            <li class="nav-item @cssClass @disabled" @elementId>
-                <a class="nav-link" href="@url" target="@menuItem.Target">
+            <li class="@cssClass @disabled" @elementId>
+                <a href="@url" target="@menuItem.Target">
                     @if (menuItem.Icon != null)
                     {
-                        if (menuItem.Icon.StartsWith("fa"))
+                        if (menuItem.Icon.StartsWith("fa") || menuItem.Icon.StartsWith("mif"))
                         {
-                            <i class="@menuItem.Icon"></i>
+                            <span class="icon @menuItem.Icon"></span>
                         }
                     }
                     @menuItem.DisplayName
@@ -26,25 +26,23 @@
     }
     else
     {
-        <li class="nav-item">
-            <div class="dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="Menu_@(menuItem.Name)" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    @if (menuItem.Icon != null)
+        <li>
+            <a href="#" class="dropdown-toggle">Products
+                @if (menuItem.Icon != null)
+                {
+                    if (menuItem.Icon.StartsWith("fa") || menuItem.Icon.StartsWith("mif"))
                     {
-                        if (menuItem.Icon.StartsWith("fa"))
-                        {
-                            <i class="@menuItem.Icon"></i>
-                        }
+                        <span class="icon @menuItem.Icon"></span>
                     }
-                    @menuItem.DisplayName
-                </a>
-                <div class="dropdown-menu border-0 shadow-sm" aria-labelledby="Menu_@(menuItem.Name)">
-                    @foreach (var childMenuItem in menuItem.Items)
-                    {
-                        @await Html.PartialAsync("~/Themes/Basic/Components/Menu/_MenuItem.cshtml", childMenuItem)
-                    }
-                </div>
-            </div>
+                }
+                @menuItem.DisplayName
+            </a>
+            <ul class="d-menu" data-role="dropdown">
+                @foreach (var childMenuItem in menuItem.Items)
+                {
+                    @await Html.PartialAsync("~/Themes/Basic/Components/Menu/_MenuItem.cshtml", childMenuItem)
+                }
+            </ul>
         </li>
     }
 }

@@ -26,14 +26,13 @@ public class WidgetManager : IWidgetManager
     public async Task<bool> IsGrantedAsync(Type widgetComponentType)
     {
         var widget = Options.Widgets.Find(widgetComponentType);
-        if (widget == null || widgetComponentType.FullName == null) return false;
+        if (widgetComponentType.FullName == null) return false;
         return await IsGrantedAsyncInternal(widget, widgetComponentType.FullName);
     }
 
     public async Task<bool> IsGrantedAsync(string name)
     {
         var widget = Options.Widgets.Find(name);
-        if(widget == null) return false;
         return await IsGrantedAsyncInternal(widget, name);
     }
 

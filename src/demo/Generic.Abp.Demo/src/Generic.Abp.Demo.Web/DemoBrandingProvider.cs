@@ -15,5 +15,6 @@ namespace Generic.Abp.Demo.Web
         }
 
         public override string AppName => _localizer["AppName"];
+
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Generic.Abp.Metro.UI.Bundling.TagHelpers;
 
-[HtmlTargetElement("abp-script", TagStructure = TagStructure.NormalOrSelfClosing)]
+[HtmlTargetElement("metro-script", TagStructure = TagStructure.NormalOrSelfClosing)]
 public class MetroScriptTagHelper : MetroBundleItemTagHelper<MetroScriptTagHelper, MetroScriptTagHelperService>, IBundleItemTagHelper
 {
     [HtmlAttributeName("defer")]

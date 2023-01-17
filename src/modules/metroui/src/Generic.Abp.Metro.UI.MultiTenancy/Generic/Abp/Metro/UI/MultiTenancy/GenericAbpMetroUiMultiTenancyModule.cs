@@ -22,7 +22,7 @@ public class GenericAbpMetroUiMultiTenancyModule : AbpModule
         PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
         {
             options.AddAssemblyResource(
-                typeof(UiMultiTenancyResource),
+                typeof(MetroUiMultiTenancyResource),
                 typeof(GenericAbpMetroUiMultiTenancyModule).Assembly
             );
         });
@@ -43,8 +43,8 @@ public class GenericAbpMetroUiMultiTenancyModule : AbpModule
         Configure<AbpLocalizationOptions>(options =>
         {
             options.Resources
-                .Add<UiMultiTenancyResource>("en")
-                .AddVirtualJson("/Generic/Abp/Metro/UI/MultiTenancy/Localization");
+                .Add<MetroUiMultiTenancyResource>("en")
+                .AddVirtualJson("/Generic/Abp/Metro/UI/MultiTenancy/Localization/MultiTenancy");
         });
 
         Configure<AbpBundlingOptions>(options =>

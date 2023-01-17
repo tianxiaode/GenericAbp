@@ -4,6 +4,7 @@ using Generic.Abp.Metro.UI.Theme.Shared.Bundling;
 using Generic.Abp.Metro.UI.Theme.Shared.ProxyScripting.Generators;
 using Generic.Abp.Metro.UI.Widgets;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.Http.ProxyScripting.Configuration;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;

@@ -1,19 +1,13 @@
 ﻿@using Generic.Abp.Metro.UI.Theme.Basic.Themes.Basic.Components.Brand
 @using Generic.Abp.Metro.UI.Theme.Basic.Themes.Basic.Components.Menu
 @using Generic.Abp.Metro.UI.Theme.Basic.Themes.Basic.Components.Toolbar
-<div data-role="appbar" data-expand-point="md">
-    <div class="container">
+<div data-role="appbar" class="bg-dark fg-white" data-expand-point="md" >
+    <div class=" container d-flex bg-dark fg-white">
         @(await Component.InvokeAsync<MainNavbarBrandViewComponent>())
-        
-        <div class="app-bar-item d-fle-"></div>
         <ul class="app-bar-menu">
-            <li><a href="#">Home</a></li>
-            <li>
-                @(await Component.InvokeAsync<MainNavbarMenuViewComponent>())
-            </li>
-            <li>
-                @(await Component.InvokeAsync<MainNavbarToolbarViewComponent>())
-            </li>
+            @(await Component.InvokeAsync<MainNavbarMenuViewComponent>())
+            @(await Component.InvokeAsync<MainNavbarToolbarViewComponent>())
         </ul>
+
     </div>
 </div>

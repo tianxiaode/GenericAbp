@@ -10,12 +10,12 @@ public class WidgetResourceItem
 
     public Type Type { get; }
 
-    public WidgetResourceItem([NotNull] string src)
+    public WidgetResourceItem(string src)
     {
         Src = Check.NotNullOrWhiteSpace(src, nameof(src));
     }
 
-    public WidgetResourceItem([NotNull] Type type)
+    public WidgetResourceItem(Type type)
     {
         Type = Check.NotNull(type, nameof(type));
     }

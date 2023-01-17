@@ -1,6 +1,6 @@
-using System;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Options;
+using System;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.Minify.Scripts;
 

@@ -5,6 +5,10 @@
 @using Generic.Abp.Metro.UI.Widgets.Components.WidgetScripts
 @using Generic.Abp.Metro.UI.Widgets.Components.WidgetStyles
 @using Generic.Abp.Metro.UI.Bundling.TagHelpers
+@using Generic.Abp.Metro.UI.TagHelpers.Alert
+@using Generic.Abp.Metro.UI.Theme.Basic.Themes.Basic.Components.PageAlerts
+@using Microsoft.Extensions.Options
+@using Volo.Abp.AspNetCore.MultiTenancy
 @using Volo.Abp.AspNetCore.Mvc.UI.Components.LayoutHook
 @using Volo.Abp.AspNetCore.Mvc.UI.Theming
 @using Volo.Abp.Localization
@@ -12,9 +16,9 @@
 @using Volo.Abp.Ui.Branding
 @using Volo.Abp.Ui.LayoutHooks
 @inject IBrandingProvider BrandingProvider
-@* @inject IOptions<AbpMultiTenancyOptions> MultiTenancyOptions *@
+@inject IOptions<AbpMultiTenancyOptions> MultiTenancyOptions 
 @inject ICurrentTenant CurrentTenant
-@inject IStringLocalizer<UiMultiTenancyResource> MultiTenancyStringLocalizer
+@inject IStringLocalizer<MetroUiMultiTenancyResource> MultiTenancyStringLocalizer
 @inject ITenantResolveResultAccessor TenantResolveResultAccessor
 
 @{
@@ -37,6 +41,7 @@
     <meta name="metro4:week_start" content="1">
 
     <title>@(ViewBag.Title == null ? BrandingProvider.AppName : ViewBag.Title)</title>
+    <metro-style-bundle name="@BasicThemeBundles.Styles.Global" />
 
     @if (ViewBag.Description != null)
     {
@@ -57,7 +62,7 @@
 <div class="@containerClass">
     <div class="row">
         <div class="cell" style="max-width: 440px">
-            if (MultiTenancyOptions.Value.IsEnabled &&
+            @if (MultiTenancyOptions.Value.IsEnabled &&
             (TenantResolveResultAccessor.Result?.AppliedResolvers?.Contains(CookieTenantResolveContributor.ContributorName) == true ||
             TenantResolveResultAccessor.Result?.AppliedResolvers?.Contains(QueryStringTenantResolveContributor.ContributorName) == true))
             {
@@ -86,6 +91,7 @@
                 </div>
             </div>
             }
+            @(await Component.InvokeAsync<PageAlertsViewComponent>())
             @await Component.InvokeLayoutHookAsync(LayoutHooks.PageContent.First, StandardLayouts.Account)
             @RenderBody()
             @await Component.InvokeLayoutHookAsync(LayoutHooks.PageContent.Last, StandardLayouts.Account)
@@ -94,7 +100,7 @@
 </div>
 
 
-    <abp-script-bundle name="@BasicThemeBundles.Scripts.Global" />
+    <metro-script-bundle name="@BasicThemeBundles.Scripts.Global" />
 
     <script src="~/metro/ApplicationLocalizationScript?cultureName=@CultureInfo.CurrentUICulture.Name"></script>
     <script src="~/metro/ApplicationConfigurationScript"></script>

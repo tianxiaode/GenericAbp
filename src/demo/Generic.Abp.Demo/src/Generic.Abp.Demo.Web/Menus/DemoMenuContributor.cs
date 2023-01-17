@@ -26,7 +26,7 @@ namespace Generic.Abp.Demo.Web.Menus
                     DemoMenus.Home,
                     l["Menu:Home"],
                     "~/",
-                    icon: "fas fa-home",
+                    icon: "mif-home",
                     order: 0
                 )
             );

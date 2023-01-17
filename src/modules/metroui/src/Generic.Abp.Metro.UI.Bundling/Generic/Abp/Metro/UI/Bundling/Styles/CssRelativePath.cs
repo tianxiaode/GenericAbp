@@ -1,4 +1,7 @@
-﻿using System.Text.RegularExpressions;
+﻿using System;
+using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Generic.Abp.Metro.UI.Bundling.Styles;
 
@@ -54,7 +57,8 @@ internal static class CssRelativePath
         return Path.GetFullPath(Path.Combine(cssFilePath, pathOnly));
     }
 
-    private static readonly string Protocol = "file:///";
+    private const string Protocol = "file:///";
+
     private static string MakeRelative(string baseFile, string file)
     {
         if (string.IsNullOrEmpty(file))

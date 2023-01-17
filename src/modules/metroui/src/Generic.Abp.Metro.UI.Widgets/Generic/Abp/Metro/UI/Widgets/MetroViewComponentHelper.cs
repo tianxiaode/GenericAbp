@@ -35,7 +35,6 @@ public class MetroViewComponentHelper : IViewComponentHelper, IViewContextAware,
         {
             return await DefaultViewComponentHelper.InvokeAsync(name, arguments);
         }
-
         return await InvokeWidgetAsync(arguments, widget);
     }
 
@@ -61,19 +60,19 @@ public class MetroViewComponentHelper : IViewComponentHelper, IViewContextAware,
 
         var wrapperAttributesBuilder = new StringBuilder($"class=\"abp-widget-wrapper\" data-widget-name=\"{widget.Name}\"");
 
-        if (widget.RefreshUrl != null)
+        if (widget?.RefreshUrl != null)
         {
             wrapperAttributesBuilder.Append($" data-refresh-url=\"{widget.RefreshUrl}\"");
         }
 
-        if (widget.AutoInitialize)
+        if (widget is { AutoInitialize: true })
         {
             wrapperAttributesBuilder.Append(" data-widget-auto-init=\"true\"");
         }
 
         return new HtmlContentBuilder()
             .AppendHtml($"<div {wrapperAttributesBuilder}>")
-            .AppendHtml(await DefaultViewComponentHelper.InvokeAsync(widget.ViewComponentType, arguments))
+            .AppendHtml(await DefaultViewComponentHelper.InvokeAsync(widget?.ViewComponentType ?? default!   , arguments))
             .AppendHtml("</div>");
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Generic.Abp.Metro.UI.Bundling.TagHelpers;
 
-[HtmlTargetElement("asp-style", TagStructure = TagStructure.NormalOrSelfClosing)]
+[HtmlTargetElement("metro-style", TagStructure = TagStructure.NormalOrSelfClosing)]
 public class MetroStyleTagHelper : MetroBundleItemTagHelper<MetroStyleTagHelper, MetroStyleTagHelperService>, IBundleItemTagHelper
 {
     [HtmlAttributeName("preload")]

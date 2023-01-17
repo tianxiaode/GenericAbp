@@ -1,4 +1,5 @@
 ﻿using JetBrains.Annotations;
+using System;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 
@@ -16,7 +17,7 @@ public class BundleTagHelperContributorTypeItem : BundleTagHelperItem
 
     public override string ToString()
     {
-        return Type.FullName ?? string.Empty;
+        return Type.FullName;
     }
 
     public override void AddToConfiguration(BundleConfiguration configuration)

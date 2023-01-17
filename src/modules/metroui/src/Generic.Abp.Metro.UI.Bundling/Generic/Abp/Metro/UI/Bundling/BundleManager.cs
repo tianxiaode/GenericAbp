@@ -1,5 +1,9 @@
+using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Generic.Abp.Metro.UI.Bundling.Scripts;
 using Generic.Abp.Metro.UI.Bundling.Styles;
 using Generic.Abp.Metro.UI.Resources;
@@ -20,7 +24,7 @@ public class BundleManager : IBundleManager, ITransientDependency
     public ILogger<BundleManager> Logger { get; set; }
 
     protected readonly AbpBundlingOptions Options;
-    protected readonly AbpBundleContributorOptions ContributorOptions;
+    protected readonly MetroBundleContributorOptions ContributorOptions;
     protected readonly IWebHostEnvironment HostingEnvironment;
     protected readonly IScriptBundler ScriptBundler;
     protected readonly IStyleBundler StyleBundler;
@@ -31,7 +35,7 @@ public class BundleManager : IBundleManager, ITransientDependency
 
     public BundleManager(
         IOptions<AbpBundlingOptions> options,
-        IOptions<AbpBundleContributorOptions> contributorOptions,
+        IOptions<MetroBundleContributorOptions> contributorOptions,
         IScriptBundler scriptBundler,
         IStyleBundler styleBundler,
         IWebHostEnvironment hostingEnvironment,
@@ -221,11 +225,9 @@ public class BundleManager : IBundleManager, ITransientDependency
         for (var i = 0; i < contributors.Count; ++i)
         {
             var extensions = ContributorOptions.Extensions(contributors[i].GetType()).GetAll();
-            if (extensions.Count > 0)
-            {
-                contributors.InsertRange(i + 1, extensions);
-                i += extensions.Count;
-            }
+            if (extensions.Count <= 0) continue;
+            contributors.InsertRange(i + 1, extensions);
+            i += extensions.Count;
         }
 
         return contributors;

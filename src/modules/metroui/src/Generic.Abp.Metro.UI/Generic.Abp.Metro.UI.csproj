@@ -5,9 +5,12 @@
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+    <AssemblyName>Generic.Abp.Metro.UI</AssemblyName>
+    <PackageId>Generic.Abp.Metro.UI</PackageId>
     <IsPackable>true</IsPackable>
     <OutputType>Library</OutputType>
     <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
+    <RootNamespace />
   </PropertyGroup>
 
   <ItemGroup>

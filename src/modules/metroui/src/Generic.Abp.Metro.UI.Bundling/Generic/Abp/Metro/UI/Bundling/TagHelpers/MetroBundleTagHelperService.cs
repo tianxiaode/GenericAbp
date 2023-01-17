@@ -1,4 +1,6 @@
-﻿using Generic.Abp.Metro.UI.TagHelpers;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using Generic.Abp.Metro.UI.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace Generic.Abp.Metro.UI.Bundling.TagHelpers;
@@ -29,7 +31,7 @@ public abstract class MetroBundleTagHelperService<TTagHelper, TService> : MetroT
     protected virtual async Task<List<BundleTagHelperItem>> GetBundleItems(TagHelperContext context, TagHelperOutput output)
     {
         var bundleItems = new List<BundleTagHelperItem>();
-        context.Items[MeroTagHelperConsts.ContextBundleItemListKey] = bundleItems;
+        context.Items[MetroTagHelperConsts.ContextBundleItemListKey] = bundleItems;
         await output.GetChildContentAsync(); //TODO: Is there a way of executing children without getting content?
         return bundleItems;
     }

@@ -13,10 +13,12 @@
 
   <ItemGroup>
     <None Remove="Pages\Abp\MultiTenancy\tenant-switch.js" />
+    <Content Remove="Generic\Abp\Metro\UI\MultiTenancy\Localization\MultiTenancy\*.json" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Pages\Abp\MultiTenancy\tenant-switch.js" />
+    <EmbeddedResource Include="Generic\Abp\Metro\UI\MultiTenancy\Localization\MultiTenancy\*.json" />
   </ItemGroup>
 
   <ItemGroup>

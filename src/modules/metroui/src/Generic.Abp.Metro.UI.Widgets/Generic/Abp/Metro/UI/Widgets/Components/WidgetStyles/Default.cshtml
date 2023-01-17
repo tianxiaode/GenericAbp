@@ -4,18 +4,11 @@
     var resourceItems = Model.Widgets.SelectMany(w => w.Styles).ToArray();
     if (resourceItems.Any())
     {
-        <abp-style-bundle>
+        <metro-style-bundle>
             @foreach (var resourceItem in resourceItems)
             {
-                if (resourceItem.Src != null)
-                {
-                    <abp-style src="@resourceItem.Src" />
-                }
-                else
-                {
-                    <abp-style type="@resourceItem.Type" />
-                }
+                <metro-style src="@resourceItem.Src" />
             }
-        </abp-style-bundle>
+        </metro-style-bundle>
     }
 }

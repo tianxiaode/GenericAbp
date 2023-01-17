@@ -1,6 +1,6 @@
 ﻿@using Volo.Abp.Ui.Branding
 @inject IBrandingProvider BrandingProvider
-<a class="brand no-hover" href="~/">
+<a class="brand no-hover fg-white mr-auto" href="~/">
     @if (!BrandingProvider.LogoUrl.IsNullOrWhiteSpace())
     {
         <img src="@BrandingProvider.LogoUrl" alt="@BrandingProvider.AppName">

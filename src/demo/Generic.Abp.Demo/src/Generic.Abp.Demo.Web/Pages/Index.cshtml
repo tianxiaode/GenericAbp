@@ -1,19 +1,26 @@
 ﻿@page
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Generic.Abp.Demo.Localization
+@using Generic.Abp.Metro.UI.Bundling.TagHelpers
+@using Generic.Abp.Metro.UI.TagHelpers.Alert
+@using Volo.Abp.AspNetCore.Mvc.UI.Theming
 @using Volo.Abp.Users
 @model Generic.Abp.Demo.Web.Pages.IndexModel
+@inject IThemeManager ThemeManager
 @inject IHtmlLocalizer<DemoResource> L
 @inject ICurrentUser CurrentUser
+@{
+    Layout = ThemeManager.CurrentTheme.GetAccountLayout();
+}
 @section styles {
-    <abp-style-bundle>
-        <abp-style src="/Pages/Index.css" />
-    </abp-style-bundle>
+    <metro-style-bundle>
+        <metro-style src="/Pages/Index.css" />
+    </metro-style-bundle>
 }
 @section scripts {
-    <abp-script-bundle>
-        <abp-script src="/Pages/Index.js" />
-    </abp-script-bundle>
+    <metro-script-bundle>
+        <metro-script src="/Pages/Index.js" />
+    </metro-script-bundle>
 }
 <div class="jumbotron text-center">
     <h1>@L["Welcome"]</h1>

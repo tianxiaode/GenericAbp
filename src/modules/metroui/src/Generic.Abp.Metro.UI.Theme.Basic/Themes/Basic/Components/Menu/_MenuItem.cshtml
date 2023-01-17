@@ -10,35 +10,38 @@
 {
     if (Model.Url != null)
     {
-        <a class="dropdown-item @cssClass @disabled" href="@url" target="@Model.Target" @Html.Raw(elementId)>
-            @if (Model.Icon != null)
-            {
-                if (Model.Icon.StartsWith("fa"))
+        <li class="@cssClass @disabled" @elementId>
+            <a href="@url" target="@Model.Target">
+                @if (Model.Icon != null)
                 {
-                    <i class="@Model.Icon"></i>
+                    if (Model.Icon.StartsWith("fa") || Model.Icon.StartsWith("mif"))
+                    {
+                        <span class="icon @Model.Icon"></span>
+                    }
                 }
-            }
-            @Model.DisplayName
-        </a>
+                @Model.DisplayName
+            </a>
+        </li>
     }
 }
 else
 {
-    <div class="dropdown-submenu">
-        <a role="button" class="btn dropdown-toggle" data-bs-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false">
-            <span class="lp-icon">
-                <i class="@(Model.Icon ?? "")"></i>
-            </span>
-            <span class="lp-text">
-                @Model.DisplayName
-            </span>
+    <li>
+        <a href="#" class="dropdown-toggle">Products
+            @if (Model.Icon != null)
+            {
+                if (Model.Icon.StartsWith("fa") || Model.Icon.StartsWith("mif"))
+                {
+                    <span class="icon @Model.Icon"></span>
+                }
+            }
+            @Model.DisplayName
         </a>
-        <div class="dropdown-menu border-0 shadow-sm">
+        <ul class="d-menu" data-role="dropdown">
             @foreach (var childMenuItem in Model.Items)
             {
                 @await Html.PartialAsync("~/Themes/Basic/Components/Menu/_MenuItem.cshtml", childMenuItem)
             }
-        </div>
-    </div>
+        </ul>
+    </li>
 }

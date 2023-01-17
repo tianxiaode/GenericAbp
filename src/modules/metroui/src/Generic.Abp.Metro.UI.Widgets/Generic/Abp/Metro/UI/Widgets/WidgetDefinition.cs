@@ -130,14 +130,14 @@ public class WidgetDefinition
 
     private static ILocalizableString GetDisplayName(WidgetAttribute widgetAttribute, string widgetName)
     {
-        if (widgetAttribute.DisplayName == null)
+        if (widgetAttribute?.DisplayName == null)
         {
             return new FixedLocalizableString(widgetName);
         }
 
-        if (widgetAttribute.DisplayNameResource == null)
+        if (widgetAttribute?.DisplayNameResource == null)
         {
-            return new FixedLocalizableString(widgetAttribute.DisplayName);
+            return new FixedLocalizableString(widgetAttribute?.DisplayName);
         }
 
         return new LocalizableString(widgetAttribute.DisplayNameResource, widgetAttribute.DisplayName);

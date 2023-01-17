@@ -1,3 +1,5 @@
+using System;
+
 namespace Generic.Abp.Metro.UI.Bundling;
 
 public interface IBundleCache

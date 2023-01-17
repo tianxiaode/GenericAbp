@@ -1,4 +1,6 @@
-﻿namespace Generic.Abp.Metro.UI.Resources;
+﻿using System.Collections.Generic;
+
+namespace Generic.Abp.Metro.UI.Resources;
 
 public interface IWebRequestResources
 {

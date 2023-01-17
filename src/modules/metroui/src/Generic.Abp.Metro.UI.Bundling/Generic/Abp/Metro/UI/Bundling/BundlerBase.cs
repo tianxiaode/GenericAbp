@@ -1,3 +1,4 @@
+using System;
 using System.Text;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.FileProviders;
@@ -19,7 +20,7 @@ public abstract class BundlerBase : IBundler, ITransientDependency
 
     protected IWebHostEnvironment HostEnvironment { get; }
     protected IMinifier Minifier { get; }
-    protected AbpBundlingOptions BundlingOptions { get; }
+    protected AbpBundlingOptions MetroBundlingOptions { get; }
 
     protected BundlerBase(
         IWebHostEnvironment hostEnvironment,
@@ -28,7 +29,7 @@ public abstract class BundlerBase : IBundler, ITransientDependency
     {
         HostEnvironment = hostEnvironment;
         Minifier = minifier;
-        BundlingOptions = bundlingOptions.Value;
+        MetroBundlingOptions = bundlingOptions.Value;
 
         Logger = NullLogger<BundlerBase>.Instance;
     }
@@ -62,7 +63,7 @@ public abstract class BundlerBase : IBundler, ITransientDependency
 
     private string GetFileContentConsideringMinification(IBundlerContext context, string fileName)
     {
-        var isIgnoredForMinification = BundlingOptions.MinificationIgnoredFiles.Contains(fileName);
+        var isIgnoredForMinification = MetroBundlingOptions.MinificationIgnoredFiles.Contains(fileName);
         var isMinFile = IsMinFile(fileName);
         if (!context.IsMinificationEnabled || isIgnoredForMinification || isMinFile)
         {
@@ -84,7 +85,7 @@ public abstract class BundlerBase : IBundler, ITransientDependency
         }
 
         var minFileInfo = GetMinFileInfoOrNull(fileName);
-        if (minFileInfo != null)
+        if (minFileInfo == null) return GetAndMinifyFileContent(context, fileName);
         {
             var fileContent = minFileInfo.ReadAsString();
             Logger.LogDebug($"- {fileName}");
@@ -92,7 +93,6 @@ public abstract class BundlerBase : IBundler, ITransientDependency
             return fileContent;
         }
 
-        return GetAndMinifyFileContent(context, fileName);
     }
 
     private string GetAndMinifyFileContent(IBundlerContext context, string fileName)

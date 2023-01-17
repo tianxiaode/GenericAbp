@@ -24,7 +24,7 @@ public class TenantSwitchModalModel : AbpPageModel
     {
         TenantStore = tenantStore;
         Options = options.Value;
-        LocalizationResourceType = typeof(UiMultiTenancyResource);
+        LocalizationResourceType = typeof(MetroUiMultiTenancyResource);
     }
 
     public virtual async Task OnGetAsync()

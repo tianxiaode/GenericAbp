@@ -4,18 +4,11 @@
     var resourceItems = Model.Widgets.SelectMany(w => w.Scripts).ToArray();
     if (resourceItems.Any())
     {
-        <abp-script-bundle>
+        <metro-script-bundle>
             @foreach (var resourceItem in resourceItems)
             {
-                if (resourceItem.Src != null)
-                {
-                    <abp-script src="@resourceItem.Src" />
-                }
-                else
-                {
-                    <abp-script type="@resourceItem.Type" />
-                }
+                <metro-script src="@resourceItem.Src" />
             }
-        </abp-script-bundle>
+        </metro-script-bundle>
     }
 }

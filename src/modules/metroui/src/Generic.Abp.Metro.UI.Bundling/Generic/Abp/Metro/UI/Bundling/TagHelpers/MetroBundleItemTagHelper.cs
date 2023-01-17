@@ -1,4 +1,5 @@
-﻿using Generic.Abp.Metro.UI.TagHelpers;
+﻿using System;
+using Generic.Abp.Metro.UI.TagHelpers;
 using Volo.Abp;
 
 namespace Generic.Abp.Metro.UI.Bundling.TagHelpers;
@@ -10,12 +11,12 @@ public abstract class MetroBundleItemTagHelper<TTagHelper, TTagHelperService> : 
     /// <summary>
     /// A file path.
     /// </summary>
-    public string? Src { get; set; }
+    public string Src { get; set; }
 
     /// <summary>
     /// A bundle contributor type.
     /// </summary>
-    public Type? Type { get; set; } 
+    public Type Type { get; set; } 
 
     protected MetroBundleItemTagHelper(TTagHelperService service)
         : base(service)
@@ -26,7 +27,7 @@ public abstract class MetroBundleItemTagHelper<TTagHelper, TTagHelperService> : 
     {
         if (Type != null)
         {
-            return Type.FullName ?? string.Empty;
+            return Type.FullName;
         }
 
         if (Src != null)

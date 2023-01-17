@@ -1,6 +1,7 @@
 ﻿@using Generic.Abp.Metro.UI.Theme.Basic.Bundling
 @using Generic.Abp.Metro.UI.Theme.Basic.Themes.Basic.Components.ContentTitle
 @using Generic.Abp.Metro.UI.Theme.Basic.Themes.Basic.Components.MainNavbar
+@using Generic.Abp.Metro.UI.Theme.Basic.Themes.Basic.Components.PageAlerts
 @using Generic.Abp.Metro.UI.Widgets.Components.WidgetScripts
 @using Generic.Abp.Metro.UI.Widgets.Components.WidgetStyles
 @using Volo.Abp.AspNetCore.Mvc.UI.Components.LayoutHook
@@ -9,6 +10,7 @@
 @using Volo.Abp.Localization
 @using Volo.Abp.Ui.Branding
 @using Volo.Abp.Ui.LayoutHooks
+@using Generic.Abp.Metro.UI.Bundling.TagHelpers
 @inject IBrandingProvider BrandingProvider
 @inject IPageLayout PageLayout
 @{
@@ -44,7 +46,7 @@
     <meta name="metro4:week_start" content="1">
 
     <title>@pageTitle</title>
-    <abp-style-bundle name="@BasicThemeBundles.Styles.Global" />
+    <metro-style-bundle name="@BasicThemeBundles.Styles.Global" />
     @await Component.InvokeAsync(typeof(WidgetStylesViewComponent))
 
     @await RenderSectionAsync("styles", false)
@@ -57,6 +59,7 @@
     @(await Component.InvokeAsync<MainNavbarViewComponent>())
 
     <div class="@containerClass">
+        @(await Component.InvokeAsync<PageAlertsViewComponent>())
         <div id="AbpContentToolbar">
             <div class="row mb-2">
                 @(await Component.InvokeAsync<ContentTitleViewComponent>())
@@ -72,7 +75,7 @@
         @await Component.InvokeLayoutHookAsync(LayoutHooks.PageContent.Last, StandardLayouts.Application)
     </div>
 
-    <abp-script-bundle name="@BasicThemeBundles.Scripts.Global" />
+    <metro-script-bundle name="@BasicThemeBundles.Scripts.Global" />
     <script src="~/metro/ApplicationLocalizationScript?cultureName=@CultureInfo.CurrentUICulture.Name"></script>
     <script src="~/metro/ApplicationConfigurationScript"></script>
     <script src="~/metro/ServiceProxyScript?type=metro"></script>

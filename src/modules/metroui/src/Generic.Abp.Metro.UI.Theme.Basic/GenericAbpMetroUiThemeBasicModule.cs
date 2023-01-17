@@ -1,7 +1,6 @@
 ﻿using Generic.Abp.Metro.UI.MultiTenancy;
 using Generic.Abp.Metro.UI.Theme.Basic.Bundling;
 using Generic.Abp.Metro.UI.Theme.Basic.Toolbars;
-using Generic.Abp.Metro.UI.Theme.Shared;
 using Generic.Abp.Metro.UI.Theme.Shared.Bundling;
 using Generic.Abp.Metro.UI.Theme.Shared.Toolbars;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,10 +30,7 @@ public class GenericAbpMetroUiThemeBasicModule : AbpModule
         {
             options.Themes.Add<BasicTheme>();
 
-            if (options.DefaultThemeName == null)
-            {
-                options.DefaultThemeName = BasicTheme.Name;
-            }
+            options.DefaultThemeName ??= BasicTheme.Name;
         });
 
         Configure<AbpVirtualFileSystemOptions>(options =>

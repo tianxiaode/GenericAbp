@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
@@ -20,7 +24,7 @@ public class MetroTagHelperStyleService : MetroTagHelperResourceService
     {
     }
 
-    protected override void CreateBundle(string? bundleName, List<BundleTagHelperItem> bundleItems)
+    protected override void CreateBundle(string bundleName, List<BundleTagHelperItem> bundleItems)
     {
         Options.StyleBundles.TryAdd(
             bundleName,
@@ -29,9 +33,9 @@ public class MetroTagHelperStyleService : MetroTagHelperResourceService
         );
     }
 
-    protected override async Task<IReadOnlyList<string>> GetBundleFilesAsync(string? bundleName)
+    protected override async Task<IReadOnlyList<string>> GetBundleFilesAsync(string bundleName)
     {
-        return await BundleManager.GetStyleBundleFilesAsync(bundleName ?? string.Empty);
+        return await BundleManager.GetStyleBundleFilesAsync(bundleName);
     }
 
     protected override void AddHtmlTag(ViewContext viewContext, TagHelper tagHelper, TagHelperContext context, TagHelperOutput output, string file)
@@ -39,7 +43,7 @@ public class MetroTagHelperStyleService : MetroTagHelperResourceService
         var preload = tagHelper switch
         {
             MetroStyleTagHelper styleTagHelper => styleTagHelper.Preload,
-            StyleMetroBundleTagHelper styleBundleTagHelper => styleBundleTagHelper.Preload,
+            MetroStyleBundleTagHelper styleBundleTagHelper => styleBundleTagHelper.Preload,
             _ => false
         };
 

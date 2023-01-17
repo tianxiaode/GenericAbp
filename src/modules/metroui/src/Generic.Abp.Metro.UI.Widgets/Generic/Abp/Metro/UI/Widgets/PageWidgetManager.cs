@@ -31,12 +31,9 @@ public class PageWidgetManager : IPageWidgetManager, IScopedDependency
             throw new AbpException($"{typeof(PageWidgetManager).AssemblyQualifiedName} should be used in a web request! Can not get IHttpContextAccessor.HttpContext.");
         }
 
-        var widgets = httpContext.Items[HttpContextItemName] as List<WidgetDefinition>;
-        if (widgets == null)
-        {
-            widgets = new List<WidgetDefinition>();
-            httpContext.Items[HttpContextItemName] = widgets;
-        }
+        if (httpContext.Items[HttpContextItemName] is List<WidgetDefinition> widgets) return widgets;
+        widgets = new List<WidgetDefinition>();
+        httpContext.Items[HttpContextItemName] = widgets;
 
         return widgets;
     }

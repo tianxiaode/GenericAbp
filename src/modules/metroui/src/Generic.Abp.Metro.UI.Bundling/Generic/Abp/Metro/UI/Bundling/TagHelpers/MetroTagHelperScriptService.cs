@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
@@ -39,7 +43,7 @@ public class MetroTagHelperScriptService : MetroTagHelperResourceService
         var defer = tagHelper switch
         {
             MetroScriptTagHelper scriptTagHelper => scriptTagHelper.Defer,
-            ScriptMetroBundleTagHelper scriptBundleTagHelper => scriptBundleTagHelper.Defer,
+            MetroScriptBundleTagHelper scriptBundleTagHelper => scriptBundleTagHelper.Defer,
             _ => false
         };
 

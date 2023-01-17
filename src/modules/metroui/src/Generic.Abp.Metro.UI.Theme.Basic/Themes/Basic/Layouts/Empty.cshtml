@@ -5,6 +5,7 @@
 @using Volo.Abp.Ui.Branding
 @using Volo.Abp.Ui.LayoutHooks
 @using Generic.Abp.Metro.UI.Theme.Basic.Bundling
+@using Generic.Abp.Metro.UI.Theme.Basic.Themes.Basic.Components.PageAlerts
 @using Generic.Abp.Metro.UI.Widgets.Components.WidgetScripts
 @using Generic.Abp.Metro.UI.Widgets.Components.WidgetStyles
 @inject IBrandingProvider BrandingProvider
@@ -42,6 +43,8 @@
     <meta name="metro4:week_start" content="1">
 
     <title>@pageTitle</title>
+    <metro-style-bundle name="@BasicThemeBundles.Styles.Global" />
+
     @if (ViewBag.Description != null)
     {
         <meta name="description" content="@ViewBag.Description" />
@@ -57,12 +60,13 @@
     @await Component.InvokeLayoutHookAsync(LayoutHooks.Body.First, StandardLayouts.Empty)
 
     <div class="@containerClass">
+        @(await Component.InvokeAsync<PageAlertsViewComponent>())
         @await Component.InvokeLayoutHookAsync(LayoutHooks.PageContent.First, StandardLayouts.Empty)
         @RenderBody()
         @await Component.InvokeLayoutHookAsync(LayoutHooks.PageContent.Last, StandardLayouts.Empty)
     </div>
 
-    <abp-script-bundle name="@BasicThemeBundles.Scripts.Global" />
+    <metro-script-bundle name="@BasicThemeBundles.Scripts.Global" />
 
     <script src="~/metro/ApplicationLocalizationScript?cultureName=@CultureInfo.CurrentUICulture.Name"></script>
     <script src="~/metro/ApplicationConfigurationScript"></script>
