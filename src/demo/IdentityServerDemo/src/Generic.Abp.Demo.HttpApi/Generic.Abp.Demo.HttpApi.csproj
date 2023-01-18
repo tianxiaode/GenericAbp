@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <RootNamespace>Generic.Abp.Demo</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\modules\application\src\Generic.Abp.Application\Generic.Abp.Application.csproj" />
+    <ProjectReference Include="..\..\..\..\modules\enumeration\src\Generic.Abp.Enumeration.HttpApi\Generic.Abp.Enumeration.HttpApi.csproj" />
+    <ProjectReference Include="..\..\..\..\modules\extresource\src\Generic.Abp.ExtResource.HttpApi\Generic.Abp.ExtResource.HttpApi.csproj" />
+    <ProjectReference Include="..\..\..\..\modules\identity\src\Generic.Abp.Identity.Application\Generic.Abp.Identity.Application.csproj" />
+    <ProjectReference Include="..\..\..\..\modules\identity\src\Generic.Abp.Identity.HttpApi\Generic.Abp.Identity.HttpApi.csproj" />
+    <ProjectReference Include="..\..\..\..\modules\IdentityServer\src\Generic.Abp.IdentityServer.HttpApi\Generic.Abp.IdentityServer.HttpApi.csproj" />
+    <ProjectReference Include="..\Generic.Abp.Demo.Application.Contracts\Generic.Abp.Demo.Application.Contracts.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Volo.Abp.Account.HttpApi" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.Identity.HttpApi" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.PermissionManagement.HttpApi" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.TenantManagement.HttpApi" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.FeatureManagement.HttpApi" Version="$(AbpVersion)" />
+  </ItemGroup>
+
+</Project>
