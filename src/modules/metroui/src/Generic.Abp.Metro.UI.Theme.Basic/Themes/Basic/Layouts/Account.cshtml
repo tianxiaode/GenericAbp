@@ -59,18 +59,18 @@
 
     @(await Component.InvokeAsync<MainNavbarViewComponent>())
 
-<div class="@containerClass">
-    <div class="row">
-        <div class="cell" style="max-width: 440px">
+    <div class="@containerClass">
+        <div class="row flex-justify-center flex-align-center" style="min-height: calc(100vh - 60px);">
+            <div class="cell " style="max-width: 440px">
             @if (MultiTenancyOptions.Value.IsEnabled &&
             (TenantResolveResultAccessor.Result?.AppliedResolvers?.Contains(CookieTenantResolveContributor.ContributorName) == true ||
             TenantResolveResultAccessor.Result?.AppliedResolvers?.Contains(QueryStringTenantResolveContributor.ContributorName) == true))
             {
-            <div class="card shadow-sm rounded mb-3">
-                <div class="card-body px-5">
+            <div class="card rounded mb-3">
+                <div class="card-content px-5">
                     <div class="row">
                         <div class="col">
-                            <span style="font-size: .8em;" class="text-uppercase text-muted">@MultiTenancyStringLocalizer["Tenant"]</span><br/>
+                            <span style="font-size: .8em;" class="text-upper text-muted">@MultiTenancyStringLocalizer["Tenant"]</span><br/>
                             <h6 class="m-0 d-inline-block">
                                 @if (CurrentTenant.Id == null)
                                 {
@@ -85,7 +85,7 @@
                             </h6>
                         </div>
                         <div class="col-auto">
-                            <a id="AbpTenantSwitchLink" href="javascript:;" class="btn btn-sm mt-3 btn-outline-primary">@MultiTenancyStringLocalizer["Switch"]</a>
+                            <a id="AbpTenantSwitchLink" href="javascript:;" class="button small mt-3 outline primary">@MultiTenancyStringLocalizer["Switch"]</a>
                         </div>
                     </div>
                 </div>

@@ -22,7 +22,6 @@ public class MetroButtonTagHelperService : MetroButtonTagHelperServiceBase<Metro
     {
         base.Process(context, output);
         output.TagName = "button";
-        AddClasses(context, output);
         AddType(context, output);
         AddBusyText(context, output);
         AddBusyTextIsHtml(context, output);

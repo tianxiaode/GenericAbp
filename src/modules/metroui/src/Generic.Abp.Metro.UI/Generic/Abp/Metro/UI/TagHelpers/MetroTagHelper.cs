@@ -10,8 +10,6 @@ namespace Generic.Abp.Metro.UI.TagHelpers;
 
 public abstract class MetroTagHelper : TagHelper, ITransientDependency
 {
-    public string Cls { get; set; }
-
 }
 
 public abstract class MetroTagHelper<TTagHelper, TService> : MetroTagHelper

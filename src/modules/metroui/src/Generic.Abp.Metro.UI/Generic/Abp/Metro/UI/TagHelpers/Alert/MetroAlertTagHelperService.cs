@@ -14,9 +14,8 @@ public class MetroAlertTagHelperService : MetroTagHelperService<MetroAlertTagHel
         AddDismissButtonIfDismissible(context, output);
     }
 
-    protected override void AddClasses(TagHelperContext context, TagHelperOutput output)
+    protected virtual void AddClasses(TagHelperContext context, TagHelperOutput output)
     {
-        base.AddClasses(context, output);
         output.Attributes.AddClass("info-box");
 
         var type = TagHelper.AlertType switch

@@ -1,219 +1,120 @@
-var abp = abp || {};
+function ModalManager(config) {
+    let me = this;
+    if (_.isString(config)) {
+        config = { viewUrl: config };
+    }
+    for (let i in config) {
+        me[i] = config[i];
+    }
+    me.initConfig = config;
+    me.callBacks = [];
+}
 
-//$.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only for the form we are working on! Also this should be decided by the form itself!
+ModalManager.prototype.open = function (data) {
+    data = data || {};
+    let me = this;
 
-(function ($) {
+    $.get(me.viewUrl, data)
+        .then(me.getDialogSuccess.bind(me), me.getDialogFailure.bind(me));
 
-    abp.modals = abp.modals || {};
+}
 
-    abp.ModalManager = (function () {
+ModalManager.prototype.getDialogSuccess = function (data) {
+    let me = this;
+    if (me.initConfig.scriptUrl) {
+        //加载资源
+        // abp.ResourceLoader.loadScript(options.scriptUrl, function () {
+        //     _initAndShowDialog();
+        // });
+    } else {
+        let id = 'Metro_Dialog_' + (Math.floor((Math.random() * 1000000))) + new Date().getTime();
+        me.dialogId = id;
+        data = data.replace('{id}', id);
+        let body = $('body');
+        body.append(data);
+        me.initAndShowDialog();
+    }
 
-        var CallbackList = function () {
-            var _callbacks = [];
+}
 
-            return {
-                add: function (callback) {
-                    _callbacks.push(callback);
-                },
+ModalManager.prototype.getDialogFailure = function () {
+    console.log(arguments);
+}
 
-                triggerAll: function (thisObj, argumentList) {
-                    for (var i = 0; i < _callbacks.length; i++) {
-                        _callbacks[i].apply(thisObj, argumentList);
-                    }
-                }
+ModalManager.prototype.initAndShowDialog = function () {
+    let me = this,
+        id = `#${me.dialogId}`,
+        dialog, form, dialogElement;
+    dialog = me.dialog = Metro.getPlugin(id, 'dialog');
+    if (!dialog) {
+        _.delay(me.initAndShowDialog.bind(me), 50);
+        return;
+    }
+    dialog.options.removeOnClose = true;
+    dialogElement = dialog.element;
+    form = me.form = Metro.getPlugin(dialogElement.find('form'), 'validator');
+    formElement = form.element;
+    formElement.on('validate-form', function(){console.log(arguments)});
+    formElement.on('error-form', function(){console.log(arguments)});
+    formElement.on('submit', me.onFormSubmit.bind(me));
+    if (formElement.attr('data-check-form-on-close') !== 'false') {
+        //form.needConfirmationOnUnsavedClose(dialog);
+    }
 
-            };
-        };
+    //dialogElement.on('colse', me.onClose.bind(me));
 
-        return function (options) {
+    if (me.init) me.init.call(me);
 
-            if (typeof options === 'string') {
-                options = {
-                    viewUrl: options
-                };
-            }
+    dialog.open();
 
-            var _options = options;
+}
 
-            var _$modalContainer = null;
-            var _$modal = null;
-            var _$form = null;
+ModalManager.prototype.onSubmitSuccess = function () {
+    this.setResult(arguments);
+    this.dialog.close();
+}
 
-            var _modalId = 'Abp_Modal_' + (Math.floor((Math.random() * 1000000))) + new Date().getTime();
-            var _modalObject = null;
+ModalManager.prototype.onClose = function () {
+    let me = this;
+    delete me.dialog;
+    delete me.form;
+    delete me.callBacks;
+}
 
-            var _publicApi = null;
-            var _args = null;
 
-            var _onOpenCallbacks = new CallbackList();
-            var _onCloseCallbacks = new CallbackList();
-            var _onResultCallbacks = new CallbackList();
+ModalManager.prototype.getModalId = function () {
+    return this.dialogId;
+}
 
-            function _removeContainer() {
-                _$modalContainer && _$modalContainer.remove();
-            }
+ModalManager.prototype.getDialog = function () {
+    return this.dialog;
+}
 
-            function _createContainer() {
-                _removeContainer();
-                _$modalContainer = $('<div id="' + _modalId + 'Container' + '"></div>');
-                var existsModals = $('[id^="Abp_Modal_"]');
-                if (existsModals.length) {
-                    existsModals.last().after(_$modalContainer)
-                } else {
-                    $('body').prepend(_$modalContainer);
-                }
-                return _$modalContainer;
-            }
+ModalManager.prototype.getForm = function () {
+    return this.form;
+}
 
-            function _initAndShowModal() {
-                _$modal = _$modalContainer.find('.modal');
-                _$form = _$modalContainer.find('form');
-                if (_$form.length) {
-                    if (_$form.attr('data-ajaxForm') !== 'false') {
-                        _$form.abpAjaxForm();
-                    }
+ModalManager.prototype.getData = function () {
+    return this.initConfig.data;
+}
 
-                    if (_$form.attr('data-check-form-on-close') !== 'false') {
-                        _$form.needConfirmationOnUnsavedClose(_$modal);
-                    }
+ModalManager.prototype.getConfig = function () {
+    return this.initConfig;
+}
 
-                    _$form.on('abp-ajax-success',
-                        function () {
-                            _publicApi.setResult.apply(_publicApi, arguments);
-                            _$modal.modal('hide');
-                        });
-                } else {
-                    _$form = null;
-                }
+ModalManager.prototype.setResult = function () {
+    this.callBacks.forEach(f => {
+        f.apply(null, arguments);
+    })
+    _onResultCallbacks.triggerAll(_publicApi, arguments);
+}
 
-                _$modal.modal({
-                    backdrop: 'static'
-                });
+ModalManager.prototype.onResult = function (callback) {
+    this.callBacks.push(callback);
+}
 
-                _$modal.on('hidden.bs.modal', function () {
-                    _removeContainer();
-                    _onCloseCallbacks.triggerAll(_publicApi);
-                });
+ModalManager.prototype.onFormSubmit = function(e) {
+    e.preventDefault();
 
-                _$modal.on('shown.bs.modal', function () {
-                    if (!options.focusElement) {
-                        //focuses first element if it's a typeable input.
-                        var $firstVisibleInput = _$modal.find('input:not([type=hidden]):first');
-
-                        _onOpenCallbacks.triggerAll(_publicApi);
-
-                        if ($firstVisibleInput.hasClass("datepicker")) {
-                            return; //don't pop-up date pickers...
-                        }
-
-                        var focusableInputs = ["text", "password", "email", "number", "search", "tel", "url"];
-                        if (!focusableInputs.includes($firstVisibleInput.prop("type"))) {
-                            return;
-                        }
-
-                        $firstVisibleInput.focus();
-                    } else if (typeof options.focusElement === 'function') {
-                        var focusElement = options.focusElement();
-                        focusElement.focus();
-                    } else if (typeof options.focusElement === 'string') {
-                        $(options.focusElement).focus();
-                    }
-                });
-
-                var modalClass = abp.modals[options.modalClass];
-                if (modalClass) {
-                    _modalObject = new modalClass();
-                    _modalObject.init && _modalObject.init(_publicApi, _args); //TODO: Remove later
-                    _modalObject.initModal && _modalObject.initModal(_publicApi, _args);
-                }
-
-                _$modal.modal('show');
-            };
-
-            var _open = function (args) {
-
-                _args = args || {};
-
-                _createContainer(_modalId)
-                    .load(options.viewUrl, $.param(_args), function (response, status, xhr) {
-                        if (status === "error") {
-                            //TODO: Handle!
-                            return;
-                        };
-
-                        if (options.scriptUrl) {
-                            abp.ResourceLoader.loadScript(options.scriptUrl, function () {
-                                _initAndShowModal();
-                            });
-                        } else {
-                            _initAndShowModal();
-                        }
-                    });
-            };
-
-            var _close = function () {
-                if (!_$modal) {
-                    return;
-                }
-
-                _$modal.modal('hide');
-            };
-
-            var _onOpen = function (onOpenCallback) {
-                _onOpenCallbacks.add(onOpenCallback);
-            };
-
-            var _onClose = function (onCloseCallback) {
-                _onCloseCallbacks.add(onCloseCallback);
-            };
-
-            var _onResult = function (callback) {
-                _onResultCallbacks.add(callback);
-            };
-
-            _publicApi = {
-                open: _open,
-
-                reopen: function () {
-                    _open(_args);
-                },
-
-                close: _close,
-
-                getModalId: function () {
-                    return _modalId;
-                },
-
-                getModal: function () {
-                    return _$modal;
-                },
-
-                getForm: function () {
-                    return _$form;
-                },
-
-                getArgs: function () {
-                    return _args;
-                },
-
-                getOptions: function () {
-                    return _options;
-                },
-
-                setResult: function () {
-                    _onResultCallbacks.triggerAll(_publicApi, arguments);
-                },
-
-                onOpen: _onOpen,
-
-                onClose: _onClose,
-
-                onResult: _onResult
-            };
-
-            return _publicApi;
-
-        };
-    })();
-
-})();
+    console.log(arguments);
+}

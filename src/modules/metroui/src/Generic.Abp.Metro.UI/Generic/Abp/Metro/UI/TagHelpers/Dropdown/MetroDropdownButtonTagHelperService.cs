@@ -35,7 +35,6 @@ public class MetroDropdownButtonTagHelperService : MetroTagHelperService<MetroDr
         output.TagMode = TagMode.StartTagAndEndTag;
         output.Content.SetContent("");
         output.Attributes.Clear();
-        AddClasses(context, output);
     }
 
     protected virtual async Task<string> GetButtonsAsHtmlAsync(TagHelperContext context, TagHelperOutput output,
@@ -66,7 +65,6 @@ public class MetroDropdownButtonTagHelperService : MetroTagHelperService<MetroDr
         abpButtonTagHelper.IconType = TagHelper.IconType;
         abpButtonTagHelper.Size = TagHelper.Size;
         abpButtonTagHelper.ButtonType = TagHelper.ButtonType;
-        abpButtonTagHelper.Cls = TagHelper.Cls;
         var attributes = GetAttributesForMainButton(context, output);
 
         var buttonTag = await abpButtonTagHelper.ProcessAndGetOutputAsync(attributes, context, "button", TagMode.StartTagAndEndTag);

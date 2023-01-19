@@ -12,7 +12,6 @@ public class MetroDropdownTagHelperService : MetroTagHelperService<MetroDropdown
 
         output.TagMode = TagMode.StartTagAndEndTag;
 
-        AddClasses(context, output);
     }
 
 }

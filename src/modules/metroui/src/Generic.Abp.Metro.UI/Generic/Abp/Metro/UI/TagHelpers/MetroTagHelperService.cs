@@ -44,14 +44,5 @@ public abstract class MetroTagHelperService<TTagHelper> : IMetroTagHelperService
         return Task.CompletedTask;
     }
 
-    protected virtual void AddClasses(TagHelperContext context, TagHelperOutput output)
-    {
-        if(TagHelper is not MetroTagHelper tagHelper) return;
-        if (!tagHelper.Cls.IsNullOrWhiteSpace())
-        {
-            output.Attributes.AddClass(tagHelper.Cls);
-        }
-
-    }
 
 }

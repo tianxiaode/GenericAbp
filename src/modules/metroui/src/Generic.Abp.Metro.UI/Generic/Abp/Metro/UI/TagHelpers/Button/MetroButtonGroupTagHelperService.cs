@@ -7,7 +7,6 @@ public class MetroButtonGroupTagHelperService : MetroTagHelperService<MetroButto
 {
     public override void Process(TagHelperContext context, TagHelperOutput output)
     {
-        AddClasses(context, output);
         AddAttributes(context, output);
 
         output.TagName = "div";

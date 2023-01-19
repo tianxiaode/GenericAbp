@@ -15,6 +15,10 @@ public class SharedThemeGlobalScriptContributor : BundleContributor
 {
     public override void ConfigureBundle(BundleConfigurationContext context)
     {
-        context.Files.Add("/libs/abp/metro/modal-manager.js");
+        context.Files.AddRange(new []
+        {
+            "/libs/abp/metro/metro-extensions.js",
+            "/libs/abp/metro/modal-manager.js"
+        });
     }
 }

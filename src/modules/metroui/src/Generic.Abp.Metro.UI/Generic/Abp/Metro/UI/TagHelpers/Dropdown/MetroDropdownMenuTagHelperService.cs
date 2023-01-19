@@ -13,7 +13,7 @@ public class MetroDropdownMenuTagHelperService : MetroTagHelperService<MetroDrop
         AddClasses(context, output);
     }
 
-    protected override void AddClasses(TagHelperContext context, TagHelperOutput output)
+    protected virtual void AddClasses(TagHelperContext context, TagHelperOutput output)
     {
         output.Attributes.AddClass("d-menu");
 
@@ -27,6 +27,5 @@ public class MetroDropdownMenuTagHelperService : MetroTagHelperService<MetroDrop
 
         output.Attributes.AddClass(dir);
 
-        base.AddClasses(context, output);
     }
 }

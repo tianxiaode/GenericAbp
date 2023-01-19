@@ -10,8 +10,6 @@ public interface IButtonTagHelperBase
 
     string Icon { get; }
 
-    string Cls { get; }
-
     bool? Disabled { get; }
 
     FontIconType IconType { get; }

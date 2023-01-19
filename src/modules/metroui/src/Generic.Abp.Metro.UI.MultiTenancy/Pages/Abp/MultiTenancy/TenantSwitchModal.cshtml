@@ -1,10 +1,23 @@
 ﻿@page
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Generic.Abp.Metro.UI.MultiTenancy.Localization;
+@using Generic.Abp.Metro.UI.TagHelpers.Dialog
+@using Generic.Abp.Metro.UI.TagHelpers.Form
 @model Pages.Abp.MultiTenancy.TenantSwitchModalModel
 @inject IHtmlLocalizer<MetroUiMultiTenancyResource> L
 @{
     Layout = null;
 }
-<form>
-</form>
+@*<metro-dynamic-form metro-model="@Model.Input" asp-page="/Abp/MultiTenancy/TenantSwitchModal">*@
+<metro-dialog >
+    <form data-role="validator,Validator">
+    <metro-dialog-title title="@L["SwitchTenant"].Value"></metro-dialog-title>
+    <metro-dialog-content>
+        <metro-form-content>
+            <metro-input asp-for="@Model.Input" label="@L["Tenant:Name"].Value" />
+            </metro-form-content>
+    </metro-dialog-content>
+    <metro-dialog-footer buttons="@(MetroDialogButtons.Submit|MetroDialogButtons.Cancel)"></metro-dialog-footer>
+    </form>
+</metro-dialog>
+@*</metro-dynamic-form>*@

@@ -21,7 +21,7 @@ public abstract class MetroButtonTagHelperServiceBase<TTagHelper> : MetroTagHelp
         output.TagMode = TagMode.StartTagAndEndTag;
     }
 
-    protected override void AddClasses(TagHelperContext context, TagHelperOutput output)
+    protected virtual void AddClasses(TagHelperContext context, TagHelperOutput output)
     {
         output.Attributes.AddClass("button");
 
@@ -35,7 +35,6 @@ public abstract class MetroButtonTagHelperServiceBase<TTagHelper> : MetroTagHelp
             output.Attributes.AddClass(TagHelper.Size.ToString().ToLowerInvariant().Replace("_", "-"));
         }
 
-        base.AddClasses(context, output);
     }
 
     protected virtual void AddIcon(TagHelperContext context, TagHelperOutput output)
