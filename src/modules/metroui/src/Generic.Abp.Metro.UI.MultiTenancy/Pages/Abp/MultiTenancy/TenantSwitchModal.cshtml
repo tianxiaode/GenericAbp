@@ -10,12 +10,13 @@
 }
 @*<metro-dynamic-form metro-model="@Model.Input" asp-page="/Abp/MultiTenancy/TenantSwitchModal">*@
 <metro-dialog >
-    <form data-role="validator,Validator">
+    <form data-role="validator" asp-page="/Abp/MultiTenancy/TenantSwitchModal" cols="2">
     <metro-dialog-title title="@L["SwitchTenant"].Value"></metro-dialog-title>
     <metro-dialog-content>
-        <metro-form-content>
-            <metro-input asp-for="@Model.Input" label="@L["Tenant:Name"].Value" />
-            </metro-form-content>
+            <metro-form-content cols="2">
+                <metro-input asp-for="@Model.Input.Name" label="@L["TenantName"].Value" required-symbol="true"/>
+                <metro-input label="2" />
+        </metro-form-content>
     </metro-dialog-content>
     <metro-dialog-footer buttons="@(MetroDialogButtons.Submit|MetroDialogButtons.Cancel)"></metro-dialog-footer>
     </form>

@@ -17,6 +17,7 @@ public class SharedThemeGlobalScriptContributor : BundleContributor
     {
         context.Files.AddRange(new []
         {
+            "/libs/abp/metro/input-extension.js",
             "/libs/abp/metro/metro-extensions.js",
             "/libs/abp/metro/modal-manager.js"
         });

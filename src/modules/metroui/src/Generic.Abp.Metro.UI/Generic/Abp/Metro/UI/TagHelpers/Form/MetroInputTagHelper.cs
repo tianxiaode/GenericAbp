@@ -17,7 +17,7 @@ public class MetroInputTagHelper : MetroTagHelper<MetroInputTagHelper, MetroInpu
     public bool IsDisabled { get; set; } = false;
 
     [HtmlAttributeName("readonly")]
-    public bool? IsReadonly { get; set; } = false;
+    public bool IsReadonly { get; set; } = false;
 
     [HtmlAttributeName("type")]
     public string InputTypeName { get; set; }
@@ -34,10 +34,9 @@ public class MetroInputTagHelper : MetroTagHelper<MetroInputTagHelper, MetroInpu
 
     public string Value { get; set; }
 
-    public bool SuppressLabel { get; set; }
-    public bool Horizontal { get; set; } = false;
-    public CheckBoxHiddenInputRenderMode? CheckBoxHiddenInputRenderMode { get; set; }
-
+    public bool SuppressLabel { get; set; } = false;
+    public bool ClearButton { get; set; } = true;
+    public int? DisplayOrder { get; set; } 
     public MetroInputTagHelper(MetroInputTagHelperService tagHelperService)
         : base(tagHelperService)
     {

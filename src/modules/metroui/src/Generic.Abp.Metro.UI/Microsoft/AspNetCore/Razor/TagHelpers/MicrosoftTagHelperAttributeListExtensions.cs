@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NUglify.JavaScript.Syntax;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -45,6 +46,35 @@ public static class MicrosoftTagHelperAttributeListExtensions
 
         attributes.SetAttribute("class", classList.JoinAsString(" "));
     }
+
+    public static void AddStyle(this TagHelperAttributeList attributes, string styleName, string styleValue)
+    {
+        if (string.IsNullOrWhiteSpace(styleName) || string.IsNullOrWhiteSpace(styleValue))
+        {
+            return;
+        }
+
+        var newStyle =$"{styleName}:{styleValue};";
+        attributes.Add("style", newStyle);
+        return;
+
+        var styleAttribute = attributes["style"];
+        if (styleAttribute == null)
+        {
+            attributes.Add("style", newStyle);
+        }
+        else
+        {
+            var oldStyle = styleAttribute.Value.ToString().EnsureEndsWith(';');
+            var existingStyle = oldStyle.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+            if(existingStyle.Any(m=>m.StartsWith(styleName))) return;
+            var style = oldStyle + newStyle;
+            attributes.Add("style", style);
+
+        }
+
+    }
+
 
     public static void AddIfNotContains(this TagHelperAttributeList attributes, string name, object value)
     {

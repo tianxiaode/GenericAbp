@@ -1,3 +1,49 @@
+.w-cols-4{
+    width: calc( 25% - 10px );
+    margin: 0 5px;
+}
+
+.w-cols-3{
+    width: calc( 100%/3 - 10px );
+    margin: 0 5px;
+}
+
+.w-cols-2{
+    width: calc( 50% - 10px );
+    margin: 0 5px;
+}
+
+.w-cols-1{
+    width: calc( 100% - 10px );
+    margin: 0 5px;
+}
+
+.lh-input-label-small{
+    line-height: 26px;
+}
+
+.lh-input-label{
+    line-height: 36px;
+}
+
+.lh-input-label-large{
+    line-height: 48px;
+}
+
+.h-input-wrap-samll{
+    height: 54px;
+}
+
+
+.h-input-wrap{
+    height: 64px;
+}
+
+.h-input-wrap-large{
+    height: 76px;
+}
+
+
 @keyframes spin {
     0% {
         transform: translateZ(0) rotate(0deg);

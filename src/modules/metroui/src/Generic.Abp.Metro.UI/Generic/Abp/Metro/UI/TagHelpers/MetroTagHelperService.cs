@@ -15,7 +15,7 @@ public abstract class MetroTagHelperService<TTagHelper> : IMetroTagHelperService
     protected const string CarouselItemsContent = "CarouselItemsContent";
     protected const string TabItemsDataTogglePlaceHolder = "{_data_toggle_Placeholder_}";
     protected const string TabItemNamePlaceHolder = "{_Tab_Tag_Name_Placeholder_}";
-    protected const string MetroFormContentPlaceHolder = "{_MetroFormContentPlaceHolder_}";
+    //protected const string MetroFormContentPlaceHolder = "{_MetroFormContentPlaceHolder_}";
     protected const string MetroTabItemActivePlaceholder = "{_Tab_Active_Placeholder_}";
     protected const string MetroTabDropdownItemsActivePlaceholder = "{_Tab_DropDown_Items_Placeholder_}";
     protected const string MetroTabItemShowActivePlaceholder = "{_Tab_Show_Active_Placeholder_}";

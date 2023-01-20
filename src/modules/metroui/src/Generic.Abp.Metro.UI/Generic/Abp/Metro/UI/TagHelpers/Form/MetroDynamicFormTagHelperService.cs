@@ -102,14 +102,14 @@ public class MetroDynamicFormTagHelperService :MetroTagHelperService<MetroDynami
         }
 
         var content = childContent.GetContent();
-        if (content.Contains(MetroFormContentPlaceHolder))
-        {
-            content = content.Replace(MetroFormContentPlaceHolder, contentBuilder.ToString());
-        }
-        else
-        {
-            content = contentBuilder + content;
-        }
+        //if (content.Contains(MetroFormContentPlaceHolder))
+        //{
+        //    content = content.Replace(MetroFormContentPlaceHolder, contentBuilder.ToString());
+        //}
+        //else
+        //{
+        //    content = contentBuilder + content;
+        //}
 
         output.Content.SetHtmlContent(content);
     }

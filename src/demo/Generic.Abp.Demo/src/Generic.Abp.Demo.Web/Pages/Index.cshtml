@@ -10,7 +10,7 @@
 @inject IHtmlLocalizer<DemoResource> L
 @inject ICurrentUser CurrentUser
 @{
-    Layout = ThemeManager.CurrentTheme.GetAccountLayout();
+    Layout = ThemeManager.CurrentTheme.GetApplicationLayout();
 }
 @section styles {
     <metro-style-bundle>
@@ -22,6 +22,89 @@
         <metro-script src="/Pages/Index.js" />
     </metro-script-bundle>
 }
+
+<div class="row">
+    <div class="col-md-half">
+        <form id="form1" data-role="validator" >
+        <metro-form-content horizontal="true">
+            <metro-input asp-for="@Model.IndexView.Email" ></metro-input>
+            <metro-input asp-for="@Model.IndexView.Password"></metro-input>
+            <metro-input asp-for="@Model.IndexView.Name"></metro-input>
+            <metro-input asp-for="@Model.IndexView.Age"></metro-input>
+            <metro-input asp-for="@Model.IndexView.Phone1"></metro-input>
+            <metro-input asp-for="@Model.IndexView.Phone2"></metro-input>
+        </metro-form-content>
+        </form>
+    </div>
+    <div class="col-md-half">
+        <metro-form-content cols="2" horizontal="true">
+            <metro-input asp-for="@Model.IndexView.Email"></metro-input>
+            <metro-input asp-for="@Model.IndexView.Password"></metro-input>
+            <metro-input asp-for="@Model.IndexView.Name"></metro-input>
+            <metro-input asp-for="@Model.IndexView.Age"></metro-input>
+            <metro-input asp-for="@Model.IndexView.Phone1"></metro-input>
+            <metro-input asp-for="@Model.IndexView.Phone2"></metro-input>
+        </metro-form-content>
+    </div>
+    <div class="col-md-half">
+        <metro-form-content cols="3" horizontal="true">
+            <metro-input asp-for="@Model.IndexView.Email"></metro-input>
+            <metro-input asp-for="@Model.IndexView.Password"></metro-input>
+            <metro-input asp-for="@Model.IndexView.Name"></metro-input>
+            <metro-input asp-for="@Model.IndexView.Age"></metro-input>
+            <metro-input asp-for="@Model.IndexView.Phone1"></metro-input>
+            <metro-input asp-for="@Model.IndexView.Phone2"></metro-input>
+        </metro-form-content>
+    </div>
+    <div class="col-md-half">
+        <metro-form-content cols="4" horizontal="true">
+            <metro-input asp-for="@Model.IndexView.Email"></metro-input>
+            <metro-input asp-for="@Model.IndexView.Password"></metro-input>
+            <metro-input asp-for="@Model.IndexView.Name"></metro-input>
+            <metro-input asp-for="@Model.IndexView.Age"></metro-input>
+            <metro-input asp-for="@Model.IndexView.Phone1"></metro-input>
+            <metro-input asp-for="@Model.IndexView.Phone2"></metro-input>
+        </metro-form-content>
+    </div>
+</div>
+
+<div class="row">
+    <form>
+        <div class="row mb-2">
+            <label class="cell-sm-2">Email</label>
+            <div class="cell-sm-10">
+                <input type="email" title="" class="metro-input">
+            </div>
+        </div>
+        <div class="row mb-2">
+            <label class="cell-sm-2">Password</label>
+            <div class="cell-sm-10">
+                <input type="password" title="" class="metro-input">
+            </div>
+        </div>
+        <div class="row mb-2">
+            <label class="cell-sm-2">Radios</label>
+            <div class="cell-sm-10">
+                <input name="horizontal_form_r1" type="radio" data-role="radio" data-caption="Option one" checked title="">
+                <input name="horizontal_form_r1" type="radio" data-role="radio" data-caption="Option two" title="">
+                <input name="horizontal_form_r1" type="radio" data-role="radio" data-caption="Option three is disabled" disabled title="">
+            </div>
+        </div>
+        <div class="row mb-2">
+            <label class="cell-sm-2">Checkbox</label>
+            <div class="cell-sm-10">
+                <input name="horizontal_form_c1" type="checkbox" data-role="checkbox" data-caption="Check me out" checked title="">
+            </div>
+        </div>
+        <div class="row">
+            <div class="cell">
+                <button type="submit" class="button primary">Sign in</button>
+            </div>
+        </div>
+    </form>
+
+</div>
+
 <div class="jumbotron text-center">
     <h1>@L["Welcome"]</h1>
     <div class="row">
