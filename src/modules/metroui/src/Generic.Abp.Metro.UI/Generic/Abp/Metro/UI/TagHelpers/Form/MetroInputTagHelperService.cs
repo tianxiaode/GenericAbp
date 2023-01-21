@@ -1,16 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text.Encodings.Web;
-using System.Threading.Tasks;
-using Generic.Abp.Metro.UI.TagHelpers.Extensions;
+﻿using Generic.Abp.Metro.UI.TagHelpers.Extensions;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Logging;
-using Nito.AsyncEx;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text.Encodings.Web;
+using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using Volo.Abp;
 
 namespace Generic.Abp.Metro.UI.TagHelpers.Form;
 
@@ -32,54 +33,78 @@ public class MetroInputTagHelperService : MetroTagHelperService<MetroInputTagHel
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
         var formContent = context.Items["FormContent"] as FormContent;
-        var innerHtml = await GetFormInputGroupAsHtmlAsync(context, output, formContent);
+        var (innerHtml,isCheckBox,isTextArea) = await GetFormInputGroupAsHtmlAsync(context, output, formContent);
+
+        if (isCheckBox && TagHelper.CheckBoxHiddenInputRenderMode.HasValue)
+        {
+            TagHelper.ViewContext.CheckBoxHiddenInputRenderMode = TagHelper.CheckBoxHiddenInputRenderMode.Value;
+        }
 
         var order = TagHelper.AspFor?.ModelExplorer.GetDisplayOrder() ?? 0;
 
+        AddGroupToFormGroupContents(
+            context,
+            TagHelper.AspFor?.Name,
+            SurroundInnerHtmlAndGet(context, output, innerHtml, isCheckBox),
+            order,
+            out var suppress
+        );
+
+        if (suppress)
+        {
+            output.SuppressOutput();
+            return;
+        }
         output.TagMode = TagMode.StartTagAndEndTag;
         output.TagName = "div";
-        output.Attributes.AddClass($"w-cols-{formContent?.Cols ?? 1}");
+        var cols = formContent?.Cols ?? 1;
+        if (isTextArea) cols = 1;
+        output.Attributes.AddClass($"w-cols-{cols} pt-1 pb-6");
 
-        if (formContent?.Horizontal == true)
+        if (formContent?.Horizontal == true )
         {
-            output.Attributes.AddClass("d-flex py-1");
+            output.Attributes.AddClass("d-flex");
+            if (!isTextArea)
+            {
+                var heightCls = TagHelper.Size switch
+                {
+                    MetroFormControlSize.Large => "h-input-wrap-large",
+                    MetroFormControlSize.Small => "h-input-wrap-small",
+                    _ => "h-input-wrap",
+                };
+                output.Attributes.AddClass(heightCls);
+            }
         }
 
-        if (order > 0)
-        {
-            output.Attributes.AddStyle(  "order", order.ToString());
-        }
+        //if (order > 0)
+        //{
+        //    output.Attributes.AddStyle(  "order", order.ToString());
+        //}
         output.Attributes.RemoveClass("data-validate");
-        output.Attributes.Add("data-role", "inputextension");
         output.Content.AppendHtml(innerHtml);
     }
 
-    protected virtual async Task<string> GetFormInputGroupAsHtmlAsync(TagHelperContext context, TagHelperOutput output, FormContent formContent)
+    protected virtual async Task<(string,bool, bool)> GetFormInputGroupAsHtmlAsync(TagHelperContext context, TagHelperOutput output, FormContent formContent)
     {
-        var inputTag  = await GetInputTagHelperOutputAsync(context, output, formContent);
+        var (inputTag ,isCheckBox, isTextarea)  = await GetInputTagHelperOutputAsync(context, output, formContent);
+
         inputTag.Attributes.Add("data-validate", await GetInputValidatorAsync(inputTag.Attributes));
         var inputHtml = inputTag.Render(_encoder);
-        var label = await GetLabelAsHtmlAsync(context, output, inputTag, formContent);
+        var label = await GetLabelAsHtmlAsync(context, output, inputTag, formContent, isCheckBox);
 
-        return GetContent(context, output, label, inputHtml);
+        return (GetContent(context, output, label, inputHtml, isCheckBox),isCheckBox, isTextarea);
     }
 
-    protected virtual string GetContent(TagHelperContext context, TagHelperOutput output, string label, string inputHtml)
+    protected virtual string GetContent(TagHelperContext context, TagHelperOutput output, string label, string inputHtml, bool isCheckBox)
     {
-        var heightCls = TagHelper.Size switch
-        {
-            MetroFormControlSize.Large => "h-input-wrap-large",
-            MetroFormControlSize.Small => "h-input-wrap-small",
-            _ => "h-input-wrap",
-        };
 
-        inputHtml = $"<div class='flex-fill {heightCls}'>{inputHtml}<span class='invalid_feedback'></span></div>";
+        //inputHtml = $"<div class='flex-fill {heightCls}'>{inputHtml}</div>";
         var innerContent = label + inputHtml;
 
         return innerContent ;
     }
 
-    protected virtual async Task<TagHelperOutput> GetInputTagHelperOutputAsync(TagHelperContext context, TagHelperOutput output, FormContent formContent)
+    protected virtual async Task<(TagHelperOutput,bool, bool)> GetInputTagHelperOutputAsync(TagHelperContext context, TagHelperOutput output, FormContent formContent)
     {
         var tagHelper = GetInputTagHelper(context, output);
 
@@ -89,11 +114,21 @@ public class MetroInputTagHelperService : MetroTagHelperService<MetroInputTagHel
             "input"
         );
 
+        var isTextArea = ConvertToTextAreaIfTextArea(inputTagHelperOutput);
         AddDisabledAttribute(inputTagHelperOutput);
+        var isCheckbox = IsInputCheckbox(context, output, inputTagHelperOutput.Attributes);
         AddReadOnlyAttribute(inputTagHelperOutput);
         AddPlaceholderAttribute(inputTagHelperOutput);
-        //inputTagHelperOutput.Attributes.Add("data-role", "input");
-        return inputTagHelperOutput;
+        if (isCheckbox)
+        {
+            SetCheckBoxAttributes(inputTagHelperOutput);
+        }else
+        {
+            inputTagHelperOutput.Attributes.AddClass("metro-input");
+        }
+
+        SetDataRoleAttribute(inputTagHelperOutput,isCheckbox, isTextArea);
+        return (inputTagHelperOutput,isCheckbox, isTextArea);
     }
 
     protected virtual TagHelper GetInputTagHelper(TagHelperContext context, TagHelperOutput output)
@@ -151,11 +186,10 @@ public class MetroInputTagHelperService : MetroTagHelperService<MetroInputTagHel
         {
             attrList.Add("value", TagHelper.Value);
         }
-        attrList.Add("class", "metro-input");
         return attrList;
     }
 
-    protected virtual async Task<string> GetLabelAsHtmlAsync(TagHelperContext context, TagHelperOutput output, TagHelperOutput inputTag, FormContent formContent)
+    protected virtual async Task<string> GetLabelAsHtmlAsync(TagHelperContext context, TagHelperOutput output, TagHelperOutput inputTag, FormContent formContent, bool isCheckbox)
     {
         if (IsOutputHidden(inputTag) || TagHelper.SuppressLabel)
         {
@@ -164,17 +198,30 @@ public class MetroInputTagHelperService : MetroTagHelperService<MetroInputTagHel
 
         if (string.IsNullOrEmpty(TagHelper.Label))
         {
-            return await GetLabelAsHtmlUsingTagHelperAsync(context, output, formContent) ;
+            return await GetLabelAsHtmlUsingTagHelperAsync(context, output, formContent, isCheckbox) ;
         }
 
         var label = new TagBuilder("label");
-        label.InnerHtml.AppendHtml(TagHelper.Label);
+        label.Attributes.Add("for", GetIdAttributeValue(inputTag));
+        
+        if(!isCheckbox)label.InnerHtml.AppendHtml(TagHelper.Label);
+        if (formContent.Horizontal)
+        {
+            label.Attributes.Add("style", $"min-width:{formContent.LabelWidth}px;");
+        }
+        var lineHeight = TagHelper.Size switch
+        {
+            MetroFormControlSize.Large => "lh-input-label-large",
+            MetroFormControlSize.Small => "lh-input-label-small",
+            _ => "lh-input-label",
+        };
+        label.AddCssClass(lineHeight);
 
 
         return label.ToHtmlString();
     }
 
-    protected virtual async Task<string> GetLabelAsHtmlUsingTagHelperAsync(TagHelperContext context, TagHelperOutput output, FormContent formContent)
+    protected virtual async Task<string> GetLabelAsHtmlUsingTagHelperAsync(TagHelperContext context, TagHelperOutput output, FormContent formContent, bool isCheckbox)
     {
         var labelTagHelper = new LabelTagHelper(_generator)
         {
@@ -185,7 +232,7 @@ public class MetroInputTagHelperService : MetroTagHelperService<MetroInputTagHel
 
         if (formContent.Horizontal)
         {
-            attributeList.Add("style", $"width:{formContent.LabelWidth}px;");
+            attributeList.Add("style", $"min-width:{formContent.LabelWidth}px;");
         }
 
         var lineHeight = TagHelper.Size switch
@@ -202,16 +249,23 @@ public class MetroInputTagHelperService : MetroTagHelperService<MetroInputTagHel
             TagMode.StartTagAndEndTag
         );
 
-        if (formContent.Horizontal)
-        {
-            labelTagHelperOutput.Content.AppendHtml(": ");
-        }
 
-        labelTagHelperOutput.Content.AppendHtml(GetRequiredSymbol(context, output));
         AddDisabledAttribute(labelTagHelperOutput);
         AddReadOnlyAttribute(labelTagHelperOutput);
-        var labelHtml = labelTagHelperOutput.Render(_encoder);
 
+        if (isCheckbox)
+        {
+            labelTagHelperOutput.Attributes.AddClass("checkbox-label");
+        }
+        else
+        {
+            labelTagHelperOutput.Content.AppendHtml(GetRequiredSymbol(context, output));
+            if (formContent.Horizontal)
+            {
+                labelTagHelperOutput.Content.AppendHtml(": ");
+            }
+        }
+        var labelHtml = labelTagHelperOutput.Render(_encoder);
         return labelHtml;
     }
 
@@ -284,6 +338,9 @@ public class MetroInputTagHelperService : MetroTagHelperService<MetroInputTagHel
                     validateAttributeValue += $" max={attributeList["data-val-range-max"]?.Value}";
                     validateAttributeValue += $" min={attributeList["data-val-range-min"]?.Value}";
                     continue;
+                case "length":
+                    validateAttributeValue += $" {name}={attributeList["data-val-length-max"]?.Value}";
+                    continue;
                 default:
                     validateAttributeValue += $" {name}";
                     break;
@@ -291,6 +348,97 @@ public class MetroInputTagHelperService : MetroTagHelperService<MetroInputTagHel
         }
 
         return Task.FromResult(validateAttributeValue);
+    }
+
+    protected virtual bool ConvertToTextAreaIfTextArea(TagHelperOutput tagHelperOutput)
+    {
+        var textAreaAttribute = TryGetTextAreaAttribute(tagHelperOutput);
+
+        if (textAreaAttribute == null)
+        {
+            return false;
+        }
+
+        tagHelperOutput.TagName = "textarea";
+        tagHelperOutput.TagMode = TagMode.StartTagAndEndTag;
+        tagHelperOutput.Content.SetContent(TagHelper.AspFor.ModelExplorer.Model?.ToString());
+        tagHelperOutput.Attributes.AddClass("flex-fill");
+        if (textAreaAttribute.Rows > 0)
+        {
+            tagHelperOutput.Attributes.Add("rows", textAreaAttribute.Rows);
+        }
+        if (textAreaAttribute.Cols > 0)
+        {
+            tagHelperOutput.Attributes.Add("cols", textAreaAttribute.Cols);
+        }
+
+        return true;
+    }
+
+    protected virtual TextArea TryGetTextAreaAttribute(TagHelperOutput output)
+    {
+        var textAreaAttribute = TagHelper.AspFor.ModelExplorer.GetAttribute<TextArea>();
+
+        if (textAreaAttribute == null && output.Attributes.Any(a => a.Name == "text-area"))
+        {
+            return new TextArea();
+        }
+
+        return textAreaAttribute;
+    }
+
+    protected virtual bool IsInputCheckbox(TagHelperContext context, TagHelperOutput output, TagHelperAttributeList attributes)
+    {
+        return attributes.Any(a => a.Value != null && a.Name == "type" && a.Value.ToString() == "checkbox");
+    }
+
+    protected virtual void SetDataRoleAttribute(TagHelperOutput output, bool isCheckbox, bool isTextarea)
+    {
+        var dataRole = "input";
+        if (isCheckbox) dataRole = "checkbox";
+        if (isTextarea) dataRole = "textarea";
+        output.Attributes.Add("data-role", dataRole);
+
+    }
+
+    protected virtual void SetCheckBoxAttributes(TagHelperOutput output)
+    {
+        var name = TagHelper.Label ?? TagHelper.AspFor.Name;
+        name = name[(name?.IndexOf(".") + 1 ?? 1)..];
+        var label = _tagHelperLocalizer.GetLocalizedText(name, TagHelper.AspFor.ModelExplorer);
+        output.Attributes.Add("data-caption", label);
+        output.Attributes.Add("data-style", 2);
+        output.Attributes.Add("data-cls-caption", "fg-cyan");
+        output.Attributes.Add("data-cls-check", "bd-cyan");
+    }
+
+    protected virtual string GetIdAttributeValue(TagHelperOutput inputTag)
+    {
+        var idAttr = inputTag.Attributes.FirstOrDefault(a => a.Name == "id");
+
+        return idAttr != null ? idAttr.Value.ToString() : string.Empty;
+    }
+
+    protected virtual void AddGroupToFormGroupContents(TagHelperContext context, string propertyName, string html, int order, out bool suppress)
+    {
+        var list = context.GetValue<List<FormGroupItem>>(FormGroupContents);
+        suppress = list == null;
+
+        if (list != null && !list.Any(igc => igc.HtmlContent.Contains("id=\"" + propertyName.Replace('.', '_') + "\"")))
+        {
+            list.Add(new FormGroupItem
+            {
+                HtmlContent = html,
+                Order = order,
+                PropertyName = propertyName
+            });
+        }
+    }
+    protected virtual string SurroundInnerHtmlAndGet(TagHelperContext context, TagHelperOutput output, string innerHtml, bool isCheckbox)
+    {
+        return "<div class=\"" + (isCheckbox ? "custom-checkbox custom-control mb-2 form-check" : "mb-3") + "\">" +
+               Environment.NewLine + innerHtml + Environment.NewLine +
+               "</div>";
     }
 
 }

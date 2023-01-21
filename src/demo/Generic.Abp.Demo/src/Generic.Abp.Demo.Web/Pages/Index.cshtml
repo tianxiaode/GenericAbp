@@ -21,59 +21,37 @@
     <metro-script-bundle>
         <metro-script src="/Pages/Index.js" />
     </metro-script-bundle>
+    
+
 }
 
 <div class="row">
-    <div class="col-md-half">
-        <form id="form1" data-role="validator" >
-        <metro-form-content horizontal="true">
-            <metro-input asp-for="@Model.IndexView.Email" ></metro-input>
-            <metro-input asp-for="@Model.IndexView.Password"></metro-input>
-            <metro-input asp-for="@Model.IndexView.Name"></metro-input>
-            <metro-input asp-for="@Model.IndexView.Age"></metro-input>
-            <metro-input asp-for="@Model.IndexView.Phone1"></metro-input>
-            <metro-input asp-for="@Model.IndexView.Phone2"></metro-input>
-        </metro-form-content>
-        </form>
-    </div>
-    <div class="col-md-half">
+    @*
+    <form id="form1" data-role="validator">
         <metro-form-content cols="2" horizontal="true">
             <metro-input asp-for="@Model.IndexView.Email"></metro-input>
             <metro-input asp-for="@Model.IndexView.Password"></metro-input>
-            <metro-input asp-for="@Model.IndexView.Name"></metro-input>
+            <metro-input asp-for="@Model.IndexView.Surname"></metro-input>
             <metro-input asp-for="@Model.IndexView.Age"></metro-input>
             <metro-input asp-for="@Model.IndexView.Phone1"></metro-input>
-            <metro-input asp-for="@Model.IndexView.Phone2"></metro-input>
+            <metro-input type="checkbox" asp-for="@Model.IndexView.Name"></metro-input>
+            <metro-input asp-for="@Model.IndexView.Demo"></metro-input>
         </metro-form-content>
-    </div>
-    <div class="col-md-half">
-        <metro-form-content cols="3" horizontal="true">
-            <metro-input asp-for="@Model.IndexView.Email"></metro-input>
-            <metro-input asp-for="@Model.IndexView.Password"></metro-input>
-            <metro-input asp-for="@Model.IndexView.Name"></metro-input>
-            <metro-input asp-for="@Model.IndexView.Age"></metro-input>
-            <metro-input asp-for="@Model.IndexView.Phone1"></metro-input>
-            <metro-input asp-for="@Model.IndexView.Phone2"></metro-input>
-        </metro-form-content>
-    </div>
-    <div class="col-md-half">
-        <metro-form-content cols="4" horizontal="true">
-            <metro-input asp-for="@Model.IndexView.Email"></metro-input>
-            <metro-input asp-for="@Model.IndexView.Password"></metro-input>
-            <metro-input asp-for="@Model.IndexView.Name"></metro-input>
-            <metro-input asp-for="@Model.IndexView.Age"></metro-input>
-            <metro-input asp-for="@Model.IndexView.Phone1"></metro-input>
-            <metro-input asp-for="@Model.IndexView.Phone2"></metro-input>
-        </metro-form-content>
-    </div>
+    </form>
+    *@
+    <button class="button primary" id="button1">提交</button>
+    <metro-dynamic-form metro-model="@Model.IndexView" cols="2" horizontal="true">
+        <metro-form-content ></metro-form-content>
+    </metro-dynamic-form>
 </div>
 
 <div class="row">
     <form>
+        <input type="email" title="" class="metro-input input-small" data-role="input" data-append="email">
+
         <div class="row mb-2">
             <label class="cell-sm-2">Email</label>
             <div class="cell-sm-10">
-                <input type="email" title="" class="metro-input">
             </div>
         </div>
         <div class="row mb-2">
@@ -119,3 +97,4 @@
         <a abp-button="Primary" href="~/Account/Login" class="px-4"><i class="fa fa-sign-in"></i> @L["Login"]</a>
     }
 </div>
+

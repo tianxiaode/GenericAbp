@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Logging;
 
 namespace Generic.Abp.Metro.UI.TagHelpers.Form;
 
@@ -23,37 +24,39 @@ public class MetroDynamicFormTagHelperService :MetroTagHelperService<MetroDynami
     private readonly IServiceProvider _serviceProvider;
     private readonly IStringLocalizer<AbpUiResource> _localizer;
 
+    protected ILogger<MetroDynamicFormTagHelperService> Logger { get; }
     public MetroDynamicFormTagHelperService(
         HtmlEncoder htmlEncoder,
         IHtmlGenerator htmlGenerator,
         IServiceProvider serviceProvider,
-        IStringLocalizer<AbpUiResource> localizer)
+        IStringLocalizer<AbpUiResource> localizer, ILogger<MetroDynamicFormTagHelperService> logger)
     {
         _htmlEncoder = htmlEncoder;
         _htmlGenerator = htmlGenerator;
         _serviceProvider = serviceProvider;
         _localizer = localizer;
+        Logger = logger;
     }
 
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
         var list = InitilizeFormGroupContentsContext(context, output);
 
-        NormalizeTagMode(context, output);
+        //NormalizeTagMode(context, output);
 
         var childContent = await output.GetChildContentAsync();
 
-        await ConvertToMvcForm(context, output);
+        //await ConvertToMvcForm(context, output);
 
         await ProcessFieldsAsync(context, output);
 
-        RemoveFormGroupItemsNotInModel(context, output, list);
+        //RemoveFormGroupItemsNotInModel(context, output, list);
 
-        SetContent(context, output, list, childContent);
+        //SetContent(context, output, list, childContent);
 
-        SetFormAttributes(context, output);
+        //SetFormAttributes(context, output);
 
-        await SetSubmitButton(context, output);
+        //await SetSubmitButton(context, output);
     }
 
     protected virtual async Task ConvertToMvcForm(TagHelperContext context, TagHelperOutput output)
@@ -136,8 +139,10 @@ public class MetroDynamicFormTagHelperService :MetroTagHelperService<MetroDynami
     protected virtual async Task ProcessFieldsAsync(TagHelperContext context, TagHelperOutput output)
     {
         var models = GetModels(context, output);
-
-        foreach (var model in models)
+        Logger.LogInformation(
+            $"models:{System.Text.Json.JsonSerializer.Serialize(models.Select(m => new { m.Name, MetadataName= m.Metadata.Name }))}");
+    return;
+    foreach (var model in models)
         {
             if (IsSelectGroup(context, model))
             {

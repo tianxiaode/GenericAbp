@@ -43,6 +43,13 @@
     height: 76px;
 }
 
+.bd-cyan::before{
+    border-color: #1ba1e2 !important;
+}
+
+.checkbox-label{
+    color: transparent;
+}
 
 @keyframes spin {
     0% {

@@ -25,12 +25,16 @@ namespace Generic.Abp.Demo.Web.Pages
             public string Password { get; set; }
 
             [DisabledInput]
-            public string Name { get; set; }
-            
-            [Range(100,200)]
-            public int Age { get; set; }
+            public string Surname { get; set; }
+
+            [Range(1, 100)] public int Age { get; set; } = 0;
             public string Phone1 { get; set; }
-            public string Phone2 { get; set; }
+            
+            public bool Name { get; set; }
+            [TextArea]
+            [StringLength(5)]
+            [Required]
+            public string Demo { get; set; }
             
         }
 
