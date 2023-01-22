@@ -1,19 +1,20 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace Generic.Abp.Metro.UI.TagHelpers.Dropdown;
 
 public class MetroDropdownMenuTagHelperService : MetroTagHelperService<MetroDropdownMenuTagHelper>
 {
-    public override void Process(TagHelperContext context, TagHelperOutput output)
+    public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
         output.TagName = "ul";
         output.Attributes.Add("data-role","dropdown");
         output.TagMode = TagMode.StartTagAndEndTag;
-        AddClasses(context, output);
+        await AddClassesAsync(context, output);
     }
 
-    protected virtual void AddClasses(TagHelperContext context, TagHelperOutput output)
+    protected virtual Task AddClassesAsync(TagHelperContext context, TagHelperOutput output)
     {
         output.Attributes.AddClass("d-menu");
 
@@ -26,6 +27,6 @@ public class MetroDropdownMenuTagHelperService : MetroTagHelperService<MetroDrop
         };
 
         output.Attributes.AddClass(dir);
-
+        return Task.CompletedTask;
     }
 }

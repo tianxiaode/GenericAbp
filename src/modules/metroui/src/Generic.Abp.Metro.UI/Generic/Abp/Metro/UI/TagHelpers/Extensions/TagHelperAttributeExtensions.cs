@@ -1,24 +1,21 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace Generic.Abp.Metro.UI.TagHelpers.Extensions;
 
 public static class TagHelperAttributeExtensions
 {
-    public static string ToHtmlAttributeAsString(this TagHelperAttribute attribute)
+    public static Task<string> ToHtmlAttributeAsStringAsync(this TagHelperAttribute attribute)
     {
-        return attribute.Name + "=\"" + attribute.Value + "\"";
+        return Task.FromResult(attribute.Name + "=\"" + attribute.Value + "\"");
     }
 
-    public static string ToHtmlAttributesAsString(this List<TagHelperAttribute> attributes)
+    public static Task<string> ToHtmlAttributesAsStringAsync(this List<TagHelperAttribute> attributes)
     {
-        var attributesAsString = "";
+        var attributesAsString = attributes.Aggregate("", (current, attribute) => current + (attribute.ToHtmlAttributeAsStringAsync() + " "));
 
-        foreach (var attribute in attributes)
-        {
-            attributesAsString += attribute.ToHtmlAttributeAsString() + " ";
-        }
-
-        return attributesAsString;
+        return Task.FromResult(attributesAsString);
     }
 }

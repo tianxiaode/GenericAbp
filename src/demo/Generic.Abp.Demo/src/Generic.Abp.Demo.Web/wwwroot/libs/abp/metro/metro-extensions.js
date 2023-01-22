@@ -43,7 +43,6 @@ Metro.textareaSetup({
         var invalidInput = div.find(`input[name="__Invariant"]`);
         var lable = div.find('label');
         if(invalidInput){
-            console.log(invalidInput);
             invalidInput.remove();
         }
         span.css('left', lable.width());
@@ -59,7 +58,6 @@ Metro.checkboxSetup({
         var label = div.find('.checkbox-label');
         var html = label.html();
         var span = div.find('span.caption');
-        console.log(html, span);
         span.text(html);
     }
 })

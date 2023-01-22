@@ -1,31 +1,33 @@
-﻿using System;
-using System.Text;
-using Localization.Resources.AbpUi;
+﻿using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Localization;
+using System;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Generic.Abp.Metro.UI.TagHelpers.Dialog;
 
 public class MetroDialogFooterTagHelperService : MetroTagHelperService<MetroDialogFooterTagHelper>
 {
-    private readonly IStringLocalizer<AbpUiResource> _localizer;
+    protected IStringLocalizer<AbpUiResource> L { get; }
 
     public MetroDialogFooterTagHelperService(IStringLocalizer<AbpUiResource> localizer)
     {
-        _localizer = localizer;
+        L = localizer;
     }
 
-    public override void Process(TagHelperContext context, TagHelperOutput output)
+    public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
         output.TagName = "div";
         AddClasses(context, output);
 
         if (TagHelper.Buttons != MetroDialogButtons.None)
         {
-            output.PostContent.SetHtmlContent(CreateContent());
+            output.PostContent.SetHtmlContent(await CreateFooterContentAsync());
         }
 
+        await AddItemToItemsAsync<DialogItem>(context, DialogItems, nameof(MetroDialogFooterTagHelper));
     }
 
     protected virtual void AddClasses(TagHelperContext context, TagHelperOutput output)
@@ -48,28 +50,28 @@ public class MetroDialogFooterTagHelperService : MetroTagHelperService<MetroDial
 
     }
 
-    protected virtual string CreateContent()
+    protected virtual async Task<string> CreateFooterContentAsync()
     {
         var sb = new StringBuilder();
 
         switch (TagHelper.Buttons)
         {
             case MetroDialogButtons.Cancel:
-                sb.AppendLine(GetCancelButton());
+                sb.AppendLine(await CreteButtonAsync(L["Cancel"], "secondary", isClose:true));
                 break;
             case MetroDialogButtons.Close:
-                sb.AppendLine(GetCloseButton());
+                sb.AppendLine(await CreteButtonAsync(L["Close"], "secondary", isClose:true));
                 break;
             case MetroDialogButtons.Submit:
-                sb.AppendLine(GetSubmitButton());
+                sb.AppendLine(await CreteButtonAsync(L["Save"], type:"submit"));
                 break;
             case MetroDialogButtons.Submit | MetroDialogButtons.Cancel:
-                sb.AppendLine(GetSubmitButton());
-                sb.AppendLine(GetCancelButton());
+                sb.AppendLine(await CreteButtonAsync(L["Save"], type:"submit"));
+                sb.AppendLine(await CreteButtonAsync(L["Cancel"], "secondary", isClose:true));
                 break;
             case MetroDialogButtons.Submit | MetroDialogButtons.Close:
-                sb.AppendLine(GetSubmitButton());
-                sb.AppendLine(GetCloseButton());
+                sb.AppendLine(await CreteButtonAsync(L["Save"], type:"submit"));
+                sb.AppendLine(await CreteButtonAsync(L["Close"], "secondary", isClose:true));
                 break;
             case MetroDialogButtons.None:
                 break;
@@ -80,47 +82,22 @@ public class MetroDialogFooterTagHelperService : MetroTagHelperService<MetroDial
         return sb.ToString();
     }
 
-    protected virtual string GetSubmitButton()
+    protected virtual Task<string> CreteButtonAsync(string text ,string color = "primary", string type = "button", string busyText="",bool isClose= false, string tagName = "button")
     {
-        //var icon = new TagBuilder("span");
-        //icon.AddCssClass("mif-checkmark");
+        var builder = new TagBuilder(tagName);
+        var attributes = builder.Attributes;
+        attributes.Add("type", type);
+        builder.AddCssClass("button");
+        builder.AddCssClass(color);
+        if (!busyText.IsNullOrWhiteSpace())
+        {
+            attributes.Add("data-busy-text", busyText);
+        }
+        if(isClose) builder.AddCssClass("js-dialog-close");
 
-        //var span = new TagBuilder("span");
-        //span.InnerHtml.Append(_localizer["Save"]);
-
-        var element = new TagBuilder("button");
-        element.Attributes.Add("type", "submit");
-        element.AddCssClass("button");
-        element.AddCssClass("primary");
-        element.Attributes.Add("data-busy-text", _localizer["SavingWithThreeDot"]);
-        //element.InnerHtml.AppendHtml(icon);
-        element.InnerHtml.Append(_localizer["Save"]);
-
-        return element.ToHtmlString();
-    }
-
-    protected virtual string GetCloseButton()
-    {
-        var element = new TagBuilder("button");
-        element.Attributes.Add("type", "button");
-        element.AddCssClass("button");
-        element.AddCssClass("js-dialog-close");
-        element.AddCssClass("secondary");
-        element.InnerHtml.Append(_localizer["Close"]);
-
-        return element.ToHtmlString();
-    }
-
-    protected virtual string GetCancelButton()
-    {
-        var element = new TagBuilder("button");
-        element.Attributes.Add("type", "button");
-        element.AddCssClass("button");
-        element.AddCssClass("js-dialog-close");
-        element.AddCssClass("secondary");
-        element.InnerHtml.Append(_localizer["Cancel"]);
-
-        return element.ToHtmlString();
+        var innerHtml = builder.InnerHtml;
+        innerHtml.Append(text);
+        return Task.FromResult(builder.ToHtmlString());
     }
 
 }

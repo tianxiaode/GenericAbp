@@ -63,10 +63,10 @@ public class MetroSelectTagHelperService : MetroTagHelperService<MetroSelectTagH
     protected virtual async Task<string> GetFormInputGroupAsHtmlAsync(TagHelperContext context, TagHelperOutput output, TagHelperContent childContent)
     {
         var selectTag = await GetSelectTagAsync(context, output, childContent);
-        var selectAsHtml = selectTag.Render(_encoder);
+        var selectAsHtml = selectTag.RenderAsync(_encoder);
         var label = await GetLabelAsHtmlAsync(context, output, selectTag);
         var validation = await GetValidationAsHtmlAsync(context, output, selectTag);
-        var infoText = GetInfoAsHtml(context, output, selectTag);
+        var infoText = GetInfoAsHtmlAsync(context, output, selectTag);
 
         return label + Environment.NewLine + selectAsHtml + Environment.NewLine + infoText + Environment.NewLine + validation;
     }
@@ -86,7 +86,7 @@ public class MetroSelectTagHelperService : MetroTagHelperService<MetroSelectTagH
 
         if (TagHelper.AutocompleteApiUrl.IsNullOrEmpty())
         {
-            selectTagHelper.Items = GetSelectItems(context, output);
+            selectTagHelper.Items = await GetSelectItemsAsync(context, output);
         }
         else if (!TagHelper.AutocompleteSelectedItemName.IsNullOrEmpty())
         {
@@ -103,7 +103,7 @@ public class MetroSelectTagHelperService : MetroTagHelperService<MetroSelectTagH
         selectTagHelperOutput.Attributes.AddClass("form-control");
         selectTagHelperOutput.Attributes.AddClass(GetSize(context, output));
         AddDisabledAttribute(selectTagHelperOutput);
-        AddInfoTextId(selectTagHelperOutput);
+        await AddInfoTextIdAsync(selectTagHelperOutput);
         AddAutocompleteAttributes(selectTagHelperOutput);
 
         return selectTagHelperOutput;
@@ -117,8 +117,8 @@ public class MetroSelectTagHelperService : MetroTagHelperService<MetroSelectTagH
         output.Attributes.Add("data-autocomplete-items-property", TagHelper.AutocompleteItemsPropertyName);
         output.Attributes.Add("data-autocomplete-display-property", TagHelper.AutocompleteDisplayPropertyName);
         output.Attributes.Add("data-autocomplete-value-property", TagHelper.AutocompleteValuePropertyName);
-        output.Attributes.Add("data-autocomplete-filter-param-name", TagHelper.AutocompleteFilterParamName);
-        output.Attributes.Add("data-autocomplete-selected-item-name", TagHelper.AutocompleteSelectedItemName);
+        output.Attributes.Add("data-autocomplete-filter-param-Name", TagHelper.AutocompleteFilterParamName);
+        output.Attributes.Add("data-autocomplete-selected-item-Name", TagHelper.AutocompleteSelectedItemName);
         output.Attributes.Add("data-autocomplete-selected-item-value", TagHelper.AutocompleteSelectedItemValue);
         output.Attributes.Add("data-autocomplete-allow-clear", TagHelper.AllowClear);
         output.Attributes.Add("data-autocomplete-placeholder", TagHelper.Placeholder);
@@ -134,7 +134,7 @@ public class MetroSelectTagHelperService : MetroTagHelperService<MetroSelectTagH
         }
     }
 
-    protected virtual List<SelectListItem> GetSelectItems(TagHelperContext context, TagHelperOutput output)
+    protected virtual async Task<List<SelectListItem>> GetSelectItemsAsync(TagHelperContext context, TagHelperOutput output)
     {
         if (TagHelper.AspItems != null)
         {
@@ -143,7 +143,7 @@ public class MetroSelectTagHelperService : MetroTagHelperService<MetroSelectTagH
 
         if (IsEnum())
         {
-            return GetSelectItemsFromEnum(context, output, TagHelper.AspFor.ModelExplorer);
+            return await GetSelectItemsFromEnumAsync(context, output, TagHelper.AspFor.ModelExplorer);
         }
 
         var selectItemsAttribute = TagHelper.AspFor.ModelExplorer.GetAttribute<SelectItems>();
@@ -196,7 +196,7 @@ public class MetroSelectTagHelperService : MetroTagHelperService<MetroSelectTagH
         return TagHelper.AspFor.ModelExplorer.GetAttribute<RequiredAttribute>() != null ? "<span> * </span>" : "";
     }
 
-    protected virtual void AddInfoTextId(TagHelperOutput inputTagHelperOutput)
+    protected virtual async Task AddInfoTextIdAsync(TagHelperOutput inputTagHelperOutput)
     {
         if (TagHelper.AspFor.ModelExplorer.GetAttribute<InputInfoText>() == null)
         {
@@ -210,12 +210,12 @@ public class MetroSelectTagHelperService : MetroTagHelperService<MetroSelectTagH
             return;
         }
 
-        var infoText = _tagHelperLocalizer.GetLocalizedText(idAttr.Value + "InfoText", TagHelper.AspFor.ModelExplorer);
+        var infoText = await _tagHelperLocalizer.GetLocalizedTextAsync(idAttr.Value + "InfoText", TagHelper.AspFor.ModelExplorer);
 
         inputTagHelperOutput.Attributes.Add("aria-describedby", infoText);
     }
 
-    protected virtual string GetInfoAsHtml(TagHelperContext context, TagHelperOutput output, TagHelperOutput inputTag)
+    protected virtual async Task<string> GetInfoAsHtmlAsync(TagHelperContext context, TagHelperOutput output, TagHelperOutput inputTag)
     {
         var text = "";
 
@@ -237,7 +237,7 @@ public class MetroSelectTagHelperService : MetroTagHelperService<MetroSelectTagH
         }
 
         var idAttr = inputTag.Attributes.FirstOrDefault(a => a.Name == "id");
-        var localizedText = _tagHelperLocalizer.GetLocalizedText(text, TagHelper.AspFor.ModelExplorer);
+        var localizedText = await _tagHelperLocalizer.GetLocalizedTextAsync(text, TagHelper.AspFor.ModelExplorer);
 
         var small = new TagBuilder("small");
         small.Attributes.Add("id", idAttr?.Value?.ToString() + "InfoText");
@@ -247,7 +247,7 @@ public class MetroSelectTagHelperService : MetroTagHelperService<MetroSelectTagH
         return small.ToHtmlString();
     }
 
-    protected virtual List<SelectListItem> GetSelectItemsFromEnum(TagHelperContext context, TagHelperOutput output, ModelExplorer explorer)
+    protected virtual async Task<List<SelectListItem>> GetSelectItemsFromEnumAsync(TagHelperContext context, TagHelperOutput output, ModelExplorer explorer)
     {
         var selectItems = new List<SelectListItem>();
         var isNullableType = Nullable.GetUnderlyingType(explorer.ModelType) != null;
@@ -259,7 +259,7 @@ public class MetroSelectTagHelperService : MetroTagHelperService<MetroSelectTagH
             selectItems.Add(new SelectListItem());
         }
 
-        var containerLocalizer = _tagHelperLocalizer.GetLocalizerOrNull(explorer.Container.ModelType.Assembly);
+        var containerLocalizer = await _tagHelperLocalizer.GetLocalizerOrNullAsync(explorer.Container.ModelType.Assembly);
 
         foreach (var enumValue in enumType.GetEnumValuesAsUnderlyingType())
         {
@@ -380,14 +380,14 @@ public class MetroSelectTagHelperService : MetroTagHelperService<MetroSelectTagH
         return !string.IsNullOrWhiteSpace(id) ? "for=\"" + id + "\"" : string.Empty;
     }
 
-    protected virtual void AddGroupToFormGroupContents(TagHelperContext context, string propertyName, string html, int order, out bool suppress)
+    protected virtual void  AddGroupToFormGroupContents(TagHelperContext context, string propertyName, string html, int order, out bool suppress)
     {
-        var list = context.GetValue<List<FormGroupItem>>(FormGroupContents) ?? new List<FormGroupItem>();
+        var list = context.GetValue<List<FormItem>>(FormItems);
         suppress = list == null;
 
         if (list != null && !list.Any(igc => igc.HtmlContent.Contains("id=\"" + propertyName.Replace('.', '_') + "\"")))
         {
-            list.Add(new FormGroupItem
+            list.Add(new FormItem
             {
                 HtmlContent = html,
                 Order = order,

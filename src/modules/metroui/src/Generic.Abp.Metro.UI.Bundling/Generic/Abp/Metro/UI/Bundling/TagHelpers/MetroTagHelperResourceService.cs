@@ -64,7 +64,7 @@ public abstract class MetroTagHelperResourceService : ITransientDependency
 
         foreach (var bundleFile in bundleFiles)
         {
-            Logger.LogError($"bundle file name:{bundleFile}");
+            Logger.LogError($"bundle file Name:{bundleFile}");
             var file = HostingEnvironment.WebRootFileProvider.GetFileInfo(bundleFile);
 
             if (file is not { Exists: true })

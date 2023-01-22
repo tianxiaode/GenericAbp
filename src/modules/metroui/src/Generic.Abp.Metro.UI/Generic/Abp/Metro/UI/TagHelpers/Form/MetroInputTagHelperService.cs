@@ -10,8 +10,6 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using Volo.Abp;
 
 namespace Generic.Abp.Metro.UI.TagHelpers.Form;
 
@@ -89,7 +87,7 @@ public class MetroInputTagHelperService : MetroTagHelperService<MetroInputTagHel
         var (inputTag ,isCheckBox, isTextarea)  = await GetInputTagHelperOutputAsync(context, output, formContent);
 
         inputTag.Attributes.Add("data-validate", await GetInputValidatorAsync(inputTag.Attributes));
-        var inputHtml = inputTag.Render(_encoder);
+        var inputHtml = await inputTag.RenderAsync(_encoder);
         var label = await GetLabelAsHtmlAsync(context, output, inputTag, formContent, isCheckBox);
 
         return (GetContent(context, output, label, inputHtml, isCheckBox),isCheckBox, isTextarea);
@@ -118,10 +116,10 @@ public class MetroInputTagHelperService : MetroTagHelperService<MetroInputTagHel
         AddDisabledAttribute(inputTagHelperOutput);
         var isCheckbox = IsInputCheckbox(context, output, inputTagHelperOutput.Attributes);
         AddReadOnlyAttribute(inputTagHelperOutput);
-        AddPlaceholderAttribute(inputTagHelperOutput);
+        await AddPlaceholderAttributeAsync(inputTagHelperOutput);
         if (isCheckbox)
         {
-            SetCheckBoxAttributes(inputTagHelperOutput);
+            await SetCheckBoxAttributesAsync(inputTagHelperOutput);
         }else
         {
             inputTagHelperOutput.Attributes.AddClass("metro-input");
@@ -177,9 +175,9 @@ public class MetroInputTagHelperService : MetroTagHelperService<MetroInputTagHel
             attrList.Add("type", TagHelper.InputTypeName);
         }
 
-        if (!TagHelper.Name.IsNullOrEmpty() && !attrList.ContainsName("name"))
+        if (!TagHelper.Name.IsNullOrEmpty() && !attrList.ContainsName("Name"))
         {
-            attrList.Add("name", TagHelper.Name);
+            attrList.Add("Name", TagHelper.Name);
         }
 
         if (!TagHelper.Value.IsNullOrEmpty() && !attrList.ContainsName("value"))
@@ -265,7 +263,7 @@ public class MetroInputTagHelperService : MetroTagHelperService<MetroInputTagHel
                 labelTagHelperOutput.Content.AppendHtml(": ");
             }
         }
-        var labelHtml = labelTagHelperOutput.Render(_encoder);
+        var labelHtml = await labelTagHelperOutput.RenderAsync(_encoder);
         return labelHtml;
     }
 
@@ -288,7 +286,7 @@ public class MetroInputTagHelperService : MetroTagHelperService<MetroInputTagHel
         }
     }
 
-    protected virtual void AddPlaceholderAttribute(TagHelperOutput inputTagHelperOutput)
+    protected virtual async Task AddPlaceholderAttributeAsync(TagHelperOutput inputTagHelperOutput)
     {
         if (inputTagHelperOutput.Attributes.ContainsName("placeholder"))
         {
@@ -298,7 +296,7 @@ public class MetroInputTagHelperService : MetroTagHelperService<MetroInputTagHel
         var attribute = TagHelper.AspFor.ModelExplorer.GetAttribute<Placeholder>();
 
         if (attribute == null) return;
-        var placeholderLocalized = _tagHelperLocalizer.GetLocalizedText(attribute.Value, TagHelper.AspFor.ModelExplorer);
+        var placeholderLocalized = await _tagHelperLocalizer.GetLocalizedTextAsync(attribute.Value, TagHelper.AspFor.ModelExplorer);
 
         inputTagHelperOutput.Attributes.Add("placeholder", placeholderLocalized);
     }
@@ -401,11 +399,11 @@ public class MetroInputTagHelperService : MetroTagHelperService<MetroInputTagHel
 
     }
 
-    protected virtual void SetCheckBoxAttributes(TagHelperOutput output)
+    protected virtual async Task SetCheckBoxAttributesAsync(TagHelperOutput output)
     {
         var name = TagHelper.Label ?? TagHelper.AspFor.Name;
         name = name[(name?.IndexOf(".") + 1 ?? 1)..];
-        var label = _tagHelperLocalizer.GetLocalizedText(name, TagHelper.AspFor.ModelExplorer);
+        var label = await _tagHelperLocalizer.GetLocalizedTextAsync(name, TagHelper.AspFor.ModelExplorer);
         output.Attributes.Add("data-caption", label);
         output.Attributes.Add("data-style", 2);
         output.Attributes.Add("data-cls-caption", "fg-cyan");
@@ -421,12 +419,12 @@ public class MetroInputTagHelperService : MetroTagHelperService<MetroInputTagHel
 
     protected virtual void AddGroupToFormGroupContents(TagHelperContext context, string propertyName, string html, int order, out bool suppress)
     {
-        var list = context.GetValue<List<FormGroupItem>>(FormGroupContents);
+        var list = context.GetValue<List<FormItem>>(FormItems);
         suppress = list == null;
 
         if (list != null && !list.Any(igc => igc.HtmlContent.Contains("id=\"" + propertyName.Replace('.', '_') + "\"")))
         {
-            list.Add(new FormGroupItem
+            list.Add(new FormItem
             {
                 HtmlContent = html,
                 Order = order,

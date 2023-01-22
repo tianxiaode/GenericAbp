@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.Localization;
 using Volo.Abp.DependencyInjection;
@@ -7,9 +8,9 @@ namespace Generic.Abp.Metro.UI.TagHelpers;
 
 public interface IMetroTagHelperLocalizer : ITransientDependency
 {
-    string GetLocalizedText(string text, ModelExplorer explorer);
+    Task<string> GetLocalizedTextAsync(string text, ModelExplorer explorer);
 
-    IStringLocalizer GetLocalizerOrNull(ModelExplorer explorer);
+    Task<IStringLocalizer> GetLocalizerOrNullAsync(ModelExplorer explorer);
 
-    IStringLocalizer GetLocalizerOrNull(Assembly assembly);
+    Task<IStringLocalizer> GetLocalizerOrNullAsync(Assembly assembly);
 }

@@ -20,7 +20,7 @@ public class TenantController : AbpControllerBase, IAbpTenantAppService
     }
 
     [HttpGet]
-    [Route("tenants/by-name/{name}")]
+    [Route("tenants/by-Name/{Name}")]
     public virtual async Task<FindTenantResultDto> FindTenantByNameAsync(string name)
     {
         return await _abpTenantAppService.FindTenantByNameAsync(name);

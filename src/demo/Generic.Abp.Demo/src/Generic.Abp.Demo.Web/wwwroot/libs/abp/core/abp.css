@@ -18,6 +18,56 @@
     margin: 0 5px;
 }
 
+.w-dialog-400{
+    min-width: 400px !important;
+}
+.w-dialog-800{
+    min-width: 800px !important;
+}
+.w-dialog-1200{
+    min-width: 1200px !important;
+}
+.w-dialog-full{
+    min-width: 100% !important;
+}
+.h-dialog-400{
+    min-height: 400px !important;
+    max-height: 400px !important;
+}
+.h-dialog-500{
+    min-height: 500px !important;
+    max-height: 500px !important;
+}
+.h-dialog-600{
+    min-height: 600px !important;
+    max-height: 600px !important;
+}
+.h-dialog-full{
+    min-height: 100% !important;
+    max-height: 100% !important;
+}
+
+.w-lable-100{
+    min-width: 100px;
+}
+
+.w-lable-110{
+    min-width: 110px;
+}
+
+.w-lable-120{
+    min-width: 120px;
+}
+.w-lable-130{
+    min-width: 130px;
+}
+.w-lable-140{
+    min-width: 140px;
+}
+.w-lable-150{
+    min-width: 150px;
+}
+
 .lh-input-label-small{
     line-height: 26px;
 }

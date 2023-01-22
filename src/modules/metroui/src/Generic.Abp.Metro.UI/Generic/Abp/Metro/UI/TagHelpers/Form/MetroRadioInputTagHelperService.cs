@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 using Generic.Abp.Metro.UI.TagHelpers.Extensions;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
@@ -20,7 +21,7 @@ public class MetroRadioInputTagHelperService : MetroTagHelperService<MetroRadioI
         _tagHelperLocalizer = tagHelperLocalizer;
     }
 
-    public override void Process(TagHelperContext context, TagHelperOutput output)
+    public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
         var selectItems = GetSelectItems(context, output);
         SetSelectedValue(context, output, selectItems);
@@ -29,19 +30,12 @@ public class MetroRadioInputTagHelperService : MetroTagHelperService<MetroRadioI
 
         var html = GetHtml(context, output, selectItems);
 
-        AddGroupToFormGroupContents(context, TagHelper.AspFor.Name, html, order, out var suppress);
+        await AddItemToItemsAsync<FormItem>(context, FormItems, TagHelper.AspFor.Name);
 
-        if (suppress)
-        {
-            output.SuppressOutput();
-        }
-        else
-        {
-            output.TagName = "div";
-            output.Attributes.Clear();
-            output.TagMode = TagMode.StartTagAndEndTag;
-            output.Content.SetHtmlContent(html);
-        }
+        output.TagName = "div";
+        output.Attributes.Clear();
+        output.TagMode = TagMode.StartTagAndEndTag;
+        output.Content.SetHtmlContent(html);
     }
 
     protected virtual string GetHtml(TagHelperContext context, TagHelperOutput output, List<SelectListItem> selectItems)
@@ -110,7 +104,7 @@ public class MetroRadioInputTagHelperService : MetroTagHelperService<MetroRadioI
 
     protected virtual List<SelectListItem> GetSelectItemsFromEnum(TagHelperContext context, TagHelperOutput output, ModelExplorer explorer)
     {
-        var localizer = _tagHelperLocalizer.GetLocalizerOrNull(explorer);
+        var localizer = _tagHelperLocalizer.GetLocalizerOrNullAsync(explorer).GetAwaiter().GetResult();
 
         var selectItems = explorer.Metadata.IsEnum ? explorer.ModelType.GetTypeInfo().GetMembers(BindingFlags.Public | BindingFlags.Static)
             .Select((t, i) => new SelectListItem { Value = i.ToString(), Text = GetLocalizedPropertyName(localizer, explorer.ModelType, t.Name) }).ToList() : null;
@@ -177,19 +171,4 @@ public class MetroRadioInputTagHelperService : MetroTagHelperService<MetroRadioI
         return TagHelper.AspFor.ModelExplorer.Model?.ToString();
     }
 
-    protected virtual void AddGroupToFormGroupContents(TagHelperContext context, string propertyName, string html, int order, out bool suppress)
-    {
-        var list = context.GetValue<List<FormGroupItem>>(FormGroupContents) ?? new List<FormGroupItem>();
-        suppress = list == null;
-
-        if (list != null && !list.Any(igc => igc.HtmlContent.Contains("id=\"" + propertyName.Replace('.', '_') + "\"")))
-        {
-            list.Add(new FormGroupItem
-            {
-                HtmlContent = html,
-                Order = order,
-                PropertyName = propertyName
-            });
-        }
-    }
 }

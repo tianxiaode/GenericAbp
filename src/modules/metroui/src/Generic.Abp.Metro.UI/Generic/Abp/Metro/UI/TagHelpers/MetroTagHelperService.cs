@@ -1,14 +1,20 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using Generic.Abp.Metro.UI.TagHelpers.Extensions;
+using Volo.Abp.DependencyInjection;
 
 namespace Generic.Abp.Metro.UI.TagHelpers;
+
 
 //TODO: Refactor this class, extract bootstrap functionality!
 public abstract class MetroTagHelperService<TTagHelper> : IMetroTagHelperService<TTagHelper>
     where TTagHelper : TagHelper
 {
-    protected const string FormGroupContents = "FormGroupContents";
+    protected const string FormItems = "FormItems";
+    protected const string DialogItems = "DialogItems";
     protected const string TabItems = "TabItems";
     protected const string AccordionItems = "AccordionItems";
     protected const string BreadcrumbItemsContent = "BreadcrumbItemsContent";
@@ -44,5 +50,25 @@ public abstract class MetroTagHelperService<TTagHelper> : IMetroTagHelperService
         return Task.CompletedTask;
     }
 
+    protected virtual Task CreateItemsAsync<T>(TagHelperContext context, string key)
+    {
+        context.Items.Add(key,new List<T>());
+        return Task.CompletedTask;
+    }
 
+    protected virtual Task<bool> IsTypeExistsAsync<T>(TagHelperContext context, string key, string name) where T : class,ITagItem
+    {
+        return !context.Items.ContainsKey(key) ? Task.FromResult(false) : Task.FromResult(context.Items[key] is IEnumerable<T> items && items.Any(m => m.Name == name));
+    }
+
+    protected virtual Task<T> AddItemToItemsAsync<T>(TagHelperContext context, string key, string name) where  T : class,ITagItem, new()
+    {
+        var list = context.GetValue<List<T>>(key) ?? new List<T>();
+        var item = new T()
+        {
+            Name = name,
+        };
+        list.Add(item);
+        return Task.FromResult(item);
+    }
 }

@@ -1,21 +1,15 @@
-﻿using Localization.Resources.AbpUi;
-using Microsoft.AspNetCore.Razor.TagHelpers;
-using Microsoft.Extensions.Localization;
+﻿using Microsoft.AspNetCore.Razor.TagHelpers;
+using System.Threading.Tasks;
 
 namespace Generic.Abp.Metro.UI.TagHelpers.Dialog;
 
 public class MetroDialogTitleTagHelperService : MetroTagHelperService<MetroDialogTitleTagHelper>
 {
-    public override void Process(TagHelperContext context, TagHelperOutput output)
+    public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
         output.TagName = "div";
-        AddClasses(context, output);
-        output.Content.AppendHtml(TagHelper.Title);
-    }
-
-    protected virtual void AddClasses(TagHelperContext context, TagHelperOutput output)
-    {
         output.Attributes.AddClass("dialog-title");
+        await AddItemToItemsAsync<DialogItem>(context, DialogItems, nameof(MetroDialogTitleTagHelper));
     }
 
 

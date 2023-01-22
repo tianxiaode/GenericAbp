@@ -12,7 +12,7 @@ namespace Generic.Abp.Metro.UI.Widgets;
 public class WidgetDefinition
 {
     /// <summary>
-    /// Unique name of the widget.
+    /// Unique Name of the widget.
     /// </summary>
     [NotNull]
     public string Name { get; } 
@@ -21,7 +21,7 @@ public class WidgetDefinition
     public WidgetAttribute WidgetAttribute { get; }
 
     /// <summary>
-    /// Display name of the widget.
+    /// Display Name of the widget.
     /// </summary>
     [NotNull]
     public ILocalizableString DisplayName {

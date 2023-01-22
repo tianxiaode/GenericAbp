@@ -9,7 +9,7 @@ using Microsoft.Extensions.Options;
 
 namespace Generic.Abp.Metro.UI.TagHelpers.Form;
 
-[HtmlTargetElement(Attributes = "metro-id-name")]
+[HtmlTargetElement(Attributes = "metro-id-Name")]
 public class MetroIdNameTagHelper : MetroTagHelper
 {
     /// <summary>
@@ -17,7 +17,7 @@ public class MetroIdNameTagHelper : MetroTagHelper
     /// </summary>
     public override int Order => -1000 - 1;
 
-    [HtmlAttributeName("metro-id-name")]
+    [HtmlAttributeName("metro-id-Name")]
     public ModelExpression IdNameFor { get; set; }
 
     private readonly MvcViewOptions _mvcViewOptions;
@@ -36,9 +36,9 @@ public class MetroIdNameTagHelper : MetroTagHelper
             output.Attributes.Add("id", id);
         }
 
-        if (!context.AllAttributes.Any(x => x.Name.Equals("name", StringComparison.OrdinalIgnoreCase)))
+        if (!context.AllAttributes.Any(x => x.Name.Equals("Name", StringComparison.OrdinalIgnoreCase)))
         {
-            output.Attributes.Add("name", IdNameFor.Name);
+            output.Attributes.Add("Name", IdNameFor.Name);
         }
 
         return Task.CompletedTask;

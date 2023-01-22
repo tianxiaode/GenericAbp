@@ -1,27 +1,29 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using System;
+using System.Threading.Tasks;
 
 namespace Generic.Abp.Metro.UI.TagHelpers.Button;
 
 public abstract class MetroButtonTagHelperServiceBase<TTagHelper> : MetroTagHelperService<TTagHelper>
     where TTagHelper : TagHelper, IButtonTagHelperBase
 {
-    public override void Process(TagHelperContext context, TagHelperOutput output)
+    public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
-        NormalizeTagMode(context, output);
-        AddClasses(context, output);
-        AddIcon(context, output);
-        AddText(context, output);
-        AddDisabled(context, output);
+        await NormalizeTagModeAsync(context, output);
+        await AddClassesAsync(context, output);
+        await AddIconAsync(context, output);
+        await AddTextAsync(context, output);
+        await AddDisabledAsync(context, output);
     }
 
-    protected virtual void NormalizeTagMode(TagHelperContext context, TagHelperOutput output)
+    protected virtual Task NormalizeTagModeAsync(TagHelperContext context, TagHelperOutput output)
     {
         output.TagMode = TagMode.StartTagAndEndTag;
+        return Task.CompletedTask;
     }
 
-    protected virtual void AddClasses(TagHelperContext context, TagHelperOutput output)
+    protected virtual Task AddClassesAsync(TagHelperContext context, TagHelperOutput output)
     {
         output.Attributes.AddClass("button");
 
@@ -34,10 +36,10 @@ public abstract class MetroButtonTagHelperServiceBase<TTagHelper> : MetroTagHelp
         {
             output.Attributes.AddClass(TagHelper.Size.ToString().ToLowerInvariant().Replace("_", "-"));
         }
-
+        return Task.CompletedTask;
     }
 
-    protected virtual void AddIcon(TagHelperContext context, TagHelperOutput output)
+    protected virtual async Task AddIconAsync(TagHelperContext context, TagHelperOutput output)
     {
         if (TagHelper.Icon.IsNullOrWhiteSpace())
         {
@@ -53,39 +55,41 @@ public abstract class MetroButtonTagHelperServiceBase<TTagHelper> : MetroTagHelp
         else
         {
             icon = new TagBuilder("span");
-            icon.AddCssClass(GetIconClass(context, output));
+            icon.AddCssClass(await GetIconClassAsync(context, output));
             output.Content.AppendHtml(icon);
             output.Content.Append(" ");
 
         }
-
     }
 
-    protected virtual string GetIconClass(TagHelperContext context, TagHelperOutput output)
+    protected virtual Task<string> GetIconClassAsync(TagHelperContext context, TagHelperOutput output)
     {
-        return TagHelper.IconType switch
+        var iconCls = TagHelper.IconType switch
         {
             FontIconType.Metro => "mif-" + TagHelper.Icon,
             FontIconType.FontAwesome => "fa fa-" + TagHelper.Icon,
             _ => TagHelper.Icon
         };
+        return Task.FromResult(iconCls);
     }
 
-    protected virtual void AddText(TagHelperContext context, TagHelperOutput output)
+    protected virtual Task AddTextAsync(TagHelperContext context, TagHelperOutput output)
     {
         if (TagHelper.Text.IsNullOrWhiteSpace())
         {
-            return;
+            return Task.CompletedTask;
         }
 
         output.Content.AppendHtml(TagHelper.Text);
+        return Task.CompletedTask;
     }
 
-    protected virtual void AddDisabled(TagHelperContext context, TagHelperOutput output)
+    protected virtual Task AddDisabledAsync(TagHelperContext context, TagHelperOutput output)
     {
         if (TagHelper.Disabled ?? false)
         {
             output.Attributes.AddClass("disabled");
         }
+        return Task.CompletedTask;
     }
 }

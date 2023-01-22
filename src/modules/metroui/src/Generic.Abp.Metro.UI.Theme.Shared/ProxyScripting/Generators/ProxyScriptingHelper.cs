@@ -110,7 +110,7 @@ namespace Generic.Abp.Metro.UI.Theme.Shared.ProxyScripting.Generators
             }
 
             var qsBuilderParams = queryStringParameters
-                .Select(p => $"{{ name: '{p.Name.ToCamelCase()}', value: {ProxyScriptingJsFuncHelper.GetParamNameInJsFunc(p)} }}")
+                .Select(p => $"{{ Name: '{p.Name.ToCamelCase()}', value: {ProxyScriptingJsFuncHelper.GetParamNameInJsFunc(p)} }}")
                 .JoinAsString(", ");
 
             return url + $"' + abp.utils.buildQueryString([{qsBuilderParams}]) + '";

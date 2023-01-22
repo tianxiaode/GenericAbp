@@ -54,7 +54,7 @@ namespace Generic.Abp.Demo.Web
             {
                 //builder.AddValidation(options =>
                 //{
-                //    options.AddAudiences("Demos"); // Replace with your application name
+                //    options.AddAudiences("Demos"); // Replace with your application Name
                 //    options.UseLocalServer();
                 //    options.UseAspNetCore();
                 //});

@@ -39,6 +39,6 @@ public static class TagHelperExtensions
     {
         var innerOutput = await tagHelper.ProcessAndGetOutputAsync(attributeList, context, tagName, tagMode);
 
-        return innerOutput.Render(htmlEncoder);
+        return await innerOutput.RenderAsync(htmlEncoder);
     }
 }

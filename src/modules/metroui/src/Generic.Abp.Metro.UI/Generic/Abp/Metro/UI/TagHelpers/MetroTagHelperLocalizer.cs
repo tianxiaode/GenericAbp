@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
@@ -19,31 +20,31 @@ public class MetroTagHelperLocalizer : IMetroTagHelperLocalizer
         _options = options.Value;
     }
 
-    public string GetLocalizedText(string text, ModelExplorer explorer)
+    public async Task<string> GetLocalizedTextAsync(string text, ModelExplorer explorer)
     {
-        var localizer = GetLocalizerOrNull(explorer);
+        var localizer = await GetLocalizerOrNullAsync(explorer);
         return localizer == null
             ? text
             : localizer[text].Value;
     }
 
-    public IStringLocalizer GetLocalizerOrNull(ModelExplorer explorer)
+    public async Task<IStringLocalizer> GetLocalizerOrNullAsync(ModelExplorer explorer)
     {
-        return GetLocalizerOrNull(explorer.Container.ModelType.Assembly);
+        return await GetLocalizerOrNullAsync(explorer.Container.ModelType.Assembly);
     }
 
-    public IStringLocalizer GetLocalizerOrNull(Assembly assembly)
+    public async Task<IStringLocalizer> GetLocalizerOrNullAsync(Assembly assembly)
     {
-        var resourceType = GetResourceType(assembly);
+        var resourceType = await GetResourceTypeAsync(assembly);
         return resourceType == null
             ? _stringLocalizerFactory.CreateDefaultOrNull()
             : _stringLocalizerFactory.Create(resourceType);
     }
 
-    private Type GetResourceType(Assembly assembly)
+    private Task<Type> GetResourceTypeAsync(Assembly assembly)
     {
-        return _options
+        return Task.FromResult(_options
             .AssemblyResources
-            .GetOrDefault(assembly);
+            .GetOrDefault(assembly));
     }
 }

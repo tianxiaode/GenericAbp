@@ -65,15 +65,15 @@ public class MetroDropdownButtonTagHelperService : MetroTagHelperService<MetroDr
         abpButtonTagHelper.IconType = TagHelper.IconType;
         abpButtonTagHelper.Size = TagHelper.Size;
         abpButtonTagHelper.ButtonType = TagHelper.ButtonType;
-        var attributes = GetAttributesForMainButton(context, output);
+        var attributes = await GetAttributesForMainButtonAsync(context, output);
 
         var buttonTag = await abpButtonTagHelper.ProcessAndGetOutputAsync(attributes, context, "button", TagMode.StartTagAndEndTag);
 
         buttonTag.PreContent.SetHtmlContent(content);
 
-        if ((!(TagHelper.NavLink ?? false)) && (!(TagHelper.Link ?? false))) return buttonTag.Render(_htmlEncoder);
-        var linkTag = ConvertButtonToLink(buttonTag);
-        return linkTag.Render(_htmlEncoder);
+        if ((!(TagHelper.NavLink ?? false)) && (!(TagHelper.Link ?? false))) return await buttonTag.RenderAsync(_htmlEncoder);
+        var linkTag = await ConvertButtonToLinkAsync(buttonTag);
+        return await linkTag.RenderAsync(_htmlEncoder);
 
     }
 
@@ -83,12 +83,12 @@ public class MetroDropdownButtonTagHelperService : MetroTagHelperService<MetroDr
 
         abpButtonTagHelper.Size = TagHelper.Size;
         abpButtonTagHelper.ButtonType = TagHelper.ButtonType;
-        var attributes = GetAttributesForSplitButton(context, output);
+        var attributes = await GetAttributesForSplitButtonAsync(context, output);
 
         return await abpButtonTagHelper.RenderAsync(attributes, context, _htmlEncoder, "button", TagMode.StartTagAndEndTag);
     }
 
-    protected virtual TagHelperAttributeList GetAttributesForMainButton(TagHelperContext context, TagHelperOutput output)
+    protected virtual Task<TagHelperAttributeList> GetAttributesForMainButtonAsync(TagHelperContext context, TagHelperOutput output)
     {
 
         var attributes = new TagHelperAttributeList();
@@ -98,23 +98,23 @@ public class MetroDropdownButtonTagHelperService : MetroTagHelperService<MetroDr
             attributes.Add(tagHelperAttribute);
         }
 
-        if (TagHelper.DropdownStyle == DropdownStyle.Split) return attributes;
+        if (TagHelper.DropdownStyle == DropdownStyle.Split) return Task.FromResult(attributes);
         attributes.AddClass("dropdown-toggle");
 
-        return attributes;
+        return Task.FromResult(attributes);
     }
 
-    protected virtual TagHelperAttributeList GetAttributesForSplitButton(TagHelperContext context, TagHelperOutput output)
+    protected virtual  Task<TagHelperAttributeList> GetAttributesForSplitButtonAsync(TagHelperContext context, TagHelperOutput output)
     {
         var attributes = new TagHelperAttributeList();
 
         attributes.AddClass("dropdown-toggle");
         attributes.AddClass("split");
 
-        return attributes;
+        return Task.FromResult(attributes);
     }
 
-    protected virtual TagHelperOutput ConvertButtonToLink(TagHelperOutput buttonTag)
+    protected virtual Task<TagHelperOutput> ConvertButtonToLinkAsync(TagHelperOutput buttonTag)
     {
         buttonTag.TagName = "a";
         buttonTag.Attributes.RemoveAll("type");
@@ -125,6 +125,6 @@ public class MetroDropdownButtonTagHelperService : MetroTagHelperService<MetroDr
         {
             buttonTag.Attributes.AddClass("nav-link");
         }
-        return buttonTag;
+        return Task.FromResult(buttonTag) ;
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace Generic.Abp.Metro.UI.TagHelpers.Dialog;
+﻿using Microsoft.AspNetCore.Razor.TagHelpers;
+
+namespace Generic.Abp.Metro.UI.TagHelpers.Dialog;
 
 public class MetroDialogTitleTagHelper : MetroTagHelper<MetroDialogTitleTagHelper, MetroDialogTitleTagHelperService>
 {
