@@ -27,16 +27,21 @@
 
 }
 
+
 <div class="row">
     <metro-dialog title="切换租户" buttons="MetroDialogButtons.Submit | MetroDialogButtons.Cancel" id="ancd" asp-page="/Abp/MultiTenancy/TenantSwitchModal" metro-class="w-dialog-800 h-dialog-600">
-        <metro-form-content cols="2" horizontal="true" asp-modal>
+        <metro-form-content >
             <metro-input asp-for="@Model.IndexView.Email"></metro-input>
             <metro-input asp-for="@Model.IndexView.Password"></metro-input>
             <metro-input asp-for="@Model.IndexView.Surname"></metro-input>
             <metro-input asp-for="@Model.IndexView.Age"></metro-input>
-            <metro-input asp-for="@Model.IndexView.Phone1"></metro-input>
-            <metro-input type="checkbox" asp-for="@Model.IndexView.Name"></metro-input>
-            <metro-input asp-for="@Model.IndexView.Demo"></metro-input>
+            <metro-input asp-for="@Model.IndexView.Country"></metro-input>
+            <metro-input asp-for="@Model.IndexView.NeighborCountries" asp-items="@nameof(Model.CountryList)"></metro-input>
+            <metro-input asp-for="@Model.IndexView.MyCarType"></metro-input>
+            <metro-input asp-for="@Model.IndexView.YourCarType"></metro-input>
+            <metro-input asp-for="@Model.IndexView.Day"></metro-input>
+            <metro-input asp-for="@Model.IndexView.IsConfirm"></metro-input>
+            <metro-input asp-for="@Model.IndexView.Remarks"></metro-input>
             <p style="height: 500px;display: block">sdfsdfsfsdf</p>
         </metro-form-content>
     </metro-dialog>

@@ -34,7 +34,7 @@ public class MetroDialogTagHelperService : MetroTagHelperService<MetroDialogTagH
     {
         var attributes = output.Attributes;
         attributes.AddClass("dialog");
-        attributes.Add("data-role","dialog");
+        attributes.Add("data-role","dialog,validator");
         if (!attributes.ContainsName("id")) attributes.Add("id", "{id}");
         return Task.CompletedTask;
     }

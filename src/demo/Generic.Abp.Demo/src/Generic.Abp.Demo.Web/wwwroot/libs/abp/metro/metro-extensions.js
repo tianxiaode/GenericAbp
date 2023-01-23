@@ -52,15 +52,15 @@ Metro.textareaSetup({
     }
 })
 
-Metro.checkboxSetup({
-    onCheckboxCreate(input){
-        var div = $(input.closest('div'));
-        var label = div.find('.checkbox-label');
-        var html = label.html();
-        var span = div.find('span.caption');
-        span.text(html);
-    }
-})
+// Metro.checkboxSetup({
+//     onCheckboxCreate(input){
+//         var div = $(input.closest('div'));
+//         var label = div.find('.checkbox-label');
+//         var html = label.html();
+//         var span = div.find('span.caption');
+//         span.text(html);
+//     }
+// })
 
 $(function () {
 

@@ -1,28 +1,18 @@
-﻿using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using System.Collections.Generic;
 
 namespace Generic.Abp.Metro.UI.TagHelpers.Form;
 
 [OutputElementHint("select")]
-public class MetroSelectTagHelper :MetroTagHelper<MetroSelectTagHelper, MetroSelectTagHelperService>
+public class MetroSelectTagHelper : MetroInputTagHelperBase<MetroSelectTagHelper, MetroSelectTagHelperService>, ISelectItemsTagHelper,IMetroInputTagHelperBase
 {
-    public ModelExpression AspFor { get; set; }
-
-    public string Label { get; set; }
-
-    public bool SuppressLabel { get; set; }
 
     public IEnumerable<SelectListItem> AspItems { get; set; }
 
-    public MetroFormControlSize Size { get; set; } = MetroFormControlSize.Default;
 
     [HtmlAttributeName("info")]
     public string InfoText { get; set; }
-
-    [HtmlAttributeName("required-symbol")]
-    public bool DisplayRequiredSymbol { get; set; } = true;
 
     public string AutocompleteApiUrl { get; set; }
 
@@ -42,9 +32,7 @@ public class MetroSelectTagHelper :MetroTagHelper<MetroSelectTagHelper, MetroSel
 
     public string Placeholder { get; set; }
 
-    public MetroSelectTagHelper(MetroSelectTagHelperService tagHelperService)
-        : base(tagHelperService)
+    public MetroSelectTagHelper(MetroSelectTagHelperService service) : base(service)
     {
-
     }
 }

@@ -2,12 +2,12 @@
 
 public class FormContent
 {
-    public int Cols { get; set; }
-    public bool Horizontal { get; set; } = false;
+    public int Cols { get; set; } 
+    public bool Horizontal { get; set; } 
 
-    public int LabelWidth { get; set; }
+    public LabelWidth LabelWidth { get; set; }
 
-    public FormContent(int cols, bool horizontal, int labelWidth)
+    public FormContent(int cols, bool horizontal, LabelWidth labelWidth)
     {
         Cols = cols;
         Horizontal = horizontal;

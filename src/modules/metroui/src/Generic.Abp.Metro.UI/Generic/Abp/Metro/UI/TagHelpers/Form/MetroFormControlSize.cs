@@ -4,6 +4,5 @@ public enum MetroFormControlSize
 {
     Default,
     Small,
-    Medium,
     Large
 }
