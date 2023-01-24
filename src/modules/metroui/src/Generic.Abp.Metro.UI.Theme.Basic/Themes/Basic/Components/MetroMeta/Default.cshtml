@@ -1,0 +1,10 @@
+﻿@using System
+@using System.Globalization
+@{
+    var cultureName = CultureInfo.CurrentUICulture.Name;
+    if (cultureName.Equals("zh-Hans", StringComparison.OrdinalIgnoreCase)) cultureName = "zh-CN";
+    if (cultureName.Equals("zh-Hant", StringComparison.OrdinalIgnoreCase)) cultureName = "zh-TW";
+}
+    <meta name="metro4:init" content="true">
+    <meta name="metro4:locale" content="@cultureName">
+    <meta name="metro4:week_start" content="1">

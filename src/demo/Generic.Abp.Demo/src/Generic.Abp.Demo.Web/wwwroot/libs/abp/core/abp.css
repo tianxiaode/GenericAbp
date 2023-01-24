@@ -1,3 +1,25 @@
+#global-floatWrap{
+    z-index: 999999;
+}
+.float-wrap {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    pointer-events: none;
+    overflow: visible;
+}
+.root {
+    -webkit-text-size-adjust: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
 .w-cols-4{
     width: calc( 25% - 10px );
     margin: 0 5px;

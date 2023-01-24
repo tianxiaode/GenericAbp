@@ -18,16 +18,30 @@ namespace Generic.Abp.Demo.Web.Pages
             new() { Value = "UK", Text = "United Kingdom"},
             new() { Value = "RU", Text = "Russia"}
         };
-        public enum Season
+
+        public enum CarType 
         {
-            Spring,
-            Summer,
-            Autumn,
-            Winter            
+            Sedan,
+            Hatchback,
+            StationWagon,
+            Coupe
         }
         public void OnGet()
         {
-            
+            IndexView = new IndexViewModel()
+            {
+                Age = 10,
+                Country = new List<string>() { CountryList[1].Value },
+                Day = DateTime.Now,
+                Email = "abc",
+                IsConfirm = true,
+                MyCarType = CarType.Hatchback,
+                Password = "dsdf",
+                //RadioCarType = CarType.Coupe,
+                RadioCountry = CountryList[2].Value,
+                Remarks = "sdfsfsdfssdfsdf"
+            };
+
         }
 
         public class IndexViewModel
@@ -48,18 +62,22 @@ namespace Generic.Abp.Demo.Web.Pages
             
             [SelectItems(nameof(CountryList))]
             [Display(Name = "Country")]
-            public string Country { get; set; }
+            public List<string> Country { get; set; }
         
             [SelectItems(nameof(CountryList))]
-            [Display(Name = "Neighbor Countries")]
-            public List<string> NeighborCountries { get; set; }
+            [MetroRadioButton]
+            public string RadioCountry { get; set; }
+
             [Required]
             [Display(Name = "My Car Type")]
             public CarType MyCarType { get; set; }
 
             [Required]
-            [Display(Name = "Your Car Type")]
-            public CarType YourCarType { get; set; }
+            [MetroRadioButton]
+            [MetroRadioColumns(3)]
+            public CarType RadioCarType { get; set; }
+
+            [Display(Name = "Email")]
             public bool IsConfirm { get; set; }
 
             [DataType(DataType.Date)]
@@ -73,13 +91,6 @@ namespace Generic.Abp.Demo.Web.Pages
 
         }
 
-        public enum CarType
-        {
-            Sedan,
-            Hatchback,
-            StationWagon,
-            Coupe
-        }
 
     }
 }

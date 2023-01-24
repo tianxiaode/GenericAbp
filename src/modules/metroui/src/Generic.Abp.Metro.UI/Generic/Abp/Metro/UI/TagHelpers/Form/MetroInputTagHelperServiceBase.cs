@@ -34,6 +34,7 @@ where TTagHelper : TagHelper,IMetroInputTagHelperBase
     protected bool IsTextarea { get; set ;} = false;
     protected bool IsCheckbox { get; set; } = false;
     protected bool IsRadio { get; set; } = false;
+    protected bool IsSelect { get; set; } = false;
     protected string Label { get; set; }
 
     protected Task GetFormContentAsync(TagHelperContext context)
@@ -42,16 +43,21 @@ where TTagHelper : TagHelper,IMetroInputTagHelperBase
         return Task.CompletedTask;
     }
 
-    protected async Task SetInputSizeAsync(TagHelperOutput output)
+    protected Task SetInputSizeAsync(TagHelperOutput output)
     {
         var attributes = output.Attributes;
         var cols = FormContent?.Cols ?? 1;
-        if (IsTextarea || IsCheckbox) cols = 1;
+        if (IsTextarea || IsCheckbox || IsRadio) cols = 1;
         attributes.AddClass($"w-cols-{cols} pt-1 pb-6");
-        if (FormContent is not { Horizontal: true }) return;
-        var size = await GetSizeStringAsync();
+        if (FormContent is not { Horizontal: true }) return Task.CompletedTask;
         attributes.AddClass("d-flex");
-        attributes.AddClass($"h-input-wrap-{size}");
+        return Task.CompletedTask;
+        //var size = await GetSizeStringAsync();
+        //if (!size.IsNullOrWhiteSpace())
+        //{
+        //    size = "-" + size;
+        //}
+        //attributes.AddClass($"h-input-wrap{size}");
     }
 
     protected async Task SetLabelSizeAsync(TagBuilder tagBuilder)
@@ -98,7 +104,7 @@ where TTagHelper : TagHelper,IMetroInputTagHelperBase
         }
     }
 
-    protected virtual void SetDataRoleAttribute(TagHelperOutput output)
+    protected virtual Task SetDataRoleAttributeAsync(TagHelperOutput output)
     {
         var type = output.Attributes["type"]?.Value?.ToString();
         var dataRole = type switch
@@ -107,11 +113,15 @@ where TTagHelper : TagHelper,IMetroInputTagHelperBase
             "file" => "file",
             _ => "input"
         };
-
+        //if (dataRole == "calendarpicker")
+        //{
+        //    output.Attributes.Add("data-show-time", "true");
+        //}
         if (IsCheckbox) dataRole = "checkbox";
         if (IsTextarea) dataRole = "textarea";
+        if (IsSelect) dataRole = "select";
         output.Attributes.Add("data-role", dataRole);
-
+        return Task.CompletedTask;
     }
 
     protected virtual async Task<string> GetLabelAsHtmlAsync(TagHelperOutput inputTag, IMetroTagHelperLocalizer tagHelperLocalizer)
@@ -234,5 +244,19 @@ where TTagHelper : TagHelper,IMetroInputTagHelperBase
         return idAttr != null ? idAttr.Value.ToString() : string.Empty;
     }
 
+    protected virtual async Task AddPlaceholderAttributeAsync(TagHelperOutput inputTagHelperOutput, IMetroTagHelperLocalizer tagHelperLocalizer)
+    {
+        if (inputTagHelperOutput.Attributes.ContainsName("placeholder"))
+        {
+            return;
+        }
+
+        var attribute = TagHelper.AspFor.ModelExplorer.GetAttribute<Placeholder>();
+
+        if (attribute == null) return;
+        var placeholderLocalized = await tagHelperLocalizer.GetLocalizedTextAsync(attribute.Value, TagHelper.AspFor.ModelExplorer);
+
+        inputTagHelperOutput.Attributes.Add("placeholder", placeholderLocalized);
+    }
 
 }

@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text.Encodings.Web;
-using System.Threading.Tasks;
-using Generic.Abp.Metro.UI.TagHelpers.Extensions;
+﻿using Generic.Abp.Metro.UI.TagHelpers.Extensions;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Localization;
+using System;
+using System.Text.Encodings.Web;
+using System.Threading.Tasks;
 using Volo.Abp.Localization;
 
 namespace Generic.Abp.Metro.UI.TagHelpers.Form;
@@ -31,19 +28,67 @@ public class MetroSelectTagHelperService : MetroInputTagHelperServiceBase<MetroS
 
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
+        IsSelect = true;
+        await GetFormContentAsync(context);
         var childContent = await output.GetChildContentAsync();
+        var innerHtml = await GetFormInputGroupAsHtmlAsync(context, output, childContent);
 
         var order = TagHelper.AspFor.ModelExplorer.GetDisplayOrder();
 
         output.TagName = "div";
-        //LeaveOnlyGroupAttributes(context, output);
-        //output.TagMode = TagMode.StartTagAndEndTag;
-        //output.Content.SetHtmlContent(innerHtml);
-        //await SetInputSizeAsync(output);
-        //if (!string.IsNullOrWhiteSpace(TagHelper.AspFor?.Name))
-        //{
-        //    await AddItemToItemsAsync<FormItem>(context, FormItems, TagHelper.AspFor.Name);
-        //}
+        output.TagMode = TagMode.StartTagAndEndTag;
+        output.Content.SetHtmlContent(innerHtml);
+        await SetInputSizeAsync(output);
+
+        if (!string.IsNullOrWhiteSpace(TagHelper.AspFor?.Name))
+        {
+            await AddItemToItemsAsync<FormItem>(context, FormItems, TagHelper.AspFor.Name);
+        }
     }
+
+    protected virtual async Task<string> GetFormInputGroupAsHtmlAsync(TagHelperContext context, TagHelperOutput output,TagHelperContent childContent )
+    {
+        var selectTag = await GetSelectTagAsync(context, output, childContent);
+        var selectAsHtml = await selectTag.RenderAsync(Encoder);
+        var label = await GetLabelAsHtmlAsync(selectTag,TagHelperLocalizer);
+
+        return label + Environment.NewLine + selectAsHtml;
+    }
+
+    protected virtual async Task<TagHelperOutput> GetSelectTagAsync(TagHelperContext context, TagHelperOutput output, TagHelperContent childContent)
+    {
+        var selectTagHelper = new SelectTagHelper(Generator)
+        {
+            For = TagHelper.AspFor,
+            ViewContext = TagHelper.ViewContext
+        };
+
+        if (TagHelper.AutocompleteApiUrl.IsNullOrEmpty())
+        {
+            selectTagHelper.Items = await SelectItemsService.GetSelectItemsAsync(TagHelper, TagHelperLocalizer, AbpEnumLocalizer, StringLocalizerFactory);
+        }
+        else if (!TagHelper.AutocompleteSelectedItemName.IsNullOrEmpty())
+        {
+            selectTagHelper.Items = new[]
+            {
+                new SelectListItem(TagHelper.AutocompleteSelectedItemName,
+                    TagHelper.AutocompleteSelectedItemValue, false)
+            };
+        }
+
+        var selectTagHelperOutput = await selectTagHelper.ProcessAndGetOutputAsync(new TagHelperAttributeList(), context, "select", TagMode.StartTagAndEndTag);
+
+        selectTagHelperOutput.Content.SetHtmlContent(childContent);
+        selectTagHelperOutput.Attributes.AddClass("metro-input");
+        await AddPlaceholderAttributeAsync(selectTagHelperOutput, TagHelperLocalizer);
+        AddDisabledAttribute(selectTagHelperOutput);
+        AddReadOnlyAttribute(selectTagHelperOutput);
+        await SetDataRoleAttributeAsync(selectTagHelperOutput);
+        await SetInputValidatorAsync(selectTagHelperOutput.Attributes);
+        
+
+        return selectTagHelperOutput;
+    }
+
 
 }

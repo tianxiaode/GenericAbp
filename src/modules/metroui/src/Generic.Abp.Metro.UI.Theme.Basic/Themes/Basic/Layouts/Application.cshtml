@@ -11,6 +11,7 @@
 @using Volo.Abp.Ui.Branding
 @using Volo.Abp.Ui.LayoutHooks
 @using Generic.Abp.Metro.UI.Bundling.TagHelpers
+@using Generic.Abp.Metro.UI.Theme.Basic.Themes.Basic.Components.MetroMeta
 @inject IBrandingProvider BrandingProvider
 @inject IPageLayout PageLayout
 @{
@@ -41,9 +42,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <meta name="metro4:init" content="true">
-    <meta name="metro4:locale" content="@CultureInfo.CurrentUICulture.Name">
-    <meta name="metro4:week_start" content="1">
+    @(await Component.InvokeAsync<MetroMetaViewComponent>())
 
     <title>@pageTitle</title>
     <metro-style-bundle name="@BasicThemeBundles.Styles.Global" />

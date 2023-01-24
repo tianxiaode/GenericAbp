@@ -21,6 +21,7 @@
     <None Include="Themes\Basic\Components\MainNavbar\Default.cshtml" />
     <None Include="Themes\Basic\Components\Menu\Default.cshtml" />
     <None Include="Themes\Basic\Components\Menu\_MenuItem.cshtml" />
+    <None Include="Themes\Basic\Components\MetroMeta\Default.cshtml" />
     <None Include="Themes\Basic\Components\Toolbar\Default.cshtml" />
     <None Include="Themes\Basic\Components\Toolbar\LanguageSwitch\Default.cshtml" />
     <None Include="Themes\Basic\Components\Toolbar\UserMenu\Default.cshtml" />

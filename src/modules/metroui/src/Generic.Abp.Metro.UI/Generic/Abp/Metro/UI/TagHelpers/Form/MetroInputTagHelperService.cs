@@ -1,5 +1,4 @@
 ﻿using Generic.Abp.Metro.UI.TagHelpers.Extensions;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
@@ -36,7 +35,6 @@ public class MetroInputTagHelperService : MetroInputTagHelperServiceBase<MetroIn
         output.TagName = "div";
 
         await SetInputSizeAsync(output);
-        await SetInputValidatorAsync(output.Attributes);
 
         output.Content.AppendHtml(innerHtml);
         if (!string.IsNullOrWhiteSpace(TagHelper.AspFor?.Name))
@@ -77,7 +75,7 @@ public class MetroInputTagHelperService : MetroInputTagHelperServiceBase<MetroIn
         AddDisabledAttribute(inputTagHelperOutput);
         IsCheckbox = await IsInputCheckboxAsync(context, output, inputTagHelperOutput.Attributes);
         AddReadOnlyAttribute(inputTagHelperOutput);
-        await AddPlaceholderAttributeAsync(inputTagHelperOutput);
+        await AddPlaceholderAttributeAsync(inputTagHelperOutput, TagHelperLocalizer);
         if (IsCheckbox)
         {
             await SetCheckBoxAttributesAsync(inputTagHelperOutput, TagHelperLocalizer);
@@ -86,7 +84,8 @@ public class MetroInputTagHelperService : MetroInputTagHelperServiceBase<MetroIn
             inputTagHelperOutput.Attributes.AddClass("metro-input");
         }
 
-        SetDataRoleAttribute(inputTagHelperOutput);
+        await SetDataRoleAttributeAsync(inputTagHelperOutput);
+        await SetInputValidatorAsync(inputTagHelperOutput.Attributes);
         return inputTagHelperOutput;
     }
 
@@ -147,20 +146,6 @@ public class MetroInputTagHelperService : MetroInputTagHelperServiceBase<MetroIn
         return attrList;
     }
 
-    protected virtual async Task AddPlaceholderAttributeAsync(TagHelperOutput inputTagHelperOutput)
-    {
-        if (inputTagHelperOutput.Attributes.ContainsName("placeholder"))
-        {
-            return;
-        }
-
-        var attribute = TagHelper.AspFor.ModelExplorer.GetAttribute<Placeholder>();
-
-        if (attribute == null) return;
-        var placeholderLocalized = await TagHelperLocalizer.GetLocalizedTextAsync(attribute.Value, TagHelper.AspFor.ModelExplorer);
-
-        inputTagHelperOutput.Attributes.Add("placeholder", placeholderLocalized);
-    }
 
     protected virtual bool ConvertToTextAreaIfTextArea(TagHelperOutput tagHelperOutput)
     {
@@ -208,8 +193,8 @@ public class MetroInputTagHelperService : MetroInputTagHelperServiceBase<MetroIn
     {
         output.Attributes.Add("data-caption", await GetLabelDisplayNameAsync(tagHelperLocalizer));
         output.Attributes.Add("data-style", 2);
-        output.Attributes.Add("data-cls-caption", "fg-cyan");
-        output.Attributes.Add("data-cls-check", "bd-cyan");
+        //output.Attributes.Add("data-cls-caption", "fg-cyan");
+        //output.Attributes.Add("data-cls-check", "bd-cyan");
     }
 
 }

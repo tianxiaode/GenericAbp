@@ -1,6 +1,7 @@
 ﻿@page
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Generic.Abp.Demo.Localization
+@using Generic.Abp.Demo.Web.Pages
 @using Generic.Abp.Metro.UI.Bundling.TagHelpers
 @using Generic.Abp.Metro.UI.TagHelpers.Alert
 @using Generic.Abp.Metro.UI.TagHelpers.Dialog
@@ -35,11 +36,11 @@
             <metro-input asp-for="@Model.IndexView.Password"></metro-input>
             <metro-input asp-for="@Model.IndexView.Surname"></metro-input>
             <metro-input asp-for="@Model.IndexView.Age"></metro-input>
-            <metro-input asp-for="@Model.IndexView.Country"></metro-input>
-            <metro-input asp-for="@Model.IndexView.NeighborCountries" asp-items="@nameof(Model.CountryList)"></metro-input>
-            <metro-input asp-for="@Model.IndexView.MyCarType"></metro-input>
-            <metro-input asp-for="@Model.IndexView.YourCarType"></metro-input>
-            <metro-input asp-for="@Model.IndexView.Day"></metro-input>
+            <metro-select asp-for="@Model.IndexView.Country"></metro-select>
+            <metro-radio asp-for="@Model.IndexView.RadioCountry"></metro-radio>
+            <metro-select asp-for="@Model.IndexView.MyCarType"></metro-select>
+            <metro-radio asp-for="@Model.IndexView.RadioCarType"></metro-radio>
+            <metro-input asp-for="@Model.IndexView.Day" ></metro-input>
             <metro-input asp-for="@Model.IndexView.IsConfirm"></metro-input>
             <metro-input asp-for="@Model.IndexView.Remarks"></metro-input>
             <p style="height: 500px;display: block">sdfsdfsfsdf</p>

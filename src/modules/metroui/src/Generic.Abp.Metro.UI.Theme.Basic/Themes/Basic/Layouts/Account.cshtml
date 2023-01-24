@@ -6,6 +6,7 @@
 @using Generic.Abp.Metro.UI.Widgets.Components.WidgetStyles
 @using Generic.Abp.Metro.UI.Bundling.TagHelpers
 @using Generic.Abp.Metro.UI.TagHelpers.Alert
+@using Generic.Abp.Metro.UI.Theme.Basic.Themes.Basic.Components.MetroMeta
 @using Generic.Abp.Metro.UI.Theme.Basic.Themes.Basic.Components.PageAlerts
 @using Microsoft.Extensions.Options
 @using Volo.Abp.AspNetCore.MultiTenancy
@@ -36,9 +37,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <meta name="metro4:init" content="true">
-    <meta name="metro4:locale" content="@CultureInfo.CurrentUICulture.Name">
-    <meta name="metro4:week_start" content="1">
+    @(await Component.InvokeAsync<MetroMetaViewComponent>())
 
     <title>@(ViewBag.Title == null ? BrandingProvider.AppName : ViewBag.Title)</title>
     <metro-style-bundle name="@BasicThemeBundles.Styles.Global" />

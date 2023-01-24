@@ -95,15 +95,15 @@ public class SelectItemsService: ITransientDependency
 
     protected virtual Task<string> GetSelectedValueAsync(ISelectItemsTagHelper tagHelper)
     {
-        if (!tagHelper.AspFor.ModelExplorer.Metadata.IsEnum) return Task.FromResult(tagHelper.AspFor.ModelExplorer.Model?.ToString());
-        var baseType = tagHelper.AspFor.ModelExplorer.Model?.GetType().GetEnumUnderlyingType();
+        if (!tagHelper.AspFor.ModelExplorer.Metadata.IsEnum) return Task.FromResult(tagHelper?.AspFor?.ModelExplorer?.Model?.ToString());
+        var baseType = tagHelper?.AspFor?.ModelExplorer?.Model?.GetType()?.GetEnumUnderlyingType();
 
         if (baseType == null)
         {
             return null;
         }
 
-        var valueAsString = Convert.ChangeType(tagHelper.AspFor.ModelExplorer.Model, baseType);
+        var valueAsString = Convert.ChangeType(tagHelper?.AspFor?.ModelExplorer?.Model, baseType);
         return Task.FromResult(valueAsString != null ? valueAsString.ToString() : "");
 
     }
