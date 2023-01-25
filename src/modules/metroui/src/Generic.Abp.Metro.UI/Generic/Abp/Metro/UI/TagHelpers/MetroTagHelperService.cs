@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Generic.Abp.Metro.UI.TagHelpers.Form;
 
 namespace Generic.Abp.Metro.UI.TagHelpers;
 
@@ -30,7 +31,7 @@ public abstract class MetroTagHelperService<TTagHelper> : IMetroTagHelperService
 
     public TTagHelper TagHelper { get; internal set; }
 
-    public virtual int Order { get; }
+    public virtual int Order { get; set; }
 
     public virtual void Init(TagHelperContext context)
     {
@@ -69,4 +70,6 @@ public abstract class MetroTagHelperService<TTagHelper> : IMetroTagHelperService
         list.Add(item);
         return Task.FromResult(item);
     }
+
+
 }

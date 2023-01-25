@@ -28,17 +28,18 @@ namespace Generic.Abp.Demo.Web.Pages
         }
         public void OnGet()
         {
-            IndexView = new IndexViewModel()
+            IndexView = new IndexViewModel
             {
                 Age = 10,
                 Country = new List<string>() { CountryList[1].Value },
                 Day = DateTime.Now,
                 Email = "abc",
                 IsConfirm = true,
-                MyCarType = CarType.Hatchback,
+                //MyCarType = CarType.Hatchback,
                 Password = "dsdf",
                 //RadioCarType = CarType.Coupe,
-                RadioCountry = CountryList[2].Value,
+                //RadioCountry = CountryList[2].Value,
+                CheckboxCarType = new List<CarType> { CarType.Coupe, CarType.StationWagon },
                 Remarks = "sdfsfsdfssdfsdf"
             };
 
@@ -65,7 +66,7 @@ namespace Generic.Abp.Demo.Web.Pages
             public List<string> Country { get; set; }
         
             [SelectItems(nameof(CountryList))]
-            [MetroRadioButton]
+            [MetroRadioGroup]
             public string RadioCountry { get; set; }
 
             [Required]
@@ -73,9 +74,13 @@ namespace Generic.Abp.Demo.Web.Pages
             public CarType MyCarType { get; set; }
 
             [Required]
-            [MetroRadioButton]
-            [MetroRadioColumns(3)]
+            [MetroRadioGroup]
+            [MetroRadioOrCheckboxCols(3)]
             public CarType RadioCarType { get; set; }
+
+            [MetroRadioOrCheckboxCols(3)]
+            public List<CarType> CheckboxCarType { get; set; }
+
 
             [Display(Name = "Email")]
             public bool IsConfirm { get; set; }
@@ -84,13 +89,26 @@ namespace Generic.Abp.Demo.Web.Pages
             [Display(Name = "Day")]
             public DateTime Day { get; set; }
 
+            public DateTime BirthDateTime { get; set; }
+
+
             [TextArea]
             [StringLength(5)]
             [Required]
             public string Remarks { get; set; }
 
+            public Address Address { get; set; }
+
+            [DynamicFormIgnore]
+            public List<Address> AddressList { get; set; }
         }
 
-
+        public class Address
+        {
+            public string Street { get; set; }
+            public string City { get; set; }
+            public string Postcode { get; set; }
+            public string Country { get; set; }
+        }
     }
 }

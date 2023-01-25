@@ -126,7 +126,9 @@
 .w-cols-1 .checkbox-label{
     display: none;
 }
-
+.checkbox[class*=cell-],.checkbox[class*=col-] {
+    display: inline-flex;
+}
 @keyframes spin {
     0% {
         transform: translateZ(0) rotate(0deg);

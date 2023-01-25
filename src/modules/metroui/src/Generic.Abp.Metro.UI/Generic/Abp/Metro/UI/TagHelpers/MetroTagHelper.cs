@@ -18,7 +18,7 @@ public abstract class MetroTagHelper<TTagHelper, TService> : MetroTagHelper
 {
     protected TService Service { get; }
 
-    public override int Order => Service.Order;
+    //public override int Order => Service.Order;
 
     [HtmlAttributeNotBound] 
     [ViewContext] 

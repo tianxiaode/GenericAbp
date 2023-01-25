@@ -10,6 +10,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.Linq;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
@@ -33,6 +34,7 @@ where TTagHelper : TagHelper,IMetroInputTagHelperBase
     protected FormContent FormContent { get; set; }
     protected bool IsTextarea { get; set ;} = false;
     protected bool IsCheckbox { get; set; } = false;
+    protected bool IsCheckboxGroup { get; set; } = false;
     protected bool IsRadio { get; set; } = false;
     protected bool IsSelect { get; set; } = false;
     protected string Label { get; set; }
@@ -47,7 +49,7 @@ where TTagHelper : TagHelper,IMetroInputTagHelperBase
     {
         var attributes = output.Attributes;
         var cols = FormContent?.Cols ?? 1;
-        if (IsTextarea || IsCheckbox || IsRadio) cols = 1;
+        if (IsTextarea || IsCheckbox || IsRadio || IsCheckboxGroup) cols = 1;
         attributes.AddClass($"w-cols-{cols} pt-1 pb-6");
         if (FormContent is not { Horizontal: true }) return Task.CompletedTask;
         attributes.AddClass("d-flex");
@@ -110,13 +112,18 @@ where TTagHelper : TagHelper,IMetroInputTagHelperBase
         var dataRole = type switch
         {
             "date" => "calendarpicker",
+            "datetime-local" => "calendarpicker",
             "file" => "file",
             _ => "input"
         };
-        //if (dataRole == "calendarpicker")
-        //{
-        //    output.Attributes.Add("data-show-time", "true");
-        //}
+        if (type == "datetime-local")
+        {
+            output.Attributes.Add("data-show-time", "true");
+        }
+
+        if (dataRole == "calendarpicker") {
+            output.Attributes.Add("data-format", CultureInfo.CurrentUICulture.DateTimeFormat.ShortDatePattern.Replace("y","Y"));
+        }
         if (IsCheckbox) dataRole = "checkbox";
         if (IsTextarea) dataRole = "textarea";
         if (IsSelect) dataRole = "select";
@@ -199,6 +206,11 @@ where TTagHelper : TagHelper,IMetroInputTagHelperBase
             return "";
         }
 
+        if (!FormContent.RequiredSymbols)
+        {
+            return "";
+        }
+
         return TagHelper.AspFor.ModelExplorer.GetAttribute<RequiredAttribute>() != null ? "<span class='fg-red'> * </span>" : "";
     }
 
@@ -257,6 +269,33 @@ where TTagHelper : TagHelper,IMetroInputTagHelperBase
         var placeholderLocalized = await tagHelperLocalizer.GetLocalizedTextAsync(attribute.Value, TagHelper.AspFor.ModelExplorer);
 
         inputTagHelperOutput.Attributes.Add("placeholder", placeholderLocalized);
+    }
+
+    protected virtual Task SetOrderAsync(TagHelperOutput output)
+    {
+        var order = TagHelper.Order;
+        if (order == 0)
+        {
+            order = TagHelper.AspFor?.ModelExplorer.GetDisplayOrder() ?? 0;
+        }
+        Order = order;
+        output.Attributes.Add("style",$"order:{order}");
+        return Task.CompletedTask;
+    }
+
+    protected virtual Task<bool> AddItemToFromItemsAsync(TagHelperContext context, string key, string name, int order , string htmlContent)
+    {
+        if(string.IsNullOrWhiteSpace(name)) return Task.FromResult(true);
+        var list = context.GetValue<List<FormItem>>(key);
+        if (list == null ) return Task.FromResult(true);
+        var item = new FormItem()
+        {
+            Name = name,
+            Order = order,
+            HtmlContent = htmlContent
+        };
+        list.Add(item);
+        return Task.FromResult(false);
     }
 
 }

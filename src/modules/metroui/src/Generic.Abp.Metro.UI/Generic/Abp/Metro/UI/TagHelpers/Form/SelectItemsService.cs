@@ -5,6 +5,7 @@ using Microsoft.Extensions.Localization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Localization;
@@ -15,16 +16,10 @@ public class SelectItemsService: ITransientDependency
 {
     public Task<bool> IsEnumAsync(ISelectItemsTagHelper tagHelper)
     {
-        var value = tagHelper.AspFor.Model;
-        if (value != null && value.GetType().IsEnum)
-        {
-            return Task.FromResult(true);
-        }
-
-        return Task.FromResult(tagHelper.AspFor.ModelExplorer.Metadata.IsEnum);
-
+        var modelExplorer = tagHelper.AspFor.ModelExplorer;
+        var metadata = modelExplorer.Metadata;
+        return !metadata.IsEnumerableType ? Task.FromResult(metadata.IsEnum) : Task.FromResult(metadata.ElementType?.IsEnum ?? false);
     }
-
     public virtual async Task<List<SelectListItem>> GetSelectItemsAsync(ISelectItemsTagHelper tagHelper, IMetroTagHelperLocalizer tagHelperLocalizer, IAbpEnumLocalizer abpEnumLocalizer, IStringLocalizerFactory stringLocalizerFactory)
     {
         if (tagHelper.AspItems != null)
@@ -34,7 +29,7 @@ public class SelectItemsService: ITransientDependency
 
         if (await IsEnumAsync(tagHelper))
         {
-            return await GetSelectItemsFromEnumAsync(tagHelper.AspFor.ModelExplorer, tagHelperLocalizer, abpEnumLocalizer, stringLocalizerFactory);
+            return await GetSelectItemsFromEnumAsync(tagHelper, tagHelperLocalizer, abpEnumLocalizer, stringLocalizerFactory);
         }
 
         var selectItemsAttribute = tagHelper.AspFor.ModelExplorer.GetAttribute<SelectItems>();
@@ -46,19 +41,23 @@ public class SelectItemsService: ITransientDependency
         throw new Exception("No items provided for select attribute.");
     }
 
-    public virtual async Task<List<SelectListItem>> GetSelectItemsFromEnumAsync(ModelExplorer explorer, IMetroTagHelperLocalizer tagHelperLocalizer, IAbpEnumLocalizer abpEnumLocalizer, IStringLocalizerFactory stringLocalizerFactory)
+    public virtual async Task<List<SelectListItem>> GetSelectItemsFromEnumAsync(ISelectItemsTagHelper tagHelper,IMetroTagHelperLocalizer tagHelperLocalizer, IAbpEnumLocalizer abpEnumLocalizer, IStringLocalizerFactory stringLocalizerFactory)
     {
         var selectItems = new List<SelectListItem>();
-        var isNullableType = Nullable.GetUnderlyingType(explorer.ModelType) != null;
-        var enumType = explorer.ModelType;
-
+        var modelExplorer = tagHelper.AspFor.ModelExplorer;
+        var metadata = modelExplorer.Metadata;
+        var enumType = modelExplorer.ModelType;
+        if (metadata.IsEnumerableType)
+        {
+            enumType = metadata.ElementType;
+        }
+        var isNullableType = Nullable.GetUnderlyingType(modelExplorer.ModelType) != null;
         if (isNullableType)
         {
-            enumType = Nullable.GetUnderlyingType(explorer.ModelType);
+            enumType = Nullable.GetUnderlyingType(modelExplorer.ModelType);
             selectItems.Add(new SelectListItem());
         }
-
-        var containerLocalizer = await tagHelperLocalizer.GetLocalizerOrNullAsync(explorer.Container.ModelType.Assembly);
+        var containerLocalizer = await tagHelperLocalizer.GetLocalizerOrNullAsync(modelExplorer.Container.ModelType.Assembly);
         if (enumType == null) return selectItems;
         selectItems.AddRange(from object enumValue in enumType.GetEnumValuesAsUnderlyingType()
             let localizedMemberName =
@@ -78,35 +77,6 @@ public class SelectItemsService: ITransientDependency
         return Task.FromResult(selectItems ?? new List<SelectListItem>());
     }
 
-    public virtual async Task SetSelectedValueAsync(List<SelectListItem> selectItems,ISelectItemsTagHelper tagHelper)
-    {
-        var selectedValue = await GetSelectedValueAsync(tagHelper);
-
-        if (!selectItems.Any(si => si.Selected))
-        {
-            var itemToBeSelected = selectItems.FirstOrDefault(si => si.Value == selectedValue);
-
-            if (itemToBeSelected != null)
-            {
-                itemToBeSelected.Selected = true;
-            }
-        }
-    }
-
-    protected virtual Task<string> GetSelectedValueAsync(ISelectItemsTagHelper tagHelper)
-    {
-        if (!tagHelper.AspFor.ModelExplorer.Metadata.IsEnum) return Task.FromResult(tagHelper?.AspFor?.ModelExplorer?.Model?.ToString());
-        var baseType = tagHelper?.AspFor?.ModelExplorer?.Model?.GetType()?.GetEnumUnderlyingType();
-
-        if (baseType == null)
-        {
-            return null;
-        }
-
-        var valueAsString = Convert.ChangeType(tagHelper?.AspFor?.ModelExplorer?.Model, baseType);
-        return Task.FromResult(valueAsString != null ? valueAsString.ToString() : "");
-
-    }
 
 
 }

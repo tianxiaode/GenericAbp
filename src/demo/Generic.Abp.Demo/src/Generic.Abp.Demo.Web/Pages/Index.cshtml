@@ -31,18 +31,20 @@
 
 <div class="row">
     <metro-dialog title="切换租户" buttons="MetroDialogButtons.Submit | MetroDialogButtons.Cancel" id="ancd" asp-page="/Abp/MultiTenancy/TenantSwitchModal" metro-class="w-dialog-800 h-dialog-600">
-        <metro-form-content >
+        <metro-form-content metro-model="IndexView" >
             <metro-input asp-for="@Model.IndexView.Email"></metro-input>
             <metro-input asp-for="@Model.IndexView.Password"></metro-input>
             <metro-input asp-for="@Model.IndexView.Surname"></metro-input>
             <metro-input asp-for="@Model.IndexView.Age"></metro-input>
-            <metro-select asp-for="@Model.IndexView.Country"></metro-select>
-            <metro-radio asp-for="@Model.IndexView.RadioCountry"></metro-radio>
+            <metro-checkbox-group asp-for="@Model.IndexView.Country" cols="2"></metro-checkbox-group>
+            <metro-radio-group asp-for="@Model.IndexView.RadioCountry" cols="3"></metro-radio-group>
             <metro-select asp-for="@Model.IndexView.MyCarType"></metro-select>
-            <metro-radio asp-for="@Model.IndexView.RadioCarType"></metro-radio>
-            <metro-input asp-for="@Model.IndexView.Day" ></metro-input>
-            <metro-input asp-for="@Model.IndexView.IsConfirm"></metro-input>
-            <metro-input asp-for="@Model.IndexView.Remarks"></metro-input>
+            <metro-radio-group asp-for="@Model.IndexView.RadioCarType" cols="2"></metro-radio-group>
+            <metro-checkbox-group asp-for="@Model.IndexView.CheckboxCarType" cols="3"></metro-checkbox-group>
+            <metro-input asp-for="@Model.IndexView.Day"></metro-input>
+            <metro-input asp-for="@Model.IndexView.BirthDateTime" ></metro-input>
+            @*<metro-input asp-for="@Model.IndexView.IsConfirm"></metro-input>
+            <metro-input asp-for="@Model.IndexView.Remarks"></metro-input>*@
             <p style="height: 500px;display: block">sdfsdfsfsdf</p>
         </metro-form-content>
     </metro-dialog>
@@ -65,43 +67,6 @@
     <button class="button primary" id="button1" onclick="Metro.getPlugin('#ancd','dialog').open()">显示</button>
 </div>
 
-<div class="row">
-    <form>
-        <input type="email" title="" class="metro-input input-small" data-role="input" data-append="email">
-
-        <div class="row mb-2">
-            <label class="cell-sm-2">Email</label>
-            <div class="cell-sm-10">
-            </div>
-        </div>
-        <div class="row mb-2">
-            <label class="cell-sm-2">Password</label>
-            <div class="cell-sm-10">
-                <input type="password" title="" class="metro-input">
-            </div>
-        </div>
-        <div class="row mb-2">
-            <label class="cell-sm-2">Radios</label>
-            <div class="cell-sm-10">
-                <input name="horizontal_form_r1" type="radio" data-role="radio" data-caption="Option one" checked title="">
-                <input name="horizontal_form_r1" type="radio" data-role="radio" data-caption="Option two" title="">
-                <input name="horizontal_form_r1" type="radio" data-role="radio" data-caption="Option three is disabled" disabled title="">
-            </div>
-        </div>
-        <div class="row mb-2">
-            <label class="cell-sm-2">Checkbox</label>
-            <div class="cell-sm-10">
-                <input name="horizontal_form_c1" type="checkbox" data-role="checkbox" data-caption="Check me out" checked title="">
-            </div>
-        </div>
-        <div class="row">
-            <div class="cell">
-                <button type="submit" class="button primary">Sign in</button>
-            </div>
-        </div>
-    </form>
-
-</div>
 
 <div class="jumbotron text-center">
     <h1>@L["Welcome"]</h1>

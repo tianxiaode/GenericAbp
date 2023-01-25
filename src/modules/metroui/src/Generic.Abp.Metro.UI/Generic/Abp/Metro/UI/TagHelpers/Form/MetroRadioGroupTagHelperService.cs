@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Localization;
 using Nito.AsyncEx;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
@@ -12,7 +14,7 @@ using Volo.Abp.Localization;
 
 namespace Generic.Abp.Metro.UI.TagHelpers.Form;
 
-public class MetroRadioInputTagHelperService : MetroInputTagHelperServiceBase<MetroRadioInputTagHelper>
+public class MetroRadioGroupTagHelperService : MetroInputTagHelperServiceBase<MetroRadioGroupTagHelper>
 {
     protected IMetroTagHelperLocalizer TagHelperLocalizer { get; }
     protected SelectItemsService SelectItemsService { get; }
@@ -20,7 +22,7 @@ public class MetroRadioInputTagHelperService : MetroInputTagHelperServiceBase<Me
     protected IAbpEnumLocalizer AbpEnumLocalizer { get; }
     protected string ColumnClass { get; set; }
 
-    public MetroRadioInputTagHelperService(IHtmlGenerator generator, HtmlEncoder encoder, IMetroTagHelperLocalizer tagHelperLocalizer, SelectItemsService selectItemsService, IStringLocalizerFactory stringLocalizerFactory, IAbpEnumLocalizer abpEnumLocalizer) : base(generator, encoder)
+    public MetroRadioGroupTagHelperService(IHtmlGenerator generator, HtmlEncoder encoder, IMetroTagHelperLocalizer tagHelperLocalizer, SelectItemsService selectItemsService, IStringLocalizerFactory stringLocalizerFactory, IAbpEnumLocalizer abpEnumLocalizer) : base(generator, encoder)
     {
         TagHelperLocalizer = tagHelperLocalizer;
         SelectItemsService = selectItemsService;
@@ -31,28 +33,28 @@ public class MetroRadioInputTagHelperService : MetroInputTagHelperServiceBase<Me
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
         await SetRadioColumnsClassAsync();
+        await SetOrderAsync(output);
         await GetFormContentAsync(context);
         IsRadio = true;
         var selectItems = await SelectItemsService.GetSelectItemsAsync(TagHelper,TagHelperLocalizer, AbpEnumLocalizer, StringLocalizerFactory);
-        await SelectItemsService.SetSelectedValueAsync(selectItems, TagHelper);
-
-        var order = TagHelper.AspFor.ModelExplorer.GetDisplayOrder();
+        await SetSelectedValueAsync(selectItems);
 
         var html = await GetHtmlAsync(context, output, selectItems);
         var label = await GetLabelAsHtmlAsync(output, TagHelperLocalizer);
 
-        await AddItemToItemsAsync<FormItem>(context, FormItems, TagHelper.AspFor.Name);
 
         output.TagName = "div";
         output.Attributes.Clear();
         output.TagMode = TagMode.StartTagAndEndTag;
         await SetInputSizeAsync(output);
         output.Content.SetHtmlContent(await GetContentAsync(label, html));
-        if (!string.IsNullOrWhiteSpace(TagHelper.AspFor?.Name))
+        var suppress =await AddItemToFromItemsAsync(context, FormItems, TagHelper.AspFor.Name, Order, await output.RenderAsync(Encoder));
+        
+        if (suppress)
         {
-            await AddItemToItemsAsync<FormItem>(context, FormItems, TagHelper.AspFor.Name);
+            
+            output.SuppressOutput();
         }
-
     }
 
     protected virtual Task<string> GetContentAsync(string label, string inputHtml)
@@ -103,14 +105,58 @@ public class MetroRadioInputTagHelperService : MetroInputTagHelperServiceBase<Me
         if (TagHelper.Cols.HasValue) cols = TagHelper.Cols.Value;
         if (cols == 0)
         {
-            var attribute = TagHelper.AspFor.ModelExplorer.GetAttribute<MetroRadioColumns>();
-            if (attribute != null) cols = attribute.Columns;
+            var attribute = TagHelper.AspFor.ModelExplorer.GetAttribute<MetroRadioOrCheckboxCols>();
+            if (attribute != null) cols = attribute.Cols;
+        }
+
+        if (cols == 0)
+        {
+            var attribute = TagHelper.AspFor.ModelExplorer.GetAttribute<MetroCheckboxGroup>();
+            if (attribute != null) cols = attribute.Cols;
+
+        }
+
+        if (cols == 0)
+        {
+            var attribute = TagHelper.AspFor.ModelExplorer.GetAttribute<MetroRadioGroup>();
+            if (attribute != null) cols = attribute.Cols;
+
         }
 
         if (cols == 0) cols = 1;
         cols = 12 / cols;
         ColumnClass = $"cell-{cols}";
         return Task.CompletedTask;
+    }
+
+    public virtual async Task SetSelectedValueAsync(List<SelectListItem> selectItems)
+    {
+        var selectedValue = await GetSelectedValueAsync();
+
+        if (!selectItems.Any(si => si.Selected))
+        {
+            var itemToBeSelected = selectItems.FirstOrDefault(si => si.Value == selectedValue);
+
+            if (itemToBeSelected != null)
+            {
+                itemToBeSelected.Selected = true;
+            }
+        }
+    }
+
+    protected virtual Task<string> GetSelectedValueAsync()
+    {
+        if (!TagHelper.AspFor.ModelExplorer.Metadata.IsEnum) return Task.FromResult(TagHelper.AspFor.ModelExplorer.Model?.ToString());
+        var baseType = TagHelper.AspFor.ModelExplorer.Model?.GetType()?.GetEnumUnderlyingType();
+
+        if (baseType == null)
+        {
+            return null;
+        }
+
+        var valueAsString = Convert.ChangeType(TagHelper.AspFor.ModelExplorer.Model, baseType);
+        return Task.FromResult(valueAsString != null ? valueAsString.ToString() : "");
+
     }
 
 }

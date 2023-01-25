@@ -6,11 +6,12 @@ public class FormContent
     public bool Horizontal { get; set; } 
 
     public LabelWidth LabelWidth { get; set; }
-
-    public FormContent(int cols, bool horizontal, LabelWidth labelWidth)
+    public bool RequiredSymbols { get; set; }
+    public FormContent(int cols, bool horizontal, LabelWidth labelWidth, bool requiredSymbols = true)
     {
         Cols = cols;
         Horizontal = horizontal;
         LabelWidth = labelWidth;
+        RequiredSymbols = requiredSymbols;
     }
 }

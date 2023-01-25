@@ -13,7 +13,6 @@ namespace Generic.Abp.Metro.UI.TagHelpers.Form;
 public class MetroInputTagHelperService : MetroInputTagHelperServiceBase<MetroInputTagHelper>
 {
     protected IMetroTagHelperLocalizer TagHelperLocalizer { get; }
-
     public MetroInputTagHelperService(IHtmlGenerator generator, HtmlEncoder encoder, IMetroTagHelperLocalizer tagHelperLocalizer) : base(generator,encoder)
     {
         TagHelperLocalizer = tagHelperLocalizer;
@@ -22,6 +21,7 @@ public class MetroInputTagHelperService : MetroInputTagHelperServiceBase<MetroIn
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
         await GetFormContentAsync(context);
+        await SetOrderAsync(output);
         var innerHtml = await GetFormInputGroupAsHtmlAsync(context, output);
 
         if (IsCheckbox && TagHelper.CheckBoxHiddenInputRenderMode.HasValue)
@@ -29,17 +29,17 @@ public class MetroInputTagHelperService : MetroInputTagHelperServiceBase<MetroIn
             TagHelper.ViewContext.CheckBoxHiddenInputRenderMode = TagHelper.CheckBoxHiddenInputRenderMode.Value;
         }
 
-        var order = TagHelper.AspFor?.ModelExplorer.GetDisplayOrder() ?? 0;
-
         output.TagMode = TagMode.StartTagAndEndTag;
         output.TagName = "div";
 
         await SetInputSizeAsync(output);
-
         output.Content.AppendHtml(innerHtml);
-        if (!string.IsNullOrWhiteSpace(TagHelper.AspFor?.Name))
+        var suppress =await AddItemToFromItemsAsync(context, FormItems, TagHelper.AspFor.Name, Order, await output.RenderAsync(Encoder));
+        
+        if (suppress)
         {
-            await AddItemToItemsAsync<FormItem>(context, FormItems, TagHelper.AspFor.Name);
+            
+            output.SuppressOutput();
         }
     }
 

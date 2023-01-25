@@ -30,19 +30,22 @@ public class MetroSelectTagHelperService : MetroInputTagHelperServiceBase<MetroS
     {
         IsSelect = true;
         await GetFormContentAsync(context);
+        await SetOrderAsync(output);
         var childContent = await output.GetChildContentAsync();
         var innerHtml = await GetFormInputGroupAsHtmlAsync(context, output, childContent);
 
-        var order = TagHelper.AspFor.ModelExplorer.GetDisplayOrder();
 
         output.TagName = "div";
         output.TagMode = TagMode.StartTagAndEndTag;
         output.Content.SetHtmlContent(innerHtml);
         await SetInputSizeAsync(output);
 
-        if (!string.IsNullOrWhiteSpace(TagHelper.AspFor?.Name))
+        var suppress =await AddItemToFromItemsAsync(context, FormItems, TagHelper.AspFor.Name, Order, await output.RenderAsync(Encoder));
+        
+        if (suppress)
         {
-            await AddItemToItemsAsync<FormItem>(context, FormItems, TagHelper.AspFor.Name);
+            
+            output.SuppressOutput();
         }
     }
 

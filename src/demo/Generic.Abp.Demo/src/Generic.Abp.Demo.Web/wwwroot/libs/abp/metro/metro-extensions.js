@@ -6,7 +6,6 @@ Metro.validatorSetup({
             var span = div.find('.invalid_feedback');
             var texts =[];
             log.errors.forEach(error=>{
-                console.log(error);
                 let t = input.attr(`data-val-${error}`);
                 if(error === 'min' || error === 'max'){
                     t = input.attr(`data-val-range`);
@@ -144,6 +143,7 @@ $(function () {
             off: "关"
         }
     });
+
 
 })
 
