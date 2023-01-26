@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Threading.Tasks;
-using JetBrains.Annotations;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.DependencyInjection;
@@ -17,7 +15,7 @@ namespace Generic.Abp.Metro.UI.Bundling.TagHelpers;
 
 public abstract class MetroTagHelperResourceService : ITransientDependency
 {
-    public ILogger<MetroTagHelperResourceService> Logger { get; set; }
+    public ILogger<MetroTagHelperResourceService> Logger { get; }
     protected IBundleManager BundleManager { get; }
     protected IWebHostEnvironment HostingEnvironment { get; }
     protected AbpBundlingOptions Options { get; }
@@ -25,21 +23,21 @@ public abstract class MetroTagHelperResourceService : ITransientDependency
     protected MetroTagHelperResourceService(
         IBundleManager bundleManager,
         IOptions<AbpBundlingOptions> options,
-        IWebHostEnvironment hostingEnvironment)
+        IWebHostEnvironment hostingEnvironment,
+        ILogger<MetroTagHelperResourceService> logger)
     {
         BundleManager = bundleManager;
         HostingEnvironment = hostingEnvironment;
+        Logger = logger;
         Options = options.Value;
-
-        Logger = NullLogger<MetroTagHelperResourceService>.Instance;
     }
 
     public virtual async Task ProcessAsync(
-        [NotNull] ViewContext viewContext,
-        [NotNull] TagHelper tagHelper,
-        [NotNull] TagHelperContext context,
-        [NotNull] TagHelperOutput output,
-        [NotNull] List<BundleTagHelperItem> bundleItems,
+        ViewContext viewContext,
+        TagHelper tagHelper,
+        TagHelperContext context,
+        TagHelperOutput output,
+        List<BundleTagHelperItem> bundleItems,
         string? bundleName = null)
     {
         Check.NotNull(viewContext, nameof(viewContext));
@@ -86,7 +84,8 @@ public abstract class MetroTagHelperResourceService : ITransientDependency
 
     protected abstract Task<IReadOnlyList<string>> GetBundleFilesAsync(string? bundleName);
 
-    protected abstract void AddHtmlTag(ViewContext viewContext, TagHelper tagHelper, TagHelperContext context, TagHelperOutput output, string file);
+    protected abstract void AddHtmlTag(ViewContext viewContext, TagHelper tagHelper, TagHelperContext context,
+        TagHelperOutput output, string file);
 
     protected virtual string GenerateBundleName(List<BundleTagHelperItem> bundleItems)
     {

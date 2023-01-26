@@ -1,29 +1,68 @@
-﻿using Microsoft.AspNetCore.Razor.TagHelpers;
+﻿using Localization.Resources.AbpUi;
+using Microsoft.AspNetCore.Razor.TagHelpers;
+using Microsoft.Extensions.Localization;
+using System;
+using System.Threading.Tasks;
 
 namespace Generic.Abp.Metro.UI.TagHelpers.Button;
 
 [HtmlTargetElement("metro-button", TagStructure = TagStructure.NormalOrSelfClosing)]
-public class MetroButtonTagHelper : MetroTagHelper<MetroButtonTagHelper, MetroButtonTagHelperService>, IButtonTagHelperBase
+public class MetroButtonTagHelper : ButtonTagHelperBase
 {
-    public MetroButtonType ButtonType { get; set; } 
+    public MetroButtonTagHelper(IStringLocalizer<AbpUiResource> l)
+    {
+        L = l;
+    }
 
-    public MetroButtonSize Size { get; set; } 
-
+    protected IStringLocalizer<AbpUiResource> L { get; }
     public string BusyText { get; set; }
-
-    public string Text { get; set; }
-
-    public string Icon { get; set; }
-    public bool? Disabled { get; set; }
-
-    public FontIconType IconType { get; set; } = FontIconType.Metro;
-
     public bool BusyTextIsHtml { get; set; }
 
-    public MetroButtonTagHelper(MetroButtonTagHelperService service)
-        : base(service)
-    {
+    protected const string DataBusyTextAttributeName = "data-busy-text";
+    protected const string DataBusyTextIsHtmlAttributeName = "data-busy-text-is-html";
 
+
+    public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+    {
+        output.TagName = "button";
+        await base.ProcessAsync(context, output);
+        await AddTypeAsync(context, output);
+        await AddBusyTextAsync(context, output);
+        await AddBusyTextIsHtmlAsync(context, output);
+    }
+
+    protected virtual Task AddTypeAsync(TagHelperContext context, TagHelperOutput output)
+    {
+        if (output.Attributes.ContainsName("type"))
+        {
+            return Task.CompletedTask;
+        }
+
+        output.Attributes.Add("type", "button");
+
+        return Task.CompletedTask;
+    }
+
+    protected virtual Task AddBusyTextAsync(TagHelperContext context, TagHelperOutput output)
+    {
+        var busyText = BusyText ?? L["ProcessingWithThreeDot"];
+        if (busyText.IsNullOrWhiteSpace())
+        {
+            return Task.CompletedTask;
+        }
+
+        output.Attributes.SetAttribute(DataBusyTextAttributeName, busyText);
+        return Task.CompletedTask;
+    }
+
+    protected virtual Task AddBusyTextIsHtmlAsync(TagHelperContext context, TagHelperOutput output)
+    {
+        if (!BusyTextIsHtml)
+        {
+            return Task.CompletedTask;
+        }
+
+        output.Attributes.SetAttribute(DataBusyTextIsHtmlAttributeName, BusyTextIsHtml.ToString().ToLower());
+        return Task.CompletedTask;
     }
 }
-

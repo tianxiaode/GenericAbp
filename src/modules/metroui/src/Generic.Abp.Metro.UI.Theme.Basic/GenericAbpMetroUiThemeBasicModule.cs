@@ -3,6 +3,7 @@ using Generic.Abp.Metro.UI.Theme.Basic.Bundling;
 using Generic.Abp.Metro.UI.Theme.Basic.Toolbars;
 using Generic.Abp.Metro.UI.Theme.Shared.Bundling;
 using Generic.Abp.Metro.UI.Theme.Shared.Toolbars;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Theming;
@@ -13,7 +14,7 @@ namespace Generic.Abp.Metro.UI.Theme.Basic;
 
 [DependsOn(
     typeof(GenericAbpMetroUiMultiTenancyModule)
-    )]
+)]
 public class GenericAbpMetroUiThemeBasicModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)

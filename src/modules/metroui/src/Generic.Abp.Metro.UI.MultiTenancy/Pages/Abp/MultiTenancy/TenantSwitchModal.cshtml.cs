@@ -12,8 +12,7 @@ namespace Pages.Abp.MultiTenancy;
 
 public class TenantSwitchModalModel : AbpPageModel
 {
-    [BindProperty]
-    public TenantInfoModel Input { get; set; }
+    [BindProperty] public TenantInfoModel Input { get; set; }
 
     protected ITenantStore TenantStore { get; }
     protected AbpAspNetCoreMultiTenancyOptions Options { get; }

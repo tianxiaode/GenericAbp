@@ -1,8 +1,6 @@
 ﻿@page
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Generic.Abp.Metro.UI.MultiTenancy.Localization;
-@using Generic.Abp.Metro.UI.TagHelpers.Dialog
-@using Generic.Abp.Metro.UI.TagHelpers.Form
 @model Pages.Abp.MultiTenancy.TenantSwitchModalModel
 @inject IHtmlLocalizer<MetroUiMultiTenancyResource> L
 @{
@@ -18,7 +16,7 @@
                 <metro-input label="2" />
         </metro-form-content>
     </metro-dialog-content>
-    <metro-dialog-footer buttons="@(MetroDialogButtons.Submit|MetroDialogButtons.Cancel)"></metro-dialog-footer>
+        @*<metro-dialog-footer buttons="@(MetroDialogButtons.Submit|MetroDialogButtons.Cancel)"></metro-dialog-footer>*@
     </form>
 </metro-dialog>
 @*</metro-dynamic-form>*@

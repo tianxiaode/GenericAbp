@@ -11,6 +11,7 @@ using Microsoft.OpenApi.Models;
 using System.IO;
 using Generic.Abp.Metro.UI.Theme.Basic;
 using Generic.Abp.Metro.UI.Theme.Shared;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.Localization;
@@ -34,7 +35,7 @@ namespace Generic.Abp.Demo.Web
         typeof(GenericAbpMetroUiThemeBasicModule),
         typeof(AbpAspNetCoreSerilogModule),
         typeof(AbpSwashbuckleModule)
-        )]
+    )]
     public class DemoWebModule : AbpModule
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)
@@ -76,6 +77,10 @@ namespace Generic.Abp.Demo.Web
             ConfigureAutoApiControllers();
             ConfigureSwaggerServices(context.Services);
 
+            Configure<RazorPagesOptions>(options =>
+            {
+                options.Conventions.AddPageRoute("/TagHelpers/Index", "tag-helpers");
+            });
         }
 
         private void ConfigureAuthentication(ServiceConfigurationContext context)
@@ -94,11 +99,7 @@ namespace Generic.Abp.Demo.Web
 
         private void ConfigureAutoMapper()
         {
-            Configure<AbpAutoMapperOptions>(options =>
-            {
-                options.AddMaps<DemoWebModule>();
-
-            });
+            Configure<AbpAutoMapperOptions>(options => { options.AddMaps<DemoWebModule>(); });
         }
 
         private void ConfigureVirtualFileSystem(IWebHostEnvironment hostingEnvironment)
@@ -107,10 +108,18 @@ namespace Generic.Abp.Demo.Web
             {
                 Configure<AbpVirtualFileSystemOptions>(options =>
                 {
-                    options.FileSets.ReplaceEmbeddedByPhysical<DemoDomainSharedModule>(Path.Combine(hostingEnvironment.ContentRootPath, $"..{Path.DirectorySeparatorChar}Generic.Abp.Demo.Domain.Shared"));
-                    options.FileSets.ReplaceEmbeddedByPhysical<DemoDomainModule>(Path.Combine(hostingEnvironment.ContentRootPath, $"..{Path.DirectorySeparatorChar}Generic.Abp.Demo.Domain"));
-                    options.FileSets.ReplaceEmbeddedByPhysical<DemoApplicationContractsModule>(Path.Combine(hostingEnvironment.ContentRootPath, $"..{Path.DirectorySeparatorChar}Generic.Abp.Demo.Application.Contracts"));
-                    options.FileSets.ReplaceEmbeddedByPhysical<DemoApplicationModule>(Path.Combine(hostingEnvironment.ContentRootPath, $"..{Path.DirectorySeparatorChar}Generic.Abp.Demo.Application"));
+                    options.FileSets.ReplaceEmbeddedByPhysical<DemoDomainSharedModule>(
+                        Path.Combine(hostingEnvironment.ContentRootPath,
+                            $"..{Path.DirectorySeparatorChar}Generic.Abp.Demo.Domain.Shared"));
+                    options.FileSets.ReplaceEmbeddedByPhysical<DemoDomainModule>(
+                        Path.Combine(hostingEnvironment.ContentRootPath,
+                            $"..{Path.DirectorySeparatorChar}Generic.Abp.Demo.Domain"));
+                    options.FileSets.ReplaceEmbeddedByPhysical<DemoApplicationContractsModule>(
+                        Path.Combine(hostingEnvironment.ContentRootPath,
+                            $"..{Path.DirectorySeparatorChar}Generic.Abp.Demo.Application.Contracts"));
+                    options.FileSets.ReplaceEmbeddedByPhysical<DemoApplicationModule>(
+                        Path.Combine(hostingEnvironment.ContentRootPath,
+                            $"..{Path.DirectorySeparatorChar}Generic.Abp.Demo.Application"));
                     options.FileSets.ReplaceEmbeddedByPhysical<DemoWebModule>(hostingEnvironment.ContentRootPath);
                 });
             }
@@ -118,10 +127,7 @@ namespace Generic.Abp.Demo.Web
 
         private void ConfigureNavigationServices()
         {
-            Configure<AbpNavigationOptions>(options =>
-            {
-                options.MenuContributors.Add(new DemoMenuContributor());
-            });
+            Configure<AbpNavigationOptions>(options => { options.MenuContributors.Add(new DemoMenuContributor()); });
         }
 
         private void ConfigureAutoApiControllers()
@@ -177,14 +183,10 @@ namespace Generic.Abp.Demo.Web
             //app.UseAbpOpenIddictValidation();
             app.UseAuthorization();
             app.UseSwagger();
-            app.UseSwaggerUI(options =>
-            {
-                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Demo API");
-            });
+            app.UseSwaggerUI(options => { options.SwaggerEndpoint("/swagger/v1/swagger.json", "Demo API"); });
             app.UseAuditing();
             app.UseAbpSerilogEnrichers();
             app.UseConfiguredEndpoints();
         }
     }
-
 }

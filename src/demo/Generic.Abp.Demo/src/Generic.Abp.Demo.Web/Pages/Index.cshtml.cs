@@ -1,31 +1,31 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using Generic.Abp.Metro.UI.TagHelpers.Form;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Generic.Abp.Demo.Web.Pages
 {
     public class IndexModel : DemoPageModel
     {
-        [BindProperty]
-        public IndexViewModel IndexView { get; set; }
+        [BindProperty] public IndexViewModel IndexView { get; set; }
+
         public List<SelectListItem> CountryList { get; set; } = new List<SelectListItem>
         {
-            new() { Value = "CA", Text = "Canada"},
-            new() { Value = "US", Text = "USA"},
-            new() { Value = "UK", Text = "United Kingdom"},
-            new() { Value = "RU", Text = "Russia"}
+            new() { Value = "CA", Text = "Canada" },
+            new() { Value = "US", Text = "USA" },
+            new() { Value = "UK", Text = "United Kingdom" },
+            new() { Value = "RU", Text = "Russia" }
         };
 
-        public enum CarType 
+        public enum CarType
         {
             Sedan,
             Hatchback,
             StationWagon,
             Coupe
         }
+
         public void OnGet()
         {
             IndexView = new IndexViewModel
@@ -36,13 +36,12 @@ namespace Generic.Abp.Demo.Web.Pages
                 Email = "abc",
                 IsConfirm = true,
                 //MyCarType = CarType.Hatchback,
-                Password = "dsdf",
+                //Password = "dsdf",
                 //RadioCarType = CarType.Coupe,
                 //RadioCountry = CountryList[2].Value,
-                CheckboxCarType = new List<CarType> { CarType.Coupe, CarType.StationWagon },
+                //CheckboxCarType = new List<CarType> { CarType.Coupe, CarType.StationWagon },
                 Remarks = "sdfsfsdfssdfsdf"
             };
-
         }
 
         public class IndexViewModel
@@ -53,20 +52,17 @@ namespace Generic.Abp.Demo.Web.Pages
             [MinLength(2)]
             public string Email { get; set; }
 
-            [ReadOnlyInput]
-            public string Password { get; set; }
+            //[ReadOnlyInput] public string Password { get; set; }
 
-            [DisabledInput]
-            public string Surname { get; set; }
+            //[DisabledInput] public string Surname { get; set; }
 
             [Range(1, 100)] public int Age { get; set; } = 0;
-            
-            [SelectItems(nameof(CountryList))]
-            [Display(Name = "Country")]
-            public List<string> Country { get; set; }
-        
-            [SelectItems(nameof(CountryList))]
-            [MetroRadioGroup]
+
+            //[SelectItems(nameof(CountryList))]
+            [Display(Name = "Country")] public List<string> Country { get; set; }
+
+            //[SelectItems(nameof(CountryList))]
+            //[MetroRadioGroup]
             public string RadioCountry { get; set; }
 
             [Required]
@@ -74,16 +70,14 @@ namespace Generic.Abp.Demo.Web.Pages
             public CarType MyCarType { get; set; }
 
             [Required]
-            [MetroRadioGroup]
-            [MetroRadioOrCheckboxCols(3)]
+            //[MetroRadioGroup]
+            //[MetroRadioOrCheckboxCols(3)]
             public CarType RadioCarType { get; set; }
 
-            [MetroRadioOrCheckboxCols(3)]
-            public List<CarType> CheckboxCarType { get; set; }
+            //[MetroRadioOrCheckboxCols(3)] public List<CarType> CheckboxCarType { get; set; }
 
 
-            [Display(Name = "Email")]
-            public bool IsConfirm { get; set; }
+            [Display(Name = "Email")] public bool IsConfirm { get; set; }
 
             [DataType(DataType.Date)]
             [Display(Name = "Day")]
@@ -92,15 +86,12 @@ namespace Generic.Abp.Demo.Web.Pages
             public DateTime BirthDateTime { get; set; }
 
 
-            [TextArea]
-            [StringLength(5)]
-            [Required]
-            public string Remarks { get; set; }
+            //[TextArea]
+            [StringLength(5)] [Required] public string Remarks { get; set; }
 
             public Address Address { get; set; }
 
-            [DynamicFormIgnore]
-            public List<Address> AddressList { get; set; }
+            //[DynamicFormIgnore] public List<Address> AddressList { get; set; }
         }
 
         public class Address

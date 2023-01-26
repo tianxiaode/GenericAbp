@@ -1,9 +1,8 @@
 ﻿namespace Generic.Abp.Metro.UI.TagHelpers.Button;
 
-public enum MetroButtonSize
+public enum ButtonShape
 {
     Default,
-    Mini,
-    Small,
-    Large
+    Square,
+    Cycle
 }

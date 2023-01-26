@@ -43,6 +43,8 @@
     "DisplayName:Email": "邮箱地址",
     "DisplayName:PhoneNumber": "手机号码",
     "DesktopClient": "桌面客户端",
-    "MobileClient": "移动客户端"
+    "MobileClient": "移动客户端",
+    "TagHelpers": "标记帮助程序",
+    "Buttons": "按钮"
   }
 }

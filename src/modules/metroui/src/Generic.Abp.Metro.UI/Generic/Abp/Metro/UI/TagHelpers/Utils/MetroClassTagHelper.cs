@@ -3,12 +3,10 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace Generic.Abp.Metro.UI.TagHelpers.Utils;
 
-
 [HtmlTargetElement(Attributes = "metro-class")]
-public class MetroClassTagHelper: MetroTagHelper
+public class MetroClassTagHelper : TagHelper
 {
-    [HtmlAttributeName("metro-class")]
-    public string Class { get; set; }
+    [HtmlAttributeName("metro-class")] public string Class { get; set; }
 
     public override Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {

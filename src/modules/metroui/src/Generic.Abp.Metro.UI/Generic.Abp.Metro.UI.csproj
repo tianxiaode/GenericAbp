@@ -14,6 +14,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Generic\Abp\Metro\UI\TagHelpers\Dropdown\**" />
+    <Compile Remove="Generic\Abp\Metro\UI\TagHelpers\Form\**" />
+    <Content Remove="Generic\Abp\Metro\UI\TagHelpers\Dropdown\**" />
+    <Content Remove="Generic\Abp\Metro\UI\TagHelpers\Form\**" />
+    <EmbeddedResource Remove="Generic\Abp\Metro\UI\TagHelpers\Dropdown\**" />
+    <EmbeddedResource Remove="Generic\Abp\Metro\UI\TagHelpers\Form\**" />
+    <None Remove="Generic\Abp\Metro\UI\TagHelpers\Dropdown\**" />
+    <None Remove="Generic\Abp\Metro\UI\TagHelpers\Form\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI" Version="$(AbpVersion)" />
   </ItemGroup>
 

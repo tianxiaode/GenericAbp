@@ -8,11 +8,6 @@ namespace Generic.Abp.Metro.UI.TagHelpers.Alert;
 [HtmlTargetElement("h4", ParentTag = "metro-alert", TagStructure = TagStructure.NormalOrSelfClosing)]
 [HtmlTargetElement("h5", ParentTag = "metro-alert", TagStructure = TagStructure.NormalOrSelfClosing)]
 [HtmlTargetElement("h6", ParentTag = "metro-alert", TagStructure = TagStructure.NormalOrSelfClosing)]
-public class MetroAlertHeaderTagHelper : MetroTagHelper<MetroAlertHeaderTagHelper, MetroAlertHeaderTagHelperService>
+public class MetroAlertHeaderTagHelper : TagHelper
 {
-    public MetroAlertHeaderTagHelper(MetroAlertHeaderTagHelperService tagHelperService)
-        : base(tagHelperService)
-    {
-
-    }
 }

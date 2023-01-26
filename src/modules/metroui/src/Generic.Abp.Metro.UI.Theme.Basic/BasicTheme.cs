@@ -10,16 +10,13 @@ public class BasicTheme : ITheme, ITransientDependency
 
     public virtual string GetLayout(string name, bool fallbackToDefault = true)
     {
-        switch (name)
+        return name switch
         {
-            case StandardLayouts.Application:
-                return "~/Themes/Basic/Layouts/Application.cshtml";
-            case StandardLayouts.Account:
-                return "~/Themes/Basic/Layouts/Account.cshtml";
-            case StandardLayouts.Empty:
-                return "~/Themes/Basic/Layouts/Empty.cshtml";
-            default:
-                return fallbackToDefault ? "~/Themes/Basic/Layouts/Application.cshtml" : string.Empty;
-        }
+            StandardLayouts.Application => "~/Themes/Basic/Layouts/Application.cshtml",
+            StandardLayouts.Account => "~/Themes/Basic/Layouts/Account.cshtml",
+            StandardLayouts.Empty => "~/Themes/Basic/Layouts/Empty.cshtml",
+            StandardLayouts.Public => "~/Themes/Basic/Layouts/Public.cshtml",
+            _ => fallbackToDefault ? "~/Themes/Basic/Layouts/Application.cshtml" : null
+        };
     }
 }

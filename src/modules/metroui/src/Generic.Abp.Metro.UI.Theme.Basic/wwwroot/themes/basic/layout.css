@@ -24,7 +24,8 @@
 }
 
 .app-bar .app-bar-menu a {
-    color: rgba(255,255,255,.5) !important;
+    color: #fff !important;
+    font-size: 16px !important;
 }
 
 .app-bar .app-bar-menu .dropdown-toggle:before {

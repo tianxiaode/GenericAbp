@@ -1,0 +1,85 @@
+﻿@page
+@using Generic.Abp.Demo.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Theming
+@using Generic.Abp.Demo.Web.Pages.TagHelpers;
+@using Microsoft.AspNetCore.Mvc.Localization
+@model IndexModel
+@inject IThemeManager ThemeManager
+@inject IHtmlLocalizer<DemoResource> L
+@{
+    Layout = ThemeManager.CurrentTheme.GetPublicLayout();
+    
+}
+@section styles{
+    <metro-style-bundle>
+        <metro-style src="/Pages/TagHelpers/index.css" />
+    </metro-style-bundle>
+}
+
+<div style="height: 100vh;">
+    <div data-role="navview" data-compact="md" data-expand="lg" data-toggle="#pane-toggle" data-active-state="true" data-on-menu-item-click="onMenuItemClick">
+        <nav class="navview-pane">
+
+            <ul class="navview-menu">
+                <li>
+                    <a href="~/">
+                        <span class="icon"><span class="mif-home"></span></span>
+                        <span class="caption">@L["Menu:Home"].Value</span>
+                    </a>
+                    
+                </li>
+
+                <li class="item-separator"></li>
+
+                <li class="item-header">@L["TagHelpers"].Value</li>
+
+                <li class="active">
+                    <a href="#">
+                        <span class="caption">@L["Buttons"].Value</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="navview-content">
+            
+            <div data-role="panel" class="h-100 w-100" data-title-caption="@L["Buttons"]" data-cls-title="bg-dark fg-white">
+                <div class="row">
+                    <metro-button button-type="Default" metro-class="mr-1">Default</metro-button>
+                    <metro-button button-type="Primary" metro-class="mr-1">Primary</metro-button>
+                    <metro-button button-type="Secondary" metro-class="mr-1">Secondary</metro-button>
+                    <metro-button button-type="Success" metro-class="mr-1">Success</metro-button>
+                    <metro-button button-type="Alert" metro-class="mr-1">Alert</metro-button>
+                    <metro-button button-type="Warning" metro-class="mr-1">Warning</metro-button>
+                    <metro-button button-type="Yellow" metro-class="mr-1">Yellow</metro-button>
+                    <metro-button button-type="Info" metro-class="mr-1">Info</metro-button>
+                    <metro-button button-type="Dark" metro-class="mr-1">Dark</metro-button>
+                    <metro-button button-type="Light" metro-class="mr-1">Light</metro-button>
+                </div>
+                <div class="w-50 p-2 bg-grayWhite">
+                    <div class="code">
+                    <!metro-button button-type="Default" metro-class="mr-1">Default</!metro-button>
+                    <!metro-button button-type="Primary" metro-class="mr-1">Primary</!metro-button>
+                    <!metro-button button-type="Secondary" metro-class="mr-1">Secondary</!metro-button>
+                    <!metro-button button-type="Success" metro-class="mr-1">Success</!metro-button>
+                    <!metro-button button-type="Alert" metro-class="mr-1">Alert</!metro-button>
+                    <!metro-button button-type="Warning" metro-class="mr-1">Warning</!metro-button>
+                    <!metro-button button-type="Yellow" metro-class="mr-1">Yellow</!metro-button>
+                    <!metro-button button-type="Info" metro-class="mr-1">Info</!metro-button>
+                    <!metro-button button-type="Dark" metro-class="mr-1">Dark</!metro-button>
+                    <!metro-button button-type="Light" metro-class="mr-1">Light</!metro-button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    <metro-script-bundle>
+        <metro-script src="/Pages/TagHelpers/index.js" />
+    </metro-script-bundle>
+
+}

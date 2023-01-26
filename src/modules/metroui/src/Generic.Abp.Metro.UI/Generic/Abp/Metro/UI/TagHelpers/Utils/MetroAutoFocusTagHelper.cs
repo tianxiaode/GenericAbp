@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 namespace Generic.Abp.Metro.UI.TagHelpers.Utils;
 
 [HtmlTargetElement(Attributes = "metro-auto-focus")]
-public class MetroAutoFocusTagHelper: MetroTagHelper
+public class MetroAutoFocusTagHelper : TagHelper
 {
     [HtmlAttributeName("metro-auto-focus")]
     public bool AutoFocus { get; set; } = false;
@@ -13,10 +13,9 @@ public class MetroAutoFocusTagHelper: MetroTagHelper
     {
         if (AutoFocus)
         {
-            output.Attributes.Add("autofocus","autofocus");
-
+            output.Attributes.Add("autofocus", "autofocus");
         }
+
         return Task.CompletedTask;
     }
-
 }

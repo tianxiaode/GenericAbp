@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 
@@ -14,13 +15,9 @@ namespace Generic.Abp.Metro.UI.Bundling.TagHelpers;
 
 public class MetroTagHelperStyleService : MetroTagHelperResourceService
 {
-    public MetroTagHelperStyleService(
-        IBundleManager bundleManager,
-        IOptions<AbpBundlingOptions> options,
-        IWebHostEnvironment hostingEnvironment) : base(
-            bundleManager,
-            options,
-            hostingEnvironment)
+    public MetroTagHelperStyleService(IBundleManager bundleManager, IOptions<AbpBundlingOptions> options,
+        IWebHostEnvironment hostingEnvironment, ILogger<MetroTagHelperStyleService> logger) : base(bundleManager,
+        options, hostingEnvironment, logger)
     {
     }
 
@@ -38,7 +35,8 @@ public class MetroTagHelperStyleService : MetroTagHelperResourceService
         return await BundleManager.GetStyleBundleFilesAsync(bundleName);
     }
 
-    protected override void AddHtmlTag(ViewContext viewContext, TagHelper tagHelper, TagHelperContext context, TagHelperOutput output, string file)
+    protected override void AddHtmlTag(ViewContext viewContext, TagHelper tagHelper, TagHelperContext context,
+        TagHelperOutput output, string file)
     {
         var preload = tagHelper switch
         {
@@ -47,13 +45,16 @@ public class MetroTagHelperStyleService : MetroTagHelperResourceService
             _ => false
         };
 
-        if (preload || Options.PreloadStylesByDefault || Options.PreloadStyles.Any(x => file.StartsWith(x, StringComparison.OrdinalIgnoreCase)))
+        if (preload || Options.PreloadStylesByDefault ||
+            Options.PreloadStyles.Any(x => file.StartsWith(x, StringComparison.OrdinalIgnoreCase)))
         {
-            output.Content.AppendHtml($"<link rel=\"preload\" href=\"{viewContext.GetUrlHelper().Content(file.EnsureStartsWith('~'))}\" as=\"style\" onload=\"this.rel='stylesheet'\" />{Environment.NewLine}");
+            output.Content.AppendHtml(
+                $"<link rel=\"preload\" href=\"{viewContext.GetUrlHelper().Content(file.EnsureStartsWith('~'))}\" as=\"style\" onload=\"this.rel='stylesheet'\" />{Environment.NewLine}");
         }
         else
         {
-            output.Content.AppendHtml($"<link rel=\"stylesheet\" href=\"{viewContext.GetUrlHelper().Content(file.EnsureStartsWith('~'))}\" />{Environment.NewLine}");
+            output.Content.AppendHtml(
+                $"<link rel=\"stylesheet\" href=\"{viewContext.GetUrlHelper().Content(file.EnsureStartsWith('~'))}\" />{Environment.NewLine}");
         }
     }
 }

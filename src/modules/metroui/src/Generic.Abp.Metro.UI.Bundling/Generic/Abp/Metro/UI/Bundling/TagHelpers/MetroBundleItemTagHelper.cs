@@ -1,29 +1,29 @@
-﻿using System;
-using Generic.Abp.Metro.UI.TagHelpers;
+﻿using Microsoft.AspNetCore.Razor.TagHelpers;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Volo.Abp;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace Generic.Abp.Metro.UI.Bundling.TagHelpers;
 
-public abstract class MetroBundleItemTagHelper<TTagHelper, TTagHelperService> : MetroTagHelper<TTagHelper, TTagHelperService>, IBundleItemTagHelper
-    where TTagHelper : MetroTagHelper<TTagHelper, TTagHelperService>, IBundleItemTagHelper
-    where TTagHelperService : MetroBundleItemTagHelperService<TTagHelper, TTagHelperService>
+public abstract class MetroBundleItemTagHelper : TagHelper
 {
-    /// <summary>
-    /// A file path.
-    /// </summary>
-    public string Src { get; set; }
-
-    /// <summary>
-    /// A bundle contributor type.
-    /// </summary>
-    public Type Type { get; set; } 
-
-    protected MetroBundleItemTagHelper(TTagHelperService service)
-        : base(service)
+    protected MetroBundleItemTagHelper(MetroTagHelperResourceService resourceService)
     {
+        ResourceService = resourceService;
     }
 
-    public string GetNameOrNull()
+    protected MetroTagHelperResourceService ResourceService { get; }
+    [HtmlAttributeNotBound] [ViewContext] public ViewContext ViewContext { get; set; }
+
+    public string? Src { get; set; }
+
+    public Type? Type { get; set; }
+
+
+    public string? GetNameOrNull()
     {
         if (Type != null)
         {
@@ -57,4 +57,28 @@ public abstract class MetroBundleItemTagHelper<TTagHelper, TTagHelperService> : 
     }
 
     protected abstract string GetFileExtension();
+
+    public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+    {
+        if (context.Items.GetOrDefault(MetroTagHelperConsts.ContextBundleItemListKey) is List<BundleTagHelperItem>
+            tagHelperItems)
+        {
+            output.SuppressOutput();
+            tagHelperItems.Add(CreateBundleTagHelperItem());
+        }
+        else
+        {
+            await ResourceService.ProcessAsync(
+                ViewContext,
+                this,
+                context,
+                output,
+                new List<BundleTagHelperItem>
+                {
+                    CreateBundleTagHelperItem()
+                },
+                GetNameOrNull()
+            );
+        }
+    }
 }

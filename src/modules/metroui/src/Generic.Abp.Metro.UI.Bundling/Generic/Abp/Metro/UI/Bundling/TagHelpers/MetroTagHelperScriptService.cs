@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 
@@ -14,13 +15,9 @@ namespace Generic.Abp.Metro.UI.Bundling.TagHelpers;
 
 public class MetroTagHelperScriptService : MetroTagHelperResourceService
 {
-    public MetroTagHelperScriptService(
-        IBundleManager bundleManager,
-        IOptions<AbpBundlingOptions> options,
-        IWebHostEnvironment hostingEnvironment) : base(
-            bundleManager,
-            options,
-            hostingEnvironment)
+    public MetroTagHelperScriptService(IBundleManager bundleManager, IOptions<AbpBundlingOptions> options,
+        IWebHostEnvironment hostingEnvironment, ILogger<MetroTagHelperScriptService> logger) : base(bundleManager,
+        options, hostingEnvironment, logger)
     {
     }
 
@@ -38,7 +35,8 @@ public class MetroTagHelperScriptService : MetroTagHelperResourceService
         return await BundleManager.GetScriptBundleFilesAsync(bundleName ?? string.Empty);
     }
 
-    protected override void AddHtmlTag(ViewContext viewContext, TagHelper tagHelper, TagHelperContext context, TagHelperOutput output, string file)
+    protected override void AddHtmlTag(ViewContext viewContext, TagHelper tagHelper, TagHelperContext context,
+        TagHelperOutput output, string file)
     {
         var defer = tagHelper switch
         {
@@ -47,9 +45,11 @@ public class MetroTagHelperScriptService : MetroTagHelperResourceService
             _ => false
         };
 
-        var deferText = (defer || Options.DeferScriptsByDefault || Options.DeferScripts.Any(x => file.StartsWith(x, StringComparison.OrdinalIgnoreCase)))
-                ? "defer"
-                : string.Empty;
-        output.Content.AppendHtml($"<script {deferText} src=\"{viewContext.GetUrlHelper().Content(file.EnsureStartsWith('~'))}\"></script>{Environment.NewLine}");
+        var deferText = (defer || Options.DeferScriptsByDefault ||
+                         Options.DeferScripts.Any(x => file.StartsWith(x, StringComparison.OrdinalIgnoreCase)))
+            ? "defer"
+            : string.Empty;
+        output.Content.AppendHtml(
+            $"<script {deferText} src=\"{viewContext.GetUrlHelper().Content(file.EnsureStartsWith('~'))}\"></script>{Environment.NewLine}");
     }
 }

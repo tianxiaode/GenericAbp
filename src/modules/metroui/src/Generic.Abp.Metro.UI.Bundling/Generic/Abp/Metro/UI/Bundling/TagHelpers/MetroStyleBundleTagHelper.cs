@@ -1,15 +1,15 @@
-﻿using Microsoft.AspNetCore.Razor.TagHelpers;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace Generic.Abp.Metro.UI.Bundling.TagHelpers;
 
 [HtmlTargetElement("metro-style-bundle", TagStructure = TagStructure.NormalOrSelfClosing)]
-public class MetroStyleBundleTagHelper : MetroBundleTagHelper<MetroStyleBundleTagHelper, MetroStyleBundleTagHelperService>, IBundleTagHelper
+public class MetroStyleBundleTagHelper : MetroBundleTagHelper, IBundleTagHelper
 {
-    [HtmlAttributeName("preload")]
-    public bool Preload { get; set; }
-
-    public MetroStyleBundleTagHelper(MetroStyleBundleTagHelperService service)
-        : base(service)
+    public MetroStyleBundleTagHelper(MetroTagHelperStyleService resourceService) : base(
+        resourceService)
     {
     }
+
+    [HtmlAttributeName("preload")] public bool Preload { get; set; }
 }

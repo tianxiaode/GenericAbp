@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Razor">
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <Import Project="..\..\..\..\common.props" />
 
@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <EmbeddedResource Include="wwwroot\**\*.*" />
+    <EmbeddedResource Remove="Themes\Basic\Layouts\Public.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -28,6 +29,7 @@
     <None Include="Themes\Basic\Layouts\Account.cshtml" />
     <None Include="Themes\Basic\Layouts\Application.cshtml" />
     <None Include="Themes\Basic\Layouts\Empty.cshtml" />
+    <None Include="Themes\Basic\Layouts\Public.cshtml" />
   </ItemGroup>
 
   <ItemGroup>

@@ -40,6 +40,8 @@
     "DisplayName:Email": "Email address",
     "DisplayName:PhoneNumber": "Phone number",
     "DesktopClient": "Desktop client",
-    "MobileClient": "Mobile client"
+    "MobileClient": "Mobile client",
+    "TagHelpers": "Tag Helpers",
+    "Buttons": "Buttons"
   }
 }
