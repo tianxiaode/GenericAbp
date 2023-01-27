@@ -45,6 +45,19 @@
     "DesktopClient": "桌面客户端",
     "MobileClient": "移动客户端",
     "TagHelpers": "标记帮助程序",
-    "Buttons": "按钮"
+    "Buttons": "按钮",
+    "ButtonColors": "按钮颜色",
+    "ButtonType": "按钮类型",
+    "ButtonIcon": "按钮图标",
+    "ButtonOutline": "按钮轮廓",
+    "ButtonSizes": "按钮大小",
+    "ButtonRoundedCorners": "圆角按钮",
+    "ButtonSquareAndCycle": "方形和圆形按钮",
+    "ButtonShadowed": "按钮阴影",
+    "ButtonFlat": "平面按钮",
+    "ButtonCommand": "指令按钮",
+    "ButtonImage": "图片按钮",
+    "ButtonShortcut": "快捷按钮",
+    "ButtonBadge": "按钮标记"
   }
 }

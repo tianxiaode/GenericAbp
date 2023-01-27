@@ -4,25 +4,31 @@
 $(function () {
 
     $('.code').each((i,el)=>{
-        var childNodes = el.childNodes;
-        var newChilds = [];
-        childNodes.forEach(node => {
-            var tagName = node.tagName;
-            if(!tagName) return;
-            tagName = tagName.toLocaleLowerCase();
-            if(tagName.indexOf('metro')<0) return;
-            var attributes = [];
-            Object.values(node.attributes).forEach((attr)=>{
-                console.log(attr)
-                attributes.push(`<span class="code-attribute">${attr.name}</span>="<span>${attr.value}</span>"`);
-            })
-            console.log(node);
-            var newNode =`
-                <div>
-                    &lt;<span class="code-tag">${tagName}</span>
-                    ${attributes.join(' ')}&gt;<span class="code-html">${node.innerHTML}</span>&lt;/<span  class="code-tag">${tagName}</span>&gt;</div>`
-            newChilds.push(newNode);
-        });
-        el.innerHTML = newChilds.join('');
+        var innerHTML = el.innerHTML;        
+        //innerHTML = innerHTML.replaceAll('&lt;', '<').replaceAll('&gt;', '>');
+        innerHTML = innerHTML
+            .replaceAll('\n', '</div><div>')
+            .replaceAll('&lt;', '&lt;&lt;')
+            .replaceAll('&gt;', '&gt;&gt;')
+            .replace(/\s+([a-zA-Z][a-zA-Z0-9\-]+)="([^"]*)"/g, replacAttribute)
+            .replace(/&lt;&lt;([a-zA-Z][a-zA-Z0-9\-]*)/g, replacTag)
+            .replace(/&lt;&lt;\/([a-zA-Z][a-zA-Z0-9\-]*)&gt;&gt;/g, replacClosingTag)
+            .replaceAll('&gt;&gt;', '&gt;');
+        
+        el.innerHTML = `<div>${innerHTML}</div>`;
     })
+
+    function replacTag(match, tag) {
+        return `&lt;<span class="code-tag">${tag}</span>`
+    }
+
+    function replacClosingTag(match, tag){
+        return `&lt;/<span class="code-tag">${tag}</span>&gt;`
+    }
+
+
+    function replacAttribute(match, attr, value){
+        return ` <span class="code-attribute">${attr}</span>="<span>${_.escape(value)}</span>"`
+    }
+
 });

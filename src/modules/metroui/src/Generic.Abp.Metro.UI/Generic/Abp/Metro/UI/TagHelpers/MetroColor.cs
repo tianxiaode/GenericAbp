@@ -1,6 +1,6 @@
-﻿namespace Generic.Abp.Metro.UI.TagHelpers.Button;
+﻿namespace Generic.Abp.Metro.UI.TagHelpers;
 
-public enum MetroButtonType
+public enum MetroColor
 {
     Default,
     Primary,
@@ -11,6 +11,5 @@ public enum MetroButtonType
     Yellow,
     Info,
     Light,
-    Dark,
-    Link
+    Dark
 }

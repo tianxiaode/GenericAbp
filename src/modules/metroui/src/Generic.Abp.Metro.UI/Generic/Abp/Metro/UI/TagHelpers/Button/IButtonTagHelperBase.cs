@@ -2,9 +2,10 @@
 
 public interface IButtonTagHelperBase
 {
-    MetroButtonType ButtonType { get; }
+    MetroColor Color { get; }
     MetroButtonSize Size { get; }
-    public ButtonShape Shape { get; set; }
+    public ButtonShape Shape { get; }
+    ButtonStyle ButtonStyle { get; }
     string Text { get; }
     string Icon { get; }
     bool? Disabled { get; }
@@ -12,4 +13,6 @@ public interface IButtonTagHelperBase
     public bool? Outline { get; }
     public bool? Rounded { get; }
     public bool? Shadowed { get; }
+    string Caption { get; }
+    bool? IconRight { get; }
 }

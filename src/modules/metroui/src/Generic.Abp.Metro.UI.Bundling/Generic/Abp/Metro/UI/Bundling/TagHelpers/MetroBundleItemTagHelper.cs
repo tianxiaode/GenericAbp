@@ -38,7 +38,7 @@ public abstract class MetroBundleItemTagHelper : TagHelper
                 .Replace("/", ".");
         }
 
-        throw new AbpException("abp-script tag helper requires to set either src or type!");
+        throw new AbpException("abp-script tag helper requires to set either src or color!");
     }
 
     public BundleTagHelperItem CreateBundleTagHelperItem()
@@ -53,7 +53,7 @@ public abstract class MetroBundleItemTagHelper : TagHelper
             return new BundleTagHelperFileItem(Src);
         }
 
-        throw new AbpException("abp-script tag helper requires to set either src or type!");
+        throw new AbpException("abp-script tag helper requires to set either src or color!");
     }
 
     protected abstract string GetFileExtension();

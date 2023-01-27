@@ -37,6 +37,7 @@ public class WidgetAttribute : Attribute
     public static WidgetAttribute Get(Type viewComponentType)
     {
         return viewComponentType.GetCustomAttribute<WidgetAttribute>(true)
-               ?? throw new AbpException($"Given type '{viewComponentType.AssemblyQualifiedName}' does not declare a {typeof(WidgetAttribute).AssemblyQualifiedName}");
+               ?? throw new AbpException(
+                   $"Given color '{viewComponentType.AssemblyQualifiedName}' does not declare a {typeof(WidgetAttribute).AssemblyQualifiedName}");
     }
 }

@@ -57,7 +57,7 @@ namespace Generic.Abp.Metro.UI.Theme.Shared.ProxyScripting.Generators
             if (parameters.Length > 1)
             {
                 throw new AbpException(
-                    $"Only one complex type allowed as argument to a controller action that's binding source is 'Body'. But {action.Name} ({action.Url}) contains more than one!"
+                    $"Only one complex color allowed as argument to a controller action that's binding source is 'Body'. But {action.Name} ({action.Url}) contains more than one!"
                 );
             }
 
@@ -92,7 +92,8 @@ namespace Generic.Abp.Metro.UI.Theme.Shared.ProxyScripting.Generators
 
             foreach (var pathParameter in pathParameters)
             {
-                url = url.Replace($"{{{pathParameter.Name}}}", $"' + {ProxyScriptingJsFuncHelper.GetParamNameInJsFunc(pathParameter)} + '");
+                url = url.Replace($"{{{pathParameter.Name}}}",
+                    $"' + {ProxyScriptingJsFuncHelper.GetParamNameInJsFunc(pathParameter)} + '");
             }
 
             return url;
@@ -110,7 +111,8 @@ namespace Generic.Abp.Metro.UI.Theme.Shared.ProxyScripting.Generators
             }
 
             var qsBuilderParams = queryStringParameters
-                .Select(p => $"{{ Name: '{p.Name.ToCamelCase()}', value: {ProxyScriptingJsFuncHelper.GetParamNameInJsFunc(p)} }}")
+                .Select(p =>
+                    $"{{ Name: '{p.Name.ToCamelCase()}', value: {ProxyScriptingJsFuncHelper.GetParamNameInJsFunc(p)} }}")
                 .JoinAsString(", ");
 
             return url + $"' + abp.utils.buildQueryString([{qsBuilderParams}]) + '";
@@ -150,6 +152,5 @@ namespace Generic.Abp.Metro.UI.Theme.Shared.ProxyScripting.Generators
             //Default
             return DefaultHttpVerb;
         }
-
     }
 }

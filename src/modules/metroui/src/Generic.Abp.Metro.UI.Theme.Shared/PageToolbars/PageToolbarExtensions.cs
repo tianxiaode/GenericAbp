@@ -50,7 +50,7 @@ public static class PageToolbarExtensions
         string id = null,
         ILocalizableString busyText = null,
         FontIconType iconType = FontIconType.FontAwesome,
-        MetroButtonType type = MetroButtonType.Primary,
+        MetroColor color = MetroColor.Primary,
         MetroButtonSize size = MetroButtonSize.Small,
         bool disabled = false,
         int order = 0,
@@ -67,7 +67,7 @@ public static class PageToolbarExtensions
                 id,
                 busyText,
                 iconType,
-                type,
+                type = color,
                 size,
                 disabled
             },

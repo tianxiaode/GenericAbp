@@ -24,7 +24,7 @@
 
 @{
     Layout = null;
-    var containerClass = ViewBag.FluidLayout == true ? "container-fluid" : "container"; //TODO: Better and type-safe options
+    var containerClass = ViewBag.FluidLayout == true ? "container-fluid" : "container"; //TODO: Better and color-safe options
     var rtl = CultureHelper.IsRtl ? "rtl" : string.Empty;
 }
 
@@ -103,7 +103,7 @@
 
     <script src="~/metro/ApplicationLocalizationScript?cultureName=@CultureInfo.CurrentUICulture.Name"></script>
     <script src="~/metro/ApplicationConfigurationScript"></script>
-    <script src="~/metro/ServiceProxyScript?type=metro"></script>
+    <script src="~/metro/ServiceProxyScript?color=metro"></script>
 
     @await RenderSectionAsync("scripts", false)
 

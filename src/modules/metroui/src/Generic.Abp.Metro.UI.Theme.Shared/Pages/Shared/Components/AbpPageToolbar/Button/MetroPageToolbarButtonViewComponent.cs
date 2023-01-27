@@ -25,7 +25,7 @@ public class MetroPageToolbarButtonViewComponent : AbpViewComponent
         string id,
         ILocalizableString busyText,
         FontIconType iconType,
-        MetroButtonType type,
+        MetroColor color,
         MetroButtonSize size,
         bool disabled)
     {
@@ -40,7 +40,7 @@ public class MetroPageToolbarButtonViewComponent : AbpViewComponent
                 id,
                 busyText == null ? "" : await busyText.LocalizeAsync(StringLocalizerFactory) ?? "",
                 iconType,
-                type,
+                color,
                 size,
                 disabled
             )
@@ -55,7 +55,7 @@ public class MetroPageToolbarButtonViewComponent : AbpViewComponent
         public string Id { get; }
         public string BusyText { get; }
         public FontIconType IconType { get; }
-        public MetroButtonType Type { get; }
+        public MetroColor Color { get; }
         public MetroButtonSize Size { get; }
         public bool Disabled { get; }
 
@@ -66,7 +66,7 @@ public class MetroPageToolbarButtonViewComponent : AbpViewComponent
             string id,
             string busyText,
             FontIconType iconType,
-            MetroButtonType type,
+            MetroColor color,
             MetroButtonSize size,
             bool disabled)
         {
@@ -76,7 +76,7 @@ public class MetroPageToolbarButtonViewComponent : AbpViewComponent
             Id = id;
             BusyText = busyText;
             IconType = iconType;
-            Type = type;
+            Color = color;
             Size = size;
             Disabled = disabled;
         }

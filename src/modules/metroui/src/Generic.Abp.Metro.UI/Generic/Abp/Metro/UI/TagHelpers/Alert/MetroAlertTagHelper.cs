@@ -31,7 +31,7 @@ public class MetroAlertTagHelper : TagHelper
             AlertType.Danger => "alert",
             _ => "default"
         };
-        output.Attributes.Add("data-type", type);
+        output.Attributes.Add("data-color", type);
 
         if (!(Dismissible ?? false)) return Task.CompletedTask;
         output.Attributes.AddClass("fade");

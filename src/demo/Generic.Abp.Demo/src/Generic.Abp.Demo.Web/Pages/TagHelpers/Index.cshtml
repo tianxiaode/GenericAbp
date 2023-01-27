@@ -13,6 +13,7 @@
 @section styles{
     <metro-style-bundle>
         <metro-style src="/Pages/TagHelpers/index.css" />
+        <metro-style src="/libs/fontawesome/css/all.min.css" />
     </metro-style-bundle>
 }
 
@@ -42,34 +43,273 @@
         </nav>
 
         <div class="navview-content">
-            
-            <div data-role="panel" class="h-100 w-100" data-title-caption="@L["Buttons"]" data-cls-title="bg-dark fg-white">
-                <div class="row">
-                    <metro-button button-type="Default" metro-class="mr-1">Default</metro-button>
-                    <metro-button button-type="Primary" metro-class="mr-1">Primary</metro-button>
-                    <metro-button button-type="Secondary" metro-class="mr-1">Secondary</metro-button>
-                    <metro-button button-type="Success" metro-class="mr-1">Success</metro-button>
-                    <metro-button button-type="Alert" metro-class="mr-1">Alert</metro-button>
-                    <metro-button button-type="Warning" metro-class="mr-1">Warning</metro-button>
-                    <metro-button button-type="Yellow" metro-class="mr-1">Yellow</metro-button>
-                    <metro-button button-type="Info" metro-class="mr-1">Info</metro-button>
-                    <metro-button button-type="Dark" metro-class="mr-1">Dark</metro-button>
-                    <metro-button button-type="Light" metro-class="mr-1">Light</metro-button>
+            <div data-role="panel" class="h-100 w-100 scroll-y" data-title-caption="@L["Buttons"]" data-cls-title="bg-dark fg-white">
+                <h4>@L["ButtonColors"].Value</h4>
+                <div class="row  p-2 border-1 bd-gray border-solid">
+                    <metro-button color="Default" text="Default" metro-class="mr-1" />
+                    <metro-button color="Primary" text="Primary" metro-class="mr-1" />
+                    <metro-button color="Secondary" text="Secondary" metro-class="mr-1" />
+                    <metro-button color="Success" text="Success" metro-class="mr-1" />
+                    <metro-button color="Alert" text="Alert" metro-class="mr-1" />
+                    <metro-button color="Warning" text="Warning" metro-class="mr-1" />
+                    <metro-button color="Yellow" text="Yellow" metro-class="mr-1" />
+                    <metro-button color="Info" text="Info" metro-class="mr-1" />
+                    <metro-button color="Dark" text="Dark" metro-class="mr-1" />
+                    <metro-button color="Light" text="Light" metro-class="mr-1" />
                 </div>
-                <div class="w-50 p-2 bg-grayWhite">
+                <div class=" p-2 bg-grayWhite">
                     <div class="code">
-                    <!metro-button button-type="Default" metro-class="mr-1">Default</!metro-button>
-                    <!metro-button button-type="Primary" metro-class="mr-1">Primary</!metro-button>
-                    <!metro-button button-type="Secondary" metro-class="mr-1">Secondary</!metro-button>
-                    <!metro-button button-type="Success" metro-class="mr-1">Success</!metro-button>
-                    <!metro-button button-type="Alert" metro-class="mr-1">Alert</!metro-button>
-                    <!metro-button button-type="Warning" metro-class="mr-1">Warning</!metro-button>
-                    <!metro-button button-type="Yellow" metro-class="mr-1">Yellow</!metro-button>
-                    <!metro-button button-type="Info" metro-class="mr-1">Info</!metro-button>
-                    <!metro-button button-type="Dark" metro-class="mr-1">Dark</!metro-button>
-                    <!metro-button button-type="Light" metro-class="mr-1">Light</!metro-button>
+                        &lt;metro-button color="Default" text="Default" metro-class="mr-1" /&gt;
+                        &lt;metro-button color="Primary" text="Primary" metro-class="mr-1" /&gt;
+                        &lt;metro-button color="Secondary" text="Secondary" metro-class="mr-1" /&gt;
+                        &lt;metro-button color="Success" text="Success" metro-class="mr-1" /&gt;
+                        &lt;metro-button color="Alert" text="Alert" metro-class="mr-1" /&gt;
+                        &lt;metro-button color="Warning" text="Warning" metro-class="mr-1" /&gt;
+                        &lt;metro-button color="Yellow" text="Yellow" metro-class="mr-1" /&gt;
+                        &lt;metro-button color="Info" text="Info" metro-class="mr-1" /&gt;
+                        &lt;metro-button color="Dark" text="Dark" metro-class="mr-1" /&gt;
+                        &lt;metro-button color="Light" text="Light" metro-class="mr-1" /&gt;
                     </div>
                 </div>
+                
+                <h4>@L["ButtonIcon"].Value</h4>
+                <div class="row p-2 border-1 bd-gray border-solid">
+                    <metro-button icon="checkmark" text="Check" metro-class="mr-1"/>
+                    <metro-button icon="users" icon-cls="fg-blue" metro-class="mr-1" />
+                    <metro-button icon="user" icon-cls="fg-blue" icon-type="FontAwesome" text="FontAwesome" metro-class="mr-1" />
+                    <metro-button icon="https://cdn-icons-png.flaticon.com/128/3884/3884607.png" icon-type="Image" text="Image" metro-class="mr-1" />
+                </div>
+                <div class="p-2 bg-grayWhite">
+                    <div class="code">
+                        &lt;metro-button icon="checkmark" text="Check" metro-class="mr-1"/&gt;
+                        &lt;metro-button icon="users" icon-cls="fg-blue" metro-class="mr-1" /&gt;
+                        &lt;metro-button icon="user" icon-cls="fg-blue" icon-color="FontAwesome" text="FontAwesome" metro-class="mr-1" /&gt;
+                        &lt;metro-button icon="https://cdn-icons-png.flaticon.com/128/3884/3884607.png" icon-color="Image" text="Image" metro-class="mr-1" /&gt;
+                    </div>
+                </div>
+                
+                <h4>@L["ButtonOutline"].Value</h4>
+                <div class="row  p-2 border-1 bd-gray border-solid">
+                    <metro-button color="Default" text="Default" metro-class="mr-1" outline="true" />
+                    <metro-button color="Primary" text="Primary" metro-class="mr-1" outline="true" />
+                    <metro-button color="Secondary" text="Secondary" metro-class="mr-1" outline="true" />
+                    <metro-button color="Success" text="Success" metro-class="mr-1" outline="true" />
+                    <metro-button color="Alert" text="Alert" metro-class="mr-1" outline="true" />
+                    <metro-button color="Warning" text="Warning" metro-class="mr-1" outline="true" />
+                    <metro-button color="Yellow" text="Yellow" metro-class="mr-1" outline="true" />
+                    <metro-button color="Info" text="Info" metro-class="mr-1" outline="true" />
+                    <metro-button color="Dark" text="Dark" metro-class="mr-1" outline="true" />
+                    <metro-button color="Light" text="Light" metro-class="mr-1" outline="true" />
+                </div>
+                <div class=" p-2 bg-grayWhite">
+                    <div class="code">
+                        &lt;metro-button color="Default" text="Default" metro-class="mr-1" outline="true" /&gt;
+                        &lt;metro-button color="Primary" text="Primary" metro-class="mr-1" outline="true" /&gt;
+                        &lt;metro-button color="Secondary" text="Secondary" metro-class="mr-1" outline="true" /&gt;
+                        &lt;metro-button color="Success" text="Success" metro-class="mr-1" outline="true" /&gt;
+                        &lt;metro-button color="Alert" text="Alert" metro-class="mr-1" outline="true" /&gt;
+                        &lt;metro-button color="Warning" text="Warning" metro-class="mr-1" outline="true" /&gt;
+                        &lt;metro-button color="Yellow" text="Yellow" metro-class="mr-1" outline="true" /&gt;
+                        &lt;metro-button color="Info" text="Info" metro-class="mr-1" outline="true" /&gt;
+                        &lt;metro-button color="Dark" text="Dark" metro-class="mr-1" outline="true" /&gt;
+                        &lt;metro-button color="Light" text="Light" metro-class="mr-1" outline="true" /&gt;
+                    </div>
+                </div>
+
+                <h4>@L["ButtonSizes"].Value</h4>
+                <div class="row  p-2 border-1 bd-gray border-solid flex-align-center">
+                    <metro-button color="Primary" text="Mini" size="Mini" metro-class="mr-1" />
+                    <metro-button color="Primary" text="Small" size="Small" metro-class=" mr-1" />
+                    <metro-button color="Primary" text="Default"  metro-class="mr-1"  />
+                    <metro-button color="Primary" text="Large" size="Large" metro-class="mr-1"  />
+                    <metro-button color="Primary" text="Mini" size="Mini" metro-class="mr-1" outline="true" />
+                    <metro-button color="Primary" text="Small" size="Small" metro-class="mr-1" outline="true" />
+                    <metro-button color="Primary" text="Default" metro-class="mr-1" outline="true" />
+                    <metro-button color="Primary" text="Large" size="Large" metro-class="mr-1" outline="true" />
+                </div>
+                <div class=" p-2 bg-grayWhite">
+                    <div class="code">
+                        &lt;metro-button color="Primary" text="Mini" size="Mini" metro-class="mr-1" /&gt;
+                        &lt;metro-button color="Primary" text="Small" size="Small" metro-class=" mr-1" /&gt;
+                        &lt;metro-button color="Primary" text="Default"  metro-class="mr-1"  /&gt;
+                        &lt;metro-button color="Primary" text="Large" size="Large" metro-class="mr-1"  /&gt;
+                        &lt;metro-button color="Primary" text="Mini" size="Mini" metro-class="mr-1" outline="true" /&gt;
+                        &lt;metro-button color="Primary" text="Small" size="Small" metro-class="mr-1" outline="true" /&gt;
+                        &lt;metro-button color="Primary" text="Default" metro-class="mr-1" outline="true" /&gt;
+                        &lt;metro-button color="Primary" text="Large" size="Large" metro-class="mr-1" outline="true" /&gt;
+                    </div>
+                </div>
+
+                <h4>@L["ButtonRoundedCorners"].Value</h4>
+                <div class="row  p-2 border-1 bd-gray border-solid flex-align-center">
+                    <metro-button color="Primary" text="Mini" size="Mini" metro-class="mr-1" rounded="true" />
+                    <metro-button color="Primary" text="Small" size="Small" metro-class=" mr-1" rounded="true" />
+                    <metro-button color="Primary" text="Default" metro-class="mr-1" rounded="true" />
+                    <metro-button color="Primary" text="Large" size="Large" metro-class="mr-1" rounded="true" />
+                    <metro-button color="Primary" text="Mini" size="Mini" metro-class="mr-1" outline="true" rounded="true" />
+                    <metro-button color="Primary" text="Small" size="Small" metro-class="mr-1" outline="true" rounded="true" />
+                    <metro-button color="Primary" text="Default" metro-class="mr-1" outline="true" rounded="true" />
+                    <metro-button color="Primary" text="Large" size="Large" metro-class="mr-1" outline="true" rounded="true" />
+                </div>
+                <div class=" p-2 bg-grayWhite">
+                    <div class="code">
+                        &lt;metro-button color="Primary" text="Mini" size="Mini" metro-class="mr-1" rounded="true" /&gt;
+                        &lt;metro-button color="Primary" text="Small" size="Small" metro-class=" mr-1" rounded="true" /&gt;
+                        &lt;metro-button color="Primary" text="Default"  metro-class="mr-1" rounded="true" /&gt;
+                        &lt;metro-button color="Primary" text="Large" size="Large" metro-class="mr-1" rounded="true" /&gt;
+                        &lt;metro-button color="Primary" text="Mini" size="Mini" metro-class="mr-1" outline="true" rounded="true" /&gt;
+                        &lt;metro-button color="Primary" text="Small" size="Small" metro-class="mr-1" outline="true" rounded="true" /&gt;
+                        &lt;metro-button color="Primary" text="Default" metro-class="mr-1" outline="true" rounded="true" /&gt;
+                        &lt;metro-button color="Primary" text="Large" size="Large" metro-class="mr-1" outline="true" rounded="true" /&gt;
+                    </div>
+                </div>
+
+                <h4>@L["ButtonSquareAndCycle"].Value</h4>
+                <div class="row  p-2 border-1 bd-gray border-solid flex-align-center">
+                    <metro-button color="Primary" size="Mini" metro-class="mr-1" shape="Square" icon="play" />
+                    <metro-button color="Primary" size="Small" metro-class=" mr-1" shape="Square" icon="play" />
+                    <metro-button color="Primary" metro-class="mr-1" shape="Square" icon="play" />
+                    <metro-button color="Primary" size="Large" metro-class="mr-1" shape="Square" icon="play" />
+                    <metro-button color="Primary" size="Mini" metro-class="mr-1" shape="Cycle" icon="play" />
+                    <metro-button color="Primary" size="Small" metro-class="mr-1" shape="Cycle" icon="play" />
+                    <metro-button color="Primary" metro-class="mr-1" shape="Cycle" icon="play" />
+                    <metro-button color="Primary" size="Large" metro-class="mr-1" shape="Cycle" icon="play" />
+                    <metro-button color="Primary" size="Mini" metro-class="mr-1" shape="Square" icon="play" outline="true" />
+                    <metro-button color="Primary" size="Small" metro-class=" mr-1" shape="Square" icon="play" outline="true" />
+                    <metro-button color="Primary" metro-class="mr-1" shape="Square" icon="play" outline="true" />
+                    <metro-button color="Primary" size="Large" metro-class="mr-1" shape="Square" icon="play" outline="true" />
+                    <metro-button color="Primary" size="Mini" metro-class="mr-1" shape="Cycle" icon="play" outline="true" />
+                    <metro-button color="Primary" size="Small" metro-class="mr-1" shape="Cycle" icon="play" outline="true" />
+                    <metro-button color="Primary" metro-class="mr-1" shape="Cycle" icon="play" outline="true" />
+                    <metro-button color="Primary" size="Large" metro-class="mr-1" shape="Cycle" icon="play" outline="true" />
+                </div>
+                <div class=" p-2 bg-grayWhite">
+                    <div class="code">
+                        &lt;metro-button color="Primary" size="Mini" metro-class="mr-1" shape="Square" icon="play" /&gt;
+                        &lt;metro-button color="Primary" size="Small" metro-class=" mr-1" shape="Square" icon="play" /&gt;
+                        &lt;metro-button color="Primary" metro-class="mr-1" shape="Square" icon="play" /&gt;
+                        &lt;metro-button color="Primary" size="Large" metro-class="mr-1" shape="Square" icon="play" /&gt;
+                        &lt;metro-button color="Primary" size="Mini" metro-class="mr-1" shape="Cycle" icon="play" /&gt;
+                        &lt;metro-button color="Primary" size="Small" metro-class="mr-1" shape="Cycle" icon="play" /&gt;
+                        &lt;metro-button color="Primary" metro-class="mr-1" shape="Cycle" icon="play" /&gt;
+                        &lt;metro-button color="Primary" size="Large" metro-class="mr-1" shape="Cycle" icon="play" /&gt;
+                        &lt;metro-button color="Primary" size="Mini" metro-class="mr-1" shape="Square" icon="play" outline="true" /&gt;
+                        &lt;metro-button color="Primary" size="Small" metro-class=" mr-1" shape="Square" icon="play" outline="true" /&gt;
+                        &lt;metro-button color="Primary" metro-class="mr-1" shape="Square" icon="play" outline="true" /&gt;
+                        &lt;metro-button color="Primary" size="Large" metro-class="mr-1" shape="Square" icon="play" outline="true" /&gt;
+                        &lt;metro-button color="Primary" size="Mini" metro-class="mr-1" shape="Cycle" icon="play" outline="true" /&gt;
+                        &lt;metro-button color="Primary" size="Small" metro-class="mr-1" shape="Cycle" icon="play" outline="true" /&gt;
+                        &lt;metro-button color="Primary" metro-class="mr-1" shape="Cycle" icon="play" outline="true" /&gt;
+                        &lt;metro-button color="Primary" size="Large" metro-class="mr-1" shape="Cycle" icon="play" outline="true" /&gt;
+                    </div>
+                </div>
+                
+                <h4>@L["ButtonShadowed"].Value</h4>
+                <div class="row  p-2 border-1 bd-gray border-solid">
+                    <metro-button color="Default" text="Default" metro-class="mr-1" shadowed="true" />
+                    <metro-button color="Primary" text="Primary" metro-class="mr-1" shadowed="true" />
+                    <metro-button color="Secondary" text="Secondary" metro-class="mr-1" shadowed="true" />
+                    <metro-button color="Success" text="Success" metro-class="mr-1" shadowed="true" />
+                    <metro-button color="Alert" text="Alert" metro-class="mr-1" shadowed="true" />
+                    <metro-button color="Warning" text="Warning" metro-class="mr-1" shadowed="true" />
+                    <metro-button color="Yellow" text="Yellow" metro-class="mr-1" shadowed="true" />
+                    <metro-button color="Info" text="Info" metro-class="mr-1" shadowed="true" />
+                    <metro-button color="Dark" text="Dark" metro-class="mr-1" shadowed="true" />
+                    <metro-button color="Light" text="Light" metro-class="mr-1" shadowed="true" />
+                </div>
+                <div class=" p-2 bg-grayWhite">
+                    <div class="code">
+                        &lt;metro-button color="Default" text="Default" metro-class="mr-1" shadowed="true" /&gt;
+                        &lt;metro-button color="Primary" text="Primary" metro-class="mr-1" shadowed="true" /&gt;
+                        &lt;metro-button color="Secondary" text="Secondary" metro-class="mr-1" shadowed="true" /&gt;
+                        &lt;metro-button color="Success" text="Success" metro-class="mr-1" shadowed="true" /&gt;
+                        &lt;metro-button color="Alert" text="Alert" metro-class="mr-1" shadowed="true" /&gt;
+                        &lt;metro-button color="Warning" text="Warning" metro-class="mr-1" shadowed="true" /&gt;
+                        &lt;metro-button color="Yellow" text="Yellow" metro-class="mr-1" shadowed="true" /&gt;
+                        &lt;metro-button color="Info" text="Info" metro-class="mr-1" shadowed="true" /&gt;
+                        &lt;metro-button color="Dark" text="Dark" metro-class="mr-1" shadowed="true" /&gt;
+                        &lt;metro-button color="Light" text="Light" metro-class="mr-1" shadowed="true" /&gt;
+                    </div>
+                </div>
+
+                <h4>@L["ButtonFlat"].Value</h4>
+                <div class="row  p-2 border-1 bd-gray border-solid">
+                    <metro-button metro-class="mr-1" button-style="Flat" text="@L["ButtonFlat"].Value" />
+                </div>
+                <div class=" p-2 bg-grayWhite">
+                    <div class="code">
+                        &lt;metro-button metro-class="mr-1" button-style="Flat" text="@L["ButtonFlat"].Value" /&gt;
+                    </div>
+                </div>
+
+                <h4>@L["ButtonCommand"].Value</h4>
+                <div class="row  p-2 border-1 bd-gray border-solid">
+                    <metro-button metro-class="mr-1" button-style="Command" icon="share" color="Primary" caption="Yes, share and connect<small>Use this option for home or work</small>" />
+                    <metro-button metro-class="mr-1" button-style="Command" icon="share" color="Alert" caption="Yes, share and connect<small>Use this option for home or work</small>" outline="true" icon-right="true" />
+                </div>
+                <div class=" p-2 bg-grayWhite">
+                    <div class="code">
+                        &lt;metro-button metro-class="mr-1" button-style="Command" icon="share" color="Primary" caption="Yes, share and connect<small>Use this option for home or work</small>" /&gt;
+                        &lt;metro-button metro-class="mr-1" button-style="Command" icon="share" color="Alert" caption="Yes, share and connect<small>Use this option for home or work</small>" outline="true" icon-right="true" /&gt;
+                    </div>
+                </div>
+
+                <h4>@L["ButtonImage"].Value</h4>
+                <div class="row  p-2 border-1 bd-gray border-solid">
+                    <metro-button metro-class="mr-1" button-style="Image" caption="Share it" icon="share" color="Primary" />
+                    <metro-button metro-class="mr-1" button-style="Image" caption="Share it" icon="share" color="Alert" icon-right="true" />
+                </div>
+                <div class=" p-2 bg-grayWhite">
+                    <div class="code">
+                        &lt;metro-button metro-class="mr-1" button-style="Image" caption="Share it" icon="share" color="Primary" /&gt;
+                        &lt;metro-button metro-class="mr-1" button-style="Image" caption="Share it" icon="share" color="Alert" icon-right="true" /&gt;
+                    </div>
+                </div>
+
+                <h4>@L["ButtonShortcut"].Value</h4>
+                <div class="row  p-2 border-1 bd-gray border-solid">
+                        <metro-button metro-class="mr-1" button-style="Shortcut" caption="Rocket" icon="rocket" color="Primary" />
+                        <metro-button metro-class="mr-1" button-style="Shortcut" caption="Rocket" icon="rocket" color="Alert"/>
+                </div>
+                <div class=" p-2 bg-grayWhite">
+                    <div class="code">
+                            &lt;metro-button metro-class="mr-1" button-style="Shortcut" caption="Rocket" icon="rocket" color="Primary" /&gt;
+                            &lt;metro-button metro-class="mr-1" button-style="Shortcut" caption="Rocket" icon="rocket" color="Alert" /&gt;
+                    </div>
+                </div>
+
+                <h4>@L["ButtonBadge"].Value</h4>
+            <div class="row  p-2 border-1 bd-gray border-solid flex-align-center">
+                    <metro-button metro-class="mr-1" color="Primary" text="Primary">
+                        <span class="badge bg-green fg-white">4</span>
+                    </metro-button>
+                    <metro-button metro-class="mr-1" color="Primary" text="Primary">
+                            <span class="badge inside bg-pink fg-white">4</span>
+                    </metro-button>
+                    <metro-button metro-class="mr-1" color="Primary" text="Primary">
+                            <span class="badge inline bg-red fg-white">4</span>
+                    </metro-button>
+                    <metro-button metro-class="mr-1" button-style="Shortcut" caption="Rocket" icon="rocket">
+                        <span class="badge">10</span>
+                    </metro-button>
+                </div>
+            <div class=" p-2 bg-grayWhite">
+                <div class="code">
+                    &lt;metro-button metro-class="mr-1" color="Primary" text="Primary"&gt;
+                    &nbsp;&nbsp;&nbsp;&lt;span class="badge bg-green fg-white"&gt;10&lt;/span&gt;
+                    &lt;/metro-button&gt;
+                    &lt;metro-button metro-class="mr-1" color="Primary" text="Primary"&gt;
+                    &nbsp;&nbsp;&nbsp; &lt;span class="badge inside bg-pink fg-white"&gt;10&lt;/span&gt;
+                    &lt;/metro-button>
+                    &lt;metro-button metro-class="mr-1" color="Primary" text="Primary"&gt;
+                    &nbsp;&nbsp;&nbsp;&lt;span class="badge inline bg-red fg-white"&gt;10&lt;/span&gt;
+                    &lt;/metro-button&gt;
+                    &lt;metro-button metro-class="mr-1" button-style="Shortcut" caption="Rocket" icon="rocket"&gt;
+                        &nbsp;&nbsp;&nbsp;&nbsp;&lt;span class="badge"&gt;10&lt;/span&gt;
+                    &lt;/metro-button&gt;
+                </div>
+            </div>
+
             </div>
 
         </div>

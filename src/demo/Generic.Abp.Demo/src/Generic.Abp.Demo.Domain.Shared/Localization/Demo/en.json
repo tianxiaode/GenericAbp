@@ -42,6 +42,19 @@
     "DesktopClient": "Desktop client",
     "MobileClient": "Mobile client",
     "TagHelpers": "Tag Helpers",
-    "Buttons": "Buttons"
+    "Buttons": "Buttons",
+    "ButtonColors": "Button colors",
+    "ButtonType": "Button type",
+    "ButtonIcon": "Button icon",
+    "ButtonOutline": "Outline",
+    "ButtonSizes": "Sizes",
+    "ButtonRoundedCorners": "Rounded corners",
+    "ButtonSquareAndCycle": "Square & cycle",
+    "ButtonShadowed": "Shadowed",
+    "ButtonFlat": "Flat buttons",
+    "ButtonCommand": "Command buttons",
+    "ButtonImage": "Image buttons",
+    "ButtonShortcut": "Shortcuts",
+    "ButtonBadge": "Buttons and badge"
   }
 }

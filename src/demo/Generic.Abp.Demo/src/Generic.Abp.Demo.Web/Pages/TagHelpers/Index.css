@@ -1,8 +1,9 @@
 ﻿.code{
-    color: #0000ff;    
+    color: #0000ff;
+    font-family: courier !important;    
 }
 .code-tag {
-    color: #800080;
+    color: #800000;
 }
 .code-html{
     color: #000;

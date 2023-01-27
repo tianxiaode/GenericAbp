@@ -16,7 +16,7 @@
 @inject IPageLayout PageLayout
 @{
     Layout = null;
-    var containerClass = ViewBag.FluidLayout == true ? "container-fluid" : "container"; //TODO: Better and type-safe options
+    var containerClass = ViewBag.FluidLayout == true ? "container-fluid" : "container"; //TODO: Better and color-safe options
 
     var pageTitle = ViewBag.Title == null ? BrandingProvider.AppName : ViewBag.Title; //TODO: Discard to get from Title
 
@@ -77,7 +77,7 @@
     <metro-script-bundle name="@BasicThemeBundles.Scripts.Global" />
     <script src="~/metro/ApplicationLocalizationScript?cultureName=@CultureInfo.CurrentUICulture.Name"></script>
     <script src="~/metro/ApplicationConfigurationScript"></script>
-    <script src="~/metro/ServiceProxyScript?type=metro"></script>
+    <script src="~/metro/ServiceProxyScript?color=metro"></script>
 
     @await Component.InvokeAsync(typeof(WidgetScriptsViewComponent))
 
