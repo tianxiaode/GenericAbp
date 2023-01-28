@@ -9,12 +9,13 @@ using Volo.Abp.AspNetCore.Mvc.Localization;
 
 namespace Generic.Abp.Metro.UI.TagHelpers;
 
-public class MetroTagHelperLocalizer : IMetroTagHelperLocalizer
+public class MetroTagHelperLocalizerService : IMetroTagHelperLocalizerService
 {
     private readonly IStringLocalizerFactory _stringLocalizerFactory;
     private readonly AbpMvcDataAnnotationsLocalizationOptions _options;
 
-    public MetroTagHelperLocalizer(IOptions<AbpMvcDataAnnotationsLocalizationOptions> options, IStringLocalizerFactory stringLocalizerFactory)
+    public MetroTagHelperLocalizerService(IOptions<AbpMvcDataAnnotationsLocalizationOptions> options,
+        IStringLocalizerFactory stringLocalizerFactory)
     {
         _stringLocalizerFactory = stringLocalizerFactory;
         _options = options.Value;

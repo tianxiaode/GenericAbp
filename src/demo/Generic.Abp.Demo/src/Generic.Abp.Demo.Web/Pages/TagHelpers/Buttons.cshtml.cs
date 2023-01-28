@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 
 namespace Generic.Abp.Demo.Web.Pages.TagHelpers
 {
-    public class IndexModel : AbpPageModel
+    public class ButtonsModel : AbpPageModel
     {
         public void OnGet()
         {

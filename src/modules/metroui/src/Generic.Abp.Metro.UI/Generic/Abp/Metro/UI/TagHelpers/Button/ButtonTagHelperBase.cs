@@ -42,6 +42,7 @@ public abstract class ButtonTagHelperBase : TagHelper, IButtonTagHelperBase
             ButtonStyle.Image => "image-button",
             ButtonStyle.Command => "command-button",
             ButtonStyle.Flat => "button flat-button",
+            ButtonStyle.Tool => "tool-button",
             _ => "button"
         };
 
@@ -148,6 +149,8 @@ public abstract class ButtonTagHelperBase : TagHelper, IButtonTagHelperBase
 
     protected virtual Task AddCaptionAsync(TagHelperContext context, TagHelperOutput output)
     {
+        if (ButtonStyle is ButtonStyle.Flat or ButtonStyle.Default or ButtonStyle.Tool)
+            return Task.CompletedTask;
         var caption = new TagBuilder("span");
         caption.AddCssClass("caption");
         caption.InnerHtml.AppendHtml(Caption);

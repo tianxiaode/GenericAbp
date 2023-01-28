@@ -49,7 +49,7 @@ public abstract class MetroTagHelperResourceService : ITransientDependency
 
         output.TagName = null;
 
-        if (bundleName.IsNullOrEmpty())
+        if (string.IsNullOrWhiteSpace(bundleName))
         {
             bundleName = GenerateBundleName(bundleItems);
         }
@@ -80,9 +80,9 @@ public abstract class MetroTagHelperResourceService : ITransientDependency
         Logger.LogDebug($"Added bundle '{bundleName}' to the page in {stopwatch.Elapsed.TotalMilliseconds:0.00} ms.");
     }
 
-    protected abstract void CreateBundle(string? bundleName, List<BundleTagHelperItem> bundleItems);
+    protected abstract void CreateBundle(string bundleName, List<BundleTagHelperItem> bundleItems);
 
-    protected abstract Task<IReadOnlyList<string>> GetBundleFilesAsync(string? bundleName);
+    protected abstract Task<IReadOnlyList<string>> GetBundleFilesAsync(string bundleName);
 
     protected abstract void AddHtmlTag(ViewContext viewContext, TagHelper tagHelper, TagHelperContext context,
         TagHelperOutput output, string file);

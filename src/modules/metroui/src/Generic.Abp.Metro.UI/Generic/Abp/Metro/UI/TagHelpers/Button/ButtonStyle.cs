@@ -6,5 +6,6 @@ public enum ButtonStyle
     Flat,
     Command,
     Image,
-    Shortcut
+    Shortcut,
+    Tool
 }

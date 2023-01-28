@@ -6,7 +6,7 @@ using Volo.Abp.DependencyInjection;
 
 namespace Generic.Abp.Metro.UI.TagHelpers;
 
-public interface IMetroTagHelperLocalizer : ITransientDependency
+public interface IMetroTagHelperLocalizerService : ITransientDependency
 {
     Task<string> GetLocalizedTextAsync(string text, ModelExplorer explorer);
 

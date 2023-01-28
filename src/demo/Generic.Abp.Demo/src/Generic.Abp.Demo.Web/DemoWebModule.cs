@@ -1,4 +1,5 @@
-﻿using Generic.Abp.Demo.EntityFrameworkCore;
+﻿using System;
+using Generic.Abp.Demo.EntityFrameworkCore;
 using Generic.Abp.Demo.Localization;
 using Generic.Abp.Demo.MultiTenancy;
 using Generic.Abp.Demo.Web.Menus;
@@ -11,6 +12,7 @@ using Microsoft.OpenApi.Models;
 using System.IO;
 using Generic.Abp.Metro.UI.Theme.Basic;
 using Generic.Abp.Metro.UI.Theme.Shared;
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc;
@@ -76,11 +78,6 @@ namespace Generic.Abp.Demo.Web
             ConfigureNavigationServices();
             ConfigureAutoApiControllers();
             ConfigureSwaggerServices(context.Services);
-
-            Configure<RazorPagesOptions>(options =>
-            {
-                options.Conventions.AddPageRoute("/TagHelpers/Index", "tag-helpers");
-            });
         }
 
         private void ConfigureAuthentication(ServiceConfigurationContext context)

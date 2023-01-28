@@ -21,7 +21,7 @@ public class MetroTagHelperScriptService : MetroTagHelperResourceService
     {
     }
 
-    protected override void CreateBundle(string? bundleName, List<BundleTagHelperItem> bundleItems)
+    protected override void CreateBundle(string bundleName, List<BundleTagHelperItem> bundleItems)
     {
         Options.ScriptBundles.TryAdd(
             bundleName,

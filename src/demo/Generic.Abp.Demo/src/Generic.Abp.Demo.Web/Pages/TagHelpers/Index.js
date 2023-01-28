@@ -1,6 +1,5 @@
-﻿function onMenuItemClick(el){
-    console.log(el);
-}
+﻿
+
 $(function () {
 
     $('.code').each((i,el)=>{

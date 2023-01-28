@@ -1,12 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
+﻿using Generic.Abp.Metro.UI.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Generic.Abp.Metro.UI.Bundling.TagHelpers;
 
-public abstract class MetroBundleTagHelper : TagHelper
+public abstract class MetroBundleTagHelper : MetroTagHelper
 {
     protected MetroBundleTagHelper(MetroTagHelperResourceService resourceService)
     {
@@ -14,7 +13,6 @@ public abstract class MetroBundleTagHelper : TagHelper
     }
 
     protected MetroTagHelperResourceService ResourceService { get; }
-    [HtmlAttributeNotBound] [ViewContext] public ViewContext ViewContext { get; set; }
 
     public string Name { get; set; } = string.Empty;
 

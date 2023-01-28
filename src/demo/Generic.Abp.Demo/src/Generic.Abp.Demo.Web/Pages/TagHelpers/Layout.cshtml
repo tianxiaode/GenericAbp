@@ -1,0 +1,56 @@
+﻿@using System.Text.Json.Nodes
+@using Generic.Abp.Demo.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Theming
+@using Generic.Abp.Demo.Web.Pages.TagHelpers;
+@using Generic.Abp.Metro.UI.Bundling.TagHelpers
+@using Generic.Abp.Metro.UI.TagHelpers.NavigationView
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
+@inject IThemeManager ThemeManager
+@inject IPageLayout PageLayout
+@inject IHtmlLocalizer<DemoResource> L
+@{
+    Layout = ThemeManager.CurrentTheme.GetPublicLayout();
+    var pageTitle = PageLayout.Content.Title;
+    PageLayout.Content.Title = string.IsNullOrWhiteSpace(pageTitle) ? $"{L["TagHelpers"].Value}" : $"{L["TagHelpers"].Value} - {pageTitle}";
+    var path = ViewContext.View.Path.Replace("/Pages/TagHelpers/", "");
+    path = path.Replace(".cshtml", "");
+    var menuItems = new List<MetroNavigationMenuItem>()
+    {
+        new() { Text = L["Menu:Home"].Value, Icon = "mif-home", Url = "~/"},
+        new() { Type = MetroNavigationMenuItemType.Separator},
+        new() { Type = MetroNavigationMenuItemType.Header, Text = L["TagHelpers"].Value},
+        new() { Text = L["About"].Value, Url = "./", Value = "Index"},
+        new() { Text = L["Buttons"].Value, Url = Url.Content("Buttons"), Value = "Buttons"},
+    };
+}
+@section styles{
+    <metro-style-bundle>
+        <metro-style src="/Pages/TagHelpers/index.css" />
+        <metro-style src="/libs/fontawesome/css/all.min.css" />
+    </metro-style-bundle>
+}
+
+@section scripts{
+    <metro-script-bundle>
+        <metro-script src="/Pages/TagHelpers/index.js" />
+    </metro-script-bundle>
+
+}
+<div style="height: 100vh;">
+    <metro-navigation-view>
+        <metro-navigation-panel pull-button="true" suggest-box="true">
+
+            <metro-navigation-menu metro-class="px-1" id="NavViewMenu" asp-items="@menuItems" current-value="@path">
+            </metro-navigation-menu>
+        </metro-navigation-panel>
+
+        <navigation-view-content>
+            @RenderBody()
+        </navigation-view-content>
+    </metro-navigation-view>
+
+</div>
+
+
