@@ -4,5 +4,5 @@ public interface IGroupItem
 {
     public string Name { get; set; }
     string HtmlContent { get; set; }
-    int Order { get; set; }
+    int DisplayOrder { get; set; }
 }

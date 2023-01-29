@@ -13,7 +13,7 @@ public class MetroNavigationMenuItemTagHelper : MetroTagHelper, IMetroNavigation
     public string Icon { get; set; }
     public string Url { get; set; }
     public string Value { get; set; }
-    public int DisplayOrder { get; set; } = TagHelperConsts.DisplayOrder;
+    public int DisplayOrder { get; set; }
 
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
@@ -40,6 +40,7 @@ public class MetroNavigationMenuItemTagHelper : MetroTagHelper, IMetroNavigation
 
     protected virtual Task SetDisplayOrderAsync(TagHelperContext context, TagHelperOutput output)
     {
+        if (DisplayOrder == 0) return Task.CompletedTask;
         output.Attributes.Add("style", $"order:{DisplayOrder}");
         return Task.CompletedTask;
     }

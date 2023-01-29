@@ -7,5 +7,5 @@ public class MetroNavigationMenuItem : IMetroNavigationMenuItem
     public string Icon { get; set; }
     public string Url { get; set; }
     public string Value { get; set; }
-    public int Order { get; set; } = 0;
+    public int DisplayOrder { get; set; } = 0;
 }

@@ -13,7 +13,7 @@
 @{
     Layout = ThemeManager.CurrentTheme.GetPublicLayout();
     var pageTitle = PageLayout.Content.Title;
-    PageLayout.Content.Title = string.IsNullOrWhiteSpace(pageTitle) ? $"{L["TagHelpers"].Value}" : $"{L["TagHelpers"].Value} - {pageTitle}";
+    PageLayout.Content.Title = string.IsNullOrWhiteSpace(pageTitle) ? $"{L["TagHelpers"].Value}" : $"{L["TagHelpers"].Value} {pageTitle}";
     var path = ViewContext.View.Path.Replace("/Pages/TagHelpers/", "");
     path = path.Replace(".cshtml", "");
     var menuItems = new List<MetroNavigationMenuItem>()
@@ -22,18 +22,23 @@
         new() { Type = MetroNavigationMenuItemType.Separator},
         new() { Type = MetroNavigationMenuItemType.Header, Text = L["TagHelpers"].Value},
         new() { Text = L["About"].Value, Url = "./", Value = "Index"},
-        new() { Text = L["Buttons"].Value, Url = Url.Content("Buttons"), Value = "Buttons"},
+        new() { Text = L["Badge"].Value, Url = Url.Content("/TagHelpers/Badge"), Value = "Badge"},
+        new() { Text = L["Breadcrumb"].Value, Url = Url.Content("/TagHelpers/Breadcrumb"), Value = "Breadcrumb"},
+        new() { Text = L["Buttons"].Value, Url = Url.Content("/TagHelpers/Buttons"), Value = "Buttons"},
+        new() { Text = L["NavigationView"].Value, Url = Url.Content("/TagHelpers/NavigationView"), Value = "NavigationView"},
     };
 }
 @section styles{
     <metro-style-bundle>
         <metro-style src="/Pages/TagHelpers/index.css" />
         <metro-style src="/libs/fontawesome/css/all.min.css" />
+        <metro-style src="/Pages/TagHelpers/prism.css" />
     </metro-style-bundle>
 }
 
 @section scripts{
     <metro-script-bundle>
+        <metro-script src="/Pages/TagHelpers/prism.js" />
         <metro-script src="/Pages/TagHelpers/index.js" />
     </metro-script-bundle>
 
@@ -46,9 +51,9 @@
             </metro-navigation-menu>
         </metro-navigation-panel>
 
-        <navigation-view-content>
+        <metro-navigation-view-content>
             @RenderBody()
-        </navigation-view-content>
+        </metro-navigation-view-content>
     </metro-navigation-view>
 
 </div>

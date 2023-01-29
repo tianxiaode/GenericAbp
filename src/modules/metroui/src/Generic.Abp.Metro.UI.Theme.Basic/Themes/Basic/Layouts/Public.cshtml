@@ -6,7 +6,6 @@
 @using Volo.Abp.Ui.LayoutHooks
 @using Generic.Abp.Metro.UI.Theme.Basic.Bundling
 @using Generic.Abp.Metro.UI.Theme.Basic.Themes.Basic.Components.MetroMeta
-@using Generic.Abp.Metro.UI.Theme.Basic.Themes.Basic.Components.PageAlerts
 @using Generic.Abp.Metro.UI.Widgets.Components.WidgetScripts
 @using Generic.Abp.Metro.UI.Widgets.Components.WidgetStyles
 @using Generic.Abp.Metro.UI.Bundling.TagHelpers
@@ -17,7 +16,7 @@
 @{
     Layout = null;
 
-    var pageTitle = ViewBag.Title == null ? BrandingProvider.AppName : ViewBag.Title; //TODO: Discard to get from Title
+    var pageTitle = ViewBag.Title == null ? BrandingProvider.AppName : ViewBag.Title; //TODO: Discard to get from TitleCaption
 
     if (PageLayout.Content.Title != null)
     {

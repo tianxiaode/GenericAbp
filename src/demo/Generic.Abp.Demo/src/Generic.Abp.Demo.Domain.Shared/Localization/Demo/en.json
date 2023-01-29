@@ -56,6 +56,11 @@
     "ButtonCommand": "Command buttons",
     "ButtonImage": "Image buttons",
     "ButtonShortcut": "Shortcuts",
-    "ButtonBadge": "Buttons and badge"
+    "ButtonBadge": "Buttons and badge",
+    "NavigationView": "Navigation view",
+    "NavigationViewContent": "Content area",
+    "NavigationViewMenu": "Menu",
+    "Badge": "Badge",
+    "Breadcrumb": "Breadcrumb"
   }
 }

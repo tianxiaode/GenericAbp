@@ -59,6 +59,11 @@
     "ButtonCommand": "指令按钮",
     "ButtonImage": "图片按钮",
     "ButtonShortcut": "快捷按钮",
-    "ButtonBadge": "按钮标记"
+    "ButtonBadge": "按钮标记",
+    "NavigationView": "导航视图",
+    "NavigationViewContent": "内容区域",
+    "NavigationViewMenu": "导航菜单",
+    "Badge": "徽标数",
+    "Breadcrumb": "面包屑导航"
   }
 }

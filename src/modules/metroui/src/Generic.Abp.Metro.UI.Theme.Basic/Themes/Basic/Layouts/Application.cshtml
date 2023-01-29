@@ -1,7 +1,6 @@
 ﻿@using Generic.Abp.Metro.UI.Theme.Basic.Bundling
 @using Generic.Abp.Metro.UI.Theme.Basic.Themes.Basic.Components.ContentTitle
 @using Generic.Abp.Metro.UI.Theme.Basic.Themes.Basic.Components.MainNavbar
-@using Generic.Abp.Metro.UI.Theme.Basic.Themes.Basic.Components.PageAlerts
 @using Generic.Abp.Metro.UI.Widgets.Components.WidgetScripts
 @using Generic.Abp.Metro.UI.Widgets.Components.WidgetStyles
 @using Volo.Abp.AspNetCore.Mvc.UI.Components.LayoutHook
@@ -18,7 +17,7 @@
     Layout = null;
     var containerClass = ViewBag.FluidLayout == true ? "container-fluid" : "container"; //TODO: Better and color-safe options
 
-    var pageTitle = ViewBag.Title == null ? BrandingProvider.AppName : ViewBag.Title; //TODO: Discard to get from Title
+    var pageTitle = ViewBag.Title == null ? BrandingProvider.AppName : ViewBag.Title; //TODO: Discard to get from TitleCaption
 
     if (PageLayout.Content.Title != null)
     {
@@ -58,7 +57,6 @@
     @(await Component.InvokeAsync<MainNavbarViewComponent>())
 
     <div class="@containerClass">
-        @(await Component.InvokeAsync<PageAlertsViewComponent>())
         <div id="AbpContentToolbar">
             <div class="row mb-2">
                 @(await Component.InvokeAsync<ContentTitleViewComponent>())

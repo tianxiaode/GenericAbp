@@ -8,19 +8,17 @@ using System.Threading.Tasks;
 
 namespace Generic.Abp.Metro.UI.TagHelpers.NavigationView;
 
-[HtmlTargetElement("metro-navigation-menu", Attributes = ItemsAttributeName)]
-public class MetroNavigationMenuTagHelper : MetroTagHelper
+[HtmlTargetElement("metro-navigation-menu", Attributes = TagHelperConsts.ItemsAttributeName)]
+public class MetroNavigationMenuTagHelper : MetroTagHelper, IHasItems<MetroNavigationMenuItem>
 {
-    private const string ItemsAttributeName = "asp-items";
-
-    [HtmlAttributeName(ItemsAttributeName)]
+    [HtmlAttributeName(TagHelperConsts.ItemsAttributeName)]
     public IEnumerable<MetroNavigationMenuItem> Items { get; set; }
 
     public string CurrentValue { get; set; }
 
     public override void Init(TagHelperContext context)
     {
-        context.Items[typeof(MetroNavigationMenuTagHelper)] = CurrentValue;
+        context.Items[nameof(MetroNavigationMenuTagHelper)] = CurrentValue;
     }
 
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
@@ -40,7 +38,7 @@ public class MetroNavigationMenuTagHelper : MetroTagHelper
         var builder = new StringBuilder();
         foreach (var item in Items)
         {
-            var displayOrder = await GetDisplayOrderAsync(item.Order);
+            var displayOrder = await GetDisplayOrderAsync(item.DisplayOrder);
 
             switch (item.Type)
             {

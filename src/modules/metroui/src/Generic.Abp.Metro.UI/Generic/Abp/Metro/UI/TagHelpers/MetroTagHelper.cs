@@ -27,10 +27,9 @@ public abstract class MetroTagHelper<T> : MetroTagHelper where T : IGroupItem, n
 {
     protected string GroupItemsName { get; set; }
 
-    protected virtual Task InitGroupItemsAsync(TagHelperContext context)
+    protected virtual void InitGroupItems(TagHelperContext context)
     {
         context.Items.Add(GroupItemsName, new List<T>());
-        return Task.CompletedTask;
     }
 
     protected virtual Task<List<T>> GetGroupItems(TagHelperContext context)
@@ -49,18 +48,25 @@ public abstract class MetroTagHelper<T> : MetroTagHelper where T : IGroupItem, n
         return items != null && items.Any(m => m.Name == name);
     }
 
-    protected virtual async Task AddGroupItemAsync(TagHelperContext context, string name, int order,
+    protected virtual async Task AddGroupItemAsync(TagHelperContext context, string name, int displayOrder,
         string htmlContent)
     {
         var items = await GetGroupItems(context);
         if (items == null) throw new ArgumentNullException(nameof(items));
+        await AddGroupItemAsync(items, name, displayOrder, htmlContent);
+    }
+
+    protected virtual Task AddGroupItemAsync(List<T> items, string name, int displayOrder,
+        string htmlContent)
+    {
         var item = new T
         {
             HtmlContent = htmlContent,
-            Order = order,
+            DisplayOrder = displayOrder,
             Name = name,
         };
         items.Add(item);
+        return Task.CompletedTask;
     }
 
     protected virtual async Task AddGroupItemAsync(TagHelperContext context, T item)

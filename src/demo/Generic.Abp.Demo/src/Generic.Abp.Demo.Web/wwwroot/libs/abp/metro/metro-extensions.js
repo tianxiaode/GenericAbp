@@ -1,3 +1,9 @@
+
+Metro.toastSetup({
+    showTop:true,
+    timeout: 5000
+});
+
 Metro.validatorSetup({
     onErrorForm: function(logs, data){
         logs.forEach(log=>{
@@ -110,6 +116,7 @@ function moveToFloatDiv(input, move, callback){
 }
 
 
+
 // Metro.checkboxSetup({
 //     onCheckboxCreate(input){
 //         var div = $(input.closest('div'));
@@ -144,6 +151,25 @@ $(function () {
         }
     });
 
+    var showNotification = function (type, message, options) {
+        Metro.toast.create(message, null, null, type, options);
+    };
+
+    abp.notify.success = function (message, options) {
+        showNotification('success', message);
+    };
+
+    abp.notify.info = function (message,  options) {
+        showNotification('info', message,  options);
+    };
+
+    abp.notify.warn = function (message,  options) {
+        showNotification('warning', message,  options);
+    };
+
+    abp.notify.error = function (message,  options) {
+        showNotification('alert', message,  options);
+    };
 
 })
 

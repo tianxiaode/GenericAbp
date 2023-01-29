@@ -4,5 +4,5 @@ public class GroupItem : IGroupItem
 {
     public string Name { get; set; }
     public string HtmlContent { get; set; }
-    public int Order { get; set; }
+    public int DisplayOrder { get; set; }
 }
