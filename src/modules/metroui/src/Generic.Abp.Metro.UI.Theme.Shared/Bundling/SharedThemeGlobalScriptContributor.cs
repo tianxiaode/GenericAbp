@@ -10,13 +10,14 @@ namespace Generic.Abp.Metro.UI.Theme.Shared.Bundling;
     typeof(MetroUiScriptContributor),
     typeof(LodashScriptContributor),
     typeof(SignalRBrowserScriptContributor)
-    )]
+)]
 public class SharedThemeGlobalScriptContributor : BundleContributor
 {
     public override void ConfigureBundle(BundleConfigurationContext context)
     {
-        context.Files.AddRange(new []
+        context.Files.AddRange(new[]
         {
+            "/libs/abp/metro/metro-crud-toolbar.js",
             "/libs/abp/metro/metro-extensions.js",
             "/libs/abp/metro/modal-manager.js"
         });

@@ -1,6 +1,6 @@
 ﻿namespace Generic.Abp.Metro.UI.TagHelpers;
 
-public interface IElementItem
+public interface IHasDisplayOrder
 {
     int DisplayOrder { get; }
 }

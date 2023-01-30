@@ -11,14 +11,14 @@ namespace Generic.Abp.Metro.UI.TagHelpers;
 
 public class MetroTagHelperLocalizerService : IMetroTagHelperLocalizerService
 {
-    private readonly IStringLocalizerFactory _stringLocalizerFactory;
-    private readonly AbpMvcDataAnnotationsLocalizationOptions _options;
+    protected IStringLocalizerFactory StringLocalizerFactory { get; }
+    protected AbpMvcDataAnnotationsLocalizationOptions Options { get; }
 
     public MetroTagHelperLocalizerService(IOptions<AbpMvcDataAnnotationsLocalizationOptions> options,
         IStringLocalizerFactory stringLocalizerFactory)
     {
-        _stringLocalizerFactory = stringLocalizerFactory;
-        _options = options.Value;
+        StringLocalizerFactory = stringLocalizerFactory;
+        Options = options.Value;
     }
 
     public async Task<string> GetLocalizedTextAsync(string text, ModelExplorer explorer)
@@ -38,13 +38,13 @@ public class MetroTagHelperLocalizerService : IMetroTagHelperLocalizerService
     {
         var resourceType = await GetResourceTypeAsync(assembly);
         return resourceType == null
-            ? _stringLocalizerFactory.CreateDefaultOrNull()
-            : _stringLocalizerFactory.Create(resourceType);
+            ? StringLocalizerFactory.CreateDefaultOrNull()
+            : StringLocalizerFactory.Create(resourceType);
     }
 
     private Task<Type> GetResourceTypeAsync(Assembly assembly)
     {
-        return Task.FromResult(_options
+        return Task.FromResult(Options
             .AssemblyResources
             .GetOrDefault(assembly));
     }

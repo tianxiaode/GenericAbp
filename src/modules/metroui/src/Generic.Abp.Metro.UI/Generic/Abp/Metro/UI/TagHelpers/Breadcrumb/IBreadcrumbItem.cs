@@ -1,6 +1,6 @@
 ﻿namespace Generic.Abp.Metro.UI.TagHelpers.Breadcrumb;
 
-public interface IBreadcrumbItem : IElementItem
+public interface IBreadcrumbItem : IHasDisplayOrder
 {
     string Title { get; }
     string Cls { get; }

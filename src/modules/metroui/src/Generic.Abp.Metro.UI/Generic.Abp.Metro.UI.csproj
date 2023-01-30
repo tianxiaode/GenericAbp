@@ -18,10 +18,32 @@
     <Compile Remove="Generic\Abp\Metro\UI\TagHelpers\Form\**" />
     <Content Remove="Generic\Abp\Metro\UI\TagHelpers\Dropdown\**" />
     <Content Remove="Generic\Abp\Metro\UI\TagHelpers\Form\**" />
-    <EmbeddedResource Remove="Generic\Abp\Metro\UI\TagHelpers\Dropdown\**" />
-    <EmbeddedResource Remove="Generic\Abp\Metro\UI\TagHelpers\Form\**" />
     <None Remove="Generic\Abp\Metro\UI\TagHelpers\Dropdown\**" />
     <None Remove="Generic\Abp\Metro\UI\TagHelpers\Form\**" />
+    <Content Remove="Generic\Abp\Metro\UI\Localization\cs.json" />
+    <Content Remove="Generic\Abp\Metro\UI\Localization\en.json" />
+    <Content Remove="Generic\Abp\Metro\UI\Localization\pl-PL.json" />
+    <Content Remove="Generic\Abp\Metro\UI\Localization\pt-BR.json" />
+    <Content Remove="Generic\Abp\Metro\UI\Localization\sl.json" />
+    <Content Remove="Generic\Abp\Metro\UI\Localization\tr.json" />
+    <Content Remove="Generic\Abp\Metro\UI\Localization\vi.json" />
+    <Content Remove="Generic\Abp\Metro\UI\Localization\zh-Hans.json" />
+    <Content Remove="Generic\Abp\Metro\UI\Localization\zh-Hant.json" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <EmbeddedResource Remove="Generic\Abp\Metro\UI\TagHelpers\Dropdown\**" />
+    <EmbeddedResource Remove="Generic\Abp\Metro\UI\TagHelpers\Form\**" />
+    <EmbeddedResource Include="Generic\Abp\Metro\UI\Localization\cs.json" />
+    <EmbeddedResource Include="Generic\Abp\Metro\UI\Localization\en.json" />
+    <EmbeddedResource Include="Generic\Abp\Metro\UI\Localization\pl-PL.json" />
+    <EmbeddedResource Include="Generic\Abp\Metro\UI\Localization\pt-BR.json" />
+    <EmbeddedResource Include="Generic\Abp\Metro\UI\Localization\sl.json" />
+    <EmbeddedResource Include="Generic\Abp\Metro\UI\Localization\tr.json" />
+    <EmbeddedResource Include="Generic\Abp\Metro\UI\Localization\vi.json" />
+    <EmbeddedResource Include="Generic\Abp\Metro\UI\Localization\zh-Hans.json" />
+    <EmbeddedResource Include="Generic\Abp\Metro\UI\Localization\zh-Hant.json" />
   </ItemGroup>
 
   <ItemGroup>

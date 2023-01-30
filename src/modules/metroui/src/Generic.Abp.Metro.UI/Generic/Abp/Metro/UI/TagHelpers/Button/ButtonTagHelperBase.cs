@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Generic.Abp.Metro.UI.TagHelpers.Button;
 
-public abstract class ButtonTagHelperBase : TagHelper, IButtonTagHelperBase
+public abstract class ButtonTagHelperBase : MetroTagHelper, IButtonTagHelperBase
 {
     public MetroColor Color { get; set; } = MetroColor.Default;
     public MetroButtonSize Size { get; set; } = MetroButtonSize.Default;
@@ -45,6 +45,7 @@ public abstract class ButtonTagHelperBase : TagHelper, IButtonTagHelperBase
             ButtonStyle.Tool => "tool-button",
             _ => "button"
         };
+
 
         attributes.AddClass(styleClass);
 
@@ -110,6 +111,12 @@ public abstract class ButtonTagHelperBase : TagHelper, IButtonTagHelperBase
             icon.AddCssClass("icon");
         }
 
+        if (!string.IsNullOrWhiteSpace(Text))
+        {
+            var cls = IconRight == true ? "" : "pr-1";
+            icon.AddCssClass(cls);
+        }
+
         output.Content.AppendHtml(icon);
 
         return Task.CompletedTask;
@@ -134,6 +141,7 @@ public abstract class ButtonTagHelperBase : TagHelper, IButtonTagHelperBase
         }
 
         output.Content.AppendHtml(Text);
+
         return Task.CompletedTask;
     }
 

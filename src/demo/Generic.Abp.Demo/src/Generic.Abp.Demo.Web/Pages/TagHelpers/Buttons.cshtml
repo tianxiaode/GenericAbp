@@ -246,36 +246,78 @@
         </div>
     </div>
 
-    <h4>@L["ButtonBadge"].Value</h4>
+    <h4>@L["ButtonGroup"].Value</h4>
     <div class="row  p-2 border-1 bd-gray border-solid flex-align-center">
-        <metro-button metro-class="mr-1" color="Primary" text="Primary">
-            <span class="badge bg-green fg-white">4</span>
-        </metro-button>
-        <metro-button metro-class="mr-1" color="Primary" text="Primary">
-            <span class="badge inside bg-pink fg-white">4</span>
-        </metro-button>
-        <metro-button metro-class="mr-1" color="Primary" text="Primary">
-            <span class="badge inline bg-red fg-white">4</span>
-        </metro-button>
-        <metro-button metro-class="mr-1" button-style="Shortcut" caption="Rocket" icon="rocket">
-            <span class="badge">10</span>
-        </metro-button>
+        <metro-button-group metro-class="mr-7">
+            <metro-button>1</metro-button>
+            <metro-button>2</metro-button>
+                <metro-button metro-class="active">3</metro-button>
+        </metro-button-group>
+            <metro-button-group multi="true" active-cls="bg-red fg-white">
+                <metro-button metro-class="active">1</metro-button>
+            <metro-button>2</metro-button>
+            <metro-button metro-class="active">3</metro-button>
+        </metro-button-group>
+
     </div>
     <div class=" p-2 bg-grayWhite">
         <div class="code">
-            &lt;metro-button metro-class="mr-1" color="Primary" text="Primary"&gt;
-            &nbsp;&nbsp;&nbsp;&lt;span class="badge bg-green fg-white"&gt;10&lt;/span&gt;
-            &lt;/metro-button&gt;
-            &lt;metro-button metro-class="mr-1" color="Primary" text="Primary"&gt;
-            &nbsp;&nbsp;&nbsp; &lt;span class="badge inside bg-pink fg-white"&gt;10&lt;/span&gt;
-            &lt;/metro-button>
-            &lt;metro-button metro-class="mr-1" color="Primary" text="Primary"&gt;
-            &nbsp;&nbsp;&nbsp;&lt;span class="badge inline bg-red fg-white"&gt;10&lt;/span&gt;
-            &lt;/metro-button&gt;
-            &lt;metro-button metro-class="mr-1" button-style="Shortcut" caption="Rocket" icon="rocket"&gt;
-            &nbsp;&nbsp;&nbsp;&nbsp;&lt;span class="badge"&gt;10&lt;/span&gt;
-            &lt;/metro-button&gt;
+            &lt;metro-button-group metro-class="mr-7"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-button&gt;1&lt;/metro-button&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-button&gt;2&lt;/metro-button&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-button metro-class="active"&gt;3&lt;/metro-button&gt;
+            &lt;/metro-button-group&gt;
+            &lt;metro-button-group multi="true" active-cls="bg-red fg-white"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-button metro-class="active"&gt;1&lt;/metro-button&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-button&gt;2&lt;/metro-button&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-button metro-class="active"&gt;3&lt;/metro-button&gt;
+            &lt;/metro-button-group&gt;
         </div>
     </div>
+
+    <h4>@L["Toolbar"].Value</h4>
+    <div class="row  p-2 border-1 bd-gray border-solid flex-align-center">
+        <metro-toolbar metro-class="w-100">
+            <metro-button-group multi="true">
+                <metro-button button-style="Tool" icon="bold" />
+                <metro-button button-style="Tool" icon="italic" />
+                <metro-button button-style="Tool" icon="underline" />
+            </metro-button-group>
+            <metro-toolbar-separator />
+            <metro-button-group multi="true">
+                <metro-button button-style="Tool" icon="sort-asc" />
+                <metro-button button-style="Tool" icon="sort-desc" />
+            </metro-button-group>
+        </metro-toolbar>
+        <metro-crud-toolbar metro-class="mt-2 w-100" edit="true">
+            <metro-button icon="download" metro-class="mr-1" display-order="10201" data-action="download" />
+        </metro-crud-toolbar>
+        <metro-crud-toolbar metro-class="mt-2 w-100" edit="true" show-text="true">
+            <metro-button icon="download" display-order="10201" text="@L["Download"].Value" metro-class="mr-1" data-action="download" />
+        </metro-crud-toolbar>
+    </div>
+    <div class=" p-2 bg-grayWhite">
+        <div class="code">
+            &lt;metro-toolbar metro-class="w-100"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-button-group multi="true"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-button button-style="Tool" icon="bold" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-button button-style="Tool" icon="italic" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-button button-style="Tool" icon="underline" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;/metro-button-group&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-toolbar-separator /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-button-group multi="true"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-button button-style="Tool" icon="sort-asc" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-button button-style="Tool" icon="sort-desc" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;/metro-button-group&gt;
+            &lt;/metro-toolbar&gt;
+            &lt;metro-crud-toolbar metro-class="mt-2 w-100" edit="true"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-button icon="download" metro-class="mr-1" display-order="10201" data-action="download" /&gt;
+            &lt;/metro-crud-toolbar&gt;
+            &lt;metro-crud-toolbar metro-class="mt-2 w-100" edit="true" show-text="true"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-button icon="download" display-order="10201" text="@L["Download"].Value" metro-class="mr-1" data-action="download" /&gt;
+            &lt;/&lt;metro-crud-toolbar>
+        </div>
+    </div>
+
 
 </div>

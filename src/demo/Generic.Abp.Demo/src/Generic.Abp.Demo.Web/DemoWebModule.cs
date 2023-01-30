@@ -10,13 +10,17 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using System.IO;
+using Generic.Abp.Metro.UI.Packages.FontAwesome;
 using Generic.Abp.Metro.UI.Theme.Basic;
+using Generic.Abp.Metro.UI.Theme.Basic.Bundling;
 using Generic.Abp.Metro.UI.Theme.Shared;
+using Generic.Abp.Metro.UI.Theme.Shared.Bundling;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.Localization;
+using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
@@ -78,6 +82,14 @@ namespace Generic.Abp.Demo.Web
             ConfigureNavigationServices();
             ConfigureAutoApiControllers();
             ConfigureSwaggerServices(context.Services);
+
+            Configure<AbpBundlingOptions>(options =>
+            {
+                options
+                    .StyleBundles
+                    .Get(BasicThemeBundles.Styles.Global)
+                    .AddContributors(typeof(FontAwesomeStyleContributor));
+            });
         }
 
         private void ConfigureAuthentication(ServiceConfigurationContext context)

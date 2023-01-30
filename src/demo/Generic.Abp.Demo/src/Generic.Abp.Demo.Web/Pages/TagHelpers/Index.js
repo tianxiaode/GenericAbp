@@ -1,6 +1,10 @@
-﻿
+﻿function onButtonClick(button, action, toolbar){
+    abp.notify.success(action);
+}
 
 $(function () {
+
+
 
     $('.code').each((i,el)=>{
         var innerHTML = el.innerHTML;        

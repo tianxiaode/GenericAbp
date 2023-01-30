@@ -13,7 +13,6 @@ public class MetroNavigationMenuItemTagHelper : MetroTagHelper, IMetroNavigation
     public string Icon { get; set; }
     public string Url { get; set; }
     public string Value { get; set; }
-    public int DisplayOrder { get; set; }
 
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
@@ -27,22 +26,13 @@ public class MetroNavigationMenuItemTagHelper : MetroTagHelper, IMetroNavigation
             case MetroNavigationMenuItemType.Header:
                 output.Attributes.AddClass("item-header");
                 output.Content.AppendHtml(Text);
-                await SetDisplayOrderAsync(context, output);
                 break;
             case MetroNavigationMenuItemType.Default:
             default:
                 await SetCurrentValueAsync(context, output);
-                await SetDisplayOrderAsync(context, output);
                 await ProcessItemAsync(context, output);
                 break;
         }
-    }
-
-    protected virtual Task SetDisplayOrderAsync(TagHelperContext context, TagHelperOutput output)
-    {
-        if (DisplayOrder == 0) return Task.CompletedTask;
-        output.Attributes.Add("style", $"order:{DisplayOrder}");
-        return Task.CompletedTask;
     }
 
     protected virtual Task SetCurrentValueAsync(TagHelperContext context, TagHelperOutput output)

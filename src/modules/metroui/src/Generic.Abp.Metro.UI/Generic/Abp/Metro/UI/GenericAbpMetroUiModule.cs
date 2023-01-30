@@ -1,5 +1,8 @@
-﻿using Volo.Abp.AspNetCore.Mvc.UI;
+﻿using Localization.Resources.AbpUi;
+using Volo.Abp.AspNetCore.Mvc.UI;
+using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
+using Volo.Abp.Validation.Localization;
 using Volo.Abp.VirtualFileSystem;
 
 namespace Generic.Abp.Metro.UI
@@ -13,7 +16,13 @@ namespace Generic.Abp.Metro.UI
             {
                 options.FileSets.AddEmbedded<GenericAbpMetroUiModule>("Generic.Abp.Metro.UI");
             });
-        }
 
+            Configure<AbpLocalizationOptions>(options =>
+            {
+                options.Resources
+                    .Get<AbpUiResource>()
+                    .AddVirtualJson("/Localization");
+            });
+        }
     }
 }

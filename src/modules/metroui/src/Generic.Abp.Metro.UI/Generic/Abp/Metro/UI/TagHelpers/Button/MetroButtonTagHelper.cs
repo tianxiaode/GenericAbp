@@ -8,13 +8,6 @@ namespace Generic.Abp.Metro.UI.TagHelpers.Button;
 [HtmlTargetElement("metro-button", TagStructure = TagStructure.NormalOrSelfClosing)]
 public class MetroButtonTagHelper : ButtonTagHelperBase
 {
-    public MetroButtonTagHelper(IStringLocalizer<AbpUiResource> l)
-    {
-        L = l;
-    }
-
-    protected IStringLocalizer<AbpUiResource> L { get; }
-
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
         output.TagName = "button";
