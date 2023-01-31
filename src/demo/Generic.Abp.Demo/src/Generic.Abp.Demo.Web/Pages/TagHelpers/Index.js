@@ -1,5 +1,5 @@
-﻿function onButtonClick(button, action, toolbar){
-    abp.notify.success(action);
+﻿function onCrudToolbarButtonClick(button, action, toolbar){
+    abp.notify.success(action);        
 }
 
 $(function () {

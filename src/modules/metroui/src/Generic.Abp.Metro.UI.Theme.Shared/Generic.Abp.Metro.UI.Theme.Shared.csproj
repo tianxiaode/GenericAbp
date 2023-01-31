@@ -15,8 +15,6 @@
     <None Include="Pages\Account\_ViewStart.cshtml" />
     <None Include="Pages\Shared\Components\AbpApplicationPath\Default.cshtml" />
     <None Include="Pages\Shared\Components\AbpPageSearchBox\Default.cshtml" />
-    <None Include="Pages\Shared\Components\AbpPageToolbar\Button\Default.cshtml" />
-    <None Include="Pages\Shared\Components\AbpPageToolbar\Default.cshtml" />
     <None Include="Pages\_ViewStart.cshtml" />
     <None Include="Views\Error\Default.cshtml" />
     <None Include="Views\_ViewStart.cshtml" />

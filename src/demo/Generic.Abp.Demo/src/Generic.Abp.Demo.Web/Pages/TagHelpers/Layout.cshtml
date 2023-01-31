@@ -18,7 +18,7 @@
     path = path.Replace(".cshtml", "");
     var menuItems = new List<MetroNavigationMenuItem>()
     {
-        new() { Text = L["Menu:Home"].Value, Icon = "mif-home", Url = "~/"},
+        new() { Text = L["Menu:Home"].Value, Icon = "mif-home", Url = "../"},
         new() { Type = MetroNavigationMenuItemType.Separator},
         new() { Type = MetroNavigationMenuItemType.Header, Text = L["TagHelpers"].Value},
         new() { Text = L["About"].Value, Url = "./", Value = "Index"},
@@ -26,6 +26,7 @@
         new() { Text = L["Breadcrumb"].Value, Url = Url.Content("/TagHelpers/Breadcrumb"), Value = "Breadcrumb"},
         new() { Text = L["Buttons"].Value, Url = Url.Content("/TagHelpers/Buttons"), Value = "Buttons"},
         new() { Text = L["NavigationView"].Value, Url = Url.Content("/TagHelpers/NavigationView"), Value = "NavigationView"},
+        new() { Text = L["Tabs"].Value, Url = Url.Content("/TagHelpers/Tabs"), Value = "Tabs"},
     };
 }
 @section styles{
@@ -46,7 +47,7 @@
     <metro-navigation-view>
         <metro-navigation-panel pull-button="true" suggest-box="true">
 
-            <metro-navigation-menu metro-class="px-1" id="NavViewMenu" asp-items="@menuItems" current-value="@path">
+            <metro-navigation-menu class="px-1" id="NavViewMenu" asp-items="@menuItems" current-value="@path">
             </metro-navigation-menu>
         </metro-navigation-panel>
 

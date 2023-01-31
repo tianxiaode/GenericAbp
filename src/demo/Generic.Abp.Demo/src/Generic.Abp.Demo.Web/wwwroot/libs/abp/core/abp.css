@@ -1,15 +1,62 @@
-#global-floatWrap{
-    z-index: 999999;
+
+.flex-fill {
+    -webkit-flex: 1 1 auto !important;
+    -ms-flex: 1 1 auto !important;
+    -o-flex: 1 1 auto !important;
+    flex: 1 1 auto !important;
 }
-.float-wrap {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    pointer-events: none;
-    overflow: visible;
+
+
+.app-bar-menu li {
+    list-style: none !important;
 }
+
+.brand {
+    font-size: 1.25rem !important;
+    text-decoration: none;
+    white-space: nowrap;
+
+}
+
+.brand img {
+    height: 54px;
+    padding: 5px;
+}
+
+.app-bar .app-bar-menu a {
+    color: #fff !important;
+    font-size: 16px !important;
+}
+
+.app-bar .app-bar-menu .dropdown-toggle:before {
+    border-color: rgba(255,255,255,.5) !important;
+}
+
+#main-navbar-tools a.dropdown-toggle {
+    text-decoration: none;
+    color: #fff;
+}
+
+.mask {
+    opacity: 0.9 !important;
+    background-color: rgba(0, 0, 0, 0.3) !important;
+    z-index: 200000000;
+}
+.mask .mask-inner {
+    border-radius: 3px;
+    background-color: #000 !important;
+}
+.mask .mask-inner .x-loading-spinner-outer {
+    background-image: url(resources/images/loadmask/loading_1.gif);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 70px 70px;
+    height: 60px !important;
+}
+.mask .mask-inner .mask-message {
+    color: white;
+}
+
 .root {
     -webkit-text-size-adjust: none;
     -webkit-font-smoothing: antialiased;
@@ -153,7 +200,13 @@
   .toast{
       min-width: 300px;
   }
-
+.pager-info{
+    -webkit-flex: 1 1 auto !important;
+    -ms-flex: 1 1 auto !important;
+    -o-flex: 1 1 auto !important;
+    flex: 1 1 auto !important;
+    line-height: 42px;
+}
 
 @keyframes spin {
     0% {

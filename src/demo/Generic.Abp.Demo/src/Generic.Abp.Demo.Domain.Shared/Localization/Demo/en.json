@@ -62,6 +62,9 @@
     "NavigationViewContent": "Content area",
     "NavigationViewMenu": "Menu",
     "Badge": "Badge",
-    "Breadcrumb": "Breadcrumb"
+    "Breadcrumb": "Breadcrumb",
+    "Tabs": "Tabs",
+    "Vertical": "Vertical",
+    "Types": "Types"
   }
 }

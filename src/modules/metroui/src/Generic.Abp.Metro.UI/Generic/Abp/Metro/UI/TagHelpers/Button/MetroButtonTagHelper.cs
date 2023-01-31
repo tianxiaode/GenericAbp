@@ -1,6 +1,4 @@
-﻿using Localization.Resources.AbpUi;
-using Microsoft.AspNetCore.Razor.TagHelpers;
-using Microsoft.Extensions.Localization;
+﻿using Microsoft.AspNetCore.Razor.TagHelpers;
 using System.Threading.Tasks;
 
 namespace Generic.Abp.Metro.UI.TagHelpers.Button;

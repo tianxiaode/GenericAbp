@@ -36,7 +36,7 @@ public class MetroNavigationMenuTagHelper : MetroTagHelper, IHasItems<MetroNavig
     public async Task AddItemsAsync(TagHelperOutput output, IEnumerable<MetroNavigationMenuItem> items)
     {
         var builder = new StringBuilder();
-        foreach (var item in Items)
+        foreach (var item in items)
         {
             var displayOrder = await GetDisplayOrderAsync(item.DisplayOrder);
 

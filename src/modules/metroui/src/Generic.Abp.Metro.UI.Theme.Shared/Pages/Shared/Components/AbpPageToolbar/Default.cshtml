@@ -1,5 +1,0 @@
-﻿@model Generic.Abp.Metro.UI.Theme.Shared.PageToolbars.PageToolbarItem[]
-@foreach (var toolbarItem in Model)
-{
-    @(await Component.InvokeAsync(toolbarItem.ComponentType, toolbarItem.Arguments))
-}

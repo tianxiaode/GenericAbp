@@ -65,6 +65,9 @@
     "NavigationViewContent": "内容区域",
     "NavigationViewMenu": "导航菜单",
     "Badge": "徽标数",
-    "Breadcrumb": "面包屑导航"
+    "Breadcrumb": "面包屑导航",
+    "Tabs": "标签页",
+    "Vertical": "垂直",
+    "Types":  "类型"
   }
 }
