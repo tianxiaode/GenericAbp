@@ -68,6 +68,9 @@
     "Breadcrumb": "面包屑导航",
     "Tabs": "标签页",
     "Vertical": "垂直",
-    "Types":  "类型"
+    "Types": "类型",
+    "Figures": "画像",
+    "Hints": "提示",
+    "ListGroup": "列表组"
   }
 }

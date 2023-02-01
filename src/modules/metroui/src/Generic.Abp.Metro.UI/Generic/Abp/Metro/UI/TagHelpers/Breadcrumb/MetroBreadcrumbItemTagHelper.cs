@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 
 namespace Generic.Abp.Metro.UI.TagHelpers.Breadcrumb;
 
+[HtmlTargetElement("metro-breadcrumb-item", TagStructure = TagStructure.NormalOrSelfClosing)]
 public class MetroBreadcrumbItemTagHelper : MetroTagHelper<BreadcrumbGroupItem>, IBreadcrumbItem
 {
     public string Title { get; set; }

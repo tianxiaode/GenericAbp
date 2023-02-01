@@ -22,10 +22,15 @@ public abstract class ButtonTagHelperBase : MetroTagHelper, IButtonTagHelperBase
     public bool? Shadowed { get; set; }
     public string Caption { get; set; }
     public bool? IconRight { get; set; }
+    public HintPosition HintPosition { get; set; } = HintPosition.Top;
+    public string HintText { get; set; }
+    public string HintCls { get; set; }
+
 
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
         output.TagMode = TagMode.StartTagAndEndTag;
+        await ProcessHintAsync(context, output);
         await AddClassesAsync(context, output);
         await AddIconAsync(context, output);
         await AddTextAsync(context, output);
@@ -163,6 +168,17 @@ public abstract class ButtonTagHelperBase : MetroTagHelper, IButtonTagHelperBase
         caption.AddCssClass("caption");
         caption.InnerHtml.AppendHtml(Caption);
         output.Content.AppendHtml(caption);
+        return Task.CompletedTask;
+    }
+
+    protected virtual Task ProcessHintAsync(TagHelperContext context, TagHelperOutput output)
+    {
+        if (ButtonStyle != ButtonStyle.Hint) return Task.CompletedTask;
+        var attributes = output.Attributes;
+        attributes.Add("data-role", "hint");
+        attributes.Add("data-hint-text", HintText);
+        attributes.Add("data-cls-hint", HintCls);
+        attributes.Add("data-hint-position", Enum.GetName(HintPosition)?.ToLowerInvariant());
         return Task.CompletedTask;
     }
 }

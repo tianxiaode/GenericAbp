@@ -21,6 +21,12 @@ public abstract class MetroTagHelper : TagHelper
 
         return Task.FromResult(order);
     }
+
+    protected virtual Task SetDisplayOrderAsync(TagBuilder tagBuilder, int order)
+    {
+        if (order != 0) tagBuilder.Attributes.Add("style", $"order:{order}");
+        return Task.CompletedTask;
+    }
 }
 
 public abstract class MetroTagHelper<T> : MetroTagHelper where T : IGroupItem, new()

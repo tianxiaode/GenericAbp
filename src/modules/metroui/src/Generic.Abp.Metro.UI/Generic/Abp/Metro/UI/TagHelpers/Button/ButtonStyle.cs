@@ -7,5 +7,6 @@ public enum ButtonStyle
     Command,
     Image,
     Shortcut,
-    Tool
+    Tool,
+    Hint
 }

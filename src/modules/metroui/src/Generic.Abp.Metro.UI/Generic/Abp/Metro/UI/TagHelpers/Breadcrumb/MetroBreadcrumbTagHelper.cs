@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 
 namespace Generic.Abp.Metro.UI.TagHelpers.Breadcrumb;
 
-[HtmlTargetElement("metro-breadcrumb", Attributes = TagHelperConsts.ItemsAttributeName)]
 public class MetroBreadcrumbTagHelper : MetroTagHelper<BreadcrumbGroupItem>, IHasItems<MetroBreadcrumbItem>
 {
     [HtmlAttributeName(TagHelperConsts.ItemsAttributeName)]

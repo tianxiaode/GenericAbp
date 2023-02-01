@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace Generic.Abp.Metro.UI.TagHelpers.Tab;
 
-[HtmlTargetElement("metro-tabs", Attributes = TagHelperConsts.ItemsAttributeName)]
-public class MetroTabsTagHelpers : MetroTagHelper, IHasItems<TabItem>
+public class MetroTabsTagHelper : MetroTagHelper, IHasItems<TabItem>
 {
     public bool Vertical { get; set; } = false;
     public bool Bottom { get; set; } = false;

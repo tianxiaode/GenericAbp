@@ -1,0 +1,39 @@
+﻿@page
+@using Generic.Abp.Demo.Localization
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
+@model Generic.Abp.Demo.Web.Pages.TagHelpers.FiguresModel
+@inject IPageLayout PageLayout
+@inject IHtmlLocalizer<DemoResource> L
+@{
+    Layout = "~/Pages/TagHelpers/Layout.cshtml";
+    var text = L["Figures"].Value;
+    PageLayout.Content.Title = text;
+}
+<div data-role="panel" class="h-100 w-100 scroll-y" data-title-caption="@text" data-cls-title="bg-dark fg-white  h4 m-0">
+    <div class="row w-100 p-2 border-1 bd-gray border-solid">
+        <div class="cell-md-4 p-2">
+            <metro-figure image="/images/image.jpg" caption="A caption for the above image" />
+        </div>
+        <div class="cell-md-4 p-2">
+            <metro-figure image="/images/image.jpg" caption="A caption for the above image" caption-alignment="Center" />
+        </div>
+        <div class="cell-md-4 p-2">
+            <metro-figure image="/images/image.jpg" caption="A caption for the above image" caption-alignment="Right" />
+        </div>
+    </div>
+    <div class=" p-2 bg-grayWhite">
+        <div class="code">
+            &lt;div class="cell-md-4 p-2"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-figure image="/images/image.jpg" caption="A caption for the above image" /&gt;
+            &lt;/div&gt;
+            &lt;div class="cell-md-4 p-2" &gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-figure image="/images/image.jpg" caption="A caption for the above image" caption-alignment="Center" /&gt;
+            &lt;/div>
+            &lt;div class="cell-md-4 p-2">
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-figure image="/images/image.jpg" caption="A caption for the above image" caption-alignment="Right" /&gt;
+            &lt;/div>
+        </div>
+    </div>
+
+</div>

@@ -65,6 +65,9 @@
     "Breadcrumb": "Breadcrumb",
     "Tabs": "Tabs",
     "Vertical": "Vertical",
-    "Types": "Types"
+    "Types": "Types",
+    "Figures": "Figures",
+    "Hints": "Hints",
+    "ListGroup": "List group"
   }
 }
