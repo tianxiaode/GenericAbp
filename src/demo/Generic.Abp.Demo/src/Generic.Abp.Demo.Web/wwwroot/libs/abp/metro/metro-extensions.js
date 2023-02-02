@@ -115,6 +115,40 @@ function moveToFloatDiv(input, move, callback){
     dialogContent.on('scroll', callback)
 }
 
+// let left = ['L', ''], 
+//     right = ['R', ''],
+//     borderTop =[ 'T', ''],
+//     bottom = ['B' ,''],
+//     style = ['solid', 'dashed', 'dotted', 'double',  'groove', 'inset' ,'outset' ,'ridge'],
+//     text = [];
+// left.forEach(l=>{
+//     right.forEach(r=>{
+//         borderTop.forEach(t=>{
+//             bottom.forEach(b=>{
+//                 // style.forEach(s=>{
+//                 //     [1,2,3,4,5].forEach(size=>{
+//                         let result = [];
+//                         if(!_.isEmpty(l)) result.push(l);
+//                         if(!_.isEmpty(r)) result.push(r);
+//                         if(!_.isEmpty(t)) result.push(t);
+//                         if(!_.isEmpty(b)) result.push(b);
+//                         if(result.length === 0) return;
+//                         result[0] = _.capitalize(result[0]);
+//                         text.push(result.join(''));
+//                 //     })
+//                 // })
+//             })
+//         })
+//     })
+// })
+// console.log(text.sort().join(',\n'));
+// var colorList = ["black"," white"," dark"," light"," grayBlue"," grayWhite"," grayMouse"," brandColor1"," brandColor2","lime"," green"," emerald"," blue"," teal"," cyan"," cobalt"," indigo"," violet"," pink"," magenta"," crimson"," red"," orange"," amber"," yellow"," brown"," olive"," steel"," mauve"," taupe"," gray","lightLime"," lightGreen"," lightEmerald"," lightBlue"," lightTeal"," lightCyan"," lightCobalt"," lightIndigo"," lightViolet"," lightPink"," lightMagenta"," lightCrimson"," lightRed"," lightOrange"," lightAmber"," lightYellow"," lightBrown"," lightOlive"," lightSteel"," lightMauve"," lightTaupe"," lightGray"," lightGrayBlue","darkLime"," darkGreen"," darkEmerald"," darkBlue"," darkTeal"," darkCyan"," darkCobalt"," darkIndigo"," darkViolet"," darkPink"," darkMagenta"," darkCrimson"," darkRed"," darkOrange"," darkAmber"," darkYellow"," darkBrown"," darkOlive"," darkSteel"," darkMauve"," darkTaupe"," darkGray"," darkGrayBlue"];
+// var result = [];
+// colorList.forEach(c=>{
+//     c = _.upperFirst(_.trim(c));
+//     result.push(c);
+// })
+// console.log(result.sort().join(',\n'))
 
 
 // Metro.checkboxSetup({

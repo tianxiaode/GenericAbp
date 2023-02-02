@@ -1,6 +1,6 @@
 ﻿namespace Generic.Abp.Metro.UI.TagHelpers;
 
-public enum MetroColor
+public enum MetroAccentColor
 {
     Default,
     Primary,

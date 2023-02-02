@@ -1,15 +1,23 @@
-﻿using Microsoft.AspNetCore.Razor.TagHelpers;
+﻿using System.Text.Encodings.Web;
+using Microsoft.AspNetCore.Razor.TagHelpers;
 using System.Threading.Tasks;
+using Generic.Abp.Metro.UI.TagHelpers.Extensions;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Html;
 
 namespace Generic.Abp.Metro.UI.TagHelpers.Breadcrumb;
 
 [HtmlTargetElement("metro-breadcrumb-item", TagStructure = TagStructure.NormalOrSelfClosing)]
-public class MetroBreadcrumbItemTagHelper : MetroTagHelper<BreadcrumbGroupItem>, IBreadcrumbItem
+public class MetroBreadcrumbItemTagHelper : MetroTagHelper<BreadcrumbGroupItem>
 {
+    public MetroBreadcrumbItemTagHelper(HtmlEncoder htmlEncoder)
+    {
+        HtmlEncoder = htmlEncoder;
+    }
+
+    protected HtmlEncoder HtmlEncoder { get; }
     public string Title { get; set; }
-    public string Cls { get; set; }
-    public string Url { get; set; }
-    public int DisplayOrder { get; set; } = 0;
+    public string Href { get; set; }
 
     public override void Init(TagHelperContext context)
     {
@@ -21,10 +29,21 @@ public class MetroBreadcrumbItemTagHelper : MetroTagHelper<BreadcrumbGroupItem>,
         output.TagMode = TagMode.StartTagAndEndTag;
         output.TagName = "li";
         output.Attributes.AddClass("page-item");
-        DisplayOrder = await GetDisplayOrderAsync(DisplayOrder);
-        var html =
-            $"<li class=\"page-item\" style=\"order:{DisplayOrder}\"><a href=\"{Url}\" class=\"page-link {Cls}\">{Title}</a></li>";
-        await AddGroupItemAsync(context, Title, DisplayOrder, html);
+        output.Content.SetHtmlContent(await GetInnerHtmlAsync(context, output));
+        await AddGroupItemAsync(context, Title, await output.RenderAsync(HtmlEncoder));
         output.SuppressOutput();
+    }
+
+    protected virtual Task<string> GetInnerHtmlAsync(TagHelperContext context, TagHelperOutput output)
+    {
+        if (string.IsNullOrWhiteSpace(Href))
+        {
+            return Task.FromResult(HtmlEncoder.Encode(Title));
+        }
+
+        var link = new TagBuilder("a");
+        link.Attributes.Add("href", Href);
+        link.InnerHtml.AppendHtml(Title);
+        return Task.FromResult(link.ToHtmlString());
     }
 }

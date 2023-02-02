@@ -1,6 +1,7 @@
 ﻿@page
 @using System.Globalization
 @using Generic.Abp.Demo.Localization
+@using Generic.Abp.Metro.UI.TagHelpers.Border
 @using Generic.Abp.Metro.UI.TagHelpers.Breadcrumb
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Volo.Abp.AspNetCore.Mvc.UI.Layout
@@ -11,70 +12,26 @@
     Layout = "~/Pages/TagHelpers/Layout.cshtml";
     var title = L["Breadcrumb"].Value;
     PageLayout.Content.Title = title;
-    var cultureName = CultureInfo.CurrentCulture.Name?.ToLowerInvariant();
 }
 <div data-role="panel" class="h-100 w-100 scroll-y" data-title-caption="@title" data-cls-title="bg-dark fg-white h4 m-0">
-    @{
-        var items = new List<MetroBreadcrumbItem>()
-        {
-            new(){ Title = "Home", Url = "#"},
-            new(){ Title = "Products", Url = "#"},
-            new(){ Title = "Windows 10", Url = "#"},
-        };
-        var cSharpCode = @"
-        var items = new List<MetroBreadcrumbItem>()
-        {
-            new(){ Title = ""Home"", Url = ""#""},
-            new(){ Title = ""Products"", Url = ""#""},
-            new(){ Title = ""Windows 10"", Url = ""#""},
-        };
-    ";
-    }
     <div class="row  p-2 border-1 bd-gray border-solid">
-        <metro-breadcrumb asp-items="@items">
-            <metro-breadcrumb-item title="Downloads" url="#" display-order="10110" />
+        <metro-breadcrumb>
+            <metro-breadcrumb-item title="Home" href="#" />
+            <metro-breadcrumb-item title="Products" href="#" />
+            <metro-breadcrumb-item title="Downloads" href="#"/>
+            <metro-breadcrumb-item title="Windows 10" href="#" />
         </metro-breadcrumb>
     </div>
     <div class=" p-2 bg-grayWhite">
-        <pre><code class="language-csharp">@cSharpCode</code></pre>
         <div class="code">
-            &lt;metro-breadcrumb asp-items="@@items"&gt;
-            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-breadcrumb-item title="Downloads" url="#" display-order="10110" /&gt;
+            &lt;metro-breadcrumb&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-breadcrumb-item title="Home" href="#" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-breadcrumb-item title="Products" href="#" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-breadcrumb-item title="Downloads" href="#"/&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-breadcrumb-item title="Windows 10" href="#" /&gt;
             &lt;/metro-breadcrumb&gt;
 
         </div>
     </div>
-    @if (cultureName.Equals("zh-Hans", StringComparison.OrdinalIgnoreCase))
-    {
-        <h4>导航项的显示顺序</h4>
-        <div class="py-2" data-replace="true">
-            <p class="text-indent">
-                导航项的显示顺序是由[[flex]]布局的[[order]] 来决定的。
-            </p>
-            <p class="text-indent">
-                使用[[asp-items]]输出的导航项，如果没有指定[[DisplayOrder]]值，则会输出默认的[[DisplayOrder]]值。默认的[[DisplayOrder]]值从[[10000]]开始计算,每添加一项增加[[100]]。
-            </p>
-            <p class="text-indent">
-                不在[[asp-items]]中的菜单项，可通过设置[[display-order]]的值来调整显示顺序，如示例中的[[Downloads]]所示。如果不设置，显示顺序默认值为[[10000]]，会显示在导航开始部分。
-            </p>
-        </div>
-
-    }
-    else
-    {
-        <div class="py-2" data-replace="true">
-            <h4>The display order of the navigation item</h4>
-            <p>
-                The order in which navigation items are displayed is determined by the [[order]] of the [[flex]] layout.
-            </p>
-            <p>
-                Using [[asp-items]] to output a navigation item, if no [[DisplayOrder]] value is specified, the default [[DisplayOrder]] value is output. The default [[DisplayOrder]] value starts at [[10,000]] and increases by [[100]] for each additional item.
-            </p>
-            <p>
-                For navigation items that are not in [[asp-items]], the display order can be adjusted by setting the value of [[display-order]], as shown in [[Downloads]] in the example. If not set, the display order defaults to [[10,000]] and is displayed at the beginning of the menu.
-            </p>
-        </div>
-    }
-
 
 </div>

@@ -52,6 +52,8 @@
     <Folder Include="Generic\Abp\Metro\UI\TagHelpers\Figure\" />
     <Folder Include="Generic\Abp\Metro\UI\TagHelpers\Carousel\" />
     <Folder Include="Generic\Abp\Metro\UI\TagHelpers\Dropdown\" />
+    <Folder Include="Generic\Abp\Metro\UI\TagHelpers\Card\" />
+    <Folder Include="Generic\Abp\Metro\UI\TagHelpers\Border\" />
   </ItemGroup>
 
 </Project>

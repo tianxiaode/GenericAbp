@@ -8,7 +8,7 @@ namespace Generic.Abp.Metro.UI.TagHelpers.Button;
 
 public abstract class ButtonTagHelperBase : MetroTagHelper, IButtonTagHelperBase
 {
-    public MetroColor Color { get; set; } = MetroColor.Default;
+    public MetroAccentColor AccentColor { get; set; } = MetroAccentColor.Default;
     public MetroButtonSize Size { get; set; } = MetroButtonSize.Default;
     public ButtonShape Shape { get; set; } = ButtonShape.Default;
     public ButtonStyle ButtonStyle { get; set; } = ButtonStyle.Default;
@@ -59,9 +59,9 @@ public abstract class ButtonTagHelperBase : MetroTagHelper, IButtonTagHelperBase
             attributes.AddClass("icon-right");
         }
 
-        if (Color != MetroColor.Default)
+        if (AccentColor != MetroAccentColor.Default)
         {
-            attributes.AddClass(Enum.GetName(Color)?.ToLowerInvariant());
+            attributes.AddClass(Enum.GetName(AccentColor)?.ToLowerInvariant());
         }
 
 

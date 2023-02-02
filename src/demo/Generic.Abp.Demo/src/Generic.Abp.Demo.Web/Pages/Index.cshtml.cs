@@ -66,7 +66,7 @@ namespace Generic.Abp.Demo.Web.Pages
             public string RadioCountry { get; set; }
 
             [Required]
-            [Display(Name = "My Car Color")]
+            [Display(Name = "My Car AccentColor")]
             public CarType MyCarType { get; set; }
 
             [Required]

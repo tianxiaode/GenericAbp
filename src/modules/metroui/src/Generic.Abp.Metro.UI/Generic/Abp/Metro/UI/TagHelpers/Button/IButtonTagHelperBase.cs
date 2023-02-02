@@ -2,7 +2,7 @@
 
 public interface IButtonTagHelperBase
 {
-    MetroColor Color { get; }
+    MetroAccentColor AccentColor { get; }
     MetroButtonSize Size { get; }
     public ButtonShape Shape { get; }
     ButtonStyle ButtonStyle { get; }

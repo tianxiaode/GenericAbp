@@ -8,7 +8,7 @@
         <ul class="d-menu bg-dark" data-role="dropdown">
             @foreach (var language in Model.OtherLanguages)
             {
-                <li><a href="~/Abp/Languages/Switch?culture=@(language.CultureName)&uiCulture=@(language.UiCultureName)&returnUrl=@(System.Net.WebUtility.UrlEncode(Context.Request.GetEncodedPathAndQuery()))">@language.DisplayName</a></li>
+                <li><a href="~/Abp/Languages/Switch?culture=@(language.CultureName)&uiCulture=@(language.UiCultureName)&returnHref=@(System.Net.WebUtility.UrlEncode(Context.Request.GetEncodedPathAndQuery()))">@language.DisplayName</a></li>
             }
         </ul>
         </li>

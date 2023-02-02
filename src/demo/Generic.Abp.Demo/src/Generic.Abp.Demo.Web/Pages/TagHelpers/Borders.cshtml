@@ -1,0 +1,101 @@
+﻿@page
+@using System.Globalization
+@using Generic.Abp.Demo.Localization
+@using Generic.Abp.Metro.UI.TagHelpers.Breadcrumb
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
+@model Generic.Abp.Demo.Web.Pages.TagHelpers.BordersModel
+@inject IPageLayout PageLayout
+@inject IHtmlLocalizer<DemoResource> L
+@{
+    Layout = "~/Pages/TagHelpers/Layout.cshtml";
+    var title = L["Borders"].Value;
+    PageLayout.Content.Title = title;
+}
+<div data-role="panel" class="h-100 w-100 scroll-y" data-title-caption="@title" data-cls-title="bg-dark fg-white h4 m-0">
+    <div class="row  p-2 border-1 bd-gray border-solid" style="height: 40px;">
+        <div metro-border="LRTB" class="mr-2 cell-1 text-center">Block</div>
+        <div metro-border="LRB" border-color="Orange" class="mr-2 cell-1 text-center">Block</div>
+        <div metro-border="TB" border-color="Green" class="mr-2 cell-1 text-center">Block</div>
+        <div metro-border="B" border-color="Red" class="mr-2 cell-1 text-center">Block</div>
+    </div>
+    <div class=" p-2 bg-grayWhite">
+        <div class="code">
+            &lt;div metro-border="LRTB" class="mr-2 cell-1 text-center"&gt;Block&lt;/div&gt;
+            &lt;div metro-border="LRB" border-color="Orange" class="mr-2 cell-1 text-center"&gt;Block&lt;/div&gt;
+            &lt;div metro-border="TB" border-color="Green" class="mr-2 cell-1 text-center"&gt;Block&lt;/div&gt;
+            &lt;div metro-border="B" border-color="Red" class="mr-2 cell-1 text-center"&gt;Block&lt;/div&gt;
+
+        </div>
+    </div>
+    
+    <h4>Border size</h4>
+    
+    <div class="row  p-2 border-1 bd-gray border-solid" style="height: 60px;">
+        <div metro-border="LRTB" border-color="Cyan" border-size="1" class="mr-2 cell-1 text-center">Block</div>
+        <div metro-border="LRTB" border-color="Cyan" border-size="2" class="mr-2 cell-1 text-center">Block</div>
+        <div metro-border="LRTB" border-color="Cyan" border-size="3" class="mr-2 cell-1 text-center">Block</div>
+        <div metro-border="LRTB" border-color="Cyan" border-size="4" class="mr-2 cell-1 text-center">Block</div>
+        <div metro-border="LRTB" border-color="Cyan" border-size="10" class="mr-2 cell-1 text-center">Block</div>
+    </div>
+    <div class=" p-2 bg-grayWhite">
+        <div class="code">
+            &lt;div metro-border="LRTB" border-color="Cyan" border-size="1" class="mr-2 cell-1 text-center"&gt;Block&lt;/div&gt;
+            &lt;div metro-border="LRTB" border-color="Cyan" border-size="2" class="mr-2 cell-1 text-center"&gt;Block&lt;/div&gt;
+            &lt;div metro-border="LRTB" border-color="Cyan" border-size="3" class="mr-2 cell-1 text-center"&gt;Block&lt;/div&gt;
+            &lt;div metro-border="LRTB" border-color="Cyan" border-size="4" class="mr-2 cell-1 text-center"&gt;Block&lt;/div&gt;
+            &lt;div metro-border="LRTB" border-color="Cyan" border-size="10" class="mr-2 cell-1 text-center"&gt;Block&lt;/div&gt;
+
+        </div>
+    </div>
+
+    <h4>Border style</h4>
+    <div class="row  p-2 border-1 bd-gray border-solid" style="height: 60px;">
+        <div metro-border="LRTB" border-color="Cyan" border-size="10" class="mr-2 cell-1 text-center">Block</div>
+        <div metro-border="LRTB" border-color="Cyan" border-size="10" border-style="Dashed" class="mr-2 cell-1 text-center">Block</div>
+        <div metro-border="LRTB" border-color="Cyan" border-size="10" border-style="Dotted" class="mr-2 cell-1 text-center">Block</div>
+        <div metro-border="LRTB" border-color="Cyan" border-size="10" border-style="Double" class="mr-2 cell-1 text-center">Block</div>
+        <div metro-border="LRTB" border-color="Cyan" border-size="10" border-style="Groove" class="mr-2 cell-1 text-center">Block</div>
+        <div metro-border="LRTB" border-color="Cyan" border-size="10" border-style="Inset" class="mr-2 cell-1 text-center">Block</div>
+        <div metro-border="LRTB" border-color="Cyan" border-size="10" border-style="Outset" class="mr-2 cell-1 text-center">Block</div>
+        <div metro-border="LRTB" border-color="Cyan" border-size="10" border-style="Ridge" class="mr-2 cell-1 text-center">Block</div>
+    </div>
+    <div class=" p-2 bg-grayWhite">
+        <div class="code">
+            &lt;div metro-border="LRTB" border-color="Cyan" border-size="10" class="mr-2 cell-1 text-center"&gt;Block&lt;/div&gt;
+            &lt;div metro-border="LRTB" border-color="Cyan" border-size="10" border-style="Dashed" class="mr-2 cell-1 text-center"&gt;Block&lt;/div&gt;
+            &lt;div metro-border="LRTB" border-color="Cyan" border-size="10" border-style="Dotted" class="mr-2 cell-1 text-center"&gt;Block&lt;/div&gt;
+            &lt;div metro-border="LRTB" border-color="Cyan" border-size="10" border-style="Double" class="mr-2 cell-1 text-center"&gt;Block&lt;/div&gt;
+            &lt;div metro-border="LRTB" border-color="Cyan" border-size="10" border-style="Groove" class="mr-2 cell-1 text-center"&gt;Block&lt;/div&gt;
+            &lt;div metro-border="LRTB" border-color="Cyan" border-size="10" border-style="Inset" class="mr-2 cell-1 text-center"&gt;Block&lt;/div&gt;
+            &lt;div metro-border="LRTB" border-color="Cyan" border-size="10" border-style="Outset" class="mr-2 cell-1 text-center"&gt;Block&lt;/div&gt;
+            &lt;div metro-border="LRTB" border-color="Cyan" border-size="10" border-style="Ridge" class="mr-2 cell-1 text-center"&gt;Block&lt;/div&gt;
+
+        </div>
+    </div>
+
+    <h4>Border radius</h4>
+    <div class="row  p-2 border-1 bd-gray border-solid" style="height: 60px;">
+        <div metro-border="LRTB" border-color="Cyan" border-radius="Default" class="mr-2 cell-1 text-center">Block</div>
+        <div metro-border="LRTB" border-color="Cyan" border-radius="Half" class="mr-2 cell-1 text-center">Block</div>
+        <div metro-border="LRTB" border-color="Cyan" border-radius="_1" class="mr-2 cell-1 text-center">Block</div>
+        <div metro-border="LRTB" border-color="Cyan" border-radius="_3" class="mr-2 cell-1 text-center">Block</div>
+        <div metro-border="LRTB" border-color="Cyan" border-radius="_5" class="mr-2 cell-1 text-center">Block</div>
+        <div metro-border="LRTB" border-color="Cyan" border-radius="_7" class="mr-2 cell-1 text-center">Block</div>
+        <div metro-border="LRTB"  custom-border-radius="40%" custom-border-color="#ededed" class="mr-2 cell-1 text-center">Block</div>
+    </div>
+    <div class=" p-2 bg-grayWhite">
+        <div class="code">
+            &lt;div metro-border="LRTB" border-color="Cyan" border-radius="Default" class="mr-2 cell-1 text-center"&gt;Block&lt;/div&gt;
+            &lt;div metro-border="LRTB" border-color="Cyan" border-radius="Half" class="mr-2 cell-1 text-center"&gt;Block&lt;/div&gt;
+            &lt;div metro-border="LRTB" border-color="Cyan" border-radius="_1" class="mr-2 cell-1 text-center"&gt;Block&lt;/div&gt;
+            &lt;div metro-border="LRTB" border-color="Cyan" border-radius="_3" class="mr-2 cell-1 text-center"&gt;Block&lt;/div&gt;
+            &lt;div metro-border="LRTB" border-color="Cyan" border-radius="_5" class="mr-2 cell-1 text-center"&gt;Block&lt;/div&gt;
+            &lt;div metro-border="LRTB" border-color="Cyan" border-radius="_7" class="mr-2 cell-1 text-center"&gt;Block&lt;/div&gt;
+            &lt;div metro-border="LRTB" custom-border-radius="40%" custom-border-color="#ededed" class="mr-2 cell-1 text-center" &gt;Block&lt;/div&gt;
+
+        </div>
+    </div>
+
+</div>
+
