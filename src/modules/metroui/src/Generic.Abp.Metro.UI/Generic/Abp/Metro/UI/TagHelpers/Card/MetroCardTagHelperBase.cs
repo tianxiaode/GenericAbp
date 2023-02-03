@@ -1,30 +1,48 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Razor.TagHelpers;
+﻿using Microsoft.AspNetCore.Razor.TagHelpers;
+using System.Text.Encodings.Web;
+using System.Threading.Tasks;
 
 namespace Generic.Abp.Metro.UI.TagHelpers.Card;
 
-public abstract class MetroCardTagHelperBase : MetroTagHelper
+public abstract class MetroCardTagHelperBase : MetroTagHelper<CardGroupItem>
 {
-    protected virtual async Task AddHeaderAsync<T>(T builder, string text, string image) where T : class
+    protected MetroCardTagHelperBase(HtmlEncoder htmlEncoder) : base(htmlEncoder)
+    {
+    }
+
+    public override void Init(TagHelperContext context)
+    {
+        GroupItemsName = TagHelperConsts.CardGroupItems;
+    }
+
+    protected virtual async Task<string> AddHeaderAsync<T>(T builder, string text, string image, string cls = "")
+        where T : class
     {
         await AddClassAsync(builder, "card-header");
         await AppendHtmlAsync(builder, text);
+        await AddClassAsync(builder, cls);
         if (!string.IsNullOrWhiteSpace(image))
         {
-            await AddAttributeAsync(builder, "style", $"background-image: url({image})");
+            await AddStyleAsync(builder, $"background-image: url({image});");
         }
+
+        return await GetBuilderAsHtmlAsync(builder);
     }
 
-    protected virtual async Task AddContentAsync<T>(T builder, string content) where T : class
+    protected virtual async Task<string> AddContentAsync<T>(T builder, string content, string cls) where T : class
     {
         await AddClassAsync(builder, "card-content");
+        await AddClassAsync(builder, cls);
         await AppendHtmlAsync(builder, content);
+
+        return await GetBuilderAsHtmlAsync(builder);
     }
 
-    protected virtual async Task AddFooterAsync<T>(T builder, string text) where T : class
+    protected virtual async Task<string> AddFooterAsync<T>(T builder, string text, string cls = "") where T : class
     {
         await AddClassAsync(builder, "card-footer");
+        await AddClassAsync(builder, cls);
         await AppendHtmlAsync(builder, text);
+        return await GetBuilderAsHtmlAsync(builder);
     }
 }

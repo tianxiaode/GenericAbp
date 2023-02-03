@@ -73,6 +73,9 @@
     "Hints": "提示",
     "ListGroup": "列表组",
     "Cards": "卡片",
-    "Borders": "边框"
+    "Borders": "边框",
+    "Carousel": "轮播",
+    "Collapse": "折叠",
+    "Accordion": "手风琴"
   }
 }

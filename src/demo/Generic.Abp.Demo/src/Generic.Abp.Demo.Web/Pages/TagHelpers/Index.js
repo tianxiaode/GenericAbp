@@ -37,7 +37,7 @@ $(function () {
 
 
     function replacAttribute(match, attr, value){
-        return ` <span class="code-attribute">${attr}</span>="<span>${_.escape(value)}</span>"`
+        return ` <span class="code-attribute">${attr}</span>="<span>${_.escape(value.replaceAll('&lt;&lt;', '<').replaceAll('&gt;&gt;', '>'))}</span>"`
     }
 
 });

@@ -1,11 +1,16 @@
 ﻿using Microsoft.AspNetCore.Razor.TagHelpers;
 using System.Text;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 
 namespace Generic.Abp.Metro.UI.TagHelpers.Breadcrumb;
 
 public class MetroBreadcrumbTagHelper : MetroTagHelper<BreadcrumbGroupItem>
 {
+    public MetroBreadcrumbTagHelper(HtmlEncoder htmlEncoder) : base(htmlEncoder)
+    {
+    }
+
     public override void Init(TagHelperContext context)
     {
         GroupItemsName = TagHelperConsts.BreadcrumbItems;

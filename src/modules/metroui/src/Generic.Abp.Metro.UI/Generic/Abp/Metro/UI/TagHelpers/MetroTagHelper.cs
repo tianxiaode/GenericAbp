@@ -1,20 +1,21 @@
-using Microsoft.AspNetCore.Html;
+using Generic.Abp.Metro.UI.TagHelpers.Extensions;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace Generic.Abp.Metro.UI.TagHelpers;
 
 public abstract class MetroTagHelper : TagHelper
 {
+    protected const string DataAttributePrefix = "data-";
     [HtmlAttributeNotBound] [ViewContext] public ViewContext ViewContext { get; set; }
     protected int OrderIncrement { get; set; } = 0;
-
 
     protected virtual Task AppendHtmlAsync<T>(T builder, string html) where T : class
     {
@@ -48,6 +49,17 @@ public abstract class MetroTagHelper : TagHelper
         return Task.CompletedTask;
     }
 
+    protected virtual async Task AddDataAttributeAsync<T>(T builder, string name, object value)
+    {
+        if (string.IsNullOrWhiteSpace(name) || value == null) return;
+        name = $"{DataAttributePrefix}{name.ToKebabCase()}";
+        var strValue = value.ToString();
+        if (value.GetType().IsEnum) strValue = Enum.GetName(value.GetType(), value);
+        if (string.IsNullOrWhiteSpace(strValue)) return;
+        strValue.ToKebabCase();
+        await AddAttributeAsync(builder, name, strValue.ToLowerInvariant());
+    }
+
     protected virtual Task AddAttributeAsync<T>(T builder, string name, string value)
     {
         if (string.IsNullOrWhiteSpace(value)) return Task.CompletedTask;
@@ -79,6 +91,19 @@ public abstract class MetroTagHelper : TagHelper
         return Task.CompletedTask;
     }
 
+    protected virtual async Task AddStyleAsync<TBuilder>(TBuilder builder, string value)
+    {
+        switch (builder)
+        {
+            case TagHelperOutput output:
+                await AddStyleAsync(output, value);
+                break;
+            case TagBuilder tagBuilder:
+                await AddStyleAsync(tagBuilder, value);
+                break;
+        }
+    }
+
     protected virtual Task AddStyleAsync(TagHelperOutput output, string value)
     {
         var attributes = output.Attributes;
@@ -88,6 +113,32 @@ public abstract class MetroTagHelper : TagHelper
             if (!string.IsNullOrEmpty(currentValue))
             {
                 attributes.Add("style", currentValue.EnsureEndsWith(';') + value.EnsureEndsWith(';'));
+            }
+            else
+            {
+                attributes.Add("style", value);
+            }
+        }
+        else
+        {
+            attributes.Add("style", value);
+        }
+
+        return Task.CompletedTask;
+    }
+
+    protected virtual Task AddStyleAsync(TagBuilder builder, string value)
+    {
+        var attributes = builder.Attributes;
+        if (attributes.TryGetValue("style", out var currentValue))
+        {
+            if (!string.IsNullOrEmpty(currentValue))
+            {
+                attributes.Add("style", currentValue.EnsureEndsWith(';') + value.EnsureEndsWith(';'));
+            }
+            else
+            {
+                attributes.Add("style", value);
             }
         }
         else
@@ -101,6 +152,12 @@ public abstract class MetroTagHelper : TagHelper
 
 public abstract class MetroTagHelper<T> : MetroTagHelper where T : IGroupItem, new()
 {
+    protected MetroTagHelper(HtmlEncoder htmlEncoder)
+    {
+        HtmlEncoder = htmlEncoder;
+    }
+
+    protected HtmlEncoder HtmlEncoder { get; }
     protected string GroupItemsName { get; set; }
 
     protected virtual void InitGroupItems(TagHelperContext context)
@@ -111,6 +168,13 @@ public abstract class MetroTagHelper<T> : MetroTagHelper where T : IGroupItem, n
     protected virtual Task<List<T>> GetGroupItems(TagHelperContext context)
     {
         return Task.FromResult((List<T>)context.Items[GroupItemsName]);
+    }
+
+    [ItemCanBeNull]
+    protected virtual async Task<T> GetGroupItemAsync(TagHelperContext context, string name)
+    {
+        var items = await GetGroupItems(context);
+        return items == null ? default! : items.FirstOrDefault(m => m.Name == name);
     }
 
     protected virtual Task<bool> HasGroupItemsAsync(TagHelperContext context)
@@ -149,5 +213,16 @@ public abstract class MetroTagHelper<T> : MetroTagHelper where T : IGroupItem, n
         var items = await GetGroupItems(context);
         if (items == null) throw new ArgumentNullException(nameof(items));
         items.Add(item);
+    }
+
+    protected virtual async Task<string> GetBuilderAsHtmlAsync<TBuilder>(TBuilder builder)
+    {
+        var html = builder switch
+        {
+            TagBuilder tagBuilder => tagBuilder.ToHtmlString(),
+            TagHelperOutput output => await output.RenderAsync(HtmlEncoder),
+            _ => ""
+        };
+        return html;
     }
 }

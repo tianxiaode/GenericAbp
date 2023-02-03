@@ -70,6 +70,9 @@
     "Hints": "Hints",
     "ListGroup": "List group",
     "Cards": "Cards",
-    "Borders": "Borders"
+    "Borders": "Borders",
+    "Carousel": "Carousel",
+    "Collapse": "Collapse",
+    "Accordion": "Accordion"
   }
 }

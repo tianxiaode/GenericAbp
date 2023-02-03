@@ -7,9 +7,7 @@ public class TagHelperConsts
     public const string PanelGroupItems = "PanelGroupItems";
     public const string DialogGroupItems = "DialogGroupItems";
     public const string NavigationMenuItems = "NavigationMenuItems";
+    public const string CardGroupItems = "CardGroupItems";
     public const string BreadcrumbItems = "BreadcrumbItems";
     public const int DisplayOrder = 10000;
-
-    public static readonly string[] BORDER_STYLE =
-        { "solid", "dashed", "dotted", "double", "groove", "inset", "outset", "ridge" };
 }

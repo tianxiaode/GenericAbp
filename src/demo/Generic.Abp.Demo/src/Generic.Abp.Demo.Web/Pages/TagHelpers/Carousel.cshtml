@@ -1,0 +1,267 @@
+﻿@page
+@using Generic.Abp.Demo.Localization
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
+@model Generic.Abp.Demo.Web.Pages.TagHelpers.CarouselModel
+@inject IPageLayout PageLayout
+@inject IHtmlLocalizer<DemoResource> L
+@{
+    Layout = "~/Pages/TagHelpers/Layout.cshtml";
+    var text = L["Carousel"].Value;
+    PageLayout.Content.Title = text;
+}
+<div data-role="panel" class="h-100 w-100 scroll-y" data-title-caption="@text" data-cls-title="bg-dark fg-white  h4 m-0">
+    <div class="row w-100 p-2 border-1 bd-gray border-solid text-center">
+        <metro-carousel  width="50%">
+            <metro-carousel-slide cover="/Images/1.jpg" />
+            <metro-carousel-slide cover="/Images/2.jpg" />
+            <metro-carousel-slide cover="/Images/3.jpg" />
+            <metro-carousel-slide cover="/Images/4.jpg" />
+            <metro-carousel-slide cover="/Images/5.jpg" />
+        </metro-carousel>
+    </div>
+    <div class=" p-2 bg-grayWhite">
+        <div class="code">
+            &lt;metro-carousel  width="50%"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-carousel-slide cover="/Images/1.jpg" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-carousel-slide cover="/Images/2.jpg" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-carousel-slide cover="/Images/3.jpg" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-carousel-slide cover="/Images/4.jpg" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-carousel-slide cover="/Images/5.jpg" /&gt;
+            &lt;/metro-carousel&gt;
+        </div>
+    </div>
+    
+    <h4>Size</h4>
+    <div class="row w-100 p-2 border-1 bd-gray border-solid text-center">
+        <div class="cell-md-3 p-2">
+            <metro-carousel height="16/9">
+                <metro-carousel-slide cover="/Images/1.jpg" class="d-flex flex-justify-center flex-align-center"> <span class="h3 fg-white">16/9</span></metro-carousel-slide>
+            </metro-carousel>
+        </div>
+        <div class="cell-md-3 p-2">
+            <metro-carousel height="21/9">
+                <metro-carousel-slide cover="/Images/1.jpg" class="d-flex flex-justify-center flex-align-center"> <span class="h3 fg-white">21/9</span></metro-carousel-slide>
+            </metro-carousel>
+        </div>
+        <div class="cell-md-3 p-2">
+            <metro-carousel height="4/3">
+                <metro-carousel-slide cover="/Images/1.jpg" class="d-flex flex-justify-center flex-align-center"> <span class="h3 fg-white">4/3</span></metro-carousel-slide>
+            </metro-carousel>
+        </div>
+        <div class="cell-md-3 p-2">
+            <metro-carousel height="300">
+                <metro-carousel-slide cover="/Images/1.jpg" class="d-flex flex-justify-center flex-align-center"> <span class="h3 fg-white">300</span></metro-carousel-slide>
+            </metro-carousel>
+        </div>
+    </div>
+    <div class=" p-2 bg-grayWhite">
+        <div class="code">
+            &lt;metro-carousel height="16/9"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-carousel-slide cover="/Images/1.jpg" class="d-flex flex-justify-center flex-align-center"&gt; &lt;span class="h3 fg-white"&gt;16/9&lt;/span&gt;&lt;/metro-carousel-slide&gt;
+            &lt;/metro-carousel&gt;
+            &nbsp;
+            &lt;metro-carousel height="21/9"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-carousel-slide cover="/Images/1.jpg" class="d-flex flex-justify-center flex-align-center"&gt; &lt;span class="h3 fg-white"&gt;21/9&lt;/span&gt;&lt;/metro-carousel-slide&gt;
+            &lt;/metro-carousel&gt;
+            &nbsp;
+            &lt;metro-carousel height="4/3"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-carousel-slide cover="/Images/1.jpg" class="d-flex flex-justify-center flex-align-center"&gt; &lt;span class="h3 fg-white"&gt;4/3&lt;/span&gt;&lt;/metro-carousel-slide&gt;
+            &lt;/metro-carousel&gt;
+            &nbsp;
+            &lt;metro-carousel height="300"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-carousel-slide cover="/Images/1.jpg" class="d-flex flex-justify-center flex-align-center"&gt; &lt;span class="h3 fg-white"&gt;300&lt;/span&gt;&lt;/metro-carousel-slide&gt;
+            &lt;/metro-carousel&gt;
+        </div>
+    </div>
+    
+    <h4>Controls</h4>
+    <div class="row w-100 p-2 border-1 bd-gray border-solid text-center">
+        <div class="cell-md-3 p-1">
+            <metro-carousel controls-outside="true">
+                <metro-carousel-slide cover="/Images/1.jpg"/>
+                <metro-carousel-slide cover="/Images/2.jpg"/>
+            </metro-carousel>
+        </div>
+        <div class="cell-md-3 p-1">
+            <metro-carousel controls-on-mouse="true">
+                <metro-carousel-slide cover="/Images/1.jpg" />
+                <metro-carousel-slide cover="/Images/2.jpg" />
+            </metro-carousel>
+        </div>
+        <div class="cell-md-3 p-1">
+            <metro-carousel controls="false">
+                <metro-carousel-slide cover="/Images/1.jpg" />
+                <metro-carousel-slide cover="/Images/2.jpg" />
+            </metro-carousel>
+        </div>
+        <div class="cell-md-3 p-1">
+            <metro-carousel control-next="<span class='mif-chevron-right'></span>" control-prev="<span class='mif-chevron-left'></span>">
+                <metro-carousel-slide cover="/Images/1.jpg" />
+                <metro-carousel-slide cover="/Images/2.jpg" />
+            </metro-carousel>
+        </div>
+
+    </div>
+    <div class=" p-2 bg-grayWhite">
+        <div class="code">
+            &lt;metro-carousel controls-outside="true"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-carousel-slide cover="/Images/1.jpg"/&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-carousel-slide cover="/Images/2.jpg"/&gt;
+            &lt;/metro-carousel&gt;
+            &nbsp;
+            &lt;metro-carousel controls-on-mouse="true"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-carousel-slide cover="/Images/1.jpg" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-carousel-slide cover="/Images/2.jpg" /&gt;
+            &lt;/metro-carousel&gt;
+            &nbsp;
+            &lt;metro-carousel controls="false"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-carousel-slide cover="/Images/1.jpg" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-carousel-slide cover="/Images/2.jpg" /&gt;
+            &lt;/metro-carousel&gt;
+            &nbsp;
+            &lt;metro-carousel control-next="&lt;span class='mif-chevron-right'&gt;&lt;/span&gt;" control-prev="&lt;span class='mif-chevron-left'&gt;&lt;/span&gt;"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-carousel-slide cover="/Images/1.jpg" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-carousel-slide cover="/Images/2.jpg" /&gt;
+            &lt;/metro-carousel&gt;
+        </div>
+    </div>
+
+    <h4>Bullets</h4>
+    <div class="row w-100 p-2 border-1 bd-gray border-solid text-center">
+        <div class="cell-md-3 p-1">
+            <metro-carousel bullets="false">
+                <metro-carousel-slide cover="/Images/1.jpg" />
+                <metro-carousel-slide cover="/Images/2.jpg" />
+            </metro-carousel>
+        </div>
+        <div class="cell-md-3 p-1">
+            <metro-carousel bullets-style="Circle">
+                <metro-carousel-slide cover="/Images/1.jpg" />
+                <metro-carousel-slide cover="/Images/2.jpg" />
+            </metro-carousel>
+        </div>
+        <div class="cell-md-3 p-1">
+            <metro-carousel bullets-style="Diamond" bullets-position="Left">
+                <metro-carousel-slide cover="/Images/1.jpg" />
+                <metro-carousel-slide cover="/Images/2.jpg" />
+            </metro-carousel>
+        </div>
+        <div class="cell-md-3 p-1">
+            <metro-carousel bullets-style="Rect" bullets-position="Right">
+                <metro-carousel-slide cover="/Images/1.jpg" />
+                <metro-carousel-slide cover="/Images/2.jpg" />
+            </metro-carousel>
+        </div>
+
+    </div>
+    <div class=" p-2 bg-grayWhite">
+        <div class="code">
+            &lt;metro-carousel controls-outside="true"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-carousel-slide cover="/Images/1.jpg"/&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-carousel-slide cover="/Images/2.jpg"/&gt;
+            &lt;/metro-carousel&gt;
+            &nbsp;
+            &lt;metro-carousel controls-on-mouse="true"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-carousel-slide cover="/Images/1.jpg" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-carousel-slide cover="/Images/2.jpg" /&gt;
+            &lt;/metro-carousel&gt;
+            &nbsp;
+            &lt;metro-carousel controls="false"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-carousel-slide cover="/Images/1.jpg" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-carousel-slide cover="/Images/2.jpg" /&gt;
+            &lt;/metro-carousel&gt;
+            &nbsp;
+            &lt;metro-carousel control-next="&lt;span class='mif-chevron-right'&gt;&lt;/span&gt;" control-prev="&lt;span class='mif-chevron-left'&gt;&lt;/span&gt;"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-carousel-slide cover="/Images/1.jpg" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-carousel-slide cover="/Images/2.jpg" /&gt;
+            &lt;/metro-carousel&gt;
+        </div>
+    </div>
+    
+    <h4>Effects</h4>
+    <div class="row w-100 p-2 border-1 bd-gray border-solid text-center">
+        <div class="cell-md-2 p-1">
+            <metro-carousel>
+                <metro-carousel-slide cover="/Images/1.jpg" />
+                <metro-carousel-slide cover="/Images/2.jpg" />
+                <metro-carousel-slide cover="/Images/3.jpg" />
+            </metro-carousel>
+        </div>
+        <div class="cell-md-2 p-1">
+            <metro-carousel effect="Fade" period="500">
+                <metro-carousel-slide cover="/Images/1.jpg" />
+                <metro-carousel-slide cover="/Images/2.jpg" />
+                <metro-carousel-slide cover="/Images/3.jpg" />
+            </metro-carousel>
+        </div>
+        <div class="cell-md-2 p-1">
+            <metro-carousel effect="SlideV" period="500">
+                <metro-carousel-slide cover="/Images/1.jpg" />
+                <metro-carousel-slide cover="/Images/2.jpg" />
+                <metro-carousel-slide cover="/Images/3.jpg" />
+            </metro-carousel>
+        </div>
+        <div class="cell-md-2 p-1">
+            <metro-carousel effect="Swirl" period="500">
+                <metro-carousel-slide cover="/Images/1.jpg" />
+                <metro-carousel-slide cover="/Images/2.jpg" />
+                <metro-carousel-slide cover="/Images/3.jpg" />
+            </metro-carousel>
+        </div>
+        <div class="cell-md-2 p-1">
+            <metro-carousel effect="Switch" period="500">
+                <metro-carousel-slide cover="/Images/1.jpg" />
+                <metro-carousel-slide cover="/Images/2.jpg" />
+                <metro-carousel-slide cover="/Images/3.jpg" />
+            </metro-carousel>
+        </div>
+        <div class="cell-md-2 p-1">
+            <metro-carousel effect="Zoom" period="500">
+                <metro-carousel-slide cover="/Images/1.jpg" />
+                <metro-carousel-slide cover="/Images/2.jpg" />
+                <metro-carousel-slide cover="/Images/3.jpg" />
+            </metro-carousel>
+        </div>
+
+    </div>
+    <div class=" p-2 bg-grayWhite">
+        <div class="code">
+            &lt;metro-carousel&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-carousel-slide cover="/Images/1.jpg" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-carousel-slide cover="/Images/2.jpg" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-carousel-slide cover="/Images/3.jpg" /&gt;
+            &lt;/metro-carousel&gt;
+            &nbsp;
+            &lt;metro-carousel effect="Fade" period="500"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-carousel-slide cover="/Images/1.jpg" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-carousel-slide cover="/Images/2.jpg" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-carousel-slide cover="/Images/3.jpg" /&gt;
+            &lt;/metro-carousel&gt;
+            &nbsp;
+            &lt;metro-carousel effect="SlideV" period="500"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-carousel-slide cover="/Images/1.jpg" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-carousel-slide cover="/Images/2.jpg" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-carousel-slide cover="/Images/3.jpg" /&gt;
+            &lt;/metro-carousel&gt;
+            &nbsp;
+            &lt;metro-carousel effect="Swirl" period="500"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-carousel-slide cover="/Images/1.jpg" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-carousel-slide cover="/Images/2.jpg" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-carousel-slide cover="/Images/3.jpg" /&gt;
+            &lt;/metro-carousel&gt;
+            &nbsp;
+            &lt;metro-carousel effect="Switch" period="500"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-carousel-slide cover="/Images/1.jpg" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-carousel-slide cover="/Images/2.jpg" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-carousel-slide cover="/Images/3.jpg" /&gt;
+            &lt;/metro-carousel&gt;
+            &nbsp;
+            &lt;metro-carousel effect="Zoom" period="500"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-carousel-slide cover="/Images/1.jpg" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-carousel-slide cover="/Images/2.jpg" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-carousel-slide cover="/Images/3.jpg" /&gt;
+            &lt;/metro-carousel&gt;
+        </div>
+    </div>
+</div>

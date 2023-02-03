@@ -1,21 +1,18 @@
-﻿using System.Text.Encodings.Web;
-using Microsoft.AspNetCore.Razor.TagHelpers;
-using System.Threading.Tasks;
-using Generic.Abp.Metro.UI.TagHelpers.Extensions;
+﻿using Generic.Abp.Metro.UI.TagHelpers.Extensions;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Razor.TagHelpers;
+using System.Text.Encodings.Web;
+using System.Threading.Tasks;
 
 namespace Generic.Abp.Metro.UI.TagHelpers.Breadcrumb;
 
 [HtmlTargetElement("metro-breadcrumb-item", TagStructure = TagStructure.NormalOrSelfClosing)]
 public class MetroBreadcrumbItemTagHelper : MetroTagHelper<BreadcrumbGroupItem>
 {
-    public MetroBreadcrumbItemTagHelper(HtmlEncoder htmlEncoder)
+    public MetroBreadcrumbItemTagHelper(HtmlEncoder htmlEncoder) : base(htmlEncoder)
     {
-        HtmlEncoder = htmlEncoder;
     }
 
-    protected HtmlEncoder HtmlEncoder { get; }
     public string Title { get; set; }
     public string Href { get; set; }
 

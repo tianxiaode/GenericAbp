@@ -24,7 +24,7 @@ public abstract class ButtonTagHelperBase : MetroTagHelper, IButtonTagHelperBase
     public bool? IconRight { get; set; }
     public HintPosition HintPosition { get; set; } = HintPosition.Top;
     public string HintText { get; set; }
-    public string HintCls { get; set; }
+    public string ClsHint { get; set; }
 
 
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
@@ -171,14 +171,13 @@ public abstract class ButtonTagHelperBase : MetroTagHelper, IButtonTagHelperBase
         return Task.CompletedTask;
     }
 
-    protected virtual Task ProcessHintAsync(TagHelperContext context, TagHelperOutput output)
+    protected virtual async Task ProcessHintAsync(TagHelperContext context, TagHelperOutput output)
     {
-        if (ButtonStyle != ButtonStyle.Hint) return Task.CompletedTask;
-        var attributes = output.Attributes;
-        attributes.Add("data-role", "hint");
-        attributes.Add("data-hint-text", HintText);
-        attributes.Add("data-cls-hint", HintCls);
-        attributes.Add("data-hint-position", Enum.GetName(HintPosition)?.ToLowerInvariant());
-        return Task.CompletedTask;
+        if (ButtonStyle != ButtonStyle.Hint) return;
+        const string role = "hint";
+        await AddDataAttributeAsync(output, nameof(role), role);
+        await AddDataAttributeAsync(output, nameof(HintText), HintText);
+        await AddDataAttributeAsync(output, nameof(ClsHint), ClsHint);
+        await AddDataAttributeAsync(output, nameof(HintPosition), HintPosition);
     }
 }

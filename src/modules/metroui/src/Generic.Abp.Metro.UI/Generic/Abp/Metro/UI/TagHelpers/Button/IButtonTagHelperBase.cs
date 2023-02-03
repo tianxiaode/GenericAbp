@@ -15,4 +15,7 @@ public interface IButtonTagHelperBase
     public bool? Shadowed { get; }
     string Caption { get; }
     bool? IconRight { get; }
+    HintPosition HintPosition { get; set; }
+    string HintText { get; set; }
+    string ClsHint { get; set; }
 }
