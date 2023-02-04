@@ -9,5 +9,6 @@ public class TagHelperConsts
     public const string NavigationMenuItems = "NavigationMenuItems";
     public const string CardGroupItems = "CardGroupItems";
     public const string BreadcrumbItems = "BreadcrumbItems";
+    public const string MenuGroupItem = "MenuGroupItem";
     public const int DisplayOrder = 10000;
 }

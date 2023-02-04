@@ -4,7 +4,22 @@
 
 $(function () {
 
+    $('#contextMenuArea').on('contextmenu',(e)=>{
+        e.preventDefault();
+        var menu = $('#contextMenu');
+        var area =  $('#contextMenuArea');       
+        var x = e.clientX;
+        var y = e.clientY;
+        var offset = area.offset();
 
+        menu.css('left', x - offset.left);
+        menu.css('top', y- offset.top);
+        menu.show();
+    });
+
+    $(document).on('click', ()=>{
+        $('#contextMenu').hide();
+    })
 
     $('.code').each((i,el)=>{
         var innerHTML = el.innerHTML;        

@@ -14,6 +14,8 @@ namespace Generic.Abp.Metro.UI.TagHelpers;
 public abstract class MetroTagHelper : TagHelper
 {
     protected const string DataAttributePrefix = "data-";
+    protected const string BackgroundColorPrefix = "bg-";
+    protected const string ForegroundColorPrefix = "fg-";
     [HtmlAttributeNotBound] [ViewContext] public ViewContext ViewContext { get; set; }
     protected int OrderIncrement { get; set; } = 0;
 
@@ -31,6 +33,16 @@ public abstract class MetroTagHelper : TagHelper
         }
 
         return Task.CompletedTask;
+    }
+
+    protected virtual async Task AddColorClassAsync<T>(T builder, object value, bool isBackGround = false)
+        where T : class
+    {
+        if (value == null) return;
+        var cls = await ValueToStringAsync(value);
+        if (string.IsNullOrWhiteSpace(cls)) return;
+        cls = (isBackGround ? BackgroundColorPrefix : ForegroundColorPrefix) + cls[..1].ToLowerInvariant() + cls[1..];
+        await AddClassAsync(builder, cls);
     }
 
     protected virtual Task AddClassAsync<T>(T builder, string cls) where T : class
@@ -52,10 +64,9 @@ public abstract class MetroTagHelper : TagHelper
     protected virtual async Task AddDataAttributeAsync<T>(T builder, string name, object value)
     {
         if (string.IsNullOrWhiteSpace(name) || value == null) return;
-        name = $"{DataAttributePrefix}{name.ToKebabCase()}";
-        var strValue = value.ToString();
-        if (value.GetType().IsEnum) strValue = Enum.GetName(value.GetType(), value);
+        var strValue = await ValueToStringAsync(value);
         if (string.IsNullOrWhiteSpace(strValue)) return;
+        name = $"{DataAttributePrefix}{name.ToKebabCase()}";
         strValue.ToKebabCase();
         await AddAttributeAsync(builder, name, strValue.ToLowerInvariant());
     }
@@ -147,6 +158,13 @@ public abstract class MetroTagHelper : TagHelper
         }
 
         return Task.CompletedTask;
+    }
+
+    protected virtual Task<string> ValueToStringAsync(object value)
+    {
+        var type = value.GetType();
+        var str = type.IsEnum ? Enum.GetName(type, value) : value.ToString();
+        return Task.FromResult(str);
     }
 }
 

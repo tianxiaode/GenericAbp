@@ -11,5 +11,6 @@ public enum MetroAccentColor
     Yellow,
     Info,
     Light,
-    Dark
+    Dark,
+    Link
 }

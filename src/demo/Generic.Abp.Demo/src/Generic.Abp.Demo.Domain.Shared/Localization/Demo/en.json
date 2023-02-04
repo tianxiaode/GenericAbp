@@ -73,6 +73,8 @@
     "Borders": "Borders",
     "Carousel": "Carousel",
     "Collapse": "Collapse",
-    "Accordion": "Accordion"
+    "Accordion": "Accordion",
+    "Menu": "Menu",
+    "Dropdown": "Dropdown"
   }
 }

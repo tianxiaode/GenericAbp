@@ -1,0 +1,368 @@
+﻿@page
+@using Generic.Abp.Demo.Localization
+@using Generic.Abp.Metro.UI
+@using Generic.Abp.Metro.UI.TagHelpers.Collapse
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
+@model Generic.Abp.Demo.Web.Pages.TagHelpers.MenuModel
+@inject IPageLayout PageLayout
+@inject IHtmlLocalizer<DemoResource> L
+@{
+    Layout = "~/Pages/TagHelpers/Layout.cshtml";
+    var text = L["Menu"].Value;
+    PageLayout.Content.Title = text;
+}
+<div data-role="panel" class="h-100 w-100 scroll-y" data-title-caption="@text" data-cls-title="bg-dark fg-white  h4 m-0">
+    <div class="row w-100 p-2 border-1 bd-gray border-solid">
+        <div class="cell-md-6 p-1">
+            <metro-menu background-color="MetroColor.Dark" color="MetroColor.White">
+                <metro-menu-item text="Home"/>
+                <metro-menu-item text="Products"></metro-menu-item>
+                <metro-menu-item text="Support">Products</metro-menu-item>
+                <metro-menu-item text="Cart"/>
+            </metro-menu>
+        </div>
+        <div class="cell-md-6 p-1">
+            <metro-menu no-hover="true">
+                <metro-menu-item text="Home" />
+                <metro-menu-item>Products</metro-menu-item>
+                <metro-menu-item text="Support">Products</metro-menu-item>
+                <metro-menu-item text="Cart" />
+            </metro-menu>
+        </div>
+        <div class="cell-md-12 p-1">
+            <metro-menu large="true">
+                <metro-menu-item text="Home" />
+                <metro-menu-item>Products</metro-menu-item>
+                <metro-menu-item text="Support">Products</metro-menu-item>
+                <metro-menu-item text="Cart" />
+            </metro-menu>
+        </div>
+    </div>
+    <div class=" p-2 bg-grayWhite">
+        <div class="code">
+            &lt;metro-menu background-color="MetroColor.Dark" color="MetroColor.White"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item text="Home" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item&gt;Products&lt;/metro-menu-item&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item text="Support"&gt;Products&lt;/metro-menu-item&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item text="Cart" /&gt;
+            &lt;/metro-menu&gt;
+            &nbsp;
+            &lt;metro-menu no-hover="true"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item text="Home" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item&gt;Products&lt;/metro-menu-item&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item text="Support"&gt;Products&lt;/metro-menu-item&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item text="Cart" /&gt;
+            &lt;/metro-menu&gt;
+            &nbsp;
+            &lt;metro-menu large="true"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item text="Home" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item&gt;Products&lt;/metro-menu-item&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item text="Support"&gt;Products&lt;/metro-menu-item&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item text="Cart" /&gt;
+            &lt;/metro-menu&gt;
+        </div>
+    </div>
+    
+    <h4>Horizontal menu with dropdown</h4>
+    <div class="row w-100 p-2 border-1 bd-gray border-solid">
+        <div class="cell-md-6 p-1">
+            <metro-menu>
+                <metro-menu-item text="Home" />
+                <metro-menu-item text="Products" type="DropDown">
+                    <metro-menu type="Dropdown">
+                        <metro-menu-item type="DropDown" text="Windows">
+                            <metro-menu type="Dropdown">
+                                <metro-menu-item text="Windows 10" />
+                                <metro-menu-item text="Windows Server" />
+                                <metro-menu-item type="Divider"/>
+                                <metro-menu-item text="MS-DOS"/>
+                            </metro-menu>
+                        </metro-menu-item>
+                        <metro-menu-item text="Skype" />
+                        <metro-menu-item type="Divider"/>
+                        <metro-menu-item text="Office" />
+                    </metro-menu>
+                </metro-menu-item>
+                <metro-menu-item text="Support">Products</metro-menu-item>
+                <metro-menu-item text="Cart" />
+            </metro-menu>
+        </div>
+        <div class="cell-md-6 p-1">
+            <metro-menu mega="true">
+                <metro-menu-item text="Home" />
+                <metro-menu-item text="Products" type="Mega" mega-container-cls="p-2">
+                    <div class="row">
+                        <div class="cell-md-6">
+                            <h2 class="text-light">Metro UI</h2>
+                            <p>
+                                Is an open source toolkit for developing with ...
+                            </p>
+                        </div>
+                        <div class="cell-md-6">
+                            <h4>Begin with Metro UI</h4>
+                            <ul class="unstyled-list pl-0">
+                                <li><a href="#">Getting started</a></li>
+                                <li><a href="#">Base CSS</a></li>
+                                <li><a href="#">Components</a></li>
+                                <li><a href="#">Utilities</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </metro-menu-item>
+                <metro-menu-item text="Support" type="Mega">
+                    <metro-menu>
+                        <metro-menu-item text="Blog" />
+                        <metro-menu-item text="Forum" />
+                        <metro-menu-item text="Github" />
+                        <metro-menu-item text="Community" />
+                    </metro-menu>
+                </metro-menu-item>
+                <metro-menu-item text="Cart" />
+            </metro-menu>
+        </div>
+    </div>
+    <div class=" p-2 bg-grayWhite">
+        <div class="code">
+            &lt;metro-menu&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item text="Home" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item text="Products" type="DropDown"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu type="Dropdown"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item type="DropDown" text="Windows"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu type="Dropdown"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item text="Windows 10" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item text="Windows Server" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item type="Divider"/&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item text="MS-DOS"/&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/metro-menu&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/metro-menu-item&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item text="Skype" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item type="Divider"/&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item text="Office" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/metro-menu&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;/metro-menu-item&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item text="Support"&gt;Products&lt;/metro-menu-item&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item text="Cart" /&gt;
+            &lt;/metro-menu&gt;
+            &nbsp;
+            &lt;metro-menu mega="true"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item text="Home" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item text="Products" type="Mega" mega-container-cls="p-2"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class="row"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class="cell-md-6"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h2 class="text-light"&gt;Metro UI&lt;/h2&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Is an open source toolkit for developing with ...
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/p&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class="cell-md-6"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h4&gt;Begin with Metro UI&lt;/h4&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;ul class="unstyled-list pl-0"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;li&gt;&lt;a href="#"&gt;Getting started&lt;/a&gt;&lt;/li&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;li&gt;&lt;a href="#"&gt;Base CSS&lt;/a&gt;&lt;/li&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;li&gt;&lt;a href="#"&gt;Components&lt;/a&gt;&lt;/li&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;li&gt;&lt;a href="#"&gt;Utilities&lt;/a&gt;&lt;/li&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/ul&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;/metro-menu-item&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item text="Support" type="Mega"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item text="Blog" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item text="Forum" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item text="Github" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item text="Community" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/metro-menu&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;/metro-menu-item&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item text="Cart" /&gt;
+            &lt;/metro-menu&gt;
+        </div>
+    </div>
+
+
+    <h4>Vertical menu</h4>
+    <div class="row w-100 p-2 border-1 bd-gray border-solid">
+        <div class="cell-md-2 p-1">
+            <metro-menu type="Vertical">
+                <metro-menu-item  text="General" type="Title" />
+                <metro-menu-item text="Home" icon="mif-home" />
+                <metro-menu-item text="Products" type="Title" />
+                <metro-menu-item text="Windows" icon="mif-windows" />
+                <metro-menu-item text="Office 365" icon="mif-library " />
+                <metro-menu-item text="Skype" icon="mif-skype" />
+                <metro-menu-item text="Support" type="Title" />
+                <metro-menu-item text="Community" hot-key="Alt+F1" type="DropDown">
+                    <metro-menu type="Vertical" dropdown="true">
+                        <metro-menu-item text="Blog" />
+                        <metro-menu-item text="Github" />
+                        <metro-menu-item text="Forum" />
+                        <metro-menu-item type="Divider" />
+                        <metro-menu-item type="Custom" class="p-2 bg-light">
+                            <button class="button square primary"><span class="mif-target"></span></button>
+                            <button class="button square success"><span class="mif-apps"></span></button>
+                            <button class="button square alert"><span class="mif-file-code"></span></button>
+                            <button class="button square warning"><span class="mif-download"></span></button>
+                        </metro-menu-item>
+                    </metro-menu>
+                </metro-menu-item>
+                <metro-menu-item text="Shop" type="Title" />
+                <metro-menu-item text="Cart" icon="mif-cart" />
+            </metro-menu>
+        </div>
+    </div>
+    <div class=" p-2 bg-grayWhite">
+        <div class="code">
+            &lt;metro-menu type="Vertical"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item  text="General" type="Title" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item text="Home" icon="mif-home" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item text="Products" type="Title" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item text="Windows" icon="mif-windows" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item text="Office 365" icon="mif-library " /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item text="Skype" icon="mif-skype" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item text="Support" type="Title" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item text="Community" hot-key="Alt+F1" type="DropDown"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu type="Vertical" dropdown="true"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item text="Blog" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item text="Github" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item text="Forum" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item type="Divider" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item type="Custom" class="p-2 bg-light"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button class="button square primary"&gt;&lt;span class="mif-target"&gt;&lt;/span&gt;&lt;/button&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button class="button square success"&gt;&lt;span class="mif-apps"&gt;&lt;/span&gt;&lt;/button&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button class="button square alert"&gt;&lt;span class="mif-file-code"&gt;&lt;/span&gt;&lt;/button&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button class="button square warning"&gt;&lt;span class="mif-download"&gt;&lt;/span&gt;&lt;/button&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/metro-menu-item&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/metro-menu&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;/metro-menu-item&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item text="Shop" type="Title" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item text="Cart" icon="mif-cart" /&gt;
+            &lt;/metro-menu&gt;
+        </div>
+    </div>
+    
+    <h4>Tool menu</h4>
+    <div class="w-100 p-2 border-1 bd-gray border-solid clear">
+        <metro-menu type="Tool" open="true" class="mr-1">
+            <metro-menu-item icon="mif-apps" />
+            <metro-menu-item icon="mif-laptop" type="DropDown">
+                <metro-menu type="Tool" dropdown="true">
+                    <metro-menu-item icon="mif-bubbles" />
+                    <metro-menu-item icon="mif-bubble" />
+                    <metro-menu-item icon="mif-user" />
+                </metro-menu>
+            </metro-menu-item>
+            <metro-menu-item icon="mif-bubbles" />
+            <metro-menu-item icon="mif-bubble" />
+            <metro-menu-item icon="mif-user" />
+        </metro-menu>
+        <metro-menu type="Tool" open="true" horizontal="true" class="mr-1">
+            <metro-menu-item icon="mif-apps" />
+            <metro-menu-item icon="mif-laptop" type="DropDown">
+                <metro-menu type="Tool" dropdown="true">
+                    <metro-menu-item icon="mif-bubbles" />
+                    <metro-menu-item icon="mif-bubble" />
+                    <metro-menu-item icon="mif-user" />
+                </metro-menu>
+            </metro-menu-item>
+            <metro-menu-item icon="mif-bubbles" />
+            <metro-menu-item icon="mif-bubble" />
+            <metro-menu-item icon="mif-user" />
+        </metro-menu>
+        <metro-menu type="Tool" open="true" compact="true" class="mr-1">
+            <metro-menu-item icon="mif-apps" />
+            <metro-menu-item icon="mif-laptop" type="DropDown">
+                <metro-menu type="Tool" dropdown="true">
+                    <metro-menu-item icon="mif-bubbles" />
+                    <metro-menu-item icon="mif-bubble" />
+                    <metro-menu-item icon="mif-user" />
+                </metro-menu>
+            </metro-menu-item>
+            <metro-menu-item icon="mif-bubbles" />
+            <metro-menu-item icon="mif-bubble" />
+            <metro-menu-item icon="mif-user" />
+        </metro-menu>
+    </div>
+    <div class=" p-2 bg-grayWhite">
+        <div class="code">
+            &lt;metro-menu type="Tool" open="true" class="mr-1"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item icon="mif-apps" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item icon="mif-laptop" type="DropDown"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu type="Tool" dropdown="true"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item icon="mif-bubbles" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item icon="mif-bubble" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item icon="mif-user" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/metro-menu&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;/metro-menu-item&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item icon="mif-bubbles" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item icon="mif-bubble" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item icon="mif-user" /&gt;
+            &lt;/metro-menu&gt;
+            &nbsp;
+            &lt;metro-menu type="Tool" open="true" horizontal="true" class="mr-1"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item icon="mif-apps" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item icon="mif-laptop" type="DropDown"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu type="Tool" dropdown="true"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item icon="mif-bubbles" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item icon="mif-bubble" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item icon="mif-user" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/metro-menu&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;/metro-menu-item&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item icon="mif-bubbles" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item icon="mif-bubble" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item icon="mif-user" /&gt;
+            &lt;/metro-menu&gt;
+            &nbsp;
+            &lt;metro-menu type="Tool" open="true" compact="true" class="mr-1"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item icon="mif-apps" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item icon="mif-laptop" type="DropDown"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu type="Tool" dropdown="true"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item icon="mif-bubbles" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item icon="mif-bubble" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item icon="mif-user" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/metro-menu&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;/metro-menu-item&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item icon="mif-bubbles" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item icon="mif-bubble" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item icon="mif-user" /&gt;
+            &lt;/metro-menu&gt;
+        </div>
+    </div>
+
+    <h4>Context menu</h4>
+    <div class="w-100 p-2 border-1 bd-gray border-solid text-center" style="height: 200px" id="contextMenuArea">
+        <h4>Right click me!</h4>
+        <metro-menu type="Context" id="contextMenu">
+            <metro-menu-item icon="mif-user" text="Profile"/>
+            <metro-menu-item text="Calendar"/>
+            <metro-menu-item text="Photo"/>
+            <metro-menu-item type="Divider"/>
+            <metro-menu-item icon="mif-target" text="Location"/>
+        </metro-menu>
+    </div>
+    <div class=" p-2 bg-grayWhite">
+        <div class="code">
+            &lt;metro-menu type="Context" id="contextMenu"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item icon="mif-user" text="Profile"/&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item text="Calendar"/&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item text="Photo"/&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item type="Divider"/&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item icon="mif-target" text="Location"/&gt;
+            &lt;/metro-menu&gt;
+        </div>
+        <pre><code class="language-javascript">
+            $('#contextMenuArea').on('contextmenu',(e)=>{
+                e.preventDefault();
+                var menu = $('#contextMenu');
+                var area =  $('#contextMenuArea');       
+                var x = e.clientX;
+                var y = e.clientY;
+                var offset = area.offset();
+
+                menu.css('left', x - offset.left);
+                menu.css('top', y- offset.top);
+                menu.show();
+            });
+
+        </code></pre>
+    </div>
+</div>

@@ -50,11 +50,11 @@
     <Folder Include="Generic\Abp\Metro\UI\TagHelpers\Panel\" />
     <Folder Include="Generic\Abp\Metro\UI\TagHelpers\Badge\" />
     <Folder Include="Generic\Abp\Metro\UI\TagHelpers\Figure\" />
-    <Folder Include="Generic\Abp\Metro\UI\TagHelpers\Dropdown\" />
     <Folder Include="Generic\Abp\Metro\UI\TagHelpers\Card\" />
     <Folder Include="Generic\Abp\Metro\UI\TagHelpers\Border\" />
     <Folder Include="Generic\Abp\Metro\UI\TagHelpers\Collapse\" />
     <Folder Include="Generic\Abp\Metro\UI\TagHelpers\Accordion\" />
+    <Folder Include="Generic\Abp\Metro\UI\TagHelpers\Menu\" />
   </ItemGroup>
 
 </Project>

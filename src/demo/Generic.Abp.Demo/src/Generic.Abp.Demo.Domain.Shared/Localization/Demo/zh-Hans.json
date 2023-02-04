@@ -76,6 +76,8 @@
     "Borders": "边框",
     "Carousel": "轮播",
     "Collapse": "折叠",
-    "Accordion": "手风琴"
+    "Accordion": "手风琴",
+    "Menu": "菜单",
+    "Dropdown": "下拉菜单"
   }
 }
