@@ -89,7 +89,7 @@
             </metro-menu>
         </div>
         <div class="cell-md-6 p-1">
-            <metro-menu mega="true">
+            <metro-menu>
                 <metro-menu-item text="Home" />
                 <metro-menu-item text="Products" type="Mega" mega-container-cls="p-2">
                     <div class="row">
@@ -145,7 +145,7 @@
             &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item text="Cart" /&gt;
             &lt;/metro-menu&gt;
             &nbsp;
-            &lt;metro-menu mega="true"&gt;
+            &lt;metro-menu &gt;
             &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item text="Home" /&gt;
             &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item text="Products" type="Mega" mega-container-cls="p-2"&gt;
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class="row"&gt;
@@ -329,8 +329,8 @@
     </div>
 
     <h4>Context menu</h4>
-    <div class="w-100 p-2 border-1 bd-gray border-solid text-center" style="height: 200px" id="contextMenuArea">
-        <h4>Right click me!</h4>
+    <div class="w-100 p-2 border-1 bd-gray border-solid text-center " style="height: 200px; " id="contextMenuArea">
+        <h4 style="line-height: 200px;">Right click me!</h4>
         <metro-menu type="Context" id="contextMenu">
             <metro-menu-item icon="mif-user" text="Profile"/>
             <metro-menu-item text="Calendar"/>

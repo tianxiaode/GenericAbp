@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Text.Encodings.Web;
+using System.Threading.Tasks;
 using Generic.Abp.Metro.UI.TagHelpers.Menu;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
@@ -6,6 +7,10 @@ namespace Generic.Abp.Metro.UI.TagHelpers.Dropdown;
 
 public class MetroDropdownMenuTagHelper : MetroMenuTagHelper
 {
+    public MetroDropdownMenuTagHelper(HtmlEncoder htmlEncoder) : base(htmlEncoder)
+    {
+    }
+
     public DropdownDirection Direction { get; set; } = DropdownDirection.Down;
 
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)

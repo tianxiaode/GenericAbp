@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Text.Json;
+using System.Threading.Tasks;
 using Generic.Abp.Metro.UI.TagHelpers.Button;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
@@ -12,6 +14,9 @@ public class MetroDropdownButtonTagHelper : MetroButtonTagHelper
     {
         output.Attributes.AddClass("dropdown-toggle");
         if (Split) output.Attributes.AddClass("split");
+        //context.Items[$"{context.UniqueId}_split"] = true;
+        output.PreElement.AppendHtml(
+            $"<div>{JsonSerializer.Serialize(context.Items.Select(m => $"{m.Key}-{m.Value}"))}</div>");
         return base.ProcessAsync(context, output);
     }
 }

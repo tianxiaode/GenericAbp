@@ -1,4 +1,5 @@
 using Generic.Abp.Metro.UI.TagHelpers.Extensions;
+using Generic.Abp.Metro.UI.TagHelpers.Menu;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
@@ -8,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace Generic.Abp.Metro.UI.TagHelpers;
 
@@ -180,7 +182,44 @@ public abstract class MetroTagHelper<T> : MetroTagHelper where T : IGroupItem, n
 
     protected virtual void InitGroupItems(TagHelperContext context)
     {
-        context.Items.Add(GroupItemsName, new List<T>());
+        context.Items.TryAdd(GroupItemsName, new List<T>());
+    }
+
+    protected virtual async Task<List<T>> InitGroupItemsAsync(TagHelperContext context, bool needDepth = false)
+    {
+        var list = new List<T>();
+        if (context.Items.ContainsKey(GroupItemsName))
+        {
+            list = context.Items[GroupItemsName] as List<T>;
+        }
+        else
+        {
+            context.Items.Add(GroupItemsName, list);
+        }
+
+        if (!needDepth) return list;
+        var depthName = await GetDepthNameAsync();
+        if (!context.Items.ContainsKey(depthName))
+        {
+            context.Items[depthName] = 0;
+        }
+
+        var depth = (int)context.Items[depthName] + 1;
+        context.Items[context.UniqueId] = depth;
+        context.Items[depthName] = depth;
+        return list;
+    }
+
+    protected virtual async Task<int> GetItemDepthAsync(TagHelperContext context)
+    {
+        var name = await GetDepthNameAsync();
+        if (context.Items.ContainsKey(name)) return (int)context.Items[name];
+        return 0;
+    }
+
+    protected virtual Task<string> GetDepthNameAsync()
+    {
+        return Task.FromResult($"{GroupItemsName}_depth");
     }
 
     protected virtual Task<List<T>> GetGroupItems(TagHelperContext context)
