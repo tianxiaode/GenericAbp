@@ -9,6 +9,7 @@ public class MetroCardContentTagHelper : MetroCardTagHelperBase
 {
     public MetroCardContentTagHelper(HtmlEncoder htmlEncoder) : base(htmlEncoder)
     {
+        GroupItemsName = TagHelperConsts.CardGroupItems;
     }
 
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)

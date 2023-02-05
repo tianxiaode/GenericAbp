@@ -1,21 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Razor.TagHelpers;
 using System.Linq;
-using System.Text.Encodings.Web;
-using System.Text.Json;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace Generic.Abp.Metro.UI.TagHelpers.Menu;
 
-public class MetroMenuTagHelper : MetroTagHelper<MenuGroupItem>
+public class MetroMenuTagHelper : MetroTagHelper
 {
-    public MetroMenuTagHelper(HtmlEncoder htmlEncoder) : base(htmlEncoder)
-    {
-        GroupItemsName = nameof(MetroMenuTagHelper);
-    }
-
     protected const string Role = "Dropdown";
-    protected string IsMega { get; set; }
     public MenuType Type { get; set; } = MenuType.Horizontal;
     public MetroColor? BackgroundColor { get; set; }
     public MetroColor? Color { get; set; }
@@ -28,12 +19,12 @@ public class MetroMenuTagHelper : MetroTagHelper<MenuGroupItem>
 
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
-        var groupItem = await InitGroupItemsAsync(context, true);
+        var list = await AddFlagListAsync(context, nameof(MetroMenuTagHelper));
         output.TagName = "ul";
         output.TagMode = TagMode.StartTagAndEndTag;
         var childContentAsync = await output.GetChildContentAsync();
         var depth = (int)context.Items[context.UniqueId];
-        if (groupItem.Any(m => m.Depth == depth && m.IsMega))
+        if (list.Any(m => m.Contains($"{TagHelperConsts.MenuIsMegaName}_{depth}")))
         {
             output.Attributes.AddClass("mega");
         }

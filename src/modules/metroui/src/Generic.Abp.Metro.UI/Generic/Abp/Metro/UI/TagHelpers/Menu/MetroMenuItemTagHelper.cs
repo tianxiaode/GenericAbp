@@ -1,21 +1,13 @@
-﻿using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using System.Text;
-using System.Text.Encodings.Web;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Generic.Abp.Metro.UI.TagHelpers.Menu;
 
 [HtmlTargetElement("metro-menu-item", TagStructure = TagStructure.NormalOrSelfClosing)]
-public class MetroMenuItemTagHelper : MetroTagHelper<MenuGroupItem>
+public class MetroMenuItemTagHelper : MetroTagHelper
 {
-    public MetroMenuItemTagHelper(HtmlEncoder htmlEncoder) : base(htmlEncoder)
-    {
-        GroupItemsName = nameof(MetroMenuTagHelper);
-    }
-
     public MenuItemType Type { get; set; } = MenuItemType.Default;
     public string Text { get; set; }
     public string Href { get; set; }
@@ -29,8 +21,7 @@ public class MetroMenuItemTagHelper : MetroTagHelper<MenuGroupItem>
         output.TagMode = TagMode.StartTagAndEndTag;
         if (Type == MenuItemType.Mega)
         {
-            var depth = await GetItemDepthAsync(context);
-            await AddGroupItemAsync(context, new MenuGroupItem(depth));
+            await AddFlagValueAsync(context, nameof(MetroMenuTagHelper), TagHelperConsts.MenuIsMegaName);
         }
 
         var child = await output.GetChildContentAsync();

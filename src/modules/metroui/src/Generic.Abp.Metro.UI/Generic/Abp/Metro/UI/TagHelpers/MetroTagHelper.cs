@@ -168,6 +168,50 @@ public abstract class MetroTagHelper : TagHelper
         var str = type.IsEnum ? Enum.GetName(type, value) : value.ToString();
         return Task.FromResult(str);
     }
+
+    #region depth item
+
+    protected virtual async Task<List<string>> AddFlagListAsync(TagHelperContext context, string itemName)
+    {
+        var name = await GetItemKeyNameAsync(itemName, isDepth: true);
+        if (!context.Items.ContainsKey(name))
+        {
+            context.Items[name] = 0;
+        }
+
+        var depth = (int)context.Items[name] + 1;
+        context.Items[context.UniqueId] = depth;
+        context.Items[name] = depth;
+        var flagName = await GetItemKeyNameAsync(itemName, isFlag: true);
+        var list = new List<string>();
+        context.Items[flagName] = list;
+        return list;
+    }
+
+    protected virtual async Task AddFlagValueAsync(TagHelperContext context, string itemName, string value)
+    {
+        var name = await GetItemKeyNameAsync(itemName, isFlag: true);
+        if (!context.Items.ContainsKey(name)) return;
+        var depthName = await GetItemKeyNameAsync(itemName, isDepth: true);
+        if (context.Items.TryGetValue(depthName, out var depth))
+        {
+            var list = context.Items[name] as List<string>;
+            list?.Add($"{value}_{depth}");
+        }
+    }
+
+
+    protected virtual Task<string> GetItemKeyNameAsync(string itemName, bool isDepth = false, bool isGroup = false,
+        bool isFlag = true)
+    {
+        var result = itemName + "_";
+        if (isDepth) result += "depth";
+        if (isGroup) result += "group";
+        if (isFlag) result += "flag";
+        return Task.FromResult(result);
+    }
+
+    #endregion
 }
 
 public abstract class MetroTagHelper<T> : MetroTagHelper where T : IGroupItem, new()
@@ -180,12 +224,7 @@ public abstract class MetroTagHelper<T> : MetroTagHelper where T : IGroupItem, n
     protected HtmlEncoder HtmlEncoder { get; }
     protected string GroupItemsName { get; set; }
 
-    protected virtual void InitGroupItems(TagHelperContext context)
-    {
-        context.Items.TryAdd(GroupItemsName, new List<T>());
-    }
-
-    protected virtual async Task<List<T>> InitGroupItemsAsync(TagHelperContext context, bool needDepth = false)
+    protected virtual Task<List<T>> InitGroupItemsAsync(TagHelperContext context)
     {
         var list = new List<T>();
         if (context.Items.ContainsKey(GroupItemsName))
@@ -197,17 +236,7 @@ public abstract class MetroTagHelper<T> : MetroTagHelper where T : IGroupItem, n
             context.Items.Add(GroupItemsName, list);
         }
 
-        if (!needDepth) return list;
-        var depthName = await GetDepthNameAsync();
-        if (!context.Items.ContainsKey(depthName))
-        {
-            context.Items[depthName] = 0;
-        }
-
-        var depth = (int)context.Items[depthName] + 1;
-        context.Items[context.UniqueId] = depth;
-        context.Items[depthName] = depth;
-        return list;
+        return Task.FromResult(list);
     }
 
     protected virtual async Task<int> GetItemDepthAsync(TagHelperContext context)

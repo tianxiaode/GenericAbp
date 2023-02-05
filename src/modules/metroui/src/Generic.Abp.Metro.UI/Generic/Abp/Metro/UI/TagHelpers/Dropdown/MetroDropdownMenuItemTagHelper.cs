@@ -5,7 +5,4 @@ namespace Generic.Abp.Metro.UI.TagHelpers.Dropdown;
 
 public class MetroDropdownMenuItemTagHelper : MetroMenuItemTagHelper
 {
-    public MetroDropdownMenuItemTagHelper(HtmlEncoder htmlEncoder) : base(htmlEncoder)
-    {
-    }
 }
