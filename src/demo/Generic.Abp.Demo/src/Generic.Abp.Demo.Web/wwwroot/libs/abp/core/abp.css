@@ -220,9 +220,23 @@
     min-width: 0;
     padding: 0 .5625rem !important;
 }
+.split-button .split.link{
+    background-color: transparent;
+    color: #0366d6;
+}
 
 .split-button>:nth-child(2){
     margin-left: 0;
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+}
+.split-button>:nth-child(1){
+    border-bottom-right-radius: 0 !important;
+    border-top-right-radius: 0 !important;
+}
+
+.text-indent{    
+    text-indent: 2em;
 }
 
 @keyframes spin {

@@ -11,6 +11,6 @@
 .code-attribute{
     color: #ff0000;
 }
-.text-indent{    
-    text-indent: 2em;
+.demo-grid [class*=cell] {
+    padding: 0 12px;
 }

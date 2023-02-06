@@ -75,6 +75,7 @@
     "Collapse": "Collapse",
     "Accordion": "Accordion",
     "Menu": "Menu",
-    "Dropdown": "Dropdown"
+    "Dropdown": "Dropdown",
+    "Grid": "Grid"
   }
 }

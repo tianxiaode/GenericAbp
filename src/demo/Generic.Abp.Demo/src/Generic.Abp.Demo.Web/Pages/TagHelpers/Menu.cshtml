@@ -1,7 +1,9 @@
 ﻿@page
 @using Generic.Abp.Demo.Localization
 @using Generic.Abp.Metro.UI
+@using Generic.Abp.Metro.UI.TagHelpers
 @using Generic.Abp.Metro.UI.TagHelpers.Collapse
+@using Generic.Abp.Metro.UI.TagHelpers.Core
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Volo.Abp.AspNetCore.Mvc.UI.Layout
 @model Generic.Abp.Demo.Web.Pages.TagHelpers.MenuModel
@@ -15,7 +17,7 @@
 <div data-role="panel" class="h-100 w-100 scroll-y" data-title-caption="@text" data-cls-title="bg-dark fg-white  h4 m-0">
     <div class="row w-100 p-2 border-1 bd-gray border-solid">
         <div class="cell-md-6 p-1">
-            <metro-menu background-color="MetroColor.Dark" color="MetroColor.White">
+            <metro-menu background-color="Dark" color="White">
                 <metro-menu-item text="Home"/>
                 <metro-menu-item text="Products"></metro-menu-item>
                 <metro-menu-item text="Support">Products</metro-menu-item>

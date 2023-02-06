@@ -1,4 +1,4 @@
-﻿namespace Generic.Abp.Metro.UI;
+﻿namespace Generic.Abp.Metro.UI.TagHelpers.Core;
 
 public enum MetroColor
 {

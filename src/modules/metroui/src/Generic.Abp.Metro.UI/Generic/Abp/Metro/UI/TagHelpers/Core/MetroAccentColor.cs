@@ -1,4 +1,4 @@
-﻿namespace Generic.Abp.Metro.UI.TagHelpers;
+﻿namespace Generic.Abp.Metro.UI.TagHelpers.Core;
 
 public enum MetroAccentColor
 {

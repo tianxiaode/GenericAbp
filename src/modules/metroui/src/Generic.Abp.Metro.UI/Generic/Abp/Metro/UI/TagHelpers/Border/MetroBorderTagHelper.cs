@@ -2,13 +2,14 @@
 using System;
 using System.Text;
 using System.Threading.Tasks;
+using Generic.Abp.Metro.UI.TagHelpers.Core;
 
 namespace Generic.Abp.Metro.UI.TagHelpers.Border;
 
-[HtmlTargetElement(Attributes = "metro-border")]
+[HtmlTargetElement(Attributes = "border")]
 public class MetroBorderTagHelper : MetroTagHelper
 {
-    [HtmlAttributeName("metro-border")] public BorderType BorderType { get; set; }
+    [HtmlAttributeName("border")] public BorderType BorderType { get; set; }
 
     public int BorderSize { get; set; } = 1;
     public MetroColor BorderColor { get; set; } = MetroColor.Gray;

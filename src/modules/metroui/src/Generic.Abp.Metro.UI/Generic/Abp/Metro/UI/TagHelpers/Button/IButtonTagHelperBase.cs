@@ -1,4 +1,6 @@
-﻿namespace Generic.Abp.Metro.UI.TagHelpers.Button;
+﻿using Generic.Abp.Metro.UI.TagHelpers.Core;
+
+namespace Generic.Abp.Metro.UI.TagHelpers.Button;
 
 public interface IButtonTagHelperBase
 {

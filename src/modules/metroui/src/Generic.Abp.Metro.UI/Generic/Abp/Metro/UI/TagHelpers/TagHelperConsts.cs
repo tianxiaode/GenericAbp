@@ -10,5 +10,6 @@ public class TagHelperConsts
     public const string CardGroupItems = "CardGroupItems";
     public const string BreadcrumbItems = "BreadcrumbItems";
     public const string MenuIsMegaName = "IsMega";
+    public const string DropdownIsSplitName = "IsSplit";
     public const int DisplayOrder = 10000;
 }

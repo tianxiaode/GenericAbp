@@ -1,7 +1,9 @@
 ﻿@page
 @using Generic.Abp.Demo.Localization
 @using Generic.Abp.Metro.UI
+@using Generic.Abp.Metro.UI.TagHelpers
 @using Generic.Abp.Metro.UI.TagHelpers.Collapse
+@using Generic.Abp.Metro.UI.TagHelpers.Core
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Volo.Abp.AspNetCore.Mvc.UI.Layout
 @inject IPageLayout PageLayout
@@ -31,7 +33,7 @@
         </metro-dropdown>
         <metro-dropdown class="mr-1">
             <metro-dropdown-button shape="Square" icon="apps" icon-type="Metro" accent-color="Alert" />
-            <metro-dropdown-menu background-color="MetroColor.Red">
+            <metro-dropdown-menu background-color="Red">
                 <metro-dropdown-menu-item text="One" />
                 <metro-dropdown-menu-item text="Two" />
                 <metro-dropdown-menu-item text="Three" />
@@ -119,5 +121,80 @@
             &lt;/metro-dropdown&gt;
         </div>
     </div>
-    
+
+    <h4>Split button</h4>
+    <div class="row w-100 p-2 border-1 bd-gray border-solid">
+        <metro-dropdown split="true" class="mr-1">
+            <metro-dropdown-button>Menu toggle</metro-dropdown-button>
+            <metro-dropdown-menu>
+                <metro-dropdown-menu-item text="One" />
+                <metro-dropdown-menu-item text="Two" />
+                <metro-dropdown-menu-item text="Three" />
+            </metro-dropdown-menu>
+        </metro-dropdown>
+        <metro-dropdown split="true" class="mr-1">
+            <metro-dropdown-button accent-color="Link">Menu toggle</metro-dropdown-button>
+            <metro-dropdown-menu>
+                <metro-dropdown-menu-item text="One" />
+                <metro-dropdown-menu-item text="Two" />
+                <metro-dropdown-menu-item text="Three" />
+            </metro-dropdown-menu>
+        </metro-dropdown>
+        <metro-dropdown split="true" class="mr-1">
+            <metro-dropdown-button shape="Square" icon="apps" icon-type="Metro" accent-color="Alert" />
+            <metro-dropdown-menu background-color="Red">
+                <metro-dropdown-menu-item text="One" />
+                <metro-dropdown-menu-item text="Two" />
+                <metro-dropdown-menu-item text="Three" />
+            </metro-dropdown-menu>
+        </metro-dropdown>
+        <metro-dropdown split="true" class="mr-1" >
+            <metro-dropdown-button accent-color="Success" rounded="true" text="Drop Up" />
+            <metro-dropdown-menu direction="Up">
+                <metro-dropdown-menu-item text="One" />
+                <metro-dropdown-menu-item text="Two" />
+                <metro-dropdown-menu-item text="Three" />
+            </metro-dropdown-menu>
+        </metro-dropdown>
+    </div>
+    <div class=" p-2 bg-grayWhite">
+        <div class="code">
+            &lt;metro-dropdown split="true" class="mr-1"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-dropdown-button&gt;Menu toggle&lt;/metro-dropdown-button&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-dropdown-menu&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-dropdown-menu-item text="One" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-dropdown-menu-item text="Two" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-dropdown-menu-item text="Three" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;/metro-dropdown-menu&gt;
+            &lt;/metro-dropdown&gt;
+            &nbsp;
+            &lt;metro-dropdown split="true" class="mr-1"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-dropdown-button accent-color="Link"&gt;Menu toggle&lt;/metro-dropdown-button&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-dropdown-menu&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-dropdown-menu-item text="One" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-dropdown-menu-item text="Two" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-dropdown-menu-item text="Three" /&gt;
+            &lt;/metro-dropdown-menu&gt;
+            &lt;/metro-dropdown&gt;
+            &nbsp;
+            &lt;metro-dropdown split="true" class="mr-1"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-dropdown-button shape="Square" icon="apps" icon-type="Metro" accent-color="Alert" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-dropdown-menu background-color="MetroColor.Red"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-dropdown-menu-item text="One" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-dropdown-menu-item text="Two" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-dropdown-menu-item text="Three" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;/metro-dropdown-menu&gt;
+            &lt;/metro-dropdown&gt;
+            &nbsp;
+            &lt;metro-dropdown split="true" class="mr-1"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-dropdown-button  accent-color="Success" text="Drop Up"  /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-dropdown-menu direction="Up"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-dropdown-menu-item text="One" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-dropdown-menu-item text="Two" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-dropdown-menu-item text="Three" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;/metro-dropdown-menu&gt;
+            &lt;/metro-dropdown&gt;
+        </div>
+    </div>
+
 </div>
