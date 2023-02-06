@@ -14,87 +14,42 @@
     var cultureName = CultureInfo.CurrentCulture.Name?.ToLowerInvariant();
 }
 <div data-role="panel" class="h-100 w-100 scroll-y" data-title-caption="@title" data-cls-title="bg-dark fg-white h4 m-0">
-    @{
-        var menuItems = new List<MetroNavigationMenuItem>()
-        {
-            new(){ Type = MetroNavigationMenuItemType.Header, Text = L["NavigationViewMenu"].Value},
-            new(){ Type = MetroNavigationMenuItemType.Separator},
-            new(){ Type = MetroNavigationMenuItemType.Header, Text = "Main Pages"},
-            new(){ Text = "Apps", Icon = "mif-apps", Url = "", Value = "Apps"},
-            new(){ Text = "Games", Icon = "mif-gamepad", Url = "", Value = "Games"},
-        };
-        var cSharpCode = @"
-            var menuItems = new List<MetroNavigationMenuItem>()
-            {
-                new(){ Type = MetroNavigationMenuItemType.Header, Text = L[""NavigationViewMenu""].Value},
-                new(){ Type = MetroNavigationMenuItemType.Separator},
-                new(){ Type = MetroNavigationMenuItemType.Header, Text = ""Main Pages""},
-                new(){ Text = ""Apps"", Icon = ""mif-apps"", Href = """", Value = ""Apps""},
-                new(){ Text = ""Games"", Icon = ""mif-gamepad"", Href = """", Value = ""Games""},
-            }
-        ";
-    }
     <div class="row  p-2 border-1 bd-gray border-solid" style="height: 320px;">
         <metro-navigation-view>
             <metro-navigation-panel pull-button="true" suggest-box="true">
-
-                <metro-navigation-menu class="px-1" id="NavViewMenu" asp-items="@menuItems" current-value="Music">
-                    <metro-navigation-menu-item text="Music" icon="mif-music" display-order="10301" value="Music" />
+                <metro-navigation-menu class="px-1" id="NavViewMenu" current-value="Music">
+                    <metro-navigation-menu-item type="Header" text="@L["NavigationViewMenu"].Value" />
+                    <metro-navigation-menu-item type="Separator" />
+                    <metro-navigation-menu-item type="Header" text="Main Pages" />
+                    <metro-navigation-menu-item text="Apps" icon="mif-apps" value="Apps" />
+                    <metro-navigation-menu-item text="Music" icon="mif-music" value="Music" />
+                    <metro-navigation-menu-item text="Games" icon="mif-gamepad" value="Games" />
                 </metro-navigation-menu>
             </metro-navigation-panel>
-
             <metro-navigation-view-content>
                 @L["NavigationViewContent"].Value
             </metro-navigation-view-content>
         </metro-navigation-view>
     </div>
     <div class=" p-2 bg-grayWhite">
-        <pre><code class="language-csharp">@cSharpCode</code></pre>
         <div class="code">
             &lt;metro-navigation-view&gt;
             &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-navigation-panel pull-button="true" suggest-box="true"&gt;
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-navigation-menu class="px-1" id="NavViewMenu" asp-items="@@menuItems" current-value="Music"&gt;
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-navigation-menu-item text="Music" icon="mif-music" display-order="10301" value="Music" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-navigation-menu class="px-1" id="NavViewMenu" current-value="Music"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-navigation-menu-item type="Header" text="@@L["NavigationViewMenu"].Value" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-navigation-menu-item type="Separator" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-navigation-menu-item type="Header" text="Main Pages" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-navigation-menu-item text="Apps" icon="mif-apps" value="Apps" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-navigation-menu-item text="Music" icon="mif-music" value="Music" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-navigation-menu-item text="Games" icon="mif-gamepad" value="Games" /&gt;
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/metro-navigation-menu&gt;
             &nbsp;&nbsp;&nbsp;&nbsp;&lt;/metro-navigation-panel&gt;
             &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-navigation-view-content&gt;
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@@L["NavigationViewContent"].Value
             &nbsp;&nbsp;&nbsp;&nbsp;&lt;/metro-navigation-view-content&gt;
-            &lt;/metro-navigation-view>
-
+            &lt;/metro-navigation-view&gt;
         </div>
     </div>
-    @if (cultureName.Equals("zh-Hans", StringComparison.OrdinalIgnoreCase))
-    {
-        <h4>菜单项的显示顺序</h4>
-        <div class="py-2" data-replace="true">
-            <p class="text-indent">
-                菜单项的显示顺序是由[[flex]]布局的[[order]] 来决定的。
-            </p>
-            <p class="text-indent">
-                使用[[asp-items]]输出的菜单项，如果没有指定[[DisplayOrder]]值，则会输出默认的[[DisplayOrder]]值。默认的[[DisplayOrder]]值从[[10000]]开始计算,每添加一项增加[[100]]。
-            </p>
-            <p class="text-indent">
-                不在[[asp-items]]中的菜单项，可通过设置[[display-order]]的值来调整显示顺序，如示例中的[[Music]]所示。如果不设置，显示顺序默认值为[[10000]]，会显示在菜单开始部分。
-            </p>
-        </div>
 
-    }
-    else
-    {
-        <div class="py-2" data-replace="true">
-            <h4>The display order of the menu item</h4>
-            <p>
-                The order in which menu items are displayed is determined by the [[order]] of the [[flex]] layout.
-            </p>
-            <p>
-                Using [[asp-items]] to output a menu item, if no [[DisplayOrder]] value is specified, the default [[DisplayOrder]] value is output. The default [[DisplayOrder]] value starts at [[10,000]] and increases by [[100]] for each additional item.
-            </p>
-            <p>
-                For menu items that are not in [[asp-items]], the display order can be adjusted by setting the value of [[display-order]], as shown in [[Music]] in the example. If not set, the display order defaults to [[10,000]] and is displayed at the beginning of the menu.
-            </p>
-        </div>
-    }
-   
 
 </div>

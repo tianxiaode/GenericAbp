@@ -27,10 +27,17 @@ public class MetroColumnTagHelper : MetroTagHelper
     public ColumnSize OffsetXl { get; set; } = ColumnSize.Default;
 
     public VerticalAlign VAlign { get; set; } = VerticalAlign.Default;
+    public bool Stub { get; set; } = false;
 
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
         output.TagName = "div";
+
+        if (Stub)
+        {
+            output.Attributes.AddClass("stub");
+            return;
+        }
 
         output.Attributes.AddClass("cell");
 

@@ -238,6 +238,30 @@
 .text-indent{    
     text-indent: 2em;
 }
+.pagination .info-item{
+    flex: 1 1 auto;
+    display: list-item;
+    background-color: #fff;
+    color: #1d1d1d;
+    border: 1px solid #dfdfdf;
+    margin: .25rem;
+    -webkit-transition: all .15s ease-in-out;
+    transition: all .15s
+}
+.pagination .info-item.no-link{
+    pointer-events: none;
+    cursor: default;
+    border-color: transparent;
+}
+.pagination.size-small .info-item .page-link {
+    padding: .25rem 0.5rem;
+}
+.pagination .info-item .page-link {
+    padding: .5rem 0.5rem;
+}
+.pagination.size-large .info-item .page-link {
+    padding: .75rem 0.5rem;
+}
 
 @keyframes spin {
     0% {

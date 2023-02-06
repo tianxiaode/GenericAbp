@@ -79,6 +79,7 @@
     "Accordion": "手风琴",
     "Menu": "菜单",
     "Dropdown": "下拉菜单",
-    "Grid": "网格"
+    "Grid": "网格",
+    "Pagination": "分页"
   }
 }
