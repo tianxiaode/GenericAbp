@@ -29,37 +29,40 @@
 
 }
 <div style="height: 100vh;">
-    <metro-navigation-view>
-        <metro-navigation-panel pull-button="true" suggest-box="true">
+    <metro-nav-view>
+        <metro-nav-panel pull-button="true" suggest-box="true">
 
-            <metro-navigation-menu class="px-1" id="NavViewMenu" current-value="@path">
-                <metro-navigation-menu-item text="@L["Menu:Home"].Value" icon="mif-home" url="/" />
-                <metro-navigation-menu-item type="Separator" />
-                <metro-navigation-menu-item type="Header" text="@L["TagHelpers"].Value" />
-                <metro-navigation-menu-item text="@L["About"].Value" url="./" value="Index" />
-                <metro-navigation-menu-item text="@L["Accordion"].Value" url="./Accordion" value="Accordion" />
-                <metro-navigation-menu-item text="@L["Badge"].Value" url="./Badge" value="Badge" />
-                <metro-navigation-menu-item text="@L["Breadcrumb"].Value" url="./Breadcrumb" value="Breadcrumb" />
-                <metro-navigation-menu-item text="@L["Borders"].Value" url="./Borders" value="Borders" />
-                <metro-navigation-menu-item text="@L["Buttons"].Value" url="./Buttons" value="Buttons" />
-                <metro-navigation-menu-item text="@L["Cards"].Value" url="./Cards" value="Cards" />
-                <metro-navigation-menu-item text="@L["Carousel"].Value" url="./Carousel" value="Carousel" />
-                <metro-navigation-menu-item text="@L["Dropdown"].Value" url="./Dropdown" value="Dropdown" />
-                <metro-navigation-menu-item text="@L["Figures"].Value" url="./Figures" value="Figures" />
-                <metro-navigation-menu-item text="@L["Grid"].Value" url="./Grid" value="Grid" />
-                <metro-navigation-menu-item text="@L["Hints"].Value" url="./Hints" value="Hints" />
-                <metro-navigation-menu-item text="@L["ListGroup"].Value" url="./ListGroup" value="ListGroup" />
-                <metro-navigation-menu-item text="@L["Menu"].Value" url="./Menu" value="Menu" />
-                <metro-navigation-menu-item text="@L["NavigationView"].Value" url="./NavigationView" value="NavigationView" />
-                <metro-navigation-menu-item text="@L["Pagination"].Value" url="./Pagination" value="Pagination" />
-                <metro-navigation-menu-item text="@L["Tabs"].Value" url="./Tabs" value="Tabs" />
-            </metro-navigation-menu>
-        </metro-navigation-panel>
+            <metro-nav-menu class="px-1" id="NavViewMenu" current="@path">
+                <metro-nav-menu-item text="@L["Menu:Home"].Value" icon="mif-home" href="/" />
+                <metro-nav-menu-separator />
+                <metro-nav-menu-header header="@L["TagHelpers"].Value" />
+                <metro-nav-menu-item text="@L["About"].Value" href="/TagHelpers" value="Index" />
+                <metro-nav-menu-item text="@L["Accordion"].Value" href="/TagHelpers/Accordion" value="Accordion" />
+                <metro-nav-menu-item text="@L["Badge"].Value" href="/TagHelpers/Badge" value="Badge" />
+                <metro-nav-menu-item text="@L["Breadcrumb"].Value" href="/TagHelpers/Breadcrumb" value="Breadcrumb" />
+                <metro-nav-menu-item text="@L["Borders"].Value" href="/TagHelpers/Borders" value="Borders" />
+                <metro-nav-menu-item text="@L["Buttons"].Value" href="/TagHelpers/Buttons" value="Buttons" />
+                <metro-nav-menu-item text="@L["Cards"].Value" href="/TagHelpers/Cards" value="Cards" />
+                <metro-nav-menu-item text="@L["Carousel"].Value" href="/TagHelpers/Carousel" value="Carousel" />
+                <metro-nav-menu-item text="@L["Dropdown"].Value" href="/TagHelpers/Dropdown" value="Dropdown" />
+                <metro-nav-menu-item text="@L["Figures"].Value" href="/TagHelpers/Figures" value="Figures" />
+                <metro-nav-menu-item text="@L["Grid"].Value" href="/TagHelpers/Grid" value="Grid" />
+                <metro-nav-menu-item text="@L["Hints"].Value" href="/TagHelpers/Hints" value="Hints" />
+                <metro-nav-menu-item text="@L["ListGroup"].Value" href="/TagHelpers/ListGroup" value="ListGroup" />
+                <metro-nav-menu-item text="@L["Menu"].Value" href="/TagHelpers/Menu" value="Menu" />
+                <metro-nav-menu-item text="@L["NavigationView"].Value" href="/TagHelpers/NavigationView" value="NavigationView" />
+                <metro-nav-menu-item text="@L["Pagination"].Value" href="/TagHelpers/Pagination" value="Pagination" />
+                <metro-nav-menu-item text="@L["Popover"].Value" href="/TagHelpers/Popover" value="Popover" />
+                <metro-nav-menu-item text="@L["Progress"].Value" href="/TagHelpers/Progress" value="Progress" />
+                <metro-nav-menu-item text="@L["SideNavigation"].Value" href="/TagHelpers/SideNavigation" value="SideNavigation" />
+                <metro-nav-menu-item text="@L["Tabs"].Value" href="/TagHelpers/Tabs" value="Tabs" />
+            </metro-nav-menu>
+        </metro-nav-panel>
 
-        <metro-navigation-view-content>
+        <metro-nav-content>
             @RenderBody()
-        </metro-navigation-view-content>
-    </metro-navigation-view>
+        </metro-nav-content>
+    </metro-nav-view>
 
 </div>
 

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace Generic.Abp.Metro.UI.TagHelpers.NavigationView;
 
-public class MetroNavigationViewTagHelper : MetroTagHelper
+public class MetroNavViewTagHelper : MetroTagHelper
 {
     public MetroMediaMode Compact { get; set; } = MetroMediaMode.Md;
     public MetroMediaMode Expand { get; set; } = MetroMediaMode.Lg;

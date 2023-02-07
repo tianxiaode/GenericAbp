@@ -112,11 +112,18 @@ public class MetroPaginationTagHelper : MetroTagHelper
         if (!ShowInfo) return Task.FromResult(builder.ToHtmlString());
         builder.AddCssClass("info-item");
         builder.AddCssClass("no-link");
-        if (PaginationAlign == PaginationAlignment.Left) builder.AddCssClass("text-right");
-        if (PaginationAlign == PaginationAlignment.Center)
+        switch (PaginationAlign)
         {
-            builder.AddCssClass("text-center");
-            builder.AddCssClass("w-100");
+            case PaginationAlignment.Left:
+                builder.AddCssClass("text-right");
+                break;
+            case PaginationAlignment.Center:
+                builder.AddCssClass("text-center");
+                builder.AddCssClass("w-100");
+                break;
+            case PaginationAlignment.Right:
+            default:
+                break;
         }
 
         var info = HtmlEncoder.Encode(L["PagerInfo{0}{1}{2}", Model.ShowingFrom, Model.ShowingTo,

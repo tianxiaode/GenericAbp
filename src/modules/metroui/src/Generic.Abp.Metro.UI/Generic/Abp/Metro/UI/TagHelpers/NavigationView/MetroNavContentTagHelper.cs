@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace Generic.Abp.Metro.UI.TagHelpers.NavigationView;
 
-public class MetroNavigationViewContentTagHelper : TagHelper
+public class MetroNavContentTagHelper : TagHelper
 {
     public override Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {

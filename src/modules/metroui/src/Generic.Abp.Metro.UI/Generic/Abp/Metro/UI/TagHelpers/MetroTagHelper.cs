@@ -49,14 +49,16 @@ public abstract class MetroTagHelper : TagHelper
         return Task.CompletedTask;
     }
 
-    protected virtual async Task AddDataAttributeAsync<T>(T builder, string name, object value)
+    protected virtual async Task AddDataAttributeAsync<T>(T builder, string name, object value, bool isLower = true,
+        bool isToKebabCase = false)
     {
         if (string.IsNullOrWhiteSpace(name) || value == null) return;
         var strValue = await ValueToStringAsync(value);
         if (string.IsNullOrWhiteSpace(strValue)) return;
         name = $"{DataAttributePrefix}{name.ToKebabCase()}";
-        strValue.ToKebabCase();
-        await AddAttributeAsync(builder, name, strValue.ToLowerInvariant());
+        if (isToKebabCase) strValue = strValue.ToKebabCase();
+        if (isLower) strValue = strValue.ToLowerInvariant();
+        await AddAttributeAsync(builder, name, strValue);
     }
 
     protected virtual Task AddAttributeAsync<T>(T builder, string name, string value)

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace Generic.Abp.Metro.UI.TagHelpers.Menu;
 
 [HtmlTargetElement("metro-menu-item", TagStructure = TagStructure.NormalOrSelfClosing)]
-public class MetroMenuItemTagHelper : MetroTagHelper
+public class MetroMenuItemTagHelper : MenuItemTagHelperBase
 {
     public MenuItemType Type { get; set; } = MenuItemType.Default;
     public string Text { get; set; }
@@ -17,8 +17,7 @@ public class MetroMenuItemTagHelper : MetroTagHelper
 
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
-        output.TagName = "li";
-        output.TagMode = TagMode.StartTagAndEndTag;
+        await SetMainTagAsync(context, output);
         if (Type == MenuItemType.Mega)
         {
             await AddFlagValueAsync(context, nameof(MetroMenuTagHelper), TagHelperConsts.MenuIsMegaName);
@@ -67,26 +66,18 @@ public class MetroMenuItemTagHelper : MetroTagHelper
         return stringBuilder.ToString();
     }
 
-    protected virtual Task<string> GetAnchorAsHtmlAsync(TagHelperContent childContent)
+    protected virtual async Task<string> GetAnchorAsHtmlAsync(TagHelperContent childContent)
     {
-        var builder = new TagBuilder("a");
         var text = Text;
         if (string.IsNullOrWhiteSpace(text) && Type is MenuItemType.Default)
             text = childContent.GetContent();
-        if (!string.IsNullOrWhiteSpace(Href)) builder.Attributes.Add("href", Href);
+        var iconHtml = "";
         if (!string.IsNullOrWhiteSpace(Icon))
         {
-            builder.InnerHtml.AppendHtml($"<span class=\"{Icon} icon\"></span>");
+            iconHtml = await GetIconAsHtmlAsync(Icon);
         }
 
-        if (!string.IsNullOrWhiteSpace(HotKey))
-        {
-            builder.Attributes.Add("data-hotkey", HotKey);
-        }
-
-        if (Type is MenuItemType.DropDown or MenuItemType.Mega) builder.AddCssClass("dropdown-toggle");
-
-        builder.InnerHtml.AppendHtml(text ?? string.Empty);
-        return Task.FromResult(builder.ToHtmlString());
+        return await GetAnchorAsHtmlAsync(Href, iconHtml, text, hotKey: HotKey,
+            isDropDown: Type is MenuItemType.DropDown or MenuItemType.Mega);
     }
 }

@@ -1,11 +1,10 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Mvc.TagHelpers;
+﻿using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using System.Threading.Tasks;
 
 namespace Generic.Abp.Metro.UI.TagHelpers.NavigationView;
 
-public class MetroNavigationPanelTagHelper : MetroTagHelper
+public class MetroNavPanelTagHelper : MetroTagHelper
 {
     public bool? PullButton { get; set; }
     public bool? SuggestBox { get; set; }

@@ -235,9 +235,6 @@
     border-top-right-radius: 0 !important;
 }
 
-.text-indent{    
-    text-indent: 2em;
-}
 .pagination .info-item{
     flex: 1 1 auto;
     display: list-item;
@@ -261,6 +258,9 @@
 }
 .pagination.size-large .info-item .page-link {
     padding: .75rem 0.5rem;
+}
+.progress.small{
+    height: 6px;
 }
 
 @keyframes spin {

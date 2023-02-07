@@ -1,6 +1,6 @@
 ﻿namespace Generic.Abp.Metro.UI.TagHelpers;
 
-public class TagHelperConsts
+public static class TagHelperConsts
 {
     public const string ItemsAttributeName = "asp-items";
     public const string FormGroupItems = "FormGroupItems";
@@ -12,4 +12,6 @@ public class TagHelperConsts
     public const string MenuIsMegaName = "IsMega";
     public const string DropdownIsSplitName = "IsSplit";
     public const int DisplayOrder = 10000;
+    public const string BackgroundColorPrefix = "bg-";
+    public const string ForegroundColorPrefix = "fg-";
 }

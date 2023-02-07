@@ -1,20 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Generic.Abp.Metro.UI.TagHelpers.NavigationView;
 
-public class MetroNavigationMenuTagHelper : MetroNavigationMenuTagHelperBase
+public class MetroNavMenuTagHelper : TagHelper
 {
-    public string CurrentValue { get; set; }
+    public string Current { get; set; }
 
     public override void Init(TagHelperContext context)
     {
-        context.Items[nameof(MetroNavigationMenuTagHelper)] = CurrentValue;
+        context.Items[nameof(MetroNavMenuTagHelper)] = Current;
     }
 
     public override Task ProcessAsync(TagHelperContext context, TagHelperOutput output)

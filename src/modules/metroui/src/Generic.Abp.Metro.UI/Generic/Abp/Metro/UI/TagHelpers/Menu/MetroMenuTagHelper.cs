@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Razor.TagHelpers;
 using System.Linq;
 using System.Threading.Tasks;
-using Generic.Abp.Metro.UI.TagHelpers.Core;
 
 namespace Generic.Abp.Metro.UI.TagHelpers.Menu;
 
@@ -10,9 +9,6 @@ public class MetroMenuTagHelper : MetroTagHelper
     protected const string Role = "Dropdown";
 
     public MenuType Type { get; set; } = MenuType.Horizontal;
-
-    //public MetroColor? BackgroundColor { get; set; }
-    //public MetroColor? Color { get; set; }
     public bool NoHover { get; set; } = false;
     public bool Large { get; set; } = false;
     public bool Dropdown { get; set; } = false;

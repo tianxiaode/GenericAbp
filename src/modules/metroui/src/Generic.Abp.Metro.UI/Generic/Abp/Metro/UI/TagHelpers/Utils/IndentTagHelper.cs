@@ -14,7 +14,11 @@ public class IndentTagHelper : TagHelper
         var cultureName = CultureInfo.CurrentUICulture.Name;
         if (Indent && cultureName.StartsWith("zh"))
         {
-            output.Attributes.AddClass("text-indent");
+            output.Attributes.AddClass("indent");
+        }
+        else
+        {
+            output.Attributes.AddClass("indent-letter");
         }
 
         return Task.CompletedTask;
