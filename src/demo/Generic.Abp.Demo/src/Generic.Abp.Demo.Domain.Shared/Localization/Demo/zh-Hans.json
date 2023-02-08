@@ -83,6 +83,8 @@
     "Pagination": "分页",
     "SideNavigation": "侧边导航",
     "Progress": "进度条",
-    "Popover": "弹出框"
+    "Popover": "弹出框",
+    "Modal": "模态对话框",
+    "Form": "表单"
   }
 }

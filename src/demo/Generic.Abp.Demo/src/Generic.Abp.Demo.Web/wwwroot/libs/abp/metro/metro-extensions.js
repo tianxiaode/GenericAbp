@@ -4,27 +4,27 @@ Metro.toastSetup({
     timeout: 5000
 });
 
-Metro.validatorSetup({
-    onErrorForm: function(logs, data){
-        logs.forEach(log=>{
-            var input = $(log.input);
-            var div = input.parent().parent();
-            var span = div.find('.invalid_feedback');
-            var texts =[];
-            log.errors.forEach(error=>{
-                let t = input.attr(`data-val-${error}`);
-                if(error === 'min' || error === 'max'){
-                    t = input.attr(`data-val-range`);
-                }
-                if(t)texts.push(t);
-            })
-            span.html(texts.join('<br/>'));
-        })
-    },
-    onSubmit(){
-        console.log('onSubmit', arguments);
-    }
-});
+// Metro.validatorSetup({
+//     onErrorForm: function(logs, data){
+//         logs.forEach(log=>{
+//             var input = $(log.input);
+//             var div = input.parent().parent();
+//             var span = div.find('.invalid_feedback');
+//             var texts =[];
+//             log.errors.forEach(error=>{
+//                 let t = input.attr(`data-val-${error}`);
+//                 if(error === 'min' || error === 'max'){
+//                     t = input.attr(`data-val-range`);
+//                 }
+//                 if(t)texts.push(t);
+//             })
+//             span.html(texts.join('<br/>'));
+//         })
+//     },
+//     onSubmit(){
+//         console.log('onSubmit', arguments);
+//     }
+// });
 
 Metro.inputSetup({
     onInputCreate(input){
@@ -41,49 +41,12 @@ Metro.textareaSetup({
 Metro.calendarPickerSetup({
     onCalendarPickerCreate(input){
         addErrorSpan(input.parent().parent());
-        // var me = this;
-        // var calendar = input.parent().find('.calendar');
-        // var id = $.uniqueId();
-        // calendar.id(id);
-        // this.calendarId = id;
-        // var callback = function(){
-        //     Metro.getPlugin(me, 'calendar-picker')._removeOverlay();
-        //     calendar.removeClass("open open-up");
-        // }
-        // moveToFloatDiv(input, calendar , callback);
-    },
-    onCalendarShow(calendar){
-        // console.log(calendar);
-        // var inputDiv = $(this).parent();
-        // var offset = inputDiv.offset();
-        // calendar.attr({'style': `position:absolute;left:${offset.left}px !important;top:${offset.top + inputDiv.height() + 2}px !important;`});
-        //calendar.cssText('top', `${offset.top + inputDiv.height() + 2} !important`);
-        //calendar.css('position', 'absolute');
     }
 })
 
 Metro.selectSetup({
     onSelectCreate(input){
         addErrorSpan(input.parent().parent());
-        // var dropContainer = input.parent().parent().find('.drop-container');
-        // var id = $.uniqueId();
-        // dropContainer.id(id);
-        // this.dropContainerId = id;
-        // console.log(this)
-        // var callback = function(){
-        //     Metro.getPlugin(dropContainer, "dropdown").close();
-        // }
-        // moveToFloatDiv(input, dropContainer , callback);
-    },
-    onDrop(){
-        // var inputDiv = $(this).parent();
-        // var id = this.dropContainerId;
-        // var offset = inputDiv.offset();
-        // var dropContainer = $(`#${id}`);
-        // dropContainer.css('left', offset.left);
-        // dropContainer.css('top', offset.top + inputDiv.height() + 2);
-        // dropContainer.css('height', 234);
-        // dropContainer.css('width', inputDiv.width());
     }
 })
 

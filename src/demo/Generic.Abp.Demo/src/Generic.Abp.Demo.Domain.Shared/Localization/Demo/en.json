@@ -80,6 +80,8 @@
     "Pagination": "Pagination",
     "SideNavigation": "Side navigation",
     "Progress": "Progress",
-    "Popover": "Popover"
+    "Popover": "Popover",
+    "Modal": "Modal",
+    "Form": "Form"
   }
 }

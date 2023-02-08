@@ -39,19 +39,40 @@
 
 .mask {
     opacity: 0.9 !important;
-    background-color: rgba(0, 0, 0, 0.3) !important;
-    z-index: 200000000;
+    min-width: 8.5em;
+    /* position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    height: 100%; */
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.3) center center no-repeat;    
 }
 .mask .mask-inner {
     border-radius: 3px;
     background-color: #000 !important;
+    position: relative;
+    background: rgba(0, 0, 0, 0.25);
+    color: #fff;
+    text-align: center;
+    padding: 0.4em;
+    font-size: 0.95em;
+    font-weight: bold;
+    padding-bottom: 2em;    
 }
-.mask .mask-inner .x-loading-spinner-outer {
-    background-image: url(resources/images/loadmask/loading_1.gif);
+.mask .mask-inner .loading-spinner {
+    /* background-image: url(resources/images/loadmask/loading_1.gif);
     background-repeat: no-repeat;
     background-position: center;
-    background-size: 70px 70px;
+    background-size: 70px 70px; */
     height: 60px !important;
+}
+.mask .mask-inner .loading-spinner span::before{
+    font-size: xxx-large;
 }
 .mask .mask-inner .mask-message {
     color: white;

@@ -14,9 +14,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Generic\Abp\Metro\UI\TagHelpers\Form\**" />
-    <Content Remove="Generic\Abp\Metro\UI\TagHelpers\Form\**" />
-    <None Remove="Generic\Abp\Metro\UI\TagHelpers\Form\**" />
     <Content Remove="Generic\Abp\Metro\UI\Localization\cs.json" />
     <Content Remove="Generic\Abp\Metro\UI\Localization\en.json" />
     <Content Remove="Generic\Abp\Metro\UI\Localization\pl-PL.json" />
@@ -30,7 +27,6 @@
 
 
   <ItemGroup>
-    <EmbeddedResource Remove="Generic\Abp\Metro\UI\TagHelpers\Form\**" />
     <EmbeddedResource Include="Generic\Abp\Metro\UI\Localization\cs.json" />
     <EmbeddedResource Include="Generic\Abp\Metro\UI\Localization\en.json" />
     <EmbeddedResource Include="Generic\Abp\Metro\UI\Localization\pl-PL.json" />

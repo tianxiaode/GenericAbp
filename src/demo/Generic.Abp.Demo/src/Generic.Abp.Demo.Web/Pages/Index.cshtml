@@ -28,7 +28,7 @@
 
 <div class="row">
     @*
-    <metro-dialog title="切换租户" buttons="MetroDialogButtons.Submit | MetroDialogButtons.Cancel" id="ancd" asp-page="/Abp/MultiTenancy/TenantSwitchModal" metro-class="w-dialog-800 h-dialog-600">
+    <metro-dialog title="切换租户" buttons="ModalDialogButtons.Save | ModalDialogButtons.Cancel" id="ancd" asp-page="/Abp/MultiTenancy/TenantSwitchModal" metro-class="w-dialog-800 h-dialog-600">
         <metro-form-content metro-model="IndexView">
             <metro-input asp-for="@Model.IndexView.Email"></metro-input>
             <metro-input asp-for="@Model.IndexView.Password"></metro-input>

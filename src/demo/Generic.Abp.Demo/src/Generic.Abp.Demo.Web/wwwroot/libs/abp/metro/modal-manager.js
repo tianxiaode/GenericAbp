@@ -15,11 +15,11 @@ ModalManager.prototype.open = function (data) {
     let me = this;
 
     $.get(me.viewUrl, data)
-        .then(me.getDialogSuccess.bind(me), me.getDialogFailure.bind(me));
+        .then(me.getModalSuccess.bind(me), me.getModalFailure.bind(me));
 
 }
 
-ModalManager.prototype.getDialogSuccess = function (data) {
+ModalManager.prototype.getModalSuccess = function (data) {
     let me = this;
     if (me.initConfig.scriptUrl) {
         //加载资源
@@ -27,67 +27,68 @@ ModalManager.prototype.getDialogSuccess = function (data) {
         //     _initAndShowDialog();
         // });
     } else {
-        let id = 'Metro_Dialog_' + (Math.floor((Math.random() * 1000000))) + new Date().getTime();
-        me.dialogId = id;
-        data = data.replace('{id}', id);
+        let id = 'Metro_Modal_' + $.uniqueId(),
+            container = $('<div>');
+        me.container = container;
+        container.attr('id', id);        
+        me.containerId = id;
         let body = $('body');
-        body.append(data);
-        me.initAndShowDialog();
+        container.html(data);
+        container.appendTo(body);
+        me.initAndShowModal();
     }
 
 }
 
-ModalManager.prototype.getDialogFailure = function () {
+ModalManager.prototype.getModalFailure = function () {
     console.log(arguments);
 }
 
-ModalManager.prototype.initAndShowDialog = function () {
+ModalManager.prototype.initAndShowModal = function () {
     let me = this,
-        id = `#${me.dialogId}`,
-        dialog, form, dialogElement;
-    dialog = me.dialog = Metro.getPlugin(id, 'dialog');
-    if (!dialog) {
-        _.delay(me.initAndShowDialog.bind(me), 50);
+        container = me.container,
+        modal = container.find('.dialog'),
+        form = container.find('form');
+    modal = Metro.getPlugin(modal, 'modal');
+    if (!modal) {
+        _.delay(me.initAndShowModal.bind(me), 50);
         return;
     }
-    dialog.options.removeOnClose = true;
-    dialogElement = dialog.element;
-    form = me.form = Metro.getPlugin(dialogElement.find('form'), 'validator');
-    formElement = form.element;
-    formElement.on('validate-form', function(){console.log(arguments)});
-    formElement.on('error-form', function(){console.log(arguments)});
-    formElement.on('submit', me.onFormSubmit.bind(me));
-    if (formElement.attr('data-check-form-on-close') !== 'false') {
-        //form.needConfirmationOnUnsavedClose(dialog);
-    }
-
-    //dialogElement.on('colse', me.onClose.bind(me));
+    me.modal = modal;
+    form = me.form = Metro.makePlugin(form, 'validator',{
+        onBeforeSubmit: me.onBeforeFormSubmit.bind(me),
+        onSubmit: me.onFormSubmit.bind(me),
+        onError: me.onValidateError.bind(me),
+        onValidate: me.onValidate.bind(me),
+    });
 
     if (me.init) me.init.call(me);
 
-    dialog.open();
+    modal.open();
 
 }
 
 ModalManager.prototype.onSubmitSuccess = function () {
     this.setResult(arguments);
-    this.dialog.close();
+    this.modal.close();
 }
 
 ModalManager.prototype.onClose = function () {
     let me = this;
-    delete me.dialog;
+    me.container.remove();
+    delete me.modal;
     delete me.form;
+    delete me.container;
     delete me.callBacks;
 }
 
 
 ModalManager.prototype.getModalId = function () {
-    return this.dialogId;
+    return this.containerId;
 }
 
-ModalManager.prototype.getDialog = function () {
-    return this.dialog;
+ModalManager.prototype.getModal = function () {
+    return this.modal;
 }
 
 ModalManager.prototype.getForm = function () {
@@ -113,7 +114,38 @@ ModalManager.prototype.onResult = function (callback) {
     this.callBacks.push(callback);
 }
 
+ModalManager.prototype.onBeforeFormSubmit = function(e) {
+    e.preventDefault();
+
+    console.log(arguments);
+}
+
 ModalManager.prototype.onFormSubmit = function(e) {
+    e.preventDefault();
+
+    console.log(arguments);
+}
+
+ModalManager.prototype.onValidateError = function(logs, data) {
+    logs.forEach(log=>{
+        let input = $(log.input),
+        div = input.parent().parent(),
+        span = div.find('.invalid_feedback'),
+        texts =[];
+        log.errors.forEach(error=>{
+            let t = input.attr(`data-val-${error}`);
+            if(error === 'min' || error === 'max'){
+                t = input.attr(`data-val-range`);
+            }
+            if(t)texts.push(t);
+        })
+        span.html(texts.join('<br/>'));
+    })
+
+    console.log(arguments);
+}
+
+ModalManager.prototype.onValidate = function(e) {
     e.preventDefault();
 
     console.log(arguments);
