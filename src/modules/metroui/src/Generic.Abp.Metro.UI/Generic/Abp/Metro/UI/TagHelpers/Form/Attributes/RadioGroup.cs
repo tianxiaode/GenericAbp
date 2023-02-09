@@ -3,6 +3,6 @@
 namespace Generic.Abp.Metro.UI.TagHelpers.Form.Attributes;
 
 [AttributeUsage(AttributeTargets.Property)]
-public class RadioGroup : Attribute
+public class RadioGroup : InputGroupAttribute
 {
 }

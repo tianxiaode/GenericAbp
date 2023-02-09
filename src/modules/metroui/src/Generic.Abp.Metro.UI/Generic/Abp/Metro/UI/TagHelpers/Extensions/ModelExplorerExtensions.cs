@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using System;
 using System.Reflection;
+using Generic.Abp.Metro.UI.TagHelpers.Form.Attributes;
 
 namespace Generic.Abp.Metro.UI.TagHelpers.Extensions;
 
@@ -14,8 +15,8 @@ public static class ModelExplorerExtensions
         return null;
     }
 
-    //public static int GetDisplayOrder(this ModelExplorer explorer)
-    //{
-    //    return GetAttribute<DisplayOrder>(explorer)?.Number ?? DisplayOrder.Default;
-    //}
+    public static int GetDisplayOrder(this ModelExplorer explorer)
+    {
+        return GetAttribute<DisplayOrder>(explorer)?.Number ?? DisplayOrder.Default;
+    }
 }

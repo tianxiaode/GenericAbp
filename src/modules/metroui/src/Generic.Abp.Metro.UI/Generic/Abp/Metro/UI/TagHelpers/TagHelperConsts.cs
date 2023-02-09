@@ -4,6 +4,7 @@ public static class TagHelperConsts
 {
     public const string ItemsAttributeName = "asp-items";
     public const string FormGroupItems = "FormGroupItems";
+    public const string FormContent = "FormContent";
     public const string PanelGroupItems = "PanelGroupItems";
     public const string DialogGroupItems = "DialogGroupItems";
     public const string NavigationMenuItems = "NavigationMenuItems";

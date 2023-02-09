@@ -1,52 +1,32 @@
-﻿using System.Linq;
-using System.Text;
-using System.Text.Encodings.Web;
-using System.Threading.Tasks;
-using Generic.Abp.Metro.UI.TagHelpers.Extensions;
+﻿using Generic.Abp.Metro.UI.TagHelpers.Extensions;
 using Generic.Abp.Metro.UI.TagHelpers.Form.Attributes;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using System.Linq;
+using System.Text.Encodings.Web;
+using System.Threading.Tasks;
 
 namespace Generic.Abp.Metro.UI.TagHelpers.Form;
 
 public class MetroInputTagHelper : MetroInputTagHelperBase
 {
     public MetroInputTagHelper(HtmlEncoder htmlEncoder, IMetroTagHelperLocalizerService localizer,
-        IHtmlGenerator generator) : base(htmlEncoder, localizer, generator)
+        IHtmlGenerator generator) : base(htmlEncoder, generator, localizer)
     {
     }
 
-    public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
-    {
-        await GetFormContentAsync(context);
-        var innerHtml = await GetFormInputGroupAsHtmlAsync(context, output);
+    public string Prepend { get; set; }
+    public string Append { get; set; }
+    public string DefaultValue { get; set; }
+    public string ClsPrepend { get; set; }
+    public string ClsAppend { get; set; }
 
-        if (IsCheckbox && CheckBoxHiddenInputRenderMode.HasValue)
-        {
-            ViewContext.CheckBoxHiddenInputRenderMode = CheckBoxHiddenInputRenderMode.Value;
-        }
-
-        output.TagMode = TagMode.StartTagAndEndTag;
-        output.TagName = "div";
-
-        await SetInputSizeAsync(output);
-        output.Content.AppendHtml(innerHtml);
-        var suppress = await AddItemToFromItemsAsync(context, FormItems, TagHelper.AspFor.Name, Order,
-            await output.RenderAsync(Encoder));
-
-        if (suppress)
-        {
-            output.SuppressOutput();
-        }
-    }
-
-    protected virtual async Task<string> GetFormInputGroupAsHtmlAsync(TagHelperContext context, TagHelperOutput output)
+    protected override async Task<string> GetFormInputGroupAsHtmlAsync(TagHelperContext context, TagHelperOutput output)
     {
         var inputTag = await GetInputTagHelperOutputAsync(context, output);
-
         var inputHtml = await inputTag.RenderAsync(HtmlEncoder);
-        var label = await GetLabelAsHtmlAsync(inputTag);
+        var label = NoLabel ? "" : await GetLabelAsHtmlAsync(inputTag);
 
         return GetContent(label, inputHtml);
     }
@@ -73,18 +53,20 @@ public class MetroInputTagHelper : MetroInputTagHelperBase
         AddDisabledAttribute(inputTagHelperOutput);
         IsCheckbox = await IsInputCheckboxAsync(context, output, inputTagHelperOutput.Attributes);
         AddReadOnlyAttribute(inputTagHelperOutput);
-        await AddPlaceholderAttributeAsync(inputTagHelperOutput, TagHelperLocalizer);
+        await AddPlaceholderAttributeAsync(inputTagHelperOutput);
         if (IsCheckbox)
         {
-            await SetCheckBoxAttributesAsync(inputTagHelperOutput, TagHelperLocalizer);
+            await SetCheckBoxAttributesAsync(inputTagHelperOutput);
         }
         else
         {
             inputTagHelperOutput.Attributes.AddClass("metro-input");
+            await AddDataAttributeAsync(tagHelper);
         }
 
         await SetDataRoleAttributeAsync(inputTagHelperOutput);
         await SetInputValidatorAsync(inputTagHelperOutput.Attributes);
+
         return inputTagHelperOutput;
     }
 
@@ -92,24 +74,24 @@ public class MetroInputTagHelper : MetroInputTagHelperBase
     {
         var inputTagHelper = new InputTagHelper(Generator)
         {
-            For = TagHelper.AspFor,
-            InputTypeName = TagHelper.InputTypeName,
-            ViewContext = TagHelper.ViewContext
+            For = AspFor,
+            InputTypeName = InputTypeName,
+            ViewContext = ViewContext
         };
 
-        if (!TagHelper.Format.IsNullOrEmpty())
+        if (!string.IsNullOrWhiteSpace(Format))
         {
-            inputTagHelper.Format = TagHelper.Format;
+            inputTagHelper.Format = Format;
         }
 
-        if (!TagHelper.Name.IsNullOrEmpty())
+        if (!string.IsNullOrWhiteSpace(Name))
         {
-            inputTagHelper.Name = TagHelper.Name;
+            inputTagHelper.Name = Name;
         }
 
-        if (!TagHelper.Value.IsNullOrEmpty())
+        if (!string.IsNullOrWhiteSpace(Value))
         {
-            inputTagHelper.Value = TagHelper.Value;
+            inputTagHelper.Value = Value;
         }
 
 
@@ -127,19 +109,19 @@ public class MetroInputTagHelper : MetroInputTagHelperBase
             attrList.Add(tagHelperAttribute);
         }
 
-        if (!TagHelper.InputTypeName.IsNullOrEmpty() && !attrList.ContainsName("type"))
+        if (!string.IsNullOrWhiteSpace(InputTypeName) && !attrList.ContainsName("type"))
         {
-            attrList.Add("type", TagHelper.InputTypeName);
+            attrList.Add("type", InputTypeName);
         }
 
-        if (!TagHelper.Name.IsNullOrEmpty() && !attrList.ContainsName("Name"))
+        if (!string.IsNullOrWhiteSpace(Name) && !attrList.ContainsName("Name"))
         {
-            attrList.Add("name", TagHelper.Name);
+            attrList.Add("name", Name);
         }
 
-        if (!TagHelper.Value.IsNullOrEmpty() && !attrList.ContainsName("value"))
+        if (!string.IsNullOrWhiteSpace(Value) && !attrList.ContainsName("value"))
         {
-            attrList.Add("value", TagHelper.Value);
+            attrList.Add("value", Value);
         }
 
         return attrList;
@@ -158,7 +140,7 @@ public class MetroInputTagHelper : MetroInputTagHelperBase
         IsTextarea = true;
         tagHelperOutput.TagName = "textarea";
         tagHelperOutput.TagMode = TagMode.StartTagAndEndTag;
-        tagHelperOutput.Content.SetContent(TagHelper.AspFor.ModelExplorer.Model?.ToString());
+        tagHelperOutput.Content.SetContent(AspFor.ModelExplorer.Model?.ToString());
         tagHelperOutput.Attributes.AddClass("flex-fill");
         if (textAreaAttribute.Rows > 0)
         {
@@ -175,7 +157,7 @@ public class MetroInputTagHelper : MetroInputTagHelperBase
 
     protected virtual TextArea TryGetTextAreaAttribute(TagHelperOutput output)
     {
-        var textAreaAttribute = TagHelper.AspFor.ModelExplorer.GetAttribute<TextArea>();
+        var textAreaAttribute = AspFor.ModelExplorer.GetAttribute<TextArea>();
 
         if (textAreaAttribute == null && output.Attributes.Any(a => a.Name == "text-area"))
         {
@@ -192,12 +174,22 @@ public class MetroInputTagHelper : MetroInputTagHelperBase
             a.Value != null && a.Name == "type" && a.Value.ToString() == "checkbox"));
     }
 
-    protected virtual async Task SetCheckBoxAttributesAsync(TagHelperOutput output,
-        IMetroTagHelperLocalizer tagHelperLocalizer)
+    protected virtual async Task SetCheckBoxAttributesAsync(TagHelperOutput output)
     {
-        output.Attributes.Add("data-caption", await GetLabelDisplayNameAsync(tagHelperLocalizer));
+        output.Attributes.Add("data-caption", await GetLabelDisplayNameAsync());
         output.Attributes.Add("data-style", 2);
         //output.Attributes.Add("data-cls-caption", "fg-cyan");
         //output.Attributes.Add("data-cls-check", "bd-cyan");
+    }
+
+    protected virtual async Task AddDataAttributeAsync(TagHelper tagHelper)
+    {
+        if (!string.IsNullOrWhiteSpace(Prepend)) await AddDataAttributeAsync(tagHelper, nameof(Prepend), Prepend);
+        if (!string.IsNullOrWhiteSpace(Append)) await AddDataAttributeAsync(tagHelper, nameof(Append), Append);
+        if (!string.IsNullOrWhiteSpace(ClsPrepend))
+            await AddDataAttributeAsync(tagHelper, nameof(ClsPrepend), ClsPrepend);
+        if (!string.IsNullOrWhiteSpace(ClsAppend)) await AddDataAttributeAsync(tagHelper, nameof(ClsAppend), ClsAppend);
+        if (!string.IsNullOrWhiteSpace(DefaultValue))
+            await AddDataAttributeAsync(tagHelper, nameof(DefaultValue), DefaultValue);
     }
 }

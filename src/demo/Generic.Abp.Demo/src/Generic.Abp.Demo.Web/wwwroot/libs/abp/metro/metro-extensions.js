@@ -4,27 +4,27 @@ Metro.toastSetup({
     timeout: 5000
 });
 
-// Metro.validatorSetup({
-//     onErrorForm: function(logs, data){
-//         logs.forEach(log=>{
-//             var input = $(log.input);
-//             var div = input.parent().parent();
-//             var span = div.find('.invalid_feedback');
-//             var texts =[];
-//             log.errors.forEach(error=>{
-//                 let t = input.attr(`data-val-${error}`);
-//                 if(error === 'min' || error === 'max'){
-//                     t = input.attr(`data-val-range`);
-//                 }
-//                 if(t)texts.push(t);
-//             })
-//             span.html(texts.join('<br/>'));
-//         })
-//     },
-//     onSubmit(){
-//         console.log('onSubmit', arguments);
-//     }
-// });
+Metro.validatorSetup({
+    onErrorForm: function(logs, data){
+        logs.forEach(log=>{
+            var input = $(log.input);
+            var div = input.parent().parent();
+            var span = div.find('.invalid_feedback');
+            var texts =[];
+            log.errors.forEach(error=>{
+                let t = input.attr(`data-val-${error}`);
+                if(error === 'min' || error === 'max'){
+                    t = input.attr(`data-val-range`);
+                }
+                if(t)texts.push(t);
+            })
+            span.html(texts.join('<br/>'));
+        })
+    },
+    onSubmit(){
+        console.log('onSubmit', arguments);
+    }
+});
 
 Metro.inputSetup({
     onInputCreate(input){

@@ -9,6 +9,5 @@
 
         public const string FormDefaultCols = Prefix + ".Form.Cols";
         public const string FormHorizontal = Prefix + ".Form.Horizontal";
-        public const string FormDefaultLabelWidth = Prefix + ".Form.LabelWidth";
     }
 }

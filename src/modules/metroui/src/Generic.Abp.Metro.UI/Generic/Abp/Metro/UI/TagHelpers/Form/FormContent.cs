@@ -2,16 +2,24 @@
 
 public class FormContent
 {
-    public int Cols { get; set; } 
-    public bool Horizontal { get; set; } 
-
-    public LabelWidth LabelWidth { get; set; }
+    public int Cols { get; set; }
+    public bool Horizontal { get; set; }
     public bool RequiredSymbols { get; set; }
-    public FormContent(int cols, bool horizontal, LabelWidth labelWidth, bool requiredSymbols = true)
+    public int LabelWidth { get; set; }
+
+    public FormContent()
+    {
+        Cols = 0;
+        Horizontal = false;
+        RequiredSymbols = true;
+        LabelWidth = 100;
+    }
+
+    public FormContent(int cols, bool horizontal, bool requiredSymbols = true, int labelWidth = 100)
     {
         Cols = cols;
         Horizontal = horizontal;
-        LabelWidth = labelWidth;
         RequiredSymbols = requiredSymbols;
+        LabelWidth = labelWidth;
     }
 }

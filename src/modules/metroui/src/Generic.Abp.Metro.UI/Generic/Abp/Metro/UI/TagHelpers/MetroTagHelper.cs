@@ -77,7 +77,7 @@ public abstract class MetroTagHelper : TagHelper
         return Task.CompletedTask;
     }
 
-    protected virtual Task<int> GetDisplayOrderAsync(int order)
+    protected virtual Task<int> GetDisplayOrderAsync(int order = 0)
     {
         if (order != 0) return Task.FromResult(order);
         order = TagHelperConsts.DisplayOrder + OrderIncrement;
@@ -239,7 +239,7 @@ public abstract class MetroTagHelper<T> : MetroTagHelper where T : IGroupItem, n
         return Task.FromResult($"{GroupItemsName}_depth");
     }
 
-    protected virtual Task<List<T>> GetGroupItems(TagHelperContext context)
+    protected virtual Task<List<T>> GetGroupItemsAsync(TagHelperContext context)
     {
         return Task.FromResult((List<T>)context.Items[GroupItemsName]);
     }
@@ -247,25 +247,25 @@ public abstract class MetroTagHelper<T> : MetroTagHelper where T : IGroupItem, n
     [ItemCanBeNull]
     protected virtual async Task<T> GetGroupItemAsync(TagHelperContext context, string name)
     {
-        var items = await GetGroupItems(context);
+        var items = await GetGroupItemsAsync(context);
         return items == null ? default! : items.FirstOrDefault(m => m.Name == name);
     }
 
     protected virtual Task<bool> HasGroupItemsAsync(TagHelperContext context)
     {
-        return Task.FromResult(context.Items.Any(m => m.Key.ToString() == GroupItemsName));
+        return Task.FromResult(context.Items.ContainsKey(GroupItemsName));
     }
 
     protected virtual async Task<bool> GroupItemsAnyAsync(TagHelperContext context, string name)
     {
-        var items = await GetGroupItems(context);
+        var items = await GetGroupItemsAsync(context);
         return items != null && items.Any(m => m.Name == name);
     }
 
     protected virtual async Task AddGroupItemAsync(TagHelperContext context, string name, string htmlContent,
         int displayOrder = 0)
     {
-        var items = await GetGroupItems(context);
+        var items = await GetGroupItemsAsync(context);
         if (items == null) throw new ArgumentNullException(nameof(items));
         await AddGroupItemAsync(items, name, htmlContent, displayOrder);
     }
@@ -284,7 +284,7 @@ public abstract class MetroTagHelper<T> : MetroTagHelper where T : IGroupItem, n
 
     protected virtual async Task AddGroupItemAsync(TagHelperContext context, T item)
     {
-        var items = await GetGroupItems(context);
+        var items = await GetGroupItemsAsync(context);
         if (items == null) throw new ArgumentNullException(nameof(items));
         items.Add(item);
     }

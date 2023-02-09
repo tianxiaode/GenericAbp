@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
 using System.Text.Encodings.Web;
@@ -11,10 +12,14 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace Generic.Abp.Metro.UI.TagHelpers.Form;
 
+[HtmlTargetElement(TagStructure = TagStructure.WithoutEndTag)]
 public abstract class MetroInputTagHelperBase : MetroTagHelper<FormGroupItem>
 {
-    protected MetroInputTagHelperBase(HtmlEncoder htmlEncoder, IMetroTagHelperLocalizerService localizer,
-        IHtmlGenerator generator) : base(htmlEncoder)
+    protected MetroInputTagHelperBase(
+        HtmlEncoder htmlEncoder,
+        IHtmlGenerator generator,
+        IMetroTagHelperLocalizerService localizer
+    ) : base(htmlEncoder)
     {
         Localizer = localizer;
         Generator = generator;
@@ -29,29 +34,61 @@ public abstract class MetroInputTagHelperBase : MetroTagHelper<FormGroupItem>
     protected bool IsCheckboxGroup { get; set; } = false;
     protected bool IsRadio { get; set; } = false;
     protected bool IsSelect { get; set; } = false;
+    protected bool IsRadioGroup { get; set; } = false;
     public ModelExpression AspFor { get; set; }
     [HtmlAttributeName("disabled")] public bool IsDisabled { get; set; } = false;
-
     [HtmlAttributeName("readonly")] public bool IsReadonly { get; set; } = false;
     public string Label { get; set; }
-
     [HtmlAttributeName("type")] public string InputTypeName { get; set; }
-
     [HtmlAttributeName("required-symbol")] public bool DisplayRequiredSymbol { get; set; } = true;
-
     [HtmlAttributeName("asp-format")] public string Format { get; set; }
-
     public string Name { get; set; }
-
     public string Value { get; set; }
+    public bool NoLabel { get; set; } = false;
+    public int? LabelWidth { get; set; }
 
     public CheckBoxHiddenInputRenderMode? CheckBoxHiddenInputRenderMode { get; set; }
 
     public MetroFormControlSize Size { get; set; } = MetroFormControlSize.Default;
 
+    public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+    {
+        await GetFormContentAsync(context);
+        var innerHtml = await GetFormInputGroupAsHtmlAsync(context, output);
+
+        if (IsCheckbox && CheckBoxHiddenInputRenderMode.HasValue)
+        {
+            ViewContext.CheckBoxHiddenInputRenderMode = CheckBoxHiddenInputRenderMode.Value;
+        }
+
+        output.TagMode = TagMode.StartTagAndEndTag;
+        output.TagName = "div";
+
+        await SetInputSizeAsync(output);
+        output.Content.AppendHtml(innerHtml);
+        var suppress = await AddItemToFormItemsContents(context, AspFor.Name,
+            await output.RenderAsync(HtmlEncoder), AspFor.ModelExplorer.GetDisplayOrder());
+
+        if (suppress)
+        {
+            output.SuppressOutput();
+        }
+    }
+
+    protected virtual Task<string> GetFormInputGroupAsHtmlAsync(TagHelperContext context, TagHelperOutput output)
+    {
+        throw new NotImplementedException();
+    }
+
     protected Task GetFormContentAsync(TagHelperContext context)
     {
-        FormContent = context.Items["FormContent"] as FormContent;
+        if (!context.Items.ContainsKey(TagHelperConsts.FormContent))
+        {
+            FormContent = new FormContent();
+            return Task.CompletedTask;
+        }
+
+        FormContent = context.Items[TagHelperConsts.FormContent] as FormContent ?? new FormContent();
         return Task.CompletedTask;
     }
 
@@ -71,11 +108,6 @@ public abstract class MetroInputTagHelperBase : MetroTagHelper<FormGroupItem>
         var size = await GetSizeStringAsync();
         //line-height
         tagBuilder.AddCssClass($"lh-input-label{size}");
-
-        if (FormContent is not { Horizontal: true }) return;
-
-        //label width
-        tagBuilder.AddCssClass($"w-label-{(int)FormContent.LabelWidth}");
     }
 
     protected Task<string> GetSizeStringAsync()
@@ -103,7 +135,7 @@ public abstract class MetroInputTagHelperBase : MetroTagHelper<FormGroupItem>
     protected virtual void AddReadOnlyAttribute(TagHelperOutput inputTagHelperOutput)
     {
         if (inputTagHelperOutput.Attributes.ContainsName("readonly") == false &&
-            (IsReadonly != false || AspFor.ModelExplorer.GetAttribute<ReadOnlyInput>() != null))
+            (IsReadonly || AspFor.ModelExplorer.GetAttribute<ReadOnlyInput>() != null))
         {
             inputTagHelperOutput.Attributes.Add("readonly", "");
         }
@@ -174,6 +206,10 @@ public abstract class MetroInputTagHelperBase : MetroTagHelper<FormGroupItem>
                 label.InnerHtml.AppendHtml(": ");
             }
         }
+
+        if (!FormContent.Horizontal) return label.ToHtmlString();
+        var width = LabelWidth ?? FormContent.LabelWidth;
+        await AddStyleAsync(label, $"min-width:{width}px;");
 
         return label.ToHtmlString();
     }
@@ -281,5 +317,15 @@ public abstract class MetroInputTagHelperBase : MetroTagHelper<FormGroupItem>
             await Localizer.GetLocalizedTextAsync(attribute.Value, AspFor.ModelExplorer);
 
         inputTagHelperOutput.Attributes.Add("placeholder", placeholderLocalized);
+    }
+
+    protected virtual async Task<bool> AddItemToFormItemsContents(TagHelperContext context, string propertyName,
+        string html, int displayOrder)
+    {
+        if (!await HasGroupItemsAsync(context)) return false;
+        var list = await GetGroupItemsAsync(context);
+        if (list == null) return false;
+        await AddGroupItemAsync(list, propertyName, html, displayOrder);
+        return true;
     }
 }

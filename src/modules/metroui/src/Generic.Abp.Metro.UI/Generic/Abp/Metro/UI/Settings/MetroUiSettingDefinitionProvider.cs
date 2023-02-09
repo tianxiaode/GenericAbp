@@ -1,4 +1,5 @@
-﻿using Volo.Abp.Settings;
+﻿using Generic.Abp.Metro.UI.TagHelpers.Form;
+using Volo.Abp.Settings;
 
 namespace Generic.Abp.Metro.UI.Settings
 {
@@ -11,7 +12,6 @@ namespace Generic.Abp.Metro.UI.Settings
             context.Add(
                 new SettingDefinition(MetroUiSettings.FormDefaultCols, "2"),
                 new SettingDefinition(MetroUiSettings.FormHorizontal, true.ToString())
-                //new SettingDefinition(MetroUiSettings.FormDefaultLabelWidth, ((int)LabelWidth.W100).ToString())
             );
         }
     }

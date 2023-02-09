@@ -136,28 +136,6 @@
     min-height: 100% !important;
     max-height: 100% !important;
 }
-
-.w-label-100{
-    min-width: 100px;
-}
-
-.w-label-110{
-    min-width: 110px;
-}
-
-.w-label-120{
-    min-width: 120px;
-}
-.w-label-130{
-    min-width: 130px;
-}
-.w-label-140{
-    min-width: 140px;
-}
-.w-label-150{
-    min-width: 150px;
-}
-
 .lh-input-label-small{
     line-height: 26px;
 }

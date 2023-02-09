@@ -11,7 +11,21 @@
     PageLayout.Content.Title = text;
 }
 <div data-role="panel" class="h-100 w-100 scroll-y" data-title-caption="@text" data-cls-title="bg-dark fg-white  h4 m-0">
-    <div class="w-100 p-2 border-1 bd-gray border-solid">
+    <div class="row w-100 p-2 border-1 bd-gray border-solid">
+        <form class="cell-6">
+            <metro-input asp-for="@Model.Base.Name"/>
+            <metro-input asp-for="@Model.Base.Age"/>
+            <metro-input asp-for="@Model.Base.Confirm"/>
+            <metro-input asp-for="@Model.Base.BirthDateTime"/>
+        </form>
+        <form class="cell-6">
+            <metro-form-content horizontal="true">
+                <metro-input asp-for="@Model.Base.Name"/>
+                <metro-input asp-for="@Model.Base.Age"/>
+                <metro-input asp-for="@Model.Base.Confirm"/>
+                <metro-input asp-for="@Model.Base.BirthDateTime"/>
+            </metro-form-content>
+        </form>
     </div>
     <div class=" p-2 bg-grayWhite">
         <div class="code">
