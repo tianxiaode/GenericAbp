@@ -42,8 +42,9 @@ public class MetroFormContentTagHelper : MetroTagHelper<FormGroupItem>
     [HtmlAttributeName("metro-model")] public ModelExpression Model { get; set; }
     public int? Cols { get; set; }
     public bool? Horizontal { get; set; }
-    public int LabelWidth { get; set; }
-    public bool? RequiredSymbols { get; set; }
+    public int LabelWidth { get; set; } = 100;
+    public bool RequiredSymbols { get; set; } = true;
+    public InputSize Size { get; set; } = InputSize.Default;
 
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
@@ -70,7 +71,7 @@ public class MetroFormContentTagHelper : MetroTagHelper<FormGroupItem>
     {
         var contentBuilder = new StringBuilder("");
 
-        foreach (var item in list.OrderBy(o => o.DisplayOrder))
+        foreach (var item in list)
         {
             contentBuilder.AppendLine(item.HtmlContent);
         }
@@ -88,7 +89,7 @@ public class MetroFormContentTagHelper : MetroTagHelper<FormGroupItem>
 
         if (Cols != null) cols = Cols.Value;
         if (Horizontal != null) horizontal = Horizontal.Value;
-        context.Items["FormContent"] = new FormContent(cols, horizontal, RequiredSymbols ?? true, LabelWidth);
+        context.Items["FormContent"] = new FormContent(cols, horizontal, RequiredSymbols, LabelWidth, Size);
     }
 
     protected virtual async Task ProcessFieldsAsync(TagHelperContext context, TagHelperOutput output,
@@ -105,27 +106,28 @@ public class MetroFormContentTagHelper : MetroTagHelper<FormGroupItem>
 
         foreach (var model in models)
         {
+            var order = await GetDisplayOrderAsync();
             if (IsCheckboxGroup(model.ModelExplorer))
             {
-                await ProcessCheckboxGroupAsync(context, output, model, list);
+                await ProcessCheckboxGroupAsync(context, output, model, list, order);
             }
             else if (IsRadioGroup(model.ModelExplorer))
             {
-                await ProcessRadioGroupAsync(context, output, model, list);
+                await ProcessRadioGroupAsync(context, output, model, list, order);
             }
             else if (IsSelectGroup(context, model))
             {
-                await ProcessSelectGroupAsync(context, output, model, list);
+                await ProcessSelectGroupAsync(context, output, model, list, order);
             }
             else
             {
-                await ProcessInputAsync(context, output, model, list);
+                await ProcessInputAsync(context, output, model, list, order);
             }
         }
     }
 
     protected virtual async Task ProcessCheckboxGroupAsync(TagHelperContext context, TagHelperOutput output,
-        ModelExpression model, List<FormGroupItem> list)
+        ModelExpression model, List<FormGroupItem> list, int displayOrder)
     {
         var checkboxGroupAttribute = model.ModelExplorer.GetAttribute<CheckboxGroup>();
         var tagHelper = new MetroCheckboxGroupTagHelper(HtmlEncoder, Generator, Localizer, SelectItemsService)
@@ -133,61 +135,65 @@ public class MetroFormContentTagHelper : MetroTagHelper<FormGroupItem>
             AspFor = model,
             AspItems = null,
             ViewContext = ViewContext,
-            IsDisabled = checkboxGroupAttribute.Disabled,
-            Cols = checkboxGroupAttribute.Cols
+            Disabled = checkboxGroupAttribute.Disabled,
+            Cols = checkboxGroupAttribute.Cols,
+            DisplayOrder = displayOrder
         };
 
         var html = await tagHelper.RenderAsync(new TagHelperAttributeList(), context, HtmlEncoder, "div",
             TagMode.StartTagAndEndTag);
-        await AddGroupItemAsync(list, model.Name, html, await GetDisplayOrderAsync());
+        await AddGroupItemAsync(list, model.Name, html, displayOrder);
     }
 
     protected virtual async Task ProcessRadioGroupAsync(TagHelperContext context, TagHelperOutput output,
-        ModelExpression model, List<FormGroupItem> list)
+        ModelExpression model, List<FormGroupItem> list, int displayOrder)
     {
         var radioGroupAttribute = model.ModelExplorer.GetAttribute<RadioGroup>();
-        var tagHelper = new MetroCheckboxGroupTagHelper(HtmlEncoder, Generator, Localizer, SelectItemsService)
+        var tagHelper = new MetroRadioGroupTagHelper(HtmlEncoder, Generator, Localizer, SelectItemsService)
         {
             AspFor = model,
             AspItems = null,
             ViewContext = ViewContext,
-            IsDisabled = radioGroupAttribute.Disabled,
-            Cols = radioGroupAttribute.Cols
+            Disabled = radioGroupAttribute.Disabled,
+            Cols = radioGroupAttribute.Cols,
+            DisplayOrder = displayOrder
         };
 
         var html = await tagHelper.RenderAsync(new TagHelperAttributeList(), context, HtmlEncoder, "div",
             TagMode.StartTagAndEndTag);
-        await AddGroupItemAsync(list, model.Name, html, await GetDisplayOrderAsync());
+        await AddGroupItemAsync(list, model.Name, html, displayOrder);
     }
 
 
     protected virtual async Task ProcessSelectGroupAsync(TagHelperContext context, TagHelperOutput output,
-        ModelExpression model, List<FormGroupItem> list)
+        ModelExpression model, List<FormGroupItem> list, int displayOrder)
     {
         var tagHelper = new MetroSelectTagHelper(HtmlEncoder, Generator, Localizer, SelectItemsService)
         {
             AspFor = model,
             AspItems = null,
-            ViewContext = ViewContext
+            ViewContext = ViewContext,
+            DisplayOrder = displayOrder
         };
 
         var html = await tagHelper.RenderAsync(new TagHelperAttributeList(), context, HtmlEncoder, "div",
             TagMode.StartTagAndEndTag);
-        await AddGroupItemAsync(list, model.Name, html, await GetDisplayOrderAsync());
+        await AddGroupItemAsync(list, model.Name, html, displayOrder);
     }
 
     protected virtual async Task ProcessInputAsync(TagHelperContext context, TagHelperOutput output,
-        ModelExpression model, List<FormGroupItem> list)
+        ModelExpression model, List<FormGroupItem> list, int displayOrder)
     {
         var tagHelper = new MetroInputTagHelper(HtmlEncoder, Localizer, Generator)
         {
             AspFor = model,
-            ViewContext = ViewContext
+            ViewContext = ViewContext,
+            DisplayOrder = displayOrder
         };
 
         var html = await tagHelper.RenderAsync(new TagHelperAttributeList(), context, HtmlEncoder, "div",
             TagMode.StartTagAndEndTag);
-        await AddGroupItemAsync(list, model.Name, html, await GetDisplayOrderAsync());
+        await AddGroupItemAsync(list, model.Name, html, displayOrder);
     }
 
 

@@ -17,6 +17,6 @@ public static class ModelExplorerExtensions
 
     public static int GetDisplayOrder(this ModelExplorer explorer)
     {
-        return GetAttribute<DisplayOrder>(explorer)?.Number ?? DisplayOrder.Default;
+        return GetAttribute<DisplayOrder>(explorer)?.Number ?? TagHelperConsts.DisplayOrder;
     }
 }

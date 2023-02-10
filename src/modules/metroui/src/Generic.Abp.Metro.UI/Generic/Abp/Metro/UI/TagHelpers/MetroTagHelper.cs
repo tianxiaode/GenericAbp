@@ -86,10 +86,11 @@ public abstract class MetroTagHelper : TagHelper
         return Task.FromResult(order);
     }
 
-    protected virtual Task SetDisplayOrderAsync(TagBuilder tagBuilder, int order)
+    protected virtual async Task SetDisplayOrderAsync(TagBuilder tagBuilder, int order)
     {
-        if (order != 0) tagBuilder.Attributes.Add("style", $"order:{order}");
-        return Task.CompletedTask;
+        if (order == 0) return;
+        await AddStyleAsync(tagBuilder, $"order:{order};");
+        //tagBuilder.Attributes.Add("style", $"order:{order}");
     }
 
     protected virtual async Task AddStyleAsync<TBuilder>(TBuilder builder, string value)

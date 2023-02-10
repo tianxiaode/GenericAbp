@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 
@@ -15,12 +16,6 @@ public class MetroInputTagHelper : MetroInputTagHelperBase
         IHtmlGenerator generator) : base(htmlEncoder, generator, localizer)
     {
     }
-
-    public string Prepend { get; set; }
-    public string Append { get; set; }
-    public string DefaultValue { get; set; }
-    public string ClsPrepend { get; set; }
-    public string ClsAppend { get; set; }
 
     protected override async Task<string> GetFormInputGroupAsHtmlAsync(TagHelperContext context, TagHelperOutput output)
     {
@@ -61,17 +56,35 @@ public class MetroInputTagHelper : MetroInputTagHelperBase
         else
         {
             inputTagHelperOutput.Attributes.AddClass("metro-input");
-            await AddDataAttributeAsync(tagHelper);
+            await AddPrependAndAppendAttributesAsync(inputTagHelperOutput);
         }
 
         await SetDataRoleAttributeAsync(inputTagHelperOutput);
         await SetInputValidatorAsync(inputTagHelperOutput.Attributes);
+
+        await SetInputSizeAsync(inputTagHelperOutput);
 
         return inputTagHelperOutput;
     }
 
     protected virtual TagHelper GetInputTagHelper(TagHelperContext context, TagHelperOutput output)
     {
+        if (TryGetTextAreaAttribute(output) != null)
+        {
+            var textAreaTagHelper = new TextAreaTagHelper(Generator)
+            {
+                For = AspFor,
+                ViewContext = ViewContext
+            };
+
+            if (!string.IsNullOrWhiteSpace(Name))
+            {
+                textAreaTagHelper.Name = Name;
+            }
+
+            return textAreaTagHelper;
+        }
+
         var inputTagHelper = new InputTagHelper(Generator)
         {
             For = AspFor,
@@ -180,16 +193,5 @@ public class MetroInputTagHelper : MetroInputTagHelperBase
         output.Attributes.Add("data-style", 2);
         //output.Attributes.Add("data-cls-caption", "fg-cyan");
         //output.Attributes.Add("data-cls-check", "bd-cyan");
-    }
-
-    protected virtual async Task AddDataAttributeAsync(TagHelper tagHelper)
-    {
-        if (!string.IsNullOrWhiteSpace(Prepend)) await AddDataAttributeAsync(tagHelper, nameof(Prepend), Prepend);
-        if (!string.IsNullOrWhiteSpace(Append)) await AddDataAttributeAsync(tagHelper, nameof(Append), Append);
-        if (!string.IsNullOrWhiteSpace(ClsPrepend))
-            await AddDataAttributeAsync(tagHelper, nameof(ClsPrepend), ClsPrepend);
-        if (!string.IsNullOrWhiteSpace(ClsAppend)) await AddDataAttributeAsync(tagHelper, nameof(ClsAppend), ClsAppend);
-        if (!string.IsNullOrWhiteSpace(DefaultValue))
-            await AddDataAttributeAsync(tagHelper, nameof(DefaultValue), DefaultValue);
     }
 }

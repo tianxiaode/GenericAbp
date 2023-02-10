@@ -3,11 +3,11 @@
 namespace Generic.Abp.Metro.UI.TagHelpers.Form.Attributes;
 
 [AttributeUsage(AttributeTargets.Property)]
-public class FormControlSize : Attribute
+public class InputSize : Attribute
 {
-    public MetroFormControlSize Size { get; set; }
+    public Form.InputSize Size { get; set; }
 
-    public FormControlSize(MetroFormControlSize size)
+    public InputSize(Form.InputSize size)
     {
         Size = size;
     }

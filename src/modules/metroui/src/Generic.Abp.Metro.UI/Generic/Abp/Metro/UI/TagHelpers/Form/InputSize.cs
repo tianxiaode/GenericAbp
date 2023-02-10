@@ -1,6 +1,6 @@
 ﻿namespace Generic.Abp.Metro.UI.TagHelpers.Form;
 
-public enum MetroFormControlSize
+public enum InputSize
 {
     Default,
     Small,

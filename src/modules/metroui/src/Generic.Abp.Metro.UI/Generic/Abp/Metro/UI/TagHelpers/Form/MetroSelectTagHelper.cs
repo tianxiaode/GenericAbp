@@ -26,13 +26,6 @@ public class MetroSelectTagHelper : MetroInputTagHelperBase, ISelectItemsTagHelp
     public IEnumerable<SelectListItem> AspItems { get; set; }
     [HtmlAttributeName("info")] public string InfoText { get; set; }
 
-    public string Prepend { get; set; }
-    public string Append { get; set; }
-    public string DefaultValue { get; set; }
-    public string ClsPrepend { get; set; }
-    public string ClsAppend { get; set; }
-
-
     protected override async Task<string> GetFormInputGroupAsHtmlAsync(TagHelperContext context, TagHelperOutput output)
     {
         var childContent = await output.GetChildContentAsync();
@@ -60,25 +53,15 @@ public class MetroSelectTagHelper : MetroInputTagHelperBase, ISelectItemsTagHelp
 
         selectTagHelperOutput.Content.SetHtmlContent(childContent);
         selectTagHelperOutput.Attributes.AddClass("metro-input");
+        await SetInputSizeAsync(selectTagHelperOutput);
         await AddPlaceholderAttributeAsync(selectTagHelperOutput);
         AddDisabledAttribute(selectTagHelperOutput);
         AddReadOnlyAttribute(selectTagHelperOutput);
         await SetDataRoleAttributeAsync(selectTagHelperOutput);
         await SetInputValidatorAsync(selectTagHelperOutput.Attributes);
-        await AddDataAttributeAsync(selectTagHelper);
+        await AddPrependAndAppendAttributesAsync(selectTagHelperOutput);
 
 
         return selectTagHelperOutput;
-    }
-
-    protected virtual async Task AddDataAttributeAsync(TagHelper tagHelper)
-    {
-        if (!string.IsNullOrWhiteSpace(Prepend)) await AddDataAttributeAsync(tagHelper, nameof(Prepend), Prepend);
-        if (!string.IsNullOrWhiteSpace(Append)) await AddDataAttributeAsync(tagHelper, nameof(Append), Append);
-        if (!string.IsNullOrWhiteSpace(ClsPrepend))
-            await AddDataAttributeAsync(tagHelper, nameof(ClsPrepend), ClsPrepend);
-        if (!string.IsNullOrWhiteSpace(ClsAppend)) await AddDataAttributeAsync(tagHelper, nameof(ClsAppend), ClsAppend);
-        if (!string.IsNullOrWhiteSpace(DefaultValue))
-            await AddDataAttributeAsync(tagHelper, nameof(DefaultValue), DefaultValue);
     }
 }

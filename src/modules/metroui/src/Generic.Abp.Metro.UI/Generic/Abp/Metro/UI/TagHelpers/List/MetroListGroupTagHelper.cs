@@ -38,17 +38,18 @@ public class MetroListGroupTagHelper : MetroListGroupTagHelperBase, IHasItems<Me
         return Task.CompletedTask;
     }
 
-    public async Task AddItemsAsync(TagHelperOutput output, IEnumerable<MetroListItem> items)
+    public virtual async Task AddItemsAsync(TagHelperOutput output, IEnumerable<MetroListItem> items)
     {
         var builder = new StringBuilder();
         foreach (var item in items)
         {
-            var displayOrder = await GetDisplayOrderAsync(item.DisplayOrder);
+            var displayOrder = await GetDisplayOrderAsync();
             await AddFeedTitleAsync(builder, item.Title, displayOrder);
 
             var tagBuilder = await AddItemAsync(item.Title, item.Marker, item.StepContent, item.Image, item.Label,
                 item.SecondLabel, item.SecondAction);
-            tagBuilder.Attributes.Add("style", $"order:{displayOrder}");
+            await SetDisplayOrderAsync(tagBuilder, displayOrder);
+            //tagBuilder.Attributes.Add("style", $"order:{displayOrder}");
             builder.AppendLine(tagBuilder.ToHtmlString());
         }
 

@@ -33,7 +33,7 @@ public class MetroInputGroupTagHelper : MetroInputTagHelperBase, ISelectItemsTag
     {
         var builder = new StringBuilder();
         builder.AppendLine(await GetLabelAsHtmlAsync(output));
-        builder.AppendLine("$<div class=\"row w-100\">");
+        builder.AppendLine($"<div class=\"row w-100\">");
         if (IsCheckboxGroup || IsRadioGroup)
         {
             builder.AppendLine(await GetInputGroupAsHtmlAsync(context, output));
@@ -56,6 +56,7 @@ public class MetroInputGroupTagHelper : MetroInputTagHelperBase, ISelectItemsTag
         var list = AspItems?.ToList() ?? await SelectItemsService.GetSelectItemsAsync(this, Localizer);
         if (list == null) return "";
         await SetSelectedValueAsync(list);
+        //var size = await GetSizeStringAsync();
 
         foreach (var selectItem in list)
         {
@@ -68,9 +69,10 @@ public class MetroInputGroupTagHelper : MetroInputTagHelperBase, ISelectItemsTag
             attributes.Add("id", id);
             attributes.Add("name", name);
             attributes.Add("value", selectItem.Value);
-            attributes.Add("data-role", "checkbox");
+            attributes.Add("data-role", type);
             attributes.Add("data-style", "2");
-            attributes.Add("class", colsCls);
+            input.AddCssClass(colsCls);
+            //if (!string.IsNullOrWhiteSpace(size)) input.AddCssClass($"input{size}");
             //attributes.Add(" data-cls-caption", "fg-cyan text-bold");
             //attributes.Add(" data-cls-check", "bd-cyan");
 

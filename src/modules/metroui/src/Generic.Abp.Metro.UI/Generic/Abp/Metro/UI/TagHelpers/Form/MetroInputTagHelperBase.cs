@@ -36,20 +36,23 @@ public abstract class MetroInputTagHelperBase : MetroTagHelper<FormGroupItem>
     protected bool IsSelect { get; set; } = false;
     protected bool IsRadioGroup { get; set; } = false;
     public ModelExpression AspFor { get; set; }
-    [HtmlAttributeName("disabled")] public bool IsDisabled { get; set; } = false;
-    [HtmlAttributeName("readonly")] public bool IsReadonly { get; set; } = false;
+    public bool Disabled { get; set; } = false;
+    public bool Readonly { get; set; } = false;
     public string Label { get; set; }
     [HtmlAttributeName("type")] public string InputTypeName { get; set; }
-    [HtmlAttributeName("required-symbol")] public bool DisplayRequiredSymbol { get; set; } = true;
+    public bool? RequiredSymbol { get; set; }
     [HtmlAttributeName("asp-format")] public string Format { get; set; }
     public string Name { get; set; }
     public string Value { get; set; }
     public bool NoLabel { get; set; } = false;
     public int? LabelWidth { get; set; }
-
     public CheckBoxHiddenInputRenderMode? CheckBoxHiddenInputRenderMode { get; set; }
-
-    public MetroFormControlSize Size { get; set; } = MetroFormControlSize.Default;
+    public InputSize? Size { get; set; }
+    public string Prepend { get; set; }
+    public string Append { get; set; }
+    public string ClsPrepend { get; set; }
+    public string ClsAppend { get; set; }
+    public int DisplayOrder { get; set; } = 0;
 
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
@@ -63,12 +66,12 @@ public abstract class MetroInputTagHelperBase : MetroTagHelper<FormGroupItem>
 
         output.TagMode = TagMode.StartTagAndEndTag;
         output.TagName = "div";
-
-        await SetInputSizeAsync(output);
+        var order = await GetDisplayOrderAsync(DisplayOrder);
+        await SetColumnWidthAsync(output);
         output.Content.AppendHtml(innerHtml);
+        await AddStyleAsync(output, $"order:{order};");
         var suppress = await AddItemToFormItemsContents(context, AspFor.Name,
-            await output.RenderAsync(HtmlEncoder), AspFor.ModelExplorer.GetDisplayOrder());
-
+            await output.RenderAsync(HtmlEncoder), order);
         if (suppress)
         {
             output.SuppressOutput();
@@ -82,21 +85,43 @@ public abstract class MetroInputTagHelperBase : MetroTagHelper<FormGroupItem>
 
     protected Task GetFormContentAsync(TagHelperContext context)
     {
-        if (!context.Items.ContainsKey(TagHelperConsts.FormContent))
+        FormContent = new FormContent();
+        if (context.Items.ContainsKey(TagHelperConsts.FormContent))
         {
-            FormContent = new FormContent();
-            return Task.CompletedTask;
+            var formContent = context.Items[TagHelperConsts.FormContent];
+            if (formContent != null)
+            {
+                FormContent = formContent as FormContent ?? FormContent;
+            }
         }
 
-        FormContent = context.Items[TagHelperConsts.FormContent] as FormContent ?? new FormContent();
+        if (LabelWidth.HasValue)
+        {
+            FormContent.LabelWidth = LabelWidth.Value;
+        }
+
+        if (RequiredSymbol.HasValue)
+        {
+            FormContent.RequiredSymbols = RequiredSymbol.Value;
+        }
+
+        if (Size.HasValue)
+        {
+            FormContent.Size = Size.Value;
+        }
+        else if (AspFor.ModelExplorer.GetAttribute<Attributes.InputSize>() != null)
+        {
+            FormContent.Size = AspFor.ModelExplorer.GetAttribute<Attributes.InputSize>().Size;
+        }
+
         return Task.CompletedTask;
     }
 
-    protected Task SetInputSizeAsync(TagHelperOutput output)
+    protected Task SetColumnWidthAsync(TagHelperOutput output)
     {
         var attributes = output.Attributes;
-        var cols = FormContent?.Cols ?? 1;
-        if (IsTextarea || IsCheckbox || IsRadio || IsCheckboxGroup) cols = 1;
+        var cols = FormContent.Cols;
+        if (IsTextarea || IsCheckbox || IsRadio || IsCheckboxGroup || IsRadioGroup) cols = 1;
         attributes.AddClass($"w-cols-{cols} pt-1 pb-6");
         if (FormContent is not { Horizontal: true }) return Task.CompletedTask;
         attributes.AddClass("d-flex");
@@ -110,12 +135,19 @@ public abstract class MetroInputTagHelperBase : MetroTagHelper<FormGroupItem>
         tagBuilder.AddCssClass($"lh-input-label{size}");
     }
 
+    protected async Task SetInputSizeAsync(TagHelperOutput output)
+    {
+        var size = await GetSizeStringAsync();
+        if (string.IsNullOrWhiteSpace(size)) return;
+        output.Attributes.AddClass($"input{size}");
+    }
+
     protected Task<string> GetSizeStringAsync()
     {
-        var size = Size switch
+        var size = FormContent.Size switch
         {
-            MetroFormControlSize.Large => "large",
-            MetroFormControlSize.Small => "small",
+            InputSize.Large => "large",
+            InputSize.Small => "small",
             _ => "",
         };
         if (!string.IsNullOrWhiteSpace(size)) size = "-" + size;
@@ -126,7 +158,7 @@ public abstract class MetroInputTagHelperBase : MetroTagHelper<FormGroupItem>
     protected virtual void AddDisabledAttribute(TagHelperOutput inputTagHelperOutput)
     {
         if (inputTagHelperOutput.Attributes.ContainsName("disabled") == false &&
-            (IsDisabled || AspFor.ModelExplorer.GetAttribute<DisabledInput>() != null))
+            (Disabled || AspFor.ModelExplorer.GetAttribute<DisabledInput>() != null))
         {
             inputTagHelperOutput.Attributes.Add("disabled", "");
         }
@@ -135,7 +167,7 @@ public abstract class MetroInputTagHelperBase : MetroTagHelper<FormGroupItem>
     protected virtual void AddReadOnlyAttribute(TagHelperOutput inputTagHelperOutput)
     {
         if (inputTagHelperOutput.Attributes.ContainsName("readonly") == false &&
-            (IsReadonly || AspFor.ModelExplorer.GetAttribute<ReadOnlyInput>() != null))
+            (Readonly || AspFor.ModelExplorer.GetAttribute<ReadOnlyInput>() != null))
         {
             inputTagHelperOutput.Attributes.Add("readonly", "");
         }
@@ -171,7 +203,7 @@ public abstract class MetroInputTagHelperBase : MetroTagHelper<FormGroupItem>
 
     protected virtual async Task<string> GetLabelAsHtmlAsync(TagHelperOutput inputTag)
     {
-        if (IsOutputHidden(inputTag) || IsCheckbox)
+        if (IsOutputHidden(inputTag) || IsCheckbox || NoLabel)
         {
             return string.Empty;
         }
@@ -247,11 +279,6 @@ public abstract class MetroInputTagHelperBase : MetroTagHelper<FormGroupItem>
 
     protected virtual string GetRequiredSymbol()
     {
-        if (!DisplayRequiredSymbol)
-        {
-            return "";
-        }
-
         if (!FormContent.RequiredSymbols)
         {
             return "";
@@ -327,5 +354,46 @@ public abstract class MetroInputTagHelperBase : MetroTagHelper<FormGroupItem>
         if (list == null) return false;
         await AddGroupItemAsync(list, propertyName, html, displayOrder);
         return true;
+    }
+
+    protected virtual async Task AddPrependAndAppendAttributesAsync(TagHelperOutput output)
+    {
+        if (AspFor.ModelExplorer.GetAttribute<InputPrepend>() != null)
+        {
+            Prepend = AspFor.ModelExplorer.GetAttribute<InputPrepend>().Prepend;
+        }
+
+        if (AspFor.ModelExplorer.GetAttribute<InputClsPrepend>() != null)
+        {
+            ClsPrepend = AspFor.ModelExplorer.GetAttribute<InputClsPrepend>().ClsPrepend;
+        }
+
+        if (AspFor.ModelExplorer.GetAttribute<InputAppend>() != null)
+        {
+            Append = AspFor.ModelExplorer.GetAttribute<InputAppend>().Append;
+        }
+
+        if (AspFor.ModelExplorer.GetAttribute<InputClsAppend>() != null)
+        {
+            ClsAppend = AspFor.ModelExplorer.GetAttribute<InputClsAppend>().ClsAppend;
+        }
+
+
+        if (!string.IsNullOrWhiteSpace(Prepend)) await AddDataAttributeAsync(output, nameof(Prepend), Prepend);
+        if (!string.IsNullOrWhiteSpace(Append)) await AddDataAttributeAsync(output, nameof(Append), Append);
+        if (!string.IsNullOrWhiteSpace(ClsPrepend))
+            await AddDataAttributeAsync(output, nameof(ClsPrepend), ClsPrepend);
+        if (!string.IsNullOrWhiteSpace(ClsAppend)) await AddDataAttributeAsync(output, nameof(ClsAppend), ClsAppend);
+    }
+
+    protected override Task<int> GetDisplayOrderAsync(int order = 0)
+    {
+        if (order != 0) return Task.FromResult(order);
+        order = AspFor.ModelExplorer.GetDisplayOrder();
+        if (order != TagHelperConsts.DisplayOrder) return Task.FromResult(order);
+        order = TagHelperConsts.DisplayOrder + OrderIncrement;
+        OrderIncrement += 100;
+
+        return Task.FromResult(order);
     }
 }

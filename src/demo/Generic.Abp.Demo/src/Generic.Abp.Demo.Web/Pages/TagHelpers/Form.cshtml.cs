@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Generic.Abp.Metro.UI.TagHelpers.Form.Attributes;
 
 namespace Generic.Abp.Demo.Web.Pages.TagHelpers
 {
@@ -42,12 +43,15 @@ namespace Generic.Abp.Demo.Web.Pages.TagHelpers
         public class BaseViewModel
         {
             public string Name { get; set; }
+            [DataType(DataType.Password)] public string Password { get; set; }
+            public string PhoneNumber { get; set; }
             public int Age { get; set; }
             public bool Confirm { get; set; }
+            [Display(Name = "BirthDay")] public DateTime BirthDateTime { get; set; }
+            public CarType CarType { get; set; }
 
-            [Display(Name = "BirthDay")]
-            //[DataType(DataType.DateTime)]
-            public DateTime BirthDateTime { get; set; }
+            [RadioGroup(2)] public CarType CarType2 { get; set; }
+            [CheckboxGroup(2)] public List<CarType> CarType3 { get; set; }
         }
 
         public class IndexViewModel
