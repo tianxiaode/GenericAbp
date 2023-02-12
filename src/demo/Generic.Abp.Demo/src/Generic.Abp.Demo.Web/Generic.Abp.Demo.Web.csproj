@@ -23,12 +23,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Remove="Pages\TagHelpers\Index.cshtml" />
+    <Content Remove="Pages\TagHelpers2\Index.cshtml" />
     <Content Remove="wwwroot\global.js" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Pages\TagHelpers\Index.cshtml" />
+    <EmbeddedResource Include="Pages\TagHelpers2\Index.cshtml" />
     <EmbeddedResource Include="wwwroot\global.js" />
   </ItemGroup>
 
@@ -61,7 +61,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\modules\metroui\src\Generic.Abp.Metro.UI.Theme.Basic\Generic.Abp.Metro.UI.Theme.Basic.csproj" />
+    <ProjectReference Include="..\..\..\..\modules\metroui\src\Generic.Abp.Metro.UI.Theme.Basic.Demo\Generic.Abp.Metro.UI.Theme.Basic.Demo.csproj" />
     <ProjectReference Include="..\Generic.Abp.Demo.Application\Generic.Abp.Demo.Application.csproj" />
     <ProjectReference Include="..\Generic.Abp.Demo.EntityFrameworkCore\Generic.Abp.Demo.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\Generic.Abp.Demo.HttpApi\Generic.Abp.Demo.HttpApi.csproj" />

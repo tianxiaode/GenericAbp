@@ -1,0 +1,153 @@
+﻿@page
+@using System.Globalization
+@using Generic.Abp.Metro.UI.TagHelpers.List
+@using Generic.Abp.Metro.UI.Theme.Basic.Demo.Localization
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
+@model Generic.Abp.Demo.Web.Pages.TagHelpers.ListGroupModel
+@inject IPageLayout PageLayout
+@inject IHtmlLocalizer<MetroUiThemeBasicDemoResource> L
+@{
+    Layout = "~/Pages/TagHelpers/Layout.cshtml";
+    var title = L["ListGroup"].Value;
+    PageLayout.Content.Title = title;
+}
+<div data-role="panel" class="h-100 w-100 scroll-y" data-title-caption="@title" data-cls-title="bg-dark fg-white h4 m-0">
+    @{
+        var items = new List<MetroListItem>()
+        {
+            new(){ Title = "One"},
+            new(){ Title = "Three"},
+            new(){ Title = "Four"},
+        };
+        var cSharpCode = @"
+    var items = new List<MetroListItem>()
+    {
+        new(){ Title = ""One""},
+        new(){ Title = ""Three""},
+        new(){ Title = ""Four""},
+    };
+    ";
+    }
+    <div class="row  p-2 border-1 bd-gray border-solid">
+        <div class="cell-md-6 p-2">
+            <metro-list-group asp-items="@items">
+                <metro-list-item type="Group" title="Two" display-order="10001" />
+            </metro-list-group>
+        </div>
+        <div class="cell-md-6 p-2">
+            <metro-list-group asp-items="@items" horizontal="true">
+                <metro-list-item type="Group" title="Two" display-order="10001" />
+            </metro-list-group>
+        </div>
+    </div>
+    <div class=" p-2 bg-grayWhite">
+        <pre><code class="language-csharp">@cSharpCode</code></pre>
+        <div class="code">
+            &lt;metro-list-group asp-items="@@items"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-list-item type="Group" title="Two" display-order="10001" /&gt;
+            &lt;/metro-list-group&gt;
+
+
+            &lt;metro-list-group asp-items="@@items" horizontal="true" &gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-list-item type="Group" title="Two" display-order="10001" /&gt;
+            &lt;/metro-list-group&gt;
+        </div>
+    </div>
+    
+    <h4>Marker</h4>
+    <div class="row  p-2 border-1 bd-gray border-solid">
+        <div class="cell-md-6 p-2">
+            <metro-list-group type="Marker">
+                <metro-list-item type="Marker" title="One" marker="★" />
+                <metro-list-item type="Marker" title="Two" marker="☄" />
+                <metro-list-item type="Marker" title="Three" marker="✓" />
+                <metro-list-item type="Marker" title="Four" marker="❤" />
+            </metro-list-group>
+        </div>
+    </div>
+    <div class=" p-2 bg-grayWhite">
+        <div class="code">
+            &lt;metro-list-group type="Marker"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-list-item type="Marker" title="One" marker="★" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-list-item type="Marker" title="Two" marker="☄" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-list-item type="Marker" title="Three" marker="✓" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-list-item type="Marker" title="Four" marker="❤" /&gt;
+            &lt;/metro-list-group&gt;
+        </div>
+    </div>
+    
+    <h4>Step list</h4>
+    <div class="row  p-2 border-1 bd-gray border-solid">
+        <div class="cell-md-6 p-2">
+            <metro-list-group type="Step">
+                <metro-list-item type="Step" title="One" step-content="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book." />
+                <metro-list-item type="Step" title="Two" step-content="Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old." />
+                <metro-list-item type="Step" title="Three" step-content="There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text." />
+            </metro-list-group>
+        </div>
+    </div>
+    <div class=" p-2 bg-grayWhite">
+        <div class="code">
+            &lt;metro-list-group type="Step"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-list-item type="Step" title="One" step-content="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book." /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-list-item type="Step" title="Two" step-content="Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old." /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-list-item type="Step" title="Three" step-content="There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text." /&gt;
+            &lt;/metro-list-group&gt;
+        </div>
+    </div>
+
+    <h4>Items list</h4>
+    <div class="row  p-2 border-1 bd-gray border-solid">
+        <div class="cell-md-6 p-2">
+            <metro-list-group type="Items">
+                <metro-list-item type="Items" image="/images/image.jpg" label="Label One" second-label="second-label" second-action="mif-alarm fg-red" />
+                <metro-list-item type="Items" image="/images/image.jpg" label="Label Two" second-label="second-label"  />
+                <metro-list-item type="Items" image="/images/image.jpg" label="Label Three" second-label="second-label"  />
+            </metro-list-group>
+        </div>
+    </div>
+    <div class=" p-2 bg-grayWhite">
+        <div class="code">
+            &lt;metro-list-group type="Items"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-list-item type="Items" image="/images/image.jpg" label="Label One" second-label="second-label" second-action="mif-alarm fg-red" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-list-item type="Items" image="/images/image.jpg" label="Label Two" second-label="second-label"  /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-list-item type="Items" image="/images/image.jpg" label="Label Three" second-label="second-label"  /&gt;
+            &lt;/metro-list-group&gt;
+        </div>
+    </div>
+
+    <h4>Feed list</h4>
+    <div class="row  p-2 border-1 bd-gray border-solid">
+        <div class="cell-md-6 p-2">
+            <metro-list-group type="Feed">
+                <metro-list-item type="Feed" image="/images/image.jpg" label="Label One" second-label="second-label" title="Title" />
+                <metro-list-item type="Feed" image="/images/image.jpg" label="Label Two" second-label="second-label" />
+                <metro-list-item type="Feed" image="/images/image.jpg" label="Label Three" second-label="second-label" />
+            </metro-list-group>
+        </div>
+        <div class="cell-md-6 p-2">
+            <metro-list-group type="Feed">
+                <metro-list-item type="Feed" image="/images/image.jpg" label="Label One" second-label="second-label" image-on-right="true" title="Title" />
+                <metro-list-item type="Feed" image="/images/image.jpg" label="Label Two" second-label="second-label" image-on-right="true" />
+                <metro-list-item type="Feed" image="/images/image.jpg" label="Label Three" second-label="second-label" image-on-right="true" />
+            </metro-list-group>
+        </div>
+    </div>
+    <div class=" p-2 bg-grayWhite">
+        <div class="code">
+            &lt;metro-list-group type="Feed"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-list-item type="Feed" image="/images/image.jpg" label="Label One" second-label="second-label" title="Title" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-list-item type="Feed" image="/images/image.jpg" label="Label Two" second-label="second-label" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-list-item type="Feed" image="/images/image.jpg" label="Label Three" second-label="second-label" /&gt;
+            &lt;/metro-list-group&gt;
+            
+            &lt;metro-list-group type="Feed"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-list-item type="Feed" image="/images/image.jpg" label="Label One" second-label="second-label" image-on-right="true" title="Title" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-list-item type="Feed" image="/images/image.jpg" label="Label Two" second-label="second-label" image-on-right="true" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-list-item type="Feed" image="/images/image.jpg" label="Label Three" second-label="second-label" image-on-right="true" /&gt;
+            &lt;/metro-list-group&gt;
+
+        </div>
+    </div>
+</div>

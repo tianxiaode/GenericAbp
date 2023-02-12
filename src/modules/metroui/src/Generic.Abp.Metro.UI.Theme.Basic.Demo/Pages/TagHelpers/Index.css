@@ -1,0 +1,16 @@
+﻿.code{
+    color: #0000ff;
+    font-family: courier !important;    
+}
+.code-tag {
+    color: #800000;
+}
+.code-html{
+    color: #000;
+}
+.code-attribute{
+    color: #ff0000;
+}
+.demo-grid [class*=cell] {
+    padding: 0 12px;
+}

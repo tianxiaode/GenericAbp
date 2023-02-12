@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+      <Import Project="..\..\..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+    <IsPackable>true</IsPackable>
+    <OutputType>Library</OutputType>
+    <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="Localization\Resources\*.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Pages\TagHelpers\Index.css" />
+    <None Remove="Pages\TagHelpers\Index.js" />
+    <None Remove="Pages\TagHelpers\prism.css" />
+    <None Remove="Pages\TagHelpers\prism.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Localization\Resources\*.json" />
+    <EmbeddedResource Include="Pages\TagHelpers\Index.css" />
+    <EmbeddedResource Include="Pages\TagHelpers\Index.js" />
+    <EmbeddedResource Include="Pages\TagHelpers\prism.css" />
+    <EmbeddedResource Include="Pages\TagHelpers\prism.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Generic.Abp.Metro.UI.Theme.Basic\Generic.Abp.Metro.UI.Theme.Basic.csproj" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="$(FileProvidersEmbeddedVersion)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Menu\" />
+  </ItemGroup>
+
+
+</Project>

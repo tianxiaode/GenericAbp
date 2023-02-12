@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace Generic.Abp.Metro.UI.TagHelpers.Tab;
 
-[HtmlTargetElement("metro-tab", TagStructure = TagStructure.NormalOrSelfClosing)]
+[HtmlTargetElement("metro-tab", TagStructure = TagStructure.WithoutEndTag)]
 public class MetroTabTagHelper : MetroTagHelper, ITabItem
 {
     public string Title { get; set; }

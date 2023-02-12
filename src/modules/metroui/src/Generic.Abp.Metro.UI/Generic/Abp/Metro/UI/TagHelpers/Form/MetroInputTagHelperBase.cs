@@ -35,6 +35,8 @@ public abstract class MetroInputTagHelperBase : MetroTagHelper<FormGroupItem>
     protected bool IsRadio { get; set; } = false;
     protected bool IsSelect { get; set; } = false;
     protected bool IsRadioGroup { get; set; } = false;
+    protected bool IsTagInput { get; set; } = false;
+    protected bool IsHidden { get; set; } = false;
     public ModelExpression AspFor { get; set; }
     public bool Disabled { get; set; } = false;
     public bool Readonly { get; set; } = false;
@@ -67,9 +69,14 @@ public abstract class MetroInputTagHelperBase : MetroTagHelper<FormGroupItem>
         output.TagMode = TagMode.StartTagAndEndTag;
         output.TagName = "div";
         var order = await GetDisplayOrderAsync(DisplayOrder);
-        await SetColumnWidthAsync(output);
+        if (!IsHidden)
+        {
+            await SetColumnWidthAsync(output);
+            await AddStyleAsync(output, $"order:{order};");
+        }
+
         output.Content.AppendHtml(innerHtml);
-        await AddStyleAsync(output, $"order:{order};");
+        if (!string.IsNullOrWhiteSpace(GetIdAttributeValue(output))) output.Attributes.Remove(output.Attributes["id"]);
         var suppress = await AddItemToFormItemsContents(context, AspFor.Name,
             await output.RenderAsync(HtmlEncoder), order);
         if (suppress)
@@ -181,6 +188,7 @@ public abstract class MetroInputTagHelperBase : MetroTagHelper<FormGroupItem>
             "date" => "calendarpicker",
             "datetime-local" => "calendarpicker",
             "file" => "file",
+            "hidden" => "",
             _ => "input"
         };
         if (type == "datetime-local")
@@ -194,6 +202,7 @@ public abstract class MetroInputTagHelperBase : MetroTagHelper<FormGroupItem>
                 CultureInfo.CurrentUICulture.DateTimeFormat.ShortDatePattern.Replace("y", "Y"));
         }
 
+        if (IsTagInput) dataRole = "taginput";
         if (IsCheckbox) dataRole = "checkbox";
         if (IsTextarea) dataRole = "textarea";
         if (IsSelect) dataRole = "select";
@@ -211,6 +220,8 @@ public abstract class MetroInputTagHelperBase : MetroTagHelper<FormGroupItem>
         var resolvedLabelText = await GetLabelDisplayNameAsync();
 
         var label = new TagBuilder("label");
+        label.AddCssClass("label-for-input");
+        label.Attributes.Add("for", GetIdAttributeValue(inputTag));
 
         label.InnerHtml.AppendHtml(
             await Localizer.GetLocalizedTextAsync(resolvedLabelText, AspFor.ModelExplorer));
@@ -384,16 +395,5 @@ public abstract class MetroInputTagHelperBase : MetroTagHelper<FormGroupItem>
         if (!string.IsNullOrWhiteSpace(ClsPrepend))
             await AddDataAttributeAsync(output, nameof(ClsPrepend), ClsPrepend);
         if (!string.IsNullOrWhiteSpace(ClsAppend)) await AddDataAttributeAsync(output, nameof(ClsAppend), ClsAppend);
-    }
-
-    protected override Task<int> GetDisplayOrderAsync(int order = 0)
-    {
-        if (order != 0) return Task.FromResult(order);
-        order = AspFor.ModelExplorer.GetDisplayOrder();
-        if (order != TagHelperConsts.DisplayOrder) return Task.FromResult(order);
-        order = TagHelperConsts.DisplayOrder + OrderIncrement;
-        OrderIncrement += 100;
-
-        return Task.FromResult(order);
     }
 }

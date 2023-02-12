@@ -27,7 +27,7 @@
 else
 {
     <li>
-        <a href="#" class="dropdown-toggle">Products
+        <a href="#" class="dropdown-toggle">
             @if (Model.Icon != null)
             {
                 if (Model.Icon.StartsWith("fa") || Model.Icon.StartsWith("mif"))
@@ -37,7 +37,7 @@ else
             }
             @Model.DisplayName
         </a>
-        <ul class="d-menu" data-role="dropdown">
+        <ul class="d-menu bg-dark" data-role="dropdown">
             @foreach (var childMenuItem in Model.Items)
             {
                 @await Html.PartialAsync("~/Themes/Basic/Components/Menu/_MenuItem.cshtml", childMenuItem)

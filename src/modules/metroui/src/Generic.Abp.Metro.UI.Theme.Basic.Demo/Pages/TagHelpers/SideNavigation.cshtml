@@ -1,0 +1,146 @@
+﻿@page
+@using Generic.Abp.Metro.UI.TagHelpers.Core
+@using Generic.Abp.Metro.UI.Theme.Basic.Demo.Localization
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
+@model Generic.Abp.Demo.Web.Pages.TagHelpers.SideNavigationModel
+@inject IPageLayout PageLayout
+@inject IHtmlLocalizer<MetroUiThemeBasicDemoResource> L
+@{
+    Layout = "~/Pages/TagHelpers/Layout.cshtml";
+    var text = L["SideNavigation"].Value;
+    PageLayout.Content.Title = text;
+}
+<div data-role="panel" class="h-100 w-100 scroll-y" data-title-caption="@text" data-cls-title="bg-dark fg-white  h4 m-0">
+    <div class="row w-100 p-2 border-1 bd-gray border-solid">
+        <div class="cell-6">
+            <metro-side-nav type="Simple" expand="MetroMediaMode.Md">
+                <metro-side-nav-item text="all items" icon="mif-apps" />
+                <metro-side-nav-item text="websites" icon="mif-vpn-lock" />
+                <metro-side-nav-item text="Virtual machines" icon="mif-drive-eta" active="true" />
+                <metro-side-nav-item text="Cloud services" icon="mif-cloud" />
+                <metro-side-nav-item text="SQL Databases" icon="mif-database" />
+                <metro-side-nav-item text="Automation" icon="mif-cogs" />
+            </metro-side-nav>
+        </div>
+        <div class="cell-6">
+            <metro-side-nav type="Simple">
+                <metro-side-nav-item text="all items" icon="mif-apps" />
+                <metro-side-nav-item text="websites" icon="mif-vpn-lock" />
+                <metro-side-nav-item text="Virtual machines" icon="mif-drive-eta" active="true" />
+                <metro-side-nav-item text="Cloud services" icon="mif-cloud" />
+                <metro-side-nav-item text="SQL Databases" icon="mif-database" />
+                <metro-side-nav-item text="Automation" icon="mif-cogs" />
+            </metro-side-nav>
+        </div>
+    </div>
+    <div class=" p-2 bg-grayWhite">
+        <div class="code">
+            &lt;metro-side-nav type="Simple" expand="MetroMediaMode.Md"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-side-nav-item text="all items" icon="mif-apps" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-side-nav-item text="websites" icon="mif-vpn-lock" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-side-nav-item text="Virtual machines" icon="mif-drive-eta" active="true" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-side-nav-item text="Cloud services" icon="mif-cloud" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-side-nav-item text="SQL Databases" icon="mif-database" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-side-nav-item text="Automation" icon="mif-cogs" /&gt;
+            &lt;/metro-side-nav&gt;
+            &nbsp;
+            &lt;metro-side-nav type="Simple"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-side-nav-item text="all items" icon="mif-apps" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-side-nav-item text="websites" icon="mif-vpn-lock" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-side-nav-item text="Virtual machines" icon="mif-drive-eta" active="true" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-side-nav-item text="Cloud services" icon="mif-cloud" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-side-nav-item text="SQL Databases" icon="mif-database" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-side-nav-item text="Automation" icon="mif-cogs" /&gt;
+            &lt;/metro-side-nav&gt;
+        </div>
+    </div>
+
+    <div class="w-100 p-2 border-1 bd-gray border-solid">
+        <div class="row w-100 p-2 border-1 bd-gray border-solid">
+            <div class="cell-6">
+                <metro-side-nav type="Counter" expand="MetroMediaMode.Md">
+                    <metro-side-nav-item text="all items" icon="mif-apps" />
+                    <metro-side-nav-item text="websites" icon="mif-vpn-lock" />
+                    <metro-side-nav-item text="Virtual machines" icon="mif-drive-eta" active="true"/>
+                    <metro-side-nav-item text="Cloud services" icon="mif-cloud" />
+                    <metro-side-nav-item text="SQL Databases" icon="mif-database" />
+                    <metro-side-nav-item text="Automation" icon="mif-cogs" />
+                </metro-side-nav>
+            </div>
+            <div class="cell-6">
+                <metro-side-nav type="Counter">
+                    <metro-side-nav-item text="all items" icon="mif-apps" />
+                    <metro-side-nav-item text="websites" icon="mif-vpn-lock" />
+                    <metro-side-nav-item text="Virtual machines" icon="mif-drive-eta" active="true" />
+                    <metro-side-nav-item text="Cloud services" icon="mif-cloud" />
+                    <metro-side-nav-item text="SQL Databases" icon="mif-database" />
+                    <metro-side-nav-item text="Automation" icon="mif-cogs" />
+                </metro-side-nav>
+            </div>
+        </div>
+    </div>
+    <div class=" p-2 bg-grayWhite">
+        <div class="code">
+            &lt;metro-side-nav type="Counter" expand="MetroMediaMode.Md"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-side-nav-item text="all items" icon="mif-apps" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-side-nav-item text="websites" icon="mif-vpn-lock" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-side-nav-item text="Virtual machines" icon="mif-drive-eta" active="true" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-side-nav-item text="Cloud services" icon="mif-cloud" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-side-nav-item text="SQL Databases" icon="mif-database" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-side-nav-item text="Automation" icon="mif-cogs" /&gt;
+            &lt;/metro-side-nav&gt;
+            &nbsp;
+            &lt;metro-side-nav type="Counter"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-side-nav-item text="all items" icon="mif-apps" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-side-nav-item text="websites" icon="mif-vpn-lock" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-side-nav-item text="Virtual machines" icon="mif-drive-eta" active="true" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-side-nav-item text="Cloud services" icon="mif-cloud" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-side-nav-item text="SQL Databases" icon="mif-database" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-side-nav-item text="Automation" icon="mif-cogs" /&gt;
+            &lt;/metro-side-nav&gt;
+        </div>
+    </div>
+
+    <div class="w-100 p-2 border-1 bd-gray border-solid">
+        <div class="row w-100 p-2 border-1 bd-gray border-solid">
+            <div class="cell-6">
+                <metro-side-nav type="M3" expand="MetroMediaMode.Md">
+                    <metro-side-nav-item text="all items" icon="mif-apps" />
+                    <metro-side-nav-item text="websites" icon="mif-vpn-lock" drop-down="true">
+                        <metro-menu type="Dropdown">
+                            <metro-menu-item text="Subitem 1" />
+                            <metro-menu-item text="Subitem 2" />
+                            <metro-menu-item text="Subitem 3" />
+                            <metro-menu-item text="Subitem 4" />
+                        </metro-menu>
+                    </metro-side-nav-item>
+                    <metro-side-nav-item text="Virtual machines" icon="mif-drive-eta" active="true" stick-color="MetroColor.Green" />
+                    <metro-side-nav-item text="Cloud services" icon="mif-cloud" />
+                    <metro-side-nav-item text="SQL Databases" icon="mif-database" />
+                    <metro-side-nav-item text="Automation" icon="mif-cogs" />
+                </metro-side-nav>
+            </div>
+        </div>
+    </div>
+    <div class=" p-2 bg-grayWhite">
+        <div class="code">
+            &lt;metro-side-nav type="M3" expand="MetroMediaMode.Md"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-side-nav-item text="all items" icon="mif-apps" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-side-nav-item text="websites" icon="mif-vpn-lock" drop-down="true"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu type="Dropdown"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item text="Subitem 1" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item text="Subitem 2" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item text="Subitem 3" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-menu-item text="Subitem 4" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/metro-menu&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;/metro-side-nav-item&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-side-nav-item text="Virtual machines" icon="mif-drive-eta" active="true" stick-color="MetroColor.Green" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-side-nav-item text="Cloud services" icon="mif-cloud" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-side-nav-item text="SQL Databases" icon="mif-database" /&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-side-nav-item text="Automation" icon="mif-cogs" /&gt;
+            &lt;/metro-side-nav&gt;
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,31 @@
+﻿@page
+@using Generic.Abp.Metro.UI.Theme.Basic.Demo.Localization
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
+@model Generic.Abp.Demo.Web.Pages.TagHelpers.CollapseModel
+@inject IPageLayout PageLayout
+@inject IHtmlLocalizer<MetroUiThemeBasicDemoResource> L
+@{
+    Layout = "~/Pages/TagHelpers/Layout.cshtml";
+    var text = L["Collapse"].Value;
+    PageLayout.Content.Title = text;
+}
+<div data-role="panel" class="h-100 w-100 scroll-y" data-title-caption="@text" data-cls-title="bg-dark fg-white  h4 m-0">
+    <div class="w-100 p-2 border-1 bd-gray border-solid">
+        <metro-collapse text="Collapse block" body-cls="bg-red fg-white">
+            <p class="p-10 text-center">
+                In Metro UI you can transform any element to collapsible.
+            </p>
+        </metro-collapse>
+    </div>
+    <div class=" p-2 bg-grayWhite">
+        <div class="code">
+            &lt;metro-collapse text="Collapse block" body-cls="bg-red fg-white"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;p class="p-10 text-center"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;In Metro UI you can transform any element to collapsible.
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;/p&gt;
+            &lt;/metro-collapse&gt;
+        </div>
+    </div>
+    
+</div>

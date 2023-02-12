@@ -79,7 +79,7 @@ public abstract class MetroTagHelper : TagHelper
 
     protected virtual Task<int> GetDisplayOrderAsync(int order = 0)
     {
-        if (order != 0) return Task.FromResult(order);
+        if (order is not (0 or TagHelperConsts.DisplayOrder)) return Task.FromResult(order);
         order = TagHelperConsts.DisplayOrder + OrderIncrement;
         OrderIncrement += 100;
 
@@ -90,7 +90,6 @@ public abstract class MetroTagHelper : TagHelper
     {
         if (order == 0) return;
         await AddStyleAsync(tagBuilder, $"order:{order};");
-        //tagBuilder.Attributes.Add("style", $"order:{order}");
     }
 
     protected virtual async Task AddStyleAsync<TBuilder>(TBuilder builder, string value)

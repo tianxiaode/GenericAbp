@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using System.Linq;
-using System.Reflection.Emit;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 
@@ -20,6 +19,11 @@ public class MetroInputTagHelper : MetroInputTagHelperBase
     protected override async Task<string> GetFormInputGroupAsHtmlAsync(TagHelperContext context, TagHelperOutput output)
     {
         var inputTag = await GetInputTagHelperOutputAsync(context, output);
+        if (IsOutputHidden(inputTag))
+        {
+            IsHidden = true;
+        }
+
         var inputHtml = await inputTag.RenderAsync(HtmlEncoder);
         var label = NoLabel ? "" : await GetLabelAsHtmlAsync(inputTag);
 
@@ -191,7 +195,5 @@ public class MetroInputTagHelper : MetroInputTagHelperBase
     {
         output.Attributes.Add("data-caption", await GetLabelDisplayNameAsync());
         output.Attributes.Add("data-style", 2);
-        //output.Attributes.Add("data-cls-caption", "fg-cyan");
-        //output.Attributes.Add("data-cls-check", "bd-cyan");
     }
 }

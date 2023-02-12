@@ -45,6 +45,7 @@ public class MetroFormContentTagHelper : MetroTagHelper<FormGroupItem>
     public int LabelWidth { get; set; } = 100;
     public bool RequiredSymbols { get; set; } = true;
     public InputSize Size { get; set; } = InputSize.Default;
+    public string GroupName { get; set; }
 
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
@@ -97,6 +98,12 @@ public class MetroFormContentTagHelper : MetroTagHelper<FormGroupItem>
     {
         if (Model.ModelExplorer?.Properties == null) return;
         var models = await GetModelsAsync(context, output);
+        if (!string.IsNullOrWhiteSpace(GroupName))
+        {
+            models = models.Where(m => m.ModelExplorer.GetAttribute<FormContentGroup>()?.GroupName == GroupName)
+                .ToList();
+        }
+
         var exits = await GetGroupItemsAsync(context);
         if (exits != null)
         {
@@ -106,7 +113,7 @@ public class MetroFormContentTagHelper : MetroTagHelper<FormGroupItem>
 
         foreach (var model in models)
         {
-            var order = await GetDisplayOrderAsync();
+            var order = await GetDisplayOrderAsync(model.ModelExplorer.GetDisplayOrder());
             if (IsCheckboxGroup(model.ModelExplorer))
             {
                 await ProcessCheckboxGroupAsync(context, output, model, list, order);
@@ -114,6 +121,10 @@ public class MetroFormContentTagHelper : MetroTagHelper<FormGroupItem>
             else if (IsRadioGroup(model.ModelExplorer))
             {
                 await ProcessRadioGroupAsync(context, output, model, list, order);
+            }
+            else if (IsTagInput(model.ModelExplorer))
+            {
+                await ProcessTagInputAsync(context, output, model, list, order);
             }
             else if (IsSelectGroup(context, model))
             {
@@ -180,6 +191,22 @@ public class MetroFormContentTagHelper : MetroTagHelper<FormGroupItem>
             TagMode.StartTagAndEndTag);
         await AddGroupItemAsync(list, model.Name, html, displayOrder);
     }
+
+    protected virtual async Task ProcessTagInputAsync(TagHelperContext context, TagHelperOutput output,
+        ModelExpression model, List<FormGroupItem> list, int displayOrder)
+    {
+        var tagHelper = new MetroTagInputTagHelper(HtmlEncoder, Localizer, Generator)
+        {
+            AspFor = model,
+            ViewContext = ViewContext,
+            DisplayOrder = displayOrder
+        };
+
+        var html = await tagHelper.RenderAsync(new TagHelperAttributeList(), context, HtmlEncoder, "div",
+            TagMode.StartTagAndEndTag);
+        await AddGroupItemAsync(list, model.Name, html, displayOrder);
+    }
+
 
     protected virtual async Task ProcessInputAsync(TagHelperContext context, TagHelperOutput output,
         ModelExpression model, List<FormGroupItem> list, int displayOrder)
@@ -279,5 +306,10 @@ public class MetroFormContentTagHelper : MetroTagHelper<FormGroupItem>
     protected virtual bool IsCheckboxGroup(ModelExplorer explorer)
     {
         return explorer.GetAttribute<CheckboxGroup>() != null;
+    }
+
+    protected virtual bool IsTagInput(ModelExplorer explorer)
+    {
+        return explorer.GetAttribute<TagInput>() != null;
     }
 }

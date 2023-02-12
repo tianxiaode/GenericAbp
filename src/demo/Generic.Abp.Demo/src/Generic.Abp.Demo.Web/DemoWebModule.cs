@@ -13,6 +13,7 @@ using System.IO;
 using Generic.Abp.Metro.UI.Packages.FontAwesome;
 using Generic.Abp.Metro.UI.Theme.Basic;
 using Generic.Abp.Metro.UI.Theme.Basic.Bundling;
+using Generic.Abp.Metro.UI.Theme.Basic.Demo;
 using Generic.Abp.Metro.UI.Theme.Shared;
 using Generic.Abp.Metro.UI.Theme.Shared.Bundling;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
@@ -38,7 +39,7 @@ namespace Generic.Abp.Demo.Web
         typeof(DemoApplicationModule),
         typeof(DemoEntityFrameworkCoreModule),
         typeof(AbpAutofacModule),
-        typeof(GenericAbpMetroUiThemeBasicModule),
+        typeof(GenericAbpMetroUiThemeBasicDemoModule),
         typeof(AbpAspNetCoreSerilogModule),
         typeof(AbpSwashbuckleModule)
     )]
