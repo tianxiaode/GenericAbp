@@ -1,5 +1,4 @@
-﻿@page
-@using Generic.Abp.Metro.UI.TagHelpers.List
+﻿@page "/tag-helpers/crads"
 @using Generic.Abp.Metro.UI.Theme.Basic.Demo.Localization
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Volo.Abp.AspNetCore.Mvc.UI.Layout
@@ -14,10 +13,10 @@
 <div data-role="panel" class="h-100 w-100 scroll-y" data-title-caption="@title" data-cls-title="bg-dark fg-white h4 m-0">
     <div class="row  p-2 border-1 bd-gray border-solid">
         <div class="cell-md-3 p-2">
-            <metro-card header="Card header" content="Card with header and footer. Card header is used to display card title and footer for some additional information or for custom actions." footer="Card footer"  content-cls="p-2"></metro-card>
+            <metro-card header="@L["CardHeader"].Value" content="Card with header and footer. Card header is used to display card title and footer for some additional information or for custom actions." footer="@L["CardFooter"].Value" content-cls="p-2"></metro-card>
         </div>
         <div class="cell-md-3 p-2">
-            <metro-card header="Card header" footer="Card footer" >
+            <metro-card header="@L["CardHeader"].Value" footer="@L["CardFooter"].Value" >
                 <metro-card-content class="p-2">
                     Card with header and footer. Card header is used to display card title and footer for some additional information or for custom actions.
                 </metro-card-content>
@@ -25,14 +24,14 @@
 
         </div>
         <div class="cell-md-3 p-2">
-            <metro-card header="Card header" footer="Card footer" content-cls="p-2">
+            <metro-card header="@L["CardHeader"].Value" footer="@L["CardFooter"].Value" content-cls="p-2">
                     Card with header and footer. Card header is used to display card title and footer for some additional information or for custom actions.
             </metro-card>
 
         </div>
         <div class="cell-md-3 p-2">
-            <metro-card footer="Card footer" content-cls="p-2">
-                <metro-card-header>Card header</metro-card-header>
+            <metro-card footer="@L["CardFooter"].Value" content-cls="p-2">
+                <metro-card-header>@L["CardHeader"].Value</metro-card-header>
                 Card with header and footer. Card header is used to display card title and footer for some additional information or for custom actions.
             </metro-card>
 
@@ -40,29 +39,29 @@
     </div>
     <div class=" p-2 bg-grayWhite">
         <div class="code">
-            &lt;metro-card header="Card header" content="Card with header and footer. Card header is used to display card title and footer for some additional information or for custom actions." footer="Card footer"  content-cls="p-2"&gt;&lt;/metro-card&gt;
+            &lt;metro-card header="@@L["CardHeader"].Value" content="Card with header and footer. Card header is used to display card title and footer for some additional information or for custom actions." footer="@L["CardFooter"].Value"  content-cls="p-2"&gt;&lt;/metro-card&gt;
             &nbsp;
-            &lt;metro-card header="Card header" footer="Card footer" &gt;
+            &lt;metro-card header="@@L["CardHeader"].Value" footer="@@L["CardFooter"].Value" &gt;
             &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-card-content class="p-2"&gt;
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Card with header and footer. Card header is used to display card title and footer for some additional information or for custom actions.
             &nbsp;&nbsp;&nbsp;&nbsp;&lt;/metro-card-content&gt;
             &lt;/metro-card&gt;
             &nbsp;
-            &lt;metro-card header="Card header" footer="Card footer" content-cls="p-2"&gt;
+            &lt;metro-card header="@@L["CardHeader"].Value" footer="@@L["CardFooter"].Value" content-cls="p-2"&gt;
             &nbsp;&nbsp;&nbsp;&nbsp;Card with header and footer. Card header is used to display card title and footer for some additional information or for custom actions.
             &lt;/metro-card&gt;
             &nbsp;
-            &lt;metro-card footer="Card footer" content-cls="p-2"&gt;
-            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-card-header&gt;Card header&lt;/metro-card-header&gt;
+            &lt;metro-card footer="@L["CardFooter"].Value" content-cls="p-2"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-card-header&gt;@@L["CardHeader"].Value&lt;/metro-card-header&gt;
             &nbsp;&nbsp;&nbsp;&nbsp;Card with header and footer. Card header is used to display card title and footer for some additional information or for custom actions.
             &lt;/metro-card&gt;
         </div>
     </div>
     
-    <h4>Image header</h4>
+    <h4>@L["ImageHeader"].Value</h4>
     <div class="row  p-2 border-1 bd-gray border-solid">
         <div class="cell-md-3 p-2">
-            <metro-card header="Card header" header-image="/images/image.jpg" header-cls="fg-white" footer="Card footer">
+            <metro-card header="@L["CardHeader"].Value" header-image="/images/image.jpg" header-cls="fg-white" footer="@L["CardFooter"].Value">
                 <metro-card-content class="p-2">
                     Card with header and footer. Card header is used to display card title and footer for some additional information or for custom actions.
                 </metro-card-content>
@@ -70,8 +69,8 @@
 
         </div>
         <div class="cell-md-3 p-2">
-            <metro-card footer="Card footer" content-cls="p-2">
-                <metro-card-header image="/images/image.jpg" class="fg-white">Card header</metro-card-header>
+            <metro-card footer="@L["CardFooter"].Value" content-cls="p-2">
+                <metro-card-header image="/images/image.jpg" class="fg-white">@L["CardHeader"].Value</metro-card-header>
                 Card with header and footer. Card header is used to display card title and footer for some additional information or for custom actions.
             </metro-card>
 
@@ -79,14 +78,14 @@
     </div>
     <div class=" p-2 bg-grayWhite">
         <div class="code">
-            &lt;metro-card header="Card header" header-image="/images/image.jpg" header-cls="fg-white" footer="Card footer"&gt;
+            &lt;metro-card header="@@L["CardHeader"].Value" header-image="/images/image.jpg" header-cls="fg-white" footer="@@L["CardFooter"].Value"&gt;
             &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-card-content class="p-2"&gt;
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Card with header and footer. Card header is used to display card title and footer for some additional information or for custom actions.
             &nbsp;&nbsp;&nbsp;&nbsp;&lt;/metro-card-content&gt;
             &lt;/metro-card&gt;
             &nbsp;
-            &lt;metro-card footer="Card footer" content-cls="p-2"&gt;
-            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-card-header image="/images/image.jpg" class="fg-white"&gt;Card header&lt;/metro-card-header&gt;
+            &lt;metro-card footer="@@L["CardFooter"].Value" content-cls="p-2"&gt;
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;metro-card-header image="/images/image.jpg" class="fg-white"&gt;@@L["CardHeader"].Value&lt;/metro-card-header&gt;
             &nbsp;&nbsp;&nbsp;&nbsp;Card with header and footer. Card header is used to display card title and footer for some additional information or for custom actions.
             &lt;/metro-card&gt;
         </div>

@@ -1,8 +1,4 @@
-﻿@page
-@using Generic.Abp.Metro.UI
-@using Generic.Abp.Metro.UI.TagHelpers
-@using Generic.Abp.Metro.UI.TagHelpers.Collapse
-@using Generic.Abp.Metro.UI.TagHelpers.Core
+﻿@page "/tag-helpers/dropdown"
 @using Generic.Abp.Metro.UI.Theme.Basic.Demo.Localization
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Volo.Abp.AspNetCore.Mvc.UI.Layout
@@ -122,7 +118,7 @@
         </div>
     </div>
 
-    <h4>Split button</h4>
+    <h4>@L["SplitButton"].Value</h4>
     <div class="row w-100 p-2 border-1 bd-gray border-solid">
         <metro-dropdown split="true" class="mr-1">
             <metro-dropdown-button>Menu toggle</metro-dropdown-button>

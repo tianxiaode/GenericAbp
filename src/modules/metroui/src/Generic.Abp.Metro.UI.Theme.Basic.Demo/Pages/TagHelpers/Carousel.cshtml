@@ -1,4 +1,4 @@
-﻿@page
+﻿@page "/tag-helpers/carousel"
 @using Generic.Abp.Metro.UI.Theme.Basic.Demo.Localization
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Volo.Abp.AspNetCore.Mvc.UI.Layout
@@ -32,7 +32,7 @@
         </div>
     </div>
     
-    <h4>Size</h4>
+    <h4>@L["Size"].Value</h4>
     <div class="row w-100 p-2 border-1 bd-gray border-solid text-center">
         <div class="cell-md-3 p-2">
             <metro-carousel height="16/9">
@@ -75,7 +75,7 @@
         </div>
     </div>
     
-    <h4>Controls</h4>
+    <h4>@L["Controls"].Value</h4>
     <div class="row w-100 p-2 border-1 bd-gray border-solid text-center">
         <div class="cell-md-3 p-1">
             <metro-carousel controls-outside="true">
@@ -127,7 +127,7 @@
         </div>
     </div>
 
-    <h4>Bullets</h4>
+    <h4>@L["Bullets"]</h4>
     <div class="row w-100 p-2 border-1 bd-gray border-solid text-center">
         <div class="cell-md-3 p-1">
             <metro-carousel bullets="false">
@@ -179,7 +179,7 @@
         </div>
     </div>
     
-    <h4>Effects</h4>
+    <h4>@L["Effects"].Value</h4>
     <div class="row w-100 p-2 border-1 bd-gray border-solid text-center">
         <div class="cell-md-2 p-1">
             <metro-carousel>

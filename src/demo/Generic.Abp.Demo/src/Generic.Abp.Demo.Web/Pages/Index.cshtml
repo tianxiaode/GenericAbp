@@ -1,7 +1,6 @@
 ﻿@page
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Generic.Abp.Demo.Localization
-@using Generic.Abp.Demo.Web.Pages
 @using Generic.Abp.Metro.UI.Bundling.TagHelpers
 @using Volo.Abp.AspNetCore.Mvc.UI.Theming
 @using Volo.Abp.Users
@@ -21,49 +20,8 @@
     <metro-script-bundle>
         <metro-script src="/Pages/Index.js" />
     </metro-script-bundle>
-    
 
 }
-
-
-<div class="row">
-    @*
-    <metro-dialog title="切换租户" buttons="ModalDialogButtons.Save | ModalDialogButtons.Cancel" id="ancd" asp-page="/Abp/MultiTenancy/TenantSwitchModal" metro-class="w-dialog-800 h-dialog-600">
-        <metro-form-content metro-model="IndexView">
-            <metro-input asp-for="@Model.IndexView.Email"></metro-input>
-            <metro-input asp-for="@Model.IndexView.Password"></metro-input>
-            <metro-input asp-for="@Model.IndexView.Surname"></metro-input>
-            <metro-input asp-for="@Model.IndexView.Age"></metro-input>
-            <metro-checkbox-group asp-for="@Model.IndexView.Country" cols="2"></metro-checkbox-group>
-            <metro-radio-group asp-for="@Model.IndexView.RadioCountry" cols="3"></metro-radio-group>
-            <metro-select asp-for="@Model.IndexView.MyCarAccentColor"></metro-select>
-            <metro-radio-group asp-for="@Model.IndexView.RadioCarAccentColor" cols="2"></metro-radio-group>
-            <metro-checkbox-group asp-for="@Model.IndexView.CheckboxCarAccentColor" cols="3"></metro-checkbox-group>
-            <metro-input asp-for="@Model.IndexView.Day"></metro-input>
-            <metro-input asp-for="@Model.IndexView.BirthDateTime"></metro-input>
-            <metro-input asp-for="@Model.IndexView.IsConfirm"></metro-input>
-            <metro-input asp-for="@Model.IndexView.Remarks"></metro-input>
-        </metro-form-content>
-    </metro-dialog>
-    *@
-    @*
-    <form id="form1" data-role="validator">
-        <metro-form-content cols="2" horizontal="true">
-            <metro-input asp-for="@Model.IndexView.Email"></metro-input>
-            <metro-input asp-for="@Model.IndexView.Password"></metro-input>
-            <metro-input asp-for="@Model.IndexView.SurName"></metro-input>
-            <metro-input asp-for="@Model.IndexView.Age"></metro-input>
-            <metro-input asp-for="@Model.IndexView.Phone1"></metro-input>
-            <metro-input color="checkbox" asp-for="@Model.IndexView.Name"></metro-input>
-            <metro-input asp-for="@Model.IndexView.Demo"></metro-input>
-        </metro-form-content>
-    </form>
-    <metro-dynamic-form metro-model="@Model.IndexView" cols="2" horizontal="true">
-        <metro-form-content ></metro-form-content>
-    </metro-dynamic-form>
-    *@
-    <button class="button primary" id="button1" onclick="Metro.getPlugin('#ancd','dialog').open()">显示</button>
-</div>
 
 
 <div class="jumbotron text-center">
@@ -81,3 +39,10 @@
     }
 </div>
 
+<div class="mask" style="width: 300px; height: 300px;">
+    <div class="mask-inner">
+        <div class="loading-spinner"><span class="mif-spinner4 ani-spin"></span></div>
+        <div class="mask-message">跳过分析器以加快生成速度</div>
+    </div>
+        
+</div>

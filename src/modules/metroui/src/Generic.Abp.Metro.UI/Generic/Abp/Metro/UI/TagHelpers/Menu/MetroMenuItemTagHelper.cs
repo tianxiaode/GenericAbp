@@ -77,7 +77,7 @@ public class MetroMenuItemTagHelper : MenuItemTagHelperBase
             iconHtml = await GetIconAsHtmlAsync(Icon);
         }
 
-        return await GetAnchorAsHtmlAsync(Href, iconHtml, text, hotKey: HotKey,
+        return await GetAnchorAsHtmlAsync(Href, icon: iconHtml, text: text, hotKey: HotKey,
             isDropDown: Type is MenuItemType.DropDown or MenuItemType.Mega);
     }
 }

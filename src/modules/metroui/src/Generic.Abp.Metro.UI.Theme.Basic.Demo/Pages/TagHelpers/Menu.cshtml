@@ -1,4 +1,4 @@
-﻿@page
+﻿@page "/tag-helpers/menu"
 @using Generic.Abp.Metro.UI
 @using Generic.Abp.Metro.UI.TagHelpers
 @using Generic.Abp.Metro.UI.TagHelpers.Collapse
@@ -66,7 +66,7 @@
         </div>
     </div>
     
-    <h4>Horizontal menu with dropdown</h4>
+    <h4>@L["Horizontal menu with dropdown"].Value</h4>
     <div class="row w-100 p-2 border-1 bd-gray border-solid">
         <div class="cell-md-6 p-1">
             <metro-menu>
@@ -182,7 +182,7 @@
     </div>
 
 
-    <h4>Vertical menu</h4>
+    <h4>@L["Vertical menu"].Value</h4>
     <div class="row w-100 p-2 border-1 bd-gray border-solid">
         <div class="cell-md-2 p-1">
             <metro-menu type="Vertical">
@@ -242,7 +242,7 @@
         </div>
     </div>
     
-    <h4>Tool menu</h4>
+    <h4>@L["Tool menu"].Value</h4>
     <div class="w-100 p-2 border-1 bd-gray border-solid clear">
         <metro-menu type="Tool" open="true" class="mr-1">
             <metro-menu-item icon="mif-apps" />
@@ -330,7 +330,7 @@
         </div>
     </div>
 
-    <h4>Context menu</h4>
+    <h4>@L["Context menu"].Value</h4>
     <div class="w-100 p-2 border-1 bd-gray border-solid text-center " style="height: 200px; " id="contextMenuArea">
         <h4 style="line-height: 200px;">Right click me!</h4>
         <metro-menu type="Context" id="contextMenu">

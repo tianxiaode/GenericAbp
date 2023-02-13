@@ -1,4 +1,4 @@
-﻿@page
+﻿@page "/tag-helpers/form"
 @using Generic.Abp.Metro.UI.Theme.Basic.Demo.Localization
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Volo.Abp.AspNetCore.Mvc.UI.Layout
@@ -42,10 +42,10 @@
         </div>
     </div>
     
-    <h4>Horizontal columns</h4>
+    <h4>@L["Columns"].Value</h4>
     <div class="w-100 p-2 border-1 bd-gray border-solid">
         <form border="LRTB" border-style="Solid" class="m-1">
-            <metro-form-content horizontal="true" cols="2">
+            <metro-form-content horizontal="false" cols="2">
                 <metro-input asp-for="@Model.Form.Name" id="Name3" />
                 <metro-input asp-for="@Model.Form.Age"  id="Age3"/>
                 <metro-input asp-for="@Model.Form.Password" id="Password3"/>
@@ -98,7 +98,7 @@
         </div>
     </div>
 
-    <h4>Size</h4>
+    <h4>@L["Size"].Value</h4>
     <div class="row w-100 p-2 border-1 bd-gray border-solid">
         <form border="LRTB" border-style="Solid" class="m-1 cell-3">
             <metro-form-content horizontal="true" cols="1" size="Small">
@@ -136,7 +136,7 @@
         </div>
     </div>
     
-    <h4>Prepend and append</h4>
+    <h4>@L["PrependAndAppend"].Value</h4>
     <div class="row w-100 p-2 border-1 bd-gray border-solid">
         <form border="LRTB" border-style="Solid" class="m-1 p-1 cell-3">
             <metro-input asp-for="@Model.Form.Name" no-label="true" prepend="Name" append="%" id="Name9" />
@@ -150,7 +150,7 @@
         </div>
     </div>
 
-    <h4>Dynamic</h4>
+    <h4>@L["Dynamic"].Value</h4>
     <div class="row w-100 p-2 border-1 bd-gray border-solid">
         <form border="LRTB" border-style="Solid" class="p-1" data-role="validator">
             <metro-form-content metro-model="Form" label-width="150">
@@ -223,7 +223,7 @@
         </div>
     </div>
     
-    <h4>Group</h4>
+    <h4>@L["Group"].Value</h4>
     <div class="w-100 p-2 border-1 bd-gray border-solid">
         <form border="LRTB" border-style="Solid" class="p-1" data-role="validator">
             <metro-tabs>

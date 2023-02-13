@@ -1,4 +1,4 @@
-﻿@page
+﻿@page "/tag-helpers/buttons"
 @using Generic.Abp.Metro.UI.TagHelpers.Button
 @using Generic.Abp.Metro.UI.Theme.Basic.Demo.Localization
 @using Microsoft.AspNetCore.Mvc.Localization
@@ -314,14 +314,14 @@
         </div>
 
     </div>
-    <h4>Crud toolbar attributes</h4>
+    <h4>@L["CrudToolbarAttributes"].Value</h4>
     <table class="table cell-border table-border options-table mt-4">
         <thead>
         <tr>
-            <th>Option</th>
+            <th>@L["Option"].Value</th>
             <th>Data-*</th>
-            <th>Default</th>
-            <th>Desc</th>
+            <th>@L["Default"].Value</th>
+            <th>@L["Desc"].Value"</th>
         </tr>
         </thead>
         <tbody>
@@ -329,73 +329,73 @@
                 <td><code>noRefresh</code></td>
                 <td><code>data-no-refresh</code></td>
                 <td>false</td>
-                <td>Whether to create a refresh button.The default value of false means create.</td>
+                <td>@L["WhetherCreateButton","Refresh"] @L["DefaultValueOfCreateButton", "false"]</td>
             </tr>
             <tr>
                 <td><code>noNew</code></td>
                 <td><code>data-no-new</code></td>
                 <td>false</td>
-                <td>Whether to create a new button.The default value of false means create.</td>
+                <td>@L["WhetherCreateButton","New"] @L["DefaultValueOfCreateButton", "false"]</td>
             </tr>
             <tr>
                 <td><code>noEdit</code></td>
                 <td><code>data-no-edit</code></td>
                 <td>true</td>
-                <td>Whether to create a edit button.The default value of true means not to create.</td>
+                <td>@L["WhetherCreateButton","Edit"] @L["DefaultValueOfNotCreateButton", "true"]</td>
             </tr>
             <tr>
                 <td><code>noDelete</code></td>
                 <td><code>data-no-delete</code></td>
                 <td>false</td>
-                <td>Whether to create a delete button.The default value of false means create.</td>
+                <td>@L["WhetherCreateButton","Delete"] @L["DefaultValueOfCreateButton", "false"]</td>
             </tr>
             <tr>
                 <td><code>noText</code></td>
                 <td><code>data-no-text</code></td>
                 <td>false</td>
-                <td>Whether to display button text. The default value of false indicates display.</td>
+                <td>@L["DataNoText"].Value</td>
             </tr>
             <tr>
                 <td><code>permissionPrefix</code></td>
                 <td><code>data-permission-prefix</code></td>
                 <td></td>
-                <td>Permission prefix for the button, e.g. 'AbpIdentity.Users.Update', then 'AbpIdentity.Users'.You can also define the button permission as the full name of the permission without setting the prefix, such as 'AbpIdentity.Users.Update'.</td>
+                <td>@L["DataPermissionPrefix"].Value</td>
             </tr>
             <tr>
                 <td><code>refreshPermission</code></td>
                 <td><code>data-refresh-permission</code></td>
                 <td></td>
-                <td>Permissions for the refresh button.If empty, permissions are not required.</td>
+                <td>@L["DataPermission", "Refresh"]</td>
             </tr>
             <tr>
                 <td><code>newPermission</code></td>
                 <td><code>data-new-permission</code></td>
                 <td>Create</td>
-                <td>Permissions for the new button.If empty, permissions are not required.</td>
+                <td>@L["DataPermission", "Create"]</td>
             </tr>
             <tr>
                 <td><code>editPermission</code></td>
                 <td><code>data-edit-permission</code></td>
                 <td>Update</td>
-                <td>Permissions for the edit button.If empty, permissions are not required.</td>
+                <td>@L["DataPermission", "Update"]</td>
             </tr>
             <tr>
                 <td><code>deletePermission</code></td>
                 <td><code>data-delete-permission</code></td>
                 <td>Delete</td>
-                <td>Permissions for the delete button.If empty, permissions are not required.</td>
+                <td>@L["DataPermission", "Delete"]</td>
             </tr>
             <tr>
                 <td><code>customButtons</code></td>
                 <td><code>data-custom-buttons</code></td>
                 <td></td>
-                <td>Custom button with an array of values. Buttons are defined as arrays, followed by the button's text, icon, color, display order, whether to display text, and permissions, as in the example [["New","fa fa-plus","info",10000,true],["Download","mif-download","info",10201]]</td>
+                <td>@L["DataCustomButtons"].Value</td>
             </tr>
             <tr>
                 <td><code>onButtonClick</code></td>
                 <td><code>data-on-button-click</code></td>
                 <td>onCrudToolbarButtonClick</td>
-                <td>The name of the function to execute after the toolbar button is clicked.The function returns the three parameters of the button, action, and toolbar.</td>
+                <td>@L["DataOnButtonClick"].Value</td>
             </tr>
         
         </tbody>

@@ -1,4 +1,4 @@
-﻿@page
+﻿@page "/tag-helpers/grid"
 @using Generic.Abp.Metro.UI.TagHelpers.Collapse
 @using Generic.Abp.Metro.UI.Theme.Basic.Demo.Localization
 @using Microsoft.AspNetCore.Mvc.Localization
@@ -112,7 +112,7 @@
         </div>
     </div>
     
-    <h4>Media columns</h4>
+    <h4>@L["MediaColumns"].Value</h4>
     <div class="w-100 p-2 border-1 bd-gray border-solid">
         <metro-grid>
             <metro-row>
@@ -152,7 +152,7 @@
         </div>
     </div>
 
-    <h4>Gap</h4>
+    <h4>@L["Gap"].Value</h4>
     <div class="w-100 p-2 border-1 bd-gray border-solid">
         <metro-grid class="demo-grid">
             <metro-row>
@@ -224,7 +224,7 @@
         </div>
     </div>
 
-    <h4>Stub column</h4>
+    <h4>@L["StubColumn"].Value</h4>
     <div class="w-100 p-2 border-1 bd-gray border-solid">
         <metro-grid>
             <metro-row>
@@ -244,7 +244,7 @@
         </div>
     </div>
 
-    <h4>Ordering</h4>
+    <h4>@L["Ordering"].Value</h4>
     <div class="w-100 p-2 border-1 bd-gray border-solid">
         <metro-grid>
             <metro-row>
@@ -264,7 +264,7 @@
         </div>
     </div>
 
-    <h4>Vertical alignment</h4>
+    <h4>@L["VerticalAlignment"].Value</h4>
     <div class="w-100 p-2 border-1 bd-gray border-solid">
         <metro-grid >
             <metro-row height="100" v-align="Start" background-color="GrayWhite">
@@ -314,7 +314,7 @@
         </div>
     </div>
 
-    <h4>Horizontal alignment</h4>
+    <h4>@L["HorizontalAlignment"].Value</h4>
     <div class="w-100 p-2 border-1 bd-gray border-solid">
         <metro-grid>
             <metro-row h-align="Start" background-color="GrayWhite">
