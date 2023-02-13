@@ -1,10 +1,8 @@
 ﻿@page "/tag-helpers"
-@using Volo.Abp.AspNetCore.Mvc.UI.Theming
+@using System.Globalization
 @using Generic.Abp.Demo.Web.Pages.TagHelpers;
-@using Generic.Abp.Metro.UI.Bundling.TagHelpers
 @using Generic.Abp.Metro.UI.Theme.Basic.Demo.Localization
 @using Microsoft.AspNetCore.Mvc.Localization
-@using Microsoft.AspNetCore.Mvc.TagHelpers
 @using Volo.Abp.AspNetCore.Mvc.UI.Layout
 @model IndexModel
 @inject IPageLayout PageLayout
@@ -17,7 +15,15 @@
 }
 
 <div data-role="panel" class="h-100 w-100 scroll-y" data-title-caption="@L["About"]" data-cls-title="bg-dark fg-white">
-    关于TagHelpers
+    @if (CultureInfo.CurrentCulture.Name.Contains("zh"))
+    {
+        <p>本示例中的标记帮助程序都是根据<a href="https://metroui.org.ua/intro.html" target="_blank">Metro UI</a>，并参考<a href="https://abp.io/" target="_blank">Abp</a>编写的。</p>
+    }
+    else
+    {
+        <p>The tag helpers in this example are written based on <a href="https://metroui.org.ua/intro.html" target="_blank" >Metro UI</a> and reference to <a href="https://abp.io/" target="_blank"> Abp</a>.</p>
+
+    }
     
 </div>
 
