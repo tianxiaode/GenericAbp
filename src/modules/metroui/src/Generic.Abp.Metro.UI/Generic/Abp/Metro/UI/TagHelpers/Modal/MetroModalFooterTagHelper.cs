@@ -8,7 +8,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Generic.Abp.Metro.UI.TagHelpers.Modal;
 
-[HtmlTargetElement("metro-modal-footer", ParentTag = "metro-modal", TagStructure = TagStructure.WithoutEndTag)]
+[HtmlTargetElement("metro-modal-footer", TagStructure = TagStructure.WithoutEndTag)]
 public class MetroModalFooterTagHelper : MetroTagHelper
 {
     public MetroModalFooterTagHelper(IStringLocalizer<AbpUiResource> l)

@@ -76,7 +76,8 @@
             }
 
             if (o.closeAction === true) {
-                element.on(Metro.events.click, ".js-dialog-close", function(){
+                element.on(Metro.events.click, ".js-dialog-close", function(e){
+                    e.preventDefault();
                     that.close();
                 });
             }

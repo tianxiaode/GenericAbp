@@ -129,8 +129,8 @@ public abstract class MetroInputTagHelperBase : MetroTagHelper<FormGroupItem>
         var attributes = output.Attributes;
         var cols = FormContent.Cols;
         if (IsTextarea || IsCheckbox || IsRadio || IsCheckboxGroup || IsRadioGroup) cols = 1;
-        attributes.AddClass($"w-cols-{cols} pt-1 pb-6");
         if (FormContent is not { Horizontal: true }) return Task.CompletedTask;
+        attributes.AddClass($"w-cols-{cols} pt-1 pb-6");
         attributes.AddClass("d-flex");
         return Task.CompletedTask;
     }

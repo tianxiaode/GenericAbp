@@ -59,6 +59,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\modules\metroui\src\Generic.Abp.Metro.UI.Account.Web\Generic.Abp.Metro.UI.Account.Web.csproj" />
     <ProjectReference Include="..\..\..\..\modules\metroui\src\Generic.Abp.Metro.UI.Theme.Basic.Demo\Generic.Abp.Metro.UI.Theme.Basic.Demo.csproj" />
     <ProjectReference Include="..\Generic.Abp.Demo.Application\Generic.Abp.Demo.Application.csproj" />
     <ProjectReference Include="..\Generic.Abp.Demo.EntityFrameworkCore\Generic.Abp.Demo.EntityFrameworkCore.csproj" />

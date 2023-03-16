@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Generic.Abp.Metro.UI.MultiTenancy.Localization;
 using Microsoft.AspNetCore.Mvc;
@@ -61,6 +62,6 @@ public class TenantSwitchModalModel : AbpPageModel
 
     public class TenantInfoModel
     {
-        public string Name { get; set; }
+        [Required] public string Name { get; set; }
     }
 }

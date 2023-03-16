@@ -30,7 +30,7 @@ ModalManager.prototype.getModalSuccess = function (data) {
         let id = 'Metro_Modal_' + $.uniqueId(),
             container = $('<div>');
         me.container = container;
-        container.attr('id', id);        
+        container.attr('id', id);
         me.containerId = id;
         let body = $('body');
         container.html(data);
@@ -55,12 +55,15 @@ ModalManager.prototype.initAndShowModal = function () {
         return;
     }
     me.modal = modal;
-    form = me.form = Metro.makePlugin(form, 'validator',{
-        onBeforeSubmit: me.onBeforeFormSubmit.bind(me),
-        onSubmit: me.onFormSubmit.bind(me),
-        onError: me.onValidateError.bind(me),
-        onValidate: me.onValidate.bind(me),
+    me.form = form;
+
+    form.find('.js-dialog-save').on('click', me.submit.bind(me));
+    form.find('.js-dialog-close').on('click', me.onClose.bind(me));
+
+    Metro.makePlugin(form, 'validator', {
+        onSubmit: me.onSubmit.bind(me)
     });
+
 
     if (me.init) me.init.call(me);
 
@@ -68,18 +71,17 @@ ModalManager.prototype.initAndShowModal = function () {
 
 }
 
-ModalManager.prototype.onSubmitSuccess = function () {
-    this.setResult(arguments);
-    this.modal.close();
-}
-
 ModalManager.prototype.onClose = function () {
     let me = this;
+    me.form.off(Metro.events.click, ".js-dialog-close");
+    me.form.off(Metro.events.click, ".js-dialog-save");
     me.container.remove();
+    delete me.validator;
     delete me.modal;
     delete me.form;
     delete me.container;
     delete me.callBacks;
+    delete me.mask;
 }
 
 
@@ -114,39 +116,55 @@ ModalManager.prototype.onResult = function (callback) {
     this.callBacks.push(callback);
 }
 
-ModalManager.prototype.onBeforeFormSubmit = function(e) {
+ModalManager.prototype.submit = function (e) {
     e.preventDefault();
-
-    console.log(arguments);
+    Metro.getPlugin(this.form, 'validator')._submit();
 }
 
-ModalManager.prototype.onFormSubmit = function(e) {
-    e.preventDefault();
 
-    console.log(arguments);
-}
-
-ModalManager.prototype.onValidateError = function(logs, data) {
-    logs.forEach(log=>{
-        let input = $(log.input),
-        div = input.parent().parent(),
-        span = div.find('.invalid_feedback'),
-        texts =[];
-        log.errors.forEach(error=>{
-            let t = input.attr(`data-val-${error}`);
-            if(error === 'min' || error === 'max'){
-                t = input.attr(`data-val-range`);
-            }
-            if(t)texts.push(t);
-        })
-        span.html(texts.join('<br/>'));
+ModalManager.prototype.onSubmit = function (data) {
+    let me = this,
+        url = me.form[0].action,
+        params = {};
+    data.forEach(d => {
+        let p = d.split('=');
+        params[decodeURIComponent(p[0])] = decodeURIComponent(p[1]);
     })
-
-    console.log(arguments);
+    me.showMask();
+    $.post(url, params).then(me.onSubmitSuccess.bind(me), me.onSubmitFailure.bind(me));
 }
 
-ModalManager.prototype.onValidate = function(e) {
-    e.preventDefault();
+ModalManager.prototype.onSubmitSuccess = function () {
+    let me = this;
+    me.mask.hide();
+    me.setResult(arguments);
+    me.modal.close();
+}
 
-    console.log(arguments);
+
+ModalManager.prototype.onSubmitFailure = function (xhr) {
+    let me = this;
+    me.mask.hide();
+    console.log('onSubmitFailure', arguments);
+}
+
+ModalManager.prototype.showMask = function () {
+    let me = this,
+        modal = me.modal,
+        modalEl = modal.element,
+        mask = me.mask;
+    if(!mask){
+        mask = me.mask = $("<div>");
+        mask.addClass('mask');
+        mask.html(`
+            <div class="mask-body">
+                <div class="mask-inner">
+                    <div class="loading-spinner"><span class="mif-spinner ani-spin"></span></div>
+                    <div class="mask-message">${abp.localization.resources.AbpUi.texts.SavingWithThreeDot}</div>
+                </div>
+            </div>
+        `);
+        mask.appendTo(modalEl);
+    }
+    mask.show();
 }

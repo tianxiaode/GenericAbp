@@ -7,6 +7,7 @@ using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
+using Volo.Abp.Validation.Localization;
 using Volo.Abp.VirtualFileSystem;
 
 namespace Generic.Abp.Metro.UI.MultiTenancy;
@@ -14,7 +15,7 @@ namespace Generic.Abp.Metro.UI.MultiTenancy;
 [DependsOn(
     typeof(GenericAbpMetroUiThemeSharedModule),
     typeof(AbpAspNetCoreMultiTenancyModule)
-    )]
+)]
 public class GenericAbpMetroUiMultiTenancyModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
@@ -44,6 +45,7 @@ public class GenericAbpMetroUiMultiTenancyModule : AbpModule
         {
             options.Resources
                 .Add<MetroUiMultiTenancyResource>("en")
+                .AddBaseTypes(typeof(AbpValidationResource))
                 .AddVirtualJson("/Generic/Abp/Metro/UI/MultiTenancy/Localization/MultiTenancy");
         });
 

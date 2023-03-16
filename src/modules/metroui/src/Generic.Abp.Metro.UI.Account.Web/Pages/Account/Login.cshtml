@@ -1,0 +1,76 @@
+﻿@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.Account.Localization
+@using Volo.Abp.Account.Settings
+@using Volo.Abp.Identity;
+@using Volo.Abp.Settings
+@using Generic.Abp.Metro.UI.Account.Web.Pages.Account
+@using Volo.Abp.AspNetCore.Mvc.UI.Theming
+@model Generic.Abp.Metro.UI.Account.Web.Pages.Account.LoginModel
+@inject IHtmlLocalizer<AccountResource> L
+@inject IThemeManager ThemeManager
+@inject ISettingProvider SettingProvider
+
+@{
+    Layout = ThemeManager.CurrentTheme.GetAccountLayout();
+}
+
+@section scripts
+    {
+    <metro-script-bundle name="@typeof(LoginModel).FullName">
+        <metro-script src="/Pages/Account/Login.js" />
+    </metro-script-bundle>
+}
+
+<div class="card mt-3  rounded">
+    <div class="p-5">
+        <h4>@L["Login"]</h4>
+        @if (Model.EnableLocalLogin)
+        {
+            <form method="post" class="mt-4" data-role="validator">
+                <input asp-for="LoginInput.UserNameOrEmailAddress" type="text" data-role="input" data-prepend="<span class='mif-user'></span>" class="input-large">
+                <input asp-for="LoginInput.Password" type="password" data-role="input" data-prepend="<span class='mif-key'></span>" class="input-large mt-2">
+                <div class="row mt-2">
+                    <div class="col-6">
+                        <input asp-for="LoginInput.RememberMe" type="checkbox" data-role="checkbox" class="input-large" data-style="2" data-caption="@L["RememberMe"].Value">
+                    </div>
+                    <div class="col-6 text-right" style="line-height: 36px;">
+                        <a href="@Url.Page("./ForgotPassword", new { returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash })">@L["ForgotPassword"]</a>
+                    </div>
+                </div>
+                <div class="row">
+                    <button name="Action" value="Login" class="button primary large mt-2 w-100">@L["Login"]</button>
+                </div>
+            </form>
+        }
+
+        @if (await SettingProvider.IsTrueAsync(AccountSettingNames.IsSelfRegistrationEnabled)) {
+                <div class="mt-2 text-bold">
+                @L["AreYouANewUser"]
+                    <a href="@Url.Page("./Register", new { returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash })">@L["Register"]</a>
+                </div>
+        }
+
+        @if (Model.VisibleExternalProviders.Any())
+        {
+            <div class="mt-2">
+                <h5>@L["OrLoginWith"]</h5>
+                <form asp-page="./Login" asp-page-handler="ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" asp-route-returnUrlHash="@Model.ReturnUrlHash" method="post">
+                    @foreach (var provider in Model.VisibleExternalProviders)
+                    {
+                        <button type="submit" class="button primary m-1" name="provider" value="@provider.AuthenticationScheme" title="@L["LogInUsingYourProviderAccount", provider.DisplayName]">@provider.DisplayName</button>
+                    }
+                </form>
+            </div>
+        }
+
+        @if (!Model.EnableLocalLogin && !Model.VisibleExternalProviders.Any())
+        {
+            <div class="alert warning">
+                <strong>@L["InvalidLoginRequest"]</strong>
+                @L["ThereAreNoLoginSchemesConfiguredForThisClient"]
+            </div>
+        }
+
+    </div>
+</div>

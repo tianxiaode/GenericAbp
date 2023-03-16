@@ -19,7 +19,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Generic.Abp.Metro.UI.Bundli
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Generic.Abp.Metro.UI.Widgets", "src\Generic.Abp.Metro.UI.Widgets\Generic.Abp.Metro.UI.Widgets.csproj", "{04DD530B-596B-40C9-82B0-CBD64F1E4D17}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Generic.Abp.Metro.UI.Theme.Basic.Demo", "src\Generic.Abp.Metro.UI.Theme.Basic.Demo\Generic.Abp.Metro.UI.Theme.Basic.Demo.csproj", "{E5AC7C6F-52CF-48C0-B803-82838702C680}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Generic.Abp.Metro.UI.Theme.Basic.Demo", "src\Generic.Abp.Metro.UI.Theme.Basic.Demo\Generic.Abp.Metro.UI.Theme.Basic.Demo.csproj", "{E5AC7C6F-52CF-48C0-B803-82838702C680}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Generic.Abp.Metro.UI.Account.Web", "src\Generic.Abp.Metro.UI.Account.Web\Generic.Abp.Metro.UI.Account.Web.csproj", "{4B767DA1-1E35-486B-8E1D-2552BBE80926}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -59,6 +61,10 @@ Global
 		{E5AC7C6F-52CF-48C0-B803-82838702C680}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E5AC7C6F-52CF-48C0-B803-82838702C680}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E5AC7C6F-52CF-48C0-B803-82838702C680}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4B767DA1-1E35-486B-8E1D-2552BBE80926}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B767DA1-1E35-486B-8E1D-2552BBE80926}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4B767DA1-1E35-486B-8E1D-2552BBE80926}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B767DA1-1E35-486B-8E1D-2552BBE80926}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -72,6 +78,7 @@ Global
 		{25F89ABD-DCCD-4595-93BD-2E3CF8C001B9} = {CED86EF0-2C69-4C22-A6A3-9B9C2A5296CF}
 		{04DD530B-596B-40C9-82B0-CBD64F1E4D17} = {CED86EF0-2C69-4C22-A6A3-9B9C2A5296CF}
 		{E5AC7C6F-52CF-48C0-B803-82838702C680} = {CED86EF0-2C69-4C22-A6A3-9B9C2A5296CF}
+		{4B767DA1-1E35-486B-8E1D-2552BBE80926} = {CED86EF0-2C69-4C22-A6A3-9B9C2A5296CF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {385D6690-DCAF-4266-80C7-0D7D4952253D}

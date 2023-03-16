@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using System.IO;
+using Generic.Abp.Metro.UI.Account.Web;
 using Generic.Abp.Metro.UI.Packages.FontAwesome;
 using Generic.Abp.Metro.UI.Theme.Basic;
 using Generic.Abp.Metro.UI.Theme.Basic.Bundling;
@@ -39,6 +40,7 @@ namespace Generic.Abp.Demo.Web
         typeof(DemoApplicationModule),
         typeof(DemoEntityFrameworkCoreModule),
         typeof(AbpAutofacModule),
+        typeof(GenericAbpMetroUiAccountWebModule),
         typeof(GenericAbpMetroUiThemeBasicDemoModule),
         typeof(AbpAspNetCoreSerilogModule),
         typeof(AbpSwashbuckleModule)

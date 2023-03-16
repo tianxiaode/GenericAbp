@@ -20,9 +20,6 @@ Metro.validatorSetup({
             })
             span.html(texts.join('<br/>'));
         })
-    },
-    onSubmit(){
-        console.log('onSubmit', arguments);
     }
 });
 

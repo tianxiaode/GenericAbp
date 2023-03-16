@@ -1,22 +1,22 @@
 ﻿@page
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Generic.Abp.Metro.UI.MultiTenancy.Localization;
+@using Generic.Abp.Metro.UI.TagHelpers.Form
+@using Generic.Abp.Metro.UI.TagHelpers.Modal
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 @model Pages.Abp.MultiTenancy.TenantSwitchModalModel
 @inject IHtmlLocalizer<MetroUiMultiTenancyResource> L
 @{
     Layout = null;
 }
-@*<metro-dynamic-form metro-model="@Model.Input" asp-page="/Abp/MultiTenancy/TenantSwitchModal">*@
-<metro-dialog title=""  >
-    <form data-role="validator" asp-page="/Abp/MultiTenancy/TenantSwitchModal">
-    <metro-dialog-title title="@L["SwitchTenant"].Value"></metro-dialog-title>
-    <metro-dialog-content>
-            <metro-form-content cols="2" a>
-                <metro-input asp-for="@Model.Input.Name" label="@L["TenantName"].Value" required-symbol="true"/>
-                <metro-input label="2" />
-        </metro-form-content>
-    </metro-dialog-content>
-        @*<metro-dialog-footer buttons="@(ModalDialogButtons.Save|ModalDialogButtons.Cancel)"></metro-dialog-footer>*@
+<metro-modal >
+    <form asp-page="/Abp/MultiTenancy/TenantSwitchModal">
+        <metro-modal-title title="@L["SwitchTenant"].Value" />
+        <metro-modal-content >
+            <metro-form-content cols="1" label-width="120">
+                <metro-input asp-for="@Model.Input.Name" required-symbol="true"/>
+            </metro-form-content>
+        </metro-modal-content>
+        <metro-modal-footer buttons="Save | ModalDialogButtons.Cancel " button-alignment="End" />
     </form>
-</metro-dialog>
-@*</metro-dynamic-form>*@
+</metro-modal>

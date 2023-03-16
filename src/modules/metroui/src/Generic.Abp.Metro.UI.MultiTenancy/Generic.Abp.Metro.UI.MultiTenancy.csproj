@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <PackageReference Include="Volo.Abp.AspNetCore.MultiTenancy" Version="$(AbpVersion)" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="$(FileProvidersEmbeddedVersion)" />
   </ItemGroup>
 
   <ItemGroup>

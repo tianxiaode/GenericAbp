@@ -1,0 +1,18 @@
+﻿@using Volo.Abp.Account.Localization
+@using Volo.Abp.Users
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Theming
+@inject IHtmlLocalizer<AccountResource> L
+@inject ICurrentUser CurrentUser
+@model Generic.Abp.Metro.UI.Account.Web.Pages.Account.Components.ProfileManagementGroup.Password.AccountProfilePasswordManagementGroupViewComponent.ChangePasswordInfoModel
+
+<h4>@L["ChangePassword"]</h4><hr/>
+<form id="ChangePasswordForm">
+    @if (!Model.HideOldPasswordInput)
+    {
+        <metro-input asp-for="CurrentPassword"/>
+    }
+    <metro-input asp-for="NewPassword" />
+    <metro-input asp-for="NewPasswordConfirm" />
+    <metro-button type="submit" button-type="Primary" text="@L["Submit"].Value" />
+</form>

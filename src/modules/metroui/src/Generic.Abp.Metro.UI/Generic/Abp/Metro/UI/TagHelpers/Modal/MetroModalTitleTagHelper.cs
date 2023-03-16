@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace Generic.Abp.Metro.UI.TagHelpers.Modal;
 
-[HtmlTargetElement("metro-modal-title", ParentTag = "metro-modal", TagStructure = TagStructure.WithoutEndTag)]
+[HtmlTargetElement("metro-modal-title", TagStructure = TagStructure.WithoutEndTag)]
 public class MetroModalTitleTagHelper : TagHelper
 {
     public string Title { get; set; }
