@@ -165,5 +165,57 @@ $(function () {
         showNotification('alert', message,  options);
     };
 
+    abp.message.info = function (message, detail) {
+        return showNotification('info', message, title);
+    };
+
+    abp.message.success = function (message, detail) {
+        return showNotification('success', message, title);
+    };
+
+    abp.message.warn = function (message, detail) {
+        return showNotification('warn', message, title);
+    };
+
+    abp.message.error = function (message, detail) {
+        message = `<h4>${message}</h4>`;
+        if(detail) message += `<p>${detail}</p>`;
+        
+        Metro.dialog.create({
+            title: abp.localization.resources.AbpExceptionHandling.texts.Error,
+            content: message,
+            clsDialog: 'alert',
+            closeButton: false
+        });
+    };
+
+    abp.message.confirm = function (message, titleOrCallback, callback) {
+
+        var userOpts = {
+            text: message
+        };
+
+        if ($.isFunction(titleOrCallback)) {
+            closeOnEsc = callback;
+            callback = titleOrCallback;
+        } else if (titleOrCallback) {
+            userOpts.title = titleOrCallback;
+        };
+
+        var opts = $.extend(
+            {},
+            abp.libs.sweetAlert.config['default'],
+            abp.libs.sweetAlert.config.confirm,
+            userOpts
+        );
+
+        return $.Deferred(function ($dfd) {
+            Swal.fire(opts).then(result  => {
+                callback && callback(result.value);
+                $dfd.resolve(result.value);
+            })
+        });
+    };
+
 })
 

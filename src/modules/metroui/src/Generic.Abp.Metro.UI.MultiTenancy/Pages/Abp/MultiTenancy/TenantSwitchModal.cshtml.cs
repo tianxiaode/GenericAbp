@@ -38,7 +38,7 @@ public class TenantSwitchModalModel : AbpPageModel
         }
     }
 
-    public virtual async Task OnPostAsync()
+    public virtual async Task<NoContentResult> OnPostAsync()
     {
         Guid? tenantId = null;
         if (!Input.Name.IsNullOrEmpty())
@@ -58,6 +58,7 @@ public class TenantSwitchModalModel : AbpPageModel
         }
 
         AbpMultiTenancyCookieHelper.SetTenantCookie(HttpContext, tenantId, Options.TenantKey);
+        return NoContent();
     }
 
     public class TenantInfoModel

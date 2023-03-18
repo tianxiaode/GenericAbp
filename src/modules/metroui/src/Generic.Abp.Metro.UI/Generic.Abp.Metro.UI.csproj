@@ -5,8 +5,6 @@
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
-    <AssemblyName>Generic.Abp.Metro.UI</AssemblyName>
-    <PackageId>Generic.Abp.Metro.UI</PackageId>
     <IsPackable>true</IsPackable>
     <OutputType>Library</OutputType>
     <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
@@ -14,32 +12,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="Generic\Abp\Metro\UI\Localization\cs.json" />
-    <Content Remove="Generic\Abp\Metro\UI\Localization\en.json" />
-    <Content Remove="Generic\Abp\Metro\UI\Localization\pl-PL.json" />
-    <Content Remove="Generic\Abp\Metro\UI\Localization\pt-BR.json" />
-    <Content Remove="Generic\Abp\Metro\UI\Localization\sl.json" />
-    <Content Remove="Generic\Abp\Metro\UI\Localization\tr.json" />
-    <Content Remove="Generic\Abp\Metro\UI\Localization\vi.json" />
-    <Content Remove="Generic\Abp\Metro\UI\Localization\zh-Hans.json" />
-    <Content Remove="Generic\Abp\Metro\UI\Localization\zh-Hant.json" />
+    <Content Remove="Generic\Abp\Metro\UI\Localization\*.json" />
   </ItemGroup>
 
 
   <ItemGroup>
-    <EmbeddedResource Include="Generic\Abp\Metro\UI\Localization\cs.json" />
-    <EmbeddedResource Include="Generic\Abp\Metro\UI\Localization\en.json" />
-    <EmbeddedResource Include="Generic\Abp\Metro\UI\Localization\pl-PL.json" />
-    <EmbeddedResource Include="Generic\Abp\Metro\UI\Localization\pt-BR.json" />
-    <EmbeddedResource Include="Generic\Abp\Metro\UI\Localization\sl.json" />
-    <EmbeddedResource Include="Generic\Abp\Metro\UI\Localization\tr.json" />
-    <EmbeddedResource Include="Generic\Abp\Metro\UI\Localization\vi.json" />
-    <EmbeddedResource Include="Generic\Abp\Metro\UI\Localization\zh-Hans.json" />
-    <EmbeddedResource Include="Generic\Abp\Metro\UI\Localization\zh-Hant.json" />
+    <EmbeddedResource Include="Generic\Abp\Metro\UI\Localization\*.json" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI" Version="$(AbpVersion)" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="$(FileProvidersEmbeddedVersion)" />
   </ItemGroup>
 
   <ItemGroup>

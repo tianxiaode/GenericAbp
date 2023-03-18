@@ -143,8 +143,21 @@ ModalManager.prototype.onSubmitSuccess = function () {
 
 
 ModalManager.prototype.onSubmitFailure = function (xhr) {
-    let me = this;
+    let me = this,
+        result = JSON.parse(xhr.responseText),
+        messagePromise;
     me.mask.hide();
+    
+    if (xhr.getResponseHeader('_AbpErrorFormat') === 'true') {
+        abp.ajax.logError(result.error);
+        messagePromise = abp.ajax.showError(result.error);
+        if (xhr.status === 401) {
+            abp.ajax.handleUnAuthorizedRequest(messagePromise);
+        }
+    } else {
+        abp.ajax.handleErrorStatusCode(xhr.status);
+    }
+
     console.log('onSubmitFailure', arguments);
 }
 
@@ -168,3 +181,4 @@ ModalManager.prototype.showMask = function () {
     }
     mask.show();
 }
+

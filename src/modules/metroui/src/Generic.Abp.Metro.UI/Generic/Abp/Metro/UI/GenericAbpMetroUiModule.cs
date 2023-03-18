@@ -21,7 +21,7 @@ namespace Generic.Abp.Metro.UI
             {
                 options.Resources
                     .Get<AbpUiResource>()
-                    .AddVirtualJson("/Localization");
+                    .AddVirtualJson("/Generic/Abp/Metro/UI/Localization");
             });
         }
     }
