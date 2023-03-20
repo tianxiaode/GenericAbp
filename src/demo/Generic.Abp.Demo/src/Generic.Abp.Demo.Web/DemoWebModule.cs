@@ -20,6 +20,7 @@ using Generic.Abp.Metro.UI.Theme.Shared.Bundling;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Volo.Abp;
+using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
@@ -42,6 +43,7 @@ namespace Generic.Abp.Demo.Web
         typeof(AbpAutofacModule),
         typeof(GenericAbpMetroUiAccountWebModule),
         typeof(GenericAbpMetroUiThemeBasicDemoModule),
+        //typeof(AbpAccountWebOpenIddictModule),
         typeof(AbpAspNetCoreSerilogModule),
         typeof(AbpSwashbuckleModule)
     )]
@@ -63,12 +65,12 @@ namespace Generic.Abp.Demo.Web
 
             PreConfigure<OpenIddictBuilder>(builder =>
             {
-                //builder.AddValidation(options =>
-                //{
-                //    options.AddAudiences("Demos"); // Replace with your application Name
-                //    options.UseLocalServer();
-                //    options.UseAspNetCore();
-                //});
+                builder.AddValidation(options =>
+                {
+                    options.AddAudiences("Demos"); // Replace with your application Name
+                    options.UseLocalServer();
+                    options.UseAspNetCore();
+                });
             });
         }
 
@@ -183,7 +185,7 @@ namespace Generic.Abp.Demo.Web
             app.UseStaticFiles();
             app.UseRouting();
             app.UseAuthentication();
-            //app.UseAbpOpenIddictValidation();
+            app.UseAbpOpenIddictValidation();
 
             if (MultiTenancyConsts.IsEnabled)
             {

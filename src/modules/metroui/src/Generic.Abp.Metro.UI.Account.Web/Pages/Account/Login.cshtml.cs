@@ -12,12 +12,14 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Volo.Abp;
 using Volo.Abp.Account.Settings;
+using Volo.Abp.AspNetCore.Mvc.UI.Alerts;
 using Volo.Abp.Auditing;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.AspNetCore;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.Settings;
 using Volo.Abp.Validation;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 using IdentityUser = Volo.Abp.Identity.IdentityUser;
 
 namespace Generic.Abp.Metro.UI.Account.Web.Pages.Account;
@@ -34,13 +36,15 @@ public class LoginModel : AccountPageModel
 
     [BindProperty] public LoginInputModel LoginInput { get; set; }
 
+    [BindProperty] public AlertList Errors { get; set; }
+
     public bool EnableLocalLogin { get; set; }
 
     //TODO: Why there is an ExternalProviders if only the VisibleExternalProviders is used.
     public IEnumerable<ExternalProviderModel> ExternalProviders { get; set; }
 
     public IEnumerable<ExternalProviderModel> VisibleExternalProviders =>
-        ExternalProviders.Where(x => !String.IsNullOrWhiteSpace(x.DisplayName));
+        ExternalProviders.Where(x => !string.IsNullOrWhiteSpace(x.DisplayName));
 
     public bool IsExternalLoginOnly => EnableLocalLogin == false && ExternalProviders?.Count() == 1;
 
@@ -136,6 +140,8 @@ public class LoginModel : AccountPageModel
             return Page();
         }
 
+        Errors = Alerts;
+        Logger.LogInformation($"错误信息：{System.Text.Json.JsonSerializer.Serialize(Errors)}");
         //TODO: Find a way of getting user's id from the logged in user and do not query it again like that!
         var user = await UserManager.FindByNameAsync(LoginInput.UserNameOrEmailAddress) ??
                    await UserManager.FindByEmailAsync(LoginInput.UserNameOrEmailAddress);

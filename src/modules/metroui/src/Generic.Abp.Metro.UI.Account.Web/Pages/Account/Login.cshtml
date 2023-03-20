@@ -25,9 +25,9 @@
                     <input asp-for="LoginInput.UserNameOrEmailAddress" type="text" data-role="input" data-prepend="<span class='mif-user'></span>" class="input-large" data-validate="required maxLength">
                 </div>
                 <div class="pb-6">
-                    <input asp-for="LoginInput.Password" type="password" data-role="input" data-prepend="<span class='mif-key'></span>" class="input-large mt-2" data-validate="required maxLength">
+                    <input asp-for="LoginInput.Password" type="password" data-role="input" data-prepend="<span class='mif-key'></span>" class="input-large" data-validate="required maxLength">
                 </div>
-                <div class="row mt-2">
+                <div class="row">
                     <div class="col-6">
                         <input asp-for="LoginInput.RememberMe" type="checkbox" data-role="checkbox" class="input-large" data-style="2" data-caption="@L["RememberMe"].Value">
                     </div>
@@ -39,6 +39,16 @@
                     <button name="Action" value="Login" class="button primary large mt-2 w-100">@L["Login"]</button>
                 </div>
             </form>
+            if (Model.Errors != null)
+            {
+                @foreach (var alertMessage in Model.Errors)
+                {
+                    <div>
+                        @alertMessage.Text
+                    </div>
+                }
+            }
+
         }
 
         @if (await SettingProvider.IsTrueAsync(AccountSettingNames.IsSelfRegistrationEnabled)) {
