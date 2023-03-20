@@ -48,13 +48,15 @@ Metro.selectSetup({
 })
 
 function addErrorSpan(div){
-    var span = $('<span>').addClass('invalid_feedback pos-absolute');
-    var invalidInput = div.find(`input[name="__Invariant"]`);
-    var label = div.children().first('label');
+    let span = $('<span>').addClass('invalid_feedback pos-absolute'),
+        invalidInput = div.find(`input[name="__Invariant"]`),
+        label = div.find('label').first(),
+        labelWidth = label ? label.width() : 0;
     if(invalidInput){
         invalidInput.remove();
     }
-    span.css('left', label.width());
+    console.log(label)
+    span.css('left', labelWidth);
     span.css('bottom', 2);
     span.appendTo(div);
 
@@ -189,32 +191,27 @@ $(function () {
         });
     };
 
-    abp.message.confirm = function (message, titleOrCallback, callback) {
-
-        var userOpts = {
-            text: message
+    abp.message.confirm = function (message, title, callback) {
+        let opts = { 
+            title: title,
+            clsDialog: 'primary',
+            content: message,
+            closeButton: false,
+            actions:[
+                {
+                    caption: abp.localization.resources.AbpUi.texts.Yes,
+                    cls: "js-dialog-close success",
+                    onclick: callback
+                },
+                {
+                    caption: abp.localization.resources.AbpUi.texts.No,
+                    cls: 'js-dialog-close'
+                }                
+            ]
         };
 
-        if ($.isFunction(titleOrCallback)) {
-            closeOnEsc = callback;
-            callback = titleOrCallback;
-        } else if (titleOrCallback) {
-            userOpts.title = titleOrCallback;
-        };
+        Metro.dialog.create(opts);
 
-        var opts = $.extend(
-            {},
-            abp.libs.sweetAlert.config['default'],
-            abp.libs.sweetAlert.config.confirm,
-            userOpts
-        );
-
-        return $.Deferred(function ($dfd) {
-            Swal.fire(opts).then(result  => {
-                callback && callback(result.value);
-                $dfd.resolve(result.value);
-            })
-        });
     };
 
 })

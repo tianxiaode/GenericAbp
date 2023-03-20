@@ -15,21 +15,18 @@
     Layout = ThemeManager.CurrentTheme.GetAccountLayout();
 }
 
-@section scripts
-    {
-    <metro-script-bundle name="@typeof(LoginModel).FullName">
-        <metro-script src="/Pages/Account/Login.js" />
-    </metro-script-bundle>
-}
-
 <div class="card mt-3  rounded">
     <div class="p-5">
         <h4>@L["Login"]</h4>
         @if (Model.EnableLocalLogin)
         {
             <form method="post" class="mt-4" data-role="validator">
-                <input asp-for="LoginInput.UserNameOrEmailAddress" type="text" data-role="input" data-prepend="<span class='mif-user'></span>" class="input-large">
-                <input asp-for="LoginInput.Password" type="password" data-role="input" data-prepend="<span class='mif-key'></span>" class="input-large mt-2">
+                <div class="pb-6">
+                    <input asp-for="LoginInput.UserNameOrEmailAddress" type="text" data-role="input" data-prepend="<span class='mif-user'></span>" class="input-large" data-validate="required maxLength">
+                </div>
+                <div class="pb-6">
+                    <input asp-for="LoginInput.Password" type="password" data-role="input" data-prepend="<span class='mif-key'></span>" class="input-large mt-2" data-validate="required maxLength">
+                </div>
                 <div class="row mt-2">
                     <div class="col-6">
                         <input asp-for="LoginInput.RememberMe" type="checkbox" data-role="checkbox" class="input-large" data-style="2" data-caption="@L["RememberMe"].Value">

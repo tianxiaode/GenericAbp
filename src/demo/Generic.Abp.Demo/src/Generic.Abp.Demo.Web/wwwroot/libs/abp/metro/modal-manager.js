@@ -157,8 +157,6 @@ ModalManager.prototype.onSubmitFailure = function (xhr) {
     } else {
         abp.ajax.handleErrorStatusCode(xhr.status);
     }
-
-    console.log('onSubmitFailure', arguments);
 }
 
 ModalManager.prototype.showMask = function () {
