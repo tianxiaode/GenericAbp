@@ -5,6 +5,7 @@
 @using Volo.Abp.Identity;
 @using Volo.Abp.Settings
 @using Generic.Abp.Metro.UI.Account.Web.Pages.Account
+@using Generic.Abp.Metro.UI.TagHelpers.Form
 @using Volo.Abp.AspNetCore.Mvc.UI.Theming
 @model Generic.Abp.Metro.UI.Account.Web.Pages.Account.LoginModel
 @inject IHtmlLocalizer<AccountResource> L
@@ -17,45 +18,44 @@
 
 <div class="card mt-3  rounded">
     <div class="p-5">
+
         <h4>@L["Login"]</h4>
         @if (Model.EnableLocalLogin)
         {
             <form method="post" class="mt-4" data-role="validator">
-                <div class="pb-6">
-                    <input asp-for="LoginInput.UserNameOrEmailAddress" type="text" data-role="input" data-prepend="<span class='mif-user'></span>" class="input-large" data-validate="required maxLength">
-                </div>
-                <div class="pb-6">
-                    <input asp-for="LoginInput.Password" type="password" data-role="input" data-prepend="<span class='mif-key'></span>" class="input-large" data-validate="required maxLength">
-                </div>
+                <metro-input asp-for="LoginInput.UserNameOrEmailAddress" prepend="<span class='mif-user'></span>" size="InputSize.Large" no-label="true" />
+                <metro-input asp-for="LoginInput.Password" type="password" prepend="<span class='mif-key'></span>" size="InputSize.Large" no-label="true" class="mt-2" />
                 <div class="row">
-                    <div class="col-6">
-                        <input asp-for="LoginInput.RememberMe" type="checkbox" data-role="checkbox" class="input-large" data-style="2" data-caption="@L["RememberMe"].Value">
+                    <div class="col-6 " style="line-height: 36px;">
+                        <metro-input asp-for="LoginInput.RememberMe" type="checkbox" size="InputSize.Large" label="@L["RememberMe"].Value"/>
                     </div>
                     <div class="col-6 text-right" style="line-height: 36px;">
                         <a href="@Url.Page("./ForgotPassword", new { returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash })">@L["ForgotPassword"]</a>
                     </div>
                 </div>
                 <div class="row">
-                    <button name="Action" value="Login" class="button primary large mt-2 w-100">@L["Login"]</button>
+                    <button type="submit" name="Action" value="Login" class="button primary large mt-2 w-100">@L["Login"]</button>
                 </div>
             </form>
-            if (Model.Errors != null)
+        }
+        
+        @if (Model.Errors != null)
+        {
+            @foreach (var alertMessage in Model.Errors)
             {
-                @foreach (var alertMessage in Model.Errors)
-                {
-                    <div>
-                        @alertMessage.Text
-                    </div>
-                }
+                <div class="my-4 fg-red text-center w-100 text-bold">
+                    @alertMessage.Text
+                </div>
             }
-
         }
 
-        @if (await SettingProvider.IsTrueAsync(AccountSettingNames.IsSelfRegistrationEnabled)) {
-                <div class="mt-2 text-bold">
+
+        @if (await SettingProvider.IsTrueAsync(AccountSettingNames.IsSelfRegistrationEnabled))
+        {
+            <div class="mt-2 text-bold">
                 @L["AreYouANewUser"]
-                    <a href="@Url.Page("./Register", new { returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash })">@L["Register"]</a>
-                </div>
+                <a href="@Url.Page("./Register", new { returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash })">@L["Register"]</a>
+            </div>
         }
 
         @if (Model.VisibleExternalProviders.Any())

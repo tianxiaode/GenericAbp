@@ -125,23 +125,24 @@ public class LoginModel : AccountPageModel
         if (result.IsLockedOut)
         {
             Alerts.Warning(L["UserLockedOutMessage"]);
+            Errors = Alerts;
             return Page();
         }
 
         if (result.IsNotAllowed)
         {
             Alerts.Warning(L["LoginIsNotAllowed"]);
+            Errors = Alerts;
             return Page();
         }
 
         if (!result.Succeeded)
         {
             Alerts.Danger(L["InvalidUserNameOrPassword"]);
+            Errors = Alerts;
             return Page();
         }
 
-        Errors = Alerts;
-        Logger.LogInformation($"错误信息：{System.Text.Json.JsonSerializer.Serialize(Errors)}");
         //TODO: Find a way of getting user's id from the logged in user and do not query it again like that!
         var user = await UserManager.FindByNameAsync(LoginInput.UserNameOrEmailAddress) ??
                    await UserManager.FindByEmailAsync(LoginInput.UserNameOrEmailAddress);

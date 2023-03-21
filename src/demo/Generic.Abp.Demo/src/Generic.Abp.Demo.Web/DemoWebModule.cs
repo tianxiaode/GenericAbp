@@ -1,26 +1,22 @@
-﻿using System;
-using Generic.Abp.Demo.EntityFrameworkCore;
+﻿using Generic.Abp.Demo.EntityFrameworkCore;
 using Generic.Abp.Demo.Localization;
 using Generic.Abp.Demo.MultiTenancy;
 using Generic.Abp.Demo.Web.Menus;
+using Generic.Abp.Metro.UI.Account.Web;
+using Generic.Abp.Metro.UI.Theme.Basic.Demo;
+using Generic.Abp.Metro.UI.Theme.Shared;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using OpenIddict.Validation.AspNetCore;
 using System.IO;
-using Generic.Abp.Metro.UI.Account.Web;
 using Generic.Abp.Metro.UI.Packages.FontAwesome;
-using Generic.Abp.Metro.UI.Theme.Basic;
 using Generic.Abp.Metro.UI.Theme.Basic.Bundling;
-using Generic.Abp.Metro.UI.Theme.Basic.Demo;
-using Generic.Abp.Metro.UI.Theme.Shared;
-using Generic.Abp.Metro.UI.Theme.Shared.Bundling;
-using Microsoft.AspNetCore.Mvc.ApplicationModels;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Volo.Abp;
-using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
@@ -28,7 +24,6 @@ using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Modularity;
-using Volo.Abp.Settings;
 using Volo.Abp.Swashbuckle;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.UI.Navigation.Urls;
@@ -41,9 +36,8 @@ namespace Generic.Abp.Demo.Web
         typeof(DemoApplicationModule),
         typeof(DemoEntityFrameworkCoreModule),
         typeof(AbpAutofacModule),
-        typeof(GenericAbpMetroUiAccountWebModule),
+        typeof(GenericAbpMetroUiAccountWebOpenIddictModule),
         typeof(GenericAbpMetroUiThemeBasicDemoModule),
-        //typeof(AbpAccountWebOpenIddictModule),
         typeof(AbpAspNetCoreSerilogModule),
         typeof(AbpSwashbuckleModule)
     )]
@@ -99,7 +93,8 @@ namespace Generic.Abp.Demo.Web
 
         private void ConfigureAuthentication(ServiceConfigurationContext context)
         {
-            //context.Services.ForwardIdentityAuthenticationForBearer(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme);
+            context.Services.ForwardIdentityAuthenticationForBearer(OpenIddictValidationAspNetCoreDefaults
+                .AuthenticationScheme);
         }
 
         private void ConfigureUrls(IConfiguration configuration)

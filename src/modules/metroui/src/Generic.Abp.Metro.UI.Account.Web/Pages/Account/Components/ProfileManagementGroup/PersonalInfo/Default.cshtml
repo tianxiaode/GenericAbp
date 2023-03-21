@@ -24,9 +24,7 @@
         StringComparison.OrdinalIgnoreCase);
 }
 
-<h4>@L["PersonalSettings"]</h4>
-<hr />
-<form method="post" id="PersonalSettingsForm">
+<form method="post" id="PersonalSettingsForm" >
 
     <input asp-for="ConcurrencyStamp" />
 
@@ -34,16 +32,16 @@
 
     <abp-row>
         <abp-column size-md="_6">
-            <abp-input asp-for="Name" />
+            <metro-input asp-for="Name" />
         </abp-column>
         <abp-column size-md="_6">
-            <abp-input asp-for="Surname" />
+            <metro-input asp-for="Surname" />
         </abp-column>
     </abp-row>
 
-    <abp-input asp-for="Email" readonly="!isEmailUpdateEnabled" />
+    <metro-input asp-for="Email" readonly="!isEmailUpdateEnabled" />
 
-    <abp-input asp-for="PhoneNumber" />
+    <metro-input asp-for="PhoneNumber" />
 
     @foreach (var propertyInfo in from propertyInfo in ObjectExtensionManager.Instance.GetProperties<AccountProfilePersonalInfoManagementGroupViewComponent.PersonalInfoModel>() let isAllowed = propertyInfo.Configuration.GetOrDefault(IdentityModuleExtensionConsts.ConfigurationNames.AllowUserToEdit) where isAllowed != null && isAllowed.Equals(true) where !propertyInfo.Name.EndsWith("_Text") select propertyInfo)
     {
@@ -76,5 +74,5 @@
         }
     }
 
-    <abp-button type="submit" button-type="Primary" text="@L["Submit"].Value" />
+    <metro-button type="submit" button-type="Primary" text="@L["Submit"].Value" />
 </form>

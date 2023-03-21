@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "Generic.Abp.Metro.UI.Account.Web.OpenIddict": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:58422;http://localhost:58423"
+    }
+  }
+}

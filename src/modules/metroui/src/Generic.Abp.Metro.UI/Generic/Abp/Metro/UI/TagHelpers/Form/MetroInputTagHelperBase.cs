@@ -305,7 +305,7 @@ public abstract class MetroInputTagHelperBase : MetroTagHelper<FormGroupItem>
     {
         var validateAttributes = attributes.Where(m => m.Name?.StartsWith("data-val-") ?? false);
         var validateAttributeValue = "";
-        foreach (var attribute in validateAttributes)
+        foreach (var attribute in validateAttributes.OrderBy(m => m.Name))
         {
             var name = attribute.Name?.Replace("data-val-", "");
             if (string.IsNullOrWhiteSpace(name) || name?.IndexOf("-") > 0) continue;
@@ -322,9 +322,10 @@ public abstract class MetroInputTagHelperBase : MetroTagHelper<FormGroupItem>
                     validateAttributeValue += $" min={attributes["data-val-range-min"]?.Value}";
                     continue;
                 case "length":
-                    validateAttributeValue += $" {name}={attributes["data-val-length-max"]?.Value}";
+                    validateAttributeValue += $" maxlength={attributes["data-val-length-max"]?.Value}";
                     continue;
                 default:
+                    if (name == "required" && IsCheckbox) continue;
                     validateAttributeValue += $" {name}";
                     break;
             }

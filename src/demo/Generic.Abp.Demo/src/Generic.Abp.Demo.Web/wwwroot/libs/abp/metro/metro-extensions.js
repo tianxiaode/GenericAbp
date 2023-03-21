@@ -6,6 +6,7 @@ Metro.toastSetup({
 
 Metro.validatorSetup({
     onErrorForm: function(logs, data){
+        console.log(logs)
         logs.forEach(log=>{
             var input = $(log.input);
             var div = input.parent().parent();
@@ -48,14 +49,16 @@ Metro.selectSetup({
 })
 
 function addErrorSpan(div){
-    let span = $('<span>').addClass('invalid_feedback pos-absolute'),
+    let span = $('<span>').addClass('invalid_feedback'),
         invalidInput = div.find(`input[name="__Invariant"]`),
         label = div.find('label').first(),
         labelWidth = label ? label.width() : 0;
     if(invalidInput){
         invalidInput.remove();
     }
-    console.log(label)
+    if(div.hasClass('d-flex')){
+        span.addClass('pos-absolute');
+    }
     span.css('left', labelWidth);
     span.css('bottom', 2);
     span.appendTo(div);

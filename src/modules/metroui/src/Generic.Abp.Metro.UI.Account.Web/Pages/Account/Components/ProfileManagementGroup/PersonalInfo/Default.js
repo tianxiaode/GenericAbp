@@ -25,4 +25,4 @@
             $("#ConcurrencyStamp").val(profile.concurrencyStamp);
         });
     }
-})(jQuery);
+})(m4q);

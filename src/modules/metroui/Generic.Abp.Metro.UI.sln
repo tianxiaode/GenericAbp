@@ -21,7 +21,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Generic.Abp.Metro.UI.Widget
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Generic.Abp.Metro.UI.Theme.Basic.Demo", "src\Generic.Abp.Metro.UI.Theme.Basic.Demo\Generic.Abp.Metro.UI.Theme.Basic.Demo.csproj", "{E5AC7C6F-52CF-48C0-B803-82838702C680}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Generic.Abp.Metro.UI.Account.Web", "src\Generic.Abp.Metro.UI.Account.Web\Generic.Abp.Metro.UI.Account.Web.csproj", "{4B767DA1-1E35-486B-8E1D-2552BBE80926}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Generic.Abp.Metro.UI.Account.Web", "src\Generic.Abp.Metro.UI.Account.Web\Generic.Abp.Metro.UI.Account.Web.csproj", "{4B767DA1-1E35-486B-8E1D-2552BBE80926}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Generic.Abp.Metro.UI.Account.Web.OpenIddict", "src\Generic.Abp.Metro.UI.Account.Web.OpenIddict\Generic.Abp.Metro.UI.Account.Web.OpenIddict.csproj", "{3B902EEB-8C47-4F5D-AD56-4252FD2ED54E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Generic.Abp.Metro.UI.OpenIddict.AspNetCore", "src\Generic.Abp.Metro.UI.OpenIddict.AspNetCore\Generic.Abp.Metro.UI.OpenIddict.AspNetCore.csproj", "{0DDD6077-7464-4D8A-8242-425BA850A7F5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -65,6 +69,14 @@ Global
 		{4B767DA1-1E35-486B-8E1D-2552BBE80926}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4B767DA1-1E35-486B-8E1D-2552BBE80926}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4B767DA1-1E35-486B-8E1D-2552BBE80926}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B902EEB-8C47-4F5D-AD56-4252FD2ED54E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B902EEB-8C47-4F5D-AD56-4252FD2ED54E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B902EEB-8C47-4F5D-AD56-4252FD2ED54E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B902EEB-8C47-4F5D-AD56-4252FD2ED54E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0DDD6077-7464-4D8A-8242-425BA850A7F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0DDD6077-7464-4D8A-8242-425BA850A7F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0DDD6077-7464-4D8A-8242-425BA850A7F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0DDD6077-7464-4D8A-8242-425BA850A7F5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -79,6 +91,8 @@ Global
 		{04DD530B-596B-40C9-82B0-CBD64F1E4D17} = {CED86EF0-2C69-4C22-A6A3-9B9C2A5296CF}
 		{E5AC7C6F-52CF-48C0-B803-82838702C680} = {CED86EF0-2C69-4C22-A6A3-9B9C2A5296CF}
 		{4B767DA1-1E35-486B-8E1D-2552BBE80926} = {CED86EF0-2C69-4C22-A6A3-9B9C2A5296CF}
+		{3B902EEB-8C47-4F5D-AD56-4252FD2ED54E} = {CED86EF0-2C69-4C22-A6A3-9B9C2A5296CF}
+		{0DDD6077-7464-4D8A-8242-425BA850A7F5} = {CED86EF0-2C69-4C22-A6A3-9B9C2A5296CF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {385D6690-DCAF-4266-80C7-0D7D4952253D}

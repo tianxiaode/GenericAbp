@@ -2,37 +2,44 @@
     $(function () {
         var l = abp.localization.getResource("AbpAccount");
 
-        $('#ChangePasswordForm').submit(function (e) {
+
+
+        $('#ChangePasswordFormSubmitButton').click((e)=>{
             e.preventDefault();
+            Metro.getPlugin('#ChangePasswordForm', 'validator')._submit();
+        })
 
-            if (!$('#ChangePasswordForm').valid()) {
-                return false;
-            }
+    //    $('#ChangePasswordForm').submit(function (e) {
+    //        e.preventDefault();
 
-            var input = $('#ChangePasswordForm').serializeFormToObject();
+    //        if (!$('#ChangePasswordForm').valid()) {
+    //            return false;
+    //        }
 
-            if (
-                input.newPassword != input.newPasswordConfirm ||
-                input.newPassword == ''
-            ) {
-                abp.message.error(l('NewPasswordConfirmFailed'));
-                return;
-            }
+    //        var input = $('#ChangePasswordForm').serializeFormToObject();
 
-            if (input.currentPassword && input.currentPassword == ''){
-                return;
-            }
+    //        if (
+    //            input.newPassword != input.newPasswordConfirm ||
+    //            input.newPassword == ''
+    //        ) {
+    //            abp.message.error(l('NewPasswordConfirmFailed'));
+    //            return;
+    //        }
+
+    //        if (input.currentPassword && input.currentPassword == ''){
+    //            return;
+    //        }
             
-            if(input.currentPassword == input.newPassword) {
-                abp.message.error(l('NewPasswordSameAsOld'));
-                return;
-            }
+    //        if(input.currentPassword == input.newPassword) {
+    //            abp.message.error(l('NewPasswordSameAsOld'));
+    //            return;
+    //        }
             
-            volo.abp.account.profile.changePassword(input).then(function (result) {
-                abp.message.success(l('PasswordChanged'));
-                abp.event.trigger('passwordChanged');
-                $('#ChangePasswordForm').trigger("reset");
-            });
-        });
+    //        volo.abp.account.profile.changePassword(input).then(function (result) {
+    //            abp.message.success(l('PasswordChanged'));
+    //            abp.event.trigger('passwordChanged');
+    //            $('#ChangePasswordForm').trigger("reset");
+    //        });
+    //    });
     });
 })();

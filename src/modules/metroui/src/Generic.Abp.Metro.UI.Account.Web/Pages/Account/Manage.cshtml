@@ -10,36 +10,38 @@
     Layout = ThemeManager.CurrentTheme.GetApplicationLayout();
 }
 @section scripts {
-    <abp-script-bundle name="@typeof(ManageModel).FullName"/>
+    <metro-script-bundle name="@typeof(ManageModel).FullName"/>
 }
 
+<h4>@L["MyAccount"]</h4>
 @if (!Model.ReturnUrl.IsNullOrWhiteSpace())
 {
-    <abp-row class="mb-2">
-        <abp-column>
-            <a class="btn btn-primary" href="@Model.ReturnUrl">
-                <i class="fa fa-chevron-left me-2"></i>@L["ReturnToApplication"]
+    <div class="row mb-2">
+        <div class="cell-12">
+            <a class="button primary" href="@Model.ReturnUrl">
+                <i class="fa fa-chevron-left mr-2"></i>@L["ReturnToApplication"]
             </a>
-        </abp-column>
-    </abp-row>
+        </div>
+    </div>
 }
 
 <div id="ProfileManagementWrapper">
-    <abp-card>
-        <abp-card-body>
-            <abp-tabs tab-style="PillVertical" vertical-header-size="_3">
-                @foreach (var group in Model.ProfileManagementPageCreationContext.Groups)
-                {
-                    <abp-tab title="@group.DisplayName">
-                        <h2>@group.DisplayName</h2>
-                        <hr class="my-4" />
-                        @await Component.InvokeAsync(group.ComponentType, new
-                        {
-                            parameter = group.Parameter
-                        })
-                    </abp-tab>
-                }
-            </abp-tabs>
-        </abp-card-body>
-    </abp-card>
+    <metro-tabs>
+        @foreach (var group in Model.ProfileManagementPageCreationContext.Groups)
+        {
+            <metro-tab title="@group.DisplayName" target="@group.Id.Replace(".","_")" />
+        }
+    </metro-tabs>
+    <div class="border bd-default no-border-top p-2">
+        @foreach (var group in Model.ProfileManagementPageCreationContext.Groups)
+        {
+            <div id="@group.Id.Replace(".","_")" style="display: none;">
+                @await Component.InvokeAsync(group.ComponentType, new
+                       {
+                           parameter = group.Parameter
+                       })
+
+            </div>
+        }
+    </div>
 </div>
