@@ -1,21 +1,27 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<Import Project="..\..\..\..\common.props" />
 
 	<PropertyGroup>
-		<TargetFramework>netstandard2.1</TargetFramework>
+		<TargetFramework>net7.0</TargetFramework>
 		<RootNamespace></RootNamespace>
 	</PropertyGroup>
 
-	<ItemGroup>
-		<PackageReference Include="System.Text.Encodings.Web" Version="5.0.0" />
-		<PackageReference Include="Volo.Abp.Identity.Application" Version="$(AbpVersion)" />
-		<PackageReference Include="Volo.Abp.MailKit" Version="$(AbpVersion)" />
-	</ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Volo\Abp\Account\Emailing\Templates\*.tpl" />
+    <None Remove="Volo\Abp\Account\Emailing\Templates\*.tpl" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="$(FileProvidersEmbeddedVersion)" />
+  </ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\..\texttemplate\src\Generic.Abp.TextTemplate\Generic.Abp.TextTemplate.csproj" />
-		<ProjectReference Include="..\Generic.Abp.Account.Application.Contracts\Generic.Abp.Account.Application.Contracts.csproj" />
+    <PackageReference Include="Volo.Abp.Account.Application.Contracts" Version="$(AbpVersion)" />
+		<PackageReference Include="Volo.Abp.Identity.Application" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.UI.Navigation" Version="$(AbpVersion)" />
+		<PackageReference Include="Volo.Abp.Emailing" Version="$(AbpVersion)" />
 	</ItemGroup>
+
 
 </Project>

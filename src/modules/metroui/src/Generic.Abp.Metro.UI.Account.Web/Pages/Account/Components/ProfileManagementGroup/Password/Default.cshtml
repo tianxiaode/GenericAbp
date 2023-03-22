@@ -6,7 +6,7 @@
 @inject ICurrentUser CurrentUser
 @model Generic.Abp.Metro.UI.Account.Web.Pages.Account.Components.ProfileManagementGroup.Password.AccountProfilePasswordManagementGroupViewComponent.ChangePasswordInfoModel
 
-<form id="ChangePasswordForm" data-role="validator">
+<form method="post" id="ChangePasswordForm">
     @if (!Model.HideOldPasswordInput)
     {
         <metro-input asp-for="CurrentPassword"/>

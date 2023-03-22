@@ -25,6 +25,15 @@ public class MetroSelectTagHelper : MetroInputTagHelperBase, ISelectItemsTagHelp
     protected SelectItemsService SelectItemsService { get; }
     public IEnumerable<SelectListItem> AspItems { get; set; }
     [HtmlAttributeName("info")] public string InfoText { get; set; }
+    public string AutocompleteApiUrl { get; set; }
+    public string AutocompleteItemsPropertyName { get; set; }
+    public string AutocompleteDisplayPropertyName { get; set; }
+    public string AutocompleteValuePropertyName { get; set; }
+    public string AutocompleteFilterParamName { get; set; }
+    public string AutocompleteSelectedItemName { get; set; }
+    public string AutocompleteSelectedItemValue { get; set; }
+    public string AllowClear { get; set; }
+    public string Placeholder { get; set; }
 
     protected override async Task<string> GetFormInputGroupAsHtmlAsync(TagHelperContext context, TagHelperOutput output)
     {
@@ -63,5 +72,20 @@ public class MetroSelectTagHelper : MetroInputTagHelperBase, ISelectItemsTagHelp
 
 
         return selectTagHelperOutput;
+    }
+
+    protected virtual void AddAutocompleteAttributes(TagHelperOutput output)
+    {
+        if (AutocompleteApiUrl.IsNullOrEmpty()) return;
+        var attributes = output.Attributes;
+        attributes.Add("data-autocomplete-api-url", AutocompleteApiUrl);
+        attributes.Add("data-autocomplete-items-property", AutocompleteItemsPropertyName);
+        attributes.Add("data-autocomplete-display-property", AutocompleteDisplayPropertyName);
+        attributes.Add("data-autocomplete-value-property", AutocompleteValuePropertyName);
+        attributes.Add("data-autocomplete-filter-param-name", AutocompleteFilterParamName);
+        attributes.Add("data-autocomplete-selected-item-name", AutocompleteSelectedItemName);
+        attributes.Add("data-autocomplete-selected-item-value", AutocompleteSelectedItemValue);
+        attributes.Add("data-autocomplete-allow-clear", AllowClear);
+        attributes.Add("data-autocomplete-placeholder", Placeholder);
     }
 }

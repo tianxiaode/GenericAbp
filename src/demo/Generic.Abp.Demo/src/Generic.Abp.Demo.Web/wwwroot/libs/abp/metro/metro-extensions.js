@@ -65,67 +65,6 @@ function addErrorSpan(div){
 
 }
 
-function moveToFloatDiv(input, move, callback){
-    var floatDiv = $('#global-floatWrap');    
-    if(!floatDiv[0]){
-        floatDiv = $('<div>');
-        floatDiv.attr('id', 'global-floatWrap');
-        floatDiv.addClass('float-wrap');
-        floatDiv.addClass('root');
-        floatDiv.attr('data-sticky', true);
-        floatDiv.appendTo($('body'));
-    }
-    move.appendTo(floatDiv);
-    var dialogContent = input.parents('.dialog-content');
-    dialogContent.on('scroll', callback)
-}
-
-// let left = ['L', ''], 
-//     right = ['R', ''],
-//     borderTop =[ 'T', ''],
-//     bottom = ['B' ,''],
-//     style = ['solid', 'dashed', 'dotted', 'double',  'groove', 'inset' ,'outset' ,'ridge'],
-//     text = [];
-// left.forEach(l=>{
-//     right.forEach(r=>{
-//         borderTop.forEach(t=>{
-//             bottom.forEach(b=>{
-//                 // style.forEach(s=>{
-//                 //     [1,2,3,4,5].forEach(size=>{
-//                         let result = [];
-//                         if(!_.isEmpty(l)) result.push(l);
-//                         if(!_.isEmpty(r)) result.push(r);
-//                         if(!_.isEmpty(t)) result.push(t);
-//                         if(!_.isEmpty(b)) result.push(b);
-//                         if(result.length === 0) return;
-//                         result[0] = _.capitalize(result[0]);
-//                         text.push(result.join(''));
-//                 //     })
-//                 // })
-//             })
-//         })
-//     })
-// })
-// console.log(text.sort().join(',\n'));
-// var colorList = ["black"," white"," dark"," light"," grayBlue"," grayWhite"," grayMouse"," brandColor1"," brandColor2","lime"," green"," emerald"," blue"," teal"," cyan"," cobalt"," indigo"," violet"," pink"," magenta"," crimson"," red"," orange"," amber"," yellow"," brown"," olive"," steel"," mauve"," taupe"," gray","lightLime"," lightGreen"," lightEmerald"," lightBlue"," lightTeal"," lightCyan"," lightCobalt"," lightIndigo"," lightViolet"," lightPink"," lightMagenta"," lightCrimson"," lightRed"," lightOrange"," lightAmber"," lightYellow"," lightBrown"," lightOlive"," lightSteel"," lightMauve"," lightTaupe"," lightGray"," lightGrayBlue","darkLime"," darkGreen"," darkEmerald"," darkBlue"," darkTeal"," darkCyan"," darkCobalt"," darkIndigo"," darkViolet"," darkPink"," darkMagenta"," darkCrimson"," darkRed"," darkOrange"," darkAmber"," darkYellow"," darkBrown"," darkOlive"," darkSteel"," darkMauve"," darkTaupe"," darkGray"," darkGrayBlue"];
-// var result = [];
-// colorList.forEach(c=>{
-//     c = _.upperFirst(_.trim(c));
-//     result.push(c);
-// })
-// console.log(result.sort().join(',\n'))
-
-
-// Metro.checkboxSetup({
-//     onCheckboxCreate(input){
-//         var div = $(input.closest('div'));
-//         var label = div.find('.checkbox-label');
-//         var html = label.html();
-//         var span = div.find('span.caption');
-//         span.text(html);
-//     }
-// })
-
 $(function () {
 
     $.extend(Metro.locales['zh-CN'],{
@@ -149,6 +88,80 @@ $(function () {
             off: "关"
         }
     });
+
+    $.extend({
+        serializeToArray: function(form){
+            var _form = $(form)[0];
+            if (!_form || _form.nodeName !== "FORM") {
+                console.warn("Element is not a HTMLFromElement");
+                return;
+            }
+            var i, j, q = [], data= {};
+            for (i = _form.elements.length - 1; i >= 0; i = i - 1) {
+                if (_form.elements[i].name === "") {
+                    continue;
+                }
+                switch (_form.elements[i].nodeName) {
+                    case 'INPUT':
+                        switch (_form.elements[i].type) {
+                            case 'checkbox':
+                            case 'radio':
+                                if (_form.elements[i].checked) {
+                                    data[_.camelCase(_form.elements[i].name)] = _form.elements[i].value;
+                                }
+                                break;
+                            case 'file':
+                                break;
+                            default: data[_.camelCase(_form.elements[i].name)] = _form.elements[i].value;
+                        }
+                        break;
+                    case 'TEXTAREA':
+                        data[_.camelCase(_form.elements[i].name)] = _form.elements[i].value;
+                        break;
+                    case 'SELECT':
+                        switch (_form.elements[i].type) {
+                            case 'select-one':
+                                data[_.camelCase(_form.elements[i].name)] = _form.elements[i].value;
+                                break;
+                            case 'select-multiple':
+                                let name = _.camelCase(_form.elements[i].name);
+                                data[name] = [];
+                                for (j = _form.elements[i].options.length - 1; j >= 0; j = j - 1) {
+                                    if (_form.elements[i].options[j].selected) {
+                                        data[name].push(_form.elements[i].value);
+                                    }
+                                }
+                                break;
+                        }
+                        break;
+                    case 'BUTTON':
+                        switch (_form.elements[i].type) {
+                            case 'reset':
+                            case 'submit':
+                            case 'button':
+                                data[_.camelCase(_form.elements[i].name)] = _form.elements[i].value;
+                                break;
+                        }
+                        break;
+                }
+            }
+            return data;
+        },
+        defer() {
+            const deferred = {};
+            const promise = new Promise((resolve, reject) => {
+              deferred.resolve = resolve;
+              deferred.reject = reject;
+            });
+          
+            deferred.promise = () => {
+              return promise;
+            };
+          
+            return deferred;
+          }
+    })
+
 
     var showNotification = function (type, message, options) {
         Metro.toast.create(message, null, null, type, options);

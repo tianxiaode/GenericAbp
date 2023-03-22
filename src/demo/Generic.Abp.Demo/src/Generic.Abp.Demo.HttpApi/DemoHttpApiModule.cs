@@ -29,7 +29,7 @@ namespace Generic.Abp.Demo
         typeof(GenericAbpApplicationModule),
         typeof(GenericAbpEnumerationHttpApiModule),
         typeof(GenericAbpOpenIddictHttpApiModule)
-        )]
+    )]
     public class DemoHttpApiModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
@@ -48,6 +48,5 @@ namespace Generic.Abp.Demo
                     );
             });
         }
-
     }
 }

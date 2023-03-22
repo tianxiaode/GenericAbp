@@ -14,34 +14,34 @@
     volo.abp.account.account.register = function(input, ajaxParams) {
       return abp.ajax($.extend({
         url: abp.appPath + 'api/account/register',
-        type: 'POST',
-        data: JSON.stringify(input)
+        method: 'POST',
+        data: input
       }, ajaxParams));
     };
 
     volo.abp.account.account.sendPasswordResetCode = function(input, ajaxParams) {
       return abp.ajax($.extend({
         url: abp.appPath + 'api/account/send-password-reset-code',
-        type: 'POST',
+        method: 'POST',
         dataType: null,
-        data: JSON.stringify(input)
+        data:input
       }, ajaxParams));
     };
 
     volo.abp.account.account.verifyPasswordResetToken = function(input, ajaxParams) {
       return abp.ajax($.extend({
         url: abp.appPath + 'api/account/verify-password-reset-token',
-        type: 'POST',
-        data: JSON.stringify(input)
+        method: 'POST',
+        data: input
       }, ajaxParams));
     };
 
     volo.abp.account.account.resetPassword = function(input, ajaxParams) {
       return abp.ajax($.extend({
         url: abp.appPath + 'api/account/reset-password',
-        type: 'POST',
+        method: 'POST',
         dataType: null,
-        data: JSON.stringify(input)
+        data: input
       }, ajaxParams));
     };
 
@@ -56,15 +56,15 @@
     volo.abp.account.web.areas.account.controllers.account.login = function(login, ajaxParams) {
       return abp.ajax($.extend({
         url: abp.appPath + 'api/account/login',
-        type: 'POST',
-        data: JSON.stringify(login)
+        method: 'POST',
+        data: login
       }, ajaxParams));
     };
 
     volo.abp.account.web.areas.account.controllers.account.logout = function(ajaxParams) {
       return abp.ajax($.extend({
         url: abp.appPath + 'api/account/logout',
-        type: 'GET',
+        method: 'GET',
         dataType: null
       }, ajaxParams));
     };
@@ -72,8 +72,8 @@
     volo.abp.account.web.areas.account.controllers.account.checkPassword = function(login, ajaxParams) {
       return abp.ajax($.extend({
         url: abp.appPath + 'api/account/check-password',
-        type: 'POST',
-        data: JSON.stringify(login)
+        method: 'POST',
+        data: input
       }, ajaxParams));
     };
 
@@ -88,24 +88,24 @@
     volo.abp.account.profile.get = function(ajaxParams) {
       return abp.ajax($.extend({
         url: abp.appPath + 'api/account/my-profile',
-        type: 'GET'
+        method: 'GET'
       }, ajaxParams));
     };
 
     volo.abp.account.profile.update = function(input, ajaxParams) {
       return abp.ajax($.extend({
         url: abp.appPath + 'api/account/my-profile',
-        type: 'PUT',
-        data: JSON.stringify(input)
+        method: 'PUT',
+        data: input
       }, ajaxParams));
     };
 
     volo.abp.account.profile.changePassword = function(input, ajaxParams) {
       return abp.ajax($.extend({
         url: abp.appPath + 'api/account/my-profile/change-password',
-        type: 'POST',
+        method: 'POST',
         dataType: null,
-        data: JSON.stringify(input)
+        data: input
       }, ajaxParams));
     };
 

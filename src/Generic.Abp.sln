@@ -161,6 +161,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Generic.Abp.Metro.UI.Accoun
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Generic.Abp.Metro.UI.OpenIddict.AspNetCore", "modules\metroui\src\Generic.Abp.Metro.UI.OpenIddict.AspNetCore\Generic.Abp.Metro.UI.OpenIddict.AspNetCore.csproj", "{A392E182-10F6-493B-9B42-D7CA392E7474}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "account", "account", "{F2D7AF8B-CEF5-4D93-B300-DA9FD49A5EB6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -865,6 +867,7 @@ Global
 		{78FCA8A3-D791-41BD-A581-1216B7DD5560} = {15FD3C65-E926-4250-8E67-7268626328F9}
 		{957AEB9E-294A-4B2E-B5E5-BB789678E842} = {15FD3C65-E926-4250-8E67-7268626328F9}
 		{A392E182-10F6-493B-9B42-D7CA392E7474} = {15FD3C65-E926-4250-8E67-7268626328F9}
+		{F2D7AF8B-CEF5-4D93-B300-DA9FD49A5EB6} = {334C2CC9-4833-4DEA-833A-8D5FD88961B3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {11F1E32E-A8BF-442B-94DB-FE8C30C1FB2A}

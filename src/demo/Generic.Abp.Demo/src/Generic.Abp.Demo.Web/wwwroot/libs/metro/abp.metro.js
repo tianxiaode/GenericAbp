@@ -94,41 +94,63 @@ var abp = abp || {};
     abp.ajax = function (userOptions) {
         userOptions = userOptions || {};
 
-        var options = $.extend(true, {}, abp.ajax.defaultOpts, userOptions);
+        var options = $.extend({}, abp.ajax.defaultOpts, userOptions);
 
         options.success = undefined;
         options.error = undefined;
+        // function(jqXHR){
+        //     console.log(jqXHR)
+        //     if(jqXHR.statusText === 'abort') {
+        //         //ajax request is abort, ignore error handle.
+        //         return;
+        //     }
+        //     if (jqXHR.getResponseHeader('_AbpErrorFormat') === 'true') {
+        //         abp.ajax.handleAbpErrorResponse(jqXHR, userOptions, $dfd);
+        //     } else {
+        //         abp.ajax.handleNonAbpErrorResponse(jqXHR, userOptions, $dfd);
+        //     }
+        // };
 
-        var xhr = null;
-        var promise = $.Deferred(function ($dfd) {
-            xhr = $.ajax(options)
-                .done(function (data, textStatus, jqXHR) {
-                    $dfd.resolve(data);
-                    userOptions.success && userOptions.success(data);
-                }).fail(function (jqXHR) {
-                    if(jqXHR.statusText === 'abort') {
-                        //ajax request is abort, ignore error handle.
-                        return;
-                    }
-                    if (jqXHR.getResponseHeader('_AbpErrorFormat') === 'true') {
-                        abp.ajax.handleAbpErrorResponse(jqXHR, userOptions, $dfd);
-                    } else {
-                        abp.ajax.handleNonAbpErrorResponse(jqXHR, userOptions, $dfd);
-                    }
-                });
-        }).promise();
+        if(options.data && options.data.requestVerificationToken){
+            options.headers.RequestVerificationToken = options.data.requestVerificationToken;
+        }
 
-        promise['jqXHR'] = xhr;
+        options.data = JSON.stringify(options.data);
 
-        return promise;
+        const defer = $.defer();
+
+        $.ajax(options).then(
+            function(result){
+                defer.resolve(result);
+                userOptions.success && userOptions.success(result);
+            },
+            function(xhr){
+                if(xhr.statusText === 'abort') {
+                    //ajax request is abort, ignore error handle.
+                    return;
+                }
+                if (xhr.getResponseHeader('_AbpErrorFormat') === 'true') {
+                    abp.ajax.handleAbpErrorResponse(xhr, userOptions);
+                } else {
+                    abp.ajax.handleNonAbpErrorResponse(xhr, userOptions);
+                }
+            }
+        );
+        return defer.promise();
+
+        // promise['jqXHR'] = xhr;
+        // return promise;
+
     };
 
     $.extend(abp.ajax, {
         defaultOpts: {
             dataType: 'json',
-            type: 'POST',
-            contentType: 'application/json',
+            method: 'POST',
+            contentType: false,
+            parseJson: true,
             headers: {
+                'Content-Type': 'application/json',
                 'X-Requested-With': 'XMLHttpRequest'
             }
         },

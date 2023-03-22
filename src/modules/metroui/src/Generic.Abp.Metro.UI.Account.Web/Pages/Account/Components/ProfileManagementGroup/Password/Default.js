@@ -1,12 +1,40 @@
 (function () {
     $(function () {
-        var l = abp.localization.getResource("AbpAccount");
+        var l = abp.localization.getResource("AbpAccount"),
+            form = $('#ChangePasswordForm');
 
+        Metro.makePlugin(form, 'validator', {
+            onSubmit: function (data) {
+                if (
+                    data.newPassword != data.newPasswordConfirm ||
+                    data.newPassword == ''
+                ) {
+                    abp.message.error(l('NewPasswordConfirmFailed'));
+                    return;
+                }
 
+                if (data.currentPassword && data.currentPassword == ''){
+                    return;
+                }
+            
+                if(data.currentPassword == data.newPassword) {
+                    abp.message.error(l('NewPasswordSameAsOld'));
+                    return;
+                }
+
+                volo.abp.account.profile.changePassword(data).then(function (result) {
+                    console.log(result)
+                    abp.message.success(l('PasswordChanged'));
+                    abp.event.trigger('passwordChanged');
+                    form.trigger("reset");
+                });
+
+            }
+        })
 
         $('#ChangePasswordFormSubmitButton').click((e)=>{
             e.preventDefault();
-            Metro.getPlugin('#ChangePasswordForm', 'validator')._submit();
+            Metro.getPlugin(form, 'validator')._submit();
         })
 
     //    $('#ChangePasswordForm').submit(function (e) {

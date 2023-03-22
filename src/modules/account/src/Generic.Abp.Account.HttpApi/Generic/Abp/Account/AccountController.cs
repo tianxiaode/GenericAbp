@@ -1,50 +1,49 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Volo.Abp;
+using Volo.Abp.Account;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Identity;
 
-namespace Generic.Abp.Account
+namespace Generic.Abp.Account;
+
+[RemoteService(Name = AccountRemoteServiceConsts.RemoteServiceName)]
+[Area(AccountRemoteServiceConsts.ModuleName)]
+[Route("api/account")]
+public class AccountController : AbpControllerBase, IAccountAppService
 {
-    [RemoteService(Name = AccountRemoteServiceConsts.RemoteServiceName)]
-    [Area("account")]
-    [Route("api/account")]
-    public class AccountController : AbpController, IAccountAppService
+    protected IAccountAppService AccountAppService { get; }
+
+    public AccountController(IAccountAppService accountAppService)
     {
-        protected IAccountAppService AccountAppService { get; }
+        AccountAppService = accountAppService;
+    }
 
-        public AccountController(IAccountAppService accountAppService)
-        {
-            AccountAppService = accountAppService;
-        }
+    [HttpPost]
+    [Route("register")]
+    public virtual Task<IdentityUserDto> RegisterAsync(RegisterDto input)
+    {
+        return AccountAppService.RegisterAsync(input);
+    }
 
-        [HttpPost]
-        [Route("register")]
-        public virtual Task<IdentityUserDto> RegisterAsync(RegisterDto input)
-        {
-            return AccountAppService.RegisterAsync(input);
-        }
+    [HttpPost]
+    [Route("send-password-reset-code")]
+    public virtual Task SendPasswordResetCodeAsync(SendPasswordResetCodeDto input)
+    {
+        return AccountAppService.SendPasswordResetCodeAsync(input);
+    }
 
-        [HttpPost]
-        [Route("send-verification-code")]
-        public virtual Task<SendVerificationCodeResult> SendVerificationCodeAsync(SendVerificationCodeDto input)
-        {
-            return AccountAppService.SendVerificationCodeAsync(input);
-        }
+    [HttpPost]
+    [Route("verify-password-reset-token")]
+    public Task<bool> VerifyPasswordResetTokenAsync(VerifyPasswordResetTokenInput input)
+    {
+        return AccountAppService.VerifyPasswordResetTokenAsync(input);
+    }
 
-        [HttpPost]
-        [Route("check-verification-code")]
-        public virtual Task<CheckVerificationCodeResultDto> CheckVerificationCodeAsync(
-            CheckVerificationCodeInputDto input)
-        {
-            return AccountAppService.CheckVerificationCodeAsync(input);
-        }
-
-        [HttpPost]
-        [Route("reset-password")]
-        public virtual Task ResetPasswordAsync(ResetPasswordInputDto input)
-        {
-            return AccountAppService.ResetPasswordAsync(input);
-        }
+    [HttpPost]
+    [Route("reset-password")]
+    public virtual Task ResetPasswordAsync(ResetPasswordDto input)
+    {
+        return AccountAppService.ResetPasswordAsync(input);
     }
 }

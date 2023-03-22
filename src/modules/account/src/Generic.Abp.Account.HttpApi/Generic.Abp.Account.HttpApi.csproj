@@ -9,10 +9,8 @@
 	<ItemGroup>
 		<PackageReference Include="Volo.Abp.AspNetCore.Mvc" Version="$(AbpVersion)" />
 		<PackageReference Include="Volo.Abp.Identity.HttpApi" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.Account.Application.Contracts" Version="$(AbpVersion)" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <ProjectReference Include="..\Generic.Abp.Account.Application.Contracts\Generic.Abp.Account.Application.Contracts.csproj" />
-	</ItemGroup>
 
 </Project>

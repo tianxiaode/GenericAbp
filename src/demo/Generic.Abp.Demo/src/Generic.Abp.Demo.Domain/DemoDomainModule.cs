@@ -30,7 +30,7 @@ namespace Generic.Abp.Demo
         typeof(AbpTenantManagementDomainModule),
         typeof(GenericAbpPhoneLoginDomainModule),
         typeof(GenericAbpIdentityDomainModule)
-        )]
+    )]
     public class DemoDomainModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
@@ -56,11 +56,7 @@ namespace Generic.Abp.Demo
                 options.Languages.Add(new LanguageInfo("es", "es", "Español"));
             });
 
-            Configure<AbpMultiTenancyOptions>(options =>
-            {
-                options.IsEnabled = MultiTenancyConsts.IsEnabled;
-            });
-
+            Configure<AbpMultiTenancyOptions>(options => { options.IsEnabled = MultiTenancyConsts.IsEnabled; });
         }
     }
 }
