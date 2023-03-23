@@ -11,6 +11,8 @@ namespace Generic.Abp.Metro.UI.TagHelpers.Form;
 
 public class MetroInputTagHelper : MetroInputTagHelperBase
 {
+    public bool AutoComplete { get; set; } = true;
+
     public MetroInputTagHelper(HtmlEncoder htmlEncoder, IMetroTagHelperLocalizerService localizer,
         IHtmlGenerator generator) : base(htmlEncoder, generator, localizer)
     {
@@ -61,6 +63,11 @@ public class MetroInputTagHelper : MetroInputTagHelperBase
         {
             inputTagHelperOutput.Attributes.AddClass("metro-input");
             await AddPrependAndAppendAttributesAsync(inputTagHelperOutput);
+        }
+
+        if (AutoComplete == false)
+        {
+            inputTagHelperOutput.Attributes.Add("autocomplete", "off");
         }
 
         await SetDataRoleAttributeAsync(inputTagHelperOutput);

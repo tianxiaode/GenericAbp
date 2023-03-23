@@ -1,31 +1,44 @@
 ﻿@page
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Volo.Abp.Account.Localization
+@using Generic.Abp.Metro.UI.TagHelpers.Form
 @model Generic.Abp.Metro.UI.Account.Web.Pages.Account.RegisterModel
 @inject IHtmlLocalizer<AccountResource> L
 
-<div class="card mt-3 shadow-sm rounded">
-    <div class="card-body p-5">
+<div class="card mt-3 rounded">
+    <div class=" p-5">
         <h4>@L["Register"]</h4>
-        <strong>
-            @L["AlreadyRegistered"]
-            <a href="@Url.Page("./Login", new {returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash})" class="text-decoration-none">@L["Login"]</a>
-        </strong>
-        <form method="post" class="mt-4">
+        <form method="post" class="mt-4" autocomplete="off">
             @if (!Model.IsExternalLogin)
             {
-                <abp-input asp-for="Input.UserName" auto-focus="true"/>
+                <metro-input asp-for="Input.UserName" auto-focus="true" prepend="<span class='mif-user'></span>" size="InputSize.Large" no-label="true" placeholder="@L["UserName"]" auto-complete="false" />
             }
 
-            <abp-input asp-for="Input.EmailAddress"/>
+            <metro-input asp-for="Input.EmailAddress" size="InputSize.Large" prepend="<span class='fa fa-at'></span>" no-label="true" class="mt-2" placeholder="@L["EmailAddress"]" auto-complete="false" />
 
             @if (!Model.IsExternalLogin)
             {
-                <abp-input asp-for="Input.Password"/>
+                <metro-input asp-for="Input.Password" size="InputSize.Large" prepend="<span class='mif-key'></span>" no-label="true" class="mt-2" auto-complete="false" />
             }
-            <div class="d-grid gap-2">
-                <abp-button button-type="Primary" type="submit" class="btn-lg mt-4">@L["Register"]</abp-button>
+            <div class="">
+                <button class="button primary large w-100 mt-2" type="submit" >@L["Register"]</button>
             </div>
         </form>
+        
+        @if (Model.Errors != null)
+        {
+            @foreach (var alertMessage in Model.Errors)
+            {
+                <div class="my-4 fg-red text-center w-100 text-bold">
+                    @alertMessage.Text
+                </div>
+            }
+        }
+
+        <div class="mt-2 text-bold">
+            @L["AlreadyRegistered"]
+            <a href="@Url.Page("./Login", new {returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash})">@L["Login"]</a>
+        </div>
+
     </div>
 </div>

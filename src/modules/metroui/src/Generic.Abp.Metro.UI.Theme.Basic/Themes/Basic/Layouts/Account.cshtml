@@ -6,6 +6,7 @@
 @using Generic.Abp.Metro.UI.Widgets.Components.WidgetStyles
 @using Generic.Abp.Metro.UI.Bundling.TagHelpers
 @using Generic.Abp.Metro.UI.Theme.Basic.Themes.Basic.Components.MetroMeta
+@using Generic.Abp.Metro.UI.Theme.Basic.Themes.Basic.Components.PageAlerts
 @using Microsoft.Extensions.Options
 @using Volo.Abp.AspNetCore.MultiTenancy
 @using Volo.Abp.AspNetCore.Mvc.UI.Components.LayoutHook
@@ -88,6 +89,7 @@
                 </div>
             </div>
             }
+                @(await Component.InvokeAsync<PageAlertsViewComponent>())
             @await Component.InvokeLayoutHookAsync(LayoutHooks.PageContent.First, StandardLayouts.Account)
             @RenderBody()
             @await Component.InvokeLayoutHookAsync(LayoutHooks.PageContent.Last, StandardLayouts.Account)

@@ -9,6 +9,7 @@ using Microsoft.Extensions.Options;
 using Volo.Abp;
 using Volo.Abp.Account;
 using Volo.Abp.Account.Settings;
+using Volo.Abp.AspNetCore.Mvc.UI.Alerts;
 using Volo.Abp.Auditing;
 using Volo.Abp.Identity;
 using Volo.Abp.Settings;
@@ -28,6 +29,7 @@ public class RegisterModel : AccountPageModel
     [BindProperty(SupportsGet = true)] public bool IsExternalLogin { get; set; }
 
     [BindProperty(SupportsGet = true)] public string ExternalLoginAuthSchema { get; set; }
+    [BindProperty] public AlertList Errors { get; set; }
 
     public RegisterModel(IAccountAppService accountAppService)
     {
@@ -97,6 +99,7 @@ public class RegisterModel : AccountPageModel
         catch (BusinessException e)
         {
             Alerts.Danger(GetLocalizeExceptionMessage(e));
+            Errors = Alerts;
             return Page();
         }
     }

@@ -11,6 +11,7 @@
 @using Volo.Abp.Ui.LayoutHooks
 @using Generic.Abp.Metro.UI.Bundling.TagHelpers
 @using Generic.Abp.Metro.UI.Theme.Basic.Themes.Basic.Components.MetroMeta
+@using Generic.Abp.Metro.UI.Theme.Basic.Themes.Basic.Components.PageAlerts
 @inject IBrandingProvider BrandingProvider
 @inject IPageLayout PageLayout
 @{
@@ -56,21 +57,22 @@
 
     @(await Component.InvokeAsync<MainNavbarViewComponent>())
 
-    <div class="@containerClass">
-        <div id="AbpContentToolbar">
-            <div class="row mb-2">
-                @(await Component.InvokeAsync<ContentTitleViewComponent>())
-                <div class="col">
-                    <div class="text-end">
-                        @await RenderSectionAsync("content_toolbar", false)
-                    </div>
+<div class="@containerClass">
+        @(await Component.InvokeAsync<PageAlertsViewComponent>())
+    <div id="AbpContentToolbar">
+        <div class="row mb-2">
+            @(await Component.InvokeAsync<ContentTitleViewComponent>())
+            <div class="col">
+                <div class="text-right">
+                    @await RenderSectionAsync("content_toolbar", false)
                 </div>
             </div>
         </div>
-        @await Component.InvokeLayoutHookAsync(LayoutHooks.PageContent.First, StandardLayouts.Application)
-        @RenderBody()
-        @await Component.InvokeLayoutHookAsync(LayoutHooks.PageContent.Last, StandardLayouts.Application)
     </div>
+    @await Component.InvokeLayoutHookAsync(LayoutHooks.PageContent.First, StandardLayouts.Application)
+    @RenderBody()
+    @await Component.InvokeLayoutHookAsync(LayoutHooks.PageContent.Last, StandardLayouts.Application)
+</div>
 
     <metro-script-bundle name="@BasicThemeBundles.Scripts.Global" />
     <script src="~/metro/ApplicationLocalizationScript?cultureName=@CultureInfo.CurrentUICulture.Name"></script>

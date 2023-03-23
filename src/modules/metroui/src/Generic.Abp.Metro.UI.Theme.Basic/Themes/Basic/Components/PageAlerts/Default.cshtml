@@ -1,0 +1,16 @@
+﻿@model Volo.Abp.AspNetCore.Mvc.UI.Alerts.AlertList
+@if (Model.Any())
+{
+    <div id="AbpPageAlerts" class="mx-2">
+        @foreach (var alertMessage in Model)
+        {
+            <div data-role="alert" data-type="@(alertMessage.Type.ToString().ToLowerInvariant())" data-dismissible="@alertMessage.Dismissible">
+                @if (alertMessage.Title != null)
+                {
+                    <h4>@alertMessage.Title</h4>
+                }
+                @alertMessage.Text
+            </div>
+        }
+    </div>
+}
