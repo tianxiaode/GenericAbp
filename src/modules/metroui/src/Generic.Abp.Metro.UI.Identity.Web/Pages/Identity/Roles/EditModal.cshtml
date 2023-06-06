@@ -1,0 +1,72 @@
+﻿@page
+@using Generic.Abp.Metro.UI.Identity.Web.Pages.Identity.Roles
+@using Generic.Abp.Metro.UI.TagHelpers.Form
+@using Generic.Abp.Metro.UI.TagHelpers.Modal
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Microsoft.Extensions.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@using Volo.Abp.Identity.Localization
+@using Volo.Abp.Localization
+@using Volo.Abp.ObjectExtending
+@using Volo.Abp.Data
+@model Generic.Abp.Metro.UI.Identity.Web.Pages.Identity.Roles.EditModalModel
+@inject IHtmlLocalizer<IdentityResource> L
+@inject IStringLocalizerFactory StringLocalizerFactory
+@{
+    Layout = null;
+}
+<metro-modal>
+    <form asp-page="/Identity/Roles/EditModal">
+        <metro-modal-title title="@L["NewRole"].Value" />
+        <metro-modal-content>
+            <metro-form-content cols="1" label-width="120">
+                <metro-input asp-for="Role.Id" />
+                <metro-input asp-for="Role.ConcurrencyStamp" />
+                @if (Model.Role.IsStatic)
+                {
+                    <metro-input asp-for="Role.Name" readonly="true" />
+                }
+                else
+                {
+                    <metro-input asp-for="Role.Name" />
+                }
+                <metro-input asp-for="Role.IsDefault" />
+                <metro-input asp-for="Role.IsPublic" />
+                @foreach (var propertyInfo in ObjectExtensionManager.Instance.GetProperties<CreateModalModel.RoleInfoModel>())
+                {
+                    if (!propertyInfo.Name.EndsWith("_Text"))
+                    {
+                        if (propertyInfo.Type.IsEnum || !propertyInfo.Lookup.Url.IsNullOrEmpty())
+                        {
+                            if (propertyInfo.Type.IsEnum)
+                            {
+                                Model.Role.ExtraProperties.ToEnum(propertyInfo.Name, propertyInfo.Type);
+                            }
+                            <metro-select asp-for="Role.ExtraProperties[propertyInfo.Name]"
+                                          label="@propertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)"
+                                          autocomplete-api-url="@propertyInfo.Lookup.Url"
+                                          autocomplete-selected-item-name="@Model.Role.GetProperty(propertyInfo.Name + "_Text")"
+                                          autocomplete-selected-item-value="@Model.Role.GetProperty(propertyInfo.Name)"
+                                          autocomplete-filter-param-name="@propertyInfo.Lookup.FilterParamName"
+                                          autocomplete-items-property-name="@propertyInfo.Lookup.ResultListPropertyName"
+                                          autocomplete-display-property-name="@propertyInfo.Lookup.DisplayPropertyName"
+                                          autocomplete-value-property-name="@propertyInfo.Lookup.ValuePropertyName"></metro-select>
+                        }
+                        else
+                        {
+                            <metro-input type="@propertyInfo.GetInputType()"
+                                         asp-for="Role.ExtraProperties[propertyInfo.Name]"
+                                         label="@propertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)"
+                                         asp-format="@propertyInfo.GetInputFormatOrNull()"
+                                         value="@propertyInfo.GetInputValueOrNull(Model.Role.GetProperty(propertyInfo.Name))" />
+                        }
+                    }
+                }
+            </metro-form-content>
+
+        </metro-modal-content>
+        <metro-modal-footer buttons="Save | ModalDialogButtons.Cancel " button-alignment="End" />
+    </form>
+</metro-modal>
+

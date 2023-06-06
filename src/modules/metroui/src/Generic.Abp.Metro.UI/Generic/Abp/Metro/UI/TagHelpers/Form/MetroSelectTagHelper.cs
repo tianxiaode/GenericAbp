@@ -51,11 +51,9 @@ public class MetroSelectTagHelper : MetroInputTagHelperBase, ISelectItemsTagHelp
         var selectTagHelper = new SelectTagHelper(Generator)
         {
             For = AspFor,
-            ViewContext = ViewContext
+            ViewContext = ViewContext,
+            Items = await SelectItemsService.GetSelectItemsAsync(this, Localizer)
         };
-
-        selectTagHelper.Items =
-            await SelectItemsService.GetSelectItemsAsync(this, Localizer);
 
         var selectTagHelperOutput = await selectTagHelper.ProcessAndGetOutputAsync(new TagHelperAttributeList(),
             context, "select", TagMode.StartTagAndEndTag);
