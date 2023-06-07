@@ -1,4 +1,6 @@
 ﻿@page
+@using Generic.Abp.Metro.UI.Bundling.TagHelpers
+@using Generic.Abp.Metro.UI.TagHelpers
 @using Generic.Abp.Metro.UI.Identity.Web.Navigation
 @using Generic.Abp.Metro.UI.Identity.Web.Pages.Identity.Roles
 @using Microsoft.AspNetCore.Authorization
@@ -10,26 +12,20 @@
 @inject IHtmlLocalizer<IdentityResource> L
 @inject IAuthorizationService Authorization
 @inject IPageLayout PageLayout
-@{
-    PageLayout.Content.Title = L["Roles"].Value;
-    PageLayout.Content.BreadCrumb.Add(L["Menu:IdentityManagement"].Value);
-    PageLayout.Content.MenuItemName = IdentityMenuNames.Roles;
-}
+
 @section styles {
-    <abp-style-bundle name="@typeof(IndexModel).FullName">
-        <abp-style src="/Pages/AbpPermissionManagement/permission-management-modal.css" />
-    </abp-style-bundle>
+    <metro-style-bundle name="W2Ui"></metro-style-bundle>
+    <metro-style-bundle name="@typeof(IndexModel).FullName">
+        <metro-style src="/Pages/AbpPermissionManagement/permission-management-modal.css" />
+    </metro-style-bundle>
 }
 @section scripts {
-    <abp-script-bundle name="@typeof(IndexModel).FullName">
-        <abp-script src="/client-proxies/identity-proxy.js" />
-        <abp-script src="/Pages/AbpPermissionManagement/permission-management-modal.js" />
-        <abp-script src="/Pages/identity/roles/index.js" />
-    </abp-script-bundle>
+    <metro-script-bundle name="W2Ui"></metro-script-bundle>
+    <metro-script-bundle name="@typeof(IndexModel).FullName">
+        <metro-script src="/client-proxies/identity-proxy.js" />
+        <metro-script src="/Pages/AbpPermissionManagement/permission-management-modal.js" />
+        <metro-script src="/Pages/identity/roles/index.js" />
+    </metro-script-bundle>
 }
 
-<abp-card id="IdentityRolesWrapper">
-    <abp-card-body>
-        <abp-table striped-rows="true" class="nowrap"></abp-table>
-    </abp-card-body>
-</abp-card>
+<div id="grid" class="w-100 mt-1" style="height: calc( 100vh - 60px)"></div>

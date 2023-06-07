@@ -1,0 +1,30 @@
+@page
+@using Generic.Abp.Metro.UI.TagHelpers.Modal
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Volo.Abp.Localization
+@using Volo.Abp.PermissionManagement.Localization
+@model Generic.Abp.Metro.UI.PermissionManagement.Web.Pages.AbpPermissionManagement.PermissionManagementModal
+@inject IHtmlLocalizer<AbpPermissionManagementResource> L
+@{
+    Layout = null;
+}
+<metro-modal width="800">
+
+    <form asp-page="/AbpPermissionManagement/PermissionManagementModal" data-script-class="abp.modals.PermissionManagement" id="PermissionManagementForm">
+        <metro-modal-title title="@(L["Permissions"].Value) - @Model.EntityDisplayName" />
+        <metro-modal-content>
+            <metro-input asp-for="@Model.ProviderKey" />
+            <metro-input asp-for="@Model.ProviderName" />
+            @foreach (var group in Model.Groups)
+            {
+                <div class="h5">@group.DisplayName</div>
+                @foreach (var permission in group.Permissions)
+                {
+                    <div>@System.Text.Json.JsonSerializer.Serialize(permission)</div>
+                }
+            }
+        </metro-modal-content>
+        <metro-modal-footer buttons="Save | ModalDialogButtons.Cancel " button-alignment="End" />
+    </form>
+</metro-modal>

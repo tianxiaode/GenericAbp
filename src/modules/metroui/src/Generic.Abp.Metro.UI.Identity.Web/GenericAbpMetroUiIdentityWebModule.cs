@@ -1,7 +1,7 @@
 ﻿using Generic.Abp.Metro.UI.Identity.Web.Navigation;
-using Generic.Abp.Metro.UI.Identity.Web.Pages.Identity.Users;
+using Generic.Abp.Metro.UI.PermissionManagement.Web;
 using Generic.Abp.Metro.UI.Theme.Shared;
-using Generic.Abp.Metro.UI.Theme.Shared.Toolbars;
+using Generic.Abp.W2Ui;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.Localization;
@@ -9,11 +9,9 @@ using Volo.Abp.AutoMapper;
 using Volo.Abp.Http.ProxyScripting.Generators.JQuery;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.Localization;
-using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.ObjectExtending.Modularity;
-using Volo.Abp.PermissionManagement.Web;
 using Volo.Abp.Threading;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
@@ -24,8 +22,9 @@ namespace Generic.Abp.Metro.UI.Identity.Web;
 
 [DependsOn(typeof(AbpIdentityApplicationContractsModule))]
 [DependsOn(typeof(AbpAutoMapperModule))]
-[DependsOn(typeof(AbpPermissionManagementWebModule))]
+[DependsOn(typeof(GenericAbpMetroUiPermissionManagementWeb))]
 [DependsOn(typeof(GenericAbpMetroUiThemeSharedModule))]
+[DependsOn(typeof(GenericAbpW2UiModule))]
 public class GenericAbpMetroUiIdentityWebModule : AbpModule
 {
     private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
@@ -73,33 +72,6 @@ public class GenericAbpMetroUiIdentityWebModule : AbpModule
             options.Conventions.AuthorizePage("/Identity/Roles/EditModal", IdentityPermissions.Roles.Update);
         });
 
-
-        Configure<MetroToolbarOptions>(options =>
-        {
-            options.Contributors.Add(new );.Configure<IndexModel>(
-                toolbar =>
-                {
-                    toolbar.AddButton(
-                        LocalizableString.Create<IdentityResource>("NewUser"),
-                        icon: "plus",
-                        name: "CreateUser",
-                        requiredPolicyName: IdentityPermissions.Users.Create
-                    );
-                }
-            );
-
-            options.Configure<Pages.Identity.Roles.IndexModel>(
-                toolbar =>
-                {
-                    toolbar.AddButton(
-                        LocalizableString.Create<IdentityResource>("NewRole"),
-                        icon: "plus",
-                        name: "CreateRole",
-                        requiredPolicyName: IdentityPermissions.Roles.Create
-                    );
-                }
-            );
-        });
 
         Configure<DynamicJavaScriptProxyOptions>(options =>
         {

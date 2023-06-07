@@ -3,12 +3,28 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{24789C7B-687E-4D39-A1BC-33C12C35A3B7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Generic.Abp.Tabulator", "src\Generic.Abp.Tabulator\Generic.Abp.Tabulator.csproj", "{C1E6B0E5-44E1-4C42-A2E7-90C816C54771}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C1E6B0E5-44E1-4C42-A2E7-90C816C54771}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1E6B0E5-44E1-4C42-A2E7-90C816C54771}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1E6B0E5-44E1-4C42-A2E7-90C816C54771}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1E6B0E5-44E1-4C42-A2E7-90C816C54771}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C1E6B0E5-44E1-4C42-A2E7-90C816C54771} = {24789C7B-687E-4D39-A1BC-33C12C35A3B7}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BE4652E8-85ED-4764-824C-C64E0B6C7B26}
 	EndGlobalSection
 EndGlobal

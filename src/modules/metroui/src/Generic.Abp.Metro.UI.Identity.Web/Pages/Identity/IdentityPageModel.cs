@@ -6,6 +6,6 @@ public abstract class IdentityPageModel : AbpPageModel
 {
     protected IdentityPageModel()
     {
-        ObjectMapperContext = typeof(AbpIdentityWebModule);
+        ObjectMapperContext = typeof(GenericAbpMetroUiIdentityWebModule);
     }
 }

@@ -25,7 +25,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Generic.Abp.Metro.UI.Accoun
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Generic.Abp.Metro.UI.Account.Web.OpenIddict", "src\Generic.Abp.Metro.UI.Account.Web.OpenIddict\Generic.Abp.Metro.UI.Account.Web.OpenIddict.csproj", "{3B902EEB-8C47-4F5D-AD56-4252FD2ED54E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Generic.Abp.Metro.UI.OpenIddict.AspNetCore", "src\Generic.Abp.Metro.UI.OpenIddict.AspNetCore\Generic.Abp.Metro.UI.OpenIddict.AspNetCore.csproj", "{0DDD6077-7464-4D8A-8242-425BA850A7F5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Generic.Abp.Metro.UI.OpenIddict.AspNetCore", "src\Generic.Abp.Metro.UI.OpenIddict.AspNetCore\Generic.Abp.Metro.UI.OpenIddict.AspNetCore.csproj", "{0DDD6077-7464-4D8A-8242-425BA850A7F5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Generic.Abp.Metro.UI.Identity.Web", "src\Generic.Abp.Metro.UI.Identity.Web\Generic.Abp.Metro.UI.Identity.Web.csproj", "{E32FABE9-260C-42E3-AD0F-FBB64418423C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Generic.Abp.Metro.UI.PermissionManagement.Web", "src\Generic.Abp.Metro.UI.PermissionManagement.Web\Generic.Abp.Metro.UI.PermissionManagement.Web.csproj", "{C24730CE-A605-410A-B3D0-FED23A43A725}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -77,6 +81,14 @@ Global
 		{0DDD6077-7464-4D8A-8242-425BA850A7F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0DDD6077-7464-4D8A-8242-425BA850A7F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0DDD6077-7464-4D8A-8242-425BA850A7F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E32FABE9-260C-42E3-AD0F-FBB64418423C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E32FABE9-260C-42E3-AD0F-FBB64418423C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E32FABE9-260C-42E3-AD0F-FBB64418423C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E32FABE9-260C-42E3-AD0F-FBB64418423C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C24730CE-A605-410A-B3D0-FED23A43A725}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C24730CE-A605-410A-B3D0-FED23A43A725}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C24730CE-A605-410A-B3D0-FED23A43A725}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C24730CE-A605-410A-B3D0-FED23A43A725}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -93,6 +105,8 @@ Global
 		{4B767DA1-1E35-486B-8E1D-2552BBE80926} = {CED86EF0-2C69-4C22-A6A3-9B9C2A5296CF}
 		{3B902EEB-8C47-4F5D-AD56-4252FD2ED54E} = {CED86EF0-2C69-4C22-A6A3-9B9C2A5296CF}
 		{0DDD6077-7464-4D8A-8242-425BA850A7F5} = {CED86EF0-2C69-4C22-A6A3-9B9C2A5296CF}
+		{E32FABE9-260C-42E3-AD0F-FBB64418423C} = {CED86EF0-2C69-4C22-A6A3-9B9C2A5296CF}
+		{C24730CE-A605-410A-B3D0-FED23A43A725} = {CED86EF0-2C69-4C22-A6A3-9B9C2A5296CF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {385D6690-DCAF-4266-80C7-0D7D4952253D}

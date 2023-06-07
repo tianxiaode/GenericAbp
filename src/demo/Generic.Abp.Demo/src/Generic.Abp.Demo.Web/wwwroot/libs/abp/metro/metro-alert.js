@@ -25,7 +25,7 @@
         _create: function(){
             var element = this.element,
                 o = this.options;
-            element.addClass('alert');
+            element.addClass('x-alert');
             element.addClass(o.type);
 
             this._createButtons();

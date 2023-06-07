@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Razor">
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <Import Project="..\..\..\..\common.props" />
 
@@ -24,11 +24,12 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="$(FileProvidersEmbeddedVersion)" />
     <PackageReference Include="Volo.Abp.Identity.Application.Contracts" Version="$(AbpVersion)" />
-    <PackageReference Include="Volo.Abp.PermissionManagement.Web" Version="$(AbpVersion)" />
     <PackageReference Include="Volo.Abp.AutoMapper" Version="$(AbpVersion)" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\w2ui\src\Generic.Abp.W2Ui\Generic.Abp.W2Ui.csproj" />
+    <ProjectReference Include="..\Generic.Abp.Metro.UI.PermissionManagement.Web\Generic.Abp.Metro.UI.PermissionManagement.Web.csproj" />
     <ProjectReference Include="..\Generic.Abp.Metro.UI.Theme.Shared\Generic.Abp.Metro.UI.Theme.Shared.csproj" />
   </ItemGroup>
 
