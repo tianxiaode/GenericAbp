@@ -1,22 +1,18 @@
+import { Grid } from './libs/w2ui/grid-extension.js'
+
 (function ($) {
     var l = abp.localization.getResource('AbpIdentity');
 
-    new w2grid({
-        name: 'roles',
-        box: '#grid',
-        url: '../api/roles',
-        show: {
-            toolbar: true,
-            toolbarAdd: true,
-            toolbarEdit: true,
-            toolbarDelete: true,
-            footer: true
-        },
-        style: 'border: 0',
+    new Grid({
+        el: 'grid',
         columns: [
-            { field: 'name', text: l('RoleName'), size: '100px', searchable: true }
-        ]
-    });
+            { field: 'fname', text: 'First Name', size: '30%' },
+            { field: 'lname', text: 'Last Name', size: '30%' },
+            { field: 'email', text: 'Email', size: '40%' },
+            { field: 'sdate', text: 'Start Date', size: '120px' }
+        ]    
+    })
+
 //    var _identityRoleAppService = volo.abp.identity.identityRole;
 //    var _permissionsModal = new abp.ModalManager(
 //        abp.appPath + 'AbpPermissionManagement/PermissionManagementModal'
