@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Identity;
 
@@ -10,7 +11,7 @@ namespace Generic.Abp.Identity.Roles;
 [Area("identity")]
 [ControllerName("Roles")]
 [Route("api/roles")]
-public class RoleController: IdentityController, IRoleAppService
+public class RoleController : IdentityController, IRoleAppService
 {
     private readonly IRoleAppService _roleAppService;
 
@@ -20,41 +21,42 @@ public class RoleController: IdentityController, IRoleAppService
     }
 
     [HttpGet]
-    [Route("{id}")]
-    public   virtual Task<RoleDto> GetAsync(Guid id)
+    [Route("{id:guid}")]
+    public virtual Task<RoleDto> GetAsync(Guid id)
     {
         return _roleAppService.GetAsync(id);
     }
-    
+
     [HttpGet]
     [Route("all")]
-    public  virtual Task<ListResultDto<RoleDto>> GetAllListAsync()
+    public virtual Task<ListResultDto<RoleDto>> GetAllListAsync()
     {
         return _roleAppService.GetAllListAsync();
     }
-    
+
     [HttpGet]
-    public  virtual Task<PagedResultDto<RoleDto>> GetListAsync(GetIdentityRolesInput input)
+    public virtual Task<PagedResultDto<RoleDto>> GetListAsync(GetIdentityRolesInput input)
     {
         return _roleAppService.GetListAsync(input);
     }
-    
+
     [HttpPost]
     public virtual Task<RoleDto> CreateAsync([FromBody] RoleCreateDto input)
     {
         return _roleAppService.CreateAsync(input);
     }
-    
+
     [HttpPut]
-    [Route("{id}")]
-    public virtual Task<RoleDto> UpdateAsync(Guid id,[FromBody] RoleUpdateDto input)
+    [Route("{id:guid}")]
+    public virtual Task<RoleDto> UpdateAsync(Guid id, [FromBody] RoleUpdateDto input)
     {
         return _roleAppService.UpdateAsync(id, input);
     }
-    
+
     [HttpDelete]
-    public Task<ListResultDto<RoleDto>> DeleteAsync([FromBody]List<Guid> ids)
+    public Task<ListResultDto<RoleDto>> DeleteAsync([FromBody] List<Guid> ids)
     {
+        Logger.LogInformation(System.Text.Json.JsonSerializer.Serialize(ids));
         return _roleAppService.DeleteAsync(ids);
     }
 

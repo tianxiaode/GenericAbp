@@ -109,7 +109,7 @@ ModalManager.prototype.setResult = function () {
     this.callBacks.forEach(f => {
         f.apply(null, arguments);
     })
-    _onResultCallbacks.triggerAll(_publicApi, arguments);
+    //_onResultCallbacks.triggerAll(_publicApi, arguments);
 }
 
 ModalManager.prototype.onResult = function (callback) {
@@ -125,11 +125,14 @@ ModalManager.prototype.submit = function (e) {
 ModalManager.prototype.onSubmit = function (data) {
     let me = this,
         url = me.form[0].action,
-        params = {};
-    data.forEach(d => {
-        let p = d.split('=');
-        params[decodeURIComponent(p[0])] = decodeURIComponent(p[1]);
-    })
+        isArray = _.isArray(data),
+        params = isArray ? {}: data;
+    if (isArray) {
+        data.forEach(d => {
+            let p = d.split('=');
+            params[decodeURIComponent(p[0])] = decodeURIComponent(p[1]);
+        })
+    }
     me.showMask();
     $.post(url, params).then(me.onSubmitSuccess.bind(me), me.onSubmitFailure.bind(me));
 }
@@ -143,12 +146,13 @@ ModalManager.prototype.onSubmitSuccess = function () {
 
 
 ModalManager.prototype.onSubmitFailure = function (xhr) {
-    let me = this,
-        result = JSON.parse(xhr.responseText),
-        messagePromise;
+    let me = this;
+
     me.mask.hide();
-    
+
     if (xhr.getResponseHeader('_AbpErrorFormat') === 'true') {
+        let result = JSON.parse(xhr.responseText),
+            messagePromise;
         abp.ajax.logError(result.error);
         messagePromise = abp.ajax.showError(result.error);
         if (xhr.status === 401) {

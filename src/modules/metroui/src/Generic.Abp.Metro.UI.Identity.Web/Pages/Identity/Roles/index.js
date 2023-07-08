@@ -1,15 +1,20 @@
-import { Grid } from './libs/w2ui/grid-extension.js'
+function w2Ready(){
 
+}
 (function ($) {
     var l = abp.localization.getResource('AbpIdentity');
 
     new Grid({
         el: 'grid',
+        resourceName: 'AbpIdentity',
+        header: 'Roles',
+        modal: {
+            create: 'Identity/Roles/CreateModal',
+            edit: 'Identity/Roles/EditModal'
+        },
+        url: '/api/roles',
         columns: [
-            { field: 'fname', text: 'First Name', size: '30%' },
-            { field: 'lname', text: 'Last Name', size: '30%' },
-            { field: 'email', text: 'Email', size: '40%' },
-            { field: 'sdate', text: 'Start Date', size: '120px' }
+            { field: 'name', text: 'RoleName', size: '10%', isMessage: true }
         ]    
     })
 

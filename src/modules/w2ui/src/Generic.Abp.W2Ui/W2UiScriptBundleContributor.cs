@@ -8,7 +8,7 @@ namespace Generic.Abp.W2Ui
     {
         public override void ConfigureBundle(BundleConfigurationContext context)
         {
-            context.Files.AddIfNotContains("/libs/w2ui/w2ui-2.0.min.js");
+            context.Files.AddIfNotContains("/libs/w2ui/w2ui.min.js");
             context.Files.AddIfNotContains("/libs/w2ui/extensions.js");
             context.Files.AddIfNotContains("/libs/w2ui/grid-extension.js");
         }

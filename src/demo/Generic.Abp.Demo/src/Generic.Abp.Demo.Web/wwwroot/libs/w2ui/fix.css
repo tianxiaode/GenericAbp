@@ -1,0 +1,4 @@
+﻿.w2ui-reset table tr td, .w2ui-reset table tr th {
+    display: table-cell;
+    vertical-align: middle;
+}

@@ -107,24 +107,24 @@ $(function () {
                             case 'checkbox':
                             case 'radio':
                                 if (_form.elements[i].checked) {
-                                    data[_.camelCase(_form.elements[i].name)] = _form.elements[i].value;
+                                    data[_form.elements[i].name] = _form.elements[i].value;
                                 }
                                 break;
                             case 'file':
                                 break;
-                            default: data[_.camelCase(_form.elements[i].name)] = _form.elements[i].value;
+                            default: data[_form.elements[i].name] = _form.elements[i].value;
                         }
                         break;
                     case 'TEXTAREA':
-                        data[_.camelCase(_form.elements[i].name)] = _form.elements[i].value;
+                        data[_form.elements[i].name] = _form.elements[i].value;
                         break;
                     case 'SELECT':
                         switch (_form.elements[i].type) {
                             case 'select-one':
-                                data[_.camelCase(_form.elements[i].name)] = _form.elements[i].value;
+                                data[_form.elements[i].name] = _form.elements[i].value;
                                 break;
                             case 'select-multiple':
-                                let name = _.camelCase(_form.elements[i].name);
+                                let name = _form.elements[i].name;
                                 data[name] = [];
                                 for (j = _form.elements[i].options.length - 1; j >= 0; j = j - 1) {
                                     if (_form.elements[i].options[j].selected) {
@@ -139,12 +139,13 @@ $(function () {
                             case 'reset':
                             case 'submit':
                             case 'button':
-                                data[_.camelCase(_form.elements[i].name)] = _form.elements[i].value;
+                                data[_form.elements[i].name] = _form.elements[i].value;
                                 break;
                         }
                         break;
                 }
             }
+            console.log(data)
             return data;
         },
         defer() {

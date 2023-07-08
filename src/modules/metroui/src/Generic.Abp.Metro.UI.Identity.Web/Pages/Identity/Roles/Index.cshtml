@@ -24,8 +24,10 @@
     <metro-script-bundle name="@typeof(IndexModel).FullName">
         <metro-script src="/client-proxies/identity-proxy.js" />
         <metro-script src="/Pages/AbpPermissionManagement/permission-management-modal.js" />
+        <metro-script src="/Pages/Identity/Roles/index.js" />
     </metro-script-bundle>
-    <script src="index.js" type="module" ></script>
 }
 
-<div id="grid" class="w-100 mt-1" style="height: calc( 100vh - 60px)"></div>
+<div class="w-100 mt-1 clearfix" style="height: calc(100vh - 90px)">
+    <div id="grid" class="w-100 h-100" style="height: 600px; width: 100%;"></div>
+</div>
