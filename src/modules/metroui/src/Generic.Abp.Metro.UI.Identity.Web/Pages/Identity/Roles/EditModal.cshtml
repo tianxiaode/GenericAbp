@@ -15,10 +15,11 @@
 @inject IStringLocalizerFactory StringLocalizerFactory
 @{
     Layout = null;
+    var title = L["Edit"].Value + L["Roles"].Value;
 }
 <metro-modal>
     <form asp-page="/Identity/Roles/EditModal">
-        <metro-modal-title title="@L["NewRole"].Value" />
+        <metro-modal-title title="@title" />
         <metro-modal-content>
             <metro-form-content cols="1" label-width="120">
                 <metro-input asp-for="Role.Id" />

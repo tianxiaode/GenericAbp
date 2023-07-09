@@ -18,7 +18,7 @@ namespace Generic.Abp.Demo
         typeof(DemoDomainModule),
         typeof(AbpAccountApplicationModule),
         typeof(DemoApplicationContractsModule),
-        typeof(AbpIdentityApplicationModule),
+        //typeof(AbpIdentityApplicationModule),
         typeof(AbpPermissionManagementApplicationModule),
         typeof(AbpTenantManagementApplicationModule),
         typeof(AbpFeatureManagementApplicationModule),

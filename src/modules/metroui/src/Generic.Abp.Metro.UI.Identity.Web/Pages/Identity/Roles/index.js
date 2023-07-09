@@ -6,6 +6,8 @@ function w2Ready(){
 
     new Grid({
         el: 'grid',
+        entityName: 'AbpIdentity.Roles',
+        api: generic.abp.identity.roles.role,
         resourceName: 'AbpIdentity',
         header: 'Roles',
         modal: {
@@ -14,7 +16,16 @@ function w2Ready(){
         },
         url: '/api/roles',
         columns: [
-            { field: 'name', text: 'RoleName', size: '10%', isMessage: true }
+            { field: 'name', text: 'RoleName', size: '10%', isMessage: true, isEdit: true },
+            { field: 'isDefault', text: 'IsDefault', size: '60px', sortable: true, resizable: true, style: 'text-align: center',
+                editable: { type: 'checkbox', style: 'text-align: center' }
+            },
+            { field: 'isStatic', text: 'IsStatic', size: '60px', sortable: true, resizable: true, style: 'text-align: center',
+                editable: { type: 'checkbox', style: 'text-align: center' }
+            },
+            { field: 'isPublic', text: 'IsPublic', size: '60px', sortable: true, resizable: true, style: 'text-align: center',
+                editable: { type: 'checkbox', style: 'text-align: center' }
+            }
         ]    
     })
 

@@ -19,7 +19,7 @@ namespace Generic.Abp.Demo
     [DependsOn(
         typeof(DemoApplicationContractsModule),
         typeof(AbpAccountHttpApiModule),
-        typeof(AbpIdentityHttpApiModule),
+        //typeof(AbpIdentityHttpApiModule),
         typeof(AbpPermissionManagementHttpApiModule),
         typeof(AbpTenantManagementHttpApiModule),
         typeof(AbpFeatureManagementHttpApiModule),

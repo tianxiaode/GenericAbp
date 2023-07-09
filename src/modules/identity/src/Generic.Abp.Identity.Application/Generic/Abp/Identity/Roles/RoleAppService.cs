@@ -21,9 +21,10 @@ namespace Generic.Abp.Identity.Roles;
 
 [RemoteService(false)]
 [Authorize(IdentityPermissions.Roles.Default)]
-public class RoleAppService: IdentityAppService, IRoleAppService
+public class RoleAppService : IdentityAppService, IRoleAppService
 {
-    public RoleAppService(IdentityRoleManager roleManager, IIdentityRoleRepository roleRepository, IPermissionManager permissionManager, IPermissionDefinitionManager permissionDefinitionManager)
+    public RoleAppService(IdentityRoleManager roleManager, IIdentityRoleRepository roleRepository,
+        IPermissionManager permissionManager, IPermissionDefinitionManager permissionDefinitionManager)
     {
         RoleManager = roleManager;
         RoleRepository = roleRepository;
@@ -41,7 +42,7 @@ public class RoleAppService: IdentityAppService, IRoleAppService
     {
         var role = await RoleManager.GetByIdAsync(id);
         var dto = ObjectMapper.Map<IdentityRole, RoleDto>(role);
-        dto.Permissions =(await PermissionManager.GetAllAsync(RolePermissionValueProvider.ProviderName, dto.Name))
+        dto.Permissions = (await PermissionManager.GetAllAsync(RolePermissionValueProvider.ProviderName, dto.Name))
             .Where(m => m.IsGranted)
             .Select(m => m.Name).OrderBy(m => m).ToList();
         return dto;
@@ -59,9 +60,10 @@ public class RoleAppService: IdentityAppService, IRoleAppService
     [UnitOfWork]
     public virtual async Task<PagedResultDto<RoleDto>> GetListAsync(GetIdentityRolesInput input)
     {
-        var list = await RoleRepository.GetListAsync(input.Sorting, input.MaxResultCount, input.SkipCount, input.Filter);
+        var list = await RoleRepository.GetListAsync(input.Sorting, input.MaxResultCount, input.SkipCount,
+            input.Filter);
         var totalCount = await RoleRepository.GetCountAsync(input.Filter);
-        
+
         var dtos = ObjectMapper.Map<List<IdentityRole>, List<RoleDto>>(list);
         foreach (var dto in dtos)
         {
@@ -71,7 +73,7 @@ public class RoleAppService: IdentityAppService, IRoleAppService
                 .Select(m => m.Name).OrderBy(m => m).ToList();
         }
 
-        return new PagedResultDto<RoleDto>(totalCount,dtos);
+        return new PagedResultDto<RoleDto>(totalCount, dtos);
     }
 
     [Authorize(IdentityPermissions.Roles.Create)]
@@ -84,7 +86,7 @@ public class RoleAppService: IdentityAppService, IRoleAppService
             CurrentTenant.Id
         )
         {
-            IsDefault = input.IsDefault, 
+            IsDefault = input.IsDefault,
             IsPublic = input.IsPublic
         };
 
@@ -92,13 +94,12 @@ public class RoleAppService: IdentityAppService, IRoleAppService
 
         (await RoleManager.CreateAsync(role)).CheckErrors();
 
-        var permissions =await NormalizedPermissionsAsync(input);
+        var permissions = await NormalizedPermissionsAsync(input);
 
         foreach (var permission in permissions)
         {
             await PermissionManager.SetAsync(permission, RolePermissionValueProvider.ProviderName, input.Name,
                 true);
-
         }
 
         await CurrentUnitOfWork.SaveChangesAsync();
@@ -183,13 +184,14 @@ public class RoleAppService: IdentityAppService, IRoleAppService
             {
                 throw new UserFriendlyException("Role admin is not allowed to change");
             }
+
             if (role.IsStatic)
             {
                 throw new EntityNotBeDeletedBusinessException(L["Role"], role.Name);
             }
 
             (await RoleManager.DeleteAsync(role)).CheckErrors();
-            result.Add((RoleDto) ObjectMapper.Map<IdentityRole, RoleDto>(role));
+            result.Add((RoleDto)ObjectMapper.Map<IdentityRole, RoleDto>(role));
 
             var rolePermissions =
                 (await PermissionManager.GetAllAsync(RolePermissionValueProvider.ProviderName, role.Name))
@@ -202,8 +204,6 @@ public class RoleAppService: IdentityAppService, IRoleAppService
             }
 
             await CurrentUnitOfWork.SaveChangesAsync();
-
-
         }
 
         return new ListResultDto<RoleDto>(result);
@@ -244,10 +244,9 @@ public class RoleAppService: IdentityAppService, IRoleAppService
         translations = translations.Where(m => !string.IsNullOrEmpty(m.Name)).ToList();
         await CheckTranslationInputAsync(translations);
         var entity = await RoleRepository.GetAsync(id);
-        entity.SetTranslations(translations.Select(m=>new RoleTranslation(m.Language,m.Name)));
+        entity.SetTranslations(translations.Select(m => new RoleTranslation(m.Language, m.Name)));
 
         await CurrentUnitOfWork.SaveChangesAsync();
-
     }
 
 
@@ -263,7 +262,7 @@ public class RoleAppService: IdentityAppService, IRoleAppService
         {
             throw new UserFriendlyException(string.Join("<br>", errors));
         }
+
         return Task.CompletedTask;
     }
-
 }

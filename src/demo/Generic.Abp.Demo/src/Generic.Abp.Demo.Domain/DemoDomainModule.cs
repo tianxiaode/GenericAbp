@@ -22,7 +22,7 @@ namespace Generic.Abp.Demo
         typeof(AbpAuditLoggingDomainModule),
         typeof(AbpBackgroundJobsDomainModule),
         typeof(AbpFeatureManagementDomainModule),
-        typeof(AbpIdentityDomainModule),
+        //typeof(AbpIdentityDomainModule),
         typeof(AbpOpenIddictDomainModule),
         typeof(AbpPermissionManagementDomainOpenIddictModule),
         typeof(AbpPermissionManagementDomainIdentityModule),

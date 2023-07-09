@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Application.Services;
 using Volo.Abp.Identity;
 
 namespace Generic.Abp.Identity.Users;
 
-public interface IUserAppService
+public interface IUserAppService : IApplicationService
 {
     Task<IdentityUserDto> GetAsync(Guid id);
     Task<PagedResultDto<IdentityUserDto>> GetListAsync(GetIdentityUsersInput input);

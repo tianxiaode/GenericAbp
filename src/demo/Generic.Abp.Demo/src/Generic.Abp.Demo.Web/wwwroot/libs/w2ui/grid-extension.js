@@ -2,8 +2,15 @@ function Grid(config) {
     let me = this;
     me.initConfig = config;
     me.modal = config.modal;
+    me.entityName = config.entityName;
+    me.policies = config.policies || ['Create', 'Delete', 'Update'];
+    ['Create', 'Delete', 'Update'].forEach(p => {
+        me[`allow${p}`] = abp.auth.isGranted(`${me.entityName}.${p}`);
+    })
     me.el = `#${config.el}`;
     delete config.el;
+    me.api = config.api;
+    delete config.api;
     me.localization = window.abp.localization.getResource(config.resourceName);
     me.globalLocalization = window.abp.localization.getResource('ExtResource');
     me.initGrid();
@@ -11,15 +18,21 @@ function Grid(config) {
 }
 
 Grid.prototype.render = {
-    boolean(value) {
-        let cls = value ? 'fa-check-square' : 'fa-square';
+    boolean(record, extra) {
+        let value = extra.value,
+            cls = value ? 'fa-check-square' : 'fa-square';
         return `<i class="far ${cls}"></i>`;
+    },
+    editColumn(record, extra) {
+        let value = extra.value;
+        return `<a class='edit' data-id='${record.recid}' href="javascript:void(0);">${value}</a>`;
     }
 
 }
 
 Grid.prototype.getGridDefaultConfig = function () {
-    let me = this;
+    let me = this
+        ;        
     return {
         dataType: 'HTTP',
         limit: 25,
@@ -32,9 +45,9 @@ Grid.prototype.getGridDefaultConfig = function () {
             toolbarSearch: false,
             toolbarColumns: false,
             toolbarInput: false,
-            toolbarAdd: { text: null },
-            toolbarEdit: true,
-            toolbarDelete: true,
+            toolbarAdd: me.allowCreate,
+            //toolbarEdit: true,
+            toolbarDelete: me.allowDelete,
             //skipRecords: false,
             //lineNumbers: true,
         },
@@ -56,21 +69,36 @@ Grid.prototype.getGridDefaultConfig = function () {
 
 Grid.prototype.getColumns = function () {
     let me = this,
-        l = me.localization,
         columns = [];
     me.initConfig.columns.forEach(c => {
         if (c.isMessage) me.messageField = c.field;
         if (c.isAction) me.hasActionColumn = true;
         let config = Object.assign({}, c),
             text = config.text || config.field;
-        if (text) {
-            text = _.upperFirst(text);
-            config.text = l(text) || l(`DisplayName:${text}`);
-            config.tooltip = config.text;
-        }
+        if (c.isEdit && me.allowUpdate) {
+            config.render = me.render.editColumn;
+            me.hasEditColumn = true;
+        };
+        config.text = me.getColumnTitle(text);
+        config.tooltip = config.text;
         columns.push(config);
     })
     return columns;
+}
+
+Grid.prototype.getColumnTitle = function(text){
+    text = _.upperFirst(text);
+    let me = this,
+        config = me.initConfig,
+        source = abp.localization.resources[config.resourceName],
+        displayName = `DisplayName:${text}`,
+        title = source.texts[displayName];
+     if (title) {
+            return title;
+     }
+
+     title = source.text[text];
+     return title || text;
 }
 
 Grid.prototype.initGrid = function () {
@@ -91,9 +119,12 @@ Grid.prototype.initGrid = function () {
     config.box = me.el;
     me.el = $(me.el);
     me.grid = new w2grid(config);
+    if (me.hasEditColumn) {
+        me.el.on('click','a.edit', me.onEdit.bind(me));
+    }
 
     if (me.hasActionColumn) {
-        me.el.delegate('span.action', 'click', me.onActionClick.bind(me));
+        me.el.on('click','span.action',  me.onActionClick.bind(me));
     }
 
 }
@@ -138,9 +169,9 @@ Grid.prototype.onAdd = function (event) {
 }
 
 Grid.prototype.onEdit = function (event) {
-    console.log(arguments)
     let me = this,
-        record = me.grid.get(event.detail.recid);
+        recId = event.srcElement.getAttribute('data-id'),
+        record = me.grid.get(recId);
     if (!record || !me.editModal) return;
     me.editModal.open({
         id: record.id
@@ -165,30 +196,31 @@ Grid.prototype.onDelete = function (event) {
     window.abp.message.confirm(l('DeleteConfirmMessage').replace('{0}',message.join(',')), title, function (confirm) {
         if (!confirm) retrun;
 
-        let config = me.initConfig,
-            api = config.api;
+        let api = me.api;
         if (api) {
-            return api.delete(ids).then(me.deleteSuccess.bind(me), me.ajaxFailure.bind(me));
+            api.delete(ids).then(me.deleteSuccess.bind(me));
         }
-        fetch(config.url,{ 
-            method: 'DELETE',
-            body: JSON.stringify(ids),
-            headers: { 
-                "Content-type": "application/json;charset=utf-8",
-                RequestVerificationToken: abp.security.antiForgery.getToken()
-                }
-        })
-        .then(response => response.json())
-        .then(me.deleteSuccess.bind(me))
-        .catch(me.ajaxFailure.bind(me));
+    //    fetch(config.url,{ 
+    //        method: 'DELETE',
+    //        body: JSON.stringify(ids),
+    //        headers: { 
+    //            "Content-type": "application/json;charset=utf-8",
+    //            RequestVerificationToken: abp.security.antiForgery.getToken()
+    //            }
+    //    })
+    //    .then(response => response.json())
+    //    .then(me.deleteSuccess.bind(me))
+    //    .catch(me.ajaxFailure.bind(me));
     });
 
 }
 
 Grid.prototype.onChange = function (event) {
+    console.log(event)
     let me = this,
+        detail = event.detail,
         grid = me.grid,
-        column = grid.columns[event.column],
+        column = grid.columns[detail.column],
         record = grid.get(event.recid),
         action = column.action;
 
@@ -235,7 +267,6 @@ Grid.prototype.rejectChanges = function (error) {
 }
 
 Grid.prototype.ajaxFailure = function (error) {
-    console.log(arguments)
     if (error.code) {
         return abp.message.error(this.localization(error.code));
     }
@@ -259,6 +290,7 @@ Grid.prototype.onDestroy=  function() {
     me.el = null;
     me.localization = null;
     me.globalLocalization = null;
+    me.policies = null;
 }
 
 Grid.prototype.clear = function (isRefresh) {

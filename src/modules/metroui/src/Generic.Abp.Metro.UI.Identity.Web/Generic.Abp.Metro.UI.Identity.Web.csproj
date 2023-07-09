@@ -33,6 +33,10 @@
     <ProjectReference Include="..\Generic.Abp.Metro.UI.Theme.Shared\Generic.Abp.Metro.UI.Theme.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
 
 
 </Project>

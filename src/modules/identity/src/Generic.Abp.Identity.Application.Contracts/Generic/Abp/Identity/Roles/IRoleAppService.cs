@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Application.Services;
 using Volo.Abp.Identity;
 
 namespace Generic.Abp.Identity.Roles;
 
-public interface IRoleAppService
+public interface IRoleAppService : IApplicationService
 {
     Task<RoleDto> GetAsync(Guid id);
     Task<ListResultDto<RoleDto>> GetAllListAsync();
@@ -18,5 +19,4 @@ public interface IRoleAppService
     Task SetPublicAsync(Guid id, bool value);
     Task<ListResultDto<RoleTranslationDto>> GetTranslationAsync(Guid id);
     Task UpdateTranslationAsync(Guid id, List<RoleTranslationDto> translations);
-
 }

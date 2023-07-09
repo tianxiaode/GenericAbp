@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Identity;
 
@@ -56,7 +58,7 @@ public class RoleController : IdentityController, IRoleAppService
     [HttpDelete]
     public Task<ListResultDto<RoleDto>> DeleteAsync([FromBody] List<Guid> ids)
     {
-        Logger.LogInformation(System.Text.Json.JsonSerializer.Serialize(ids));
+        throw new AbpException("test");
         return _roleAppService.DeleteAsync(ids);
     }
 
@@ -69,6 +71,7 @@ public class RoleController : IdentityController, IRoleAppService
 
     [HttpPatch]
     [Route("{id}/public/{value:bool}")]
+    //[NonAction]
     public Task SetPublicAsync(Guid id, bool value)
     {
         return _roleAppService.SetPublicAsync(id, value);

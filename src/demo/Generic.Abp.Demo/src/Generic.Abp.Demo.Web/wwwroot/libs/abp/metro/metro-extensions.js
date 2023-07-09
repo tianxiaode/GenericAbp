@@ -145,7 +145,6 @@ $(function () {
                         break;
                 }
             }
-            console.log(data)
             return data;
         },
         defer() {

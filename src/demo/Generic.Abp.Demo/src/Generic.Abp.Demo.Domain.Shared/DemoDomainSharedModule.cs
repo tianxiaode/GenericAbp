@@ -23,7 +23,7 @@ namespace Generic.Abp.Demo
         typeof(AbpAuditLoggingDomainSharedModule),
         typeof(AbpBackgroundJobsDomainSharedModule),
         typeof(AbpFeatureManagementDomainSharedModule),
-        typeof(AbpIdentityDomainSharedModule),
+        //typeof(AbpIdentityDomainSharedModule),
         typeof(AbpOpenIddictDomainSharedModule),
         typeof(AbpPermissionManagementDomainSharedModule),
         typeof(AbpSettingManagementDomainSharedModule),
@@ -32,9 +32,7 @@ namespace Generic.Abp.Demo
         typeof(GenericAbpEnumerationDomainSharedModule),
         typeof(GenericAbpOpenIddictDomainSharedModule),
         typeof(GenericAbpPhoneLoginDomainSharedModule)
-        )]
-
-
+    )]
     public class DemoDomainSharedModule : AbpModule
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)
@@ -72,7 +70,6 @@ namespace Generic.Abp.Demo
             //        .Add(typeof(MyEnum));
 
             //});
-
         }
     }
 }

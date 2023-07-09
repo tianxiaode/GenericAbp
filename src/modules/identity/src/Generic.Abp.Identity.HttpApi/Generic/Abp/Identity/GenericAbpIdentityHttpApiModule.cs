@@ -34,6 +34,13 @@ namespace Generic.Abp.Identity
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
+            Configure<AbpAspNetCoreMvcOptions>(options =>
+            {
+                options
+                    .ConventionalControllers
+                    .Create(typeof(GenericAbpIdentityHttpApiModule).Assembly);
+            });
+
             Configure<AbpLocalizationOptions>(options =>
             {
                 options.Resources

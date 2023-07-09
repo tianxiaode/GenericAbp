@@ -111,35 +111,48 @@ var abp = abp || {};
         //     }
         // };
 
+
         if(options.data && options.data.requestVerificationToken){
             options.headers.RequestVerificationToken = options.data.requestVerificationToken;
         }
 
-        options.data = JSON.stringify(options.data);
+        options.body = JSON.stringify(options.data);
+        options.method = options.type;
+        //options.credentials = 'include';
+        options.headers.RequestVerificationToken = abp.security.antiForgery.getToken();
 
-        const defer = $.defer();
+          return fetch(options.url , options)
+                .then(response=>{
+                    console.log(response)
+                    if (!response.ok) {
+                        if (response.headers['_AbpErrorFormat'] === 'true') {
+                            abp.ajax.handleAbpErrorResponse(response, userOptions);
+                        } else {
+                            abp.ajax.handleNonAbpErrorResponse(response, userOptions);
+                        }
+                        return Promise.reject(response);
+                    } else {
+                        userOptions.success && userOptions.success(result);
+                        return response;
 
-        $.ajax(options).then(
-            function(result){
-                defer.resolve(result);
-                userOptions.success && userOptions.success(result);
-            },
-            function(xhr){
-                if(xhr.statusText === 'abort') {
-                    //ajax request is abort, ignore error handle.
-                    return;
-                }
-                if (xhr.getResponseHeader('_AbpErrorFormat') === 'true') {
-                    abp.ajax.handleAbpErrorResponse(xhr, userOptions);
-                } else {
-                    abp.ajax.handleNonAbpErrorResponse(xhr, userOptions);
-                }
-            }
-        );
-        return defer.promise();
+                    }
+                }).catch(error => {
+                     return Promise.reject(error);
+                });
 
-        // promise['jqXHR'] = xhr;
-        // return promise;
+
+        //    //    function(xhr){
+        //    //    console.log(xhr)
+        //    //    if(xhr.statusText === 'abort') {
+        //    //        //ajax request is abort, ignore error handle.
+        //    //        return;
+        //    //    }
+        //    //    if (xhr.getResponseHeader('_AbpErrorFormat') === 'true') {
+        //    //        abp.ajax.handleAbpErrorResponse(xhr, userOptions);
+        //    //    } else {
+        //    //        abp.ajax.handleNonAbpErrorResponse(xhr, userOptions);
+        //    //    }
+        //    //}
 
     };
 
@@ -215,16 +228,15 @@ var abp = abp || {};
             }
         },
 
-        handleNonAbpErrorResponse: function (jqXHR, userOptions, $dfd) {
+        handleNonAbpErrorResponse: function (jqXHR, userOptions) {
             if (userOptions.abpHandleError !== false) {
                 abp.ajax.handleErrorStatusCode(jqXHR.status);
             }
 
-            $dfd.reject.apply(this, arguments);
             userOptions.error && userOptions.error.apply(this, arguments);
         },
 
-        handleAbpErrorResponse: function (jqXHR, userOptions, $dfd) {
+        handleAbpErrorResponse: function (jqXHR, userOptions) {
             var messagePromise = null;
 
             var responseJSON = jqXHR.responseJSON ? jqXHR.responseJSON : JSON.parse(jqXHR.responseText);
@@ -235,7 +247,6 @@ var abp = abp || {};
 
             abp.ajax.logError(responseJSON.error);
 
-            $dfd && $dfd.reject(responseJSON.error, jqXHR);
             userOptions.error && userOptions.error(responseJSON.error, jqXHR);
 
             if (jqXHR.status === 401 && userOptions.abpHandleError !== false) {
