@@ -11,6 +11,7 @@ function Grid(config) {
     delete config.el;
     me.api = config.api;
     delete config.api;
+
     me.localization = window.abp.localization.getResource(config.resourceName);
     me.globalLocalization = window.abp.localization.getResource('ExtResource');
     me.initGrid();
@@ -97,7 +98,7 @@ Grid.prototype.getColumnTitle = function(text){
             return title;
      }
 
-     title = source.text[text];
+     title = source.texts[text];
      return title || text;
 }
 
@@ -114,9 +115,10 @@ Grid.prototype.initGrid = function () {
         config.header = me.localization(config.header);
         showConfig.header = true;
     }
-    config.show = showConfig;
+    config.show = Object.assign(showConfig, config.show);
     config.columns = me.getColumns();
     config.box = me.el;
+    console.log(config)
     me.el = $(me.el);
     me.grid = new w2grid(config);
     if (me.hasEditColumn) {
@@ -137,7 +139,7 @@ Grid.prototype.initCreateAndEditModal = function () {
         me.createModal = new ModalManager(
             window.abp.appPath + me.modal.create
         );
-        me.createModal.onResult(me.updateSuccess.bind(me));
+        me.createModal.onResult(me.updateSuccess.bind(me, 'SavedAndExit'));
     }
 
     if (modal.edit) {
@@ -145,7 +147,7 @@ Grid.prototype.initCreateAndEditModal = function () {
             window.abp.appPath + me.modal.edit
         );
 
-        me.editModal.onResult(me.updateSuccess.bind(me));
+        me.editModal.onResult(me.updateSuccess.bind(me, 'SavedAndExit'));
     }
 
 
@@ -153,12 +155,18 @@ Grid.prototype.initCreateAndEditModal = function () {
 
 
 Grid.prototype.onRequest = function (event) {
-    let postData = event.detail.postData;
+    let me = this,
+        config = me.initConfig,
+        postData = event.detail.postData;
     postData.skipCount = postData.offset;
     postData.MaxResultCount = postData.limit;
+    if(config.onBeforeRequest) config.onBeforeRequest(postData);
 }
 
 Grid.prototype.onParser = function (data) {
+    let me = this,
+        config = me.initConfig;
+    if(config.onParser) return config.onParser(data);
     data.total = data.totalCount;
     data.records = data.items;
     return data;
@@ -198,7 +206,7 @@ Grid.prototype.onDelete = function (event) {
 
         let api = me.api;
         if (api) {
-            api.delete(ids).then(me.deleteSuccess.bind(me));
+            api.delete(ids).then(me.deleteSuccess.bind(me), (error)=>console.log('grid', error));
         }
     //    fetch(config.url,{ 
     //        method: 'DELETE',
@@ -216,18 +224,18 @@ Grid.prototype.onDelete = function (event) {
 }
 
 Grid.prototype.onChange = function (event) {
-    console.log(event)
     let me = this,
+        api = me.api,
         detail = event.detail,
         grid = me.grid,
         column = grid.columns[detail.column],
-        record = grid.get(event.recid),
+        record = grid.get(detail.recid),
         action = column.action;
 
     if (!action) return;
     if (typeof action === 'string') {
-        let fn = me[action];
-        if (isFunction(fn)) fn.call(me, record, column);
+        let fn = api[action];
+        if (_.isFunction(fn)) fn.call(me, record.id, detail.value.new).then(me.updateSuccess.bind(me, 'UpdateSuccess'), () => { });
         return
     }
     if (typeof action === 'object' && action.check) {
@@ -247,8 +255,8 @@ Grid.prototype.updateCheckChange = function (record, column) {
     fn.call(null, id).then(me.mergeChanges.bind(me), me.rejectChanges.bind(me));
 }
 
-Grid.prototype.updateSuccess = function () {
-    abp.notify.success(this.globalLocalization('SavedAndExit'));
+Grid.prototype.updateSuccess = function (message) {
+    abp.notify.success(this.globalLocalization(message));
     this.grid.reload();
 }
 

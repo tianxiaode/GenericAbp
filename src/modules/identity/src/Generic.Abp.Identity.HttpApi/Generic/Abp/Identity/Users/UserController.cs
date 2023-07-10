@@ -1,17 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using Microsoft.AspNetCore.Mvc;
+using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Identity;
 
 namespace Generic.Abp.Identity.Users;
 
-[Area("identity")]
+[RemoteService(Name = IdentityRemoteServiceConsts.RemoteServiceName)]
+[Area(IdentityRemoteServiceConsts.ModuleName)]
 [ControllerName("Users")]
 [Route("api/users")]
-
-public class UserController: IdentityController,IUserAppService
+public class UserController : IdentityController, IUserAppService
 {
     public UserController(IUserAppService userAppService)
     {
@@ -26,7 +28,7 @@ public class UserController: IdentityController,IUserAppService
     {
         return UserAppService.GetAsync(id);
     }
-    
+
     [HttpGet]
     public Task<PagedResultDto<IdentityUserDto>> GetListAsync(GetIdentityUsersInput input)
     {
@@ -42,7 +44,7 @@ public class UserController: IdentityController,IUserAppService
 
 
     [HttpPost]
-    public Task<IdentityUserDto> CreateAsync([FromBody]UserCreateDto input)
+    public Task<IdentityUserDto> CreateAsync([FromBody] UserCreateDto input)
     {
         return UserAppService.CreateAsync(input);
     }
@@ -111,30 +113,29 @@ public class UserController: IdentityController,IUserAppService
 
     [HttpPatch]
     [Route("{id:guid}/name")]
-    public Task UpdateNameAsync(Guid id,[FromBody] UserUpdateNameDto input)
+    public Task UpdateNameAsync(Guid id, [FromBody] UserUpdateNameDto input)
     {
         return UserAppService.UpdateNameAsync(id, input);
     }
 
     [HttpPatch]
     [Route("{id:guid}/surname")]
-    public Task UpdateSurnameAsync(Guid id,[FromBody] UserUpdateSurnameDto input)
+    public Task UpdateSurnameAsync(Guid id, [FromBody] UserUpdateSurnameDto input)
     {
         return UserAppService.UpdateSurnameAsync(id, input);
     }
 
     [HttpPatch]
     [Route("{id:guid}/email")]
-    public Task UpdateEmailAsync(Guid id,[FromBody] UserUpdateEmailDto input)
+    public Task UpdateEmailAsync(Guid id, [FromBody] UserUpdateEmailDto input)
     {
         return UserAppService.UpdateEmailAsync(id, input);
     }
 
     [HttpPatch]
     [Route("{id:guid}/phone-number")]
-    public Task UpdatePhoneNumberAsync(Guid id,[FromBody] UserUpdatePhoneNumberDto input)
+    public Task UpdatePhoneNumberAsync(Guid id, [FromBody] UserUpdatePhoneNumberDto input)
     {
         return UserAppService.UpdatePhoneNumberAsync(id, input);
     }
-
 }

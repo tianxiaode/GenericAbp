@@ -1,8 +1,7 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
@@ -10,7 +9,8 @@ using Volo.Abp.Identity;
 
 namespace Generic.Abp.Identity.Roles;
 
-[Area("identity")]
+[RemoteService(Name = IdentityRemoteServiceConsts.RemoteServiceName)]
+[Area(IdentityRemoteServiceConsts.ModuleName)]
 [ControllerName("Roles")]
 [Route("api/roles")]
 public class RoleController : IdentityController, IRoleAppService
@@ -56,11 +56,16 @@ public class RoleController : IdentityController, IRoleAppService
     }
 
     [HttpDelete]
-    public Task<ListResultDto<RoleDto>> DeleteAsync([FromBody] List<Guid> ids)
+    public Task<ListResultDto<RoleDto>> DeleteAsync(List<Guid> ids)
     {
-        throw new AbpException("test");
         return _roleAppService.DeleteAsync(ids);
     }
+
+    //[NonAction]
+    //public Task<ListResultDto<RoleDto>> DeleteAsync(List<Guid> ids)
+    //{
+    //    throw new NotImplementedException();
+    //}
 
     [HttpPatch]
     [Route("{id}/default/{value:bool}")]

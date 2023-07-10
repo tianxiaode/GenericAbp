@@ -91,26 +91,13 @@ var abp = abp || {};
 
     // AJAX ///////////////////////////////////////////////////////////////////
 
-    abp.ajax = function (userOptions) {
+    abp.ajax = async function (userOptions) {
         userOptions = userOptions || {};
 
         var options = $.extend({}, abp.ajax.defaultOpts, userOptions);
 
         options.success = undefined;
         options.error = undefined;
-        // function(jqXHR){
-        //     console.log(jqXHR)
-        //     if(jqXHR.statusText === 'abort') {
-        //         //ajax request is abort, ignore error handle.
-        //         return;
-        //     }
-        //     if (jqXHR.getResponseHeader('_AbpErrorFormat') === 'true') {
-        //         abp.ajax.handleAbpErrorResponse(jqXHR, userOptions, $dfd);
-        //     } else {
-        //         abp.ajax.handleNonAbpErrorResponse(jqXHR, userOptions, $dfd);
-        //     }
-        // };
-
 
         if(options.data && options.data.requestVerificationToken){
             options.headers.RequestVerificationToken = options.data.requestVerificationToken;
@@ -121,38 +108,37 @@ var abp = abp || {};
         //options.credentials = 'include';
         options.headers.RequestVerificationToken = abp.security.antiForgery.getToken();
 
-          return fetch(options.url , options)
-                .then(response=>{
-                    console.log(response)
-                    if (!response.ok) {
-                        if (response.headers['_AbpErrorFormat'] === 'true') {
+        let defer = $.defer();
+        fetch(options.url, options)
+            .then(response => {
+                let result = response.json();
+                result.then(data => {
+                    response.responseJson = data;
+                    if (response.ok) {
+                        defer.resolve(response);
+                    } else {
+                        if (response.headers.get('_AbpErrorFormat') === 'true') {
                             abp.ajax.handleAbpErrorResponse(response, userOptions);
                         } else {
-                            abp.ajax.handleNonAbpErrorResponse(response, userOptions);
+                            abp.ajax.handleNonAbpErrorResponse(response,  userOptions);
                         }
-                        return Promise.reject(response);
-                    } else {
-                        userOptions.success && userOptions.success(result);
-                        return response;
+                        defer.reject(response);
 
                     }
-                }).catch(error => {
-                     return Promise.reject(error);
+                })
+                .catch(data => {
+                    if (response.ok) {
+                        defer.resolve(response);
+                        return ;
+                    }
+                    response.error = data;
+                    abp.ajax.handleNonAbpErrorResponse(response,  userOptions);
+                    defer.reject(response);
                 });
+            });
 
 
-        //    //    function(xhr){
-        //    //    console.log(xhr)
-        //    //    if(xhr.statusText === 'abort') {
-        //    //        //ajax request is abort, ignore error handle.
-        //    //        return;
-        //    //    }
-        //    //    if (xhr.getResponseHeader('_AbpErrorFormat') === 'true') {
-        //    //        abp.ajax.handleAbpErrorResponse(xhr, userOptions);
-        //    //    } else {
-        //    //        abp.ajax.handleNonAbpErrorResponse(xhr, userOptions);
-        //    //    }
-        //    //}
+        return defer.promise();
 
     };
 
@@ -228,28 +214,28 @@ var abp = abp || {};
             }
         },
 
-        handleNonAbpErrorResponse: function (jqXHR, userOptions) {
+        handleNonAbpErrorResponse: function (response, userOptions) {
             if (userOptions.abpHandleError !== false) {
-                abp.ajax.handleErrorStatusCode(jqXHR.status);
+                abp.ajax.handleErrorStatusCode(response.status);
             }
 
             userOptions.error && userOptions.error.apply(this, arguments);
         },
 
-        handleAbpErrorResponse: function (jqXHR, userOptions) {
+        handleAbpErrorResponse: function (response, userOptions) {
             var messagePromise = null;
 
-            var responseJSON = jqXHR.responseJSON ? jqXHR.responseJSON : JSON.parse(jqXHR.responseText);
+            var responseJson = response.responseJson;
 
             if (userOptions.abpHandleError !== false) {
-                messagePromise = abp.ajax.showError(responseJSON.error);
+                messagePromise = abp.ajax.showError(responseJson.error);
             }
 
-            abp.ajax.logError(responseJSON.error);
+            abp.ajax.logError(responseJson.error);
 
-            userOptions.error && userOptions.error(responseJSON.error, jqXHR);
+            userOptions.error && userOptions.error(responseJson.error, response);
 
-            if (jqXHR.status === 401 && userOptions.abpHandleError !== false) {
+            if (response.status === 401 && userOptions.abpHandleError !== false) {
                 abp.ajax.handleUnAuthorizedRequest(messagePromise);
             }
         },

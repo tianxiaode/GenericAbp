@@ -1,11 +1,18 @@
-function w2Ready(){
-
-}
 (function ($) {
     var l = abp.localization.getResource('AbpIdentity');
 
-    new Grid({
-        el: 'grid',
+    let layout = new w2layout({
+        box: '#layout',
+        name: 'layout',
+        panels: [
+            { type: 'main',  },
+            { type: 'right', size: 300 },
+        ]
+    })
+
+
+    let roleGrid = new Grid({
+        el: 'layout_layout_panel_main .w2ui-panel-content',
         entityName: 'AbpIdentity.Roles',
         api: generic.abp.identity.roles.role,
         resourceName: 'AbpIdentity',
@@ -18,6 +25,7 @@ function w2Ready(){
         columns: [
             { field: 'name', text: 'RoleName', size: '10%', isMessage: true, isEdit: true },
             { field: 'isDefault', text: 'IsDefault', size: '60px', sortable: true, resizable: true, style: 'text-align: center',
+                action: 'setDefault',
                 editable: { type: 'checkbox', style: 'text-align: center' }
             },
             { field: 'isStatic', text: 'IsStatic', size: '60px', sortable: true, resizable: true, style: 'text-align: center',
@@ -27,7 +35,37 @@ function w2Ready(){
                 editable: { type: 'checkbox', style: 'text-align: center' }
             }
         ]    
+    });
+
+    let permissionGrid = new Grid({
+        el: 'layout_layout_panel_right .w2ui-panel-content',
+        entityName: 'Permissions',
+        resourceName: 'AbpPermissionManagement',
+        header: 'Permissions',
+        url: '/api/permission-management/permissions',
+        show: {
+            toolbar: false,
+            footer: false
+        },
+        columns: [
+            { field: 'displayName', text: 'Permissions', size: '100%', isMessage: true, isEdit: true }
+        ],
+        onBeforeRequest(postData) {
+            postData.providerName = 'R';
+            postData.MaxResultCount = 10000;
+        },
+        onParser(data) {
+            let groups = data.groups,
+                recs = { records: [] };
+            groups.forEach(g => {
+                g.w2ui = { children: g.permissions };
+                recs.records.push(g);
+            })
+            console.log(recs)
+            return recs;
+        }
     })
+
 
 //    var _identityRoleAppService = volo.abp.identity.identityRole;
 //    var _permissionsModal = new abp.ModalManager(
