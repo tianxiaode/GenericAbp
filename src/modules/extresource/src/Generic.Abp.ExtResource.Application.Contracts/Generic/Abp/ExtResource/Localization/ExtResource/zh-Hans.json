@@ -158,6 +158,7 @@
     "ExportQrCode": "导出二维码",
     "Reset": "重置",
     "UpdateSuccess": "数据已更新",
+    "SaveSuccess": "数据已保存",
     "SaveAndNew": "保存并新建",
     "SavedAndNew": "数据已保存，可以继续新建记录",
     "SavedAndExit": "数据已保存，窗口即将关闭",

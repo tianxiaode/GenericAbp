@@ -164,7 +164,15 @@ $(function () {
 
 
     var showNotification = function (type, message, options) {
-        Metro.toast.create(message, null, null, type, options);
+        return new Promise(resolve => {
+            Metro.toast.create(message, null, null, type, options);
+            resolve({
+                type: type,
+                message: message,
+                options: options
+            })
+        })
+        
     };
 
     abp.notify.success = function (message, options) {
@@ -183,16 +191,16 @@ $(function () {
         showNotification('alert', message,  options);
     };
 
-    abp.message.info = function (message, detail) {
-        return showNotification('info', message, title);
+    abp.message.info = function (message, options) {
+        return showNotification('info', message, options);
     };
 
-    abp.message.success = function (message, detail) {
-        return showNotification('success', message, title);
+    abp.message.success = function (message, options) {
+        return showNotification('success', message, options);
     };
 
-    abp.message.warn = function (message, detail) {
-        return showNotification('warn', message, title);
+    abp.message.warn = function (message, options) {
+        return showNotification('warn', message, options);
     };
 
     abp.message.error = function (message, detail) {

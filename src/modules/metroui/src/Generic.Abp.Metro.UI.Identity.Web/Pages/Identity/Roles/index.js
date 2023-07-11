@@ -44,24 +44,41 @@
         header: 'Permissions',
         url: '/api/permission-management/permissions',
         show: {
-            toolbar: false,
+            toolbar: true,
+            toolbarReload:false,
+            toolbarAdd: false,
+            toolbarDelete: false,
+            toolbarSave: true,
             footer: false
         },
         columns: [
             { field: 'displayName', text: 'Permissions', size: '100%', isMessage: true, isEdit: true }
         ],
-        onBeforeRequest(postData) {
+        onRequest(event) {
+            let postData = event.detail.postData;
             postData.providerName = 'R';
             postData.MaxResultCount = 10000;
         },
         onParser(data) {
             let groups = data.groups,
-                recs = { records: [] };
+                recs = { records: [] },
+                index = 1;
             groups.forEach(g => {
-                g.w2ui = { children: g.permissions };
-                recs.records.push(g);
+                let parents = {};
+                g.permissions.forEach(p => {
+                    let parentName = p.parentName;
+                    index++;
+                    if (!parentName) {
+                        parents[p.name] = Object.assign({ w2ui: { children: [] }, recid: index}, p);
+                    } else {                        
+                        parents[parentName].w2ui.children.push(Object.assign({ recid: index }, p));
+                    }
+                })
+
+                g.w2ui = { children: Object.values(parents) };
+                index++;
+                recs.records.push(Object.assign({recid: index}, g));
             })
-            console.log(recs)
             return recs;
         }
     })

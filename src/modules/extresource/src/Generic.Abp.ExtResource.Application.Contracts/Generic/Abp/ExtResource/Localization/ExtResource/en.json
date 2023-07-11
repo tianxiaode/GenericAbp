@@ -157,6 +157,7 @@
     "Import": "Import",
     "ExportQrCode": "Export Qrcode",
     "UpdateSuccess": "The data has been updated.",
+    "SaveSuccess": "The data has been saved",
     "SaveAndNew": "Save and new",
     "SavedAndNew": "The data has been saved and you can continue to create new records.",
     "SavedAndExit": "The data is saved and the window closes.",

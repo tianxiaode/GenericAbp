@@ -1,18 +1,17 @@
 function Grid(config) {
     let me = this;
-    me.initConfig = config;
-    me.modal = config.modal;
-    me.entityName = config.entityName;
+    me.initialConfig = config;
+    for (i in config) {
+        me[i] = config[i];
+    }
+
     me.policies = config.policies || ['Create', 'Delete', 'Update'];
     ['Create', 'Delete', 'Update'].forEach(p => {
         me[`allow${p}`] = abp.auth.isGranted(`${me.entityName}.${p}`);
     })
-    me.el = `#${config.el}`;
-    delete config.el;
-    me.api = config.api;
-    delete config.api;
+    me.el = `#${me.el}`;
 
-    me.localization = window.abp.localization.getResource(config.resourceName);
+    me.localization = window.abp.localization.getResource(me.resourceName);
     me.globalLocalization = window.abp.localization.getResource('ExtResource');
     me.initGrid();
     me.initCreateAndEditModal();
@@ -32,8 +31,7 @@ Grid.prototype.render = {
 }
 
 Grid.prototype.getGridDefaultConfig = function () {
-    let me = this
-        ;        
+    let me = this;        
     return {
         dataType: 'HTTP',
         limit: 25,
@@ -50,7 +48,7 @@ Grid.prototype.getGridDefaultConfig = function () {
             //toolbarEdit: true,
             toolbarDelete: me.allowDelete,
             //skipRecords: false,
-            //lineNumbers: true,
+            lineNumbers: true,
         },
         onRequest: me.onRequest.bind(me),
         parser: me.onParser.bind(me),
@@ -71,7 +69,7 @@ Grid.prototype.getGridDefaultConfig = function () {
 Grid.prototype.getColumns = function () {
     let me = this,
         columns = [];
-    me.initConfig.columns.forEach(c => {
+    me.columns.forEach(c => {
         if (c.isMessage) me.messageField = c.field;
         if (c.isAction) me.hasActionColumn = true;
         let config = Object.assign({}, c),
@@ -90,8 +88,7 @@ Grid.prototype.getColumns = function () {
 Grid.prototype.getColumnTitle = function(text){
     text = _.upperFirst(text);
     let me = this,
-        config = me.initConfig,
-        source = abp.localization.resources[config.resourceName],
+        source = abp.localization.resources[me.resourceName],
         displayName = `DisplayName:${text}`,
         title = source.texts[displayName];
      if (title) {
@@ -105,17 +102,14 @@ Grid.prototype.getColumnTitle = function(text){
 Grid.prototype.initGrid = function () {
     let me = this,
         config = me.getGridDefaultConfig(),
-        showConfig = config.show;
-    config = Object.assign(config, me.initConfig);
-    if (!config.name) {
-        config.name = 'grid';
+        defaultShowConfig = config.show;
+    config.name = (me.entityName || 'grid'). replace('.', '_');
+    config.url = me.url;
+    if(me.header){
+        config.header = me.localization(me.header);
+        defaultShowConfig.header = true;
     }
-    if(config.header){
-        if(config.name === 'grid') config.name = config.header;
-        config.header = me.localization(config.header);
-        showConfig.header = true;
-    }
-    config.show = Object.assign(showConfig, config.show);
+    config.show = Object.assign(defaultShowConfig, me.show);
     config.columns = me.getColumns();
     config.box = me.el;
     console.log(config)
@@ -139,7 +133,7 @@ Grid.prototype.initCreateAndEditModal = function () {
         me.createModal = new ModalManager(
             window.abp.appPath + me.modal.create
         );
-        me.createModal.onResult(me.updateSuccess.bind(me, 'SavedAndExit'));
+        me.createModal.onResult(me.updateSuccess.bind(me, 'SaveSuccess'));
     }
 
     if (modal.edit) {
@@ -147,26 +141,19 @@ Grid.prototype.initCreateAndEditModal = function () {
             window.abp.appPath + me.modal.edit
         );
 
-        me.editModal.onResult(me.updateSuccess.bind(me, 'SavedAndExit'));
+        me.editModal.onResult(me.updateSuccess.bind(me, 'SaveSuccess'));
     }
 
 
 }
 
-
 Grid.prototype.onRequest = function (event) {
-    let me = this,
-        config = me.initConfig,
-        postData = event.detail.postData;
+    let postData = event.detail.postData;
     postData.skipCount = postData.offset;
     postData.MaxResultCount = postData.limit;
-    if(config.onBeforeRequest) config.onBeforeRequest(postData);
 }
 
 Grid.prototype.onParser = function (data) {
-    let me = this,
-        config = me.initConfig;
-    if(config.onParser) return config.onParser(data);
     data.total = data.totalCount;
     data.records = data.items;
     return data;
@@ -299,6 +286,8 @@ Grid.prototype.onDestroy=  function() {
     me.localization = null;
     me.globalLocalization = null;
     me.policies = null;
+    me.columns = null;
+    me.show = null;
 }
 
 Grid.prototype.clear = function (isRefresh) {
