@@ -1,3 +1,16 @@
+window.inherits = function(ctor, superCtor) {
+    if (!superCtor) return 
+    ctor.super_ = superCtor;
+    ctor.prototype = Object.create(superCtor.prototype, {
+        constructor: {
+            value: ctor,
+            enumerable: false,
+            writable: true,
+            configurable: true,
+        },
+    });
+};
+
 (function ($) {
 
     let local = abp.localization.currentCulture.cultureName;
@@ -8,6 +21,9 @@
         local += `-${local}`;
     }
     w2utils.locale(`/libs/w2ui/locale/${local}.json`, true);
+
+
+
 
     //if ( === 'zh-CN' || abp.localization.currentCulture.cultureName === 'zh-Hans') {
     //    w2utils.locale('/libs/w2ui/locale/zh-cn.json');
@@ -27,4 +43,4 @@
     //    console.log(argument)
     //}
 
-})(Metro);
+})(m4q);

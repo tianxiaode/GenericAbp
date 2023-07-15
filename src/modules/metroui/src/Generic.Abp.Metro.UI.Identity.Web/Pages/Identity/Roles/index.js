@@ -6,7 +6,33 @@
         name: 'layout',
         panels: [
             { type: 'main',  },
-            { type: 'right', size: 300 },
+            { 
+                type: 'right', size: 300,
+                style: 'border-bottom: 1px solid #efefef;;border-right: 1px solid #efefef;',
+                tabs: {
+                    active: 'permissions',
+                    style: 'border-top: 1px solid #efefef;;border-right: 1px solid #efefef;',
+                    tabs: [
+                        { id: 'permissions', text: abp.localization.resources.AbpPermissionManagement.texts.Permissions, style: 'font-size:16px;height:36px;'  },
+                        { id: 'multilingual', text: abp.localization.resources.ExtResource.texts.Multilingual, style: 'font-size:16px;height:36px;'  },
+                    ],
+                    onClick(event) {
+                        let me = this;
+                        $('#grid_multilingual_toolbar').height(52);
+                        me.tabs.forEach(t => {
+                            if (t.id === event.target) {
+                                $(`#${t.id}_grid`).show();
+                            } else {
+                                $(`#${t.id}_grid`).hide();
+                            }
+                        })
+                    }
+                },
+                html: `
+                    <div id="permissions_grid" class="w-100 h-100" ></div>
+                    <div id="multilingual_grid" class="w-100 h-100" style="height:300px;display:none;"></div>
+                `
+            },
         ]
     })
 
@@ -23,7 +49,7 @@
         },
         url: '/api/roles',
         columns: [
-            { field: 'name', text: 'RoleName', size: '10%', isMessage: true, isEdit: true },
+            { field: 'name', text: 'RoleName', size: '10%', isMessage: true, isEdit: true, editable: { type: 'text' }  },
             { field: 'isDefault', text: 'IsDefault', size: '60px', sortable: true, resizable: true, style: 'text-align: center',
                 action: 'setDefault',
                 editable: { type: 'checkbox', style: 'text-align: center' }
@@ -34,22 +60,33 @@
             { field: 'isPublic', text: 'IsPublic', size: '60px', sortable: true, resizable: true, style: 'text-align: center',
                 editable: { type: 'checkbox', style: 'text-align: center' }
             }
-        ]    
+        ],
+        onSelect(event) {
+            let grid = event.owner,
+                selection = grid.getSelection(),
+                ln = selection.length + 1,
+                rec = null;
+            if(ln === 1) rec = event.detail.clicked.recid;
+            console.log(event, selection, ln, rec)
+            if(rec) rec = grid.get(rec);
+            permissionGrid.refresh(rec);
+            multilingualGrid.refresh(rec);
+        }
     });
 
     let permissionGrid = new Grid({
-        el: 'layout_layout_panel_right .w2ui-panel-content',
+        el: 'permissions_grid',
         entityName: 'Permissions',
         resourceName: 'AbpPermissionManagement',
-        header: 'Permissions',
-        url: '/api/permission-management/permissions',
+        //url: '/api/permission-management/permissions',
+        autoLoad: false,
         show: {
             toolbar: true,
             toolbarReload:false,
             toolbarAdd: false,
             toolbarDelete: false,
             toolbarSave: true,
-            footer: false
+            footer: true
         },
         columns: [
             { field: 'displayName', text: 'Permissions', size: '100%', isMessage: true, isEdit: true }
@@ -81,6 +118,11 @@
             })
             return recs;
         }
+    })
+
+    let multilingualGrid = new MultilingualGrid({
+        el: 'multilingual_grid',
+        api: generic.abp.identity.roles.role
     })
 
 
@@ -223,4 +265,4 @@
 //            _createModal.open();
 //        });
 //    });
-})(Metro);
+})(m4q);

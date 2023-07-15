@@ -1,6 +1,7 @@
 function Grid(config) {
     let me = this;
     me.initialConfig = config;
+    me.autoLoad = true;
     for (i in config) {
         me[i] = config[i];
     }
@@ -33,9 +34,9 @@ Grid.prototype.render = {
 Grid.prototype.getGridDefaultConfig = function () {
     let me = this;        
     return {
-        dataType: 'HTTP',
-        limit: 25,
-        method: 'GET',
+        //dataType: 'HTTP',
+        //limit: 25,
+        //method: 'GET',
         multiSelect: true,
         show: {
             selectColumn: true,
@@ -104,14 +105,26 @@ Grid.prototype.initGrid = function () {
         config = me.getGridDefaultConfig(),
         defaultShowConfig = config.show;
     config.name = (me.entityName || 'grid'). replace('.', '_');
-    config.url = me.url;
+    if (me.url) {
+        config.url = me.url;
+        config.dataType = 'HTTP';
+        config.limit = 25;
+        config.method = 'GET';
+        config.autoLoad = me.autoLoad;
+    }
     if(me.header){
         config.header = me.localization(me.header);
         defaultShowConfig.header = true;
     }
     config.show = Object.assign(defaultShowConfig, me.show);
     config.columns = me.getColumns();
+    if (me.multiSelect) {
+        config.multiSelect = me.multiSelect;
+    }
     config.box = me.el;
+    if (me.advanceOnEdit) {
+        config.advanceOnEdit = true;
+    }
     console.log(config)
     me.el = $(me.el);
     me.grid = new w2grid(config);
@@ -274,6 +287,15 @@ Grid.prototype.onSelect = function () { }
 
 Grid.prototype.onDeselect = function () { }
 
+Grid.prototype.onRefresh = function () { }
+Grid.prototype.refresh = function (record) {
+    let me = this;
+    me.currentRecord = record;
+    if (!record) {
+        return me.clear(false);
+    }
+    me.onRefresh();
+}
 
 Grid.prototype.onColumnClick = function () { }
 
@@ -288,6 +310,8 @@ Grid.prototype.onDestroy=  function() {
     me.policies = null;
     me.columns = null;
     me.show = null;
+    me.currentRecord = null;
+    me.data = null;
 }
 
 Grid.prototype.clear = function (isRefresh) {
