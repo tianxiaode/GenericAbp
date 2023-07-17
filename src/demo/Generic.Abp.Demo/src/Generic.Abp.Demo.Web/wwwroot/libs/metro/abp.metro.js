@@ -103,7 +103,9 @@ var abp = abp || {};
             options.headers.RequestVerificationToken = options.data.requestVerificationToken;
         }
 
-        options.body = JSON.stringify(options.data);
+        if (options.data) {
+            options.body = JSON.stringify(options.data);
+        }
         options.method = options.type;
         //options.credentials = 'include';
         options.headers.RequestVerificationToken = abp.security.antiForgery.getToken();

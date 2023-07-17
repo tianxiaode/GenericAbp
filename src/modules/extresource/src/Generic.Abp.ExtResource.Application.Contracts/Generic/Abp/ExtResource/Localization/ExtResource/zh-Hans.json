@@ -254,6 +254,7 @@
     "DisplayName:Subject": "主题",
     "DisplayName:Body": "内容",
     "DisplayName:SendTest": "发送测试邮件",
-    "TheMessageWasSent": "邮件已发送"
+    "TheMessageWasSent": "邮件已发送",
+    "Granted": "已授予"
   }
 }

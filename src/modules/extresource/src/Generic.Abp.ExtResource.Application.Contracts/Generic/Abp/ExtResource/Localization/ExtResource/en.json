@@ -252,6 +252,7 @@
     "DisplayName:Subject": "Subject",
     "DisplayName:Body": "Body",
     "DisplayName:SendTest": "Send test e-mail",
-    "TheMessageWasSent": "The message was sent"
+    "TheMessageWasSent": "The message was sent",
+    "Granted": "Granted"
   }
 }

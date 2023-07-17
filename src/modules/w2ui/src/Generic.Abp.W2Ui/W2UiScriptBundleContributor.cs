@@ -11,7 +11,6 @@ namespace Generic.Abp.W2Ui
             context.Files.AddIfNotContains("/libs/w2ui/w2ui.min.js");
             context.Files.AddIfNotContains("/libs/w2ui/extensions.js");
             context.Files.AddIfNotContains("/libs/w2ui/grid-extension.js");
-            context.Files.AddIfNotContains("/libs/w2ui/multilingual_grid.js");
         }
     }
 }

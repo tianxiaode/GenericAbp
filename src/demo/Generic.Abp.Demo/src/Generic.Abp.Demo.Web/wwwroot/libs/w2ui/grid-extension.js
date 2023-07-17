@@ -16,6 +16,9 @@ function Grid(config) {
     me.globalLocalization = window.abp.localization.getResource('ExtResource');
     me.initGrid();
     me.initCreateAndEditModal();
+    let extensions = w2ui.extensions;
+    if (!extensions) extensions = w2ui.extensions = {};
+    extensions[me.entityName] = me;
 }
 
 Grid.prototype.render = {
@@ -54,7 +57,6 @@ Grid.prototype.getGridDefaultConfig = function () {
         onRequest: me.onRequest.bind(me),
         parser: me.onParser.bind(me),
         onSelect: me.onSelect.bind(me),
-        onUnselect: me.onDeselect.bind(me),
         onAdd: me.onAdd.bind(me),
         onEdit: me.onEdit.bind(me),
         delete: me.onDelete.bind(me),
@@ -62,7 +64,8 @@ Grid.prototype.getGridDefaultConfig = function () {
         onColumnClick: me.onColumnClick.bind(me),
         onRelaod: me.onReload.bind(me),
         onLoad: me.onReload.bind(me),
-        onDestroy: me.onDestroy.bind(me)
+        onDestroy: me.onDestroy.bind(me),
+        onToolbar: me.onToolbar.bind(me)
     };
 
 }
@@ -116,6 +119,9 @@ Grid.prototype.initGrid = function () {
         config.header = me.localization(me.header);
         defaultShowConfig.header = true;
     }
+    if (me.toolbar) {
+        config.toolbar = Object.assign({}, me.toolbar);
+    }
     config.show = Object.assign(defaultShowConfig, me.show);
     config.columns = me.getColumns();
     if (me.multiSelect) {
@@ -125,7 +131,6 @@ Grid.prototype.initGrid = function () {
     if (me.advanceOnEdit) {
         config.advanceOnEdit = true;
     }
-    console.log(config)
     me.el = $(me.el);
     me.grid = new w2grid(config);
     if (me.hasEditColumn) {
@@ -283,9 +288,26 @@ Grid.prototype.ajaxFailure = function (error) {
 
 Grid.prototype.onReload = function () { }
 
-Grid.prototype.onSelect = function () { }
+Grid.prototype.onSelect = function (event) { 
+    let me = this;
+    event.complete.then(me.onSelectComplete.bind(me));
+}
 
-Grid.prototype.onDeselect = function () { }
+Grid.prototype.onSelectComplete = function (event) {
+    let me = this,
+        grid = me.grid,
+        extensions = w2ui.extensions,
+        panels = me.detailPanels || [],
+        selection = grid.getSelection(),
+        rec;
+    if (selection.length === 1) { 
+        rec = grid.get(selection[0]);
+    }
+    panels.forEach(p => {
+        let panel = extensions[p];
+        panel && panel.refresh(rec);
+    })
+}
 
 Grid.prototype.onRefresh = function () { }
 Grid.prototype.refresh = function (record) {
@@ -301,6 +323,9 @@ Grid.prototype.onColumnClick = function () { }
 
 Grid.prototype.onActionClick = function () { }
 
+Grid.prototype.onToolbar = function () { }
+
+
 Grid.prototype.onDestroy=  function() {
     let me = this;
     me.initConfig = null;
@@ -312,6 +337,7 @@ Grid.prototype.onDestroy=  function() {
     me.show = null;
     me.currentRecord = null;
     me.data = null;
+    me.toolbar = null;
 }
 
 Grid.prototype.clear = function (isRefresh) {

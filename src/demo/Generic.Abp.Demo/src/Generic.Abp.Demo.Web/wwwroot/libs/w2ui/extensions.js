@@ -11,6 +11,7 @@ window.inherits = function(ctor, superCtor) {
     });
 };
 
+
 (function ($) {
 
     let local = abp.localization.currentCulture.cultureName;

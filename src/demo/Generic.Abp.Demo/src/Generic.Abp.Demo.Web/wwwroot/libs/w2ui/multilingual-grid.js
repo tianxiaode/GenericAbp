@@ -9,8 +9,7 @@ function MultilingualGrid(config) {
         footer: true
     };
     config.multiSelect = false;
-    config.entityName = 'multilingual';
-    config.advanceOnEdit = true;
+    config.entityName = 'Multilingual';
 
     Grid.call(this, config);
 }
@@ -49,7 +48,7 @@ MultilingualGrid.prototype.onRefresh = function () {
         })
         grid.records = Object.values(languages);
         grid.refresh();
-        $('#grid_multilingual_toolbar').height(52);
+        $(grid.toolbar.box).height(52);
     })
 
 }

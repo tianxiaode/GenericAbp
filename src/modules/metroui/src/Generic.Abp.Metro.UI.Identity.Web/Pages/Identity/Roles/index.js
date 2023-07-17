@@ -48,79 +48,27 @@
             edit: 'Identity/Roles/EditModal'
         },
         url: '/api/roles',
+        detailPanels:[ 'Permissions', 'Multilingual'],
         columns: [
-            { field: 'name', text: 'RoleName', size: '10%', isMessage: true, isEdit: true, editable: { type: 'text' }  },
-            { field: 'isDefault', text: 'IsDefault', size: '60px', sortable: true, resizable: true, style: 'text-align: center',
+            { field: 'name', text: 'RoleName', size: '10%',sortable: true, isMessage: true, isEdit: true, editable: { type: 'text' }  },
+            { field: 'isDefault', text: 'IsDefault', size: '60px', sortable: true,  style: 'text-align: center',
                 action: 'setDefault',
                 editable: { type: 'checkbox', style: 'text-align: center' }
             },
-            { field: 'isStatic', text: 'IsStatic', size: '60px', sortable: true, resizable: true, style: 'text-align: center',
+            { field: 'isStatic', text: 'IsStatic', size: '60px', sortable: true,  style: 'text-align: center',
                 editable: { type: 'checkbox', style: 'text-align: center' }
             },
-            { field: 'isPublic', text: 'IsPublic', size: '60px', sortable: true, resizable: true, style: 'text-align: center',
+            { field: 'isPublic', text: 'IsPublic', size: '60px', sortable: true, style: 'text-align: center',
                 editable: { type: 'checkbox', style: 'text-align: center' }
             }
-        ],
-        onSelect(event) {
-            let grid = event.owner,
-                selection = grid.getSelection(),
-                ln = selection.length + 1,
-                rec = null;
-            if(ln === 1) rec = event.detail.clicked.recid;
-            console.log(event, selection, ln, rec)
-            if(rec) rec = grid.get(rec);
-            permissionGrid.refresh(rec);
-            multilingualGrid.refresh(rec);
-        }
+        ]
     });
 
-    let permissionGrid = new Grid({
-        el: 'permissions_grid',
-        entityName: 'Permissions',
-        resourceName: 'AbpPermissionManagement',
-        //url: '/api/permission-management/permissions',
-        autoLoad: false,
-        show: {
-            toolbar: true,
-            toolbarReload:false,
-            toolbarAdd: false,
-            toolbarDelete: false,
-            toolbarSave: true,
-            footer: true
-        },
-        columns: [
-            { field: 'displayName', text: 'Permissions', size: '100%', isMessage: true, isEdit: true }
-        ],
-        onRequest(event) {
-            let postData = event.detail.postData;
-            postData.providerName = 'R';
-            postData.MaxResultCount = 10000;
-        },
-        onParser(data) {
-            let groups = data.groups,
-                recs = { records: [] },
-                index = 1;
-            groups.forEach(g => {
-                let parents = {};
-                g.permissions.forEach(p => {
-                    let parentName = p.parentName;
-                    index++;
-                    if (!parentName) {
-                        parents[p.name] = Object.assign({ w2ui: { children: [] }, recid: index}, p);
-                    } else {                        
-                        parents[parentName].w2ui.children.push(Object.assign({ recid: index }, p));
-                    }
-                })
-
-                g.w2ui = { children: Object.values(parents) };
-                index++;
-                recs.records.push(Object.assign({recid: index}, g));
-            })
-            return recs;
-        }
+    new PermissionGrid({
+        el: 'permissions_grid'
     })
 
-    let multilingualGrid = new MultilingualGrid({
+    new MultilingualGrid({
         el: 'multilingual_grid',
         api: generic.abp.identity.roles.role
     })
