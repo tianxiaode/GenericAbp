@@ -42,12 +42,20 @@ PermissionGrid.prototype.getColumns = function () {
     ];
 }
 
-PermissionGrid.prototype.onRefresh = function () {
+PermissionGrid.prototype.getUrl = function(){
     let me = this,
-        record = me.currentRecord,
-        providerName = me.providerName,
+        record = me.currentRecord;
+    if (!record) {
+        throw new Error('There is no permission provider！')
+    }
+    let providerName = me.providerName,
         providerKey = providerName === 'R' ? record.name : record.id,
         url = `/api/permission-management/permissions?providerName=${providerName}&providerKey=${providerKey}`;
+    return url;
+}
+PermissionGrid.prototype.onRefresh = function () {
+    let me = this,
+        url = me.getUrl();
     abp.ajax({
         url: url,
         type: 'GET'
@@ -61,6 +69,8 @@ PermissionGrid.prototype.onLoadDataSuccess = function(response){
         data = response.responseJson;
         groups = data.groups,
         records = [],
+        sourceMap = {},
+
         index = 1;
     groups.forEach(g => {
         let parents = {};
@@ -72,12 +82,13 @@ PermissionGrid.prototype.onLoadDataSuccess = function(response){
             } else {                        
                 parents[parentName].w2ui.children.push(Object.assign({ recid: index }, p));
             }
+            sourceMap[p.name] = p.isGranted;
         })
-
         index++;
         records= [...records, ...Object.values(parents)];
     });
     grid.records = records;
+    me.sourceMap = sourceMap;
     grid.refresh();
     $('#selectAllInput').toggleAttr('disabled');
     $(grid.toolbar.box).height(52);
@@ -97,13 +108,15 @@ PermissionGrid.prototype.onChangeComplete = function(event){
         value = detail.value.new,
         record = grid.get(recid),
         children = record.w2ui && record.w2ui.children;
-    record.isGranted = value;
     if(!children) return;
     children.forEach(c => {
-        c.isGranted = value;
+        if (c.isGranted !== value) {
+            c.isGranted = value;
+        } 
     })
     grid.mergeChanges();
-    grid.toolbar.enable('w2ui-save')
+    me.isDisabledSave = false;
+    grid.toolbar.enable('w2ui-save');
 }
 
 PermissionGrid.prototype.onSelectAllChange = function(event){
@@ -113,20 +126,76 @@ PermissionGrid.prototype.onSelectAllChange = function(event){
         records = grid.records;
     records.forEach(r => {
         let children = r.w2ui && r.w2ui.children;
-        r.isGranted = value;
+        if (r.isGranted !== value) {
+            r.isGranted = value;
+        }
         if (children) {
             children.forEach(c => {
-                c.isGranted = value;
+                if (c.isGranted !== value) {
+                   c.isGranted = value;
+                }
             })
         }
     })
 
     grid.mergeChanges();
-    grid.toolbar.enable('w2ui-save')
+    me.isDisabledSave = false;
+    grid.toolbar.enable('w2ui-save');
 }
 
 PermissionGrid.prototype.clear = function (isRefresh) {
     let me = this;
     me.constructor.super_.prototype.clear.call(me, isRefresh);
+    me.isDisabledSave = true;
     $('#selectAllInput').toggleAttr('disabled', true);
 }
+
+PermissionGrid.prototype.onExpandComplete = function (event) { 
+    if (this.isDisabledSave === false) {
+        this.grid.toolbar.enable('w2ui-save');
+    }
+}
+
+PermissionGrid.prototype.onSave = function(event){
+    let me = this,
+        grid = me.grid,
+        records = grid.records,
+        sourceMap = me.sourceMap,
+        url = me.getUrl(),
+        data = [];
+    records.forEach(r => {
+        let children = r.w2ui && r.w2ui.children;
+        if (sourceMap[r.name] !== r.isGranted) {
+            data.push({name: r.name, isGranted: r.isGranted });
+        }
+        if (children) {
+            children.forEach(c => {
+                if (sourceMap[c.name] !== c.isGranted) {
+                        data.push({name: c.name, isGranted: c.isGranted });
+                }
+            })
+        }
+    })
+    abp.ajax({
+        url: url,
+        type: 'PUT',
+        data: { permissions: data}
+    }).then(me.onSaveSuccess.bind(me))
+}
+
+PermissionGrid.prototype.onSaveSuccess = function(response){
+    let me = this,
+        records = me.grid.records,
+        sourceMap = me.sourceMap;
+    me.updateSuccess('UpdateSuccess');
+    records.forEach(r => {
+        let children = r.w2ui && r.w2ui.children;
+        sourceMap[r.name] == r.isGranted;
+        if (children) {
+            children.forEach(c => {
+                sourceMap[c.name] = c.isGranted
+            })
+        }
+    })
+    me.sourceMap = sourceMap;
+ }

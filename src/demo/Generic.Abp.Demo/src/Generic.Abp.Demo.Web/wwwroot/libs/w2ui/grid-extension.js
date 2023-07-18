@@ -65,7 +65,9 @@ Grid.prototype.getGridDefaultConfig = function () {
         onRelaod: me.onReload.bind(me),
         onLoad: me.onReload.bind(me),
         onDestroy: me.onDestroy.bind(me),
-        onToolbar: me.onToolbar.bind(me)
+        onToolbar: me.onToolbar.bind(me),
+        onSave: me.onSave.bind(me),
+        onExpand: me.onExpand.bind(me)
     };
 
 }
@@ -324,20 +326,17 @@ Grid.prototype.onColumnClick = function () { }
 Grid.prototype.onActionClick = function () { }
 
 Grid.prototype.onToolbar = function () { }
+Grid.prototype.onSave = function () { }
+Grid.prototype.onExpand = function (event) { 
+    event.complete.then(this.onExpandComplete.bind(this));
+}
 
-
+Grid.prototype.onExpandComplete = function (event) { }
 Grid.prototype.onDestroy=  function() {
     let me = this;
-    me.initConfig = null;
-    me.el = null;
-    me.localization = null;
-    me.globalLocalization = null;
-    me.policies = null;
-    me.columns = null;
-    me.show = null;
-    me.currentRecord = null;
-    me.data = null;
-    me.toolbar = null;
+    _.forIn(me, (value, key) => {
+        if(_.isObject(value)) me[key] = null;
+    })
 }
 
 Grid.prototype.clear = function (isRefresh) {
