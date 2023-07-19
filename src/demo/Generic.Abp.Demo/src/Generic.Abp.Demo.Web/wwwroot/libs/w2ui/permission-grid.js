@@ -70,7 +70,6 @@ PermissionGrid.prototype.onLoadDataSuccess = function(response){
         groups = data.groups,
         records = [],
         sourceMap = {},
-
         index = 1;
     groups.forEach(g => {
         let parents = {};
@@ -78,9 +77,9 @@ PermissionGrid.prototype.onLoadDataSuccess = function(response){
             let parentName = p.parentName;
             index++;
             if (!parentName) {
-                parents[p.name] = Object.assign({ w2ui: { children: [] }, recid: index}, p);
+                parents[p.name] = Object.assign({ w2ui: { children: [] }, recid: p.name}, p);
             } else {                        
-                parents[parentName].w2ui.children.push(Object.assign({ recid: index }, p));
+                parents[parentName].w2ui.children.push(Object.assign({ recid: p.name }, p));
             }
             sourceMap[p.name] = p.isGranted;
         })
@@ -162,40 +161,39 @@ PermissionGrid.prototype.onSave = function(event){
         records = grid.records,
         sourceMap = me.sourceMap,
         url = me.getUrl(),
+        map = new Map(),
+        recid, 
         data = [];
     records.forEach(r => {
         let children = r.w2ui && r.w2ui.children;
-        if (sourceMap[r.name] !== r.isGranted) {
-            data.push({name: r.name, isGranted: r.isGranted });
+        recid = r.recid;
+        if (sourceMap[recid] !== r.isGranted && !map.has(recid)) {
+            map.set(recid, r.isGranted)
         }
         if (children) {
             children.forEach(c => {
-                if (sourceMap[c.name] !== c.isGranted) {
-                        data.push({name: c.name, isGranted: c.isGranted });
+                recid = c.recid
+                if (sourceMap[recid] !== c.isGranted && !map.has(recid)) {
+                    map.set(recid, c.isGranted);
                 }
             })
         }
+    })
+    map.forEach((value, key) => {
+        data.push({ name: key, isGranted: value });
     })
     abp.ajax({
         url: url,
         type: 'PUT',
         data: { permissions: data}
-    }).then(me.onSaveSuccess.bind(me))
+    }).then(me.onSaveSuccess.bind(me, data))
 }
 
-PermissionGrid.prototype.onSaveSuccess = function(response){
+PermissionGrid.prototype.onSaveSuccess = function(data, response){
     let me = this,
-        records = me.grid.records,
         sourceMap = me.sourceMap;
     me.updateSuccess('UpdateSuccess');
-    records.forEach(r => {
-        let children = r.w2ui && r.w2ui.children;
-        sourceMap[r.name] == r.isGranted;
-        if (children) {
-            children.forEach(c => {
-                sourceMap[c.name] = c.isGranted
-            })
-        }
+    data.forEach(r => {
+        sourceMap[r.name] = r.isGranted;
     })
-    me.sourceMap = sourceMap;
  }

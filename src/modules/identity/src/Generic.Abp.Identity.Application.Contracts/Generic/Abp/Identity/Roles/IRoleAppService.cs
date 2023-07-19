@@ -18,5 +18,5 @@ public interface IRoleAppService : IApplicationService
     Task SetDefaultAsync(Guid id, bool value);
     Task SetPublicAsync(Guid id, bool value);
     Task<ListResultDto<RoleTranslationDto>> GetTranslationAsync(Guid id);
-    Task UpdateTranslationAsync(Guid id, List<RoleTranslationDto> translations);
+    Task UpdateTranslationAsync(Guid id, RoleTranslationDto[] translations);
 }

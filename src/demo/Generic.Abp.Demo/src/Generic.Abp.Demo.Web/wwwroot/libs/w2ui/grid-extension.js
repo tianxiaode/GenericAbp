@@ -331,7 +331,7 @@ Grid.prototype.onExpand = function (event) {
     event.complete.then(this.onExpandComplete.bind(this));
 }
 
-Grid.prototype.onExpandComplete = function (event) { }
+Grid.prototype.onExpandComplete = function (event) {}
 Grid.prototype.onDestroy=  function() {
     let me = this;
     _.forIn(me, (value, key) => {

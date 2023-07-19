@@ -5,6 +5,10 @@ public class RoleTranslationDto
     public string Language { get; set; }
     public string Name { get; set; }
 
+    public RoleTranslationDto()
+    {
+    }
+
     public RoleTranslationDto(string language, string name)
     {
         Language = language;

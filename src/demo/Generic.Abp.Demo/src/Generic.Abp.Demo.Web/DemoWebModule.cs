@@ -20,6 +20,7 @@ using Generic.Abp.Metro.UI.Theme.Basic.Bundling;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.Localization;
+using Volo.Abp.AspNetCore.Mvc.NewtonsoftJson;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
@@ -41,7 +42,8 @@ namespace Generic.Abp.Demo.Web
         typeof(GenericAbpMetroUiAccountWebOpenIddictModule),
         typeof(GenericAbpMetroUiThemeBasicDemoModule),
         typeof(AbpAspNetCoreSerilogModule),
-        typeof(AbpSwashbuckleModule)
+        typeof(AbpSwashbuckleModule),
+        typeof(AbpAspNetCoreMvcNewtonsoftModule)
     )]
     public class DemoWebModule : AbpModule
     {
@@ -159,6 +161,8 @@ namespace Generic.Abp.Demo.Web
                     options.CustomSchemaIds(type => type.FullName);
                 }
             );
+
+            services.AddControllers().AddNewtonsoftJson();
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)

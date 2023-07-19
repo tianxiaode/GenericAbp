@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Volo.Abp;
@@ -91,7 +92,7 @@ public class RoleController : IdentityController, IRoleAppService
 
     [HttpPut]
     [Route("{id:guid}/translations")]
-    public Task UpdateTranslationAsync(Guid id, [FromBody] List<RoleTranslationDto> translations)
+    public Task UpdateTranslationAsync(Guid id, RoleTranslationDto[] translations)
     {
         return _roleAppService.UpdateTranslationAsync(id, translations);
     }

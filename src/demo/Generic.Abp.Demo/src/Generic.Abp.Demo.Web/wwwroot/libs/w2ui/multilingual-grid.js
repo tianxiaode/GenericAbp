@@ -53,3 +53,25 @@ MultilingualGrid.prototype.onRefresh = function () {
 
 }
 
+MultilingualGrid.prototype.onSave = function(event){
+    let me = this,
+        grid = me.grid,
+        current = me.currentRecord,
+        changes = grid.getChanges(),
+        api = me.api,
+        data = [];
+    changes.forEach(r => {
+        let value = r.value,
+            record = grid.get(r.recid);
+        if (value) {
+            data.push({
+                language: record.cultureName,
+                name: value
+            })
+        }
+    })
+    if(data.length  === 0) return;
+    console.log(api, current, data)
+    api.updateTranslation(current.id, data);
+}
+
