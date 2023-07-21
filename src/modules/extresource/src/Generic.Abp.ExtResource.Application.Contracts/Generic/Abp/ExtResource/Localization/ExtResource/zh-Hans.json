@@ -255,6 +255,7 @@
     "DisplayName:Body": "内容",
     "DisplayName:SendTest": "发送测试邮件",
     "TheMessageWasSent": "邮件已发送",
-    "Granted": "已授予"
+    "Granted": "已授予",
+    "LockoutEnd": "结束锁定时间"
   }
 }

@@ -11,25 +11,20 @@
 @inject IAuthorizationService Authorization
 @inject IPageLayout PageLayout
 @{
-    PageLayout.Content.Title = L["Users"].Value;
-    PageLayout.Content.BreadCrumb.Add(L["Menu:IdentityManagement"].Value);
-    PageLayout.Content.MenuItemName = IdentityMenuNames.Users;
 }
 @section styles {
-    <abp-style-bundle name="@typeof(IndexModel).FullName">
-        <abp-style src="/Pages/AbpPermissionManagement/permission-management-modal.css" />
-        <abp-style src="/Pages/identity/users/index.css"/>
-    </abp-style-bundle>
+    <metro-style-bundle name="W2Ui"></metro-style-bundle>
+    <metro-style-bundle name="@typeof(IndexModel).FullName">
+        <metro-style src="/Pages/AbpPermissionManagement/permission-management-modal.css" />
+    </metro-style-bundle>
 }
 @section scripts {
-    <abp-script-bundle name="@typeof(IndexModel).FullName">
-        <abp-script src="/client-proxies/identity-proxy.js" />
-        <abp-script src="/Pages/AbpPermissionManagement/permission-management-modal.js" />
-        <abp-script src="/Pages/identity/users/index.js" />
-    </abp-script-bundle>
+    <metro-script-bundle name="W2Ui"></metro-script-bundle>
+        <metro-script-bundle name="@typeof(IndexModel).FullName">
+        <metro-script src="/libs/w2ui/permission-grid.js" />
+        <metro-script src="/Pages/Identity/Users/index.js" />
+    </metro-script-bundle>
+
 }
-<abp-card id="IdentityUsersWrapper">
-    <abp-card-body>
-        <abp-table striped-rows="true" class="nowrap"></abp-table>
-    </abp-card-body>
-</abp-card>
+<div class="w-100 mt-1" id="layout" style="height: calc(100vh - 90px)">
+</div>

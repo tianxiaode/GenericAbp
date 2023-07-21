@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Volo.Abp.Auditing;
 using Volo.Abp.Identity;
 using Volo.Abp.ObjectExtending;
@@ -26,7 +27,6 @@ public class CreateModalModel : IdentityPageModel
     public virtual async Task<IActionResult> OnGetAsync()
     {
         UserInfo = new UserInfoViewModel();
-
         var roleDtoList = (await IdentityUserAppService.GetAssignableRolesAsync()).Items;
 
         Roles = ObjectMapper.Map<IReadOnlyList<IdentityRoleDto>, AssignedRoleViewModel[]>(roleDtoList);
