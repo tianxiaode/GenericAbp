@@ -58,20 +58,43 @@ MultilingualGrid.prototype.onSave = function(event){
         grid = me.grid,
         current = me.currentRecord,
         changes = grid.getChanges(),
+        records = grid.records,
         api = me.api,
+        removes = {},
         data = [];
     changes.forEach(r => {
-        let value = r.value,
-            record = grid.get(r.recid);
+        let recid = r.recid,
+            value = r.value;
         if (value) {
+            let record = grid.get(recid);
             data.push({
                 language: record.cultureName,
+                name: value
+            })
+        } else {
+            removes[recid] = true;
+        }
+
+    });
+    records.forEach(r => {
+        let recid = r.recid,
+            value = r.value;
+        if (value && !removes[recid]) {
+            data.push({
+                language: r.cultureName,
                 name: value
             })
         }
     })
     if(data.length  === 0) return;
-    console.log(api, current, data)
-    api.updateTranslation(current.id, data);
+    api.updateTranslation(current.id, data).then(me.updateSuccess.bind(me, 'UpdateSuccess', false), () => { });
+    return { isCancelled: true };
 }
 
+MultilingualGrid.prototype.updateSuccess = function (message, isReload) {
+    let me = this,
+        grid = me.grid;
+    abp.notify.success(me.globalLocalization(message));
+    grid.mergeChanges();
+    $(grid.toolbar.box).height(52);
+}

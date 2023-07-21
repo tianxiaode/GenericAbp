@@ -3,7 +3,7 @@ using Volo.Abp.Identity.Localization;
 
 namespace Generic.Abp.Identity
 {
-    public abstract class IdentityController : AbpController
+    public abstract class IdentityController : AbpControllerBase
     {
         protected IdentityController()
         {

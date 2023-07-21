@@ -104,12 +104,11 @@ var abp = abp || {};
         }
 
         if (options.data) {
-            options.body = JSON.stringify(options.data);
+            options.body = typeof options.data === 'string' ? options.data : JSON.stringify(options.data);
         }
         options.method = options.type;
         //options.credentials = 'include';
         options.headers.RequestVerificationToken = abp.security.antiForgery.getToken();
-
         let defer = $.defer();
         fetch(options.url, options)
             .then(response => {

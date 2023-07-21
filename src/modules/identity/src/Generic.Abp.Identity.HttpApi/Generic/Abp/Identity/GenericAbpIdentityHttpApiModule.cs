@@ -9,7 +9,7 @@ using Volo.Abp.Modularity;
 namespace Generic.Abp.Identity
 {
     [DependsOn(
-        typeof(AbpIdentityHttpApiModule),
+        //typeof(AbpIdentityHttpApiModule),
         typeof(GenericAbpIdentityApplicationContractsModule),
         typeof(AbpAspNetCoreMvcModule))]
     public class GenericAbpIdentityHttpApiModule : AbpModule

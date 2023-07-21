@@ -186,7 +186,8 @@ PermissionGrid.prototype.onSave = function(event){
         url: url,
         type: 'PUT',
         data: { permissions: data}
-    }).then(me.onSaveSuccess.bind(me, data))
+    }).then(me.onSaveSuccess.bind(me, data));
+    return { isCancelled: true };
 }
 
 PermissionGrid.prototype.onSaveSuccess = function(data, response){

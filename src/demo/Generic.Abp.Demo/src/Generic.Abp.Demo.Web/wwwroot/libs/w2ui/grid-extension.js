@@ -213,7 +213,7 @@ Grid.prototype.onDelete = function (event) {
 
         let api = me.api;
         if (api) {
-            api.delete(ids).then(me.deleteSuccess.bind(me), (error)=>console.log('grid', error));
+            api.delete(ids).then(me.deleteSuccess.bind(me), () => { });
         }
     //    fetch(config.url,{ 
     //        method: 'DELETE',
@@ -262,9 +262,9 @@ Grid.prototype.updateCheckChange = function (record, column) {
     fn.call(null, id).then(me.mergeChanges.bind(me), me.rejectChanges.bind(me));
 }
 
-Grid.prototype.updateSuccess = function (message) {
+Grid.prototype.updateSuccess = function (message, isReload) {
     abp.notify.success(this.globalLocalization(message));
-    this.grid.reload();
+    if(isReload) this.grid.reload();
 }
 
 Grid.prototype.deleteSuccess = function () {
@@ -326,7 +326,7 @@ Grid.prototype.onColumnClick = function () { }
 Grid.prototype.onActionClick = function () { }
 
 Grid.prototype.onToolbar = function () { }
-Grid.prototype.onSave = function () { }
+Grid.prototype.onSave = function (event) { }
 Grid.prototype.onExpand = function (event) { 
     event.complete.then(this.onExpandComplete.bind(this));
 }

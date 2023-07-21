@@ -239,9 +239,9 @@ public class RoleAppService : IdentityAppService, IRoleAppService
 
     [Authorize(IdentityPermissions.Roles.Update)]
     [UnitOfWork]
-    public virtual async Task UpdateTranslationAsync(Guid id, RoleTranslationDto[] input)
+    public virtual async Task UpdateTranslationAsync(Guid id, List<RoleTranslationDto> translations)
     {
-        var translations = input.Where(m => !string.IsNullOrEmpty(m.Name)).ToList();
+        translations = translations.Where(m => !string.IsNullOrEmpty(m.Name)).ToList();
         await CheckTranslationInputAsync(translations);
         var entity = await RoleRepository.GetAsync(id);
         entity.SetTranslations(translations.Select(m => new RoleTranslation(m.Language, m.Name)));
