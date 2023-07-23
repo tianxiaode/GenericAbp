@@ -32,14 +32,6 @@
                     <metro-input asp-for="UserInfo.PhoneNumber"/>
                     <metro-input asp-for="UserInfo.IsActive"/>
                     <metro-input asp-for="UserInfo.LockoutEnabled"/>
-                    @*<div class="mt-3">
-                    @for (var i = 0; i < Model.Roles.Length; i++)
-                    {
-                        var role = Model.Roles[i];
-                        <abp-input abp-id-name="@Model.Roles[i].IsAssigned" asp-for="@role.IsAssigned" label="@role.Name"/>
-                        <input abp-id-name="@Model.Roles[i].Name" asp-for="@role.Name"/>
-                    }
-            </div>*@
                 </metro-form-content>
 
             </metro-modal-content>

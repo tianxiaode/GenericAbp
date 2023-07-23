@@ -9,6 +9,28 @@
             { 
                 type: 'right', size: 300,
                 style: 'border-bottom: 1px solid #efefef;;border-right: 1px solid #efefef;',
+                tabs: {
+                    active: 'roles',
+                    style: 'border-top: 1px solid #efefef;;border-right: 1px solid #efefef;',
+                    tabs: [
+                        { id: 'roles', text: abp.localization.resources.AbpIdentity.texts.Roles, style: 'font-size:16px;height:36px;'  },
+                        { id: 'permissions', text: abp.localization.resources.AbpPermissionManagement.texts.Permissions, style: 'font-size:16px;height:36px;'  },
+                    ],
+                    onClick(event) {
+                        let me = this;
+                        me.tabs.forEach(t => {
+                            if (t.id === event.target) {
+                                $(`#${t.id}_grid`).show();
+                            } else {
+                                $(`#${t.id}_grid`).hide();
+                            }
+                        })
+                    }
+                },
+                html: `
+                    <div id="roles_grid" class="w-100 h-100" ></div>
+                    <div id="permissions_grid" class="w-100 h-100" style="height:300px;display:none;"></div>
+                `
             },
         ]
     })
@@ -24,7 +46,7 @@
             edit: 'Identity/Users/EditModal'
         },
         url: '/api/users',
-        detailPanels:[ 'Permissions'],
+        detailPanels:['Roles', 'Permissions'],
         columns: [
             { field: 'userName', text: 'UserName', size: '10%',sortable: true, isMessage: true, isEdit: true},
             { field: 'name', text: 'Name', size: '10%',sortable: true  },
@@ -32,10 +54,11 @@
             { field: 'email', text: 'Email', size: '10%',sortable: true   },
             { field: 'phoneNumber', text: 'PhoneNumber', size: '10%',sortable: true   },
             { field: 'isActive', text: 'IsActive', size: '60px', sortable: true,  style: 'text-align: center',
-                action: 'setDefault',
+                action: 'setActive',
                 editable: { type: 'checkbox', style: 'text-align: center' }
             },
-            { field: 'lockoutEnabled', text: abp.localization.resources.ExtResource.texts.UserLocked, size: '60px', sortable: true,  style: 'text-align: center',                
+            { field: 'lockoutEnabled', text: abp.localization.resources.ExtResource.texts.UserLocked, size: '60px', sortable: true,  style: 'text-align: center', 
+                action: 'setLockoutEnabled',
                 editable: { type: 'checkbox', style: 'text-align: center' }
             },
             { 
@@ -45,9 +68,60 @@
         ]
     });
 
-    //new PermissionGrid({
-    //    el: 'permissions_grid'
-    //})
+    new Grid({
+        el: 'roles_grid',
+        entityName: 'Roles',
+        resourceName: 'AbpIdentity',
+        multiSelect: false,
+        api:generic.abp.identity.users.user,
+        show: {
+            selectColumn: false,
+            toolbar: false,
+            toolbarReload:false,
+            toolbarAdd: false,
+            toolbarDelete: false,
+            toolbarSave: true,
+            footer: true
+        },
+        columns:[
+            { field: 'name', text: 'RoleName', size: '50%',sortable: true  },
+            { field: 'isSelected', text: 'SelectedOrNot:Selected', size: '50%', sortable: true,  style: 'text-align: center',
+                editable: { type: 'checkbox', style: 'text-align: center' }
+            }
+        ],
+        onRefresh() {
+            let me = this,
+                grid = me.grid,
+                record = me.currentRecord,
+                url = `/api/users/${record.id}/roles`;
+            grid.url = url;
+            grid.reload();
+        },
+        onChangeComplete(event) {
+            let me = this,
+                grid = me.grid,
+                api = me.api,
+                detail = event.detail,
+                role = grid.get(detail.recid),
+                value = detail.value.new,
+                record = me.currentRecord;
+            if (value) {
+                api.addRole(record.id, role.id).then(me.onUpdateSuccess.bind(me));
+            } else {
+                api.removeRole(record.id, role.id).then(me.onUpdateSuccess.bind(me));
+            }
+        },
+        onUpdateSuccess(response) {
+            abp.notify.success(this.globalLocalization('UpdateSuccess'));
+            this.grid.mergeChanges();
+        }
+    });
+    
+
+    new PermissionGrid({
+        el: 'permissions_grid',
+        providerName: 'U'
+    })
 
 
 //    var _identityUserAppService = volo.abp.identity.identityUser;

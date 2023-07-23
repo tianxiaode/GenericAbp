@@ -65,6 +65,7 @@ PermissionGrid.prototype.onRefresh = function () {
 
 PermissionGrid.prototype.onLoadDataSuccess = function(response){
     let me = this,
+        providerName = me.providerName,
         grid = me.grid,
         data = response.responseJson;
         groups = data.groups,
@@ -73,15 +74,20 @@ PermissionGrid.prototype.onLoadDataSuccess = function(response){
         index = 1;
     groups.forEach(g => {
         let parents = {};
+        
         g.permissions.forEach(p => {
-            let parentName = p.parentName;
+            let parentName = p.parentName,
+                findIndex =  p.grantedProviders.findIndex(m=>m.providerName === providerName);
+            if (findIndex === -1) {
+                p.isGranted = false;
+            }
             index++;
             if (!parentName) {
                 parents[p.name] = Object.assign({ w2ui: { children: [] }, recid: p.name}, p);
             } else {                        
                 parents[parentName].w2ui.children.push(Object.assign({ recid: p.name }, p));
             }
-            sourceMap[p.name] = p.isGranted;
+            sourceMap[p.name] = findIndex === -1 ? false : p.isGranted;
         })
         index++;
         records= [...records, ...Object.values(parents)];
@@ -90,13 +96,7 @@ PermissionGrid.prototype.onLoadDataSuccess = function(response){
     me.sourceMap = sourceMap;
     grid.refresh();
     $('#selectAllInput').toggleAttr('disabled');
-    $(grid.toolbar.box).height(52);
 
-}
-
-PermissionGrid.prototype.onChange = function(event){
-    let me = this;
-    event.complete.then(me.onChangeComplete.bind(me));
 }
 
 PermissionGrid.prototype.onChangeComplete = function(event){

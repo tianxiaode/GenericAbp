@@ -48,7 +48,6 @@ MultilingualGrid.prototype.onRefresh = function () {
         })
         grid.records = Object.values(languages);
         grid.refresh();
-        $(grid.toolbar.box).height(52);
     })
 
 }
@@ -96,5 +95,4 @@ MultilingualGrid.prototype.updateSuccess = function (message, isReload) {
         grid = me.grid;
     abp.notify.success(me.globalLocalization(message));
     grid.mergeChanges();
-    $(grid.toolbar.box).height(52);
 }

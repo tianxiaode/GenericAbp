@@ -106,7 +106,9 @@ ModalManager.prototype.getConfig = function () {
 }
 
 ModalManager.prototype.setResult = function () {
-    this.callBacks.forEach(f => {
+    let callbacks = this.callBacks;
+    if(!_.isArray(callbacks)) return;
+    callbacks.forEach(f => {
         f.apply(null, arguments);
     })
     //_onResultCallbacks.triggerAll(_publicApi, arguments);

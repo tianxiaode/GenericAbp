@@ -135,6 +135,9 @@ Grid.prototype.initGrid = function () {
     }
     me.el = $(me.el);
     me.grid = new w2grid(config);
+    if (me.toolbar) {
+        $(me.grid.toolbar.box).css('min-height', 52);
+    }
     if (me.hasEditColumn) {
         me.el.on('click','a.edit', me.onEdit.bind(me));
     }
@@ -231,6 +234,11 @@ Grid.prototype.onDelete = function (event) {
 }
 
 Grid.prototype.onChange = function (event) {
+    let me = this;
+    event.complete.then(me.onChangeComplete.bind(me));
+}
+
+Grid.prototype.onChangeComplete = function(event){
     let me = this,
         api = me.api,
         detail = event.detail,
@@ -249,7 +257,6 @@ Grid.prototype.onChange = function (event) {
         me.updateCheckChange(record, column);
         return;
     }
-
 }
 
 
