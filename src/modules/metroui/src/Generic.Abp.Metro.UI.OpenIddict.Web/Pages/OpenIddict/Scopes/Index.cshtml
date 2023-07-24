@@ -1,0 +1,34 @@
+﻿@page
+@using Generic.Abp.OpenIddict.Permissions
+@using Generic.Abp.OpenIddict.Web.Pages.OpenIddict.Scopes;
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
+@using Volo.Abp.OpenIddict.Localization
+@model IndexModel
+@inject IHtmlLocalizer<AbpOpenIddictResource> _l
+@inject IAuthorizationService _authorization
+@inject IPageLayout _pageLayout
+@{
+    //_pageLayout.Content.TitleCaption = _l["Scopes"].Value;
+    //_pageLayout.Content.BreadCrumb.Add(_l["Menu:OpenIddictManagement"].Value);
+    //_pageLayout.Content.MenuItemName = OpenIddictMenus.Scopes;
+}
+@section styles{
+    <abp-style-bundle name="W2Ui"></abp-style-bundle>
+}
+
+@section scripts {
+    <abp-script-bundle name="W2Ui"></abp-script-bundle>
+    <abp-script-bundle name="@typeof(IndexModel).FullName">
+        <abp-script src="/Pages/OpenIddict/global.js" />
+        <abp-script src="/Pages/OpenIddict/Function.js" />
+        <abp-script src="/Pages/OpenIddict/forEachAsync.js" />
+        <abp-script src="/Pages/OpenIddict/Grid.js" />
+        <abp-script src="/Pages/OpenIddict/Scopes/index.js" />
+    </abp-script-bundle>
+
+}
+
+<div id="grid" style="height:calc( 100vh - 160px)">
+</div>

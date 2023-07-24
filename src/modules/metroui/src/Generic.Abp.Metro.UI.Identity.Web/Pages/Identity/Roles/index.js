@@ -18,7 +18,6 @@
                     ],
                     onClick(event) {
                         let me = this;
-                        $('#grid_multilingual_toolbar').height(52);
                         me.tabs.forEach(t => {
                             if (t.id === event.target) {
                                 $(`#${t.id}_grid`).show();

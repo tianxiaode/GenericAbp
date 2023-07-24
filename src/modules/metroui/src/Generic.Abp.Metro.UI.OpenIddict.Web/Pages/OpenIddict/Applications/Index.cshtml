@@ -1,31 +1,28 @@
 ﻿@page
 @using Generic.Abp.Metro.UI.Bundling.TagHelpers
+@using Generic.Abp.Metro.UI.OpenIddict.Web.Pages.OpenIddict.Applications
 @using Generic.Abp.Metro.UI.TagHelpers
-@using Generic.Abp.Metro.UI.Identity.Web.Navigation
-@using Generic.Abp.Metro.UI.Identity.Web.Pages.Identity.Roles
+@using Generic.Abp.OpenIddict.Localization
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Volo.Abp.AspNetCore.Mvc.UI.Layout
-@using Volo.Abp.Identity
-@using Volo.Abp.Identity.Localization
-@model Generic.Abp.Metro.UI.Identity.Web.Pages.Identity.Roles.IndexModel
-@inject IHtmlLocalizer<IdentityResource> L
+@model Generic.Abp.Metro.UI.OpenIddict.Web.Pages.OpenIddict.Applications.IndexModel
+@inject IHtmlLocalizer<OpenIddictResource> L
 @inject IAuthorizationService Authorization
 @inject IPageLayout PageLayout
-
-@section styles {
+@section styles{
     <metro-style-bundle name="W2Ui"></metro-style-bundle>
     <metro-style-bundle name="@typeof(IndexModel).FullName">
     </metro-style-bundle>
 }
+
 @section scripts {
     <metro-script-bundle name="W2Ui"></metro-script-bundle>
     <metro-script-bundle name="@typeof(IndexModel).FullName">
         <metro-script src="/libs/w2ui/multilingual-grid.js" />
-        <metro-script src="/libs/w2ui/permission-grid.js" />
-        <metro-script src="/Pages/Identity/Roles/index.js" />
-
+        <metro-script src="/Pages/OpenIddict/Applications/index.js" />
     </metro-script-bundle>
+
 }
 
 <div class="w-100 mt-1" id="layout" style="height: calc(100vh - 90px)">

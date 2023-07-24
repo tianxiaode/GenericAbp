@@ -4,11 +4,12 @@
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
-    <IsPackable>true</IsPackable>
     <OutputType>Library</OutputType>
     <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
   </PropertyGroup>
+
 
   <ItemGroup>
     <EmbeddedResource Include="Pages\**\*.js" />
@@ -22,20 +23,21 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="$(FileProvidersEmbeddedVersion)" />
-    <PackageReference Include="Volo.Abp.Identity.Application.Contracts" Version="$(AbpVersion)" />
+    <!-- <TEMPLATE-REMOVE> -->
     <PackageReference Include="Volo.Abp.AutoMapper" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared" Version="$(AbpVersion)" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="$(FileProvidersEmbeddedVersion)" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\w2ui\src\Generic.Abp.W2Ui\Generic.Abp.W2Ui.csproj" />
+    <ProjectReference Include="..\..\..\openiddict\src\Generic.Abp.OpenIddict.Application.Contracts\Generic.Abp.OpenIddict.Application.Contracts.csproj" />
     <ProjectReference Include="..\Generic.Abp.Metro.UI.Theme.Shared\Generic.Abp.Metro.UI.Theme.Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\" />
+    <Folder Include="Components\" />
   </ItemGroup>
-
 
 
 </Project>

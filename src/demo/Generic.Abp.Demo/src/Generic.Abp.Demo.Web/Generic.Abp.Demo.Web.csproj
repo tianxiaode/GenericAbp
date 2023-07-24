@@ -61,6 +61,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\modules\metroui\src\Generic.Abp.Metro.UI.Account.Web.OpenIddict\Generic.Abp.Metro.UI.Account.Web.OpenIddict.csproj" />
     <ProjectReference Include="..\..\..\..\modules\metroui\src\Generic.Abp.Metro.UI.Identity.Web\Generic.Abp.Metro.UI.Identity.Web.csproj" />
+    <ProjectReference Include="..\..\..\..\modules\metroui\src\Generic.Abp.Metro.UI.OpenIddict.Web\Generic.Abp.Metro.UI.OpenIddict.Web.csproj" />
     <ProjectReference Include="..\..\..\..\modules\metroui\src\Generic.Abp.Metro.UI.Theme.Basic.Demo\Generic.Abp.Metro.UI.Theme.Basic.Demo.csproj" />
     <ProjectReference Include="..\Generic.Abp.Demo.Application\Generic.Abp.Demo.Application.csproj" />
     <ProjectReference Include="..\Generic.Abp.Demo.EntityFrameworkCore\Generic.Abp.Demo.EntityFrameworkCore.csproj" />

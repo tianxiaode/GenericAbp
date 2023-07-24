@@ -1,5 +1,4 @@
 ﻿using Generic.Abp.Metro.UI.Identity.Web.Navigation;
-using Generic.Abp.Metro.UI.PermissionManagement.Web;
 using Generic.Abp.Metro.UI.Theme.Shared;
 using Generic.Abp.W2Ui;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -22,7 +21,6 @@ namespace Generic.Abp.Metro.UI.Identity.Web;
 
 [DependsOn(typeof(AbpIdentityApplicationContractsModule))]
 [DependsOn(typeof(AbpAutoMapperModule))]
-[DependsOn(typeof(GenericAbpMetroUiPermissionManagementWeb))]
 [DependsOn(typeof(GenericAbpMetroUiThemeSharedModule))]
 [DependsOn(typeof(GenericAbpW2UiModule))]
 public class GenericAbpMetroUiIdentityWebModule : AbpModule

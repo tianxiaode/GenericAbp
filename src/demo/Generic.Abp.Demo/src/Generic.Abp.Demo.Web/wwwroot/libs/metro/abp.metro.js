@@ -119,9 +119,9 @@ var abp = abp || {};
                         defer.resolve(response);
                     } else {
                         if (response.headers.get('_AbpErrorFormat') === 'true') {
-                            abp.ajax.handleAbpErrorResponse(response, userOptions);
+                            abp.ajax.handleAbpErrorResponse(response, options);
                         } else {
-                            abp.ajax.handleNonAbpErrorResponse(response,  userOptions);
+                            abp.ajax.handleNonAbpErrorResponse(response,  options);
                         }
                         defer.reject(response);
 
@@ -133,7 +133,7 @@ var abp = abp || {};
                         return ;
                     }
                     response.error = data;
-                    abp.ajax.handleNonAbpErrorResponse(response,  userOptions);
+                    abp.ajax.handleNonAbpErrorResponse(response,  options);
                     defer.reject(response);
                 });
             });
@@ -227,7 +227,7 @@ var abp = abp || {};
             var messagePromise = null;
 
             var responseJson = response.responseJson;
-
+            console.log(responseJson, userOptions)
             if (userOptions.abpHandleError !== false) {
                 messagePromise = abp.ajax.showError(responseJson.error);
             }

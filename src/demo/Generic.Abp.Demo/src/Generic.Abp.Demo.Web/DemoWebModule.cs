@@ -15,6 +15,7 @@ using Microsoft.OpenApi.Models;
 using OpenIddict.Validation.AspNetCore;
 using System.IO;
 using Generic.Abp.Metro.UI.Identity.Web;
+using Generic.Abp.Metro.UI.OpenIddict.Web;
 using Generic.Abp.Metro.UI.Packages.FontAwesome;
 using Generic.Abp.Metro.UI.Theme.Basic.Bundling;
 using Volo.Abp;
@@ -37,6 +38,7 @@ namespace Generic.Abp.Demo.Web
         typeof(DemoApplicationModule),
         typeof(DemoEntityFrameworkCoreModule),
         typeof(AbpAutofacModule),
+        typeof(GenericAbpMetroUiOpenIddictWebModule),
         typeof(GenericAbpMetroUiIdentityWebModule),
         typeof(GenericAbpMetroUiAccountWebOpenIddictModule),
         typeof(GenericAbpMetroUiThemeBasicDemoModule),

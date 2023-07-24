@@ -1,0 +1,36 @@
+﻿@page
+@using Generic.Abp.Metro.UI.TagHelpers.Form
+@using Generic.Abp.Metro.UI.TagHelpers.Modal
+@using Generic.Abp.OpenIddict.Localization;
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.OpenIddict.Localization
+@model Generic.Abp.OpenIddict.Web.Pages.OpenIddict.Applications.EditModalModel
+@inject IHtmlLocalizer<OpenIddictResource> L
+@{
+    Layout = null;
+    var title = L["Edit"].Value + L["Application"].Value;
+
+}
+
+<metro-modal width="800">
+    <form asp-page="/OpenIddict/Applications/EditModal">
+        <metro-modal-title title="@title" />
+        <metro-modal-content>
+            <metro-form-content cols="2" label-width="120">
+                <metro-input asp-for="Application.Id" type="hidden" />
+                <metro-input asp-for="Application.ConcurrencyStamp" type="hidden" />
+                <metro-input asp-for="Application.ClientId" label="@L["Application:ClientId"].Value" />
+                <metro-input asp-for="Application.DisplayName" label="@L["Application:DisplayName"].Value" />
+                <metro-input asp-for="Application.ClientSecret" label="@L["Application:ClientSecret"].Value" />
+                <metro-input asp-for="Application.Type" label="@L["Application:Type"].Value" />
+                <metro-input asp-for="Application.ConsentType" label="@L["Application:ConsentType"].Value" />
+                <metro-input asp-for="Application.ClientUri" label="@L["Application:ClientUri"].Value" />
+                <metro-input asp-for="Application.LogoUri" label="@L["Application:LogoUri"].Value" />
+            </metro-form-content>
+
+        </metro-modal-content>
+        <metro-modal-footer buttons="Save | ModalDialogButtons.Cancel " button-alignment="End" />
+    </form>
+</metro-modal>
+
+
