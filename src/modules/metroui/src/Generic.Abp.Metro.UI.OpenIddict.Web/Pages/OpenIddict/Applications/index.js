@@ -6,10 +6,11 @@
         box: '#layout',
         name: 'layout',
         panels: [
-            { type: 'main', title: l("Applications") },
+            { type: 'main',size: '100%',resizable: true, title: l("Applications") },
             {
                 type: 'right',
                 size: '100%',
+                resizable: true,
                 hidden: true,
                 tabs: {
                     tabs: [
@@ -38,10 +39,18 @@
                 },
                 title: `
                     <div class="d-flex flex-row">
-                        <div id="backButton" class="px-2"><span id="backButton" style="cursor:pointer;" class="fas fa-arrow-left" st></span></div>
+                        <a id="backButton" class="px-2" href="javascript:void(0)"><span class="fas fa-arrow-left" st></span></a>
                         <div id="detailTitle"></div>
                         <div class="flex-fill"></div>
                     </div>
+                `,
+                html: `
+                    <div id="detail_grid" class="w-100 h-100" ></div>
+                    <div id="permissions_grid" class="w-100 h-100" style="display:none;"></div>
+                    <div id="redirectUris_grid" class="w-100 h-100" style="display:none;"></div>
+                    <div id="postLogoutRedirectUris_grid" class="w-100 h-100" style="display:none;"></div>
+                    <div id="requirements" class="w-100 h-100" style="display:none;"></div>
+                    <div id="property_grid" class="w-100 h-100" style="display:none;"></div>
                 `
             }
         ]
@@ -53,7 +62,7 @@
     })
 
     new Grid({
-        el: 'layout_layout_panel_main div.w2ui-panel-content',
+        el: 'layout_layout_panel_main .w2ui-panel-content',
         entityName: 'OpenIddict.Applications',
         api: generic.abp.identity.roles.role,
         resourceName: 'OpenIddict',
@@ -90,11 +99,19 @@
             w2ui.layout.currentRecord = record;
             w2ui.layout.toggle('main');
             w2ui.layout.toggle('right');
+            $('#detailTitle').html(`${l('Details')} - ${record.clientId}`);
+            w2ui.layout_right_tabs.click('detail');
         }
     });
 
-
-  
+    new PropertyGrid({
+        el: 'detail_grid',
+        entityName: 'detail',
+        resourceName: 'OpenIddict',
+        resourcePrefix: 'Application',
+        fields:['id', 'clientId', 'displayName', 'clientSecret', 'type', 'consentType', 'clientUri', 'logoUri', 'creatorId', 'creationTime', 'lastModifierId', 'lastModificationTime' ]
+    })
+ 
 
 
 })(m4q);

@@ -256,6 +256,10 @@
     "DisplayName:SendTest": "发送测试邮件",
     "TheMessageWasSent": "邮件已发送",
     "Granted": "已授予",
-    "LockoutEnd": "结束锁定时间"
+    "LockoutEnd": "结束锁定时间",
+    "CreatorId": "创建者Id",
+    "CreationTime": "创建时间",
+    "LastModifierId": "最后更新者Id",
+    "LastModificationTime": "最后更新时间"
   }
 }

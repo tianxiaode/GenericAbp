@@ -29,7 +29,7 @@
                 },
                 html: `
                     <div id="permissions_grid" class="w-100 h-100" ></div>
-                    <div id="multilingual_grid" class="w-100 h-100" style="height:300px;display:none;"></div>
+                    <div id="multilingual_grid" class="w-100 h-100" style="display:none;"></div>
                 `
             },
         ]

@@ -34,6 +34,7 @@ public class MetroSelectTagHelper : MetroInputTagHelperBase, ISelectItemsTagHelp
     public string AutocompleteSelectedItemValue { get; set; }
     public string AllowClear { get; set; }
     public string Placeholder { get; set; }
+    public bool Filter { get; set; } = true;
 
     protected override async Task<string> GetFormInputGroupAsHtmlAsync(TagHelperContext context, TagHelperOutput output)
     {
@@ -68,6 +69,10 @@ public class MetroSelectTagHelper : MetroInputTagHelperBase, ISelectItemsTagHelp
         await SetInputValidatorAsync(selectTagHelperOutput.Attributes);
         await AddPrependAndAppendAttributesAsync(selectTagHelperOutput);
 
+        if (!Filter)
+        {
+            selectTagHelperOutput.Attributes.Add("data-filter", false);
+        }
 
         return selectTagHelperOutput;
     }

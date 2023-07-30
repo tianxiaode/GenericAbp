@@ -18,8 +18,8 @@
                 <metro-input asp-for="Application.ClientId" label="@L["Application:ClientId"].Value" />
                 <metro-input asp-for="Application.DisplayName" label="@L["Application:DisplayName"].Value" />
                 <metro-input asp-for="Application.ClientSecret" label="@L["Application:ClientSecret"].Value" />
-                <metro-input asp-for="Application.Type" label="@L["Application:Type"].Value" />
-                <metro-input asp-for="Application.ConsentType" label="@L["Application:ConsentType"].Value" />
+                <metro-select asp-for="Application.Type" label="@L["Application:Type"].Value" asp-items="@Model.ApplicationTypes" filter="false" />
+                <metro-select asp-for="Application.ConsentType" label="@L["Application:ConsentType"].Value" asp-items="@Model.ApplicationConsentType"  filter="false"/>
                 <metro-input asp-for="Application.ClientUri" label="@L["Application:ClientUri"].Value" />
                 <metro-input asp-for="Application.LogoUri" label="@L["Application:LogoUri"].Value" />
             </metro-form-content>

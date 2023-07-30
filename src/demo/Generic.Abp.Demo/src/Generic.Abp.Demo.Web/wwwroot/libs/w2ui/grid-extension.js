@@ -95,13 +95,17 @@ Grid.prototype.getColumnTitle = function(text){
     text = _.upperFirst(text);
     let me = this,
         source = abp.localization.resources[me.resourceName],
-        displayName = `DisplayName:${text}`,
+        extResources = abp.localization.resources['ExtResource'],
+        prefix = me.resourcePrefix || 'DisplayName',
+        displayName = `${prefix}:${text}`,
         title = source.texts[displayName];
      if (title) {
             return title;
      }
-
      title = source.texts[text];
+     if(title) return title;
+     console.log(extResources)
+     title = extResources.texts[text];
      return title || text;
 }
 
@@ -143,7 +147,7 @@ Grid.prototype.initGrid = function () {
     }
 
     if (me.hasActionColumn) {
-        me.el.on('click','span.action',  me.onActionClick.bind(me));
+        me.el.on('click','a.action',  me.onActionClick.bind(me));
     }
 
 }

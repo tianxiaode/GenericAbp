@@ -254,6 +254,10 @@
     "DisplayName:SendTest": "Send test e-mail",
     "TheMessageWasSent": "The message was sent",
     "Granted": "Granted",
-    "LockoutEnd": "Lockout end"
+    "LockoutEnd": "Lockout end",
+    "CreatorId": "Creator id",
+    "CreationTime": "Creation Time",
+    "LastModifierId": "Last modifier id",
+    "lastModificationTime": "Last modification time"
   }
 }
