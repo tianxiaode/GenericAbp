@@ -10,8 +10,8 @@
         footer: true
     };
     config.multiSelect = false;
-    config.entityName = 'Permissions';
-    config.resourceName = 'AbpPermissionManagement';
+    if(!config.entityName) config.entityName = 'Permissions';
+    if(!config.resourceName) config.resourceName = 'AbpPermissionManagement';
     config.toolbar = {
         items:[
             { 

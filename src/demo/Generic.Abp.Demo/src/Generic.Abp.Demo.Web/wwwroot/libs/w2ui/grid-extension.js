@@ -30,6 +30,14 @@ Grid.prototype.render = {
     editColumn(record, extra) {
         let value = extra.value;
         return `<a class='edit' data-id='${record.recid}' href="javascript:void(0);">${value}</a>`;
+    },
+    checkboxColumn(record, extra) {
+        let value = extra.value,
+            cls = 'fa fa-check-square primary';
+        if(value !== false && value !== true) return '';
+        if(value === false) cls = 'fa fa-square';
+        return `<span class="${cls} fg-cyan c-pointer checkbox" style="font-size:16px;line-height:22px;" data-id="${record.recid}" data-col-index="${extra.colIndex}"></span>`;
+
     }
 
 }
@@ -78,12 +86,17 @@ Grid.prototype.getColumns = function () {
     me.columns.forEach(c => {
         if (c.isMessage) me.messageField = c.field;
         if (c.isAction) me.hasActionColumn = true;
+        if(c.isCheckboxColumn) me.hasCheckboxColumn = true;
         let config = Object.assign({}, c),
             text = config.text || config.field;
         if (c.isEdit && me.allowUpdate) {
             config.render = me.render.editColumn;
             me.hasEditColumn = true;
         };
+        if (typeof config.render === 'string') {
+            let render = me.render[config.render];
+            if(render) config.render = render;
+        }
         config.text = me.getColumnTitle(text);
         config.tooltip = config.text;
         columns.push(config);
@@ -104,7 +117,6 @@ Grid.prototype.getColumnTitle = function(text){
      }
      title = source.texts[text];
      if(title) return title;
-     console.log(extResources)
      title = extResources.texts[text];
      return title || text;
 }
@@ -148,6 +160,10 @@ Grid.prototype.initGrid = function () {
 
     if (me.hasActionColumn) {
         me.el.on('click','a.action',  me.onActionClick.bind(me));
+    }
+
+    if (me.hasCheckboxColumn) {
+        me.el.on('click', 'span.checkbox', me.onCheckboxColumnClick.bind(me));
     }
 
 }
@@ -357,3 +373,5 @@ Grid.prototype.clear = function (isRefresh) {
     if (isRefresh) me.onRefresh();
 }
 
+
+Grid.prototype.onCheckboxColumnClick = function () { }

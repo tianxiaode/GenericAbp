@@ -1,11 +1,11 @@
-function PermissionGrid(config) {
+function ApplicationPermissionGrid(config) {
     config.url = "/api/applications/permissions";
     Grid.call(this, config);
 }
 
-inherits(PermissionGrid, Grid);
+inherits(ApplicationPermissionGrid, Grid);
 
-PermissionGrid.prototype.onParser = function (data) {
+ApplicationPermissionGrid.prototype.onParser = function (data) {
     let l = this.localization,
         result = {},
         records = [],
@@ -29,11 +29,11 @@ PermissionGrid.prototype.onParser = function (data) {
     return result;
 }
 
-PermissionGrid.prototype.getGridConfig = function () {
+ApplicationPermissionGrid.prototype.getGridConfig = function () {
     return {}
 }
 
-PermissionGrid.prototype.getColumns = function () {
+ApplicationPermissionGrid.prototype.getColumns = function () {
     let l = this.localization;
     return [
         {
@@ -52,7 +52,7 @@ PermissionGrid.prototype.getColumns = function () {
     ];
 }
 
-PermissionGrid.prototype.onChange = function (event) {
+ApplicationPermissionGrid.prototype.onChange = function (event) {
     let me = this,
         grid = me.grid,
         currentRecord = me.currentRecord,
@@ -68,7 +68,7 @@ PermissionGrid.prototype.onChange = function (event) {
 }
 
 
-PermissionGrid.prototype.onRefresh = function () {
+ApplicationPermissionGrid.prototype.onRefresh = function () {
     let me = this,
         data = me.data || [],
         records = me.grid.records;
@@ -85,7 +85,7 @@ PermissionGrid.prototype.onRefresh = function () {
 }
 
 
-PermissionGrid.prototype.refresh = function (record) {
+ApplicationPermissionGrid.prototype.refresh = function (record) {
     let me = this;
     me.currentRecord = record;
     if (record && record.id) {

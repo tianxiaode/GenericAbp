@@ -110,7 +110,101 @@
         resourceName: 'OpenIddict',
         resourcePrefix: 'Application',
         fields:['id', 'clientId', 'displayName', 'clientSecret', 'type', 'consentType', 'clientUri', 'logoUri', 'creatorId', 'creationTime', 'lastModifierId', 'lastModificationTime' ]
-    })
+    });
+
+    new Grid({
+        el: 'permissions_grid',
+        entityName: 'permissions',
+        resourceName: 'OpenIddict',
+        resourcePrefix: 'Permission',
+        api: generic.abp.openIddict.applications.application,
+        show: {
+            selectColumn: false,
+            toolbar: false
+        },
+        columns:[
+            { field: 'name', text: 'Permissions', size: '60%'},
+            { 
+                field: 'isGranted', text: 'Granted', size: '50%' , style: 'text-align: center',
+                isCheckboxColumn: true,
+                render: 'checkboxColumn',
+                //editable: { type: 'checkbox', style: 'text-align: center' }
+            }
+
+        ],
+        onRefresh() {
+            let me = this,
+                map = me.map;
+            if (!map) {
+                return abp.ajax({
+                    url: '/api/applications/permissions',
+                    type: 'GET'
+                }).then(me.onLoadMapSuccess.bind(me))
+            }
+            me.loadData()
+        },
+        onLoadMapSuccess(response) {
+            let me = this,
+                map = me.map,                
+                data = response.responseJson;
+            if(!map) map = me.map = new Map();
+            Object.keys(data).forEach(k => {
+                let children = data[k];
+                Object.keys(children).forEach(c => {
+                    let value = children[c];
+                    map.set(value, { name: c, group: k, value: value });
+                })
+            })
+            me.loadData();
+        },
+        loadData() {
+            let me = this,
+                record = me.currentRecord;
+            generic.abp.openIddict.applications.application.getPermissions(record.id).then(me.loadDataSuccess.bind(me));
+        },
+        loadDataSuccess(response) {
+            let me = this,
+                grid = me.grid,
+                map = me.map,
+                data = response.responseJson,
+                index = 0;
+                parentMap = {};
+            map.forEach((value, key) => {
+                let parentName = value.group,
+                    parent = parentMap[parentName],
+                    r;
+                if (!parent) {
+                    parent = parentMap[parentName] = {  w2ui: { children: [] }, recid: index , name: parentName};
+                    index++;
+                }
+                r = Object.assign({ recid: index }, value);
+                r.isGranted = data.includes(r.value);
+                index++;
+                parent.w2ui.children.push(r);
+            })
+            grid.records = Object.values(parentMap);
+            grid.refresh();
+        },
+        onCheckboxColumnClick(event) {
+            let me = this,
+                api = me.api,
+                grid = me.grid,
+                el = event.srcElement,
+                recid = el.getAttribute('data-id'),
+                colIndex = el.getAttribute('data-col-index'),
+                record = grid.get(recid),
+                col = grid.columns[colIndex],
+                isGranted = record.isGranted,
+                params = { value: record.value };
+            if (isGranted) {
+                api.removePermission(record.id, params).then(me.);
+            } else {
+                api.addPermission(record.id, params).then();
+            }
+            console.log(colIndex, record, col)
+        }
+
+    });
  
 
 
