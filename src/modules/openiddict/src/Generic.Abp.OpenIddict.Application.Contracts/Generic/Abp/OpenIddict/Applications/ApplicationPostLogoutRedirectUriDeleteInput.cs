@@ -1,6 +1,6 @@
 ﻿namespace Generic.Abp.OpenIddict.Applications
 {
-    public class ApplicationPostLogoutRedirectUriDeleteInput : ApplicationItemInput
+    public class ApplicationPostLogoutRedirectUriDeleteInput : ApplicationItemDeleteInput
     {
     }
 }

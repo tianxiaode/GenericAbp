@@ -7,9 +7,7 @@ function Grid(config) {
     }
 
     me.policies = config.policies || ['Create', 'Delete', 'Update'];
-    ['Create', 'Delete', 'Update'].forEach(p => {
-        me[`allow${p}`] = abp.auth.isGranted(`${me.entityName}.${p}`);
-    })
+    me.initPermission();
     me.el = `#${me.el}`;
 
     me.localization = window.abp.localization.getResource(me.resourceName);
@@ -18,7 +16,7 @@ function Grid(config) {
     me.initCreateAndEditModal();
     let extensions = w2ui.extensions;
     if (!extensions) extensions = w2ui.extensions = {};
-    extensions[me.entityName] = me;
+    extensions[_.lowerFirst(me.entityName)] = me;
 }
 
 Grid.prototype.render = {
@@ -39,6 +37,14 @@ Grid.prototype.render = {
         return `<span class="${cls} fg-cyan c-pointer checkbox" style="font-size:16px;line-height:22px;" data-id="${record.recid}" data-col-index="${extra.colIndex}"></span>`;
 
     }
+
+}
+
+Grid.prototype.initPermission = function () {
+    let me = this;
+    me.policies.forEach(p => {
+        me[`allow${p}`] = abp.auth.isGranted(`${me.entityName}.${p}`);
+    })
 
 }
 
@@ -151,7 +157,7 @@ Grid.prototype.initGrid = function () {
     }
     me.el = $(me.el);
     me.grid = new w2grid(config);
-    if (me.toolbar) {
+    if (config.show.toolbar) {
         $(me.grid.toolbar.box).css('min-height', 52);
     }
     if (me.hasEditColumn) {
@@ -353,6 +359,9 @@ Grid.prototype.onColumnClick = function () { }
 Grid.prototype.onActionClick = function () { }
 
 Grid.prototype.onToolbar = function () { }
+
+Grid.prototype.onRelaod = function () { }
+
 Grid.prototype.onSave = function (event) { }
 Grid.prototype.onExpand = function (event) { 
     event.complete.then(this.onExpandComplete.bind(this));

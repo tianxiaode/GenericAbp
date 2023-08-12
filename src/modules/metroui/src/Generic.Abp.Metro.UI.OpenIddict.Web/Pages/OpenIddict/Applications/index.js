@@ -16,9 +16,9 @@
                     tabs: [
                         { id: 'detail', text: l('Details'), style: 'font-size:16px;height:36px;'  },
                         { id: 'permissions', text: l('Permission'), style: 'font-size:16px;height:36px;'  },
-                        { id: 'redirectUris', text: l('RedirectUris'), style: 'font-size:16px;height:36px;'  },
-                        { id: 'postLogoutRedirectUris', text: l('Application:PostLogoutRedirectUris'), style: 'font-size:16px;height:36px;'  },
-                        { id: 'requirements', text: l('Requirements'), style: 'font-size:16px;height:36px;'  },
+                        { id: 'redirectUri', text: l('RedirectUris'), style: 'font-size:16px;height:36px;'  },
+                        { id: 'postLogoutRedirectUri', text: l('Application:PostLogoutRedirectUris'), style: 'font-size:16px;height:36px;'  },
+                        { id: 'requirement', text: l('Requirements'), style: 'font-size:16px;height:36px;'  },
                         { id: 'property', text: l('Properties'), style: 'font-size:16px;height:36px;'  }
                     ],
                     onClick(event) {
@@ -47,9 +47,9 @@
                 html: `
                     <div id="detail_grid" class="w-100 h-100" ></div>
                     <div id="permissions_grid" class="w-100 h-100" style="display:none;"></div>
-                    <div id="redirectUris_grid" class="w-100 h-100" style="display:none;"></div>
-                    <div id="postLogoutRedirectUris_grid" class="w-100 h-100" style="display:none;"></div>
-                    <div id="requirements" class="w-100 h-100" style="display:none;"></div>
+                    <div id="redirectUri_grid" class="w-100 h-100" style="display:none;"></div>
+                    <div id="postLogoutRedirectUri_grid" class="w-100 h-100" style="display:none;"></div>
+                    <div id="requirement_grid" class="w-100 h-100" style="display:none;"></div>
                     <div id="property_grid" class="w-100 h-100" style="display:none;"></div>
                 `
             }
@@ -194,18 +194,57 @@
                 colIndex = el.getAttribute('data-col-index'),
                 record = grid.get(recid),
                 col = grid.columns[colIndex],
+                applicationRecord = me.currentRecord,
                 isGranted = record.isGranted,
                 params = { value: record.value };
             if (isGranted) {
-                api.removePermission(record.id, params).then(me.);
+                api.removePermission(applicationRecord.id, params).then(me.updateSuccess.bind(me, record));
             } else {
-                api.addPermission(record.id, params).then();
+                api.addPermission(applicationRecord.id, params).then(me.updateSuccess.bind(me, record));
             }
-            console.log(colIndex, record, col)
+        },
+        updateSuccess(record, response) {
+            record.isGranted = !record.isGranted;
+            abp.notify.success(this.globalLocalization('UpdateSuccess'));
+            this.mergeChanges();
         }
 
     });
  
+    new ItemGrid({
+        el: 'redirectUri_grid',
+        resourceName: 'OpenIddict',
+        entityName: 'RedirectUri',
+        apiGetName: 'getRedirectUris',
+        grantedPolicie: 'OpenIddict.Scopes.Update',
+        api: generic.abp.openIddict.applications.application
+    });
 
+    new ItemGrid({
+        el: 'postLogoutRedirectUri_grid',
+        resourceName: 'OpenIddict',
+        entityName: 'PostLogoutRedirectUri',
+        apiGetName: 'getPostLogoutRedirectUris',
+        grantedPolicie: 'OpenIddict.Scopes.Update',
+        api: generic.abp.openIddict.applications.application
+    });
+
+    new ItemGrid({
+        el: 'requirement_grid',
+        resourceName: 'OpenIddict',
+        entityName: 'Requirement',
+        apiGetName: 'getRequirements',
+        grantedPolicie: 'OpenIddict.Scopes.Update',
+        api: generic.abp.openIddict.applications.application
+    });
+
+    new ItemGrid({
+        el: 'property_grid',
+        resourceName: 'OpenIddict',
+        entityName: 'Property',
+        apiGetName: 'getProperties',
+        grantedPolicie: 'OpenIddict.Scopes.Update',
+        api: generic.abp.openIddict.applications.application
+    });
 
 })(m4q);

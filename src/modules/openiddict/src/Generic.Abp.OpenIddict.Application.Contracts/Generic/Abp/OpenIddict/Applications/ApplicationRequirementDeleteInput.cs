@@ -1,6 +1,6 @@
 ﻿namespace Generic.Abp.OpenIddict.Applications
 {
-    public class ApplicationRequirementDeleteInput : ApplicationItemInput
+    public class ApplicationRequirementDeleteInput : ApplicationItemDeleteInput
     {
     }
 }

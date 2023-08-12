@@ -106,11 +106,12 @@ ItemGrid.prototype.onDelete = function (event) {
         if (!confirm) retrun;
         let fn = me.api[me.apiDeleteName];
         if (!isFunction(fn)) return;
-        forEachAsync(records, (m) => {
-            let data = {};
-            data[messageField] = m[messageField];
-            return fn.call(null, id, data);
-        }).then(me.deleteSuccess.bind(me), me.ajaxFailure.bind(me));
+        fn.call(null, id, { items: message }).then(me.deleteSuccess.bind(me), me.ajaxFailure.bind(me));
+    //    forEachAsync(records, (m) => {
+    //        let data = {};
+    //        data[messageField] = m[messageField];
+    //        return fn.call(null, id, data);
+    //    }).then(me.deleteSuccess.bind(me), me.ajaxFailure.bind(me));
     });
 
 }
