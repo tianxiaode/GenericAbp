@@ -8,6 +8,7 @@
     "Permission:Delete": "Delete",
     "Permission:ManagePermissions": "Manage",
     "Scopes": "Scopes",
+    "Scope": "Scope",
     "Scope:Name": "Name",
     "Scope:DisplayName": "DisplayName",
     "Scope:Description": "Description",
@@ -81,6 +82,8 @@
     "Email": "Email",
     "Phone": "Phone",
     "Profile": "Profile",
-    "Roles": "Roles"
+    "Roles": "Roles",
+    "Resource": "Resource",
+    "Edit": "Edit"
   }
 }

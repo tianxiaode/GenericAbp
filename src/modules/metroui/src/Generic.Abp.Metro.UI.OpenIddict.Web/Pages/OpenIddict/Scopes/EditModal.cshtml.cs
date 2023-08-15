@@ -1,8 +1,7 @@
-using Generic.Abp.Metro.UI.OpenIddict.Web.Pages;
 using Generic.Abp.OpenIddict.Scopes;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Generic.Abp.OpenIddict.Web.Pages.OpenIddict.Scopes
+namespace Generic.Abp.Metro.UI.OpenIddict.Web.Pages.OpenIddict.Scopes
 {
     public class EditModalModel : OpenIddictPageModel
     {
@@ -26,8 +25,6 @@ namespace Generic.Abp.OpenIddict.Web.Pages.OpenIddict.Scopes
             Scope.DisplayName = entity.DisplayName;
             Scope.Properties = entity.Properties;
             Scope.Resources = entity.Resources;
-            Scope.PropertiesStr = string.Join(',', entity.Properties);
-            Scope.ResourcesStr = string.Join(',', entity.Resources);
             return await Task.FromResult(Page());
         }
 
@@ -35,9 +32,6 @@ namespace Generic.Abp.OpenIddict.Web.Pages.OpenIddict.Scopes
         {
             ValidateModel();
 
-            Scope.Properties = Scope.PropertiesStr?.Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries)
-                .ToList();
-            Scope.Resources = Scope.ResourcesStr?.Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList();
 
             await ScopeAppService.UpdateAsync(Scope.Id, Scope);
 
@@ -47,9 +41,6 @@ namespace Generic.Abp.OpenIddict.Web.Pages.OpenIddict.Scopes
         public class ScopeVieModel : ScopeUpdateInput
         {
             public Guid Id { get; set; }
-            public string? PropertiesStr { get; set; }
-
-            public string? ResourcesStr { get; set; }
         }
     }
 }

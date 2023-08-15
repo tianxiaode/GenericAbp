@@ -1,34 +1,26 @@
 ﻿@page
-@using Generic.Abp.OpenIddict.Permissions
-@using Generic.Abp.OpenIddict.Web.Pages.OpenIddict.Scopes;
-@using Microsoft.AspNetCore.Authorization
+@using Generic.Abp.Metro.UI.OpenIddict.Web.Pages.OpenIddict.Scopes
 @using Microsoft.AspNetCore.Mvc.Localization
-@using Volo.Abp.AspNetCore.Mvc.UI.Layout
 @using Volo.Abp.OpenIddict.Localization
-@model IndexModel
-@inject IHtmlLocalizer<AbpOpenIddictResource> _l
-@inject IAuthorizationService _authorization
-@inject IPageLayout _pageLayout
-@{
-    //_pageLayout.Content.TitleCaption = _l["Scopes"].Value;
-    //_pageLayout.Content.BreadCrumb.Add(_l["Menu:OpenIddictManagement"].Value);
-    //_pageLayout.Content.MenuItemName = OpenIddictMenus.Scopes;
-}
+@model Generic.Abp.Metro.UI.OpenIddict.Web.Pages.OpenIddict.Scopes.IndexModel
+@inject IHtmlLocalizer<AbpOpenIddictResource> L
+
 @section styles{
-    <abp-style-bundle name="W2Ui"></abp-style-bundle>
+    <metro-style-bundle name="W2Ui"></metro-style-bundle>
+    <metro-style-bundle name="@typeof(IndexModel).FullName">
+    </metro-style-bundle>
 }
 
 @section scripts {
-    <abp-script-bundle name="W2Ui"></abp-script-bundle>
-    <abp-script-bundle name="@typeof(IndexModel).FullName">
-        <abp-script src="/Pages/OpenIddict/global.js" />
-        <abp-script src="/Pages/OpenIddict/Function.js" />
-        <abp-script src="/Pages/OpenIddict/forEachAsync.js" />
-        <abp-script src="/Pages/OpenIddict/Grid.js" />
-        <abp-script src="/Pages/OpenIddict/Scopes/index.js" />
-    </abp-script-bundle>
+    <metro-script-bundle name="W2Ui"></metro-script-bundle>
+    <metro-script-bundle name="@typeof(IndexModel).FullName">
+        <metro-script src="/libs/w2ui/multilingual-grid.js" />
+        <metro-script src="/libs/w2ui/property-grid.js" />
+        <metro-script src="/libs/w2ui/item-grid.js" />
+        <metro-script src="/Pages/OpenIddict/Scopes/index.js" />
+    </metro-script-bundle>
 
 }
 
-<div id="grid" style="height:calc( 100vh - 160px)">
+<div class="w-100 mt-1" id="layout" style="height: calc(100vh - 90px)">
 </div>

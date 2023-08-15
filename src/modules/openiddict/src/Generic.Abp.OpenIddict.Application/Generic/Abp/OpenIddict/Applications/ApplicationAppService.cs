@@ -278,7 +278,7 @@ namespace Generic.Abp.OpenIddict.Applications
 
         [UnitOfWork]
         [Authorize(OpenIddictPermissions.Applications.Update)]
-        public virtual async Task AddPermissionAsync(Guid id, ApplicationPermissionCreateInput input)
+        public virtual async Task AddPermissionAsync(Guid id, PermissionCreateInput input)
         {
             var entity = await Repository.GetAsync(id);
             var permissions = entity.Permissions.IsNullOrEmpty()
@@ -293,7 +293,7 @@ namespace Generic.Abp.OpenIddict.Applications
 
         [UnitOfWork]
         [Authorize(OpenIddictPermissions.Applications.Update)]
-        public virtual async Task RemovePermissionAsync(Guid id, ApplicationPermissionDeleteInput input)
+        public virtual async Task RemovePermissionAsync(Guid id, PermissionDeleteInput input)
         {
             var entity = await Repository.GetAsync(id);
             var permissions = entity.Permissions.IsNullOrEmpty()
@@ -324,7 +324,7 @@ namespace Generic.Abp.OpenIddict.Applications
         [UnitOfWork]
         [Authorize(OpenIddictPermissions.Applications.Update)]
         public virtual async Task AddPostLogoutRedirectUriAsync(Guid id,
-            ApplicationPostLogoutRedirectUriCreateInput input)
+            PostLogoutRedirectUriCreateInput input)
         {
             var entity = await Repository.GetAsync(id);
             var list = entity.PostLogoutRedirectUris.IsNullOrEmpty()
@@ -340,7 +340,7 @@ namespace Generic.Abp.OpenIddict.Applications
         [UnitOfWork]
         [Authorize(OpenIddictPermissions.Applications.Update)]
         public virtual async Task RemovePostLogoutRedirectUriAsync(Guid id,
-            ApplicationPostLogoutRedirectUriDeleteInput input)
+            PostLogoutRedirectUriDeleteInput input)
         {
             var entity = await Repository.GetAsync(id);
             var list = entity.PostLogoutRedirectUris.IsNullOrEmpty()
@@ -374,7 +374,7 @@ namespace Generic.Abp.OpenIddict.Applications
 
         [UnitOfWork]
         [Authorize(OpenIddictPermissions.Applications.Update)]
-        public virtual async Task AddPropertyAsync(Guid id, ApplicationPropertyCreateInput input)
+        public virtual async Task AddPropertyAsync(Guid id, PropertyCreateInput input)
         {
             var entity = await Repository.GetAsync(id);
             var list = entity.Properties.IsNullOrEmpty()
@@ -389,7 +389,7 @@ namespace Generic.Abp.OpenIddict.Applications
 
         [UnitOfWork]
         [Authorize(OpenIddictPermissions.Applications.Update)]
-        public virtual async Task RemovePropertyAsync(Guid id, ApplicationPropertyDeleteInput input)
+        public virtual async Task RemovePropertyAsync(Guid id, PropertyDeleteInput input)
         {
             var entity = await Repository.GetAsync(id);
             var list = entity.Properties.IsNullOrEmpty()
@@ -423,7 +423,7 @@ namespace Generic.Abp.OpenIddict.Applications
 
         [UnitOfWork]
         [Authorize(OpenIddictPermissions.Applications.Update)]
-        public virtual async Task AddRedirectUriAsync(Guid id, ApplicationRedirectUriCreateInput input)
+        public virtual async Task AddRedirectUriAsync(Guid id, RedirectUriCreateInput input)
         {
             var entity = await Repository.GetAsync(id);
             var list = entity.RedirectUris.IsNullOrEmpty()
@@ -438,7 +438,7 @@ namespace Generic.Abp.OpenIddict.Applications
 
         [UnitOfWork]
         [Authorize(OpenIddictPermissions.Applications.Update)]
-        public virtual async Task RemoveRedirectUriAsync(Guid id, ApplicationRedirectUriDeleteInput input)
+        public virtual async Task RemoveRedirectUriAsync(Guid id, RedirectUriDeleteInput input)
         {
             var entity = await Repository.GetAsync(id);
             var list = entity.RedirectUris.IsNullOrEmpty()
@@ -472,7 +472,7 @@ namespace Generic.Abp.OpenIddict.Applications
 
         [UnitOfWork]
         [Authorize(OpenIddictPermissions.Applications.Update)]
-        public virtual async Task AddRequirementAsync(Guid id, ApplicationRequirementCreateInput input)
+        public virtual async Task AddRequirementAsync(Guid id, RequirementCreateInput input)
         {
             var entity = await Repository.GetAsync(id);
             var list = entity.Requirements.IsNullOrEmpty()
@@ -487,7 +487,7 @@ namespace Generic.Abp.OpenIddict.Applications
 
         [UnitOfWork]
         [Authorize(OpenIddictPermissions.Applications.Update)]
-        public virtual async Task RemoveRequirementAsync(Guid id, ApplicationRequirementDeleteInput input)
+        public virtual async Task RemoveRequirementAsync(Guid id, RequirementDeleteInput input)
         {
             var entity = await Repository.GetAsync(id);
             var list = entity.Requirements.IsNullOrEmpty()

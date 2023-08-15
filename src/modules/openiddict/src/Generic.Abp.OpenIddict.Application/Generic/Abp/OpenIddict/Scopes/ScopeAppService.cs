@@ -8,6 +8,8 @@ using Volo.Abp.OpenIddict.Scopes;
 using Volo.Abp.Uow;
 using Generic.Abp.OpenIddict.Permissions;
 using Volo.Abp;
+using Generic.Abp.OpenIddict.Applications;
+using System.Linq;
 
 namespace Generic.Abp.OpenIddict.Scopes
 {
@@ -51,7 +53,6 @@ namespace Generic.Abp.OpenIddict.Scopes
             await Repository.InsertAsync(entity);
 
             return ObjectMapper.Map<OpenIddictScope, ScopeDto>(entity);
-
         }
 
         [UnitOfWork]
@@ -63,7 +64,6 @@ namespace Generic.Abp.OpenIddict.Scopes
             await UpdateByInputAsync(entity, input);
             await Repository.UpdateAsync(entity);
             return ObjectMapper.Map<OpenIddictScope, ScopeDto>(entity);
-
         }
 
         [UnitOfWork]
@@ -74,6 +74,7 @@ namespace Generic.Abp.OpenIddict.Scopes
             {
                 throw new DuplicateWarningBusinessException(nameof(OpenIddictScope.Name), input.Name);
             }
+
             entity.DisplayName = input.DisplayName;
             entity.Description = input.Description;
             entity.Name = input.Name;
@@ -81,11 +82,11 @@ namespace Generic.Abp.OpenIddict.Scopes
             {
                 entity.Properties = System.Text.Json.JsonSerializer.Serialize(input.Properties);
             }
+
             if (!input.Resources.IsNullOrEmpty())
             {
                 entity.Resources = System.Text.Json.JsonSerializer.Serialize(input.Resources);
             }
-
         }
 
         [UnitOfWork]
@@ -102,9 +103,105 @@ namespace Generic.Abp.OpenIddict.Scopes
             }
 
 
-
             return new ListResultDto<ScopeDto>(result);
         }
 
+        #region Properties
+
+        [UnitOfWork]
+        [Authorize(OpenIddictPermissions.Scopes.Default)]
+        public virtual async Task<List<string>> GetPropertiesAsync(Guid id)
+        {
+            var entity = await Repository.GetAsync(id);
+            var list = entity.Properties.IsNullOrEmpty()
+                ? new List<string>()
+                : System.Text.Json.JsonSerializer.Deserialize<List<string>>(entity.Properties,
+                    new System.Text.Json.JsonSerializerOptions());
+            return list;
+        }
+
+        [UnitOfWork]
+        [Authorize(OpenIddictPermissions.Scopes.Update)]
+        public virtual async Task AddPropertyAsync(Guid id, ScopePropertyCreateInput input)
+        {
+            var entity = await Repository.GetAsync(id);
+            var list = entity.Properties.IsNullOrEmpty()
+                ? new List<string>()
+                : System.Text.Json.JsonSerializer.Deserialize<List<string>>(entity.Properties,
+                    new System.Text.Json.JsonSerializerOptions());
+            if (list.Any(m => m.Equals(input.Value))) return;
+            list.Add(input.Value);
+            entity.Properties = System.Text.Json.JsonSerializer.Serialize(list);
+            await Repository.UpdateAsync(entity);
+        }
+
+        [UnitOfWork]
+        [Authorize(OpenIddictPermissions.Scopes.Update)]
+        public virtual async Task RemovePropertyAsync(Guid id, ScopePropertyDeleteInput input)
+        {
+            var entity = await Repository.GetAsync(id);
+            var list = entity.Properties.IsNullOrEmpty()
+                ? new List<string>()
+                : System.Text.Json.JsonSerializer.Deserialize<List<string>>(entity.Properties,
+                    new System.Text.Json.JsonSerializerOptions());
+            foreach (var item in input.Items)
+            {
+                list.Remove(item);
+            }
+
+            entity.Properties = System.Text.Json.JsonSerializer.Serialize(list);
+            await Repository.UpdateAsync(entity);
+        }
+
+        #endregion
+
+        #region Resources
+
+        [UnitOfWork]
+        [Authorize(OpenIddictPermissions.Scopes.Default)]
+        public virtual async Task<List<string>> GetResourcesAsync(Guid id)
+        {
+            var entity = await Repository.GetAsync(id);
+            var list = entity.Resources.IsNullOrEmpty()
+                ? new List<string>()
+                : System.Text.Json.JsonSerializer.Deserialize<List<string>>(entity.Resources,
+                    new System.Text.Json.JsonSerializerOptions());
+            return list;
+        }
+
+        [UnitOfWork]
+        [Authorize(OpenIddictPermissions.Scopes.Update)]
+        public virtual async Task AddResourceAsync(Guid id, ScopeResourceCreateInput input)
+        {
+            var entity = await Repository.GetAsync(id);
+            var list = entity.Resources.IsNullOrEmpty()
+                ? new List<string>()
+                : System.Text.Json.JsonSerializer.Deserialize<List<string>>(entity.Resources,
+                    new System.Text.Json.JsonSerializerOptions());
+            if (list.Any(m => m.Equals(input.Value))) return;
+            list.Add(input.Value);
+            entity.Resources = System.Text.Json.JsonSerializer.Serialize(list);
+            await Repository.UpdateAsync(entity);
+        }
+
+        [UnitOfWork]
+        [Authorize(OpenIddictPermissions.Scopes.Update)]
+        public virtual async Task RemoveResourceAsync(Guid id, ScopeResourceDeleteInput input)
+        {
+            var entity = await Repository.GetAsync(id);
+            var list = entity.Resources.IsNullOrEmpty()
+                ? new List<string>()
+                : System.Text.Json.JsonSerializer.Deserialize<List<string>>(entity.Resources,
+                    new System.Text.Json.JsonSerializerOptions());
+            foreach (var item in input.Items)
+            {
+                list.Remove(item);
+            }
+
+            entity.Resources = System.Text.Json.JsonSerializer.Serialize(list);
+            await Repository.UpdateAsync(entity);
+        }
+
+        #endregion
     }
 }

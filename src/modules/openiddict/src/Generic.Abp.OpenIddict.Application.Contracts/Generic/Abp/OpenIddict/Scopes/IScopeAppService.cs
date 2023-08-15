@@ -13,5 +13,11 @@ namespace Generic.Abp.OpenIddict.Scopes
         Task<ScopeDto> CreateAsync(ScopeCreateInput input);
         Task<ScopeDto> UpdateAsync(Guid id, ScopeUpdateInput input);
         Task<ListResultDto<ScopeDto>> DeleteAsync(List<Guid> ids);
+        Task<List<string>> GetPropertiesAsync(Guid id);
+        Task AddPropertyAsync(Guid id, ScopePropertyCreateInput input);
+        Task RemovePropertyAsync(Guid id, ScopePropertyDeleteInput input);
+        Task<List<string>> GetResourcesAsync(Guid id);
+        Task AddResourceAsync(Guid id, ScopeResourceCreateInput input);
+        Task RemoveResourceAsync(Guid id, ScopeResourceDeleteInput input);
     }
 }

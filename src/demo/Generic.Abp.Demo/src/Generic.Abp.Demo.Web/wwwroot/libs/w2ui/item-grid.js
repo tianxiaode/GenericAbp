@@ -121,6 +121,7 @@ ItemGrid.prototype.onDelete = function (event) {
 ItemGrid.prototype.updateSuccess = function () {
     let me = this;
     abp.notify.success(me.globalLocalization('UpdateSuccess'));
+    $(`#${me.inputId}`).val('');
     me.clear();
     me.loadData();
 }

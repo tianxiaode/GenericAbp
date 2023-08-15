@@ -15,6 +15,7 @@ namespace Generic.Abp.OpenIddict.Applications
         {
             AppService = applicationAppService;
         }
+
         protected IApplicationAppService AppService { get; }
 
         [HttpGet]
@@ -42,6 +43,7 @@ namespace Generic.Abp.OpenIddict.Applications
         {
             return AppService.UpdateAsync(id, input);
         }
+
         [HttpDelete]
         public Task<ListResultDto<ApplicationDto>> DeleteAsync([FromBody] List<Guid> ids)
         {
@@ -64,14 +66,14 @@ namespace Generic.Abp.OpenIddict.Applications
 
         [HttpPut]
         [Route("{id:guid}/permissions")]
-        public Task AddPermissionAsync(Guid id, [FromBody] ApplicationPermissionCreateInput input)
+        public Task AddPermissionAsync(Guid id, [FromBody] PermissionCreateInput input)
         {
             return AppService.AddPermissionAsync(id, input);
         }
 
         [HttpDelete]
         [Route("{id:guid}/permissions")]
-        public Task RemovePermissionAsync(Guid id, [FromBody] ApplicationPermissionDeleteInput input)
+        public Task RemovePermissionAsync(Guid id, [FromBody] PermissionDeleteInput input)
         {
             return AppService.RemovePermissionAsync(id, input);
         }
@@ -85,14 +87,15 @@ namespace Generic.Abp.OpenIddict.Applications
 
         [HttpPut]
         [Route("{id:guid}/post-logout-redirect-uris")]
-        public Task AddPostLogoutRedirectUriAsync(Guid id, [FromBody] ApplicationPostLogoutRedirectUriCreateInput input)
+        public Task AddPostLogoutRedirectUriAsync(Guid id, [FromBody] PostLogoutRedirectUriCreateInput input)
         {
             return AppService.AddPostLogoutRedirectUriAsync(id, input);
         }
 
         [HttpDelete]
         [Route("{id:guid}/post-logout-redirect-uris")]
-        public Task RemovePostLogoutRedirectUriAsync(Guid id, [FromBody] ApplicationPostLogoutRedirectUriDeleteInput input)
+        public Task RemovePostLogoutRedirectUriAsync(Guid id,
+            [FromBody] PostLogoutRedirectUriDeleteInput input)
         {
             return AppService.RemovePostLogoutRedirectUriAsync(id, input);
         }
@@ -106,14 +109,14 @@ namespace Generic.Abp.OpenIddict.Applications
 
         [HttpPut]
         [Route("{id:guid}/properties")]
-        public Task AddPropertyAsync(Guid id, [FromBody] ApplicationPropertyCreateInput input)
+        public Task AddPropertyAsync(Guid id, [FromBody] PropertyCreateInput input)
         {
             return AppService.AddPropertyAsync(id, input);
         }
 
         [HttpDelete]
         [Route("{id:guid}/properties")]
-        public Task RemovePropertyAsync(Guid id, [FromBody] ApplicationPropertyDeleteInput input)
+        public Task RemovePropertyAsync(Guid id, [FromBody] PropertyDeleteInput input)
         {
             return AppService.RemovePropertyAsync(id, input);
         }
@@ -127,14 +130,14 @@ namespace Generic.Abp.OpenIddict.Applications
 
         [HttpPut]
         [Route("{id:guid}/redirect-uris")]
-        public Task AddRedirectUriAsync(Guid id, [FromBody] ApplicationRedirectUriCreateInput input)
+        public Task AddRedirectUriAsync(Guid id, [FromBody] RedirectUriCreateInput input)
         {
             return AppService.AddRedirectUriAsync(id, input);
         }
 
         [HttpDelete]
         [Route("{id:guid}/redirect-uris")]
-        public Task RemoveRedirectUriAsync(Guid id, [FromBody] ApplicationRedirectUriDeleteInput input)
+        public Task RemoveRedirectUriAsync(Guid id, [FromBody] RedirectUriDeleteInput input)
         {
             return AppService.RemoveRedirectUriAsync(id, input);
         }
@@ -148,14 +151,14 @@ namespace Generic.Abp.OpenIddict.Applications
 
         [HttpPut]
         [Route("{id:guid}/requirements")]
-        public Task AddRequirementAsync(Guid id, [FromBody] ApplicationRequirementCreateInput input)
+        public Task AddRequirementAsync(Guid id, [FromBody] RequirementCreateInput input)
         {
             return AppService.AddRequirementAsync(id, input);
         }
 
         [HttpDelete]
         [Route("{id:guid}/requirements")]
-        public Task RemoveRequirementAsync(Guid id, [FromBody] ApplicationRequirementDeleteInput input)
+        public Task RemoveRequirementAsync(Guid id, [FromBody] RequirementDeleteInput input)
         {
             return AppService.RemoveRequirementAsync(id, input);
         }

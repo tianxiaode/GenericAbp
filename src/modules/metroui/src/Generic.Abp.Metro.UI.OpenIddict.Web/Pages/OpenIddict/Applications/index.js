@@ -64,7 +64,6 @@
     new Grid({
         el: 'layout_layout_panel_main .w2ui-panel-content',
         entityName: 'OpenIddict.Applications',
-        api: generic.abp.identity.roles.role,
         resourceName: 'OpenIddict',
         //header: 'Applications',
         modal: {
@@ -216,7 +215,7 @@
         resourceName: 'OpenIddict',
         entityName: 'RedirectUri',
         apiGetName: 'getRedirectUris',
-        grantedPolicie: 'OpenIddict.Scopes.Update',
+        grantedPolicie: 'OpenIddict.Applications.Update',
         api: generic.abp.openIddict.applications.application
     });
 
@@ -225,7 +224,7 @@
         resourceName: 'OpenIddict',
         entityName: 'PostLogoutRedirectUri',
         apiGetName: 'getPostLogoutRedirectUris',
-        grantedPolicie: 'OpenIddict.Scopes.Update',
+        grantedPolicie: 'OpenIddict.Applications.Update',
         api: generic.abp.openIddict.applications.application
     });
 
@@ -234,7 +233,7 @@
         resourceName: 'OpenIddict',
         entityName: 'Requirement',
         apiGetName: 'getRequirements',
-        grantedPolicie: 'OpenIddict.Scopes.Update',
+        grantedPolicie: 'OpenIddict.Applications.Update',
         api: generic.abp.openIddict.applications.application
     });
 
@@ -243,7 +242,7 @@
         resourceName: 'OpenIddict',
         entityName: 'Property',
         apiGetName: 'getProperties',
-        grantedPolicie: 'OpenIddict.Scopes.Update',
+        grantedPolicie: 'OpenIddict.Applications.Update',
         api: generic.abp.openIddict.applications.application
     });
 

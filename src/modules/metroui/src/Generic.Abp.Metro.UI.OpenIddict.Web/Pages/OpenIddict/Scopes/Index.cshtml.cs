@@ -1,7 +1,6 @@
-using Generic.Abp.Metro.UI.OpenIddict.Web.Pages;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Generic.Abp.OpenIddict.Web.Pages.OpenIddict.Scopes
+namespace Generic.Abp.Metro.UI.OpenIddict.Web.Pages.OpenIddict.Scopes
 {
     public class IndexModel : OpenIddictPageModel
     {

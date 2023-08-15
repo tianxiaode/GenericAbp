@@ -1,9 +1,7 @@
-using Generic.Abp.Metro.UI.OpenIddict.Web.Pages;
 using Generic.Abp.OpenIddict.Scopes;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Generic.Abp.OpenIddict.Web.Pages.OpenIddict.Scopes
+namespace Generic.Abp.Metro.UI.OpenIddict.Web.Pages.OpenIddict.Scopes
 {
     public class CreateModalModel : OpenIddictPageModel
     {
@@ -26,10 +24,6 @@ namespace Generic.Abp.OpenIddict.Web.Pages.OpenIddict.Scopes
         {
             ValidateModel();
 
-            Scope.Properties = Scope.PropertiesStr?.Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries)
-                .ToList();
-            Scope.Resources = Scope.ResourcesStr?.Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList();
-
             await ScopeAppService.CreateAsync(Scope);
 
             return NoContent();
@@ -37,9 +31,6 @@ namespace Generic.Abp.OpenIddict.Web.Pages.OpenIddict.Scopes
 
         public class ScopeVieModel : ScopeCreateInput
         {
-            public string? PropertiesStr { get; set; }
-
-            public string? ResourcesStr { get; set; }
         }
     }
 }
