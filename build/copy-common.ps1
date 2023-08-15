@@ -77,7 +77,22 @@ $projects = (
     "modules/phonelogin/src/Generic.Abp.PhoneLogin.Domain",
     "modules/phonelogin/src/Generic.Abp.PhoneLogin.IdentityServer.Domain",
     "modules/phonelogin/src/Generic.Abp.PhoneLogin.Account.Web",
-    "modules/phonelogin/src/Generic.Abp.PhoneLogin.OpenIddict.AspNetCore"
+    "modules/phonelogin/src/Generic.Abp.PhoneLogin.OpenIddict.AspNetCore",
+
+    # modules/metroui
+    "modules/metroui/src/Generic.Abp.Metro.UI",
+    "modules/metroui/src/Generic.Abp.Metro.UI.Widgets",    
+    "modules/metroui/src/Generic.Abp.Metro.UI.Packages",
+    "modules/metroui/src/Generic.Abp.Metro.UI.Bundling",
+    "modules/metroui/src/Generic.Abp.Metro.UI.Theme.Shared",
+    "modules/metroui/src/Generic.Abp.Metro.UI.Theme.Basic",
+    "modules/metroui/src/Generic.Abp.Metro.UI.Theme.Basic.Demo",
+    "modules/metroui/src/Generic.Abp.Metro.UI.MultiTenancy",
+    "modules/metroui/src/Generic.Abp.Metro.UI.Account.Web",
+    "modules/metroui/src/Generic.Abp.Metro.UI.Identity.Web",
+    "modules/metroui/src/Generic.Abp.Metro.UI.OpenIddict.AspNetCore",
+    "modules/metroui/src/Generic.Abp.Metro.UI.OpenIddict.Web",
+    "modules/metroui/src/Generic.Abp.Metro.UI.Account.Web.OpenIddict"
 
     # modules/themes
     # "modules/themes/src/Generic.Abp.Themes.Shared",

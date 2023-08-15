@@ -76,7 +76,23 @@ $packages = (
     "Generic.Abp.PhoneLogin.Domain",
     "Generic.Abp.PhoneLogin.IdentityServer.Domain",
     "Generic.Abp.PhoneLogin.Account.Web",
-    "Generic.Abp.PhoneLogin.OpenIddict.AspNetCore"
+    "Generic.Abp.PhoneLogin.OpenIddict.AspNetCore",
+
+    # modules/metroui
+    "Generic.Abp.Metro.UI",
+    "Generic.Abp.Metro.UI.Widgets",    
+    "Generic.Abp.Metro.UI.Packages",
+    "Generic.Abp.Metro.UI.Bundling",
+    "Generic.Abp.Metro.UI.Theme.Shared",
+    "Generic.Abp.Metro.UI.Theme.Basic",
+    "Generic.Abp.Metro.UI.Theme.Basic.Demo",
+    "Generic.Abp.Metro.UI.MultiTenancy",
+    "Generic.Abp.Metro.UI.Account.Web",
+    "Generic.Abp.Metro.UI.Identity.Web",
+    "Generic.Abp.Metro.UI.OpenIddict.AspNetCore",
+    "Generic.Abp.Metro.UI.OpenIddict.Web",
+    "Generic.Abp.Metro.UI.Account.Web.OpenIddict"
+
 
     # modules/themes
     #"Generic.Abp.Themes.Shared",
