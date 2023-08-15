@@ -30,4 +30,4 @@ jobs:
         Invoke-WebRequest $sourceNugetExe -OutFile $targetNugetExe
     # 5. Push  package
     - name: Push generated package to GitHub registry
-      run:  powershell "${{ github.workspace }}/nuget/push_packages.ps1 " ${{ secrets.NugetKey }}
+      run:  powershell "${{ github.workspace }}/nupkg/push_packages.ps1 " ${{ secrets.NugetKey }}
