@@ -148,6 +148,14 @@ Note: Authenticating to acquire a token using `REST Client` requires adding a `R
 - Reference `Generic.Abp.PhoneLogin.Domain` in the application's `Domain` module
 - Reference `Generic.Abp.PhoneLogin.Web` in the application's `Web` module
 
+### Metro UI theme
+
+- Reference 'Generic.Abp.Metro.UI.Account.Web.OpenIddict' in the app's 'Web' module
+- Reference 'Generic.Abp.Metro.UI.Identity.Web' in the 'Web' module of the app
+- Reference 'Generic.Abp.Metro.UI.OpenIddict.Web' in the app's 'Web' module
+
+If you want to see Metro UI demo, you can refer to 'Generic.Abp.Metro.UI.Theme.Basic.Demo' in the 'Web' module.
+
 ## References
 
 - [Sencha](https://www.sencha.com)
@@ -155,6 +163,8 @@ Note: Authenticating to acquire a token using `REST Client` requires adding a `R
 - [W2Ui](https://github.com/vitmalina/w2ui/) 
 - [SmartEnum](https://github.com/ardalis/SmartEnum)
 - [Mime Detective](https://github.com/Muraad/Mime-Detective)
+- [Metro UI](https://metroui.org.ua/intro.html)
+- [Lodash](https://lodash.com/docs/4.17.15)
 
 ## Thanks
 

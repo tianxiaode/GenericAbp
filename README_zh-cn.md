@@ -148,6 +148,13 @@ Generic Abp是一套适用于[ABP Framework](https://github.com/abpframework/abp
 - 在应用的`Domain`模块引用`Generic.Abp.PhoneLogin.Domain`
 - 在应用的`Web`模块引用`Generic.Abp.PhoneLogin.Web`
 
+### Metro UI 主题
+
+- 在应用的`Web`模块引用`Generic.Abp.Metro.UI.Account.Web.OpenIddict`
+- 在应用的`Web`模块引用`Generic.Abp.Metro.UI.Identity.Web`
+- 在应用的`Web`模块引用`Generic.Abp.Metro.UI.OpenIddict.Web`
+
+如果想查看Metro UI的演示程序，可在`Web`模块引用`Generic.Abp.Metro.UI.Theme.Basic.Demo`。
 
 ## 引用
 
@@ -156,6 +163,8 @@ Generic Abp是一套适用于[ABP Framework](https://github.com/abpframework/abp
 - [W2Ui](https://github.com/vitmalina/w2ui/) 
 - [SmartEnum](https://github.com/ardalis/SmartEnum)
 - [Mime Detective](https://github.com/Muraad/Mime-Detective)
+- [Metro UI](https://metroui.org.ua/intro.html)
+- [Lodash](https://lodash.com/docs/4.17.15)
 
 ## 感谢
 
