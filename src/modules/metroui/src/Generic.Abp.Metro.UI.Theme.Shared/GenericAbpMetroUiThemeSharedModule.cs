@@ -1,5 +1,4 @@
-﻿using Generic.Abp.Metro.UI.Bundling;
-using Generic.Abp.Metro.UI.Packages;
+﻿using Generic.Abp.Metro.UI.Packages;
 using Generic.Abp.Metro.UI.Theme.Shared.Bundling;
 using Generic.Abp.Metro.UI.Theme.Shared.ProxyScripting.Generators;
 using Generic.Abp.Metro.UI.Widgets;
@@ -13,10 +12,9 @@ namespace Generic.Abp.Metro.UI.Theme.Shared;
 
 [DependsOn(
     typeof(GenericAbpMetroUiModule),
-    typeof(GenericAbpMetroUiPackagesModule),
-typeof(GenericAbpMetroUiWidgetsModule)
-
-    )]
+    typeof(Generic.Abp.Metro.UI.Packages.GenericAbpMetroUiPackagesModule),
+    typeof(GenericAbpMetroUiWidgetsModule)
+)]
 public class GenericAbpMetroUiThemeSharedModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
@@ -44,11 +42,8 @@ public class GenericAbpMetroUiThemeSharedModule : AbpModule
         {
             options
                 .StyleBundles
-                .Add(StandardBundles.Styles.Global, bundle =>
-                    {
-                        bundle.AddContributors(typeof(SharedThemeGlobalStyleContributor));
-
-                    }
+                .Add(StandardBundles.Styles.Global,
+                    bundle => { bundle.AddContributors(typeof(SharedThemeGlobalStyleContributor)); }
                 );
 
             options

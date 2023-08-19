@@ -1,6 +1,7 @@
 ﻿using Generic.Abp.Demo.Localization;
 using System.Threading.Tasks;
 using Generic.Abp.Demo.MultiTenancy;
+using Generic.Abp.Metro.UI.Identity.Web.Navigation;
 using Volo.Abp.UI.Navigation;
 
 namespace Generic.Abp.Demo.Web.Menus
@@ -33,15 +34,15 @@ namespace Generic.Abp.Demo.Web.Menus
 
             if (MultiTenancyConsts.IsEnabled)
             {
-                administration.SetSubItemOrder(TenantManagementMenuNames.GroupName, 1);
+                //administration.SetSubItemOrder(TenantManagementMenuNames.GroupName, 1);
             }
             else
             {
-                administration.TryRemoveMenuItem(TenantManagementMenuNames.GroupName);
+                //administration.TryRemoveMenuItem(TenantManagementMenuNames.GroupName);
             }
 
             administration.SetSubItemOrder(IdentityMenuNames.GroupName, 2);
-            administration.SetSubItemOrder(SettingManagementMenuNames.GroupName, 3);
+            //administration.SetSubItemOrder(SettingManagementMenuNames.GroupName, 3);
 
             return Task.CompletedTask;
         }
