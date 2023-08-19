@@ -97,6 +97,7 @@ $projects = (
     # modules/phonelogin
     "modules/phonelogin/src/Generic.Abp.PhoneLogin.Domain.Shared",
     "modules/phonelogin/src/Generic.Abp.PhoneLogin.Domain",
+    "modules/phonelogin/src/Generic.Abp.PhoneLogin.Application",
     "modules/phonelogin/src/Generic.Abp.PhoneLogin.IdentityServer.Domain",
     "modules/phonelogin/src/Generic.Abp.PhoneLogin.Account.Web",
     "modules/phonelogin/src/Generic.Abp.PhoneLogin.OpenIddict.AspNetCore",

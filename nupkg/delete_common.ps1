@@ -74,6 +74,7 @@ $packages = (
     # modules/phonelogin
     "Generic.Abp.PhoneLogin.Domain.Shared",
     "Generic.Abp.PhoneLogin.Domain",
+    "Generic.Abp.PhoneLogin.Application",
     "Generic.Abp.PhoneLogin.IdentityServer.Domain",
     "Generic.Abp.PhoneLogin.Account.Web",
     "Generic.Abp.PhoneLogin.OpenIddict.AspNetCore",
