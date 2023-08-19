@@ -82,6 +82,7 @@ public class EditModalModel : IdentityPageModel
         [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxEmailLength))]
         public string Email { get; set; }
 
+        [Required]
         [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxPhoneNumberLength))]
         public string PhoneNumber { get; set; }
 
