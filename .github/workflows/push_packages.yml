@@ -24,7 +24,7 @@ jobs:
       shell: pwsh
       run: build-all-release.ps1
       env: 
-        FILE_PATH: build/
+        FILE_PATH: .\build
     # 4.package
     #- name: Package
     #  run: powershell "${{ github.workspace }}/nupkg/pack.ps1"
