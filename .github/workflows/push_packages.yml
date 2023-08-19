@@ -5,17 +5,17 @@ on:
     branches:
       - master
     paths:
-      - 'src/modules/**/*.cs'
-      - 'src/modules/**/*.cshtml'
-      - 'src/modules/**/*.csproj'
-      - 'src/modules/**/*.razor'
+      - 'src/**/*.cs'
+      - 'src/**/*.cshtml'
+      - 'src/**/*.csproj'
+      - 'src/**/*.razor'
 
   pull_request:
     paths:
-      - 'src/modules/**/*.cs'
-      - 'src/modules/**/*.cshtml'
-      - 'src/modules/**/*.csproj'
-      - 'src/modules/**/*.razor'
+      - 'src/**/*.cs'
+      - 'src/**/*.cshtml'
+      - 'src/**/*.csproj'
+      - 'src/**/*.razor'
     types:
       - opened
       - synchronize
