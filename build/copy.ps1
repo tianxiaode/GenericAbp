@@ -1,4 +1,4 @@
-. ".\copy-common.ps1"
+. "./copy-common.ps1"
 
 $destiontionRoot = $args[0]
 # Create all packages

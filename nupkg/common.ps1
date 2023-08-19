@@ -18,6 +18,7 @@ $solutions = (
     "modules/IdentityServer",
     "modules/FileManagement",
     "modules/openiddict",
+    "modules/phonelogin",
     "modules/metroui"
     # "modules/themes",
     # "modules/account"

@@ -22,6 +22,9 @@ jobs:
     # 3.build
     - name: Build all
       run: powershell "${{ github.workspace }}/build/build-all-release.ps1"
+    # 4.package
+    - name: Package
+      run: powershell "${{ github.workspace }}/nupkg/pack.ps1"
     # 4.Install Nuget
     - name: Install Nuget
       run: |

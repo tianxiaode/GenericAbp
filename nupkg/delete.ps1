@@ -1,4 +1,4 @@
-. ".\delete_common.ps1"
+. "./delete_common.ps1"
 
 $apiKey = $args[0]
 
