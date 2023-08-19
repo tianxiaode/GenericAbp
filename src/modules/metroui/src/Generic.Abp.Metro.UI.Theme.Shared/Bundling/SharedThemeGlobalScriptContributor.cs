@@ -4,9 +4,9 @@ using Volo.Abp.Modularity;
 namespace Generic.Abp.Metro.UI.Theme.Shared.Bundling;
 
 [DependsOn(
-    typeof(Packages.MetroUI.MetroUiScriptContributor),
-    typeof(Packages.Lodash.LodashScriptContributor),
-    typeof(Packages.SignalR.SignalRBrowserScriptContributor)
+    typeof(Generic.Abp.Metro.UI.Packages.MetroUI.MetroUiScriptContributor),
+    typeof(Generic.Abp.Metro.UI.Packages.Lodash.LodashScriptContributor),
+    typeof(Generic.Abp.Metro.UI.Packages.SignalR.SignalRBrowserScriptContributor)
 )]
 public class SharedThemeGlobalScriptContributor : BundleContributor
 {

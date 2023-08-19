@@ -1,5 +1,4 @@
-﻿using Generic.Abp.Metro.UI.Packages;
-using Generic.Abp.Metro.UI.Theme.Shared.Bundling;
+﻿using Generic.Abp.Metro.UI.Theme.Shared.Bundling;
 using Generic.Abp.Metro.UI.Theme.Shared.ProxyScripting.Generators;
 using Generic.Abp.Metro.UI.Widgets;
 using Microsoft.Extensions.DependencyInjection;
