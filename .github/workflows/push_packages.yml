@@ -2,36 +2,52 @@ name: Push packages
 
 on:
   push:
-    branches: [ master ]
+    branches:
+      - master
+    paths:
+      - 'src/modules/**/*.cs'
+      - 'src/modules/**/*.cshtml'
+      - 'src/modules/**/*.csproj'
+      - 'src/modules/**/*.razor'
+
   pull_request:
-    branches: [ master ]
+    paths:
+      - 'src/modules/**/*.cs'
+      - 'src/modules/**/*.cshtml'
+      - 'src/modules/**/*.csproj'
+      - 'src/modules/**/*.razor'
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - ready_for_review
+permissions:
+  contents: read
 
 jobs:
   build:
     runs-on: windows-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
+    if: ${{ !github.event.pull_request.draft }}
     steps:
-    # 1.Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-    - uses: actions/checkout@v3
-    # 2.runtime environment
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
+    - uses: actions/checkout@v2
+    - uses: actions/setup-dotnet@master
       with:
-        dotnet-version: 3.1.100
-    # 3.build
-    - name: Build all
-      shell: pwsh
-      run: ./build/build-all-release.ps1
-    # 4.package
-    #- name: Package
-    #  run: powershell "${{ github.workspace }}/nupkg/pack.ps1"
-    # 4.Install Nuget
-    #- name: Install Nuget
-    #  run: |
-    #    $sourceNugetExe = "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"
-    #    $targetNugetExe = "nuget.exe"
-    #    Invoke-WebRequest $sourceNugetExe -OutFile $targetNugetExe
-    # 5. Push  package
-    #- name: Push generated package to GitHub registry
-    #  run:  powershell "${{ github.workspace }}/nupkg/push_packages.ps1 " ${{ secrets.NugetKey }}
+        dotnet-version: 7.0.100
+
+    - name: Build All
+      run: .\build-all.ps1 
+      working-directory: .\build
+      shell: powershell
+
+    - name: Pack All
+      run: .\pack.ps1
+      working-directory: .\nupkg
+      shell: powershell
+
+    - name: Push All
+      run: .\push_packages.ps1 ${{ secrets.NugetKey }}
+      working-directory: .\nupkg
+      shell: powershell
+
+
+  
