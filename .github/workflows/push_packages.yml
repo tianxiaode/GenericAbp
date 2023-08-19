@@ -21,16 +21,17 @@ jobs:
         dotnet-version: 3.1.100
     # 3.build
     - name: Build all
-      run: powershell "${{ github.workspace }}/build/build-all-release.ps1"
+      shell: pwsh
+      run: ./build/build-all-release.ps1"
     # 4.package
-    - name: Package
-      run: powershell "${{ github.workspace }}/nupkg/pack.ps1"
+    #- name: Package
+    #  run: powershell "${{ github.workspace }}/nupkg/pack.ps1"
     # 4.Install Nuget
-    - name: Install Nuget
-      run: |
-        $sourceNugetExe = "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"
-        $targetNugetExe = "nuget.exe"
-        Invoke-WebRequest $sourceNugetExe -OutFile $targetNugetExe
+    #- name: Install Nuget
+    #  run: |
+    #    $sourceNugetExe = "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"
+    #    $targetNugetExe = "nuget.exe"
+    #    Invoke-WebRequest $sourceNugetExe -OutFile $targetNugetExe
     # 5. Push  package
-    - name: Push generated package to GitHub registry
-      run:  powershell "${{ github.workspace }}/nupkg/push_packages.ps1 " ${{ secrets.NugetKey }}
+    #- name: Push generated package to GitHub registry
+    #  run:  powershell "${{ github.workspace }}/nupkg/push_packages.ps1 " ${{ secrets.NugetKey }}
