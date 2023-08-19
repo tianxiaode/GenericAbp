@@ -22,7 +22,7 @@ jobs:
     # 3.build
     - name: Build all
       shell: pwsh
-      run: write-host "File path: ${{ secrets.FILE_PATH }}"
+      run: Write-Host "File path: ${{ secrets.FILE_PATH }}"
       env: 
         FILE_PATH: .\build
     # 4.package
