@@ -22,7 +22,9 @@ jobs:
     # 3.build
     - name: Build all
       shell: pwsh
-      run: ./build/build-all-release.ps1
+      run: build-all-release.ps1
+      env: 
+        FILE_PATH: ./build
     # 4.package
     #- name: Package
     #  run: powershell "${{ github.workspace }}/nupkg/pack.ps1"
