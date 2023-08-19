@@ -35,7 +35,7 @@ jobs:
         dotnet-version: 7.0.100
 
     - name: Build All
-      run: .\build-all.ps1 
+      run: .\build-all-release.ps1 
       working-directory: .\build
       shell: powershell
 

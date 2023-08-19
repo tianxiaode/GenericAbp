@@ -1,4 +1,6 @@
+#nullable enable
 using System;
+using System.Linq;
 using System.Text;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.FileProviders;
@@ -69,16 +71,14 @@ public abstract class BundlerBase : IBundler, ITransientDependency
         {
             var fileContent = GetFileInfo(context, fileName).ReadAsString();
             Logger.LogDebug($"- {fileName} ({fileContent.Length} bytes)");
-            if (context.IsMinificationEnabled)
+            if (!context.IsMinificationEnabled) return fileContent;
+            if (isMinFile)
             {
-                if (isMinFile)
-                {
-                    Logger.LogDebug("  > Already minified.");
-                }
-                else if (isIgnoredForMinification)
-                {
-                    Logger.LogDebug("  > Ignored for minification.");
-                }
+                Logger.LogDebug("  > Already minified.");
+            }
+            else if (isIgnoredForMinification)
+            {
+                Logger.LogDebug("  > Ignored for minification.");
             }
 
             return fileContent;
@@ -92,7 +92,6 @@ public abstract class BundlerBase : IBundler, ITransientDependency
             Logger.LogDebug($"  > Using the pre-minified file: {minFileInfo.Name} ({fileContent.Length} bytes)");
             return fileContent;
         }
-
     }
 
     private string GetAndMinifyFileContent(IBundlerContext context, string fileName)
@@ -136,35 +135,21 @@ public abstract class BundlerBase : IBundler, ITransientDependency
 
     protected virtual bool IsMinFile(string fileName)
     {
-        foreach (var suffix in MinFileSuffixes)
-        {
-            if (fileName.EndsWith($".{suffix}.{FileExtension}", StringComparison.InvariantCultureIgnoreCase))
-            {
-                return true;
-            }
-        }
-
-        return false;
+        return MinFileSuffixes.Any(suffix =>
+            fileName.EndsWith($".{suffix}.{FileExtension}", StringComparison.InvariantCultureIgnoreCase));
     }
 
     protected virtual IFileInfo? GetMinFileInfoOrNull(string file)
     {
-        foreach (var suffix in MinFileSuffixes)
-        {
-            var fileInfo = HostEnvironment.WebRootFileProvider.GetFileInfo(
-                $"{file.RemovePostFix($".{FileExtension}")}.{suffix}.{FileExtension}"
-            );
-
-            if (fileInfo.Exists)
-            {
-                return fileInfo;
-            }
-        }
-
-        return null;
+        return MinFileSuffixes
+            .Select(suffix =>
+                HostEnvironment.WebRootFileProvider.GetFileInfo(
+                    $"{file.RemovePostFix($".{FileExtension}")}.{suffix}.{FileExtension}"))
+            .FirstOrDefault(fileInfo => fileInfo.Exists);
     }
 
-    protected virtual string ProcessBeforeAddingToTheBundle(IBundlerContext context, string filePath, string fileContent)
+    protected virtual string ProcessBeforeAddingToTheBundle(IBundlerContext context, string filePath,
+        string fileContent)
     {
         return fileContent;
     }
