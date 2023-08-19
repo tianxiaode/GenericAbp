@@ -4,6 +4,8 @@
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
+    <AssemblyName>Generic.Abp.Metro.UI.Packages</AssemblyName>
+    <PackageId>Generic.Abp.Metro.UI.Packages</PackageId>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
     <IsPackable>true</IsPackable>
     <OutputType>Library</OutputType>
