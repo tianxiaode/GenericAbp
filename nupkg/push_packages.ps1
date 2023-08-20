@@ -2,6 +2,7 @@
 
 $apiKey = $args[0]
 
+Write-Host $apiKey
 # Get the version
 [xml]$commonPropsXml = Get-Content (Join-Path $rootFolder "common.props")
 $version = $commonPropsXml.Project.PropertyGroup.Version.Trim()
