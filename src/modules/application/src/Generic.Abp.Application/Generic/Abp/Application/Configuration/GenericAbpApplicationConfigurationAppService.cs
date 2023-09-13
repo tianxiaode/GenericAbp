@@ -20,7 +20,8 @@ using TimeZone = Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.TimeZone;
 namespace Generic.Abp.Application.Configuration;
 
 [RemoteService(IsEnabled = false)]
-public class GenericAbpApplicationConfigurationAppService : ApplicationService, IGenericAbpApplicationConfigurationAppService
+public class GenericAbpApplicationConfigurationAppService : ApplicationService,
+    IGenericAbpApplicationConfigurationAppService
 {
     private readonly ILanguageProvider _languageProvider;
     private readonly AbpLocalizationOptions _localizationOptions;
@@ -125,7 +126,6 @@ public class GenericAbpApplicationConfigurationAppService : ApplicationService, 
             {
                 permissionResource.Add(permission.Name, permission.DisplayName.Localize(StringLocalizerFactory));
             }
-
         }
 
         localizationConfig.Values.Add("Permissions", permissionResource);
@@ -145,7 +145,6 @@ public class GenericAbpApplicationConfigurationAppService : ApplicationService, 
 
         return localizationConfig;
     }
-
 
 
     protected virtual ClockDto GetClockConfig()
@@ -223,7 +222,7 @@ public class GenericAbpApplicationConfigurationAppService : ApplicationService, 
 
         foreach (var policyName in policyNames)
         {
-            authConfig.GrantedPolicies[policyName] = true;
+            authConfig.GrantedPolicies[policyName] = false;
 
             if (await AuthorizationService.IsGrantedAsync(policyName))
             {
@@ -273,6 +272,4 @@ public class GenericAbpApplicationConfigurationAppService : ApplicationService, 
             }
         };
     }
-
-
 }

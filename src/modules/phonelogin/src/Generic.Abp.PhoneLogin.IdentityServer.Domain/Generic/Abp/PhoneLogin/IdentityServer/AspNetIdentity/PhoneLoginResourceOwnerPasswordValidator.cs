@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Volo.Abp.Identity;
 using Volo.Abp.IdentityServer.AspNetIdentity;
 using Volo.Abp.IdentityServer.Localization;
+using Volo.Abp.Settings;
 using Volo.Abp.Validation;
 using IdentityUser = Volo.Abp.Identity.IdentityUser;
 
@@ -16,24 +17,35 @@ namespace Generic.Abp.PhoneLogin.IdentityServer.AspNetIdentity
 {
     public class PhoneLoginResourceOwnerPasswordValidator : AbpResourceOwnerPasswordValidator
     {
-        public PhoneLoginResourceOwnerPasswordValidator(
-            PhoneLoginUserManager userManager,
-            SignInManager<IdentityUser> signInManager,
-            IdentitySecurityLogManager identitySecurityLogManager,
+        public PhoneLoginResourceOwnerPasswordValidator(PhoneLoginUserManager userManager,
+            SignInManager<IdentityUser> signInManager, IdentitySecurityLogManager identitySecurityLogManager,
             ILogger<ResourceOwnerPasswordValidator<IdentityUser>> logger,
-            IStringLocalizer<AbpIdentityServerResource> localizer,
-            IOptions<AbpIdentityOptions> abpIdentityOptions,
-            IServiceScopeFactory serviceScopeFactory,
-            IOptions<IdentityOptions> identityOptions) :
-            base(userManager, signInManager, identitySecurityLogManager, logger, localizer, abpIdentityOptions, serviceScopeFactory, identityOptions)
+            IStringLocalizer<AbpIdentityServerResource> localizer, IOptions<AbpIdentityOptions> abpIdentityOptions,
+            IServiceScopeFactory serviceScopeFactory, IOptions<IdentityOptions> identityOptions,
+            ISettingProvider settingProvider) : base(userManager, signInManager, identitySecurityLogManager, logger,
+            localizer, abpIdentityOptions, serviceScopeFactory, identityOptions, settingProvider)
         {
             PhoneLoginUserManager = userManager;
         }
+
+        //public PhoneLoginResourceOwnerPasswordValidator(
+        //    PhoneLoginUserManager userManager,
+        //    SignInManager<IdentityUser> signInManager,
+        //    IdentitySecurityLogManager identitySecurityLogManager,
+        //    ILogger<ResourceOwnerPasswordValidator<IdentityUser>> logger,
+        //    IStringLocalizer<AbpIdentityServerResource> localizer,
+        //    IOptions<AbpIdentityOptions> abpIdentityOptions,
+        //    IServiceScopeFactory serviceScopeFactory,
+        //    IOptions<IdentityOptions> identityOptions) :
+        //    base(userManager, signInManager, identitySecurityLogManager, logger, localizer, abpIdentityOptions, serviceScopeFactory, identityOptions)
+        //{
+        //    PhoneLoginUserManager = userManager;
+        //}
         protected PhoneLoginUserManager PhoneLoginUserManager { get; }
 
-        protected override async Task ReplaceEmailToUsernameOfInputIfNeeds(ResourceOwnerPasswordValidationContext context)
+        protected override async Task ReplaceEmailToUsernameOfInputIfNeeds(
+            ResourceOwnerPasswordValidationContext context)
         {
-
             var userByUsername = await UserManager.FindByNameAsync(context.UserName);
             if (userByUsername != null)
             {
@@ -60,6 +72,5 @@ namespace Generic.Abp.PhoneLogin.IdentityServer.AspNetIdentity
 
             context.UserName = userByEmail.UserName;
         }
-
     }
 }
