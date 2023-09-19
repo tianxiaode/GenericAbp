@@ -1,0 +1,13 @@
+{
+  "culture": "en",
+  "texts": {
+    "Menu": "Menu",
+    "Menus": "Menus",
+    "NewMenu": "New menu",
+    "EditMenu": "Edit menu",
+    "Permission:Create": "Create",
+    "Permission:Edit": "Edit",
+    "Permission:Delete": "Delete",
+    "Permission:ChangePermissions": "Change permissions"
+  }
+}

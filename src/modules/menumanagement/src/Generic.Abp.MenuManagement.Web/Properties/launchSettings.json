@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "Generic.Abp.MenuManagement.Web": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:60750;http://localhost:60751"
+    }
+  }
+}

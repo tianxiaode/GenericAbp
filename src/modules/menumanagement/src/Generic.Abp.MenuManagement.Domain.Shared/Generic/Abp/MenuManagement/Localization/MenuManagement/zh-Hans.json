@@ -1,0 +1,13 @@
+{
+  "culture": "zh-Hans",
+  "texts": {
+    "Menu": "菜单",
+    "Menus": "菜单",
+    "NewMenu": "新菜单",
+    "EditMenu": "编辑菜单",
+    "Permission:Create": "创建",
+    "Permission:Edit": "编辑",
+    "Permission:Delete": "删除",
+    "Permission:ChangePermissions": "更改权限"
+  }
+}

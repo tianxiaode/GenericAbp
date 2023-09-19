@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\..\..\common.props" />
+  
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <RootNamespace />
+  </PropertyGroup>
+
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\ddd\src\Generic.Abp.DDD.Domain\Generic.Abp.DDD.Domain.csproj" />
+    <ProjectReference Include="..\Generic.Abp.MenuManagement.Domain.Shared\Generic.Abp.MenuManagement.Domain.Shared.csproj" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Folder Include="Generic\Abp\MenuManagement\Menus\" />
+  </ItemGroup>
+
+</Project>
