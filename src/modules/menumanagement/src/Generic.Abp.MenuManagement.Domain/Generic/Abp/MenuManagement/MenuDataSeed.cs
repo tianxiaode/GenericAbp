@@ -20,22 +20,20 @@ public class MenuDataSeed : ITransientDependency, IMenuDataSeed
     }
 
     protected IGuidGenerator GuidGenerator { get; }
-    protected MenuManager MenuManager { get; } = new();
+    protected MenuManager MenuManager { get; }
     protected IUnitOfWork CurrentUnitOfWork { get; }
     protected ILogger<IMenuDataSeed> Logger { get; }
 
     [UnitOfWork(true)]
     public async Task SeedAsync()
     {
-        var rootDesktop = new Menu(GuidGenerator.Create(), "桌面菜单", "fa-home", "dashboard", "desktop", order: 1);
-        rootDesktop.SetTranslations(new List<MenuTranslation>()
+        var dashboard = new Menu(GuidGenerator.Create(), "综合看板", "fa-home", "dashboard", "desktop", order: 1);
+        dashboard.SetTranslations(new List<MenuTranslation>()
         {
             new("en", "Dashboard"),
             new("zh-Hant", "綜合看板")
         });
-        await MenuManager.CreateAsync(rootDesktop);
-        Logger.LogInformation($"添加综合面板菜单");
-
-        var dashboard = new Menu(GuidGenerator.Create(), "综合看版", )
+        await MenuManager.CreateAsync(dashboard);
+        Logger.LogInformation($"添加综合面板菜单：{System.Text.Json.JsonSerializer.Serialize(dashboard)}");
     }
 }

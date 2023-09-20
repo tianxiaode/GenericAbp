@@ -2,5 +2,7 @@
 
 public class MenuConsts
 {
-    public static int DisplayNameMaxLength { get; set; } = 128;
+    public static int IconMaxLength { get; set; } = 128;
+    public static int RouterMaxLength { get; set; } = 128;
+    public static int GroupNameMaxLength { get; set; } = 128;
 }

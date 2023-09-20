@@ -4,8 +4,7 @@ namespace Generic.Abp.Domain.Entities;
 
 public interface ITree
 {
-    string Code { get; set; }
-    Guid? ParentId { get; set;  }
-    string DisplayName { get; set;  }
-
+    public string Code { get; set; }
+    public Guid? ParentId { get; set; }
+    public string DisplayName { get; set; }
 }

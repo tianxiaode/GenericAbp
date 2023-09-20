@@ -17,4 +17,8 @@
     <ProjectReference Include="..\Generic.Abp.MenuManagement.Domain\Generic.Abp.MenuManagement.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Generic\Abp\MenuManagement\Menus\" />
+  </ItemGroup>
+
 </Project>

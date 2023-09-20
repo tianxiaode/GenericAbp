@@ -1,4 +1,6 @@
-﻿using Volo.Abp.Data;
+﻿using Generic.Abp.MenuManagement.Menus;
+using Microsoft.EntityFrameworkCore;
+using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 
 namespace Generic.Abp.MenuManagement.EntityFrameworkCore
@@ -9,5 +11,7 @@ namespace Generic.Abp.MenuManagement.EntityFrameworkCore
         /* Add DbSet for each Aggregate Root here. Example:
          * DbSet<Question> Questions { get; }
          */
+
+        DbSet<Menu> Menus { get; }
     }
 }

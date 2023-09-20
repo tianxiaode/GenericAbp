@@ -1,5 +1,9 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Generic.Abp.MenuManagement.EntityFrameworkCore.Menus;
+using Generic.Abp.MenuManagement.Menus;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.EntityFrameworkCore.DependencyInjection;
 using Volo.Abp.Modularity;
 
 namespace Generic.Abp.MenuManagement.EntityFrameworkCore
@@ -17,6 +21,15 @@ namespace Generic.Abp.MenuManagement.EntityFrameworkCore
                 /* Add custom repositories here. Example:
                  * options.AddRepository<Question, EfCoreQuestionRepository>();
                  */
+                options.AddRepository<Menu, MenuRepository>();
+            });
+
+            Configure<AbpEntityOptions>(options =>
+            {
+                options.Entity<Menu>(entityOptions =>
+                {
+                    entityOptions.DefaultWithDetailsFunc = query => query.Include(m => m.Parent);
+                });
             });
         }
     }

@@ -22,14 +22,6 @@ public class MenuManager : TreeManager<Menu, IMenuRepository>
 
     public override async Task ValidateAsync(Menu entity)
     {
-        if (!string.IsNullOrWhiteSpace(entity.Keyword))
-        {
-            if (await Repository.AnyAsync(m => m.Id != entity.Id && m.Keyword == entity.Keyword))
-            {
-                throw new Volo.Abp.BusinessException()
-            }
-        }
-
         var siblings = (await FindChildrenAsync(entity.ParentId))
             .Where(m => m.Id != entity.Id)
             .ToList();
@@ -38,6 +30,5 @@ public class MenuManager : TreeManager<Menu, IMenuRepository>
         {
             throw new DuplicateWarningBusinessException(Localizer[nameof(Menu)], entity.DisplayName);
         }
-
     }
 }

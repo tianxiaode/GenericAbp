@@ -17,22 +17,14 @@ public class Menu : GenericAuditedAggregateRootWithTranslation, ITree<Menu>
     public bool IsSelectable { get; set; }
     public bool IsDisabled { get; set; }
     public int Order { get; set; }
-    public string Permissions { get; set; }
     public string Router { get; set; }
+    public string GroupName { get; set; }
 
-    public string Keyword { get; set; }
-
-    public Menu(Guid id, string displayName, string icon, string router, string keyword = "", Guid? parentId = null,
-        int order = 0,
-        bool isSelectable = true, bool isDisabled = false) : base(id)
+    public Menu(Guid id) : base(id)
     {
-        ParentId = parentId;
-        DisplayName = displayName;
-        Icon = icon;
-        Order = order;
-        Router = router;
-        IsSelectable = isSelectable;
-        IsDisabled = isDisabled;
-        Keyword = keyword;
+        DisplayName = string.Empty;
+        IsSelectable = true;
+        IsDisabled = false;
+        Code = string.Empty;
     }
 }
