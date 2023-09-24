@@ -16,11 +16,7 @@ namespace Generic.Abp.PhoneLogin
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            PreConfigure<IdentityBuilder>(builder =>
-            {
-                builder.AddUserValidator<PhoneLoginUserValidator>();
-            });
+            PreConfigure<IdentityBuilder>(builder => { builder.AddUserValidator<PhoneLoginUserValidator>(); });
         }
-
     }
 }

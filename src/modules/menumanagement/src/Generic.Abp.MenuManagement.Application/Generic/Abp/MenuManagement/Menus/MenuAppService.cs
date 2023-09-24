@@ -1,31 +1,36 @@
-﻿using Generic.Abp.BusinessException.Exceptions;
+﻿using Generic.Abp.BusinessException;
+using Generic.Abp.BusinessException.Exceptions;
 using Generic.Abp.Domain.Entities;
-using Microsoft.AspNetCore.Authorization;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System;
-using System.Linq;
-using Generic.Abp.BusinessException;
+using Generic.Abp.Domain.Extensions;
 using Generic.Abp.MenuManagement.Menus.Dtos;
 using Generic.Abp.MenuManagement.Permissions;
-using Volo.Abp.Application.Dtos;
-using Volo.Abp.Uow;
+using Microsoft.AspNetCore.Authorization;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Volo.Abp;
+using Volo.Abp.Application.Dtos;
+using Volo.Abp.Authorization;
+using Volo.Abp.Data;
 using Volo.Abp.Domain.Repositories;
-using System.Collections;
+using Volo.Abp.Uow;
 
 namespace Generic.Abp.MenuManagement.Menus;
 
 public class MenuAppService : MenuManagementAppService, IMenuAppService
 {
-    public MenuAppService(IMenuRepository repository, MenuManager menuManager)
+    public MenuAppService(IMenuRepository repository, MenuManager menuManager,
+        IAbpAuthorizationPolicyProvider abpAuthorizationPolicyProvider)
     {
         Repository = repository;
         MenuManager = menuManager;
+        AbpAuthorizationPolicyProvider = abpAuthorizationPolicyProvider;
     }
 
     protected IMenuRepository Repository { get; }
     protected MenuManager MenuManager { get; }
+    private IAbpAuthorizationPolicyProvider AbpAuthorizationPolicyProvider { get; }
 
 
     [UnitOfWork]
@@ -68,25 +73,21 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
     [Authorize(MenuManagementPermissions.Menus.Create)]
     public virtual async Task<MenuDto> CreateAsync(MenuCreateDto input)
     {
-        var parent = await Repository.GetAsync(input.ParentId, false);
         var entity = new Menu(GuidGenerator.Create());
-        await MenuManager.CreateAsync(entity);
         await UpdateMenuByInputAsync(entity, input);
+        await MenuManager.CreateAsync(entity);
         return ObjectMapper.Map<Menu, MenuDto>(entity);
     }
 
     [Authorize(MenuManagementPermissions.Menus.Update)]
     [UnitOfWork(true)]
-    public virtual async Task<DistrictDto> UpdateAsync(Guid id, DistrictUpdateDto input)
+    public virtual async Task<MenuDto> UpdateAsync(Guid id, MenuUpdateDto input)
     {
         var entity = await Repository.GetAsync(id);
         entity.ConcurrencyStamp = input.ConcurrencyStamp;
-        entity.UpdateDisplayName(input.DisplayName);
-        entity.UpdatePostcode(input.Postcode);
-        await DistrictManager.UpdateAsync(entity);
-        await CurrentUnitOfWork.SaveChangesAsync();
-        var dto = new DistrictDto(entity, !await Repository.HasChildAsync(entity.Id));
-        return dto;
+        await UpdateMenuByInputAsync(entity, input);
+        await MenuManager.UpdateAsync(entity);
+        return ObjectMapper.Map<Menu, MenuDto>(entity);
     }
 
     [Authorize(MenuManagementPermissions.Menus.Delete)]
@@ -102,36 +103,37 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
         }
 
         await Repository.DeleteAsync(entity, true);
-        return new ListResultDto<DistrictDto>(new List<DistrictDto>()
-            { new(entity, true) });
+        return new ListResultDto<MenuDto>();
     }
 
-    [Authorize(InfrastructuresPermissions.Districts.Default)]
+    #region 多语言
+
     [UnitOfWork]
-    public virtual async Task<ListResultDto<DistrictTranslationDto>> GetTranslationListAsync(Guid id)
+    [Authorize(MenuManagementPermissions.Menus.Default)]
+    public virtual async Task<ListResultDto<MenuTranslationDto>> GetTranslationListAsync(Guid id)
     {
         var entity = await Repository.GetAsync(id);
-        var translations = entity.GetTranslations<District, DistrictTranslation>();
-        var list = ObjectMapper.Map<List<DistrictTranslation>, List<DistrictTranslationDto>>(translations);
-        return new ListResultDto<DistrictTranslationDto>(list);
+        var translations = entity.GetTranslations<Menu, MenuTranslation>();
+        var list = ObjectMapper.Map<List<MenuTranslation>, List<MenuTranslationDto>>(translations);
+        return new ListResultDto<MenuTranslationDto>(list);
     }
 
-    [Authorize(InfrastructuresPermissions.Districts.Update)]
+    [Authorize(MenuManagementPermissions.Menus.Update)]
     [UnitOfWork]
-    public virtual async Task UpdateTranslationAsync(Guid id, List<DistrictTranslationUpdateDto> input)
+    public virtual async Task UpdateTranslationAsync(Guid id, List<MenuTranslationUpdateDto> input)
     {
         var list = input.Where(m => !string.IsNullOrEmpty(m.DisplayName)).ToList();
         CheckTranslationInput(list);
 
         var entity = await Repository.GetAsync(id);
-        var translations = list.Select(m => new DistrictTranslation(m.Language, m.DisplayName));
-        entity.SetTranslations<District, DistrictTranslation>(translations);
+        var translations = list.Select(m => new MenuTranslation(m.Language, m.DisplayName));
+        entity.SetTranslations<Menu, MenuTranslation>(translations);
         await Repository.UpdateAsync(entity);
         await CurrentUnitOfWork.SaveChangesAsync();
     }
 
     [UnitOfWork]
-    protected virtual void CheckTranslationInput(List<DistrictTranslationUpdateDto> input)
+    protected virtual void CheckTranslationInput(List<MenuTranslationUpdateDto> input)
     {
         var errors = input
             .Where(m => m.DisplayName.Length > DistrictConsts.DisplayNameMaxLength).Select(m =>
@@ -143,6 +145,47 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
 
         if (errors.Any()) throw new UserFriendlyException(string.Join("<br>", errors));
     }
+
+    #endregion
+
+    #region 菜单组
+
+    [Authorize(MenuManagementPermissions.Menus.Default)]
+    public virtual async Task<ListResultDto<string>> GetAllGroupNamesAsync()
+    {
+        var list = await Repository.GetAllGroupNamesAsync();
+        return new ListResultDto<string>(list);
+    }
+
+    #endregion
+
+    #region 权限
+
+    [UnitOfWork]
+    [Authorize(MenuManagementPermissions.Menus.Default)]
+    public virtual async Task<ListResultDto<string>> GetPermissionsListAsync(Guid id)
+    {
+        var entity = await Repository.GetAsync(id);
+        var translations = entity.GetProperty<string>(MenuConsts.Permissions)
+            .Split(",", StringSplitOptions.RemoveEmptyEntries);
+        return new ListResultDto<string>(translations);
+    }
+
+    [Authorize(MenuManagementPermissions.Menus.Update)]
+    [UnitOfWork]
+    public virtual async Task UpdatePermissionsAsync(Guid id, List<string> input)
+    {
+        var list = input.Where(m => !string.IsNullOrEmpty(m)).ToList();
+        var policyNames = await AbpAuthorizationPolicyProvider.GetPoliciesNamesAsync();
+        list = list.Intersect(policyNames).ToList();
+
+        var entity = await Repository.GetAsync(id);
+        entity.SetProperty(MenuConsts.Permissions, input);
+        await Repository.UpdateAsync(entity);
+        await CurrentUnitOfWork.SaveChangesAsync();
+    }
+
+    #endregion
 
     [UnitOfWork]
     protected virtual async Task<List<MenuDto>> GetFilterListAsync(string filter)
@@ -189,31 +232,14 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
         if (input.ParentId.HasValue)
         {
             var parent = await Repository.FirstOrDefaultAsync(m => m.Id == input.ParentId.Value);
-            if (parent != null) throw new 
-            {
-
-            }
-        }
-        if (!string.Equals(user.Email, input.Email, StringComparison.InvariantCultureIgnoreCase))
-        {
-            (await UserManager.SetEmailAsync(user, input.Email)).CheckErrors();
+            if (parent == null) throw new UnknownParentBusinessException();
+            entity.ParentId = parent.Id;
         }
 
-        if (!string.Equals(user.PhoneNumber, input.PhoneNumber, StringComparison.InvariantCultureIgnoreCase))
-        {
-            (await UserManager.SetPhoneNumberAsync(user, input.PhoneNumber)).CheckErrors();
-        }
-
-        //(await UserManager.SetTwoFactorEnabledAsync(user, input.TwoFactorEnabled)).CheckErrors();
-        (await UserManager.SetLockoutEnabledAsync(user, input.LockoutEnabled)).CheckErrors();
-
-        user.Name = input.Name;
-        user.Surname = input.Surname;
-
-        if (input.RoleNames != null)
-        {
-            (await UserManager.SetRolesAsync(user, input.RoleNames)).CheckErrors();
-        }
+        entity.GroupName = input.GroupName;
+        entity.Icon = input.Icon;
+        entity.Router = input.Router;
+        entity.Order = input.Order;
     }
 
 

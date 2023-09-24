@@ -11,6 +11,7 @@
     "Generic.Abp.BusinessException:000008": "单次查询日期的最长跨度为 {Value} 月",
     "Generic.Abp.BusinessException:000009": "单次查询日期的最长跨度为 {Value} 日",
     "Generic.Abp.BusinessException:000010": "没有找到{Name} {Value} ",
-    "Generic.Abp.BusinessException:000011": "不能删除 {Name} {Value} "
+    "Generic.Abp.BusinessException:000011": "不能删除 {Name} {Value} ",
+    "Generic.Abp.BusinessException:000012": "无法确定父节点"
   }
 }

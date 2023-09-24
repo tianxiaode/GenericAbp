@@ -11,6 +11,7 @@
     <ProjectReference Include="..\..\..\..\modules\identity\src\Generic.Abp.Identity.Domain\Generic.Abp.Identity.Domain.csproj" />
     <ProjectReference Include="..\Generic.Abp.Demo.Domain.Shared\Generic.Abp.Demo.Domain.Shared.csproj" />
     <ProjectReference Include="..\..\..\..\modules\phonelogin\src\Generic.Abp.PhoneLogin.Domain\Generic.Abp.PhoneLogin.Domain.csproj" />
+    <ProjectReference Include="..\..\..\..\modules\menumanagement\src\Generic.Abp.MenuManagement.Domain\Generic.Abp.MenuManagement.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>

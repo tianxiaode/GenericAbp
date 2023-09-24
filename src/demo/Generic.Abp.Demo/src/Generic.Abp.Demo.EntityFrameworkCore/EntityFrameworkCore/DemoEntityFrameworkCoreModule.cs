@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Generic.Abp.Identity.EntityFrameworkCore;
+using Generic.Abp.MenuManagement.EntityFrameworkCore;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
@@ -25,8 +26,9 @@ namespace Generic.Abp.Demo.EntityFrameworkCore
         typeof(AbpAuditLoggingEntityFrameworkCoreModule),
         typeof(AbpTenantManagementEntityFrameworkCoreModule),
         typeof(AbpFeatureManagementEntityFrameworkCoreModule),
-        typeof(GenericAbpIdentityEntityFrameworkCoreModule)
-        )]
+        typeof(GenericAbpIdentityEntityFrameworkCoreModule),
+        typeof(GenericAbpMenuManagementEntityFrameworkCoreModule)
+    )]
     public class DemoEntityFrameworkCoreModule : AbpModule
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)

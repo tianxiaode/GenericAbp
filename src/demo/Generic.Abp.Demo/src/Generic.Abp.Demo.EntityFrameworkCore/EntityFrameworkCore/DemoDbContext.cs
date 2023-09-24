@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Generic.Abp.MenuManagement.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
 using Volo.Abp.Data;
@@ -28,11 +29,10 @@ namespace Generic.Abp.Demo.EntityFrameworkCore
     [ReplaceDbContext(typeof(ITenantManagementDbContext))]
     [ConnectionStringName("Default")]
     public class DemoDbContext :
-    AbpDbContext<DemoDbContext>,
-    IIdentityDbContext,
-    ITenantManagementDbContext
+        AbpDbContext<DemoDbContext>,
+        IIdentityDbContext,
+        ITenantManagementDbContext
     {
-
         /* Add DbSet properties for your Aggregate Roots / Entities here.*/
 
         #region Entities from the modules
@@ -55,6 +55,7 @@ namespace Generic.Abp.Demo.EntityFrameworkCore
         public DbSet<OrganizationUnit> OrganizationUnits { get; set; }
         public DbSet<IdentitySecurityLog> SecurityLogs { get; set; }
         public DbSet<IdentityLinkUser> LinkUsers { get; set; }
+        public DbSet<IdentityUserDelegation> UserDelegations { get; }
 
         // Tenant Management
         public DbSet<Tenant> Tenants { get; set; }
@@ -65,7 +66,6 @@ namespace Generic.Abp.Demo.EntityFrameworkCore
         public DemoDbContext(DbContextOptions<DemoDbContext> options)
             : base(options)
         {
-
         }
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -91,7 +91,7 @@ namespace Generic.Abp.Demo.EntityFrameworkCore
             //    b.ConfigureByConvention(); //auto configure for the base class props
             //    //...
             //});
-
+            builder.ConfigureMenuManagement();
         }
     }
 }

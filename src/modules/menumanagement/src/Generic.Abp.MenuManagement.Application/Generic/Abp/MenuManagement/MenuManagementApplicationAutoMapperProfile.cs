@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices.ComTypes;
-using AutoMapper;
+﻿using AutoMapper;
 using Generic.Abp.Domain.Extensions;
 using Generic.Abp.MenuManagement.Menus;
 using Generic.Abp.MenuManagement.Menus.Dtos;
+using System;
 using Volo.Abp.Data;
 
 namespace Generic.Abp.MenuManagement
@@ -24,7 +21,9 @@ namespace Generic.Abp.MenuManagement
                     opts => opts.MapFrom(m => m.GetTranslations<Menu, MenuTranslation>()))
                 .ForMember(m => m.Permissions,
                     opts => opts.MapFrom(m =>
-                        m.GetProperty<string>("Permissions", "").Split(",", StringSplitOptions.RemoveEmptyEntries)));
+                        m.GetProperty<string>(MenuConsts.Permissions, "")
+                            .Split(",", StringSplitOptions.RemoveEmptyEntries)));
+
 
             CreateMap<MenuTranslation, MenuTranslationDto>();
             CreateMap<MenuTranslationDto, MenuTranslation>();

@@ -12,4 +12,5 @@ public interface IMenuRepository : IRepository<Menu, Guid>
     Task<List<Menu>> GetFilterListAsync(string filter, CancellationToken cancellation = default);
     Task<List<string>> GetCodeListAsync(string filter, CancellationToken cancellation = default);
     Task<List<Menu>> GetListByGroupAsync(string group, CancellationToken cancellation = default);
+    Task<List<string>> GetAllGroupNamesAsync(CancellationToken cancellation = default);
 }

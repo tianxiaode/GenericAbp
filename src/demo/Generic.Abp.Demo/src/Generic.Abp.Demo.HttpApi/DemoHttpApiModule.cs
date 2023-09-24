@@ -3,6 +3,7 @@ using Generic.Abp.Demo.Localization;
 using Generic.Abp.Enumeration;
 using Generic.Abp.ExtResource;
 using Generic.Abp.Identity;
+using Generic.Abp.MenuManagement;
 using Generic.Abp.OpenIddict;
 using Localization.Resources.AbpUi;
 using Volo.Abp.Account;
@@ -28,7 +29,8 @@ namespace Generic.Abp.Demo
         typeof(GenericAbpIdentityHttpApiModule),
         typeof(GenericAbpApplicationModule),
         typeof(GenericAbpEnumerationHttpApiModule),
-        typeof(GenericAbpOpenIddictHttpApiModule)
+        typeof(GenericAbpOpenIddictHttpApiModule),
+        typeof(GenericAbpMenuManagementHttpApiModule)
     )]
     public class DemoHttpApiModule : AbpModule
     {

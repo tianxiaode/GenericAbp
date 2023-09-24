@@ -1,16 +1,16 @@
 ﻿using Generic.Abp.Enumeration;
 using Generic.Abp.ExtResource;
 using Generic.Abp.Identity;
+using Generic.Abp.MenuManagement;
 using Generic.Abp.OpenIddict;
 using Generic.Abp.PhoneLogin;
 using Volo.Abp.Account;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.FeatureManagement;
-using Volo.Abp.Identity;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement;
-using Volo.Abp.TenantManagement;
 using Volo.Abp.SettingManagement;
+using Volo.Abp.TenantManagement;
 
 namespace Generic.Abp.Demo
 {
@@ -27,7 +27,8 @@ namespace Generic.Abp.Demo
         typeof(GenericAbpExtResourceApplicationModule),
         typeof(GenericAbpIdentityApplicationModule),
         typeof(GenericAbpOpenIddictApplicationModule),
-        typeof(GenericAbpPhoneLoginApplicationModule)
+        typeof(GenericAbpPhoneLoginApplicationModule),
+        typeof(GenericAbpMenuManagementApplicationModule)
     )]
     public class DemoApplicationModule : AbpModule
     {

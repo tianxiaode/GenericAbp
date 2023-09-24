@@ -32,6 +32,7 @@
     <ProjectReference Include="..\..\..\..\modules\identity\src\Generic.Abp.Identity.Domain.Shared\Generic.Abp.Identity.Domain.Shared.csproj" />
     <ProjectReference Include="..\..\..\..\modules\openiddict\src\Generic.Abp.OpenIddict.Domain.Shared\Generic.Abp.OpenIddict.Domain.Shared.csproj" />
     <ProjectReference Include="..\..\..\..\modules\phonelogin\src\Generic.Abp.PhoneLogin.Domain.Shared\Generic.Abp.PhoneLogin.Domain.Shared.csproj" />
+    <ProjectReference Include="..\..\..\..\modules\menumanagement\src\Generic.Abp.MenuManagement.Domain.Shared\Generic.Abp.MenuManagement.Domain.Shared.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -46,6 +47,13 @@ public class MenuRepository : EfCoreRepository<IMenuManagementDbContext, Menu, G
     {
         var dbSet = await GetDbSetAsync();
         return await dbSet.Where(m => EF.Functions.Like(m.GroupName, $"${group}")).ToListAsync(cancellation);
+    }
+
+    [UnitOfWork]
+    public async Task<List<string>> GetAllGroupNamesAsync(CancellationToken cancellation = default)
+    {
+        var dbSet = await GetDbSetAsync();
+        return await dbSet.Select(m => m.GroupName).Distinct().ToListAsync(cancellation);
     }
 
     [UnitOfWork]

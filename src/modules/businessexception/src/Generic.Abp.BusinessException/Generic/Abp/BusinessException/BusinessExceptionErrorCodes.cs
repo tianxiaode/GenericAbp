@@ -53,5 +53,6 @@
 
         public const string EntityNotBeDeletedParamValue = "Value";
 
+        public const string UnknownParent = "Generic.Abp.BusinessException:000012";
     }
 }

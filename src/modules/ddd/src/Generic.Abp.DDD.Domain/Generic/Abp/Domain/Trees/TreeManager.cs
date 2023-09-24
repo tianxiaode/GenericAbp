@@ -15,7 +15,6 @@ namespace Generic.Abp.Domain.Trees
         where TEntity : class, ITree<TEntity>
         where TRepository : IRepository<TEntity, Guid>
     {
-
         protected TRepository Repository { get; }
         protected ITreeCodeGenerator<TEntity> TreeCodeGenerator { get; }
         protected ICancellationTokenProvider CancellationTokenProvider { get; }
@@ -32,18 +31,18 @@ namespace Generic.Abp.Domain.Trees
         }
 
         [UnitOfWork]
-        public virtual async Task CreateAsync(TEntity entity)
+        public virtual async Task CreateAsync(TEntity entity, bool autoSave = true)
         {
             entity.Code = await GetNextChildCodeAsync(entity.ParentId);
             await ValidateAsync(entity);
-            await Repository.InsertAsync(entity, true, cancellationToken: CancellationToken);
+            await Repository.InsertAsync(entity, autoSave, cancellationToken: CancellationToken);
         }
 
         [UnitOfWork]
-        public virtual async Task UpdateAsync(TEntity entity)
+        public virtual async Task UpdateAsync(TEntity entity, bool autoSave = true)
         {
             await ValidateAsync(entity);
-            await Repository.UpdateAsync(entity,true, cancellationToken: CancellationToken);
+            await Repository.UpdateAsync(entity, autoSave, cancellationToken: CancellationToken);
         }
 
         [UnitOfWork]
@@ -104,8 +103,9 @@ namespace Generic.Abp.Domain.Trees
         public virtual async Task<TEntity?> GetLastChildOrNullAsync(Guid? parentId)
         {
             if (!parentId.HasValue) return default;
-            var children = await Repository.GetListAsync(m => m.ParentId == parentId, cancellationToken: CancellationToken);
-            return children.OrderBy(c => c.Code).LastOrDefault();
+            var children =
+                await Repository.GetListAsync(m => m.ParentId == parentId, cancellationToken: CancellationToken);
+            return children?.OrderBy(c => c.Code).LastOrDefault();
         }
 
         public virtual Task ValidateAsync(TEntity entity)
@@ -148,6 +148,5 @@ namespace Generic.Abp.Domain.Trees
             return await AsyncExecuter.ToListAsync(query.Where(new ParentSpecification<TEntity>(code, level)),
                 CancellationToken);
         }
-
     }
 }

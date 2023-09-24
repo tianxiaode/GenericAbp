@@ -1,11 +1,10 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using Generic.Abp.BusinessException.Exceptions;
+﻿using Generic.Abp.BusinessException.Exceptions;
 using Generic.Abp.Domain.Trees;
 using Generic.Abp.MenuManagement.Localization;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Localization;
-using Volo.Abp.Domain.Repositories;
+using System.Linq;
+using System.Threading.Tasks;
 using Volo.Abp.Threading;
 
 namespace Generic.Abp.MenuManagement.Menus;

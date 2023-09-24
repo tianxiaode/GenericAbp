@@ -6,4 +6,3 @@ public interface IMenuDataSeed
 {
     Task SeedAsync();
 }
-}

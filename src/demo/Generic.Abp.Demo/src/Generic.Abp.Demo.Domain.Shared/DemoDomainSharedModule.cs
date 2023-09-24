@@ -1,6 +1,7 @@
 ﻿using Generic.Abp.Demo.Localization;
 using Generic.Abp.Enumeration;
 using Generic.Abp.Identity;
+using Generic.Abp.MenuManagement;
 using Generic.Abp.OpenIddict;
 using Generic.Abp.PhoneLogin;
 using Volo.Abp.AuditLogging;
@@ -31,7 +32,8 @@ namespace Generic.Abp.Demo
         typeof(GenericAbpIdentityDomainSharedModule),
         typeof(GenericAbpEnumerationDomainSharedModule),
         typeof(GenericAbpOpenIddictDomainSharedModule),
-        typeof(GenericAbpPhoneLoginDomainSharedModule)
+        typeof(GenericAbpPhoneLoginDomainSharedModule),
+        typeof(GenericAbpMenuManagementDomainSharedModule)
     )]
     public class DemoDomainSharedModule : AbpModule
     {

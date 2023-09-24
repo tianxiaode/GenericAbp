@@ -8,7 +8,6 @@ namespace Generic.Abp.MenuManagement.Menus.Dtos;
 public class MenuDto : ExtensibleAuditedEntityDto<Guid>
 {
     public string Code { get; set; }
-    public string Postcode { get; set; }
     public string DisplayName { get; set; }
     public Guid? ParentId { get; set; }
     public bool Leaf { get; set; }

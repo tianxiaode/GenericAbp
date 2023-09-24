@@ -215,6 +215,7 @@ namespace Generic.Abp.Demo.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     DisplayName = table.Column<string>(type: "varchar(128)", maxLength: 128, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    EntityVersion = table.Column<int>(type: "int", nullable: false),
                     ExtraProperties = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ConcurrencyStamp = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: true)
@@ -316,6 +317,7 @@ namespace Generic.Abp.Demo.Migrations
                     IsDefault = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     IsStatic = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     IsPublic = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    EntityVersion = table.Column<int>(type: "int", nullable: false),
                     ExtraProperties = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ConcurrencyStamp = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: true)
@@ -391,6 +393,7 @@ namespace Generic.Abp.Demo.Migrations
                     Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     Name = table.Column<string>(type: "varchar(64)", maxLength: 64, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    EntityVersion = table.Column<int>(type: "int", nullable: false),
                     ExtraProperties = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ConcurrencyStamp = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: true)
@@ -406,6 +409,23 @@ namespace Generic.Abp.Demo.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AbpTenants", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "AbpUserDelegations",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    TenantId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    SourceUserId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    TargetUserId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    StartTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    EndTime = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AbpUserDelegations", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -441,6 +461,9 @@ namespace Generic.Abp.Demo.Migrations
                     LockoutEnd = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true),
                     LockoutEnabled = table.Column<bool>(type: "tinyint(1)", nullable: false, defaultValue: false),
                     AccessFailedCount = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
+                    ShouldChangePasswordOnNextLogin = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    EntityVersion = table.Column<int>(type: "int", nullable: false),
+                    LastPasswordChangeTime = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true),
                     ExtraProperties = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ConcurrencyStamp = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: true)
@@ -456,6 +479,40 @@ namespace Generic.Abp.Demo.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AbpUsers", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "MenuManagementMenus",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Code = table.Column<string>(type: "varchar(127)", maxLength: 127, nullable: false, collation: "ascii_general_ci"),
+                    ParentId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    DisplayName = table.Column<string>(type: "varchar(128)", maxLength: 128, nullable: false, collation: "gbk_chinese_ci"),
+                    Icon = table.Column<string>(type: "varchar(128)", maxLength: 128, nullable: true, collation: "gbk_chinese_ci"),
+                    IsSelectable = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    IsDisabled = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    Order = table.Column<int>(type: "int", nullable: false),
+                    Router = table.Column<string>(type: "varchar(128)", maxLength: 128, nullable: true, collation: "gbk_chinese_ci"),
+                    GroupName = table.Column<string>(type: "varchar(128)", maxLength: 128, nullable: true, collation: "gbk_chinese_ci"),
+                    ConcurrencyStamp = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    CreatorId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    ExtraProperties = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    LastModifierId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MenuManagementMenus", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_MenuManagementMenus_MenuManagementMenus_ParentId",
+                        column: x => x.ParentId,
+                        principalTable: "MenuManagementMenus",
+                        principalColumn: "Id");
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -1113,6 +1170,31 @@ namespace Generic.Abp.Demo.Migrations
                 column: "UserName");
 
             migrationBuilder.CreateIndex(
+                name: "IX_MenuManagementMenus_Code",
+                table: "MenuManagementMenus",
+                column: "Code");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MenuManagementMenus_DisplayName",
+                table: "MenuManagementMenus",
+                column: "DisplayName");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MenuManagementMenus_GroupName",
+                table: "MenuManagementMenus",
+                column: "GroupName");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MenuManagementMenus_Order",
+                table: "MenuManagementMenus",
+                column: "Order");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MenuManagementMenus_ParentId",
+                table: "MenuManagementMenus",
+                column: "ParentId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_OpenIddictApplications_ClientId",
                 table: "OpenIddictApplications",
                 column: "ClientId");
@@ -1198,6 +1280,9 @@ namespace Generic.Abp.Demo.Migrations
                 name: "AbpUserClaims");
 
             migrationBuilder.DropTable(
+                name: "AbpUserDelegations");
+
+            migrationBuilder.DropTable(
                 name: "AbpUserLogins");
 
             migrationBuilder.DropTable(
@@ -1208,6 +1293,9 @@ namespace Generic.Abp.Demo.Migrations
 
             migrationBuilder.DropTable(
                 name: "AbpUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "MenuManagementMenus");
 
             migrationBuilder.DropTable(
                 name: "OpenIddictScopes");
