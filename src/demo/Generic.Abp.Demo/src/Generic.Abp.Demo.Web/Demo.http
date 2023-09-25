@@ -2,7 +2,9 @@
 @port = 44350
 @host = {{hostname}}:{{port}}
 @contentType = application/x-www-form-urlencoded
+# @contentType = application/json
 
+@token = eyJhbGciOiJSUzI1NiIsImtpZCI6IkYwNDdDOUI1Q0IzQTE1RUQ2MkVENzY0REM1NkVBRDRBNkI5OUU4NzAiLCJ4NXQiOiI4RWZKdGNzNkZlMWk3WFpOeFc2dFNtdVo2SEEiLCJ0eXAiOiJhdCtqd3QifQ.eyJzdWIiOiIzYTBkZDg5YS1iMTdjLTJmZmYtZTE0Mi1kNTg3NTc5ZWZjNTQiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AYWJwLmlvIiwicm9sZSI6ImFkbWluIiwiZ2l2ZW5fbmFtZSI6ImFkbWluIiwicGhvbmVfbnVtYmVyIjoiMTExMTExMTExMTEiLCJwaG9uZV9udW1iZXJfdmVyaWZpZWQiOiJGYWxzZSIsImVtYWlsX3ZlcmlmaWVkIjoiRmFsc2UiLCJ1bmlxdWVfbmFtZSI6ImFkbWluIiwib2lfcHJzdCI6IkRlbW9fQXBwIiwiY2xpZW50X2lkIjoiRGVtb19BcHAiLCJvaV90a25faWQiOiIzYTBkZGQ5My1lNjBmLTYyMDUtODU4Ny01Y2MxMjExMjk0NDAiLCJqdGkiOiI0YzgyNmQzMy0wNjllLTRkN2YtYjNhYi01ODZmYjk1MDZmOGMiLCJleHAiOjE2OTU2MzMyNDMsImlzcyI6Imh0dHBzOi8vbG9jYWxob3N0OjQ0MzUwLyIsImlhdCI6MTY5NTYyOTY0M30.VaHko_b_GEStd2_lrH5enH0o1ry5813uCbtZYAn4Aj0osvbIK6gcFJ0CczW9nlXZkUKkPoXskKC3YRrbOdTcfxAKT7RdpK2u2WLLFUvUg071QmqO-ZPYTzSuVatxtJLD8xYEv_LOIhLUxi3m9g1G7S5l7-yFYYB38HlmbaWRNHMP7lPUh5Ad15yIMNsFGZfZHDMJI7wKXb7XXHvki4G_i-uGPl6n_yJ0N9e_Jbj-YcBAPgK8tTnsTc8CE29i-X2GNrfHibM6ile8yzunmOD2fn-UMvlK3CgTwi_djt6biJApj-HFz_kkNmtvCNbuuJ9MWMF5JLPcVpHiXCe23-q9cA
 ###
 # @prompt username
 # @prompt password Your one-time password in your mailbox
@@ -18,3 +20,4 @@ username={{username}}
 #     "password": "{{password}}",
 #     "grant_type" : "password"
 # }
+

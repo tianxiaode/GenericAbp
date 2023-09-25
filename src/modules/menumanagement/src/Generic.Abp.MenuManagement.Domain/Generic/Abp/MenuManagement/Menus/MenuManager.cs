@@ -12,9 +12,11 @@ namespace Generic.Abp.MenuManagement.Menus;
 public class MenuManager : TreeManager<Menu, IMenuRepository>
 {
     public MenuManager(IMenuRepository repository, [NotNull] [ItemNotNull] ITreeCodeGenerator<Menu> treeCodeGenerator,
-        [NotNull] ICancellationTokenProvider cancellationTokenProvider) : base(repository, treeCodeGenerator,
+        [NotNull] ICancellationTokenProvider cancellationTokenProvider,
+        IStringLocalizer<MenuManagementResource> localizer) : base(repository, treeCodeGenerator,
         cancellationTokenProvider)
     {
+        Localizer = localizer;
     }
 
     protected IStringLocalizer<MenuManagementResource> Localizer { get; }

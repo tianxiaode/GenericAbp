@@ -28,6 +28,5 @@ namespace Generic.Abp.Demo.EntityFrameworkCore
 
             return builder.Build();
         }
-
     }
 }

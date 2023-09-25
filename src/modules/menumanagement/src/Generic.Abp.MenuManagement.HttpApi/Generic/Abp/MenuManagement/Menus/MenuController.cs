@@ -5,9 +5,11 @@ using Generic.Abp.MenuManagement.Menus.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.AspNetCore.Mvc.AntiForgery;
 
 namespace Generic.Abp.MenuManagement.Menus;
 
+[IgnoreAntiforgeryToken]
 [RemoteService(Name = MenuManagementRemoteServiceConsts.RemoteServiceName)]
 [Area("menus")]
 [Route("api/menus")]

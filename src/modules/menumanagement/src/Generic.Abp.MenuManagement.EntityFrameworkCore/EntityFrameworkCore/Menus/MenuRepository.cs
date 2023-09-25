@@ -46,7 +46,7 @@ public class MenuRepository : EfCoreRepository<IMenuManagementDbContext, Menu, G
     public async Task<List<Menu>> GetListByGroupAsync(string group, CancellationToken cancellation = default)
     {
         var dbSet = await GetDbSetAsync();
-        return await dbSet.Where(m => EF.Functions.Like(m.GroupName, $"${group}")).ToListAsync(cancellation);
+        return await dbSet.Where(m => EF.Functions.Like(m.GroupName, $"{group}")).ToListAsync(cancellation);
     }
 
     [UnitOfWork]

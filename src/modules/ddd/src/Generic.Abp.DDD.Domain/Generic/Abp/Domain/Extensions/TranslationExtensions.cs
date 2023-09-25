@@ -5,9 +5,10 @@ namespace Generic.Abp.Domain.Extensions;
 
 public static class TranslationExtensions
 {
-    private const string TranslationsPropertyName = "Translations";
+    private const string TranslationsPropertyName = "translations";
 
-    public static void SetTranslations<TEntity,TTranslation>(this TEntity entity, IEnumerable<TTranslation> translations) where  TEntity: IHasExtraProperties
+    public static void SetTranslations<TEntity, TTranslation>(this TEntity entity,
+        IEnumerable<TTranslation> translations) where TEntity : IHasExtraProperties
     {
         entity.SetProperty(TranslationsPropertyName, System.Text.Json.JsonSerializer.Serialize(translations));
     }

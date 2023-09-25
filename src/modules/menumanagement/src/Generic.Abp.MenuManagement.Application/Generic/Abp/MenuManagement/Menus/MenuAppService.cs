@@ -166,9 +166,8 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
     public virtual async Task<ListResultDto<string>> GetPermissionsListAsync(Guid id)
     {
         var entity = await Repository.GetAsync(id);
-        var translations = entity.GetProperty<string>(MenuConsts.Permissions)
-            .Split(",", StringSplitOptions.RemoveEmptyEntries);
-        return new ListResultDto<string>(translations);
+        var permissions = entity.GetPermissions();
+        return new ListResultDto<string>(permissions);
     }
 
     [Authorize(MenuManagementPermissions.Menus.Update)]
@@ -180,7 +179,7 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
         list = list.Intersect(policyNames).ToList();
 
         var entity = await Repository.GetAsync(id);
-        entity.SetProperty(MenuConsts.Permissions, input);
+        entity.SetPermissions(list);
         await Repository.UpdateAsync(entity);
         await CurrentUnitOfWork.SaveChangesAsync();
     }
