@@ -116,6 +116,7 @@ public class GenericAbpApplicationConfigurationAppService : ApplicationService,
             localizationConfig.Values[resource.ResourceName] = dictionary;
         }
 
+        if (!CurrentUser.IsAuthenticated) return localizationConfig;
 
         var permissionResource = new Dictionary<string, string>();
 
