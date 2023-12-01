@@ -14,5 +14,5 @@ public interface IMetroTagHelperResourceService : ITransientDependency
         TagHelperContext context,
         TagHelperOutput output,
         List<BundleTagHelperItem> bundleItems,
-        string? bundleName = null);
+        string bundleName = null);
 }

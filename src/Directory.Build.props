@@ -1,9 +1,9 @@
 ﻿<Project>
   <PropertyGroup>
 
-    <AbpVersion>7.3.2</AbpVersion>
-    <JetBrainsAnnotationsVersion>2021.3.3</JetBrainsAnnotationsVersion>
-		<FileProvidersEmbeddedVersion>7.0.0</FileProvidersEmbeddedVersion>
+    <AbpVersion>7.4.2</AbpVersion>
+    <JetBrainsAnnotationsVersion>2023.3.0</JetBrainsAnnotationsVersion>
+		<FileProvidersEmbeddedVersion>7.0.10</FileProvidersEmbeddedVersion>
     <EntityFrameworkCoreToolsVersion>7.0.2</EntityFrameworkCoreToolsVersion>
 		<SkiaSharpVersion>2.80.3</SkiaSharpVersion>
 		

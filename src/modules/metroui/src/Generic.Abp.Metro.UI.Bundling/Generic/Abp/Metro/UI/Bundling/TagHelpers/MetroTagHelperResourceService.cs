@@ -38,7 +38,7 @@ public abstract class MetroTagHelperResourceService : ITransientDependency
         TagHelperContext context,
         TagHelperOutput output,
         List<BundleTagHelperItem> bundleItems,
-        string? bundleName = null)
+        string bundleName = null)
     {
         Check.NotNull(viewContext, nameof(viewContext));
         Check.NotNull(context, nameof(context));

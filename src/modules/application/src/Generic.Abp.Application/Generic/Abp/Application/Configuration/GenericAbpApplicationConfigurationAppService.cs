@@ -185,7 +185,7 @@ public class GenericAbpApplicationConfigurationAppService : ApplicationService,
             Values = new Dictionary<string, string>()
         };
 
-        foreach (var settingDefinition in _settingDefinitionManager.GetAll())
+        foreach (var settingDefinition in await _settingDefinitionManager.GetAllAsync())
         {
             if (!settingDefinition.IsVisibleToClients)
             {

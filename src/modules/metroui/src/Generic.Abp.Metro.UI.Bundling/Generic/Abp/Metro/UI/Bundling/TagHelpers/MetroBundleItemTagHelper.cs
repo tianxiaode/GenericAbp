@@ -18,12 +18,12 @@ public abstract class MetroBundleItemTagHelper : MetroTagHelper
 
     protected MetroTagHelperResourceService ResourceService { get; }
 
-    public string? Src { get; set; }
+    public string Src { get; set; }
 
-    public Type? Type { get; set; }
+    public Type Type { get; set; }
 
 
-    public string? GetNameOrNull()
+    public string GetNameOrNull()
     {
         if (Type != null)
         {
