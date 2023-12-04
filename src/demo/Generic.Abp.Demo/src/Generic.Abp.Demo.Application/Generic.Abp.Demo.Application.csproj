@@ -9,7 +9,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\modules\enumeration\src\Generic.Abp.Enumeration.Application\Generic.Abp.Enumeration.Application.csproj" />
-    <ProjectReference Include="..\..\..\..\modules\extresource\src\Generic.Abp.ExtResource.Application\Generic.Abp.ExtResource.Application.csproj" />
     <ProjectReference Include="..\..\..\..\modules\identity\src\Generic.Abp.Identity.Application\Generic.Abp.Identity.Application.csproj" />
     <ProjectReference Include="..\..\..\..\modules\openiddict\src\Generic.Abp.OpenIddict.Application\Generic.Abp.OpenIddict.Application.csproj" />
     <ProjectReference Include="..\..\..\..\modules\phonelogin\src\Generic.Abp.PhoneLogin.Application\Generic.Abp.PhoneLogin.Application.csproj" />

@@ -20,7 +20,8 @@ $solutionPaths = (
     "../src/modules/FileManagement",
     "../src/modules/openiddict",
     "../src/modules/phonelogin",
-    "../src/modules/metroui"
+    "../src/modules/metroui",
+    "../src/modules/menumanagement"
     # "../src/modules/themes",
     # "../src/modules/account"
 )

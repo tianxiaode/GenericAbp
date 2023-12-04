@@ -23,8 +23,8 @@ $packages = (
 
     # modules/extresource
     "Generic.Abp.ExtResource.Application.Contracts",
-    "Generic.Abp.ExtResource.Application",
-    "Generic.Abp.ExtResource.HttpApi",
+    # "Generic.Abp.ExtResource.Application",
+    # "Generic.Abp.ExtResource.HttpApi",
 
     # modules/texttemplate
     #"Generic.Abp.TextTemplate",
@@ -67,9 +67,9 @@ $packages = (
     # modules/openiddict
     "Generic.Abp.OpenIddict.Domain.Shared",
     "Generic.Abp.OpenIddict.Application.Contracts",
-    "Generic.Abp.OpenIddict.Application"
+    "Generic.Abp.OpenIddict.Application",
     "Generic.Abp.OpenIddict.HttpApi",
-    "Generic.Abp.OpenIddict.Web"
+    "Generic.Abp.OpenIddict.Web",
 
     # modules/phonelogin
     "Generic.Abp.PhoneLogin.Domain.Shared",
@@ -92,7 +92,7 @@ $packages = (
     "Generic.Abp.Metro.UI.Identity.Web",
     "Generic.Abp.Metro.UI.OpenIddict.AspNetCore",
     "Generic.Abp.Metro.UI.OpenIddict.Web",
-    "Generic.Abp.Metro.UI.Account.Web.OpenIddict"
+    "Generic.Abp.Metro.UI.Account.Web.OpenIddict",
 
 
     # modules/themes
@@ -106,5 +106,13 @@ $packages = (
     #"Generic.Abp.Account.Identity.Web",
     #"Generic.Abp.Account.Web",
     #"Generic.Abp.Account.IdentityServer.Web"
+    
+    # modules/menumanagement
+    "modules/menumanagement/src/Generic.Abp.MenuManagement.Domain.Shared",
+    "modules/menumanagement/src/Generic.Abp.MenuManagement.Domain",
+    "modules/menumanagement/src/Generic.Abp.MenuManagement.EntityFrameworkCore",
+    "modules/menumanagement/src/Generic.Abp.MenuManagement.Application.Contracts",
+    "modules/menumanagement/src/Generic.Abp.MenuManagement.Application",
+    "modules/menumanagement/src/Generic.Abp.MenuManagement.HttpApi"
         
 )

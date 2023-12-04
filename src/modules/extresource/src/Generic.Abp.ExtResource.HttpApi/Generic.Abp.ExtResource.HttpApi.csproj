@@ -11,8 +11,4 @@
 
 	</ItemGroup>
 
-	<ItemGroup>
-		<ProjectReference Include="..\Generic.Abp.ExtResource.Application\Generic.Abp.ExtResource.Application.csproj" />
-	</ItemGroup>
-
 </Project>

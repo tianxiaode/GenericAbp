@@ -19,7 +19,8 @@ $solutions = (
     "modules/FileManagement",
     "modules/openiddict",
     "modules/phonelogin",
-    "modules/metroui"
+    "modules/metroui",
+    "modules/menumanagement"
     # "modules/themes",
     # "modules/account"
 )
@@ -47,8 +48,8 @@ $projects = (
 
     # modules/extresource
     "modules/extresource/src/Generic.Abp.ExtResource.Application.Contracts",
-    "modules/extresource/src/Generic.Abp.ExtResource.Application",
-    "modules/extresource/src/Generic.Abp.ExtResource.HttpApi",
+    # "modules/extresource/src/Generic.Abp.ExtResource.Application",
+    # "modules/extresource/src/Generic.Abp.ExtResource.HttpApi",
 
     # modules/texttemplate
     # "modules/texttemplate/src/Generic.Abp.TextTemplate",
@@ -116,7 +117,7 @@ $projects = (
     "modules/metroui/src/Generic.Abp.Metro.UI.Identity.Web",
     "modules/metroui/src/Generic.Abp.Metro.UI.OpenIddict.AspNetCore",
     "modules/metroui/src/Generic.Abp.Metro.UI.OpenIddict.Web",
-    "modules/metroui/src/Generic.Abp.Metro.UI.Account.Web.OpenIddict"
+    "modules/metroui/src/Generic.Abp.Metro.UI.Account.Web.OpenIddict",
 
     # modules/themes
     # "modules/themes/src/Generic.Abp.Themes.Shared",
@@ -129,5 +130,13 @@ $projects = (
     # "modules/account/src/Generic.Abp.Account.Identity.Web",
     # "modules/account/src/Generic.Abp.Account.Web",
     # "modules/account/src/Generic.Abp.Account.IdentityServer.Web"
-        
+ 
+    # modules/menumanagement
+    "modules/menumanagement/src/Generic.Abp.MenuManagement.Domain.Shared",
+    "modules/menumanagement/src/Generic.Abp.MenuManagement.Domain",
+    "modules/menumanagement/src/Generic.Abp.MenuManagement.EntityFrameworkCore",
+    "modules/menumanagement/src/Generic.Abp.MenuManagement.Application.Contracts",
+    "modules/menumanagement/src/Generic.Abp.MenuManagement.Application",
+    "modules/menumanagement/src/Generic.Abp.MenuManagement.HttpApi"
+
 )
