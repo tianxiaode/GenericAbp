@@ -152,13 +152,13 @@ public class GenericAbpApplicationConfigurationAppService : ApplicationService,
     {
         return new ClockDto
         {
-            Kind = Enum.GetName(typeof(DateTimeKind), _abpClockOptions.Kind)
+            Kind = Enum.GetName(typeof(DateTimeKind), _abpClockOptions.Kind) ?? string.Empty
         };
     }
 
     protected virtual async Task<TimingDto> GetTimingConfigAsync()
     {
-        var windowsTimeZoneId = await _settingProvider.GetOrNullAsync(TimingSettingNames.TimeZone);
+        var windowsTimeZoneId = await _settingProvider.GetOrNullAsync(TimingSettingNames.TimeZone) ?? string.Empty;
 
         return new TimingDto
         {
@@ -182,7 +182,7 @@ public class GenericAbpApplicationConfigurationAppService : ApplicationService,
     {
         var result = new ApplicationSettingConfigurationDto
         {
-            Values = new Dictionary<string, string>()
+            Values = new Dictionary<string, string>()!
         };
 
         foreach (var settingDefinition in await _settingDefinitionManager.GetAllAsync())

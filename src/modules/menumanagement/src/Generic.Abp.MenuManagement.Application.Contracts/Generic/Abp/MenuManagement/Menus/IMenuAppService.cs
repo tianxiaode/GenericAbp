@@ -9,6 +9,7 @@ namespace Generic.Abp.MenuManagement.Menus;
 
 public interface IMenuAppService : IApplicationService
 {
+    Task<MenuDto> GetRootAsync();
     Task<ListResultDto<MenuDto>> GetListAsync(MenuGetListInput input);
     Task<MenuDto> GetAsync(Guid id);
     Task<MenuDto> CreateAsync(MenuCreateDto input);

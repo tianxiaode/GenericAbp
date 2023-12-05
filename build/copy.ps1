@@ -21,13 +21,13 @@ foreach($project in $projects) {
 		} 
 	if(!(Test-Path $dllFolder))
 		{
-			$framework = "net6.0"
+			$framework = "net7.0"
 			$dllFolder = Join-Path $projectFolder $framework
 		} 
 	$projectName = $project.Substring($project.LastIndexOf("/") + 1)
 	$dllFile = Join-Path $dllFolder ($projectName + ".dll")
 	$pdbFile = Join-Path $dllFolder ($projectName + ".pdb")
-	$destination = Join-Path $destiontionRoot ($projectName + "/0.0.6/lib/" + $framework)
+	$destination = Join-Path $destiontionRoot ($projectName + "/1.0.6/lib/" + $framework)
 	Write-Host("Copy file:" + $dllFile)
 	Copy-Item -Path $dllFile  -Destination $destination 
 	Copy-Item -Path $pdbFile  -Destination $destination 

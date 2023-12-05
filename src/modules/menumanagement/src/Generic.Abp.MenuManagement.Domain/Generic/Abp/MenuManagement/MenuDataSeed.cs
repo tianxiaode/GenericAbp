@@ -28,8 +28,17 @@ public class MenuDataSeed : ITransientDependency, IMenuDataSeed
     [UnitOfWork(true)]
     public async Task SeedAsync()
     {
+        var root = new Menu(GuidGenerator.Create())
+        {
+            DisplayName = "root",
+            Order = 1,
+        };
+
+        await MenuManager.CreateAsync(root);
+
         var dashboard = new Menu(GuidGenerator.Create())
         {
+            ParentId = root.Id,
             DisplayName = "综合看板",
             Order = 1,
             Icon = "fa-home",

@@ -24,7 +24,6 @@ namespace Generic.Abp.Demo
         typeof(AbpFeatureManagementApplicationModule),
         typeof(AbpSettingManagementApplicationModule),
         typeof(GenericAbpEnumerationApplicationModule),
-        typeof(GenericAbpExtResourceApplicationModule),
         typeof(GenericAbpIdentityApplicationModule),
         typeof(GenericAbpOpenIddictApplicationModule),
         typeof(GenericAbpPhoneLoginApplicationModule),

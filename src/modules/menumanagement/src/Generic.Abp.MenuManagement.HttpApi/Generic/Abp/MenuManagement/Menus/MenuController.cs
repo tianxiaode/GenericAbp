@@ -29,6 +29,13 @@ public class MenuController : MenuManagementController, IMenuAppService
     }
 
     [HttpGet]
+    [Route("root")]
+    public async Task<MenuDto> GetRootAsync()
+    {
+        return await AppService.GetRootAsync();
+    }
+
+    [HttpGet]
     [Route("{id:guid}")]
     public async Task<MenuDto> GetAsync(Guid id)
     {

@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Authorization;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Uow;
 
@@ -30,6 +31,14 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
     protected IMenuRepository Repository { get; }
     protected MenuManager MenuManager { get; }
     private IAbpAuthorizationPolicyProvider AbpAuthorizationPolicyProvider { get; }
+
+    [UnitOfWork]
+    [Authorize(MenuManagementPermissions.Menus.Default)]
+    public virtual async Task<MenuDto> GetRootAsync()
+    {
+        var root = await Repository.FirstOrDefaultAsync(m => !m.ParentId.HasValue);
+        return ObjectMapper.Map<Menu, MenuDto>(root);
+    }
 
 
     [UnitOfWork]
