@@ -8,6 +8,13 @@
     "Permission:Create": "Create",
     "Permission:Edit": "Edit",
     "Permission:Delete": "Delete",
-    "Permission:ChangePermissions": "Change permissions"
+    "Permission:ChangePermissions": "Change permissions",
+    "Menu:DisplayName": "Display name",
+    "Menu:Icon": "Icon",
+    "Menu:IsSelectable": "Selectable",
+    "Menu:IsDisabled": "Disabled",
+    "Menu:Order": "Order",
+    "Menu:Router": "Router",
+    "Menu:GroupName": "Group Name"
   }
 }

@@ -8,6 +8,13 @@
     "Permission:Create": "创建",
     "Permission:Edit": "编辑",
     "Permission:Delete": "删除",
-    "Permission:ChangePermissions": "更改权限"
+    "Permission:ChangePermissions": "更改权限",
+    "Menu:DisplayName": "名称",
+    "Menu:Icon": "图标",
+    "Menu:IsSelectable": "可选择",
+    "Menu:IsDisabled": "禁用",
+    "Menu:Order": "顺序",
+    "Menu:Router": "路由",
+    "Menu:GroupName":  "分组"
   }
 }

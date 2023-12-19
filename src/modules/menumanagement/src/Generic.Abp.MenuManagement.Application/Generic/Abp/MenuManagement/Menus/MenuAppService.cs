@@ -12,7 +12,6 @@ using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Authorization;
-using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Uow;
 
@@ -137,7 +136,7 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
         var translations = list.Select(m => new MenuTranslation(m.Language, m.DisplayName));
         entity.SetTranslations<Menu, MenuTranslation>(translations);
         await Repository.UpdateAsync(entity);
-        await CurrentUnitOfWork.SaveChangesAsync();
+        //await CurrentUnitOfWork.SaveChangesAsync();
     }
 
     [UnitOfWork]
@@ -189,7 +188,7 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
         var entity = await Repository.GetAsync(id);
         entity.SetPermissions(list);
         await Repository.UpdateAsync(entity);
-        await CurrentUnitOfWork.SaveChangesAsync();
+        //await CurrentUnitOfWork.SaveChangesAsync();
     }
 
     #endregion
@@ -238,15 +237,15 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
 
         if (input.ParentId.HasValue)
         {
-            var parent = await Repository.FirstOrDefaultAsync(m => m.Id == input.ParentId.Value);
-            if (parent == null) throw new UnknownParentBusinessException();
+            var parent = await Repository.FirstOrDefaultAsync(m => m.Id == input.ParentId.Value) ??
+                         throw new UnknownParentBusinessException();
             entity.ParentId = parent.Id;
         }
 
-        entity.GroupName = input.GroupName;
-        entity.Icon = input.Icon;
-        entity.Router = input.Router;
-        entity.Order = input.Order;
+        entity.SetGroupName(input.GroupName);
+        entity.SetIcon(input.Icon);
+        entity.SetOrder(input.Order);
+        entity.SetRouter(input.Router);
     }
 
 
