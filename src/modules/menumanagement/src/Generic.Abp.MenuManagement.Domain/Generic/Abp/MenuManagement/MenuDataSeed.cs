@@ -91,7 +91,7 @@ public class MenuDataSeed : ITransientDependency, IMenuDataSeed
             GroupName = desktopGroupName
         };
 
-        await MenuManager.CreateAsync(users);
+        await MenuManager.CreateAsync(roles);
 
         var menus = new Menu(GuidGenerator.Create())
         {
