@@ -11,7 +11,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Volo.Abp.Validation" Version="$(AbpVersion)" />
-		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="$(FileProvidersEmbeddedVersion)" />
+		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" />
 	</ItemGroup>
 
 </Project>

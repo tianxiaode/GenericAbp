@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-	  <PackageReference Include="SkiaSharp" Version="$(SkiaSharpVersion)" />
+	  <PackageReference Include="SkiaSharp"/>
 	  <PackageReference Include="Volo.Abp.SettingManagement.Domain.Shared" Version="$(AbpVersion)" />
 	  <ProjectReference Include="..\..\..\businessexception\src\Generic.Abp.BusinessException\Generic.Abp.BusinessException.csproj" />
 	  <ProjectReference Include="..\..\..\helper\src\Generic.Abp.Helper.File\Generic.Abp.Helper.File.csproj" />

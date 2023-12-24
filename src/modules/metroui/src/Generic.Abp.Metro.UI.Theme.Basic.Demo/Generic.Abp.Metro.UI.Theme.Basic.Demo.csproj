@@ -3,7 +3,7 @@
       <Import Project="..\..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
     <IsPackable>true</IsPackable>
     <OutputType>Library</OutputType>
@@ -31,7 +31,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Generic.Abp.Metro.UI.Theme.Basic\Generic.Abp.Metro.UI.Theme.Basic.csproj" />
-    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="$(FileProvidersEmbeddedVersion)" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" />
   </ItemGroup>
 
   <ItemGroup>
