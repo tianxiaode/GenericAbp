@@ -81,8 +81,14 @@ namespace Generic.Abp.OpenIddict.Applications
                 throw new DuplicateWarningBusinessException(nameof(OpenIddictScope.Name), input.ClientId);
             }
 
-            if (!OpenIddictConstants.ClientTypes.Confidential.Equals(input.Type) &&
-                !OpenIddictConstants.ClientTypes.Public.Equals(input.Type))
+            if (!OpenIddictConstants.ApplicationTypes.Native.Equals(input.ApplicationType) &&
+                !OpenIddictConstants.ApplicationTypes.Web.Equals(input.ApplicationType))
+            {
+                throw new ClientTypeErrorBusinessException();
+            }
+
+            if (!OpenIddictConstants.ClientTypes.Confidential.Equals(input.ClientType) &&
+                !OpenIddictConstants.ClientTypes.Public.Equals(input.ClientType))
             {
                 throw new ClientTypeErrorBusinessException();
             }
@@ -101,7 +107,8 @@ namespace Generic.Abp.OpenIddict.Applications
             entity.ConsentType = input.ConsentType;
             entity.ClientUri = input.ClientUri;
             entity.LogoUri = input.LogoUri;
-            entity.ClientType = input.Type;
+            entity.ClientType = input.ClientType;
+            entity.ApplicationType = input.ApplicationType;
         }
 
         [UnitOfWork]

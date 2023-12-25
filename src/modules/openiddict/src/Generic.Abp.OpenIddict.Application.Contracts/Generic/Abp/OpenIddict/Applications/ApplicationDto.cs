@@ -25,7 +25,8 @@ namespace Generic.Abp.OpenIddict.Applications
 
         //public List<string> Requirements { get; set; }
 
-        public string Type { get; set; }
+        public string ApplicationType { get; set; }
+        public string ClientType { get; set; }
 
         public string ClientUri { get; set; }
 

@@ -12,7 +12,8 @@ namespace Generic.Abp.PhoneLogin
 {
     public class PhoneLoginUserValidator : IUserValidator<IdentityUser>
     {
-        public PhoneLoginUserValidator(PhoneLoginUserManager phoneLoginUserManager, IStringLocalizer<PhoneLoginResource> localizer)
+        public PhoneLoginUserValidator(PhoneLoginUserManager phoneLoginUserManager,
+            IStringLocalizer<PhoneLoginResource> localizer)
         {
             PhoneLoginUserManager = phoneLoginUserManager;
             Localizer = localizer;
@@ -20,6 +21,7 @@ namespace Generic.Abp.PhoneLogin
 
         protected PhoneLoginUserManager PhoneLoginUserManager { get; }
         protected IStringLocalizer<PhoneLoginResource> Localizer { get; }
+
         private async Task<List<IdentityError>?> ValidatePhone(IdentityUser user)
         {
             var phone = await PhoneLoginUserManager.GetPhoneNumberAsync(user).ConfigureAwait(false);
@@ -30,7 +32,8 @@ namespace Generic.Abp.PhoneLogin
 
             var owner = await PhoneLoginUserManager.FindByPhoneAsync(phone).ConfigureAwait(false);
             if (owner != null &&
-                !string.Equals(await PhoneLoginUserManager.GetUserIdAsync(owner).ConfigureAwait(false), await PhoneLoginUserManager.GetUserIdAsync(user).ConfigureAwait(false)))
+                !string.Equals(await PhoneLoginUserManager.GetUserIdAsync(owner).ConfigureAwait(false),
+                    await PhoneLoginUserManager.GetUserIdAsync(user).ConfigureAwait(false)))
             {
                 throw new DuplicatePhoneNumberBusinessException(phone);
             }
@@ -44,6 +47,7 @@ namespace Generic.Abp.PhoneLogin
             {
                 throw new ArgumentNullException(nameof(user));
             }
+
             var errors = await ValidatePhone(user).ConfigureAwait(false);
             return errors?.Count > 0 ? IdentityResult.Failed(errors.ToArray()) : IdentityResult.Success;
         }

@@ -12,10 +12,11 @@
     <abp-modal>
         <abp-modal-header title="@_l["NewScope"].Value"></abp-modal-header>
         <abp-modal-body>
+            <abp-select asp-for="Application.ApplicationType" label="@_l["Application:ApplicationType"].Value" asp-items="@Model.ApplicationTypes" />
             <abp-input asp-for="Application.ClientId" label="@_l["Application:ClientId"].Value" />
             <abp-input asp-for="Application.DisplayName" label="@_l["Application:DisplayName"].Value" />
             <abp-input asp-for="Application.ClientSecret" label="@_l["Application:ClientSecret"].Value" />
-            <abp-select asp-for="Application.Type" label="@_l["Application:AccentColor"].Value" asp-items="@Model.ApplicationTypes" />
+            <abp-select asp-for="Application.ClientType" label="@_l["Application:AccentColor"].Value" asp-items="@Model.ClientTypes" />
             <abp-select asp-for="Application.ConsentType" label="@_l["Application:AccentColor"].Value" asp-items="@Model.ApplicationConsentType" />
             <abp-input asp-for="Application.ClientUri" label="@_l["Application:ClientUri"].Value" />
             <abp-input asp-for="Application.LogoUri" label="@_l["Application:LogoUri"].Value" />

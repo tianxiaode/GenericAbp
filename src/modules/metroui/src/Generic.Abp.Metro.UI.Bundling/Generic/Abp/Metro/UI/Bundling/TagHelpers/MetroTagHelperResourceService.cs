@@ -72,7 +72,8 @@ public abstract class MetroTagHelperResourceService : ITransientDependency
 
             if (file.Length > 0)
             {
-                AddHtmlTag(viewContext, tagHelper, context, output, bundleFile + "?_v=" + file.LastModified.UtcTicks);
+                AddHtmlTag(viewContext, tagHelper, context, output,
+                    bundleFile.FileName + "?_v=" + file.LastModified.UtcTicks);
             }
         }
 

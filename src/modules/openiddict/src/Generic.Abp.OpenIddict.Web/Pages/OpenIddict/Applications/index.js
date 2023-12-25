@@ -73,7 +73,8 @@
         columns: [
             { field: 'clientId', text: "Application:ClientId", size: '50%', isMessage: true },
             { field: 'displayName', text: "Application:DisplayName", size: '50%', isMessage: true },
-            { field: 'type', text: "Application:Type", size: '100px', isMessage: true },
+            { field: 'applicationType', text: "Application:ApplicationType", size: '100px'},
+            { field: 'clientType', text: "Application:ClientType", size: '100px', isMessage: true },
             { field: 'consentType', text: "Application:ConsentType", size: '100px' },
             {
                 size: '80px',

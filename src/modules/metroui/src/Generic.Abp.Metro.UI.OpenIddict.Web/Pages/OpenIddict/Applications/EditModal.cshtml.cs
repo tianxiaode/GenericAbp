@@ -3,6 +3,7 @@ using Generic.Abp.OpenIddict.Applications;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using OpenIddict.Abstractions;
+using static OpenIddict.Abstractions.OpenIddictConstants;
 
 namespace Generic.Abp.OpenIddict.Web.Pages.OpenIddict.Applications
 {
@@ -12,6 +13,7 @@ namespace Generic.Abp.OpenIddict.Web.Pages.OpenIddict.Applications
         {
             ApplicationTypes = new List<SelectListItem>();
             ApplicationConsentType = new List<SelectListItem>();
+            ClientTypes = new List<SelectListItem>();
             ApplicationAppService = applicationAppService;
             Application = new ApplicationVieModel();
         }
@@ -19,6 +21,7 @@ namespace Generic.Abp.OpenIddict.Web.Pages.OpenIddict.Applications
         [BindProperty] public ApplicationVieModel Application { get; set; }
 
         [BindProperty] public List<SelectListItem> ApplicationTypes { get; set; }
+        [BindProperty] public List<SelectListItem> ClientTypes { get; set; }
 
         [BindProperty] public List<SelectListItem> ApplicationConsentType { get; set; }
 
@@ -27,6 +30,12 @@ namespace Generic.Abp.OpenIddict.Web.Pages.OpenIddict.Applications
         public async Task<IActionResult> OnGetAsync(Guid id)
         {
             ApplicationTypes = new List<SelectListItem>()
+            {
+                new(OpenIddictConstants.ApplicationTypes.Web, OpenIddictConstants.ApplicationTypes.Web),
+                new(OpenIddictConstants.ApplicationTypes.Native, OpenIddictConstants.ApplicationTypes.Native),
+            };
+
+            ClientTypes = new List<SelectListItem>()
             {
                 new SelectListItem(OpenIddictConstants.ClientTypes.Public, OpenIddictConstants.ClientTypes.Public),
                 new SelectListItem(OpenIddictConstants.ClientTypes.Confidential,
@@ -50,7 +59,8 @@ namespace Generic.Abp.OpenIddict.Web.Pages.OpenIddict.Applications
                 Id = id,
                 ClientId = entity.ClientId,
                 DisplayName = entity.DisplayName,
-                Type = entity.Type,
+                ApplicationType = entity.ApplicationType,
+                ClientType = entity.ClientType,
                 ConsentType = entity.ConsentType,
                 ConcurrencyStamp = entity.ConcurrencyStamp,
                 ClientSecret = entity.ClientSecret,

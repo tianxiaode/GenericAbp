@@ -21,7 +21,7 @@ namespace Generic.Abp.PhoneLogin
     {
         public PhoneLoginUserManager(IdentityUserStore store, IIdentityRoleRepository roleRepository,
             IIdentityUserRepository userRepository, IOptions<IdentityOptions> optionsAccessor,
-            IPasswordHasher<IdentityUser> passwordHasher, IEnumerable<IUserValidator<IdentityUser>> userValidators,
+            IPasswordHasher<IdentityUser> passwordHasher, IEnumerable<PhoneLoginUserValidator> userValidators,
             IEnumerable<IPasswordValidator<IdentityUser>> passwordValidators, ILookupNormalizer keyNormalizer,
             IdentityErrorDescriber errors, IServiceProvider services, ILogger<IdentityUserManager> logger,
             ICancellationTokenProvider cancellationTokenProvider,

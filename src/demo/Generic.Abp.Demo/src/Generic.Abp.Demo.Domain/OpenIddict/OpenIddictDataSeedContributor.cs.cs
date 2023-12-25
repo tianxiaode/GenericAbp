@@ -57,9 +57,9 @@ namespace Generic.Abp.Demo.OpenIddict
                     Name = "Demo",
                     DisplayName = "Demo API",
                     Resources =
-                {
-                    "Demo"
-                }
+                    {
+                        "Demo"
+                    }
                 });
             }
         }
@@ -67,14 +67,14 @@ namespace Generic.Abp.Demo.OpenIddict
         private async Task CreateApplicationsAsync()
         {
             var commonScopes = new List<string>
-        {
-            OpenIddictConstants.Permissions.Scopes.Address,
-            OpenIddictConstants.Permissions.Scopes.Email,
-            OpenIddictConstants.Permissions.Scopes.Phone,
-            OpenIddictConstants.Permissions.Scopes.Profile,
-            OpenIddictConstants.Permissions.Scopes.Roles,
-            "Demo"
-        };
+            {
+                OpenIddictConstants.Permissions.Scopes.Address,
+                OpenIddictConstants.Permissions.Scopes.Email,
+                OpenIddictConstants.Permissions.Scopes.Phone,
+                OpenIddictConstants.Permissions.Scopes.Profile,
+                OpenIddictConstants.Permissions.Scopes.Roles,
+                "Demo"
+            };
 
             var configurationSection = _configuration.GetSection("OpenIddict:Applications");
 
@@ -88,14 +88,14 @@ namespace Generic.Abp.Demo.OpenIddict
                  * solution. Otherwise, you can delete this client. */
                 await CreateApplicationAsync(
                     name: webClientId,
-                    type: OpenIddictConstants.ClientTypes.Confidential,
+                    clientType: OpenIddictConstants.ClientTypes.Confidential,
                     consentType: OpenIddictConstants.ConsentTypes.Implicit,
                     displayName: "Web Application",
                     secret: configurationSection["Demo_Web:ClientSecret"] ?? "1q2w3e*",
                     grantTypes: new List<string> //Hybrid flow
                     {
-                    OpenIddictConstants.GrantTypes.AuthorizationCode,
-                    OpenIddictConstants.GrantTypes.Implicit
+                        OpenIddictConstants.GrantTypes.AuthorizationCode,
+                        OpenIddictConstants.GrantTypes.Implicit
                     },
                     scopes: commonScopes,
                     redirectUri: $"{webClientRootUrl}signin-oidc",
@@ -111,16 +111,16 @@ namespace Generic.Abp.Demo.OpenIddict
                 var consoleAndAngularClientRootUrl = configurationSection["Demo_App:RootUrl"]?.TrimEnd('/');
                 await CreateApplicationAsync(
                     name: consoleAndAngularClientId,
-                    type: OpenIddictConstants.ClientTypes.Public,
+                    clientType: OpenIddictConstants.ClientTypes.Public,
                     consentType: OpenIddictConstants.ConsentTypes.Implicit,
                     displayName: "Console Test / Angular Application",
                     secret: null,
                     grantTypes: new List<string>
                     {
-                    OpenIddictConstants.GrantTypes.AuthorizationCode,
-                    OpenIddictConstants.GrantTypes.Password,
-                    OpenIddictConstants.GrantTypes.ClientCredentials,
-                    OpenIddictConstants.GrantTypes.RefreshToken
+                        OpenIddictConstants.GrantTypes.AuthorizationCode,
+                        OpenIddictConstants.GrantTypes.Password,
+                        OpenIddictConstants.GrantTypes.ClientCredentials,
+                        OpenIddictConstants.GrantTypes.RefreshToken
                     },
                     scopes: commonScopes,
                     redirectUri: consoleAndAngularClientRootUrl,
@@ -138,13 +138,13 @@ namespace Generic.Abp.Demo.OpenIddict
 
                 await CreateApplicationAsync(
                     name: swaggerClientId,
-                    type: OpenIddictConstants.ClientTypes.Public,
+                    clientType: OpenIddictConstants.ClientTypes.Public,
                     consentType: OpenIddictConstants.ConsentTypes.Implicit,
                     displayName: "Swagger Application",
                     secret: null,
                     grantTypes: new List<string>
                     {
-                    OpenIddictConstants.GrantTypes.AuthorizationCode,
+                        OpenIddictConstants.GrantTypes.AuthorizationCode,
                     },
                     scopes: commonScopes,
                     redirectUri: $"{swaggerRootUrl}/swagger/oauth2-redirect.html",
@@ -155,7 +155,7 @@ namespace Generic.Abp.Demo.OpenIddict
 
         private async Task CreateApplicationAsync(
             [NotNull] string name,
-            [NotNull] string type,
+            [NotNull] string clientType,
             [NotNull] string consentType,
             string displayName,
             string secret,
@@ -166,12 +166,14 @@ namespace Generic.Abp.Demo.OpenIddict
             string postLogoutRedirectUri = null,
             List<string> permissions = null)
         {
-            if (!string.IsNullOrEmpty(secret) && string.Equals(type, OpenIddictConstants.ClientTypes.Public, StringComparison.OrdinalIgnoreCase))
+            if (!string.IsNullOrEmpty(secret) && string.Equals(clientType, OpenIddictConstants.ClientTypes.Public,
+                    StringComparison.OrdinalIgnoreCase))
             {
                 throw new Volo.Abp.BusinessException(L["NoClientSecretCanBeSetForPublicApplications"]);
             }
 
-            if (string.IsNullOrEmpty(secret) && string.Equals(type, OpenIddictConstants.ClientTypes.Confidential, StringComparison.OrdinalIgnoreCase))
+            if (string.IsNullOrEmpty(secret) && string.Equals(clientType, OpenIddictConstants.ClientTypes.Confidential,
+                    StringComparison.OrdinalIgnoreCase))
             {
                 throw new Volo.Abp.BusinessException(L["TheClientSecretIsRequiredForConfidentialApplications"]);
             }
@@ -188,7 +190,7 @@ namespace Generic.Abp.Demo.OpenIddict
                 var application = new AbpApplicationDescriptor
                 {
                     ClientId = name,
-                    Type = type,
+                    ClientType = clientType,
                     ClientSecret = secret,
                     ConsentType = consentType,
                     DisplayName = displayName,
@@ -198,11 +200,13 @@ namespace Generic.Abp.Demo.OpenIddict
                 Check.NotNullOrEmpty(grantTypes, nameof(grantTypes));
                 Check.NotNullOrEmpty(scopes, nameof(scopes));
 
-                if (new[] { OpenIddictConstants.GrantTypes.AuthorizationCode, OpenIddictConstants.GrantTypes.Implicit }.All(grantTypes.Contains))
+                if (new[] { OpenIddictConstants.GrantTypes.AuthorizationCode, OpenIddictConstants.GrantTypes.Implicit }
+                    .All(grantTypes.Contains))
                 {
                     application.Permissions.Add(OpenIddictConstants.Permissions.ResponseTypes.CodeIdToken);
 
-                    if (string.Equals(type, OpenIddictConstants.ClientTypes.Public, StringComparison.OrdinalIgnoreCase))
+                    if (string.Equals(clientType, OpenIddictConstants.ClientTypes.Public,
+                            StringComparison.OrdinalIgnoreCase))
                     {
                         application.Permissions.Add(OpenIddictConstants.Permissions.ResponseTypes.CodeIdTokenToken);
                         application.Permissions.Add(OpenIddictConstants.Permissions.ResponseTypes.CodeToken);
@@ -222,7 +226,8 @@ namespace Generic.Abp.Demo.OpenIddict
                         application.Permissions.Add(OpenIddictConstants.Permissions.ResponseTypes.Code);
                     }
 
-                    if (grantType == OpenIddictConstants.GrantTypes.AuthorizationCode || grantType == OpenIddictConstants.GrantTypes.Implicit)
+                    if (grantType == OpenIddictConstants.GrantTypes.AuthorizationCode ||
+                        grantType == OpenIddictConstants.GrantTypes.Implicit)
                     {
                         application.Permissions.Add(OpenIddictConstants.Permissions.Endpoints.Authorization);
                     }
@@ -267,7 +272,8 @@ namespace Generic.Abp.Demo.OpenIddict
                     if (grantType == OpenIddictConstants.GrantTypes.Implicit)
                     {
                         application.Permissions.Add(OpenIddictConstants.Permissions.ResponseTypes.IdToken);
-                        if (string.Equals(type, OpenIddictConstants.ClientTypes.Public, StringComparison.OrdinalIgnoreCase))
+                        if (string.Equals(clientType, OpenIddictConstants.ClientTypes.Public,
+                                StringComparison.OrdinalIgnoreCase))
                         {
                             application.Permissions.Add(OpenIddictConstants.Permissions.ResponseTypes.IdTokenToken);
                             application.Permissions.Add(OpenIddictConstants.Permissions.ResponseTypes.Token);
@@ -277,12 +283,12 @@ namespace Generic.Abp.Demo.OpenIddict
 
                 var buildInScopes = new[]
                 {
-                OpenIddictConstants.Permissions.Scopes.Address,
-                OpenIddictConstants.Permissions.Scopes.Email,
-                OpenIddictConstants.Permissions.Scopes.Phone,
-                OpenIddictConstants.Permissions.Scopes.Profile,
-                OpenIddictConstants.Permissions.Scopes.Roles
-            };
+                    OpenIddictConstants.Permissions.Scopes.Address,
+                    OpenIddictConstants.Permissions.Scopes.Email,
+                    OpenIddictConstants.Permissions.Scopes.Phone,
+                    OpenIddictConstants.Permissions.Scopes.Profile,
+                    OpenIddictConstants.Permissions.Scopes.Roles
+                };
 
                 foreach (var scope in scopes)
                 {
@@ -300,7 +306,8 @@ namespace Generic.Abp.Demo.OpenIddict
                 {
                     if (!redirectUri.IsNullOrEmpty())
                     {
-                        if (!Uri.TryCreate(redirectUri, UriKind.Absolute, out var uri) || !uri.IsWellFormedOriginalString())
+                        if (!Uri.TryCreate(redirectUri, UriKind.Absolute, out var uri) ||
+                            !uri.IsWellFormedOriginalString())
                         {
                             throw new Volo.Abp.BusinessException(L["InvalidRedirectUri", redirectUri]);
                         }
@@ -316,9 +323,11 @@ namespace Generic.Abp.Demo.OpenIddict
                 {
                     if (!postLogoutRedirectUri.IsNullOrEmpty())
                     {
-                        if (!Uri.TryCreate(postLogoutRedirectUri, UriKind.Absolute, out var uri) || !uri.IsWellFormedOriginalString())
+                        if (!Uri.TryCreate(postLogoutRedirectUri, UriKind.Absolute, out var uri) ||
+                            !uri.IsWellFormedOriginalString())
                         {
-                            throw new Volo.Abp.BusinessException(L["InvalidPostLogoutRedirectUri", postLogoutRedirectUri]);
+                            throw new Volo.Abp.BusinessException(L["InvalidPostLogoutRedirectUri",
+                                postLogoutRedirectUri]);
                         }
 
                         if (application.PostLogoutRedirectUris.All(x => x != uri))

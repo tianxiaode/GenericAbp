@@ -9,7 +9,8 @@ namespace Generic.Abp.OpenIddict.Applications
     public class ApplicationCreateOrUpdateInput
     {
         [Required]
-        [DynamicStringLength(typeof(OpenIddictApplicationConsts), nameof(OpenIddictApplicationConsts.ClientIdMaxLength))]
+        [DynamicStringLength(typeof(OpenIddictApplicationConsts),
+            nameof(OpenIddictApplicationConsts.ClientIdMaxLength))]
         [DisplayName("Application:ClientId")]
         public string ClientId { get; set; }
 
@@ -32,14 +33,14 @@ namespace Generic.Abp.OpenIddict.Applications
 
         //public List<string> Requirements { get; set; }
 
-        [DisplayName("Application:Type")]
-        public string Type { get; set; }
+        [DisplayName("Application:ApplicationType")]
+        public string ApplicationType { get; set; }
 
-        [DisplayName("Application:ClientUri")]
-        public string ClientUri { get; set; }
+        [DisplayName("Application:ClientType")]
+        public string ClientType { get; set; }
 
-        [DisplayName("Application:LogoUri")]
-        public string LogoUri { get; set; }
+        [DisplayName("Application:ClientUri")] public string ClientUri { get; set; }
 
+        [DisplayName("Application:LogoUri")] public string LogoUri { get; set; }
     }
 }

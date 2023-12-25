@@ -2,6 +2,7 @@ using Generic.Abp.OpenIddict.Applications;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using OpenIddict.Abstractions;
+using static OpenIddict.Abstractions.OpenIddictConstants;
 
 namespace Generic.Abp.Metro.UI.OpenIddict.Web.Pages.OpenIddict.Applications
 {
@@ -11,6 +12,7 @@ namespace Generic.Abp.Metro.UI.OpenIddict.Web.Pages.OpenIddict.Applications
         {
             ApplicationConsentType = new List<SelectListItem>();
             ApplicationTypes = new List<SelectListItem>();
+            ClientTypes = new List<SelectListItem>();
             ApplicationAppService = applicationAppService;
             Application = new ApplicationVieModel();
         }
@@ -18,6 +20,7 @@ namespace Generic.Abp.Metro.UI.OpenIddict.Web.Pages.OpenIddict.Applications
         [BindProperty] public ApplicationVieModel Application { get; set; }
 
         [BindProperty] public List<SelectListItem> ApplicationTypes { get; set; }
+        [BindProperty] public List<SelectListItem> ClientTypes { get; set; }
 
         [BindProperty] public List<SelectListItem> ApplicationConsentType { get; set; }
 
@@ -26,6 +29,12 @@ namespace Generic.Abp.Metro.UI.OpenIddict.Web.Pages.OpenIddict.Applications
         public async Task<IActionResult> OnGetAsync()
         {
             ApplicationTypes = new List<SelectListItem>()
+            {
+                new(OpenIddictConstants.ApplicationTypes.Web, OpenIddictConstants.ApplicationTypes.Web),
+                new(OpenIddictConstants.ApplicationTypes.Native, OpenIddictConstants.ApplicationTypes.Native),
+            };
+
+            ClientTypes = new List<SelectListItem>()
             {
                 new SelectListItem(OpenIddictConstants.ClientTypes.Public, OpenIddictConstants.ClientTypes.Public),
                 new SelectListItem(OpenIddictConstants.ClientTypes.Confidential,

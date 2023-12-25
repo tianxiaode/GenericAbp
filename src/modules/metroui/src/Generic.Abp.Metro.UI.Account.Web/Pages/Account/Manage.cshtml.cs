@@ -24,7 +24,7 @@ public class ManageModel : AccountPageModel
 
     public virtual async Task<IActionResult> OnGetAsync()
     {
-        ProfileManagementPageCreationContext = new ProfileManagementPageCreationContext(ServiceProvider);
+        ProfileManagementPageCreationContext = new ProfileManagementPageCreationContext(LazyServiceProvider);
 
         foreach (var contributor in Options.Contributors)
         {
