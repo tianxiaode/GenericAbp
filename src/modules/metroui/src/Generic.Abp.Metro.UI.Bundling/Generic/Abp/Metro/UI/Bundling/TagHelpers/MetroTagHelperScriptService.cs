@@ -30,7 +30,7 @@ public class MetroTagHelperScriptService : MetroTagHelperResourceService
         );
     }
 
-    protected override async Task<IReadOnlyList<string>> GetBundleFilesAsync(string bundleName)
+    protected override async Task<IReadOnlyList<BundleFile>> GetBundleFilesAsync(string bundleName)
     {
         return await BundleManager.GetScriptBundleFilesAsync(bundleName ?? string.Empty);
     }

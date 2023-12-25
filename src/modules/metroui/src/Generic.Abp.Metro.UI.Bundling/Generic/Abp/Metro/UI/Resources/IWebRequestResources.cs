@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
+using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 
 namespace Generic.Abp.Metro.UI.Resources;
 
 public interface IWebRequestResources
 {
-    List<string> TryAdd(List<string> resources);
+    List<BundleFile> TryAdd(List<BundleFile> resources);
 }

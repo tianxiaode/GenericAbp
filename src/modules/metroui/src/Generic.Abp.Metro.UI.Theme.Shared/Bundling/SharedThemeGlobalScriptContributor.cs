@@ -12,7 +12,7 @@ public class SharedThemeGlobalScriptContributor : BundleContributor
 {
     public override void ConfigureBundle(BundleConfigurationContext context)
     {
-        context.Files.AddRange(new[]
+        context.Files.AddRange(new BundleFile[]
         {
             "/libs/abp/metro/metro-alert.js",
             "/libs/abp/metro/metro-crud-toolbar.js",

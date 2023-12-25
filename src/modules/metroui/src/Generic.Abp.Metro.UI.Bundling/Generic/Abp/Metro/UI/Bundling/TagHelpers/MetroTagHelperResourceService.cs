@@ -63,7 +63,7 @@ public abstract class MetroTagHelperResourceService : ITransientDependency
         foreach (var bundleFile in bundleFiles)
         {
             Logger.LogError($"bundle file Name:{bundleFile}");
-            var file = HostingEnvironment.WebRootFileProvider.GetFileInfo(bundleFile);
+            var file = HostingEnvironment.WebRootFileProvider.GetFileInfo(bundleFile.FileName);
 
             if (file is not { Exists: true })
             {
@@ -82,7 +82,7 @@ public abstract class MetroTagHelperResourceService : ITransientDependency
 
     protected abstract void CreateBundle(string bundleName, List<BundleTagHelperItem> bundleItems);
 
-    protected abstract Task<IReadOnlyList<string>> GetBundleFilesAsync(string bundleName);
+    protected abstract Task<IReadOnlyList<BundleFile>> GetBundleFilesAsync(string bundleName);
 
     protected abstract void AddHtmlTag(ViewContext viewContext, TagHelper tagHelper, TagHelperContext context,
         TagHelperOutput output, string file);

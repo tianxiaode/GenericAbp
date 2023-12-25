@@ -4,23 +4,26 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Account.Web;
+using Volo.Abp.Identity;
 using Volo.Abp.Validation;
 
 namespace Generic.Abp.PhoneLogin.Account.Web.Pages.Account
 {
     public class LoginModel : Volo.Abp.Account.Web.Pages.Account.LoginModel
     {
-        public LoginModel(
-            IAuthenticationSchemeProvider schemeProvider,
-            IOptions<AbpAccountOptions> accountOptions,
-            IOptions<IdentityOptions> identityOptions, PhoneLoginUserManager phoneLoginUserManager) : base(schemeProvider, accountOptions, identityOptions)
+        public LoginModel(IAuthenticationSchemeProvider schemeProvider, IOptions<AbpAccountOptions> accountOptions,
+            IOptions<IdentityOptions> identityOptions,
+            IdentityDynamicClaimsPrincipalContributorCache identityDynamicClaimsPrincipalContributorCache,
+            PhoneLoginUserManager phoneLoginUserManager) : base(
+            schemeProvider, accountOptions, identityOptions, identityDynamicClaimsPrincipalContributorCache)
         {
             PhoneLoginUserManager = phoneLoginUserManager;
         }
+
         protected PhoneLoginUserManager PhoneLoginUserManager { get; }
+
         protected override async Task ReplaceEmailToUsernameOfInputIfNeeds()
         {
-
             var userByUsername = await UserManager.FindByNameAsync(LoginInput.UserNameOrEmailAddress);
             if (userByUsername != null)
             {
@@ -48,9 +51,6 @@ namespace Generic.Abp.PhoneLogin.Account.Web.Pages.Account
 
 
             return;
-
-
         }
-
     }
 }

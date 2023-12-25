@@ -21,7 +21,7 @@ foreach($project in $projects) {
 		} 
 	if(!(Test-Path $dllFolder))
 		{
-			$framework = "net7.0"
+			$framework = "net8.0"
 			$dllFolder = Join-Path $projectFolder $framework
 		} 
 	$projectName = $project.Substring($project.LastIndexOf("/") + 1)

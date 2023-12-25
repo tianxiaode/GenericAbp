@@ -101,7 +101,7 @@ namespace Generic.Abp.OpenIddict.Applications
             entity.ConsentType = input.ConsentType;
             entity.ClientUri = input.ClientUri;
             entity.LogoUri = input.LogoUri;
-            entity.Type = input.Type;
+            entity.ClientType = input.Type;
         }
 
         [UnitOfWork]

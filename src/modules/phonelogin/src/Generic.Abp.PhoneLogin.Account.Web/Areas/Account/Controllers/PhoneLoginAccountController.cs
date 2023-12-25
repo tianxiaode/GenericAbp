@@ -25,16 +25,16 @@ namespace Generic.Abp.PhoneLogin.Account.Web.Areas.Account.Controllers
     [ExposeServices(typeof(AccountController), IncludeSelf = true)]
     public class PhoneLoginAccountController : AccountController
     {
-        public PhoneLoginAccountController(
-            SignInManager<IdentityUser> signInManager,
-            PhoneLoginUserManager userManager,
-            ISettingProvider settingProvider,
-            IdentitySecurityLogManager identitySecurityLogManager,
-            IOptions<IdentityOptions> identityOptions) :
-        base(signInManager, userManager, settingProvider, identitySecurityLogManager, identityOptions)
+        public PhoneLoginAccountController(SignInManager<IdentityUser> signInManager, IdentityUserManager userManager,
+            ISettingProvider settingProvider, IdentitySecurityLogManager identitySecurityLogManager,
+            IOptions<IdentityOptions> identityOptions,
+            IdentityDynamicClaimsPrincipalContributorCache identityDynamicClaimsPrincipalContributorCache,
+            PhoneLoginUserManager phoneLoginUserManager) : base(
+            signInManager, userManager, settingProvider, identitySecurityLogManager, identityOptions,
+            identityDynamicClaimsPrincipalContributorCache)
         {
+            PhoneLoginUserManager = phoneLoginUserManager;
             LocalizationResource = typeof(AccountResource);
-            PhoneLoginUserManager = userManager;
         }
 
         protected PhoneLoginUserManager PhoneLoginUserManager { get; }
@@ -42,7 +42,6 @@ namespace Generic.Abp.PhoneLogin.Account.Web.Areas.Account.Controllers
 
         protected override async Task ReplaceEmailToUsernameOfInputIfNeeds(UserLoginInfo login)
         {
-
             var userByUsername = await UserManager.FindByNameAsync(login.UserNameOrEmailAddress);
             if (userByUsername != null)
             {
@@ -70,9 +69,6 @@ namespace Generic.Abp.PhoneLogin.Account.Web.Areas.Account.Controllers
 
 
             return;
-
         }
-
-
     }
 }

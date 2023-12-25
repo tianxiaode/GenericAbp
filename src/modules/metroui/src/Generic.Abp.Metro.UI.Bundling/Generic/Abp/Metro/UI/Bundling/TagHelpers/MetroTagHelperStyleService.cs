@@ -30,7 +30,7 @@ public class MetroTagHelperStyleService : MetroTagHelperResourceService
         );
     }
 
-    protected override async Task<IReadOnlyList<string>> GetBundleFilesAsync(string bundleName)
+    protected override async Task<IReadOnlyList<BundleFile>> GetBundleFilesAsync(string bundleName)
     {
         return await BundleManager.GetStyleBundleFilesAsync(bundleName);
     }

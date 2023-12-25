@@ -11,7 +11,7 @@ public class SharedThemeGlobalStyleContributor : BundleContributor
 {
     public override void ConfigureBundle(BundleConfigurationContext context)
     {
-        //context.Files.AddRange(new[]
+        //context.Files.AddRange(new BundleFile[]
         //{
         //    });
     }
