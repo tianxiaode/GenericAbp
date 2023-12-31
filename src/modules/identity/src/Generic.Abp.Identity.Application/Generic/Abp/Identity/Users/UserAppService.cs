@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Domain.ChangeTracking;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.Settings;
 using Volo.Abp.ObjectExtending;
@@ -21,7 +22,7 @@ using IdentityUser = Volo.Abp.Identity.IdentityUser;
 namespace Generic.Abp.Identity.Users;
 
 [RemoteService(false)]
-public class UserAppService: IdentityAppService, IUserAppService
+public class UserAppService : IdentityAppService, IUserAppService
 {
     protected IdentityUserManager UserManager { get; }
     protected IIdentityUserRepository UserRepository { get; }
@@ -31,7 +32,7 @@ public class UserAppService: IdentityAppService, IUserAppService
     public UserAppService(
         IdentityUserManager userManager,
         IIdentityUserRepository userRepository,
-        IRoleRepository roleRepository, 
+        IRoleRepository roleRepository,
         IObjectValidator objectValidator)
     {
         UserManager = userManager;
@@ -41,6 +42,7 @@ public class UserAppService: IdentityAppService, IUserAppService
     }
 
     //TODO: [Authorize(IdentityPermissions.Users.Default)] should go the IdentityUserAppService class.
+    [DisableEntityChangeTracking]
     [Authorize(IdentityPermissions.Users.Default)]
     public virtual async Task<IdentityUserDto> GetAsync(Guid id)
     {
@@ -49,11 +51,13 @@ public class UserAppService: IdentityAppService, IUserAppService
         );
     }
 
+    [DisableEntityChangeTracking]
     [Authorize(IdentityPermissions.Users.Default)]
     public virtual async Task<PagedResultDto<IdentityUserDto>> GetListAsync(GetIdentityUsersInput input)
     {
         var count = await UserRepository.GetCountAsync(input.Filter);
-        var list = await UserRepository.GetListAsync(input.Sorting, input.MaxResultCount, input.SkipCount, input.Filter);
+        var list = await UserRepository.GetListAsync(input.Sorting, input.MaxResultCount, input.SkipCount,
+            input.Filter);
 
         return new PagedResultDto<IdentityUserDto>(
             count,
@@ -61,6 +65,7 @@ public class UserAppService: IdentityAppService, IUserAppService
         );
     }
 
+    [DisableEntityChangeTracking]
     [Authorize(IdentityPermissions.Users.Default)]
     public virtual async Task<PagedResultDto<UserGetRoleDto>> GetRolesAsync(Guid id, UserGetRolesInput input)
     {
@@ -84,9 +89,10 @@ public class UserAppService: IdentityAppService, IUserAppService
 
         foreach (var item in list)
         {
-            var dto = ObjectMapper.Map<IdentityRole, UserGetRoleDto>(item); 
-            dto.IsSelected= roleIds.Contains(dto.Id);
-            dto.Translations = item.GetTranslations<IdentityRole, RoleTranslation>().Select(m=>new RoleTranslationDto(m.Language,m.Name)).ToList();
+            var dto = ObjectMapper.Map<IdentityRole, UserGetRoleDto>(item);
+            dto.IsSelected = roleIds.Contains(dto.Id);
+            dto.Translations = item.GetTranslations<IdentityRole, RoleTranslation>()
+                .Select(m => new RoleTranslationDto(m.Language, m.Name)).ToList();
             dtos.Add(dto);
         }
 
@@ -97,6 +103,7 @@ public class UserAppService: IdentityAppService, IUserAppService
         return new PagedResultDto<UserGetRoleDto>(totalCount, dtos.ToList());
     }
 
+    [DisableEntityChangeTracking]
     [Authorize(IdentityPermissions.Users.Default)]
     public virtual async Task<ListResultDto<RoleDto>> GetAssignableRolesAsync()
     {
@@ -171,14 +178,14 @@ public class UserAppService: IdentityAppService, IUserAppService
             {
                 continue;
             }
+
             if (user.Name.Equals("admin", StringComparison.OrdinalIgnoreCase))
             {
                 throw new UserFriendlyException("User admin is not allowed to change");
             }
 
             (await UserManager.DeleteAsync(user)).CheckErrors();
-            dtos.Add((IdentityUserDto) ObjectMapper.Map<IdentityUser, IdentityUserDto>(user));
-            
+            dtos.Add((IdentityUserDto)ObjectMapper.Map<IdentityUser, IdentityUserDto>(user));
         }
 
         return new ListResultDto<IdentityUserDto>(dtos);
@@ -246,7 +253,7 @@ public class UserAppService: IdentityAppService, IUserAppService
     }
 
     [Authorize(IdentityPermissions.Users.Update)]
-    public virtual async Task UpdateNameAsync(Guid id,UserUpdateNameDto input)
+    public virtual async Task UpdateNameAsync(Guid id, UserUpdateNameDto input)
     {
         var entity = await UserManager.GetByIdAsync(id);
         entity.Name = input.Value;
@@ -254,7 +261,7 @@ public class UserAppService: IdentityAppService, IUserAppService
     }
 
     [Authorize(IdentityPermissions.Users.Update)]
-    public virtual async Task UpdateSurnameAsync(Guid id,UserUpdateSurnameDto input)
+    public virtual async Task UpdateSurnameAsync(Guid id, UserUpdateSurnameDto input)
     {
         var entity = await UserManager.GetByIdAsync(id);
         entity.Surname = input.Value;
@@ -262,7 +269,7 @@ public class UserAppService: IdentityAppService, IUserAppService
     }
 
     [Authorize(IdentityPermissions.Users.Update)]
-    public virtual async Task UpdateEmailAsync(Guid id,UserUpdateEmailDto input)
+    public virtual async Task UpdateEmailAsync(Guid id, UserUpdateEmailDto input)
     {
         var entity = await UserManager.GetByIdAsync(id);
         (await UserManager.SetEmailAsync(entity, input.Value)).CheckErrors();
@@ -270,7 +277,7 @@ public class UserAppService: IdentityAppService, IUserAppService
     }
 
     [Authorize(IdentityPermissions.Users.Update)]
-    public virtual async Task UpdatePhoneNumberAsync(Guid id,UserUpdatePhoneNumberDto input)
+    public virtual async Task UpdatePhoneNumberAsync(Guid id, UserUpdatePhoneNumberDto input)
     {
         var entity = await UserManager.GetByIdAsync(id);
         (await UserManager.SetPhoneNumberAsync(entity, input.Value)).CheckErrors();
@@ -300,6 +307,4 @@ public class UserAppService: IdentityAppService, IUserAppService
             (await UserManager.SetRolesAsync(user, input.RoleNames)).CheckErrors();
         }
     }
-
-
 }

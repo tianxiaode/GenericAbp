@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Identity;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Authorization.Permissions;
+using Volo.Abp.Domain.ChangeTracking;
 using Volo.Abp.Identity;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.PermissionManagement;
@@ -38,6 +39,7 @@ public class RoleAppService : IdentityAppService, IRoleAppService
     protected IPermissionDefinitionManager PermissionDefinitionManager { get; }
 
     [UnitOfWork]
+    [DisableEntityChangeTracking]
     public virtual async Task<RoleDto> GetAsync(Guid id)
     {
         var role = await RoleManager.GetByIdAsync(id);
@@ -49,6 +51,7 @@ public class RoleAppService : IdentityAppService, IRoleAppService
     }
 
     [UnitOfWork]
+    [DisableEntityChangeTracking]
     public virtual async Task<ListResultDto<RoleDto>> GetAllListAsync()
     {
         var list = await RoleRepository.GetListAsync();
@@ -58,6 +61,7 @@ public class RoleAppService : IdentityAppService, IRoleAppService
     }
 
     [UnitOfWork]
+    [DisableEntityChangeTracking]
     public virtual async Task<PagedResultDto<RoleDto>> GetListAsync(GetIdentityRolesInput input)
     {
         var list = await RoleRepository.GetListAsync(input.Sorting, input.MaxResultCount, input.SkipCount,
@@ -228,6 +232,7 @@ public class RoleAppService : IdentityAppService, IRoleAppService
     }
 
     [UnitOfWork]
+    [DisableEntityChangeTracking]
     public virtual async Task<ListResultDto<RoleTranslationDto>> GetTranslationAsync(Guid id)
     {
         var entity = await RoleRepository.GetAsync(id);

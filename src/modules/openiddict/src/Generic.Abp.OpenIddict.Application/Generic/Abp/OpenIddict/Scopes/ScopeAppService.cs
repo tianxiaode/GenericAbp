@@ -10,6 +10,7 @@ using Generic.Abp.OpenIddict.Permissions;
 using Volo.Abp;
 using Generic.Abp.OpenIddict.Applications;
 using System.Linq;
+using Volo.Abp.Domain.ChangeTracking;
 
 namespace Generic.Abp.OpenIddict.Scopes
 {
@@ -24,6 +25,7 @@ namespace Generic.Abp.OpenIddict.Scopes
         }
 
         [UnitOfWork]
+        [DisableEntityChangeTracking]
         [Authorize(OpenIddictPermissions.Scopes.Default)]
         public virtual async Task<ScopeDto> GetAsync(Guid id)
         {
@@ -32,6 +34,7 @@ namespace Generic.Abp.OpenIddict.Scopes
         }
 
         [UnitOfWork]
+        [DisableEntityChangeTracking]
         [Authorize(OpenIddictPermissions.Scopes.Default)]
         public virtual async Task<PagedResultDto<ScopeDto>> GetListAsync(ScopeGetListInput input)
         {
@@ -109,6 +112,7 @@ namespace Generic.Abp.OpenIddict.Scopes
         #region Properties
 
         [UnitOfWork]
+        [DisableEntityChangeTracking]
         [Authorize(OpenIddictPermissions.Scopes.Default)]
         public virtual async Task<List<string>> GetPropertiesAsync(Guid id)
         {
@@ -158,6 +162,7 @@ namespace Generic.Abp.OpenIddict.Scopes
         #region Resources
 
         [UnitOfWork]
+        [DisableEntityChangeTracking]
         [Authorize(OpenIddictPermissions.Scopes.Default)]
         public virtual async Task<List<string>> GetResourcesAsync(Guid id)
         {

@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Authorization;
+using Volo.Abp.Domain.ChangeTracking;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Uow;
 
@@ -32,6 +33,7 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
     private IAbpAuthorizationPolicyProvider AbpAuthorizationPolicyProvider { get; }
 
     [UnitOfWork]
+    [DisableEntityChangeTracking]
     [Authorize(MenuManagementPermissions.Menus.Default)]
     public virtual async Task<MenuDto> GetRootAsync()
     {
@@ -41,6 +43,7 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
 
 
     [UnitOfWork]
+    [DisableEntityChangeTracking]
     [Authorize(MenuManagementPermissions.Menus.Default)]
     public virtual async Task<ListResultDto<MenuDto>> GetListAsync(MenuGetListInput input)
     {
@@ -69,6 +72,7 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
     }
 
     [UnitOfWork]
+    [DisableEntityChangeTracking]
     [Authorize(MenuManagementPermissions.Menus.Default)]
     public virtual async Task<MenuDto> GetAsync(Guid id)
     {
@@ -116,6 +120,7 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
     #region 多语言
 
     [UnitOfWork]
+    [DisableEntityChangeTracking]
     [Authorize(MenuManagementPermissions.Menus.Default)]
     public virtual async Task<ListResultDto<MenuTranslationDto>> GetTranslationListAsync(Guid id)
     {
@@ -157,6 +162,7 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
 
     #region 菜单组
 
+    [DisableEntityChangeTracking]
     [Authorize(MenuManagementPermissions.Menus.Default)]
     public virtual async Task<ListResultDto<string>> GetAllGroupNamesAsync()
     {
@@ -169,6 +175,7 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
     #region 权限
 
     [UnitOfWork]
+    [DisableEntityChangeTracking]
     [Authorize(MenuManagementPermissions.Menus.Default)]
     public virtual async Task<ListResultDto<string>> GetPermissionsListAsync(Guid id)
     {

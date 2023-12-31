@@ -9,6 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Domain.ChangeTracking;
 using Volo.Abp.OpenIddict.Applications;
 using Volo.Abp.OpenIddict.Scopes;
 using Volo.Abp.Uow;
@@ -29,6 +30,7 @@ namespace Generic.Abp.OpenIddict.Applications
         protected IOpenIddictScopeRepository ScopeRepository { get; }
 
         [UnitOfWork]
+        [DisableEntityChangeTracking]
         [Authorize(OpenIddictPermissions.Applications.Default)]
         public virtual async Task<ApplicationDto> GetAsync(Guid id)
         {
@@ -37,6 +39,7 @@ namespace Generic.Abp.OpenIddict.Applications
         }
 
         [UnitOfWork]
+        [DisableEntityChangeTracking]
         [Authorize(OpenIddictPermissions.Applications.Default)]
         public virtual async Task<PagedResultDto<ApplicationDto>> GetListAsync(ApplicationGetListInput input)
         {
@@ -129,6 +132,7 @@ namespace Generic.Abp.OpenIddict.Applications
         }
 
         [UnitOfWork]
+        [DisableEntityChangeTracking]
         [Authorize(OpenIddictPermissions.Applications.Default)]
         public virtual async Task<Dictionary<string, Dictionary<string, string>>> GetAllPermisions()
         {
@@ -272,6 +276,7 @@ namespace Generic.Abp.OpenIddict.Applications
         #region permissions
 
         [UnitOfWork]
+        [DisableEntityChangeTracking]
         [Authorize(OpenIddictPermissions.Applications.Default)]
         public virtual async Task<List<string>> GetPermissionsAsync(Guid id)
         {
@@ -317,6 +322,7 @@ namespace Generic.Abp.OpenIddict.Applications
         #region PostLogoutRedirectUris
 
         [UnitOfWork]
+        [DisableEntityChangeTracking]
         [Authorize(OpenIddictPermissions.Applications.Default)]
         public virtual async Task<List<string>> GetPostLogoutRedirectUrisAsync(Guid id)
         {
@@ -368,6 +374,7 @@ namespace Generic.Abp.OpenIddict.Applications
         #region Properties
 
         [UnitOfWork]
+        [DisableEntityChangeTracking]
         [Authorize(OpenIddictPermissions.Applications.Default)]
         public virtual async Task<List<string>> GetPropertiesAsync(Guid id)
         {
@@ -417,6 +424,7 @@ namespace Generic.Abp.OpenIddict.Applications
         #region RedirectUris
 
         [UnitOfWork]
+        [DisableEntityChangeTracking]
         [Authorize(OpenIddictPermissions.Applications.Default)]
         public virtual async Task<List<string>> GetRedirectUrisAsync(Guid id)
         {
@@ -466,6 +474,7 @@ namespace Generic.Abp.OpenIddict.Applications
         #region Requirements
 
         [UnitOfWork]
+        [DisableEntityChangeTracking]
         [Authorize(OpenIddictPermissions.Applications.Default)]
         public virtual async Task<List<string>> GetRequirementsAsync(Guid id)
         {
