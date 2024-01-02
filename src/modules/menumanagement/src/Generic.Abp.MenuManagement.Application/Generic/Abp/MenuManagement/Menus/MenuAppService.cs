@@ -34,7 +34,7 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
 
     [UnitOfWork]
     [DisableEntityChangeTracking]
-    [Authorize(MenuManagementPermissions.Menus.Default)]
+    [Authorize(MenuManagementPermissions.Menus.ManagePermissions)]
     public virtual async Task<MenuDto> GetRootAsync()
     {
         var root = await Repository.FirstOrDefaultAsync(m => !m.ParentId.HasValue);
@@ -50,8 +50,23 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
         if (!string.IsNullOrWhiteSpace(input.GroupName))
         {
             var groupList = await Repository.GetListByGroupAsync(input.GroupName);
-            return new ListResultDto<MenuDto>(MapList(groupList));
+            var result = new List<MenuDto>();
+            foreach (var group in groupList)
+            {
+                var permissions = group.GetPermissions();
+                if (permissions is { Count: > 0 } &&
+                    !await AuthorizationService.IsGrantedAnyAsync(permissions.ToArray())) continue;
+                var dto = ObjectMapper.Map<Menu, MenuDto>(group);
+                dto.Permissions = null;
+                result.Add(dto);
+            }
+
+            return new ListResultDto<MenuDto>(result);
         }
+
+        //没有管理权限抛出错误
+        if (!await AuthorizationService.IsGrantedAsync(MenuManagementPermissions.Menus.ManagePermissions))
+            throw new AbpAuthorizationException();
 
         if (!string.IsNullOrEmpty(input.Filter))
         {
@@ -73,7 +88,7 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
 
     [UnitOfWork]
     [DisableEntityChangeTracking]
-    [Authorize(MenuManagementPermissions.Menus.Default)]
+    [Authorize(MenuManagementPermissions.Menus.ManagePermissions)]
     public virtual async Task<MenuDto> GetAsync(Guid id)
     {
         var entity = await Repository.GetAsync(id);
@@ -121,7 +136,7 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
 
     [UnitOfWork]
     [DisableEntityChangeTracking]
-    [Authorize(MenuManagementPermissions.Menus.Default)]
+    [Authorize(MenuManagementPermissions.Menus.ManagePermissions)]
     public virtual async Task<ListResultDto<MenuTranslationDto>> GetTranslationListAsync(Guid id)
     {
         var entity = await Repository.GetAsync(id);
@@ -155,7 +170,7 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
                         DistrictConsts.DisplayNameMaxLength.ToString())).ToList();
 
 
-        if (errors.Any()) throw new UserFriendlyException(string.Join("<br>", errors));
+        if (errors is { Count: > 0 }) throw new UserFriendlyException(string.Join("<br>", errors));
     }
 
     #endregion
@@ -163,7 +178,7 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
     #region 菜单组
 
     [DisableEntityChangeTracking]
-    [Authorize(MenuManagementPermissions.Menus.Default)]
+    [Authorize(MenuManagementPermissions.Menus.ManagePermissions)]
     public virtual async Task<ListResultDto<string>> GetAllGroupNamesAsync()
     {
         var list = await Repository.GetAllGroupNamesAsync();
@@ -176,7 +191,7 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
 
     [UnitOfWork]
     [DisableEntityChangeTracking]
-    [Authorize(MenuManagementPermissions.Menus.Default)]
+    [Authorize(MenuManagementPermissions.Menus.ManagePermissions)]
     public virtual async Task<ListResultDto<string>> GetPermissionsListAsync(Guid id)
     {
         var entity = await Repository.GetAsync(id);
@@ -189,9 +204,9 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
     public virtual async Task UpdatePermissionsAsync(Guid id, List<string> input)
     {
         var list = input.Where(m => !string.IsNullOrEmpty(m)).ToList();
+        if (list is { Count: <= 0 }) return;
         var policyNames = await AbpAuthorizationPolicyProvider.GetPoliciesNamesAsync();
         list = list.Intersect(policyNames).ToList();
-
         var entity = await Repository.GetAsync(id);
         entity.SetPermissions(list);
         await Repository.UpdateAsync(entity);
@@ -204,36 +219,24 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
     protected virtual async Task<List<MenuDto>> GetFilterListAsync(string filter)
     {
         var codes = await Repository.GetCodeListAsync(filter);
-        if (!codes.Any()) return new List<MenuDto>();
-        var ln = TreeConsts.GetCodeLength(2);
-        var level2Codes = codes.Where(m => m.Length >= ln).Select(m => m[..ln]).Distinct().ToList();
-        var list = await Repository.GetListAsync(m => level2Codes.Contains(m.Code));
+        if (codes is { Count: <= 0 }) return new List<MenuDto>();
+        var query = new List<string>();
+        foreach (var code in codes)
+        {
+            var splits = code.Split(".");
+            var temp = splits[0];
+            for (var i = 1; i < splits.Length; i++)
+            {
+                temp = $"{temp}.{splits[i]}";
+                query.Add(temp);
+            }
+        }
+
+        var list = await Repository.GetListAsync(m => query.Distinct().Contains(m.Code));
         var dtos = ObjectMapper.Map<List<Menu>, List<MenuDto>>(list);
-        await GetChildrenAsync(codes, dtos, ln);
+        //await GetChildrenAsync(codes, dtos, ln);
         return dtos;
     }
-
-    [UnitOfWork]
-    protected virtual async Task GetChildrenAsync(List<string> codes, List<MenuDto> dtos, int ln)
-    {
-        var next = ln + TreeConsts.CodeUnitLength + 1;
-        var childCodes = codes.Where(m => m.Length >= next).Select(m => m[..next]).Distinct().ToList();
-        if (!childCodes.Any()) return;
-        var allChildren = await Repository.GetListAsync(m => childCodes.Contains(m.Code));
-        foreach (var dto in dtos)
-        {
-            var children = allChildren.Where(m => m.Code.StartsWith(dto.Code)).ToList();
-            if (!children.Any())
-            {
-                continue;
-            }
-
-            dto.Children = ObjectMapper.Map<List<Menu>, List<MenuDto>>(children);
-            dto.Leaf = false;
-            await GetChildrenAsync(codes, dto.Children.ToList(), next);
-        }
-    }
-
 
     protected virtual async Task UpdateMenuByInputAsync(Menu entity, MenuCreateOrUpdateDto input)
     {

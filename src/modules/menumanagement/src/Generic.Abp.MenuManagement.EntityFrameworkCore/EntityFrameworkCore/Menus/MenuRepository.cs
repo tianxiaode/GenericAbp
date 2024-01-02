@@ -46,7 +46,8 @@ public class MenuRepository : EfCoreRepository<IMenuManagementDbContext, Menu, G
     public async Task<List<Menu>> GetListByGroupAsync(string group, CancellationToken cancellation = default)
     {
         var dbSet = await GetDbSetAsync();
-        return await dbSet.Where(m => EF.Functions.Like(m.GroupName, $"{group}")).ToListAsync(cancellation);
+        return await dbSet.Where(m => EF.Functions.Like(m.GroupName, $"{group}") && m.ParentId != null)
+            .ToListAsync(cancellation);
     }
 
     [UnitOfWork]
@@ -59,7 +60,8 @@ public class MenuRepository : EfCoreRepository<IMenuManagementDbContext, Menu, G
     [UnitOfWork]
     protected virtual Task<Expression<Func<Menu, bool>>> BuildFilterPredicateAsync(string filter)
     {
-        Expression<Func<Menu, bool>> predicate = m => EF.Functions.Like(m.DisplayName, $"%{filter}%");
+        Expression<Func<Menu, bool>> predicate = m =>
+            EF.Functions.Like(m.DisplayName, $"%{filter}%") && m.ParentId != null;
 
         return Task.FromResult(predicate);
     }
