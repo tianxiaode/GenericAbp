@@ -1,7 +1,7 @@
 <Project>
   <PropertyGroup>
     <LangVersion>latest</LangVersion>
-    <Version>1.0.11</Version>
+    <Version>1.0.12</Version>
     <NoWarn>$(NoWarn);CS1591;NU1803;CS0436</NoWarn>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Authors>GenericAbp Team</Authors>
