@@ -5,6 +5,7 @@
     "SelectedOrNot:Selected": "已选",
     "SelectedOrNot:NotSelected": "未选",
     "Permission:PasswordPolicy": "密码策略",
-    "Permission:LookupPolicy": "用户锁定策略"
+    "Permission:LookupPolicy": "用户锁定策略",
+    "DisplayName:ConfirmPassword": "确认密码"
   }
 }

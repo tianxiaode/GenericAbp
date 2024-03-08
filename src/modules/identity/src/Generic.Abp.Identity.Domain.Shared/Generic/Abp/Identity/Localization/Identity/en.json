@@ -5,6 +5,7 @@
     "SelectedOrNot:Selected": "Selected",
     "SelectedOrNot:NotSelected": "Not Selected",
     "Permission:PasswordPolicy": "Password policy",
-    "Permission:LookupPolicy": "User lookup policy"
+    "Permission:LookupPolicy": "User lookup policy",
+    "DisplayName:ConfirmPassword": "Confirm password"
   }
 }

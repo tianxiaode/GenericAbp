@@ -11,6 +11,7 @@ public class UserCreateDto: IdentityUserCreateDto
     [DisableAuditing]
     [Required]
     [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxPasswordLength))]
+    [DisplayName("DisplayName:ConfirmPassword")]
     public string ConfirmPassword { get; set; }
 
 

@@ -1,7 +1,7 @@
 ﻿<Project>
   <PropertyGroup>
 
-    <AbpVersion>8.0.0</AbpVersion>
+    <AbpVersion>8.0.4</AbpVersion>
     <JetBrainsAnnotationsVersion>2023.3.0</JetBrainsAnnotationsVersion>
 		<FileProvidersEmbeddedVersion>8.0.0</FileProvidersEmbeddedVersion>
     <EntityFrameworkCoreToolsVersion>8.0.0</EntityFrameworkCoreToolsVersion>

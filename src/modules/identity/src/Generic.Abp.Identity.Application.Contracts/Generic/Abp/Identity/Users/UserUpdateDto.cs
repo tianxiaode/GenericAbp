@@ -10,6 +10,7 @@ public class UserUpdateDto: IdentityUserUpdateDto
 {
     [DisableAuditing]
     [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxPasswordLength))]
+    [DisplayName("DisplayName:ConfirmPassword")]
     public string ConfirmPassword { get; set; }
 
     public override IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
