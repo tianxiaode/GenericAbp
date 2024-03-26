@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Localization;
+﻿using System.Globalization;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using Volo.Abp;
 using Volo.Abp.Application.Services;
@@ -66,6 +67,8 @@ public class GenericAbpApplicationConfigurationAppService : ApplicationService,
             localizationConfig.Values[resource.ResourceName] = dictionary;
         }
 
+        localizationConfig.CurrentCulture = GetCurrentCultureInfo();
+
         if (!CurrentUser.IsAuthenticated) return localizationConfig;
 
         var permissionResource = new Dictionary<string, string>();
@@ -83,5 +86,31 @@ public class GenericAbpApplicationConfigurationAppService : ApplicationService,
 
 
         return localizationConfig;
+    }
+
+    private static CurrentCultureDto GetCurrentCultureInfo()
+    {
+        return new CurrentCultureDto
+        {
+            Name = CultureInfo.CurrentUICulture.Name,
+            DisplayName = CultureInfo.CurrentUICulture.DisplayName,
+            EnglishName = CultureInfo.CurrentUICulture.EnglishName,
+            NativeName = CultureInfo.CurrentUICulture.NativeName,
+            IsRightToLeft = CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft,
+            CultureName = CultureInfo.CurrentUICulture.TextInfo.CultureName,
+            TwoLetterIsoLanguageName = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName,
+            ThreeLetterIsoLanguageName = CultureInfo.CurrentUICulture.ThreeLetterISOLanguageName,
+            DateTimeFormat = new DateTimeFormatDto
+            {
+                CalendarAlgorithmType =
+                    CultureInfo.CurrentUICulture.DateTimeFormat.Calendar.AlgorithmType.ToString(),
+                DateTimeFormatLong = CultureInfo.CurrentUICulture.DateTimeFormat.LongDatePattern,
+                ShortDatePattern = CultureInfo.CurrentUICulture.DateTimeFormat.ShortDatePattern,
+                FullDateTimePattern = CultureInfo.CurrentUICulture.DateTimeFormat.FullDateTimePattern,
+                DateSeparator = CultureInfo.CurrentUICulture.DateTimeFormat.DateSeparator,
+                ShortTimePattern = CultureInfo.CurrentUICulture.DateTimeFormat.ShortTimePattern,
+                LongTimePattern = CultureInfo.CurrentUICulture.DateTimeFormat.LongTimePattern,
+            }
+        };
     }
 }
