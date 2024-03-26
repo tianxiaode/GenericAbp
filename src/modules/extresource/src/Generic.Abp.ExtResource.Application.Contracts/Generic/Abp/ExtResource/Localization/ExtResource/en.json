@@ -305,6 +305,13 @@
     "InsufficientStorage-507": "Insufficient Storage",
     "LoopDetected-508": "Loop Detected",
     "NotExtended-510": "Not Extended",
-    "NetworkAuthenticationRequired-511": "Network Authentication Required"
+    "NetworkAuthenticationRequired-511": "Network Authentication Required",
+    "SearchValueEmpty": "The search value cannot be empty",
+    "ResetSearch": "Reset the search value",
+    "Page": "Page",
+    "Item": "Item",
+    "NoPermissionToUpdate": "There is no permission to update",
+    "MoreActions": "More Actions...",
+    "PagingToolbar": "Paging toolbar"
   }
 }

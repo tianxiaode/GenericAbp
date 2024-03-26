@@ -5,7 +5,5 @@ namespace Generic.Abp.Application.Configuration;
 
 public interface IGenericAbpApplicationConfigurationAppService : IApplicationService
 {
-    Task<ApplicationConfigurationDto> GetAsync();
     Task<ApplicationLocalizationConfigurationDto> GetLocalizationAsync();
-
 }
