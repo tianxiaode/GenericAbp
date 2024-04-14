@@ -1,0 +1,7 @@
+{
+  "modules": {
+    "Generic.Abp.ExportManager": {
+      "path": "Generic.Abp.ExportManager.abpmdl"
+    }
+  }
+}

@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Generic.Abp.ExportManager</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+    <PackageReference Include="EphemeralMongo.Core" Version="1.1.3" />
+    <PackageReference Include="EphemeralMongo6.runtime.linux-x64" Version="1.1.3" Condition="$([MSBuild]::IsOSPlatform('Linux'))" />
+    <PackageReference Include="EphemeralMongo6.runtime.osx-x64" Version="1.1.3" Condition="$([MSBuild]::IsOSPlatform('OSX'))" />
+    <PackageReference Include="EphemeralMongo6.runtime.win-x64" Version="1.1.3" Condition="$([MSBuild]::IsOSPlatform('Windows'))" />
+    <ProjectReference Include="..\..\src\Generic.Abp.ExportManager.MongoDB\Generic.Abp.ExportManager.MongoDB.csproj" />
+    <ProjectReference Include="..\Generic.Abp.ExportManager.Application.Tests\Generic.Abp.ExportManager.Application.Tests.csproj" />
+  </ItemGroup>
+
+</Project>
