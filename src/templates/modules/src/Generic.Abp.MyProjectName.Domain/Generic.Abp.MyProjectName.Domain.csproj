@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-  	<PackageReference Include="Generic.Abp.DDD.Domain" Version="$(GenericAbpVersion)" />
+  	<ProjectReference Include="..\..\..\ddd\src\Generic.Abp.DDD.Domain\Generic.Abp.DDD.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>

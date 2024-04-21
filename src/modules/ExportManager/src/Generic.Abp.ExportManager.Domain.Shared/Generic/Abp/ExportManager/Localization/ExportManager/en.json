@@ -1,5 +1,8 @@
 {
   "culture": "en",
   "texts": {
+    "Display:Export.Enable.Excel": "Enable Excel Export",
+    "Display:Export.Enable.Csv": "Enable CSV Export",
+    "Display:Export.Enable.Pdf": "Enable PDF Export"
   }
 }

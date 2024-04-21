@@ -8,10 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-  	<PackageReference Include="Generic.Abp.DDD.Domain" Version="$(GenericAbpVersion)" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Generic.Abp.ExportManager.Domain.Shared\Generic.Abp.ExportManager.Domain.Shared.csproj" />
   </ItemGroup>
 

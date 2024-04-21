@@ -1,5 +1,8 @@
 {
   "culture": "zh-Hans",
   "texts": {
+    "Display:Export.Enable.Excel": "开启Excel导出功能",
+    "Display:Export.Enable.Csv": "开启CSV导出功能",
+    "Display:Export.Enable.Pdf": "开启PDF导出功能"
   }
 }
