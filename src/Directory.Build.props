@@ -14,6 +14,9 @@
     <XunitExtensibilityExecutionVersion>2.6.1</XunitExtensibilityExecutionVersion>
     <XunitRrunnerVisualstudioVersion>2.5.3</XunitRrunnerVisualstudioVersion>
     <HtmlAgilityPackVersion>1.11.54</HtmlAgilityPackVersion>
-    <MicrosoftDataSqliteVersion>8.0.0</MicrosoftDataSqliteVersion>		
+    <MicrosoftDataSqliteVersion>8.0.0</MicrosoftDataSqliteVersion>
+    <CsvHelperVersion>31.0.3</CsvHelperVersion>
+    <NpoiVersion>1.2.2</NpoiVersion>
+    <itext7Version>8.0.3</itext7Version>
   </PropertyGroup>
 </Project>

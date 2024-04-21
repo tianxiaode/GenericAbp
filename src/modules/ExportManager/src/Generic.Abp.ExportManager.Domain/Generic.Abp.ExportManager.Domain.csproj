@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="..\..\..\..\common.props" />
   
@@ -8,7 +8,23 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="CsvHelper" Version="$(CsvHelperVersion)" />
+    <PackageReference Include="DotNetCore.NPOI" Version="$(NpoiVersion)" />
+    <PackageReference Include="itext7" Version="$(itext7Version)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\ddd\src\Generic.Abp.DDD.Domain\Generic.Abp.DDD.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Generic.Abp.ExportManager.Domain.Shared\Generic.Abp.ExportManager.Domain.Shared.csproj" />
+  </ItemGroup>
+
+  
+
+  <ItemGroup>
+    <Folder Include="Generic\Abp\ExportManager\Pdf\" />
   </ItemGroup>
 
 </Project>

@@ -15,6 +15,7 @@
 
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\ddd\src\Generic.Abp.DDD.Domain.Shared\Generic.Abp.DDD.Domain.Shared.csproj" />
     <ProjectReference Include="..\..\..\businessexception\src\Generic.Abp.BusinessException\Generic.Abp.BusinessException.csproj" />
   </ItemGroup>
 

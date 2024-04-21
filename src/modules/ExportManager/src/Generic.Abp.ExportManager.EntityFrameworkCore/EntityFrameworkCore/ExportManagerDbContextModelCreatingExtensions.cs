@@ -24,13 +24,13 @@ namespace Generic.Abp.ExportManager.EntityFrameworkCore
             builder.Entity<Question>(b =>
             {
                 //Configure table & schema name
-                b.ToTable(options.TablePrefix + "Questions", options.Schema);
-            
+                b.ToTable(options.TablePrefix + "Questions", options.ExportSchema);
+
                 b.ConfigureByConvention();
-            
+
                 //Properties
                 b.Property(q => q.Title).IsRequired().HasMaxLength(QuestionConsts.MaxTitleLength);
-                
+
                 //Relations
                 b.HasMany(question => question.Tags).WithOne().HasForeignKey(qt => qt.QuestionId);
 
