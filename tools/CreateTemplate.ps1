@@ -6,7 +6,7 @@ param (
 
 # 定义模板类型和对应的模板名称
 $templates = @{
-    "module" = "module";
+    "module" = "GenericAbpTemplate";
     "pages"     = "pages";
     # 添加更多模板类型和对应的模板名称
 }
