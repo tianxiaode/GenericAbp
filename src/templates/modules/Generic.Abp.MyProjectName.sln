@@ -27,8 +27,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Generic.Abp.MyProjectName.D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Generic.Abp.MyProjectName.EntityFrameworkCore.Tests", "test\Generic.Abp.MyProjectName.EntityFrameworkCore.Tests\Generic.Abp.MyProjectName.EntityFrameworkCore.Tests.csproj", "{9D95C755-9B7F-4BC1-8848-568FFEB7C93F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Generic.Abp.MyProjectName.HttpApi.Client.ConsoleTestApp", "test\Generic.Abp.MyProjectName.HttpApi.Client.ConsoleTestApp\Generic.Abp.MyProjectName.HttpApi.Client.ConsoleTestApp.csproj", "{6E03D827-0E97-4F07-8D95-23178A4F0658}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Generic.Abp.MyProjectName.TestBase", "test\Generic.Abp.MyProjectName.TestBase\Generic.Abp.MyProjectName.TestBase.csproj", "{9802DE74-29C1-4965-BF64-B98BFBDB094E}"
 EndProject
 Global
@@ -77,10 +75,6 @@ Global
 		{9D95C755-9B7F-4BC1-8848-568FFEB7C93F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9D95C755-9B7F-4BC1-8848-568FFEB7C93F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9D95C755-9B7F-4BC1-8848-568FFEB7C93F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6E03D827-0E97-4F07-8D95-23178A4F0658}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6E03D827-0E97-4F07-8D95-23178A4F0658}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6E03D827-0E97-4F07-8D95-23178A4F0658}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6E03D827-0E97-4F07-8D95-23178A4F0658}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9802DE74-29C1-4965-BF64-B98BFBDB094E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9802DE74-29C1-4965-BF64-B98BFBDB094E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9802DE74-29C1-4965-BF64-B98BFBDB094E}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -100,7 +94,6 @@ Global
 		{94104506-6E70-43FF-A8AC-09622D45AB78} = {9DD862B8-95C0-4283-A8A2-1484669CC536}
 		{2C0094CB-1401-4AD6-92E8-31ECF5421754} = {9DD862B8-95C0-4283-A8A2-1484669CC536}
 		{9D95C755-9B7F-4BC1-8848-568FFEB7C93F} = {9DD862B8-95C0-4283-A8A2-1484669CC536}
-		{6E03D827-0E97-4F07-8D95-23178A4F0658} = {9DD862B8-95C0-4283-A8A2-1484669CC536}
 		{9802DE74-29C1-4965-BF64-B98BFBDB094E} = {9DD862B8-95C0-4283-A8A2-1484669CC536}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution

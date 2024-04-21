@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;netstandard2.1;net8.0</TargetFrameworks>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Generic.Abp.ExportManager</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CsvHelper" Version="31.0.3" />
+    <PackageReference Include="EPPlus" Version="7.1.1" />
+    <PackageReference Include="itext7" Version="8.0.3" />
+    <PackageReference Include="Volo.Abp.Ddd.Domain" Version="8.1.0" />
+    <ProjectReference Include="..\Generic.Abp.ExportManager.Domain.Shared\Generic.Abp.ExportManager.Domain.Shared.csproj" />
+  </ItemGroup>
+
+</Project>

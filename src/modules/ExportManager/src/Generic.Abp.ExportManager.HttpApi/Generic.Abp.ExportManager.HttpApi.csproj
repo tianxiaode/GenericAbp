@@ -1,15 +1,17 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="..\..\common.props" />
+  <Import Project="..\..\..\..\common.props" />
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <RootNamespace>Generic.Abp.ExportManager</RootNamespace>
+    <RootNamespace />
   </PropertyGroup>
 
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.AspNetCore.Mvc" Version="$(AbpVersion)" />
+	</ItemGroup>
+
   <ItemGroup>
-    <PackageReference Include="Volo.Abp.AspNetCore.Mvc" Version="8.1.0" />
     <ProjectReference Include="..\Generic.Abp.ExportManager.Application.Contracts\Generic.Abp.ExportManager.Application.Contracts.csproj" />
   </ItemGroup>
 
