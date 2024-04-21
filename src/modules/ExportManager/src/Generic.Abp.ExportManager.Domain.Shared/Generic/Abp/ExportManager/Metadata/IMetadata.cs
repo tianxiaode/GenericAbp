@@ -3,10 +3,9 @@ using JetBrains.Annotations;
 
 namespace Generic.Abp.ExportManager.Metadata;
 
-public interface IMetadata<TColumn, TTitleStyle, TColumnHeaderStyle, TDescriptionStyle, TFooterStyle>
+public interface IMetadata<TColumn, TTitleStyle, TDescriptionStyle, TFooterStyle>
     where TColumn : IColumn
     where TDescriptionStyle : class
-    where TColumnHeaderStyle : class
     where TTitleStyle : class
     where TFooterStyle : class
 {
@@ -16,7 +15,6 @@ public interface IMetadata<TColumn, TTitleStyle, TColumnHeaderStyle, TDescriptio
     [CanBeNull] string Description { get; set; }
     [CanBeNull] string Footer { get; set; }
     [CanBeNull] TTitleStyle TitleStyle { get; set; }
-    [CanBeNull] TColumnHeaderStyle ColumnHeaderStyle { get; set; }
     [CanBeNull] TDescriptionStyle DescriptionStyle { get; set; }
     [CanBeNull] TFooterStyle ColumnFooterStyle { get; set; }
 }

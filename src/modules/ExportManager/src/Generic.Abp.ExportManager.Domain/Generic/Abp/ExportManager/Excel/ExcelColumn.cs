@@ -1,9 +1,11 @@
 ﻿using Generic.Abp.ExportManager.Metadata;
-using OfficeOpenXml.Style;
 
 namespace Generic.Abp.ExportManager.Excel;
 
 public class ExcelColumn : DefaultColumn
 {
-    public ExcelStyle Style { get; set; }
+    public bool IsAutoSize { get; set; } = true;
+    public ExcelCellStyle CellStyle { get; set; }
+
+    public ExcelCellStyle HeaderCellStyle { get; set; }
 }

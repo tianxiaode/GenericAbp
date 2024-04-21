@@ -3,7 +3,7 @@ using Generic.Abp.ExportManager.Metadata;
 
 namespace Generic.Abp.ExportManager.Csv;
 
-public class CsvMetadata : IMetadata<DefaultColumn, DefaultTitleStyle, DefaultColumnHeaderStyle, DefaultDescriptionStyle
+public class CsvMetadata : IMetadata<DefaultColumn, DefaultTitleStyle, DefaultDescriptionStyle
     ,
     DefaultFooterStyle>
 {
@@ -13,7 +13,6 @@ public class CsvMetadata : IMetadata<DefaultColumn, DefaultTitleStyle, DefaultCo
     public string Description { get; set; }
     public string Footer { get; set; }
     public DefaultTitleStyle TitleStyle { get; set; }
-    public DefaultColumnHeaderStyle ColumnHeaderStyle { get; set; }
     public DefaultDescriptionStyle DescriptionStyle { get; set; }
     public DefaultFooterStyle ColumnFooterStyle { get; set; }
 

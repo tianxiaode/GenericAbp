@@ -1,11 +1,12 @@
-﻿using System;
+﻿using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
-using NPOI.SS.UserModel;
 
 namespace Generic.Abp.ExportManager.Excel;
 
@@ -26,75 +27,163 @@ public class ExcelExportService : IExportService<ExcelMetadata>
         // 写入列标题
         if (hasHeader)
         {
-            var titleRow = sheet.CreateRow(0);
-            for (var i = 0; i < orderedColumns.Count; i++)
-            {
-                var column = orderedColumns[i];
-                var cell = titleRow.CreateCell(i);
-                cell.SetCellValue(column.DisplayName);
-                if (metadata is { ColumnHeaderStyle: not null })
-                {
-                    cell.CellStyle = 
-                }
-            }
+            await WriteHeaderAsync(sheet, metadata, orderedColumns);
         }
 
         // 写入数据
-        var row = exportSchema != null && exportSchema.Template.HasColumnHeader ? 2 : 1;
-        foreach (var record in data)
-        {
-            if (exportSchema != null)
-            {
-                for (var i = 0; i < orderedColumns.Count; i++)
-                {
-                    var column = orderedColumns[i];
-                    var property = typeof(T).GetProperty(column.FieldName);
-                    if (property == null) continue;
-                    var value = property.GetValue(record);
-                    var cell = worksheet.Cells[row, i + 1];
-                    cell.Value = value;
-                    if (column.Style != null)
-                    {
-                    }
+        var row = hasHeader ? 2 : 1;
+        await WriteDataAsync(sheet, row, data.ToList(), metadata, orderedColumns);
 
-                    ;
-                }
-            }
-            else
-            {
-                worksheet.Cells.LoadFromCollection(new List<T> { record }, true);
-            }
+        using var stream = new MemoryStream();
+        workbook.Write(stream);
 
-            row++;
-        }
-
-        return await package.GetAsByteArrayAsync(cancellationToken);
+        return await stream.GetAllBytesAsync(cancellationToken);
     }
 
-    //static void SetFontStyle(ICellStyle style, JObject fontJson)
-    //{
-    //    IFont font = style.Workbook.CreateFont();
-    //    font.Boldweight = fontJson["Bold"].Value<bool>() ? (short)FontBoldWeight.Bold : (short)FontBoldWeight.Normal;
-    //    font.IsItalic = fontJson["Italic"].Value<bool>();
-    //    font.Color = IndexedColors.Red.Index; // 这里需要根据 JSON 中的颜色值设置字体颜色
-    //    style.SetFont(font);
-    //}
+    protected virtual async Task WriteHeaderAsync(ISheet sheet, ExcelMetadata metadata, List<ExcelColumn> columns)
+    {
+        var titleRow = sheet.CreateRow(0);
+        if (metadata.RowHeight.HasValue) titleRow.Height = metadata.RowHeight.Value;
+        for (var i = 0; i < columns.Count; i++)
+        {
+            var column = columns[i];
+            var cell = titleRow.CreateCell(i);
+            cell.SetCellValue(column.DisplayName);
+            if (column.IsAutoSize) sheet.AutoSizeColumn(i);
+            if (column is { HeaderCellStyle: not null })
+            {
+                cell.CellStyle = await SetCellStyleAsync(sheet.Workbook, column.HeaderCellStyle);
+            }
+        }
+    }
 
-    //static void SetFillStyle(ICellStyle style, JObject fillJson)
-    //{
-    //    style.FillPattern = Enum.Parse<FillPatternType>(fillJson["PatternType"].Value<string>());
-    //    style.FillForegroundColor = IndexedColors.Yellow.Index; // 这里需要根据 JSON 中的颜色值设置填充颜色
-    //}
+    protected virtual async Task WriteDataAsync<T>(ISheet sheet, int rowIndex, List<T> data,
+        ExcelMetadata metadata,
+        List<ExcelColumn> columns)
+    {
+        if (metadata == null)
+        {
+            foreach (var item in data)
+            {
+                var row = sheet.CreateRow(rowIndex++);
+                var properties = typeof(T).GetProperties();
+                var cellIndex = 0;
+                foreach (var property in properties)
+                {
+                    var value = property.GetValue(item);
+                    var cell = row.CreateCell(cellIndex++);
+                    await SetCellValueAsync(cell, property, value);
+                }
+            }
 
-    //static void SetBorderStyle(ICellStyle style, JObject borderJson)
-    //{
-    //    style.BorderTop = Enum.Parse<BorderStyle>(borderJson["Style"].Value<string>());
-    //    style.BorderBottom = Enum.Parse<BorderStyle>(borderJson["Style"].Value<string>());
-    //    style.BorderLeft = Enum.Parse<BorderStyle>(borderJson["Style"].Value<string>());
-    //    style.BorderRight = Enum.Parse<BorderStyle>(borderJson["Style"].Value<string>());
-    //    style.TopBorderColor = IndexedColors.Black.Index; // 这里需要根据 JSON 中的颜色值设置边框颜色
-    //    style.BottomBorderColor = IndexedColors.Black.Index;
-    //    style.LeftBorderColor = IndexedColors.Black.Index;
-    //    style.RightBorderColor = IndexedColors.Black.Index;
-    //}
+            return;
+        }
+
+        foreach (var record in data)
+        {
+            var row = sheet.CreateRow(rowIndex);
+            for (var i = 0; i < columns.Count; i++)
+            {
+                var column = columns[i];
+                var property = typeof(T).GetProperty(column.FieldName);
+                if (property == null) continue;
+                var value = property.GetValue(record);
+                var cell = row.CreateCell(i);
+                await SetCellValueAsync(cell, property, value);
+                if (column.CellStyle != null)
+                {
+                    await SetCellStyleAsync(sheet.Workbook, column.CellStyle);
+                }
+            }
+
+            rowIndex++;
+        }
+    }
+
+    protected virtual async Task<ICellStyle> SetCellStyleAsync(IWorkbook workbook, ExcelCellStyle excelCellStyle)
+    {
+        var style = workbook.CreateCellStyle();
+        await SetCellFontStyleAsync(workbook, style, excelCellStyle);
+        await SetFillStyleAsync(style, excelCellStyle);
+        await SetBorderStyleAsync(style, excelCellStyle);
+
+        style.Alignment = excelCellStyle.Alignment;
+        style.VerticalAlignment = excelCellStyle.VerticalAlignment;
+        style.DataFormat = excelCellStyle.DataFormat;
+        style.Rotation = excelCellStyle.Rotation;
+        style.IsLocked = excelCellStyle.IsLocked;
+        style.WrapText = excelCellStyle.WrapText;
+        style.Indention = excelCellStyle.Indention;
+        return style;
+    }
+
+    protected virtual Task SetCellFontStyleAsync(IWorkbook workbook, ICellStyle style, ExcelCellStyle cellStyle)
+    {
+        var font = workbook.CreateFont();
+        var excelFont = cellStyle.Font;
+        font.IsStrikeout = excelFont.IsStrikeout;
+        font.FontName = excelFont.FontName;
+        font.FontHeight = excelFont.FontHeight;
+        font.FontHeightInPoints = excelFont.FontHeightInPoints;
+        font.IsBold = excelFont.IsBold;
+        font.IsItalic = excelFont.IsItalic;
+        font.Color = excelFont.Color;
+        font.Boldweight = excelFont.BoldWeight;
+        font.Underline = excelFont.Underline;
+        font.TypeOffset = excelFont.TypeOffset;
+        font.Charset = excelFont.Charset;
+        style.SetFont(font);
+        return Task.CompletedTask;
+    }
+
+    protected virtual Task SetFillStyleAsync(ICellStyle style, ExcelCellStyle cellStyle)
+    {
+        style.FillPattern = cellStyle.FillPattern;
+        style.FillBackgroundColor = cellStyle.FillBackgroundColor;
+        style.FillForegroundColor = cellStyle.FillForegroundColor;
+        return Task.CompletedTask;
+    }
+
+    protected virtual Task SetBorderStyleAsync(ICellStyle style, ExcelCellStyle cellStyle)
+    {
+        style.BorderTop = cellStyle.BorderTop;
+        style.BorderBottom = cellStyle.BorderBottom;
+        style.BorderLeft = cellStyle.BorderLeft;
+        style.BorderRight = cellStyle.BorderRight;
+        style.TopBorderColor = cellStyle.TopBorderColor;
+        style.BottomBorderColor = cellStyle.BottomBorderColor;
+        style.LeftBorderColor = cellStyle.LeftBorderColor;
+        style.RightBorderColor = cellStyle.RightBorderColor;
+        style.BorderDiagonalColor = cellStyle.BorderDiagonalColor;
+        style.BorderDiagonalLineStyle = cellStyle.BorderDiagonalLineStyle;
+        style.BorderDiagonal = cellStyle.BorderDiagonal;
+        return Task.CompletedTask;
+    }
+
+    protected virtual Task SetCellValueAsync(ICell cell, PropertyInfo property, object value)
+    {
+        if (value == null) return Task.CompletedTask;
+        if (property.PropertyType == typeof(string))
+        {
+            cell.SetCellValue((string)value);
+        }
+        else if (property.PropertyType == typeof(int))
+        {
+            cell.SetCellValue((int)value);
+        }
+        else if (property.PropertyType == typeof(double))
+        {
+            cell.SetCellValue((double)value);
+        }
+        else if (property.PropertyType == typeof(DateTime))
+        {
+            var dateValue = (DateTime)value;
+            cell.SetCellValue(dateValue.ToOADate());
+        }
+        else
+        {
+        }
+
+        return Task.CompletedTask;
+    }
 }
