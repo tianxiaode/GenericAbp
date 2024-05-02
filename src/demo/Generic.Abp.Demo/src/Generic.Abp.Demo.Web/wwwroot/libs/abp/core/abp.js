@@ -86,13 +86,13 @@ var abp = abp || {};
             return key;
         }
 
-        var source = abp.localization.resources[sourceName];
+        var source = abp.localization.values[sourceName];
         if (!source) {
             abp.log.warn('Could not find localization source: ' + sourceName);
             return key;
         }
 
-        var value = source.texts[key];
+        var value = source[key];
         if (value == undefined) {
             return key;
         }
@@ -153,7 +153,7 @@ var abp = abp || {};
 
         for (var i = 0; i < packageMap.length; i++) {
             var map = packageMap[i];
-            if (map.name === language) {
+            if (map.name === language){
                 return map.value;
             }
         }
@@ -178,7 +178,7 @@ var abp = abp || {};
     abp.auth.grantedPolicies = abp.auth.grantedPolicies || {};
 
     abp.auth.isGranted = function (policyName) {
-        return abp.auth.grantedPolicies[policyName] != undefined;
+        return abp.auth.policies[policyName] != undefined && abp.auth.grantedPolicies[policyName] != undefined;
     };
 
     abp.auth.isAnyGranted = function () {
@@ -684,13 +684,6 @@ var abp = abp || {};
         document.cookie = cookieValue;
     }
 
-    /**
-     * Escape HTML to help prevent XSS attacks. 
-     */
-    abp.utils.htmlEscape = function (html) {
-        return typeof html === 'string' ? html.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;') : html;
-    }
-
     /* SECURITY ***************************************/
     abp.security = abp.security || {};
     abp.security.antiForgery = abp.security.antiForgery || {};
@@ -756,21 +749,6 @@ var abp = abp || {};
         if (kind === 'Utc') {
             return toUtc(date);
         }
-    };
-
-    /* FEATURES *************************************************/
-
-    abp.features = abp.features || {};
-
-    abp.features.values = abp.features.values || {};
-
-    abp.features.isEnabled = function (name) {
-        var value = abp.features.get(name);
-        return value == 'true' || value == 'True';
-    }
-
-    abp.features.get = function (name) {
-        return abp.features.values[name];
     };
 
 })();

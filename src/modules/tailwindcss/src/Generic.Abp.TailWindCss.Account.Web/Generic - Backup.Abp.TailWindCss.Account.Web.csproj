@@ -1,0 +1,66 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+  <Import Project="..\..\..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <OutputType>Library</OutputType>
+    <IsPackable>true</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Volo.Abp.Identity.AspNetCore" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.AutoMapper" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.Emailing" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.Account.Application.Contracts" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.OpenIddict.AspNetCore" Version="$(AbpVersion)" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="$(FileProvidersEmbeddedVersion)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Modules\**\*.js" />
+    <EmbeddedResource Include="Modules\**\*.css" />
+    <EmbeddedResource Include="Pages\**\*.js" />
+    <EmbeddedResource Include="Pages\**\*.css" />
+    <Content Remove="Modules\**\*.js" />
+    <Content Remove="Modules\**\*.css" />
+    <Content Remove="Pages\**\*.js" />
+    <Content Remove="Pages\**\*.css" />
+  </ItemGroup>
+
+  <Target Name="Tailwind" BeforeTargets="Build">
+    <Exec Command="npm run css:build" />
+  </Target>
+
+  <ItemGroup>
+    <Content Remove="Components\Brand\Default.cshtml" />
+    <Content Remove="Components\ContentTitle\Default.cshtml" />
+    <Content Remove="Components\MainNavbar\Default.cshtml" />
+    <Content Remove="Components\Menu\Default.cshtml" />
+    <Content Remove="Components\Menu\_MenuItem.cshtml" />
+    <Content Remove="Components\MetroMeta\Default.cshtml" />
+    <Content Remove="Components\PageAlerts\Default.cshtml" />
+    <Content Remove="Components\Toolbar\Default.cshtml" />
+    <Content Remove="Components\Toolbar\LanguageSwitch\Default.cshtml" />
+    <Content Remove="Components\Toolbar\UserMenu\Default.cshtml" />
+    <Content Remove="wwwroot\css\account.css" />
+    <EmbeddedResource Include="wwwroot\css\account.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Components\Brand\Default.cshtml" />
+    <None Include="Components\ContentTitle\Default.cshtml" />
+    <None Include="Components\MainNavbar\Default.cshtml" />
+    <None Include="Components\Menu\Default.cshtml" />
+    <None Include="Components\Menu\_MenuItem.cshtml" />
+    <None Include="Components\MetroMeta\Default.cshtml" />
+    <None Include="Components\PageAlerts\Default.cshtml" />
+    <None Include="Components\Toolbar\Default.cshtml" />
+    <None Include="Components\Toolbar\LanguageSwitch\Default.cshtml" />
+    <None Include="Components\Toolbar\UserMenu\Default.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Pages\新文件夹\" />
+  </ItemGroup>
+
+</Project>

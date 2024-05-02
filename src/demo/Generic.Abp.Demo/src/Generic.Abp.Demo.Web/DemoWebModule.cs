@@ -2,22 +2,22 @@
 using Generic.Abp.Demo.Localization;
 using Generic.Abp.Demo.MultiTenancy;
 using Generic.Abp.Demo.Web.Menus;
-using Generic.Abp.Metro.UI.Account.Web;
+using Generic.Abp.Metro.UI.Identity.Web;
+using Generic.Abp.Metro.UI.OpenIddict.Web;
+using Generic.Abp.Metro.UI.Packages.FontAwesome;
+using Generic.Abp.Metro.UI.Theme.Basic.Bundling;
 using Generic.Abp.Metro.UI.Theme.Basic.Demo;
 using Generic.Abp.Metro.UI.Theme.Shared;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using OpenIddict.Validation.AspNetCore;
 using System.IO;
-using Generic.Abp.Metro.UI.Identity.Web;
-using Generic.Abp.Metro.UI.OpenIddict.Web;
-using Generic.Abp.Metro.UI.Packages.FontAwesome;
-using Generic.Abp.Metro.UI.Theme.Basic.Bundling;
+using Generic.Abp.TailWindCss.Account.Web;
+using Microsoft.AspNetCore.Extensions.DependencyInjection;
+using OpenIddict.Validation.AspNetCore;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.Localization;
@@ -40,7 +40,7 @@ namespace Generic.Abp.Demo.Web
         typeof(AbpAutofacModule),
         typeof(GenericAbpMetroUiOpenIddictWebModule),
         typeof(GenericAbpMetroUiIdentityWebModule),
-        typeof(GenericAbpMetroUiAccountWebOpenIddictModule),
+        typeof(GenericAbpTailWindCssAccountWebModule),
         typeof(GenericAbpMetroUiThemeBasicDemoModule),
         typeof(AbpAspNetCoreSerilogModule),
         typeof(AbpSwashbuckleModule)

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Asp.Versioning;
 using Volo.Abp.Identity;
 
 namespace Generic.Abp.Demo.Controllers
@@ -18,7 +19,7 @@ namespace Generic.Abp.Demo.Controllers
         {
             IdentityUserManager = identityUserManager;
         }
-        protected IdentityUserManager IdentityUserManager { get; }
 
+        protected IdentityUserManager IdentityUserManager { get; }
     }
 }
