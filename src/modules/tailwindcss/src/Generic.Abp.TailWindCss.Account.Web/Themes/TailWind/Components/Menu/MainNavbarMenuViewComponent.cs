@@ -1,8 +1,9 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.UI.Navigation;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Themes.Basic.Components.Menu;
+namespace Generic.Abp.TailWindCss.Account.Web.Themes.TailWind.Components.Menu;
 
 public class MainNavbarMenuViewComponent : AbpViewComponent
 {
@@ -16,6 +17,6 @@ public class MainNavbarMenuViewComponent : AbpViewComponent
     public virtual async Task<IViewComponentResult> InvokeAsync()
     {
         var menu = await MenuManager.GetMainMenuAsync();
-        return View("~/Themes/Basic/Components/Menu/Default.cshtml", menu);
+        return View("~/Themes/TailWind/Components/Menu/Default.cshtml", menu);
     }
 }

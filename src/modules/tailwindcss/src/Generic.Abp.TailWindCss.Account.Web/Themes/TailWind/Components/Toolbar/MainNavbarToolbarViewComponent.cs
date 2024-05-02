@@ -1,8 +1,9 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Themes.Basic.Components.Toolbar;
+namespace Generic.Abp.TailWindCss.Account.Web.Themes.TailWind.Components.Toolbar;
 
 public class MainNavbarToolbarViewComponent : AbpViewComponent
 {
@@ -16,6 +17,6 @@ public class MainNavbarToolbarViewComponent : AbpViewComponent
     public virtual async Task<IViewComponentResult> InvokeAsync()
     {
         var toolbar = await ToolbarManager.GetAsync(StandardToolbars.Main);
-        return View("~/Themes/Basic/Components/Toolbar/Default.cshtml", toolbar);
+        return View("~/Themes/TailWind/Components/Toolbar/Default.cshtml", toolbar);
     }
 }

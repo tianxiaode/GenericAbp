@@ -1,6 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using Generic.Abp.TailWindCss.Account.Web.Bundling;
+using Generic.Abp.TailWindCss.Account.Web.Toolbars;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Account;
+using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Bundling;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars;
+using Volo.Abp.AspNetCore.Mvc.UI.Theming;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.ExceptionHandling;
 using Volo.Abp.Identity.AspNetCore;
@@ -32,9 +38,43 @@ public class GenericAbpTailWindCssAccountWebModule : AbpModule
 
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
+        Configure<AbpThemingOptions>(options =>
+        {
+            options.Themes.Add<TailWindTheme>();
+
+            if (options.DefaultThemeName == null)
+            {
+                options.DefaultThemeName = TailWindTheme.Name;
+            }
+        });
+
         Configure<AbpVirtualFileSystemOptions>(options =>
         {
             options.FileSets.AddEmbedded<GenericAbpTailWindCssAccountWebModule>();
+        });
+
+        Configure<AbpToolbarOptions>(options =>
+        {
+            options.Contributors.Add(new TailWindThemeMainTopToolbarContributor());
+        });
+
+        Configure<AbpBundlingOptions>(options =>
+        {
+            options
+                .StyleBundles
+                .Add(TailWindThemeBundles.Styles.Global, bundle =>
+                {
+                    bundle
+                        .AddContributors(typeof(TailWindGlobalStyleContributor));
+                });
+
+            options
+                .ScriptBundles
+                .Add(TailWindThemeBundles.Scripts.Global, bundle =>
+                {
+                    bundle
+                        .AddContributors(typeof(TailWindGlobalScriptContributor));
+                });
         });
 
 

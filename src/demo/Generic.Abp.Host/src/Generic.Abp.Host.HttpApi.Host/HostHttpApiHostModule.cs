@@ -12,10 +12,12 @@ using OpenIddict.Validation.AspNetCore;
 using System;
 using System.IO;
 using System.Linq;
+using Generic.Abp.TailWindCss.Account.Web;
 using Volo.Abp;
 using Volo.Abp.Account;
 using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.Modularity;
@@ -34,8 +36,8 @@ namespace Generic.Abp.Host;
     typeof(HostApplicationModule),
     typeof(HostEntityFrameworkCoreModule),
     typeof(AbpSwashbuckleModule),
-    typeof(AbpAspNetCoreSerilogModule)
-    //typeof(GenericAbpTailWindCssAccountWebModule)
+    typeof(AbpAspNetCoreSerilogModule),
+    typeof(GenericAbpTailWindCssAccountWebModule)
 )]
 public class HostHttpApiHostModule : AbpModule
 {
@@ -195,7 +197,7 @@ public class HostHttpApiHostModule : AbpModule
 
         if (!env.IsDevelopment())
         {
-            //app.UseErrorPage();
+            app.UseErrorPage();
         }
 
         app.UseAbpSecurityHeaders();

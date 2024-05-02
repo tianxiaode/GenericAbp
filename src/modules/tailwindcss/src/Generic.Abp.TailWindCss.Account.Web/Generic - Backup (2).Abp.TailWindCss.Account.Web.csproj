@@ -5,7 +5,6 @@
     <TargetFramework>net8.0</TargetFramework>
     <OutputType>Library</OutputType>
     <IsPackable>true</IsPackable>
-    <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,14 +21,14 @@
     <EmbeddedResource Include="Modules\**\*.css" />
     <EmbeddedResource Include="Pages\**\*.js" />
     <EmbeddedResource Include="Pages\**\*.css" />
-    <EmbeddedResource Include="Themes\**\*.js" />
-    <EmbeddedResource Include="Themes\**\*.css" />
+    <EmbeddedResource Include="Theme\**\*.js" />
+    <EmbeddedResource Include="Theme\**\*.css" />
     <Content Remove="Modules\**\*.js" />
     <Content Remove="Modules\**\*.css" />
     <Content Remove="Pages\**\*.js" />
     <Content Remove="Pages\**\*.css" />
-    <Content Remove="Themes\**\*.js" />
-    <Content Remove="Themes\**\*.css" />
+    <Content Remove="Theme\**\*.js" />
+    <Content Remove="Theme\**\*.css" />
   </ItemGroup>
 
   <Target Name="Tailwind" BeforeTargets="Build">
@@ -37,27 +36,14 @@
   </Target>
 
   <ItemGroup>
-    <EmbeddedResource Remove="Themes\TailWind\Global\styles\site.css" />
+    <Content Remove="wwwroot\css\main.css" />
+    <EmbeddedResource Include="wwwroot\css\main.css" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Themes\TailWind\Global\styles\site.css" />
-  </ItemGroup>
-
-
-
-
-  <ItemGroup>
+    <Folder Include="Themes\TailWind\" />
     <Folder Include="Toolbars\" />
-  </ItemGroup>
-
-
-
-
-  <ItemGroup>
-    <Resource Include="Themes\TailWind\Global\styles\site.css">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Resource>
+    <Folder Include="新文件夹\" />
   </ItemGroup>
 
 </Project>

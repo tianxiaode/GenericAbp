@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.Alerts;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Themes.Basic.Components.PageAlerts;
+namespace Generic.Abp.TailWindCss.Account.Web.Themes.TailWind.Components.PageAlerts;
 
 public class PageAlertsViewComponent : AbpViewComponent
 {
@@ -14,6 +15,6 @@ public class PageAlertsViewComponent : AbpViewComponent
 
     public IViewComponentResult Invoke(string name)
     {
-        return View("~/Themes/Basic/Components/PageAlerts/Default.cshtml", AlertManager.Alerts);
+        return View("~/Themes/TailWind/Components/PageAlerts/Default.cshtml", AlertManager.Alerts);
     }
 }

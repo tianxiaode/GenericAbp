@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.Layout;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Themes.Basic.Components.ContentTitle;
+namespace Generic.Abp.TailWindCss.Account.Web.Themes.TailWind.Components.ContentTitle;
 
 public class ContentTitleViewComponent : AbpViewComponent
 {
@@ -14,6 +15,6 @@ public class ContentTitleViewComponent : AbpViewComponent
 
     public virtual IViewComponentResult Invoke()
     {
-        return View("~/Themes/Basic/Components/ContentTitle/Default.cshtml", PageLayout.Content);
+        return View("~/Themes/TailWind/Components/ContentTitle/Default.cshtml", PageLayout.Content);
     }
 }

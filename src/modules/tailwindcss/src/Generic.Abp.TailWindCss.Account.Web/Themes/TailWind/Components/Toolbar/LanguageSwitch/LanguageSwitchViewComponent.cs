@@ -4,9 +4,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RequestLocalization;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Localization;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Themes.Basic.Components.Toolbar.LanguageSwitch;
+namespace Generic.Abp.TailWindCss.Account.Web.Themes.TailWind.Components.Toolbar.LanguageSwitch;
 
 public class LanguageSwitchViewComponent : AbpViewComponent
 {
@@ -27,7 +28,8 @@ public class LanguageSwitchViewComponent : AbpViewComponent
 
         if (currentLanguage == null)
         {
-            var abpRequestLocalizationOptionsProvider = HttpContext.RequestServices.GetRequiredService<IAbpRequestLocalizationOptionsProvider>();
+            var abpRequestLocalizationOptionsProvider =
+                HttpContext.RequestServices.GetRequiredService<IAbpRequestLocalizationOptionsProvider>();
             var localizationOptions = await abpRequestLocalizationOptionsProvider.GetLocalizationOptionsAsync();
             if (localizationOptions.DefaultRequestCulture != null)
             {
@@ -51,6 +53,6 @@ public class LanguageSwitchViewComponent : AbpViewComponent
             OtherLanguages = languages.Where(l => l != currentLanguage).ToList()
         };
 
-        return View("~/Themes/Basic/Components/Toolbar/LanguageSwitch/Default.cshtml", model);
+        return View("~/Themes/TailWind/Components/Toolbar/LanguageSwitch/Default.cshtml", model);
     }
 }
