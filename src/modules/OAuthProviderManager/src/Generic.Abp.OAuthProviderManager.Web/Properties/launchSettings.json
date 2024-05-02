@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "Generic.Abp.OAuthProviderManager.Web": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:51176;http://localhost:51177"
+    }
+  }
+}

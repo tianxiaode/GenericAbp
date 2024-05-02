@@ -1,0 +1,14 @@
+{
+  "culture": "en",
+  "texts": {
+    "OAuthProvider": "OAuth Provider",
+    "OAuthProviders": "OAuth Providers",
+    "Permission:ChangePermissions": "Change permissions",
+    "Permission:OAuthProviderManager": "OAuth Provider Manager",
+    "OAuthProviderManager.OAuthProviders.ManagePermissions": "Manage",
+    "OAuthProvider:Provider": "Provider",
+    "OAuthProvider:Enabled": "Enabled",
+    "OAuthLogin:ReturnUrl": "Return Url",
+    "OAuthLogin:ReturnUrlHash": "Return Url Hash"
+  }
+}
