@@ -35,4 +35,9 @@
     <None Remove="Logs\**" />
   </ItemGroup>
 
+
+  <ItemGroup>
+    <Folder Include="Pages\Shared\" />
+  </ItemGroup>
+
 </Project>

@@ -1,0 +1,25 @@
+﻿@using Generic.Abp.TailWindCss.Account.Web.Providers
+@inject ILayoutDataProvider LayoutDataProvider
+@{
+    Layout = "_Layout";
+}
+
+@section styles
+{
+    @await RenderSectionAsync("styles", false)
+
+}
+<div class="hero min-h-screen bg-hero" style="background-image:url('@LayoutDataProvider.AccountHeroBackgroundUrl')">
+
+    <div class="card w-96 bg-base-100 shadow-xl">
+        <div class="card-body">
+            @RenderBody()
+        </div>
+    </div>
+
+</div>
+
+@section scripts {
+    @await RenderSectionAsync("scripts", false)    
+}
+

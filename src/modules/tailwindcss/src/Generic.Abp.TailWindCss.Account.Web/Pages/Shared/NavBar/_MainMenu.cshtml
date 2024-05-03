@@ -1,0 +1,15 @@
+﻿@using Generic.Abp.TailWindCss.Account.Web.Providers
+@inject ILayoutMenuProvider LayoutMenuProvider;
+@{
+    var menus = await LayoutMenuProvider.GetMainMenusAsync();
+    
+}
+<div class="hidden sm:ml-6 sm:block">
+    <div class="flex space-x-4">
+        @foreach (var menu in menus)
+        {
+            <a class="text-white px-3 py-2 text-sm font-medium md:hover:bg-gray-700" href="@menu.Href"> @menu.Name </a>
+        }
+        
+    </div>
+</div>

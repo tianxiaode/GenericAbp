@@ -10,6 +10,6 @@ public class TailWindTheme : ITheme, ITransientDependency
 
     public virtual string GetLayout(string name, bool fallbackToDefault = true)
     {
-        return "~/Themes/TailWind/Layouts/Empty.cshtml";
+        return "~/Pages/Shared/_Layout.cshtml";
     }
 }

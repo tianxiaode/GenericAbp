@@ -1,11 +1,9 @@
 ﻿using Generic.Abp.TailWindCss.Account.Web.Bundling;
-using Generic.Abp.TailWindCss.Account.Web.Toolbars;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Account;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
-using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Bundling;
-using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars;
+using Volo.Abp.AspNetCore.Mvc.UI.Packages.FontAwesome;
 using Volo.Abp.AspNetCore.Mvc.UI.Theming;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.ExceptionHandling;
@@ -53,11 +51,6 @@ public class GenericAbpTailWindCssAccountWebModule : AbpModule
             options.FileSets.AddEmbedded<GenericAbpTailWindCssAccountWebModule>();
         });
 
-        Configure<AbpToolbarOptions>(options =>
-        {
-            options.Contributors.Add(new TailWindThemeMainTopToolbarContributor());
-        });
-
         Configure<AbpBundlingOptions>(options =>
         {
             options
@@ -65,7 +58,8 @@ public class GenericAbpTailWindCssAccountWebModule : AbpModule
                 .Add(TailWindThemeBundles.Styles.Global, bundle =>
                 {
                     bundle
-                        .AddContributors(typeof(TailWindGlobalStyleContributor));
+                        .AddContributors(typeof(TailWindGlobalStyleContributor))
+                        .AddContributors(typeof(FontAwesomeStyleContributor));
                 });
 
             options

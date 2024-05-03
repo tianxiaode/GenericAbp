@@ -29,7 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Pages\scripts\main.js" />
+    <Folder Include="Pages\Global\新文件夹1\" />
   </ItemGroup>
 
 

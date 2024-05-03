@@ -22,20 +22,68 @@
     <EmbeddedResource Include="Modules\**\*.css" />
     <EmbeddedResource Include="Pages\**\*.js" />
     <EmbeddedResource Include="Pages\**\*.css" />
+    <EmbeddedResource Include="Themes\**\*.js" />
+    <EmbeddedResource Include="Themes\**\*.css" />
     <Content Remove="Modules\**\*.js" />
     <Content Remove="Modules\**\*.css" />
     <Content Remove="Pages\**\*.js" />
     <Content Remove="Pages\**\*.css" />
+    <Content Remove="Themes\**\*.js" />
+    <Content Remove="Themes\**\*.css" />
   </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="Pages\scripts\main.js" />
-  </ItemGroup>
-
 
   <Target Name="Tailwind" BeforeTargets="Build">
     <Exec Command="npm run css:build" />
   </Target>
 
-  
+  <ItemGroup>
+    <Content Remove="Themes\TailWind\Layouts\_Header.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="Themes\TailWind\Global\styles\site.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Themes\TailWind\Global\styles\site.css" />
+  </ItemGroup>
+
+
+
+
+  <ItemGroup>
+    <Folder Include="Pages\新文件夹\" />
+    <Folder Include="Toolbars\" />
+  </ItemGroup>
+
+
+
+
+  <ItemGroup>
+    <Resource Include="Themes\TailWind\Global\styles\site.css">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+
+
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Themes\TailWind\Layouts\_Header.cshtml" />
+  </ItemGroup>
+
+
+
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Themes\TailWind\Layouts\_Header.cshtml" />
+  </ItemGroup>
+
+
+
+
+  <ItemGroup>
+    <None Include="Themes\TailWind\Layouts\_Header.cshtml" />
+  </ItemGroup>
+
 </Project>

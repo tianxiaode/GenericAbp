@@ -8,6 +8,6 @@ public class TailWindGlobalStyleContributor : BundleContributor
 {
     public override void ConfigureBundle(BundleConfigurationContext context)
     {
-        context.Files.Add("/Themes/TailWind/Global/styles/main.css");
+        context.Files.Add("/Pages/styles/main.css");
     }
 }

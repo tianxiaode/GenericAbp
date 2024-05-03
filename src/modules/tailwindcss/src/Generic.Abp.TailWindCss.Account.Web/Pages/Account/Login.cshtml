@@ -8,11 +8,10 @@
 @using Generic.Abp.TailWindCss.Account.Web.Pages.Account
 @model Generic.Abp.TailWindCss.Account.Web.Pages.Account.LoginModel
 @inject IHtmlLocalizer<AccountResource> L
-@inject IThemeManager ThemeManager
 @inject Volo.Abp.Settings.ISettingProvider SettingProvider
 
 @{
-    Layout = ThemeManager.CurrentTheme.GetEmptyLayout();
+    Layout = "Shared/_AccountLayout";
 }
 
 @section scripts
@@ -22,48 +21,45 @@
     </abp-script-bundle>
 }
 
-<div class="card mt-3 shadow-sm rounded">
-    <div class="card-body p-5">
-        <h4>@L["Login"]</h4>
-        @if (await SettingProvider.IsTrueAsync(AccountSettingNames.IsSelfRegistrationEnabled))
-        {
-            <strong>
-                @L["AreYouANewUser"]
-                <a href="@Url.Page("./Register", new {returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash})" class="text-decoration-none">@L["Register"]</a>
-            </strong>
-        }
+            <h2 class="card-title">@L["Login"]</h2>
         @if (Model.EnableLocalLogin)
         {
-            <form method="post" class="mt-4">
-                <div class="mb-3">
-                    <label asp-for="LoginInput.UserNameOrEmailAddress" class="form-label"></label>
-                    <input asp-for="LoginInput.UserNameOrEmailAddress" class="form-control" />
-                    <span asp-validation-for="LoginInput.UserNameOrEmailAddress" class="text-danger"></span>
+            <form method="post">
+                <div class="form-control w-full max-w-xs mb-4 {controlClass}">
+                    <div class="input input-bordered focus:border-primary focus-within:border-primary flex items-center gap-2">
+                    <i class="fas fa-user text-info w-4 h-4 opacity-70"></i>
+                <input asp-for="LoginInput.UserNameOrEmailAddress" class="grow" autocomplete="username" placeholder="@L[" LoginInput.UserNameOrEmailAddress"]" onchange="onInputValueChange(event)" />
+                <button tabindex="-1" type="button" class="btn btn-ghost btn-sm clear-button hidden " onclick="clearInputValue(event)">
+                        <i class=" fas fa-times w-4 h-4 opacity-70 clear-button"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="form-control w-full max-w-xs mb-4 {controlClass}">
+                    <div class="input input-bordered focus:border-primary focus-within:border-primary flex items-center gap-2">
+                        <i  class="fas fa-key text-info w-4 h-4 opacity-70" ></i>
+                        <input asp-for="LoginInput.Password" class="grow" autocomplete="current-password" placeholder="@L[" LoginInput.UserNameOrEmailAddress"]" onchange="onInputValueChange(event)" />
+                    <button tabindex="-1" type="button" class="btn btn-ghost btn-sm clear-button hidden" onclick="clearInputValue(event)" pattern=".*">
+                        <i class=" fas fa-times w-4 h-4 opacity-70 clear-button"></i>
+                        </button>
+                        <button tabindex="-1" type="button" class="btn btn-ghost btn-sm clear-button hidden" onclick="clearInputValue(event)" pattern=".*">
+                            <i class=" fas fa-eye w-4 h-4 opacity-70 clear-button"></i>
+                        </button>
+                    </div>
                 </div>
 
-                <div class="mb-3">
-                    <label asp-for="LoginInput.Password" class="form-label"></label>
-                    <div class="input-group">
-                        <input type="password" class="form-control" autocomplete="new-password" maxlength="@IdentityUserConsts.MaxPasswordLength" asp-for="LoginInput.Password" />
-                        <button class="btn btn-secondary" type="button" id="PasswordVisibilityButton"><i class="fa fa-eye-slash" aria-hidden="true"></i></button>
+                <div class="flex justify-between items-center mt-4">
+                    <div class="form-control">
+                        <label class="label cursor-pointer">
+                            <input asp-for="LoginInput.RememberMe" name="rememberMe" type="checkbox" class="checkbox"/>
+                            <span class="label-text ml-2">@L["RememberMe"].Value</span>
+                        </label>
                     </div>
-                    <span asp-validation-for="LoginInput.Password"></span>
+                    <div class="flex-1 text-right">
+                        <a class="text-sm text-primary" href="@Url.Page("./ForgotPassword", new { returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash })">@L["ForgotPassword"]</a>
+                    </div>
                 </div>
-                <abp-row>
-                    <abp-column>
-                        <abp-input asp-for="LoginInput.RememberMe" class="mb-4" />
-                    </abp-column>
-                    <abp-column class="text-end">
-                        <a href="@Url.Page("./ForgotPassword", new {returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash})">@L["ForgotPassword"]</a>
-                    </abp-column>
-                </abp-row>
-                <div class="d-grid gap-2">
-                    <abp-button type="submit" button-type="Primary" name="Action" value="Login" class="btn-lg mt-3">@L["Login"]</abp-button>
-                    @if (Model.ShowCancelButton)
-                    {
-                        <abp-button type="submit" button-type="Secondary" formnovalidate="formnovalidate" name="Action" value="Cancel" class="btn-lg mt-3">@L["Cancel"]</abp-button>
-                    }
-                </div>
+
+                <button type="submit" class="btn btn-primary w-full text-white text-lg mt-4">@L["Login"]</button>
             </form>
         }
 
@@ -79,6 +75,16 @@
                 </form>
             </div>
         }
+        
+        @if (await SettingProvider.IsTrueAsync(AccountSettingNames.IsSelfRegistrationEnabled))
+        {
+            <div class=" font-bold text-sm mt-2">
+                    @L["AreYouANewUser"]
+                    <a href="@Url.Page("./Register", new {returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash})" class="text-sm text-primary">@L["Register"]</a>
+            </div>
+
+        }
+
 
         @if (!Model.EnableLocalLogin && !Model.VisibleExternalProviders.Any())
         {
@@ -88,5 +94,3 @@
             </div>
         }
 
-    </div>
-</div>

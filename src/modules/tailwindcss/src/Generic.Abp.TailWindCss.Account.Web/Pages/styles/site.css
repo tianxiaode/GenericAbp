@@ -1,0 +1,32 @@
+﻿@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.dropdown .selected {
+    background-color: #e5e7eb;
+}
+
+.input .input-error {
+    background-color: var(--fallback-er, oklch(var(--er)/var(--tw-border-opacity))) !important;
+}
+
+.input:focus,
+.input:focus-within {
+    outline: none;
+}
+
+.loading-mask {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    /* 半透明黑色 */
+    z-index: 9999;
+    /* 确保在最顶层 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
