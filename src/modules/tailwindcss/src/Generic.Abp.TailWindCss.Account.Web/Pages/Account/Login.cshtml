@@ -6,10 +6,10 @@
 @using Volo.Abp.Identity;
 @using Volo.Abp.Settings
 @using Generic.Abp.TailWindCss.Account.Web.Pages.Account
+@using Generic.Abp.TailWindCss.Account.Web.Models
 @model Generic.Abp.TailWindCss.Account.Web.Pages.Account.LoginModel
 @inject IHtmlLocalizer<AccountResource> L
 @inject Volo.Abp.Settings.ISettingProvider SettingProvider
-
 @{
     Layout = "Shared/_AccountLayout";
 }
@@ -19,33 +19,32 @@
     <abp-script-bundle name="@typeof(LoginModel).FullName">
         <abp-script src="/Pages/Account/Login.js" />
     </abp-script-bundle>
-}
+    }
+    
+    @if (!ModelState.IsValid)
+    {
+        foreach (var key in ModelState.Keys)
+        {
+            <div>@key: @System.Text.Json.JsonSerializer.Serialize(ModelState.GetOrDefault(key))</div>
+        }
+    }
 
-            <h2 class="card-title">@L["Login"]</h2>
+    <h2 class="card-title">@L["Login"]</h2>
         @if (Model.EnableLocalLogin)
         {
             <form method="post">
-                <div class="form-control w-full max-w-xs mb-4 {controlClass}">
-                    <div class="input input-bordered focus:border-primary focus-within:border-primary flex items-center gap-2">
-                    <i class="fas fa-user text-info w-4 h-4 opacity-70"></i>
-                <input asp-for="LoginInput.UserNameOrEmailAddress" class="grow" autocomplete="username" placeholder="@L[" LoginInput.UserNameOrEmailAddress"]" onchange="onInputValueChange(event)" />
-                <button tabindex="-1" type="button" class="btn btn-ghost btn-sm clear-button hidden " onclick="clearInputValue(event)">
-                        <i class=" fas fa-times w-4 h-4 opacity-70 clear-button"></i>
-                        </button>
-                    </div>
-                </div>
-                <div class="form-control w-full max-w-xs mb-4 {controlClass}">
-                    <div class="input input-bordered focus:border-primary focus-within:border-primary flex items-center gap-2">
-                        <i  class="fas fa-key text-info w-4 h-4 opacity-70" ></i>
-                        <input asp-for="LoginInput.Password" class="grow" autocomplete="current-password" placeholder="@L[" LoginInput.UserNameOrEmailAddress"]" onchange="onInputValueChange(event)" />
-                    <button tabindex="-1" type="button" class="btn btn-ghost btn-sm clear-button hidden" onclick="clearInputValue(event)" pattern=".*">
-                        <i class=" fas fa-times w-4 h-4 opacity-70 clear-button"></i>
-                        </button>
-                        <button tabindex="-1" type="button" class="btn btn-ghost btn-sm clear-button hidden" onclick="clearInputValue(event)" pattern=".*">
-                            <i class=" fas fa-eye w-4 h-4 opacity-70 clear-button"></i>
-                        </button>
-                    </div>
-                </div>
+        @await Html.PartialAsync("Shared/Form/_Input", new InputModel(
+            Html.TextBoxFor(m => m.LoginInput.UserNameOrEmailAddress), 
+            iconCls: "fas fa-user text-info", 
+            placeholder: L["UserNameOrEmailAddress"].Value, 
+            autocomplete:"username"))
+        <span asp-validation-for="LoginInput.UserNameOrEmailAddress" class="text-danger"></span>
+        <span asp-validation-for="LoginInput.Password"></span>
+        @await Html.PartialAsync("Shared/Form/_Input", new InputModel(
+            Html.TextBoxFor(m => m.LoginInput.Password), 
+            iconCls: "fas fa-key text-info", 
+            placeholder: L["Password"].Value, 
+            autocomplete: "current-password"))
 
                 <div class="flex justify-between items-center mt-4">
                     <div class="form-control">

@@ -34,3 +34,14 @@
         button.className += ' hidden';
     }  
 
+    let keypressTask;
+    function onInputKyepress(event) {
+         if (keypressTask) {
+            clearTimeout(keypressTask);
+        }
+        keypressTask = setTimeout(function() {
+            keypressTask = null;
+            onInputValueChange(event);
+        }, 500);
+    }
+

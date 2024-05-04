@@ -70,11 +70,6 @@ public class HostHttpApiHostModule : AbpModule
         var configuration = context.Services.GetConfiguration();
         var hostingEnvironment = context.Services.GetHostingEnvironment();
 
-        if (!configuration.GetValue<bool>("App:DisablePII"))
-        {
-            Microsoft.IdentityModel.Logging.IdentityModelEventSource.ShowPII = true;
-        }
-
 
         ConfigureAuthentication(context);
         ConfigureUrls(configuration);
@@ -180,6 +175,12 @@ public class HostHttpApiHostModule : AbpModule
 
     private void ConfigureExternalProviders(ServiceConfigurationContext context)
     {
+        context.Services.AddAuthentication()
+            .AddGitHub(options =>
+            {
+                options.ClientId = "7e3b22278e8222293563";
+                options.ClientSecret = "1111";
+            });
     }
 
 
@@ -205,7 +206,7 @@ public class HostHttpApiHostModule : AbpModule
         app.UseRouting();
         app.UseCors();
         app.UseAuthentication();
-        //app.UseAbpOpenIddictValidation();
+        app.UseAbpOpenIddictValidation();
 
         if (MultiTenancyConsts.IsEnabled)
         {

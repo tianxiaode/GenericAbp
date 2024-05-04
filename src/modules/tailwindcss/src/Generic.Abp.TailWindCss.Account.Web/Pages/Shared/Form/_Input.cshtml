@@ -1,0 +1,55 @@
+﻿@using Generic.Abp.TailWindCss.Account.Web.Models
+@model Generic.Abp.TailWindCss.Account.Web.Models.InputModel
+
+@{
+    var input = (TagBuilder)Model.Input;
+    var type = input.Attributes["type"];
+    var label = (TagBuilder)Model.Label;
+    var inputCls = Model.InputCls == null ? "grow" : Model.InputCls + " " + "grow";
+    input.Attributes.Add("class", inputCls);
+    input.Attributes.Add("autocomplete", Model.Autocomplete);
+    input.Attributes.Add("onchange", "onInputValueChange(event)");
+    input.Attributes.Add("onkeypress", "onInputKyepress(event)");
+    if (Model.Placeholder != null)
+    {
+        input.Attributes.Add("placeholder", Model.Placeholder);
+    }
+    label?.Attributes.Add("class", "label");
+
+}
+
+<div class="form-control w-full max-w-xs mb-4 @Model.ControlCls">
+    @if(label != null && Model.LabelAlign == LabelAlign.Top){
+        @label
+    }
+    <div class="input input-bordered focus:border-primary focus-within:border-primary  flex items-center gap-2">
+    @if (label != null && Model.LabelAlign == LabelAlign.Left)
+    {
+            @label
+    }
+        @if (!Model.IconCls.IsNullOrEmpty())
+        {
+            <i class="@Model.IconCls w-4 h-4 opacity-70"></i>
+        }
+        @input
+        @if (Model.ShowClear)
+        {
+            <button tabindex="-1" type="button" class="btn btn-ghost btn-sm clear-button hidden" onclick="clearInputValue(event)" >
+                <i class=" fas fa-times w-4 h-4 opacity-70 clear-button"></i>
+            </button>
+        }
+        
+        @if (type == "password")
+        {
+            <button tabindex="-1" type="button" class="btn btn-ghost btn-sm show-password-button hidden" onclick="onShowPassword(event)" pattern=".*">
+                <i class=" fas fa-eye w-4 h-4 opacity-70 show-password-button"></i>
+            </button>
+
+        }
+    </div>
+    <div class="label hidden">
+        <span class="label-text-alt text-error"></span>
+    </div>
+</div>
+
+

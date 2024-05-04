@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Account;
+using Volo.Abp.Account.Localization;
+using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.FontAwesome;
 using Volo.Abp.AspNetCore.Mvc.UI.Theming;
@@ -28,6 +30,13 @@ public class GenericAbpTailWindCssAccountWebModule : AbpModule
 
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
+        context.Services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
+        {
+            options.AddAssemblyResource(typeof(AccountResource),
+                typeof(GenericAbpTailWindCssAccountWebModule).Assembly);
+        });
+
+
         PreConfigure<IMvcBuilder>(mvcBuilder =>
         {
             mvcBuilder.AddApplicationPartIfNotExists(typeof(GenericAbpTailWindCssAccountWebModule).Assembly);
@@ -48,7 +57,8 @@ public class GenericAbpTailWindCssAccountWebModule : AbpModule
 
         Configure<AbpVirtualFileSystemOptions>(options =>
         {
-            options.FileSets.AddEmbedded<GenericAbpTailWindCssAccountWebModule>();
+            options.FileSets.AddEmbedded<GenericAbpTailWindCssAccountWebModule>(
+                "Generic.Abp.TailWindCss.Account.Web");
         });
 
         Configure<AbpBundlingOptions>(options =>

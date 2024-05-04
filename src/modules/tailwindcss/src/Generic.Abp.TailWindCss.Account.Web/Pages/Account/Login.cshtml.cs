@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Linq;
@@ -93,11 +94,21 @@ public class LoginModel : AccountPageModel
     {
         await CheckLocalLoginAsync();
 
-        ValidateModel();
-
         ExternalProviders = await GetExternalProviders();
 
         EnableLocalLogin = await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin);
+
+        try
+        {
+            ValidateModel();
+        }
+        catch (AbpValidationException e)
+        {
+            Console.WriteLine(e);
+            Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(e.ValidationErrors));
+            return NoContent();
+        }
+
 
         await ReplaceEmailToUsernameOfInputIfNeeds();
 
@@ -328,11 +339,13 @@ public class LoginModel : AccountPageModel
     {
         [Required]
         [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxEmailLength))]
+        [DisplayName("UserNameOrEmailAddress")]
         public string UserNameOrEmailAddress { get; set; }
 
         [Required]
         [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxPasswordLength))]
         [DataType(DataType.Password)]
+        [DisplayName("Password")]
         [DisableAuditing]
         public string Password { get; set; }
 
