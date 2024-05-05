@@ -10,6 +10,7 @@ public class TailWindGlobalStyleContributor : BundleContributor
     {
         context.Files.Add("/libs/fontawesome/css/all.min.css");
         context.Files.Add("/libs/fontawesome/css/v4-shims.min.css");
-        context.Files.Add("/Pages/styles/main.css");
+        context.Files.Add("/libs/abp/core/abp.css");
+        context.Files.Add("/css/tailwind.css");
     }
 }

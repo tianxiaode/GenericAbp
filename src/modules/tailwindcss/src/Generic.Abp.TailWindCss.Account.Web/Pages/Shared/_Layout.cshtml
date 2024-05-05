@@ -50,6 +50,10 @@
     @await Html.PartialAsync("_BodyLast")
     
     <abp-script-bundle name="@TailWindThemeBundles.Scripts.Global"></abp-script-bundle>
+    <script src="~/tailwind/ApplicationLocalizationScript?cultureName=@CultureInfo.CurrentUICulture.Name"></script>
+    <script src="~/tailwind/ApplicationConfigurationScript"></script>
+    <script src="~/tailwind/ServiceProxyScript"></script>
+
     @await RenderSectionAsync("scripts", false)
 
     </body>

@@ -9,6 +9,7 @@ public class TailWindGlobalScriptContributor : BundleContributor
     {
         context.Files.Add("/libs/lodash/lodash.min.js");
         context.Files.Add("/libs/cash/cash.min.js");
-        context.Files.Add("/Pages/scripts/main.js");
+        context.Files.Add("/libs/abp/core/abp.js");
+        context.Files.Add("/js/tailwind.js");
     }
 }

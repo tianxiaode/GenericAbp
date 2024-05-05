@@ -29,29 +29,28 @@
     <EmbeddedResource Include="Pages\**\*.css" />
     <EmbeddedResource Include="Views\**\*.js" />
     <EmbeddedResource Include="Views\**\*.css" />
-    <EmbeddedResource Include="wwwroot\**\*.*" />
     <Content Remove="Modules\**\*.js" />
     <Content Remove="Modules\**\*.css" />
     <Content Remove="Pages\**\*.js" />
     <Content Remove="Pages\**\*.css" />
     <Content Remove="Views\**\*.js" />
     <Content Remove="Views\**\*.css" />
-    <Content Remove="wwwroot\**\*.*" />
   </ItemGroup>
+
 
   <ItemGroup>
-    <EmbeddedResource Include="styles\site.css" />
+    <None Remove="Pages\scripts\main.js" />
   </ItemGroup>
+
 
   <ItemGroup>
-    <Folder Include="wwwroot\" />
+    <Folder Include="新文件夹\" />
   </ItemGroup>
-
-
 
 
   <Target Name="Tailwind" BeforeTargets="Build">
-    <Exec Command="npm run build" />
+    <Exec Command="npm run css:build" />
   </Target>
 
+  
 </Project>
