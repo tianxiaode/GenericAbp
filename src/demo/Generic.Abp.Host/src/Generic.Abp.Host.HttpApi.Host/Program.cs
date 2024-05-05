@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,9 +21,7 @@ public class Program
             .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
             .MinimumLevel.Override("Microsoft.EntityFrameworkCore", LogEventLevel.Warning)
             .Enrich.FromLogContext()
-            .WriteTo.Async(c => c.File("Logs/logs.txt", retainedFileCountLimit: 100, fileSizeLimitBytes: 10485760,
-                encoding: Encoding.UTF8,
-                rollOnFileSizeLimit: true))
+            .WriteTo.Async(c => c.File("Logs/logs.txt"))
             .WriteTo.Async(c => c.Console())
             .CreateLogger();
 
@@ -32,8 +29,7 @@ public class Program
         {
             Log.Information("Starting Generic.Abp.Host.HttpApi.Host.");
             var builder = WebApplication.CreateBuilder(args);
-            builder.Host
-                .AddAppSettingsSecretsJson()
+            builder.Host.AddAppSettingsSecretsJson()
                 .UseAutofac()
                 .UseSerilog();
             await builder.AddApplicationAsync<HostHttpApiHostModule>();

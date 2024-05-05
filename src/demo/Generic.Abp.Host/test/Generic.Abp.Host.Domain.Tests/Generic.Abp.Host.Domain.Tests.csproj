@@ -9,12 +9,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Generic.Abp.Host.Domain\Generic.Abp.Host.Domain.csproj" />
-    <ProjectReference Include="..\Generic.Abp.Host.TestBase\Generic.Abp.Host.TestBase.csproj" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+    <ProjectReference Include="..\..\src\Generic.Abp.Host.Domain\Generic.Abp.Host.Domain.csproj" />
+    <ProjectReference Include="..\Generic.Abp.Host.TestBase\Generic.Abp.Host.TestBase.csproj" />
   </ItemGroup>
 
 </Project>

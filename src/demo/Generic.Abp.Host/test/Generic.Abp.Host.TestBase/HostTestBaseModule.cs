@@ -14,7 +14,7 @@ namespace Generic.Abp.Host;
     typeof(AbpTestBaseModule),
     typeof(AbpAuthorizationModule),
     typeof(AbpBackgroundJobsAbstractionsModule)
-)]
+    )]
 public class HostTestBaseModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)

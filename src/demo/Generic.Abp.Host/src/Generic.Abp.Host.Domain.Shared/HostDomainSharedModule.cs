@@ -1,6 +1,8 @@
-using Generic.Abp.Host.Localization;
+﻿using Generic.Abp.Host.Localization;
 using Volo.Abp.AuditLogging;
+using Volo.Abp.BackgroundJobs;
 using Volo.Abp.FeatureManagement;
+using Volo.Abp.Identity;
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.ExceptionHandling;
 using Volo.Abp.Modularity;
@@ -15,12 +17,14 @@ namespace Generic.Abp.Host;
 
 [DependsOn(
     typeof(AbpAuditLoggingDomainSharedModule),
+    typeof(AbpBackgroundJobsDomainSharedModule),
     typeof(AbpFeatureManagementDomainSharedModule),
+    typeof(AbpIdentityDomainSharedModule),
     typeof(AbpOpenIddictDomainSharedModule),
     typeof(AbpPermissionManagementDomainSharedModule),
     typeof(AbpSettingManagementDomainSharedModule),
-    typeof(AbpTenantManagementDomainSharedModule)
-)]
+    typeof(AbpTenantManagementDomainSharedModule)    
+    )]
 public class HostDomainSharedModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
@@ -31,7 +35,10 @@ public class HostDomainSharedModule : AbpModule
 
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        Configure<AbpVirtualFileSystemOptions>(options => { options.FileSets.AddEmbedded<HostDomainSharedModule>(); });
+        Configure<AbpVirtualFileSystemOptions>(options =>
+        {
+            options.FileSets.AddEmbedded<HostDomainSharedModule>();
+        });
 
         Configure<AbpLocalizationOptions>(options =>
         {

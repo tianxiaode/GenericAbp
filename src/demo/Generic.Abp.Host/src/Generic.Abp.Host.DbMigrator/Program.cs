@@ -1,10 +1,12 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using System.IO;
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Generic.Abp.Host.DbMigrator;
 
@@ -25,9 +27,7 @@ class Program
             .WriteTo.Async(c => c.File("Logs/logs.txt", retainedFileCountLimit: 100, fileSizeLimitBytes: 10485760,
                 encoding: Encoding.UTF8,
                 rollOnFileSizeLimit: true))
-#if DEBUG
             .WriteTo.Async(c => c.Console())
-#endif
             .CreateLogger();
 
         await CreateHostBuilder(args).RunConsoleAsync();

@@ -12,7 +12,8 @@ public class EntityFrameworkCoreHostDbSchemaMigrator
 {
     private readonly IServiceProvider _serviceProvider;
 
-    public EntityFrameworkCoreHostDbSchemaMigrator(IServiceProvider serviceProvider)
+    public EntityFrameworkCoreHostDbSchemaMigrator(
+        IServiceProvider serviceProvider)
     {
         _serviceProvider = serviceProvider;
     }

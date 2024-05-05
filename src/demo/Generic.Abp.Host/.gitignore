@@ -254,8 +254,6 @@ paket-files/
 # Host
 src/Generic.Abp.Host.Web/Logs/*
 src/Generic.Abp.Host.Web.Host/Logs/*
-src/Generic.Abp.Host.Web.Public/Logs/*
-src/Generic.Abp.Host.Web.Public.Host/Logs/*
 src/Generic.Abp.Host.AuthServer/Logs/*
 src/Generic.Abp.Host.HttpApi.Host/Logs/*
 src/Generic.Abp.Host.HttpApi.Host/Logs/*
@@ -265,7 +263,3 @@ src/Generic.Abp.Host.Blazor.Server.Tiered/Logs/*
 
 # Use abp install-libs to restore.
 **/wwwroot/libs/*
-
-# IdentityServer temp files
-tempkey.rsa
-tempkey.jwk

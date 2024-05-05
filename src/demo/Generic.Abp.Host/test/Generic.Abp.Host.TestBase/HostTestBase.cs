@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp;
 using Volo.Abp.Modularity;
@@ -9,20 +8,14 @@ using Volo.Abp.Testing;
 
 namespace Generic.Abp.Host;
 
+/* All test classes are derived from this class, directly or indirectly.
+ */
 public abstract class HostTestBase<TStartupModule> : AbpIntegratedTest<TStartupModule>
     where TStartupModule : IAbpModule
 {
     protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
     {
         options.UseAutofac();
-    }
-
-    protected override void BeforeAddApplication(IServiceCollection services)
-    {
-        var builder = new ConfigurationBuilder();
-        builder.AddJsonFile("appsettings.json", false);
-        builder.AddJsonFile("appsettings.secrets.json", true);
-        services.ReplaceConfiguration(builder.Build());
     }
 
     protected virtual Task WithUnitOfWorkAsync(Func<Task> func)

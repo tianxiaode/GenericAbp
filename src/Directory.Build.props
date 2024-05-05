@@ -22,6 +22,7 @@
     <XunitRrunnerVisualstudioVersion>2.5.3</XunitRrunnerVisualstudioVersion>
     <HtmlAgilityPackVersion>1.11.54</HtmlAgilityPackVersion>
     <MicrosoftDataSqliteVersion>8.0.0</MicrosoftDataSqliteVersion>
+    <OAuthGitHubVersion>8.0.0</OAuthGitHubVersion>
 		
   </PropertyGroup>
 </Project>

@@ -1,6 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using Microsoft.EntityFrameworkCore;
 using Shouldly;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Identity;
 using Xunit;
@@ -9,6 +11,7 @@ namespace Generic.Abp.Host.EntityFrameworkCore.Samples;
 
 /* This is just an example test class.
  * Normally, you don't test ABP framework code
+ * (like default AppUser repository IRepository<AppUser, Guid> here).
  * Only test your custom repository methods.
  */
 [Collection(HostTestConsts.CollectionDefinitionName)]
@@ -30,8 +33,9 @@ public class SampleRepositoryTests : HostEntityFrameworkCoreTestBase
         await WithUnitOfWorkAsync(async () =>
         {
                 //Act
-                var adminUser = await _appUserRepository
-                .FirstOrDefaultAsync(u => u.UserName == "admin");
+                var adminUser = await (await _appUserRepository.GetQueryableAsync())
+                .Where(u => u.UserName == "admin")
+                .FirstOrDefaultAsync();
 
                 //Assert
                 adminUser.ShouldNotBeNull();

@@ -1,4 +1,7 @@
-﻿using Volo.Abp.Threading;
+﻿using System.ComponentModel.DataAnnotations;
+using Volo.Abp.Identity;
+using Volo.Abp.ObjectExtending;
+using Volo.Abp.Threading;
 
 namespace Generic.Abp.Host;
 
@@ -54,6 +57,8 @@ public static class HostModuleExtensionConfigurator
                               //validation rules
                               property.Attributes.Add(new RequiredAttribute());
                               property.Attributes.Add(new StringLengthAttribute(64) {MinimumLength = 4});
+                              
+                              property.Configuration[IdentityModuleExtensionConsts.ConfigurationNames.AllowUserToEdit] = true;
 
                               //...other configurations for this property
                           }

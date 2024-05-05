@@ -3,25 +3,27 @@ using Generic.Abp.Host.MultiTenancy;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using OpenIddict.Validation.AspNetCore;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Generic.Abp.TailWindCss.Account.Web;
+using Generic.Abp.TailWindCss.Account.Web.Bundling;
 using Volo.Abp;
 using Volo.Abp.Account;
+using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.Modularity;
-using Volo.Abp.OpenIddict;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.Swashbuckle;
 using Volo.Abp.UI.Navigation.Urls;
@@ -35,17 +37,14 @@ namespace Generic.Abp.Host;
     typeof(AbpAspNetCoreMultiTenancyModule),
     typeof(HostApplicationModule),
     typeof(HostEntityFrameworkCoreModule),
-    typeof(AbpSwashbuckleModule),
+    typeof(GenericAbpTailWindCssAccountWebModule),
     typeof(AbpAspNetCoreSerilogModule),
-    typeof(GenericAbpTailWindCssAccountWebModule)
+    typeof(AbpSwashbuckleModule)
 )]
 public class HostHttpApiHostModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
-        var hostingEnvironment = context.Services.GetHostingEnvironment();
-        var configuration = context.Services.GetConfiguration();
-
         PreConfigure<OpenIddictBuilder>(builder =>
         {
             builder.AddValidation(options =>
@@ -55,14 +54,6 @@ public class HostHttpApiHostModule : AbpModule
                 options.UseAspNetCore();
             });
         });
-
-        if (!hostingEnvironment.IsDevelopment())
-        {
-            PreConfigure<AbpOpenIddictAspNetCoreOptions>(options =>
-            {
-                options.AddDevelopmentEncryptionAndSigningCertificate = false;
-            });
-        }
     }
 
     public override void ConfigureServices(ServiceConfigurationContext context)
@@ -70,16 +61,15 @@ public class HostHttpApiHostModule : AbpModule
         var configuration = context.Services.GetConfiguration();
         var hostingEnvironment = context.Services.GetHostingEnvironment();
 
-
         ConfigureAuthentication(context);
+        ConfigureExternalProviders(context);
+        ConfigureBundles();
         ConfigureUrls(configuration);
         ConfigureConventionalControllers();
-        ConfigureSwagger(context, configuration);
         ConfigureVirtualFileSystem(context);
         ConfigureCors(context, configuration);
-        ConfigureExternalProviders(context);
+        ConfigureSwaggerServices(context, configuration);
     }
-
 
     private void ConfigureAuthentication(ServiceConfigurationContext context)
     {
@@ -91,19 +81,39 @@ public class HostHttpApiHostModule : AbpModule
         });
     }
 
+    private void ConfigureExternalProviders(ServiceConfigurationContext context)
+    {
+        context.Services.AddAuthentication()
+            .AddGitHub(options =>
+            {
+                options.ClientId = "7e3b22278e8222293563";
+                options.ClientSecret = "1111";
+            });
+    }
+
+    private void ConfigureBundles()
+    {
+        Configure<AbpBundlingOptions>(options =>
+        {
+            options.StyleBundles.Configure(
+                TailWindThemeBundles.Styles.Global,
+                bundle => { bundle.AddFiles("/global-styles.css"); }
+            );
+        });
+    }
 
     private void ConfigureUrls(IConfiguration configuration)
     {
         Configure<AppUrlOptions>(options =>
         {
             options.Applications["MVC"].RootUrl = configuration["App:SelfUrl"];
-            options.Applications["Angular"].RootUrl = configuration["App:AngularUrl"];
-            options.Applications["Angular"].Urls[AccountUrlNames.PasswordReset] = "account/reset-password";
             options.RedirectAllowedUrls.AddRange(configuration["App:RedirectAllowedUrls"]?.Split(',') ??
                                                  Array.Empty<string>());
+
+            options.Applications["Angular"].RootUrl = configuration["App:ClientUrl"];
+            options.Applications["Angular"].Urls[AccountUrlNames.PasswordReset] = "account/reset-password";
         });
     }
-
 
     private void ConfigureVirtualFileSystem(ServiceConfigurationContext context)
     {
@@ -116,8 +126,9 @@ public class HostHttpApiHostModule : AbpModule
                 options.FileSets.ReplaceEmbeddedByPhysical<HostDomainSharedModule>(
                     Path.Combine(hostingEnvironment.ContentRootPath,
                         $"..{Path.DirectorySeparatorChar}Generic.Abp.Host.Domain.Shared"));
-                options.FileSets.ReplaceEmbeddedByPhysical<HostDomainModule>(Path.Combine(
-                    hostingEnvironment.ContentRootPath, $"..{Path.DirectorySeparatorChar}Generic.Abp.Host.Domain"));
+                options.FileSets.ReplaceEmbeddedByPhysical<HostDomainModule>(
+                    Path.Combine(hostingEnvironment.ContentRootPath,
+                        $"..{Path.DirectorySeparatorChar}Generic.Abp.Host.Domain"));
                 options.FileSets.ReplaceEmbeddedByPhysical<HostApplicationContractsModule>(
                     Path.Combine(hostingEnvironment.ContentRootPath,
                         $"..{Path.DirectorySeparatorChar}Generic.Abp.Host.Application.Contracts"));
@@ -136,13 +147,14 @@ public class HostHttpApiHostModule : AbpModule
         });
     }
 
-    private static void ConfigureSwagger(ServiceConfigurationContext context, IConfiguration configuration)
+    private static void ConfigureSwaggerServices(ServiceConfigurationContext context, IConfiguration configuration)
     {
-        context.Services.AddAbpSwaggerGenWithOidc(
+        context.Services.AddAbpSwaggerGenWithOAuth(
             configuration["AuthServer:Authority"]!,
-            ["Host"],
-            [AbpSwaggerOidcFlows.AuthorizationCode],
-            null,
+            new Dictionary<string, string>
+            {
+                { "Host", "Host API" }
+            },
             options =>
             {
                 options.SwaggerDoc("v1", new OpenApiInfo { Title = "Host API", Version = "v1" });
@@ -158,12 +170,10 @@ public class HostHttpApiHostModule : AbpModule
             options.AddDefaultPolicy(builder =>
             {
                 builder
-                    .WithOrigins(
-                        configuration["App:CorsOrigins"]?
-                            .Split(",", StringSplitOptions.RemoveEmptyEntries)
-                            .Select(o => o.Trim().RemovePostFix("/"))
-                            .ToArray() ?? Array.Empty<string>()
-                    )
+                    .WithOrigins(configuration["App:CorsOrigins"]?
+                        .Split(",", StringSplitOptions.RemoveEmptyEntries)
+                        .Select(o => o.RemovePostFix("/"))
+                        .ToArray() ?? Array.Empty<string>())
                     .WithAbpExposedHeaders()
                     .SetIsOriginAllowedToAllowWildcardSubdomains()
                     .AllowAnyHeader()
@@ -172,17 +182,6 @@ public class HostHttpApiHostModule : AbpModule
             });
         });
     }
-
-    private void ConfigureExternalProviders(ServiceConfigurationContext context)
-    {
-        context.Services.AddAuthentication()
-            .AddGitHub(options =>
-            {
-                options.ClientId = "7e3b22278e8222293563";
-                options.ClientSecret = "1111";
-            });
-    }
-
 
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
     {
@@ -201,7 +200,7 @@ public class HostHttpApiHostModule : AbpModule
             app.UseErrorPage();
         }
 
-        app.UseAbpSecurityHeaders();
+        app.UseCorrelationId();
         app.UseStaticFiles();
         app.UseRouting();
         app.UseCors();
@@ -218,13 +217,15 @@ public class HostHttpApiHostModule : AbpModule
         app.UseAuthorization();
 
         app.UseSwagger();
-        app.UseAbpSwaggerUI(options =>
+        app.UseAbpSwaggerUI(c =>
         {
-            options.SwaggerEndpoint("/swagger/v1/swagger.json", "Host API");
+            c.SwaggerEndpoint("/swagger/v1/swagger.json", "Host API");
 
             var configuration = context.ServiceProvider.GetRequiredService<IConfiguration>();
-            options.OAuthClientId(configuration["AuthServer:SwaggerClientId"]);
+            c.OAuthClientId(configuration["AuthServer:SwaggerClientId"]);
+            c.OAuthScopes("Host");
         });
+
         app.UseAuditing();
         app.UseAbpSerilogEnrichers();
         app.UseConfiguredEndpoints();

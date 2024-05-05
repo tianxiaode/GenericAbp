@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="..\..\common.props" />
 
@@ -7,28 +7,6 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Serilog.Extensions.Logging" Version="$(SerilogExtensionsLoggingVersion)" />
-    <PackageReference Include="Serilog.Sinks.Async" Version="$(SerilogSinksAsyncVersion)" />
-    <PackageReference Include="Serilog.Sinks.File" Version="$(SerilogSinksFileAndConsoleVersion)" />
-    <PackageReference Include="Serilog.Sinks.Console" Version="$(SerilogSinksFileAndConsoleVersion)" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="$(MicrosoftExtensionsHostingVersion)" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Volo.Abp.Autofac" Version="$(AbpVersion)" />
-    <ProjectReference Include="..\Generic.Abp.Host.EntityFrameworkCore\Generic.Abp.Host.EntityFrameworkCore.csproj" />
-    <ProjectReference Include="..\Generic.Abp.Host.Application.Contracts\Generic.Abp.Host.Application.Contracts.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Remove="Logs\**" />
-    <Content Remove="Logs\**" />
-
-    <EmbeddedResource Remove="Logs\**" />
-    <None Remove="Logs\**" />
-  </ItemGroup>
 
   <ItemGroup>
     <None Remove="appsettings.json" />
@@ -41,6 +19,27 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>    
+    <PackageReference Include="Serilog.Extensions.Logging" Version="$(SerilogExtensionsLoggingVersion)" />
+    <PackageReference Include="Serilog.Sinks.Async" Version="$(SerilogSinksAsyncVersion)" />
+    <PackageReference Include="Serilog.Sinks.File" Version="$(SerilogSinksFileAndConsoleVersion)" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="$(SerilogSinksFileAndConsoleVersion)" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="$(MicrosoftExtensionsHostingVersion)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Volo.Abp.Autofac" Version="$(AbpVersion)" />
+    <ProjectReference Include="..\Generic.Abp.Host.Application.Contracts\Generic.Abp.Host.Application.Contracts.csproj" />
+    <ProjectReference Include="..\Generic.Abp.Host.EntityFrameworkCore\Generic.Abp.Host.EntityFrameworkCore.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Logs\**" />
+    <Content Remove="Logs\**" />
+    <EmbeddedResource Remove="Logs\**" />
+    <None Remove="Logs\**" />
   </ItemGroup>
 
 </Project>
