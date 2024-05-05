@@ -94,20 +94,11 @@ public class LoginModel : AccountPageModel
     {
         await CheckLocalLoginAsync();
 
+
+        ValidateModel();
         ExternalProviders = await GetExternalProviders();
 
         EnableLocalLogin = await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin);
-
-        try
-        {
-            ValidateModel();
-        }
-        catch (AbpValidationException e)
-        {
-            Console.WriteLine(e);
-            Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(e.ValidationErrors));
-            return NoContent();
-        }
 
 
         await ReplaceEmailToUsernameOfInputIfNeeds();

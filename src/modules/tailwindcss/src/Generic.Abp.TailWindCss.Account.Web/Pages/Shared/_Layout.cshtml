@@ -48,6 +48,7 @@
 
     @await Html.PartialAsync("_Footer")
     @await Html.PartialAsync("_BodyLast")
+    
     <abp-script-bundle name="@TailWindThemeBundles.Scripts.Global"></abp-script-bundle>
     @await RenderSectionAsync("scripts", false)
 

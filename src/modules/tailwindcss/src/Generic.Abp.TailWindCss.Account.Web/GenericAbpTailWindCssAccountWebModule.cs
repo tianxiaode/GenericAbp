@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Account;
 using Volo.Abp.Account.Localization;
+using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
-using Volo.Abp.AspNetCore.Mvc.UI.Packages.FontAwesome;
 using Volo.Abp.AspNetCore.Mvc.UI.Theming;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.ExceptionHandling;
@@ -18,9 +18,11 @@ using Volo.Abp.VirtualFileSystem;
 namespace Generic.Abp.TailWindCss.Account.Web;
 
 [DependsOn(
+    typeof(AbpAspNetCoreMvcUiBundlingModule),
+    typeof(AbpAspNetCoreMultiTenancyModule),
+    typeof(AbpOpenIddictDomainModule),
     typeof(AbpAccountApplicationContractsModule),
     typeof(AbpIdentityAspNetCoreModule),
-    typeof(AbpOpenIddictAspNetCoreModule),
     typeof(AbpAutoMapperModule),
     typeof(AbpExceptionHandlingModule)
 )]
@@ -68,8 +70,7 @@ public class GenericAbpTailWindCssAccountWebModule : AbpModule
                 .Add(TailWindThemeBundles.Styles.Global, bundle =>
                 {
                     bundle
-                        .AddContributors(typeof(TailWindGlobalStyleContributor))
-                        .AddContributors(typeof(FontAwesomeStyleContributor));
+                        .AddContributors(typeof(TailWindGlobalStyleContributor));
                 });
 
             options

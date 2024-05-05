@@ -1,5 +1,7 @@
 using Generic.Abp.Host.EntityFrameworkCore;
 using Generic.Abp.Host.MultiTenancy;
+using Generic.Abp.TailWindCss.Account.Web;
+using Generic.Abp.TailWindCss.Account.Web.Bundling;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Extensions.DependencyInjection;
@@ -12,15 +14,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Generic.Abp.TailWindCss.Account.Web;
-using Generic.Abp.TailWindCss.Account.Web.Bundling;
+using Generic.Abp.TailWindCss.Account.Web.Microsoft.AspNetCore.Builder;
 using Volo.Abp;
 using Volo.Abp.Account;
-using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
-using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.Modularity;
@@ -188,10 +187,10 @@ public class HostHttpApiHostModule : AbpModule
         var app = context.GetApplicationBuilder();
         var env = context.GetEnvironment();
 
-        if (env.IsDevelopment())
-        {
-            app.UseDeveloperExceptionPage();
-        }
+        //if (env.IsDevelopment())
+        //{
+        //    app.UseDeveloperExceptionPage();
+        //}
 
         app.UseAbpRequestLocalization();
 
@@ -199,6 +198,8 @@ public class HostHttpApiHostModule : AbpModule
         {
             app.UseErrorPage();
         }
+
+        app.UseErrorPage();
 
         app.UseCorrelationId();
         app.UseStaticFiles();

@@ -1,0 +1,50 @@
+﻿@using System.Linq
+@using Generic.Abp.TailWindCss.Account.Web.Providers
+@using Localization.Resources.AbpUi
+@using Microsoft.AspNetCore.Mvc.Localization
+@model Generic.Abp.TailWindCss.Account.Web.Views.Error.TailWindErrorViewModel
+@inject IHtmlLocalizer<AbpUiResource> L
+@inject ILayoutDataProvider LayoutDataProvider
+@{
+        var errorMessage = Model.ErrorInfo.Message;
+        var errorDetails = Model.ErrorInfo.Details;
+        if (errorDetails.IsNullOrEmpty())
+        {
+            errorDetails = errorMessage;
+            errorMessage = L["Error"].Value + "!";
+        }
+
+        var validationErrors = Model.ErrorInfo.ValidationErrors;
+    }
+    <div class="hero min-h-screen bg-hero" style="background-image:url('@LayoutDataProvider.AccountHeroBackgroundUrl')">
+
+        <div class="card w-96 bg-base-100 shadow-xl">
+            <div class="card-body">
+                <h2 class="card-title text-error"> [@Model.HttpStatusCode] @errorMessage</h2>
+                <div>
+                    <p >
+                        @Html.Raw(errorDetails?.Replace("-", "<br/> -"))
+                    </p>
+                    <div class="divider"></div> 
+                    <p>
+                        @if (validationErrors != null)
+                        {
+                            foreach (var validationError in validationErrors)
+                            {
+                                <text>* </text>@(validationError.Message)
+                                if (validationError.Members.Any())
+                                {
+                                    <text>(@string.Join(", ", validationError.Members))</text>
+                                }
+                                <br />
+                            }
+                        }
+                    </p>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+

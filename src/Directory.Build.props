@@ -23,6 +23,7 @@
     <HtmlAgilityPackVersion>1.11.54</HtmlAgilityPackVersion>
     <MicrosoftDataSqliteVersion>8.0.0</MicrosoftDataSqliteVersion>
     <OAuthGitHubVersion>8.0.0</OAuthGitHubVersion>
+    <OpenIddictVersion>4.0.0</OpenIddictVersion>
 		
   </PropertyGroup>
 </Project>
