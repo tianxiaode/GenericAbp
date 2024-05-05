@@ -6,7 +6,7 @@
     "clean": "rmdir /s /q wwwroot",
     "clean:win": "rmdir /s /q wwwroot",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npm run clean && npx webpack --config webpack.config.js && npx tailwind build -i ./styles/site.css -o ./wwwroot/css/tailwind.css",
+    "build": "npm run clean && npx tailwind build -i ./styles/site.css -o ./wwwroot/css/tailwind.css && npx webpack --config webpack.config.js ",
     "css:build": "npx tailwind build -i ./styles/site.css -o ./wwwroot/css/tailwind.css"
   },
   "keywords": [],
