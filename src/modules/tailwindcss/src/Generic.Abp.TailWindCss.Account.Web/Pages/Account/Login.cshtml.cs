@@ -6,21 +6,27 @@ using System.Diagnostics;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Generic.Abp.TailWindCss.Account.Web.OpenIddict;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using OpenIddict.Server.AspNetCore;
+using OpenIddict.Server;
 using Volo.Abp;
 using Volo.Abp.Account.Settings;
 using Volo.Abp.Account.Web;
 using Volo.Abp.Auditing;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.AspNetCore;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.Settings;
 using Volo.Abp.Validation;
 using IdentityUser = Volo.Abp.Identity.IdentityUser;
+using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 namespace Generic.Abp.TailWindCss.Account.Web.Pages.Account;
 
@@ -61,17 +67,21 @@ public class LoginModel : AccountPageModel
     //protected IOptions<IdentityOptions> IdentityOptions { get; }
     protected IdentityDynamicClaimsPrincipalContributorCache IdentityDynamicClaimsPrincipalContributorCache { get; }
     public bool ShowCancelButton { get; set; }
+    [CanBeNull] public string Error { get; set; }
+    protected AbpOpenIddictRequestHelper OpenIddictRequestHelper { get; }
 
     public LoginModel(
         IAuthenticationSchemeProvider schemeProvider,
         IOptions<AbpAccountOptions> accountOptions,
         IOptions<IdentityOptions> identityOptions,
-        IdentityDynamicClaimsPrincipalContributorCache identityDynamicClaimsPrincipalContributorCache)
+        IdentityDynamicClaimsPrincipalContributorCache identityDynamicClaimsPrincipalContributorCache,
+        AbpOpenIddictRequestHelper openIddictRequestHelper)
     {
         SchemeProvider = schemeProvider;
         IdentityOptions = identityOptions;
         AccountOptions = accountOptions.Value;
         IdentityDynamicClaimsPrincipalContributorCache = identityDynamicClaimsPrincipalContributorCache;
+        OpenIddictRequestHelper = openIddictRequestHelper;
     }
 
     public virtual async Task<IActionResult> OnGetAsync()
@@ -82,16 +92,56 @@ public class LoginModel : AccountPageModel
 
         EnableLocalLogin = await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin);
 
+
         if (IsExternalLoginOnly)
         {
             return await OnPostExternalLogin(ExternalProviders.First().AuthenticationScheme);
         }
+
+        var request = await OpenIddictRequestHelper.GetFromReturnUrlAsync(ReturnUrl);
+
+        if (request == null)
+        {
+            return Page();
+        }
+
+        LoginInput.UserNameOrEmailAddress = request.LoginHint;
+
+        //TODO: Reference AspNetCore MultiTenancy module and use options to get the tenant key!
+        var tenant = request.GetParameter(TenantResolverConsts.DefaultTenantKey)?.ToString();
+        if (string.IsNullOrEmpty(tenant))
+        {
+            return Page();
+        }
+
+        CurrentTenant.Change(Guid.Parse(tenant));
+        Response.Cookies.Append(TenantResolverConsts.DefaultTenantKey, tenant);
 
         return Page();
     }
 
     public virtual async Task<IActionResult> OnPostAsync(string action)
     {
+        if (action == "Cancel")
+        {
+            var request = await OpenIddictRequestHelper.GetFromReturnUrlAsync(ReturnUrl);
+
+            var transaction = HttpContext.GetOpenIddictServerTransaction();
+            if (request?.ClientId == null || transaction == null)
+            {
+                return Redirect("~/");
+            }
+
+            transaction.EndpointType = OpenIddictServerEndpointType.Authorization;
+            transaction.Request = request;
+
+            var notification = new OpenIddictServerEvents.ValidateAuthorizationRequestContext(transaction);
+            transaction.SetProperty(typeof(OpenIddictServerEvents.ValidateAuthorizationRequestContext).FullName!,
+                notification);
+
+            return Forbid(OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
+        }
+
         await CheckLocalLoginAsync();
 
 
@@ -115,7 +165,7 @@ public class LoginModel : AccountPageModel
         await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
         {
             Identity = IdentitySecurityLogIdentityConsts.Identity,
-            Action = result.ToIdentitySecurityLogAction(),
+            Action = result.ToOpenIddictIdentitySecurityLogAction(),
             UserName = LoginInput.UserNameOrEmailAddress
         });
 
@@ -126,19 +176,19 @@ public class LoginModel : AccountPageModel
 
         if (result.IsLockedOut)
         {
-            Alerts.Warning(L["UserLockedOutMessage"]);
+            Error = L["UserLockedOutMessage"];
             return Page();
         }
 
         if (result.IsNotAllowed)
         {
-            Alerts.Warning(L["LoginIsNotAllowed"]);
+            Error = L["LoginIsNotAllowed"];
             return Page();
         }
 
         if (!result.Succeeded)
         {
-            Alerts.Danger(L["InvalidUserNameOrPassword"]);
+            Error = L["InvalidUserNameOrPassword"];
             return Page();
         }
 
@@ -179,6 +229,11 @@ public class LoginModel : AccountPageModel
 
     public virtual async Task<IActionResult> OnPostExternalLogin(string provider)
     {
+        if (AccountOptions.WindowsAuthenticationSchemeName == provider)
+        {
+            return await ProcessWindowsLoginAsync();
+        }
+
         var redirectUrl = Url.Page("./Login", pageHandler: "ExternalLoginCallback",
             values: new { ReturnUrl, ReturnUrlHash });
         var properties = SignInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
@@ -324,6 +379,35 @@ public class LoginModel : AccountPageModel
         {
             throw new UserFriendlyException(L["LocalLoginDisabledMessage"]);
         }
+    }
+
+    protected virtual async Task<IActionResult> ProcessWindowsLoginAsync()
+    {
+        var result = await HttpContext.AuthenticateAsync(AccountOptions.WindowsAuthenticationSchemeName);
+        if (result.Succeeded)
+        {
+            var props = new AuthenticationProperties()
+            {
+                RedirectUri = Url.Page("./Login", pageHandler: "ExternalLoginCallback",
+                    values: new { ReturnUrl, ReturnUrlHash }),
+                Items =
+                {
+                    {
+                        "LoginProvider", AccountOptions.WindowsAuthenticationSchemeName
+                    }
+                }
+            };
+
+            var id = new ClaimsIdentity(AccountOptions.WindowsAuthenticationSchemeName);
+            id.AddClaim(new Claim(ClaimTypes.NameIdentifier, result.Principal.FindFirstValue(ClaimTypes.PrimarySid)));
+            id.AddClaim(new Claim(ClaimTypes.Name, result.Principal.FindFirstValue(ClaimTypes.Name)));
+
+            await HttpContext.SignInAsync(IdentityConstants.ExternalScheme, new ClaimsPrincipal(id), props);
+
+            return Redirect(props.RedirectUri!);
+        }
+
+        return Challenge(AccountOptions.WindowsAuthenticationSchemeName);
     }
 
     public class LoginInputModel

@@ -2549,6 +2549,10 @@ html {
   padding-bottom: 0.75rem;
 }
 
+.pb-4 {
+  padding-bottom: 1rem;
+}
+
 .pt-2 {
   padding-top: 0.5rem;
 }
@@ -2686,18 +2690,6 @@ html {
   min-width: 300px;
   text-align: center;
   box-shadow: 2px 2px 5px 0 rgba(0, 0, 0, 0.12), 2px 2px 5px 0 rgba(0, 0, 0, 0.08);
-}
-
-.bg-success{
-}
-
-.bg-info{
-}
-
-.bg-warning{
-}
-
-.bg-erro{
 }
 
 @media (min-width: 640px) {

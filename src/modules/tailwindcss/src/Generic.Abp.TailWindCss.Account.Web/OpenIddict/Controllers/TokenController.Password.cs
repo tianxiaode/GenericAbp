@@ -145,7 +145,7 @@ public partial class TokenController
                 await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext
                 {
                     Identity = OpenIddictSecurityLogIdentityConsts.OpenIddict,
-                    Action = result.ToIdentitySecurityLogAction(),
+                    Action = result.ToOpenIddictIdentitySecurityLogAction(),
                     UserName = request.Username,
                     ClientId = request.ClientId
                 });

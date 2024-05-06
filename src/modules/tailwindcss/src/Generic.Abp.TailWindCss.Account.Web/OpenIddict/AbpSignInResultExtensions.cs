@@ -5,7 +5,7 @@ namespace Generic.Abp.TailWindCss.Account.Web.OpenIddict;
 
 public static class AbpSignInResultExtensions
 {
-    public static string ToIdentitySecurityLogAction(this SignInResult result)
+    public static string ToOpenIddictIdentitySecurityLogAction(this SignInResult result)
     {
         if (result.Succeeded)
         {
