@@ -63,14 +63,14 @@
            innderHtml += `<label class="label" for="${id}">${label}</label>`;
         }
         if (iconCls) {
-           innderHtml += `<i class="${iconCls} w-4 h-4 opacity-70}"></i>`;
+           innderHtml += `<i class="${iconCls} w-4 h-4  opacity-70}"></i>`;
         }
            innderHtml += `<input id="${id}" name="${el.name}" type="${type}" value="${el.value}" autocomplete="${autocomplete}"  class="${el.className} grow" pattern=".*" />`;
         if (clearable) {
-           innderHtml += `<button tabindex="-1" type="button"  class="btn btn-ghost btn-sm clear-button ${clearableHidden}" ><i class="fas fa-times w-4 h-4 opactity-70"></i></button>`;
+           innderHtml += `<button tabindex="-1" type="button"  class="clear-button ${clearableHidden}" ><i class="fas fa-times w-5 h-5 text-base opactity-70 "></i></button>`;
         }
         if (me.isPasswordField) {
-           innderHtml += `<button tabindex="-1" type="button"  class="hidden btn btn-ghost btn-sm show-password-button" ><i class="fas fa-eye w-4 h-4 opactity-70"></i></button>`;
+           innderHtml += `<button tabindex="-1" type="button"  class="show-password-button ${clearableHidden}" ><i class="fas fa-eye w-5 h-5 text-base opactity-70"></i></button>`;
         }
         innderHtml += "</div>"
         innderHtml += `<div class="label hidden"><span class="flabel-text-alt text-error"></span></div>`;
@@ -112,8 +112,8 @@
             }
             return me.clearButton!.classList.remove('hidden');
         }
-        me.switchEyeButtonState(false);
         me.clearButton?.classList.add('hidden');
+        me.switchEyeButtonState(false);
     }
 
     private onKeypress(event: Event) {

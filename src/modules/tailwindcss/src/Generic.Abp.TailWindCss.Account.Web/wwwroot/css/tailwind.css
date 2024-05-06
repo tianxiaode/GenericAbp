@@ -2574,6 +2574,11 @@ html {
   line-height: 2rem;
 }
 
+.text-base {
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
 .text-lg {
   font-size: 1.125rem;
   line-height: 1.75rem;
@@ -2690,6 +2695,17 @@ html {
   min-width: 300px;
   text-align: center;
   box-shadow: 2px 2px 5px 0 rgba(0, 0, 0, 0.12), 2px 2px 5px 0 rgba(0, 0, 0, 0.08);
+}
+
+.clear-button:hover,
+.show-password-button:hover{
+  background-color: #f3f2f1;
+}
+
+/*取消微软浏览器的密码小眼睛样式*/
+
+input[type="password"]::-ms-reveal {
+  display: none;
 }
 
 @media (min-width: 640px) {
