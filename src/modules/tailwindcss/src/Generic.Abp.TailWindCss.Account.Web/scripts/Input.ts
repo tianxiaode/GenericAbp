@@ -1,11 +1,12 @@
 ﻿export default class Input {
-    private rules:  Record<string, any>
+    public rules:  Record<string, any>
     private input: HTMLInputElement | null = null
     private keypressTask: string | number | NodeJS.Timeout | undefined = undefined
     private clearButton : HTMLButtonElement | null = null;
     private isPasswordField: boolean = false;
     private currentPasswordType: string  = "password"
     private eyeButton : HTMLButtonElement | null = null;
+    private errorElement: HTMLElement | null = null;
     constructor(el: HTMLInputElement) {
         this.rules = {};
         this.getRules(el)
@@ -83,6 +84,7 @@
         me.clearButton?.addEventListener('click', me.onClearInputValue.bind(me));
         me.eyeButton = root.querySelector('button.show-password-button');
         me.eyeButton?.addEventListener('click', me.onSwitchInputType.bind(me));
+        me.errorElement = root.querySelector('.text-error');
     }
 
     private onClearInputValue(event: Event) {
@@ -140,5 +142,17 @@
 
         }
         button.classList.add('hidden');
+    }
+
+    get value(): string | undefined {
+        return this.input?.value;
+    }
+
+    set error(error: string) {
+        const el = this.errorElement!;
+        const parent = el.parentElement;
+        el.innerHTML = error;
+        error && parent!.classList.remove('hidden');
+        !error && parent!.classList.add('hidden');
     }
 }

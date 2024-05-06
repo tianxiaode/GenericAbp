@@ -41,11 +41,21 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="styles\site.css" />
+    <Content Remove="styles\site.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="scripts\From.ts" />
+    <None Remove="scripts\Validation.ts" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="wwwroot\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="scripts\From.ts" />
+    <TypeScriptCompile Include="scripts\Validation.ts" />
   </ItemGroup>
 
 

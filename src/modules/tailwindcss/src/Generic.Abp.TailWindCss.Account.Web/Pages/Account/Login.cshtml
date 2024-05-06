@@ -25,9 +25,9 @@
     <h2 class="card-title">@L["Login"]</h2>
         @if (Model.EnableLocalLogin)
         {
-            <form method="post">
+            <form method="post" class="validate-form">
                 <input data-role="input" asp-for="LoginInput.UserNameOrEmailAddress" iconCls="fas fa-user text-info" autocomplete="username" />
-        <input data-role="input" asp-for="LoginInput.Password" iconCls="fas fa-key text-info" autocomplete="password" />
+                <input data-role="input" asp-for="LoginInput.Password" iconCls="fas fa-key text-info" autocomplete="password" />
                 
                 @*
                 @await Html.PartialAsync("Shared/Form/_Input", new InputModel(
@@ -61,12 +61,13 @@
 
         @if (Model.VisibleExternalProviders.Any())
         {
-            <div class="mt-2">
-                <h5>@L["OrLoginWith"]</h5>
+            <div class="text-center">
                 <form asp-page="./Login" asp-page-handler="ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" asp-route-returnUrlHash="@Model.ReturnUrlHash" method="post">
                     @foreach (var provider in Model.VisibleExternalProviders)
                     {
-                        <button type="submit" class="btn btn-primary m-1" name="provider" value="@provider.AuthenticationScheme" title="@L["LogInUsingYourProviderAccount", provider.DisplayName]">@provider.DisplayName</button>
+                        <button type="submit" class="m-1 rounded-full" name="provider" value="@provider.AuthenticationScheme" title="@L["LogInUsingYourProviderAccount", provider.DisplayName]">
+                    <i class="fab fa-@provider?.DisplayName.ToLower() text-external-login-icon"></i>
+                        </button>
                     }
                 </form>
             </div>

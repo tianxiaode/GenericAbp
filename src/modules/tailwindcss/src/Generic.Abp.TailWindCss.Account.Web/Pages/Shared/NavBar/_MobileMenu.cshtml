@@ -3,7 +3,7 @@
 @{
     var menus = await LayoutMenuProvider.GetMobileMenusAsync();
 }
-<div class="bg-gray-900 text-white" id="mobile-menu" style="display:none;">
+<div class="bg-gray-900 text-white hidden" id="mobileMenu" style="display:none;">
     <div class="space-y-1 px-2 pb-3 pt-2 flex flex-col">
             @foreach (var menu in menus)
             {

@@ -12,7 +12,7 @@
 @if (CurrentUser.IsAuthenticated)
 {
     <div class="dropdown dropdown-hover md:hover:bg-gray-700">
-        <button class="text-white px-3 py-2 text-sm font-medium" onmouseenter="onOpenUserMenu()" onclick="onOpenUserMenu()">
+        <button class="text-white px-3 py-2 text-sm font-medium" id="userMenuButton">
             @if (CurrentUser.TenantId != null)
             {
                 <small><i>@CurrentTenant.Name</i>\</small>@CurrentUser.UserName
