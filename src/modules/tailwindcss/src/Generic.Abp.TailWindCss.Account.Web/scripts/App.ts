@@ -1,8 +1,13 @@
 ﻿import Form from "./From"
+import Toast from "./Toast"
+import Alert from "./Alert"
+
 export default class App {
     constructor() {
         this.initNav();
         this.initForm();
+        this.initAbpNotify();
+        this.initAbpMessage();
     }
 
     private initForm() {
@@ -18,6 +23,25 @@ export default class App {
         document.getElementById('userMenuButton')?.addEventListener('mouseover',this.onOpenUserMenu);
         document.getElementById('languageMenuButton')?.addEventListener('click',this.openLanguageMenu);
         document.getElementById('languageMenuButton')?.addEventListener('mouseover',this.openLanguageMenu);
+    }
+
+    private initAbpNotify() {
+        abp.notify = {
+            success: (message: string) => { Toast.success(message) },
+            info: (message: string) => { Toast.info(message) },
+            warn: (message: string) => { Toast.warning(message) },
+            error: (message: string) => { Toast.error(message) },
+       }
+    }
+
+    private initAbpMessage() {
+        abp.message = {
+            confirm:(message: string, title: string, callback: Function)=> { Alert.confirm(message, title, callback) },
+            success: (message: string, title: string) => { Alert.success(message, title) },
+            info: (message: string, title: string) => { Alert.info(message,title) },
+            warn: (message: string, title: string) => { Alert.warning(message,title) },
+            error: (message: string, title: string) => { Alert.error(message,title) },
+        }
     }
 
     private onOpenUserMenu() {

@@ -17,7 +17,7 @@
 
 <!DOCTYPE html>
 
-<html lang="@CultureInfo.CurrentCulture.Name" dir="@rtl">
+<html lang="@CultureInfo.CurrentCulture.Name" >
 <head>
     @await Html.PartialAsync("_HeadFirst")
     <meta charset="utf-8">
@@ -36,7 +36,7 @@
     @await Html.PartialAsync("_HeadLast")
 
 </head>
-<body class="@rtl">
+<body class="@rtl" dir="@rtl">
     @await Html.PartialAsync("_BodyFirst")
 
     @await Html.PartialAsync("NavBar/_NavBar")

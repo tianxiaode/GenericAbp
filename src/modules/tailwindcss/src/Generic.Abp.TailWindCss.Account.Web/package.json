@@ -22,6 +22,7 @@
     "@types/validator": "^13.11.9",
     "daisyui": "^4.10.3",
     "sass": "^1.76.0",
+    "tailwindcss-rtl": "^0.9.0",
     "ts-loader": "^9.5.1",
     "typescript": "^5.4.5",
     "validator": "^13.11.0",

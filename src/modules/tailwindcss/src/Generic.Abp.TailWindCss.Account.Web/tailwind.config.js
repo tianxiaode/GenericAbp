@@ -11,6 +11,17 @@ module.exports = {
   },
   plugins: [
     require("daisyui"),
+    require('tailwindcss-rtl')
+  ],
+  safelist:[
+      'bg-success',
+      'bg-info',
+      'bg-warning',
+      'bg-error',
+      'text-success',
+      'text-info',
+      'text-warning',
+      'text-error'
   ],
   daisyui: {
     themes: [
