@@ -4,9 +4,11 @@ export default class Form {
 
     private form : HTMLFormElement
     private inputs : Input[];
+    private compares: Record<string, Input>;
     constructor(el: HTMLFormElement) {
         this.form = el;
         this.inputs = [];
+        this.compares = {};
         this.initInput()
         el.addEventListener('submit', this.onSubmit.bind(this));
     }
@@ -24,28 +26,11 @@ export default class Form {
         const inputs = this.inputs;
         let isValid = true;
         inputs.forEach(i => {
-            isValid = this.validate(i);
+            let reuslt = i.isValid();
+            isValid = isValid && reuslt; 
         })
         if(!isValid) return;
         this.form.submit();
-    }
-
-    private validate(input: Input) : boolean{
-        const rules = input.rules;
-        const ruleNames = Object.keys(rules);
-        const value = input.value || '';
-        let isValid = true;
-        let message = '';
-        if(ruleNames.length === 0) return true;
-        ruleNames.forEach(name => {
-            const rule = rules[name];
-            const result = Validation.validate(name, value, rule);
-            if(result) return;
-            isValid = false;
-            message += rule.message;
-        })
-        input.error = message;
-        return isValid
     }
 
 }

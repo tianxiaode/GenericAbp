@@ -2,6 +2,7 @@
 import isLength from "validator/es/lib/isLength"
 import isNumeric from "validator/es/lib/isNumeric"
 import isInt from "validator/es/lib/isInt"
+import isEmail from "validator/es/lib/isEmail"
 
 
 const Validation: Record<string, Function> = {
@@ -16,7 +17,9 @@ const Validation: Record<string, Function> = {
         return validate(value, rule);
     },
 
-    equalto(value: any, otherValue: any): boolean {
+    equalto(value: any, rule: any): boolean {
+        const other = document.getElementById(rule.other) as HTMLInputElement;
+        const otherValue = other?.value;
         return value === otherValue;
     },
 
@@ -28,18 +31,38 @@ const Validation: Record<string, Function> = {
         return isNumeric(value)
     },
 
-    range(value: string, min: number, max: number): boolean {
-        return isInt(value, { min: min, max: max})
+    range(value: string, rule: any): boolean {
+        return isInt(value, { min: rule.min, max: rule.max})
     },
 
-    regex(value: string, pattern: string): boolean {
-        var regex = new RegExp(pattern);
+    regex(value: string, rule: any): boolean {
+        var regex = new RegExp(rule.pattern);
         return regex.test(value);
     },
 
-    length(value: string, min: number, max: number): boolean {
-        return isLength(value, {min: undefined, max: max});
-    }
+    length(value: string, rule: any): boolean {
+        return isLength(value, {min: rule.min, max: rule.max});
+    },
+
+    email(value: string, rule: any): boolean {
+        return isEmail(value);
+    },
+
+    digit(value: string, rule: any): boolean {
+       return (/[0-9]/gi).test(value);
+    },
+
+    lowercase(value: string, rule: any): boolean {
+        return (/[a-z]/g).test(value);
+    },
+
+    uppercase(value: string, rule: any): boolean {
+        return (/[A-Z]/g).test(value);
+    },
+
+    nonalphanumeric(value: string, rule: any): boolean {
+        return (/[A-Z]/g).test(value);
+    }    
 }
 
 export default Validation;

@@ -1,4 +1,4 @@
-﻿import Form from "./From"
+﻿import Form from "./Form"
 import Toast from "./Toast"
 import Alert from "./Alert"
 

@@ -21,7 +21,11 @@ module.exports = {
       'text-success',
       'text-info',
       'text-warning',
-      'text-error'
+      'text-error',
+      'progress-success',
+      'progress-info',
+      'progress-warning',
+      'progress-error',
   ],
   daisyui: {
     themes: [

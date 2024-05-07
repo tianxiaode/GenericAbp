@@ -1,4 +1,5 @@
 ﻿using Generic.Abp.TailWindCss.Account.Web.Bundling;
+using Generic.Abp.TailWindCss.Account.Web.Localization;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Account;
@@ -10,9 +11,12 @@ using Volo.Abp.AspNetCore.Mvc.UI.Theming;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.ExceptionHandling;
 using Volo.Abp.Identity.AspNetCore;
+using Volo.Abp.Localization;
+using Volo.Abp.Localization.ExceptionHandling;
 using Volo.Abp.Modularity;
 using Volo.Abp.OpenIddict;
 using Volo.Abp.Threading;
+using Volo.Abp.Validation.Localization;
 using Volo.Abp.VirtualFileSystem;
 
 namespace Generic.Abp.TailWindCss.Account.Web;
@@ -62,6 +66,21 @@ public class GenericAbpTailWindCssAccountWebModule : AbpModule
             options.FileSets.AddEmbedded<GenericAbpTailWindCssAccountWebModule>(
                 "Generic.Abp.TailWindCss.Account.Web");
         });
+
+        Configure<AbpLocalizationOptions>(options =>
+        {
+            options.Resources
+                .Add<TailWindCssAccountWebResource>("en")
+                .AddBaseTypes(typeof(AccountResource))
+                .AddVirtualJson("/Localization/Resources");
+        });
+
+
+        Configure<AbpExceptionLocalizationOptions>(options =>
+        {
+            options.MapCodeNamespace("Generic.Abp.TailWindCss.Account.Web", typeof(TailWindCssAccountWebResource));
+        });
+
 
         Configure<AbpBundlingOptions>(options =>
         {

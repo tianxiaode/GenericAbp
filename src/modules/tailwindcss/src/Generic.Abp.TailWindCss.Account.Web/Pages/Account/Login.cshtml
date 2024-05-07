@@ -1,13 +1,12 @@
 ﻿@page
 @using Microsoft.AspNetCore.Mvc.Localization
-@using Volo.Abp.Account.Localization
 @using Volo.Abp.Account.Settings
 @using Volo.Abp.Identity;
 @using Volo.Abp.Settings
-@using Generic.Abp.TailWindCss.Account.Web.Pages.Account
-@using Generic.Abp.TailWindCss.Account.Web.Models
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Generic.Abp.TailWindCss.Account.Web.Localization
 @model Generic.Abp.TailWindCss.Account.Web.Pages.Account.LoginModel
-@inject IHtmlLocalizer<AccountResource> L
+@inject IHtmlLocalizer<TailWindCssAccountWebResource> L
 @inject ISettingProvider SettingProvider
 @{
     Layout = "Shared/_AccountLayout";
@@ -17,24 +16,10 @@
     <h2 class="card-title">@L["Login"]</h2>
         @if (Model.EnableLocalLogin)
         {
-            <form method="post" class="validate-form">
-                <input data-role="input" asp-for="LoginInput.UserNameOrEmailAddress" iconCls="fas fa-user text-info" autocomplete="username" />
-                <input data-role="input" asp-for="LoginInput.Password" iconCls="fas fa-key text-info" autocomplete="password" />
+            <form method="post">
+        <input data-role="input" asp-for="LoginInput.UserNameOrEmailAddress" iconCls="fas fa-user text-info" autocomplete="username" placeholder="@L["UserNameOrEmailAddress"]" />
+        <input data-role="input" asp-for="LoginInput.Password" iconCls="fas fa-key text-info" autocomplete="password" placeholder="@L["Password"]" />
                 
-                @*
-                @await Html.PartialAsync("Shared/Form/_Input", new InputModel(
-                    Html.TextBoxFor(m => m.LoginInput.UserNameOrEmailAddress),
-                    iconCls: "fas fa-user text-info",
-                    placeholder: L["UserNameOrEmailAddress"].Value,
-                    autocomplete: "username"))
-                <span asp-validation-for="LoginInput.UserNameOrEmailAddress" class="text-danger"></span>
-                <span asp-validation-for="LoginInput.Password"></span>
-                @await Html.PartialAsync("Shared/Form/_Input", new InputModel(
-                    Html.TextBoxFor(m => m.LoginInput.Password),
-                    iconCls: "fas fa-key text-info",
-                    placeholder: L["Password"].Value,
-                    autocomplete: "current-password"))
-    *@
                 <div class="flex justify-between items-center mt-4">
                     <div class="form-control">
                         <label class="label cursor-pointer">
@@ -53,6 +38,7 @@
 
         @if (Model.VisibleExternalProviders.Any())
         {
+            <h4 class="text-center">@L["LoginWithThird"]</h4>
             <div class="text-center">
                 <form asp-page="./Login" asp-page-handler="ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" asp-route-returnUrlHash="@Model.ReturnUrlHash" method="post">
                     @foreach (var provider in Model.VisibleExternalProviders)

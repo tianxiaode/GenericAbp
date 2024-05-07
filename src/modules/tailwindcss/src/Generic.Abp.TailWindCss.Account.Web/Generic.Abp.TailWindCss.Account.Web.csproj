@@ -31,6 +31,7 @@
     <EmbeddedResource Include="Views\**\*.js" />
     <EmbeddedResource Include="Views\**\*.css" />
     <EmbeddedResource Include="wwwroot\**\*.*" />
+    <EmbeddedResource Include="Localization\Resources\*.json" />
     <Content Remove="Modules\**\*.js" />
     <Content Remove="Modules\**\*.css" />
     <Content Remove="Pages\**\*.js" />
@@ -38,6 +39,7 @@
     <Content Remove="Views\**\*.js" />
     <Content Remove="Views\**\*.css" />
     <Content Remove="wwwroot\**\*.*" />
+    <Content Remove="Localization\Resources\*.json" />
   </ItemGroup>
 
   <ItemGroup>
@@ -47,7 +49,7 @@
   <ItemGroup>
     <None Remove="globals.d.ts" />
     <None Remove="scripts\Alert.ts" />
-    <None Remove="scripts\From.ts" />
+    <None Remove="scripts\Form.ts" />
     <None Remove="scripts\Toast.ts" />
     <None Remove="scripts\Validation.ts" />
   </ItemGroup>
@@ -59,7 +61,7 @@
   <ItemGroup>
     <TypeScriptCompile Include="scripts\Alert.ts" />
     <TypeScriptCompile Include="types\globals.d.ts" />
-    <TypeScriptCompile Include="scripts\From.ts" />
+    <TypeScriptCompile Include="scripts\Form.ts" />
     <TypeScriptCompile Include="scripts\Toast.ts" />
     <TypeScriptCompile Include="scripts\Validation.ts" />
   </ItemGroup>
