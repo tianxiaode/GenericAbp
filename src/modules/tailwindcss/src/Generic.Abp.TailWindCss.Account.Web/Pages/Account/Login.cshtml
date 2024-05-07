@@ -13,14 +13,6 @@
     Layout = "Shared/_AccountLayout";
 }
 
-@section scripts
-    {
-    <abp-script-bundle name="@typeof(LoginModel).FullName">
-        <abp-script src="/Pages/Account/Login.js" />
-    </abp-script-bundle>
-    }
-
-
 
     <h2 class="card-title">@L["Login"]</h2>
         @if (Model.EnableLocalLogin)
