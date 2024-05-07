@@ -37,12 +37,23 @@ export default class Input {
         return isValid;
     }
 
+    get value(): string | undefined {
+        return this.input?.value;
+    }
+
+    set error(error: string) {
+        const el = this.errorElement!;
+        const parent = el.parentElement;
+        el.innerHTML = error;
+        error && parent!.classList.remove('hidden');
+        !error && parent!.classList.add('hidden');
+    }
+
     private getRules(el: HTMLInputElement) {
         let me =this,
             hasValidate = el.getAttribute('data-val'),
             attributeNames = el.getAttributeNames(),
             id = el.id,
-            isNewPassword = el.autocomplete === 'new-password' && !id.toLowerCase().includes('confirm'),
             rules : any = {},
             indexUnderlineById = id.indexOf('_');
         if(hasValidate === 'false') return;
@@ -65,8 +76,14 @@ export default class Input {
             }
             rules[validateValueName[0]][validateValueName[1]] = value;
         });
-        me.rules = rules
-        if (!isNewPassword) return;
+
+        me.createPassworRule(rules,id, el.autocomplete);
+        me.rules = rules;
+        console.log(rules)
+    }
+
+    private createPassworRule(rules:  Record<string, any>, id: string, autocomplete: string) {
+        if(autocomplete !== 'new-password' || id.toLowerCase().includes('confirm')) return;
         let resouce = abp.localization.getResource('AbpIdentity'),
             settings = abp.setting.values;
         for (let setting of PASSWORD_SETTING) {
@@ -81,68 +98,111 @@ export default class Input {
             rules[name] = { message: resouce(`DisplayName:${setting}`)}
                 
         }
-        console.log(rules)
-        me.rules = rules;
+
     }
 
     private createInput(el: HTMLInputElement) {
         let me = this,
             root = document.createElement('div'),
-            innderHtml = "",
+            html = "",
             attachCls = el.getAttribute('controlCls') || '',
             labelAlign = el.getAttribute('labelAlign'),
             label = el.getAttribute('label'),
             id = el.id,
-            iconCls = el.getAttribute('iconCls'),
-            clearable = el.getAttribute('clearable') !== "false",
-            value = el.value,
-            clearableHidden = !!value ? '' : 'hidden',
             type = el.type,
-            placeholder = el.placeholder,
             autocomplete = el.autocomplete;
         me.isPasswordField = type === 'password';
         autocomplete = autocomplete ? autocomplete : 'off';
         
         root.className = `form-control w-full max-w-xs mb-4 ${attachCls}`;
-        if (labelAlign === 'top' && label) {
-           innderHtml += `<label class="label" for="${id}">${label}</label>`;
-        }
-        innderHtml += `<div class="input input-bordered focus:border-primary focus-within:border-primary flex items-center gap-2">`;
-        if (labelAlign === 'left' && label) {
-           innderHtml += `<label class="label" for="${id}">${label}</label>`;
-        }
-        if (iconCls) {
-           innderHtml += `<i class="${iconCls} w-4 h-4  opacity-70}"></i>`;
-        }
-           innderHtml += `<input id="${id}" name="${el.name}" type="${type}" value="${el.value}" autocomplete="${autocomplete}" placeholder="${placeholder}"  class="${el.className} grow" pattern=".*" />`;
-        if (clearable) {
-           innderHtml += `<button tabindex="-1" type="button"  class="clear-button ${clearableHidden}" ><i class="fas fa-times w-5 h-5 text-base opactity-70 "></i></button>`;
-        }
-        if (me.isPasswordField) {
-           innderHtml += `<button tabindex="-1" type="button"  class="show-password-button ${clearableHidden}" ><i class="fas fa-eye w-5 h-5 text-base opactity-70"></i></button>`;
-        }
-        innderHtml += "</div>"
-        if (me.isPasswordField && !id.toLowerCase().includes('confirm')) {
-            innderHtml += `<div class="indicator flex w-full justify-between space-x-1 items-center mt-1">
-                <progress  class="w-1/5 progress progress-gray-200" value="0" max="100"></progress >
-                <progress  class="w-1/5 progress progress-gray-200" value="0" max="100"></progress >
-                <progress  class="w-1/5 progress progress-gray-200" value="0" max="100"></progress >
-                <progress  class="w-1/5 progress progress-gray-200" value="0" max="100"></progress >
-                <progress  class="w-1/5 progress progress-gray-200" value="0" max="100"></progress >
-            </div>`;
-        }
-        innderHtml += `<div class="label hidden"><span class="flabel-text-alt text-error"></span></div>`;
-        innderHtml += "</div>";
-        root.innerHTML = innderHtml;
+
+        html += me.createLabel(labelAlign, label, id);
+
+        html += me.createInputWrap(el, labelAlign, label, id, autocomplete);
+
+        html += me.createPasswordIndicator(id);
+
+        html += me.createErrorWarp();
+        html += "</div>";
+        root.innerHTML = html;
+        me.bindEventAndElement(root);
         el.parentElement?.replaceChild(root, el);
-        me.input = root.querySelector('input');
+    }
+
+    private createLabel(labelAlign: string | null, label: string | null, id: string): string {
+        if (labelAlign === 'top' && label) {
+           return `<label class="label" for="${id}">${label}</label>`;
+        }
+        if (labelAlign === 'left' && label) {
+           return `<label class="label" for="${id}">${label}</label>`;
+        }
+        return '';
+    }
+
+    private createInputWrap(el: HTMLInputElement, labelAlign: string | null, lable: string | null, id: string, autocomplete: string) : string{
+        let me = this,
+            html = `<div class="input input-bordered focus:border-primary focus-within:border-primary flex items-center gap-2">`,
+            value = el.value;
+        html += me.createLabel(labelAlign, lable, id);
+
+        html += me.createInputIcon(el);
+        html += me.createInputElement(el, id, value, autocomplete);
+
+        html += me.createClearButton(el, value);
+        html += me.createEyeButton(value);
+
+        html += "</div>"
+
+        return html;
+    }
+
+    private createInputIcon(el: HTMLInputElement): string {
+        let cls = el.getAttribute('iconCls');
+        return cls ? `<i class="${cls} w-4 h-4  opacity-70}"></i>` : '';
+    }
+
+    private createInputElement(el: HTMLInputElement, id: string , value: string | null, autocomplete: string): string {
+        return `<input id="${id}" name="${el.name}" type="${el.type}" value="${value}" autocomplete="${autocomplete}" placeholder="${el.placeholder}"  class="${el.className} grow" pattern=".*" />`
+    }
+
+    private createClearButton(el: HTMLInputElement, value: string | null): string {
+        let clearable = el.getAttribute('clearable') !== "false",
+            hidden = !!value ? '' : 'hidden';
+        return !clearable ? ''
+            : `<button tabindex="-1" type="button"  class="clear-button ${hidden}" ><i class="fas fa-times w-5 h-5 text-base opactity-70 "></i></button>`
+    }
+
+    private createEyeButton(value: string | null) {
+        let hidden = !!value ? '' : 'hidden';
+        return !this.isPasswordField ? ''
+            : `<button tabindex="-1" type="button"  class="show-password-button ${hidden}" ><i class="fas fa-eye w-5 h-5 text-base opactity-70"></i></button>`;
+    }
+
+    private createPasswordIndicator(id: string) : string{
+        if(!this.isPasswordField || id.toLowerCase().includes('confirm')) return ''
+        let html = `<div class="indicator flex w-full justify-between space-x-1 items-center mt-1">`;
+        for (let i = 0; i <= 4; i++) {
+            html += `<progress  class="w-1/5 progress progress-gray-200" value="0" max="100"></progress >`;
+        }
+        html += `</div>`;
+        return html;
+    }
+
+    private createErrorWarp(): string {
+        return `<div class="label hidden"><span class="flabel-text-alt text-error"></span></div>`;
+    }
+
+    private bindEventAndElement(el: HTMLElement) {
+        let me = this;
+        me.input = el.querySelector('input');
         me.input?.addEventListener('input', me.onChange.bind(me));
-        me.clearButton = root.querySelector('button.clear-button');
+        me.clearButton = el.querySelector('button.clear-button');
         me.clearButton?.addEventListener('click', me.onClearInputValue.bind(me));
-        me.eyeButton = root.querySelector('button.show-password-button');
+        me.eyeButton = el.querySelector('button.show-password-button');
         me.eyeButton?.addEventListener('click', me.onSwitchInputType.bind(me));
-        me.errorElement = root.querySelector('.text-error');
-        me.indicatorElement = root.querySelector('.indicator');
+        me.errorElement = el.querySelector('.text-error');
+        me.indicatorElement = el.querySelector('.indicator');
+
     }
 
     private onClearInputValue(event: Event) {
@@ -240,15 +300,4 @@ export default class Input {
         button.classList.add('hidden');
     }
 
-    get value(): string | undefined {
-        return this.input?.value;
-    }
-
-    set error(error: string) {
-        const el = this.errorElement!;
-        const parent = el.parentElement;
-        el.innerHTML = error;
-        error && parent!.classList.remove('hidden');
-        !error && parent!.classList.add('hidden');
-    }
 }

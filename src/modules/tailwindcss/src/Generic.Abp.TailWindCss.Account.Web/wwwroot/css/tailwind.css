@@ -2558,10 +2558,6 @@ html {
   position: absolute;
 }
 
-.left-20 {
-  left: 5rem;
-}
-
 .right-0 {
   right: 0px;
 }
@@ -2614,10 +2610,6 @@ html {
   display: none;
 }
 
-.h-2 {
-  height: 0.5rem;
-}
-
 .h-4 {
   height: 1rem;
 }
@@ -2636,10 +2628,6 @@ html {
 
 .min-h-screen {
   min-height: 100vh;
-}
-
-.w-1 {
-  width: 0.25rem;
 }
 
 .w-1\/5 {
@@ -2938,6 +2926,10 @@ html {
 .input:focus,
 .input:focus-within {
   outline: none;
+}
+
+[data-role=input]{
+  display: none;
 }
 
 .loading-mask {
