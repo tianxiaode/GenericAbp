@@ -1,23 +1,33 @@
 ﻿@using Microsoft.Extensions.Primitives
 @using Volo.Abp.OpenIddict.Localization
 @using Microsoft.AspNetCore.Mvc.Localization
+@using Generic.Abp.TailWindCss.Account.Web.Providers
+@using Volo.Abp.AspNetCore.Mvc.UI.Theming
 @model Generic.Abp.TailWindCss.Account.Web.OpenIddict.ViewModels.Authorize.AuthorizeViewModel
+@inject ILayoutDataProvider LayoutDataProvider
 @inject IHtmlLocalizer<AbpOpenIddictResource> L
+@inject IThemeManager ThemeManager
+@{
+    Layout = ThemeManager.CurrentTheme.GetEmptyLayout();
+}
+<div class="hero min-h-screen bg-hero" style="background-image:url('@LayoutDataProvider.AccountHeroBackgroundUrl')">
+    <div class="card w-96 bg-base-100 shadow-xl">
+        <div class="card-body">
+            <h2 class="card-title">@L["Authorization"]</h2>
+            <p class="lead text-left"><strong>@string.Format(L["DoYouWantToGrantAccessToYourData"].Value, Model.ApplicationName)</strong></p>
+            <p class="fw-light">@L["ScopesRequested"]: @Model.Scope</p>
 
-<div class="jumbotron">
-    <h1>@L["Authorization"]</h1>
-    <p class="lead text-left"><strong>@string.Format(L["DoYouWantToGrantAccessToYourData"].Value, Model.ApplicationName)</strong></p>
-    <p class="fw-light">@L["ScopesRequested"]: @Model.Scope</p>
+            <form method="post" action="~/connect/authorize/callback">
+                @Html.AntiForgeryToken()
+                @* Flow the request parameters so they can be received by the Accept/Reject actions: *@
+                @foreach (var parameter in Context.Request.HasFormContentType ? (IEnumerable<KeyValuePair<string, StringValues>>)Context.Request.Form : Context.Request.Query)
+                {
+                    <input type="hidden" name="@parameter.Key" value="@parameter.Value"/>
+                }
 
-    <form method="post" action="~/connect/authorize/callback" >
-        @Html.AntiForgeryToken()
-        @* Flow the request parameters so they can be received by the Accept/Reject actions: *@
-        @foreach (var parameter in Context.Request.HasFormContentType ? (IEnumerable<KeyValuePair<string, StringValues>>) Context.Request.Form : Context.Request.Query)
-        {
-            <input type="hidden" name="@parameter.Key" value="@parameter.Value"/>
-        }
-
-        <input class="button primary" name="accept" type="submit" value="@L["Accept"]"/>
-        <input class="button danger ms-1" name="deny" type="submit" value="@L["Deny"]" />
-    </form>
+                <input class="btn btn-primary text-white" name="accept" type="submit" value="@L["Accept"]"/>
+                <input class="btn btn-error text-white" name="deny" type="submit" value="@L["Deny"]" />
+            </form>
+        </div>
+    </div>
 </div>

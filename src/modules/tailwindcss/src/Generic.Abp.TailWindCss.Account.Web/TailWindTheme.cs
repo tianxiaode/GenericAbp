@@ -13,7 +13,8 @@ public class TailWindTheme : ITheme, ITransientDependency
         return name switch
         {
             StandardLayouts.Account => "~/Pages/Shared/_AccountLayout.cshtml",
-            _ => fallbackToDefault ? "~/Pages/Shared/_Layout.cshtml" : null
+            StandardLayouts.Application => "~/Pages/Shared/_Layout.cshtml",
+            _ => fallbackToDefault ? "~/Pages/Shared/_EmptyLayout.cshtml" : null
         } ?? string.Empty;
     }
 }

@@ -25,11 +25,11 @@
                     <p >
                         @Html.Raw(errorDetails?.Replace("-", "<br/> -"))
                     </p>
+                @if (validationErrors != null)
+                {
                     <div class="divider"></div> 
                     <p>
-                        @if (validationErrors != null)
-                        {
-                            foreach (var validationError in validationErrors)
+                            @foreach (var validationError in validationErrors)
                             {
                                 <text>* </text>@(validationError.Message)
                                 if (validationError.Members.Any())
@@ -38,8 +38,8 @@
                                 }
                                 <br />
                             }
-                        }
                     </p>
+                }
                 </div>
 
             </div>

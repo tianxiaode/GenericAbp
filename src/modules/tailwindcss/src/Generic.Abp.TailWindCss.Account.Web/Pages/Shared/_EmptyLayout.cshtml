@@ -1,0 +1,57 @@
+﻿@using Volo.Abp.Localization
+@using Generic.Abp.TailWindCss.Account.Web.Bundling
+@using Generic.Abp.TailWindCss.Account.Web.Providers
+@inject ILayoutDataProvider LayoutDataProvider
+@{
+    Layout = null;
+
+    var rtl = CultureHelper.IsRtl ? "rtl" : string.Empty;
+    var layoutDataProviderType = LayoutDataProvider.GetType();
+    var properties = layoutDataProviderType.GetProperties();
+    foreach (var property in properties)
+    {
+        ViewData[property.Name] = property.GetValue(LayoutDataProvider);
+    }
+    
+}
+
+<!DOCTYPE html>
+
+<html lang="@CultureInfo.CurrentCulture.Name" data-theme="light">
+<head>
+    @await Html.PartialAsync("_HeadFirst")
+    <meta charset="utf-8">
+    @await Html.PartialAsync("_HeadIcon")
+    @await Html.PartialAsync("_MetaViewport")
+
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    @await Html.PartialAsync("_Title")
+    @await Html.PartialAsync("_MetaDescription")
+    
+    <abp-style-bundle name="@TailWindThemeBundles.Styles.Global" />
+    
+    @await RenderSectionAsync("styles", false)
+
+    @await Html.PartialAsync("_HeadLast")
+
+</head>
+<body class="@rtl" dir="@rtl">
+
+
+    @await Html.PartialAsync("_ContentFirst")
+    @RenderBody() 
+    @await Html.PartialAsync("_ContentLast")
+
+
+    @await Html.PartialAsync("_BodyLast")
+    
+    <abp-script-bundle name="@TailWindThemeBundles.Scripts.Global"></abp-script-bundle>
+    <script src="~/tailwind/ApplicationLocalizationScript?cultureName=@CultureInfo.CurrentUICulture.Name"></script>
+    <script src="~/tailwind/ApplicationConfigurationScript"></script>
+    <script src="~/tailwind/ServiceProxyScript"></script>
+
+    @await RenderSectionAsync("scripts", false)
+
+    </body>
+</html>
