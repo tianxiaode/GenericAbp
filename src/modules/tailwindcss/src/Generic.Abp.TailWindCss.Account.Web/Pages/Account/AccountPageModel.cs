@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Volo.Abp;
@@ -23,6 +24,7 @@ public abstract class AccountPageModel : AbpPageModel
     public IdentitySecurityLogManager IdentitySecurityLogManager { get; set; }
     public IOptions<IdentityOptions> IdentityOptions { get; set; }
     public IExceptionToErrorInfoConverter ExceptionToErrorInfoConverter { get; set; }
+    [CanBeNull] public string Error { get; set; }
 
     protected AccountPageModel()
     {

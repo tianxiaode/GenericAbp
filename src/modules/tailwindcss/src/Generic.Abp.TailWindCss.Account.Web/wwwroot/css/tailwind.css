@@ -2889,6 +2889,11 @@ html {
   color: var(--fallback-p,oklch(var(--p)/var(--tw-text-opacity)));
 }
 
+.text-secondary {
+  --tw-text-opacity: 1;
+  color: var(--fallback-s,oklch(var(--s)/var(--tw-text-opacity)));
+}
+
 .text-success {
   --tw-text-opacity: 1;
   color: var(--fallback-su,oklch(var(--su)/var(--tw-text-opacity)));

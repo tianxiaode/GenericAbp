@@ -67,7 +67,6 @@ public class LoginModel : AccountPageModel
     //protected IOptions<IdentityOptions> IdentityOptions { get; }
     protected IdentityDynamicClaimsPrincipalContributorCache IdentityDynamicClaimsPrincipalContributorCache { get; }
     public bool ShowCancelButton { get; set; }
-    [CanBeNull] public string Error { get; set; }
     protected AbpOpenIddictRequestHelper OpenIddictRequestHelper { get; }
 
     public LoginModel(

@@ -4,51 +4,48 @@
 @using Generic.Abp.TailWindCss.Account.Web.Localization
 @model Generic.Abp.TailWindCss.Account.Web.Pages.Account.RegisterModel
 @inject IHtmlLocalizer<TailWindCssAccountWebResource> L
-@{
-    Layout = "Shared/_AccountLayout";
-}
-        <h2 class="card-title">@L["Register"]</h2>
-        <form method="post">
-            @if (Model.EnableLocalRegister || Model.IsExternalLogin)
-            {
+<h2 class="card-title">@L["Register"]</h2>
+<form method="post">
+    @if (Model.EnableLocalRegister || Model.IsExternalLogin)
+    {
         <input asp-for="Input.UserName" auto-focus="true" data-role="input" autocomplete="off" iconCls="fas fa-user text-info" placeholder="@L["UserName"]" />
-            }
+    }
 
-            @if(Model.EnableLocalRegister || Model.IsExternalLogin)
-            {
+    @if (Model.EnableLocalRegister || Model.IsExternalLogin)
+    {
         <input asp-for="Input.EmailAddress" data-role="input" iconCls="fas fa-at text-info" placeholder="@L["DisplayName:EmailAddress"]" />
-            }
+    }
 
-            @if (!Model.IsExternalLogin && Model.EnableLocalRegister)
-            {
-                <input asp-for="Input.Password" data-role="input" autocomplete="new-password" iconCls="fas fa-key text-info" placeholder="@L["Password"]" />
-                <input asp-for="Input.ConfirmPassword" data-role="input" autocomplete="confirm-password" iconCls="fas fa-key text-info" placeholder="@L["ConfirmPassword"]" />
-            }
+    @if (!Model.IsExternalLogin && Model.EnableLocalRegister)
+    {
+        <input asp-for="Input.Password" data-role="input" autocomplete="new-password" iconCls="fas fa-key text-info" placeholder="@L["Password"]" />
+        <input asp-for="Input.ConfirmPassword" data-role="input" autocomplete="confirm-password" iconCls="fas fa-key text-info" placeholder="@L["ConfirmPassword"]" />
+    }
 
-            @if(Model.EnableLocalRegister || Model.IsExternalLogin)
-            {
-                <button type="submit" class="btn btn-primary w-full text-white text-lg mt-4">@L["Register"]</button>
-            }
+    @if (Model.EnableLocalRegister || Model.IsExternalLogin)
+    {
+        <button type="submit" class="btn btn-primary w-full text-white text-lg mt-4">@L["Register"]</button>
+    }
 
-        </form>
+</form>
 
-        @if (!Model.IsExternalLogin && Model.VisibleExternalProviders.Any())
-        {
-        <h4 class="text-center">@L["LoginWithThird"]</h4>
-        <div class="text-center">
+@if (!Model.IsExternalLogin && Model.VisibleExternalProviders.Any())
+{
+    <h4 class="text-center">@L["LoginWithThird"]</h4>
+    <div class="text-center">
         <form asp-page="./Login" asp-page-handler="ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" asp-route-returnUrlHash="@Model.ReturnUrlHash" method="post">
-                    @foreach (var provider in Model.VisibleExternalProviders)
-                    {
-                        <button type="submit" class="m-1 rounded-full" name="provider" value="@provider.AuthenticationScheme" title="@L["LogInUsingYourProviderAccount", provider.DisplayName]">
-                            <i class="fab fa-@provider?.DisplayName.ToLower() text-external-login-icon"></i>
-                        </button>
-                    }
-                </form>
-            </div>
-        }
+            @foreach (var provider in Model.VisibleExternalProviders)
+            {
+                <button type="submit" class="m-1 rounded-full" name="provider" value="@provider.AuthenticationScheme" title="@L["LogInUsingYourProviderAccount", provider.DisplayName]">
+                    <i class="fab fa-@provider?.DisplayName.ToLower() text-external-login-icon"></i>
+                </button>
+            }
+        </form>
+    </div>
+}
 
 
-        <strong>
-            @L["AlreadyRegistered"]
-            <a href="@Url.Page("./Login", new {returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash})" class="text-sm text-primary">@L["Login"]</a>
-        </strong>
+<strong>
+    @L["AlreadyRegistered"]
+    <a href="@Url.Page("./Login", new {returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash})" class="text-sm text-primary">@L["Login"]</a>
+</strong>

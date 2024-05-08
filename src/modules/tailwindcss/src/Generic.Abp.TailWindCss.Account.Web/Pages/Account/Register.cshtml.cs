@@ -34,7 +34,6 @@ public class RegisterModel : AccountPageModel
     [BindProperty(SupportsGet = true)] public bool IsExternalLogin { get; set; }
 
     [BindProperty(SupportsGet = true)] public string ExternalLoginAuthSchema { get; set; }
-    [CanBeNull] public string Error { get; set; }
 
     public IEnumerable<ExternalProviderModel> ExternalProviders { get; set; }
 
