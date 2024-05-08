@@ -1,0 +1,24 @@
+﻿@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Generic.Abp.TailWindCss.Account.Web.Localization
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model Generic.Abp.TailWindCss.Account.Web.Pages.Abp.MultiTenancy.TenantSwitchModalModel
+@inject IHtmlLocalizer<TailWindCssAccountWebResource> L
+@{
+    Layout = null;
+}
+<dialog class="modal">
+    <div class="modal-box">
+        <h3 class="font-bold text-lg">@L["SwitchTenant"].Value</h3>
+        <p class="py-4">Press ESC key or click the button below to close</p>
+        <div class="modal-action">
+            <form asp-page="/Abp/MultiTenancy/TenantSwitchModal">
+                <input asp-for="@Model.Input.Name" data-role="input" label="@L["Name"]" labelAlign="left" />
+                <div class="modal-action">
+                    <button class="btn btn-cancel min-w-20">@L["Cancel"]</button>
+                    <button class="btn text-white btn-primary  btn-ok min-w-20">@L["Yes"]</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</dialog>

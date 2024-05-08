@@ -106,7 +106,8 @@ export default class Input {
             root = document.createElement('div'),
             html = "",
             attachCls = el.getAttribute('controlCls') || '',
-            labelAlign = el.getAttribute('labelAlign'),
+            labelCols = parseInt(el.getAttribute('labelCols') ??  '') || 12,
+            inputCols = labelCols === 12 ? 12 : 12-labelCols,
             label = el.getAttribute('label'),
             id = el.id,
             type = el.type,
@@ -114,36 +115,26 @@ export default class Input {
         me.isPasswordField = type === 'password';
         autocomplete = autocomplete ? autocomplete : 'off';
         
-        root.className = `form-control w-full max-w-xs mb-4 ${attachCls}`;
+        root.className = `grid grid-cols-12 w-full gap-1 mb-4 ${attachCls}`;
+        html += me.createLabel(labelCols, label, id);
 
-        html += me.createLabel(labelAlign, label, id);
-
-        html += me.createInputWrap(el, labelAlign, label, id, autocomplete);
-
-        html += me.createPasswordIndicator(id,autocomplete);
-
-        html += me.createErrorWarp();
+        html += me.createInputWrap(el, inputCols, id, autocomplete);
+        html += me.createPasswordIndicator(id,autocomplete,inputCols);
+        html += me.createErrorWarp(inputCols);
         html += "</div>";
         root.innerHTML = html;
         me.bindEventAndElement(root);
         el.parentElement?.replaceChild(root, el);
     }
 
-    private createLabel(labelAlign: string | null, label: string | null, id: string): string {
-        if (labelAlign === 'top' && label) {
-           return `<label class="label" for="${id}">${label}</label>`;
-        }
-        if (labelAlign === 'left' && label) {
-           return `<label class="label" for="${id}">${label}</label>`;
-        }
-        return '';
+    private createLabel(labelCols: number,  label: string | null, id: string): string {
+        return label ? `<label class="label col-span-${labelCols}"  for="${id}">${label}</label>` : '';
     }
 
-    private createInputWrap(el: HTMLInputElement, labelAlign: string | null, lable: string | null, id: string, autocomplete: string) : string{
+    private createInputWrap(el: HTMLInputElement, inputCols: number, id: string, autocomplete: string) : string{
         let me = this,
-            html = `<div class="input input-bordered focus:border-primary focus-within:border-primary flex items-center gap-2">`,
+            html = `<div class="input input-bordered focus:border-primary focus-within:border-primary flex items-center gap-2 col-span-${inputCols}">`,
             value = el.value;
-        html += me.createLabel(labelAlign, lable, id);
 
         html += me.createInputIcon(el);
         html += me.createInputElement(el, id, value, autocomplete);
@@ -178,9 +169,10 @@ export default class Input {
             : `<button tabindex="-1" type="button"  class="show-password-button ${hidden}" ><i class="fas fa-eye w-5 h-5 text-base opactity-70"></i></button>`;
     }
 
-    private createPasswordIndicator(id: string, autocomplete: string) : string{
+    private createPasswordIndicator(id: string, autocomplete: string,inputCols: number) : string{
         if(!this.isPasswordField || id.toLowerCase().includes('confirm') || autocomplete !== 'new-password') return ''
-        let html = `<div class="indicator flex w-full justify-between space-x-1 items-center mt-1">`;
+        let start = inputCols === 12 ? '' : `col-start-${13-inputCols}`;
+        let html = `<div class="indicator flex w-full justify-between space-x-1 items-center mt-1 ${start} col-span-${inputCols}">`;
         for (let i = 0; i <= 4; i++) {
             html += `<progress  class="w-1/5 progress progress-gray-200" value="0" max="100"></progress >`;
         }
@@ -188,8 +180,9 @@ export default class Input {
         return html;
     }
 
-    private createErrorWarp(): string {
-        return `<div class="label hidden"><span class="flabel-text-alt text-xs text-error"></span></div>`;
+    private createErrorWarp(inputCols: number): string {
+        let start = inputCols === 12 ? '' : `col-start-${13-inputCols}`;
+        return `<div class="label hidden ${start} col-span-${inputCols}"><span class="flabel-text-alt text-xs text-error"></span></div>`;
     }
 
     private bindEventAndElement(el: HTMLElement) {

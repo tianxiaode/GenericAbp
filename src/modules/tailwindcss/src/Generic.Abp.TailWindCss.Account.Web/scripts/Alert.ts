@@ -6,7 +6,7 @@
         const icon = this.icons[type];
         const resource = abp.localization.getResource('AbpUi');
         const color = type === 'confirm' ? 'info' : type;
-        let buttons = `<button class="btn text-white btn-primary  btn-ok min-w-20">${resource('Ok')}</button>`;
+        let buttons = `<button class="btn text-white btn-primary  btn-ok min-w-20">${resource('Yes')}</button>`;
         const titleDiv = title ? `<h3 class="font-bold text-lg">${title}</h3>` : '';
         alert.className = "modal modal-bottom sm:modal-middle";
         alert.role = "alert";

@@ -1,0 +1,30 @@
+﻿@using Volo.Abp.AspNetCore.MultiTenancy
+@using Volo.Abp.MultiTenancy
+@using Microsoft.Extensions.Options
+@using Microsoft.Extensions.Localization
+@using Generic.Abp.TailWindCss.Account.Web.Localization
+@inject IOptions<AbpMultiTenancyOptions> MultiTenancyOptions
+@inject ICurrentTenant CurrentTenant
+@inject IStringLocalizer<TailWindCssAccountWebResource> L
+@inject ITenantResolveResultAccessor TenantResolveResultAccessor
+
+@{
+}
+@if (MultiTenancyOptions.Value.IsEnabled &&
+     (TenantResolveResultAccessor.Result?.AppliedResolvers?.Contains(CookieTenantResolveContributor.ContributorName) == true ||
+      TenantResolveResultAccessor.Result?.AppliedResolvers?.Contains(QueryStringTenantResolveContributor.ContributorName) == true))
+{
+    <a class="text-white px-3 py-2 text-sm font-medium md:hover:bg-gray-700" href="javascript:void(0)" id="AbpTenantSwitchLink">
+        @if (CurrentTenant.Id == null)
+        {
+            <span>
+                @L["NotSelected"]@L["Tenant"]
+            </span>
+        }
+        else
+        {
+            @(CurrentTenant.Name ?? CurrentTenant.Id.Value.ToString())
+        }
+
+    </a>
+}

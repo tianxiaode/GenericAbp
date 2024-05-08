@@ -51,6 +51,7 @@
     <None Remove="Pages\Account\LoggedOut.js" />
     <None Remove="scripts\Alert.ts" />
     <None Remove="scripts\Form.ts" />
+    <None Remove="scripts\TenantSwitch.ts" />
     <None Remove="scripts\Toast.ts" />
     <None Remove="scripts\Validation.ts" />
   </ItemGroup>
@@ -60,7 +61,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Pages\Abp\MultiTenancy\TenantSwitchModal.cshtml" />
+    <None Include="Pages\Abp\MultiTenancy\_ViewImports.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <TypeScriptCompile Include="scripts\Alert.ts" />
+    <TypeScriptCompile Include="scripts\TenantSwitch.ts" />
     <TypeScriptCompile Include="types\globals.d.ts" />
     <TypeScriptCompile Include="scripts\Form.ts" />
     <TypeScriptCompile Include="scripts\Toast.ts" />

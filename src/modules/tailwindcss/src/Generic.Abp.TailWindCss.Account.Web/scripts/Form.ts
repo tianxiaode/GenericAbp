@@ -1,14 +1,11 @@
 ﻿import Input from "./Input";
-import Validation from './Validation'
 export default class Form {
 
     private form : HTMLFormElement
     private inputs : Input[];
-    private compares: Record<string, Input>;
     constructor(el: HTMLFormElement) {
         this.form = el;
         this.inputs = [];
-        this.compares = {};
         this.initInput()
         el.addEventListener('submit', this.onSubmit.bind(this));
     }

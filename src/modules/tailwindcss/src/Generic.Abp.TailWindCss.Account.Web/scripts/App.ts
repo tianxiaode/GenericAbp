@@ -1,9 +1,11 @@
 ﻿import Form from "./Form"
 import Toast from "./Toast"
 import Alert from "./Alert"
+import TenantSwitch from "./TenantSwitch"
 
 export default class App {
     constructor() {
+        new TenantSwitch();
         this.initNav();
         this.initForm();
         this.initAbpNotify();

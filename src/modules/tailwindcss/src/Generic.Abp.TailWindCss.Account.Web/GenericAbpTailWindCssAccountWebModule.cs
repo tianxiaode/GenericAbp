@@ -38,7 +38,7 @@ public class GenericAbpTailWindCssAccountWebModule : AbpModule
     {
         context.Services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
         {
-            options.AddAssemblyResource(typeof(AccountResource),
+            options.AddAssemblyResource(typeof(TailWindCssAccountWebResource),
                 typeof(GenericAbpTailWindCssAccountWebModule).Assembly);
         });
 
@@ -71,6 +71,7 @@ public class GenericAbpTailWindCssAccountWebModule : AbpModule
         {
             options.Resources
                 .Add<TailWindCssAccountWebResource>("en")
+                .AddBaseTypes(typeof(AbpValidationResource))
                 .AddBaseTypes(typeof(AccountResource))
                 .AddVirtualJson("/Localization/Resources");
         });

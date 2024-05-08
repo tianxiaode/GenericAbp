@@ -2,9 +2,7 @@
 @model Generic.Abp.TailWindCss.Account.Web.Pages.Account.LoggedOutModel
 @using Volo.Abp.Account.Localization
 @using Microsoft.AspNetCore.Mvc.Localization
-@using Volo.Abp.AspNetCore.Mvc.UI.Theming
 @using Generic.Abp.TailWindCss.Account.Web.Pages.Account
-@inject IThemeManager ThemeManager
 @inject IHtmlLocalizer<AccountResource> L
 @section scripts {
     <abp-script-bundle name="@typeof(LoggedOutModel).FullName">

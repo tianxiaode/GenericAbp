@@ -55,6 +55,7 @@
     <script src="~/tailwind/ServiceProxyScript"></script>
 
     @await RenderSectionAsync("scripts", false)
-
+    
+    @await Html.PartialAsync("_TenantDialog")
     </body>
 </html>
