@@ -229,9 +229,11 @@ export class AxiosManager {
             // that falls out of the range of 2xx
             const data = response.data;
             const dataError = data?.error;
+            const message = dataError ? `${dataError?.message}${dataError?.details ? ':' + dataError?.details : ''}` : null;
+
             errorMessage = me.handlerErrorMessage( data?.code || response.status,
                 data?.msg 
-                || `${dataError?.message}${dataError?.details ? ':' + dataError?.details : ''}` 
+                ||  message
                 || response.statusText 
                 || error.message ); // 处理错误信息
             deferred.reject(errorMessage); // 拒绝 Deferred 对象的 Promise
@@ -239,7 +241,6 @@ export class AxiosManager {
             // The request was made but no response was received
             // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
             // http.ClientRequest in node.js
-            console.log(error.request);
             errorMessage = me.handlerErrorMessage(500, '服务器错误'); // 处理错误信息
             deferred.reject(errorMessage); // 拒绝 Deferred 对象的 Promise
         } 

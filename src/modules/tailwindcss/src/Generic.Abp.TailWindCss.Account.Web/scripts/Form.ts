@@ -3,10 +3,12 @@ export default class Form {
 
     private form : HTMLFormElement
     private inputs : Input[];
-    constructor(el: HTMLFormElement) {
+    private submit: Function | null
+    constructor(el: HTMLFormElement, submint: Function | null = null) {
         this.form = el;
         this.inputs = [];
         this.initInput()
+        this.submit = submint;
         el.addEventListener('submit', this.onSubmit.bind(this));
     }
 
@@ -27,6 +29,10 @@ export default class Form {
             isValid = isValid && reuslt; 
         })
         if(!isValid) return;
+        if (this.submit) {
+            this.submit(event);
+            return;
+        }
         this.form.submit();
     }
 

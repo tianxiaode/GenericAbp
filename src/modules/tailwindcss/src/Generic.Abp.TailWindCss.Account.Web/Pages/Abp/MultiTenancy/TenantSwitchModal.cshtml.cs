@@ -7,6 +7,7 @@ using Microsoft.Extensions.Options;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
+using Volo.Abp.Authorization;
 using Volo.Abp.MultiTenancy;
 
 namespace Generic.Abp.TailWindCss.Account.Web.Pages.Abp.MultiTenancy;

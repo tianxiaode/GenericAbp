@@ -17,9 +17,7 @@
     <a class="text-white px-3 py-2 text-sm font-medium md:hover:bg-gray-700" href="javascript:void(0)" id="AbpTenantSwitchLink">
         @if (CurrentTenant.Id == null)
         {
-            <span>
-                @L["NotSelected"]@L["Tenant"]
-            </span>
+            @L["NotSelected"]@L["Tenant"]
         }
         else
         {

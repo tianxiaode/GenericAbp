@@ -10,6 +10,7 @@
     "SwitchTenantHint": "将名称字段留空以切换到宿主端.",
     "SwitchTenant": "切换租户",
     "NotSelected": "未选中",
-    "Yes": "确定"
+    "Yes": "确定",
+    "Submitting": "正在提交..."
   }
 }

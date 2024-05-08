@@ -2,6 +2,7 @@
 import Toast from "./Toast"
 import Alert from "./Alert"
 import TenantSwitch from "./TenantSwitch"
+import {AxiosManager} from "./http/AxiosManager"
 
 export default class App {
     constructor() {
@@ -14,11 +15,13 @@ export default class App {
     }
 
     private initAxiosManager() {
-        //let locale = abp.localization.currentCulture.cultureName;
-        //if(locale === 'zh-Hans') locale = 'zh-CN';
-        //if(locale === 'zh-Hant') locale = 'zh-TW';
-        //abp.axiosManager = new AxiosManager({});
-        //abp.axiosManager.setLocale(locale);
+        let locale = abp.localization.currentCulture.cultureName;
+        if(locale === 'zh-Hans') locale = 'zh-CN';
+        if(locale === 'zh-Hant') locale = 'zh-TW';
+        abp.axiosManager = new AxiosManager({
+            errorMessageHandler: (message) => { Toast.error(message) }
+        });
+        abp.axiosManager.setLocale(locale);
 
     }
 

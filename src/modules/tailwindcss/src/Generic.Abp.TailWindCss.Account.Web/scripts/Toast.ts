@@ -4,8 +4,9 @@
 
         const toast = document.createElement('div');
         toast.className = "toast toast-top toast-center";
+        toast.style.zIndex = '99999';
         toast.innerHTML = `
-            <div class="toast toast-top toast-center ">
+            <div class="toast toast-top toast-center">
 	            <div class="body p-2 bg-${type} font-bold text-white rounded opactity-70">
 		            <span>${message}</span>
 	            </div>

@@ -9,9 +9,8 @@
         let buttons = `<button class="btn text-white btn-primary  btn-ok min-w-20">${resource('Yes')}</button>`;
         const titleDiv = title ? `<h3 class="font-bold text-lg">${title}</h3>` : '';
         alert.className = "modal modal-bottom sm:modal-middle";
-        alert.role = "alert";
-        alert.setAttribute('open','open');
-
+        //alert.role = "alert";
+        alert.classList.add('modal-open');
         if (type === 'confirm') {
             buttons = `<button class="btn btn-cancel min-w-20">${resource('Cancel')}</button>` + buttons;
         }
