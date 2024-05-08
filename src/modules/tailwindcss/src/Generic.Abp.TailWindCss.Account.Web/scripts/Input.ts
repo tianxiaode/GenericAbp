@@ -120,7 +120,7 @@ export default class Input {
 
         html += me.createInputWrap(el, labelAlign, label, id, autocomplete);
 
-        html += me.createPasswordIndicator(id);
+        html += me.createPasswordIndicator(id,autocomplete);
 
         html += me.createErrorWarp();
         html += "</div>";
@@ -178,8 +178,8 @@ export default class Input {
             : `<button tabindex="-1" type="button"  class="show-password-button ${hidden}" ><i class="fas fa-eye w-5 h-5 text-base opactity-70"></i></button>`;
     }
 
-    private createPasswordIndicator(id: string) : string{
-        if(!this.isPasswordField || id.toLowerCase().includes('confirm')) return ''
+    private createPasswordIndicator(id: string, autocomplete: string) : string{
+        if(!this.isPasswordField || id.toLowerCase().includes('confirm') || autocomplete !== 'new-password') return ''
         let html = `<div class="indicator flex w-full justify-between space-x-1 items-center mt-1">`;
         for (let i = 0; i <= 4; i++) {
             html += `<progress  class="w-1/5 progress progress-gray-200" value="0" max="100"></progress >`;
@@ -189,7 +189,7 @@ export default class Input {
     }
 
     private createErrorWarp(): string {
-        return `<div class="label hidden"><span class="flabel-text-alt text-error"></span></div>`;
+        return `<div class="label hidden"><span class="flabel-text-alt text-xs text-error"></span></div>`;
     }
 
     private bindEventAndElement(el: HTMLElement) {
