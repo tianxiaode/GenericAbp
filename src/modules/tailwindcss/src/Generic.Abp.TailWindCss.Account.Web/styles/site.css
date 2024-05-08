@@ -58,3 +58,8 @@ input[type="password"]::-ms-reveal {
     display: none;
 }
 
+.logoutiframe {
+    display: none;
+    width: 0;
+    height: 0;
+}

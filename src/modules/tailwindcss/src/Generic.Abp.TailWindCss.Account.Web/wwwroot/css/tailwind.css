@@ -2980,6 +2980,12 @@ input[type="password"]::-ms-reveal {
   display: none;
 }
 
+.logoutiframe {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
 @media (min-width: 640px) {
   .sm\:modal-middle {
     place-items: center;
@@ -3045,4 +3051,3 @@ input[type="password"]::-ms-reveal {
     padding-right: 2rem;
   }
 }
-

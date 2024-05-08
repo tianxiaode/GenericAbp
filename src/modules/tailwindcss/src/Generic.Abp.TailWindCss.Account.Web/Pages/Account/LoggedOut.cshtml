@@ -1,0 +1,25 @@
+﻿@page "/Account/LoggedOut"
+@model Generic.Abp.TailWindCss.Account.Web.Pages.Account.LoggedOutModel
+@using Volo.Abp.Account.Localization
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Theming
+@using Generic.Abp.TailWindCss.Account.Web.Pages.Account
+@inject IThemeManager ThemeManager
+@inject IHtmlLocalizer<AccountResource> L
+@section scripts {
+    <abp-script-bundle name="@typeof(LoggedOutModel).FullName">
+        <abp-script src="/Pages/Account/LoggedOut.js" />
+    </abp-script-bundle>
+}
+
+
+        <h2 class="card-title">@L["LoggedOutTitle"]</h2>
+        <p class="text-sm text-secondary mb-4">@L["LoggedOutText"]</p>
+        @if (Model.PostLogoutRedirectUri != null)
+        {
+            <a class="text-sm text-primary" id="redirectButton" href="@Model.PostLogoutRedirectUri" cname="@Model.ClientName">@L["ReturnToText"]</a>
+        }
+        @if (Model.SignOutIframeUrl != null)
+        {
+            <iframe class="signout logoutiframe" src="@Model.SignOutIframeUrl"></iframe>
+        }
