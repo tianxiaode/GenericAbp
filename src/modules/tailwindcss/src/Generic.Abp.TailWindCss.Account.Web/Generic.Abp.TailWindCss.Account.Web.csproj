@@ -54,6 +54,7 @@
     <None Remove="scripts\TenantSwitch.ts" />
     <None Remove="scripts\Toast.ts" />
     <None Remove="scripts\Validation.ts" />
+    <None Remove="types\zxcvbn.d.ts" />
   </ItemGroup>
 
   <ItemGroup>
@@ -68,6 +69,9 @@
   <ItemGroup>
     <TypeScriptCompile Include="scripts\Alert.ts" />
     <TypeScriptCompile Include="scripts\TenantSwitch.ts" />
+    <TypeScriptCompile Include="types\zxcvbn.d.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="types\globals.d.ts" />
     <TypeScriptCompile Include="scripts\Form.ts" />
     <TypeScriptCompile Include="scripts\Toast.ts" />

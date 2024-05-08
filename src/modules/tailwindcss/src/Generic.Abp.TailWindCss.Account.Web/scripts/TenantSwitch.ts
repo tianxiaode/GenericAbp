@@ -1,14 +1,15 @@
-﻿export default class TenantSwitch {
+﻿import ModalManager from './ModalManager'
+export default class TenantSwitch {
 
-    private modal : HTMLElement | null
+    private modal : ModalManager
     constructor() {
         const div = document.getElementById('AbpTenantSwitchLink');
         div?.addEventListener('click', this.onSwitch.bind(this));
-        this.modal = document.getElementById('switchTenantDialog');
+        this.modal = new ModalManager(abp.appPath + 'Abp/MultiTenancy/TenantSwitchModal');
         console.log(div,this.modal)
     }   
 
     onSwitch() {
-        this.modal!.setAttribute('open','open');
+        this.modal.open();
     }
 }

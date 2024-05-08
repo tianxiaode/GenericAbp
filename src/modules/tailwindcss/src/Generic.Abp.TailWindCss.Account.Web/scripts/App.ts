@@ -5,11 +5,21 @@ import TenantSwitch from "./TenantSwitch"
 
 export default class App {
     constructor() {
+        this.initAxiosManager();
         new TenantSwitch();
         this.initNav();
         this.initForm();
         this.initAbpNotify();
         this.initAbpMessage();
+    }
+
+    private initAxiosManager() {
+        //let locale = abp.localization.currentCulture.cultureName;
+        //if(locale === 'zh-Hans') locale = 'zh-CN';
+        //if(locale === 'zh-Hant') locale = 'zh-TW';
+        //abp.axiosManager = new AxiosManager({});
+        //abp.axiosManager.setLocale(locale);
+
     }
 
     private initForm() {

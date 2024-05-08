@@ -1,17 +1,17 @@
 ﻿import Validation from './Validation'
-import zxcvbn from 'zxcvbn'
+import zxcvbn from 'zxcvbn-lite';
 
 const PASSWORD_SETTING_PRIFIX = "Abp.Identity.Password";
-const PASSWORD_SETTING = ['RequireDigit', 'RequireLowercase', 'RequireNonAlphanumeric', 'RequireUppercase', 'RequiredLength'].map(m=> `${PASSWORD_SETTING_PRIFIX}.${m}`);
+const PASSWORD_SETTING = ['RequireDigit', 'RequireLowercase', 'RequireNonAlphanumeric', 'RequireUppercase', 'RequiredLength'].map(m => `${PASSWORD_SETTING_PRIFIX}.${m}`);
 export default class Input {
-    public id : string
-    public rules:  Record<string, any>
+    public id: string
+    public rules: Record<string, any>
     private input: HTMLInputElement | null = null
     private changeTask: string | number | NodeJS.Timeout | undefined = undefined
-    private clearButton : HTMLButtonElement | null = null;
+    private clearButton: HTMLButtonElement | null = null;
     private isPasswordField: boolean = false;
-    private currentPasswordType: string  = "password"
-    private eyeButton : HTMLButtonElement | null = null;
+    private currentPasswordType: string = "password"
+    private eyeButton: HTMLButtonElement | null = null;
     private errorElement: HTMLElement | null = null;
     private indicatorElement: HTMLElement | null = null;
     constructor(el: HTMLInputElement) {
@@ -27,11 +27,11 @@ export default class Input {
             message = '',
             value = input.value,
             rules = this.rules;
-        for(let [name, rule] of Object.entries(rules)){
+        for (let [name, rule] of Object.entries(rules)) {
             let result = Validation.validate(name, value, rule);
-            if(result) continue;
+            if (result) continue;
             isValid = false;
-            message += `${rule.message}<br>` ;
+            message += `${rule.message}<br>`;
         }
         this.error = message;
         return isValid;
@@ -50,13 +50,13 @@ export default class Input {
     }
 
     private getRules(el: HTMLInputElement) {
-        let me =this,
+        let me = this,
             hasValidate = el.getAttribute('data-val'),
             attributeNames = el.getAttributeNames(),
             id = el.id,
-            rules : any = {},
+            rules: any = {},
             indexUnderlineById = id.indexOf('_');
-        if(hasValidate === 'false') return;
+        if (hasValidate === 'false') return;
 
         // 遍历每个属性名
         attributeNames.forEach(attrName => {
@@ -66,37 +66,37 @@ export default class Input {
             let name = attrName.replace('data-val-', '');
             let value = el.getAttribute(attrName);
             if (!name.includes('-')) {
-                rules[name] = { message: value};
+                rules[name] = { message: value };
                 return;
             }
             let validateValueName = name.split("-");
             rules[validateValueName[0]] = rules[validateValueName[0]] || {};
-            if (value?.startsWith('*.')){
-                value = value?.replace('*.',id.substring(0, indexUnderlineById+1));
+            if (value?.startsWith('*.')) {
+                value = value?.replace('*.', id.substring(0, indexUnderlineById + 1));
             }
             rules[validateValueName[0]][validateValueName[1]] = value;
         });
 
-        me.createPassworRule(rules,id, el.autocomplete);
+        me.createPassworRule(rules, id, el.autocomplete);
         me.rules = rules;
         console.log(rules)
     }
 
-    private createPassworRule(rules:  Record<string, any>, id: string, autocomplete: string) {
-        if(autocomplete !== 'new-password' || id.toLowerCase().includes('confirm')) return;
+    private createPassworRule(rules: Record<string, any>, id: string, autocomplete: string) {
+        if (autocomplete !== 'new-password' || id.toLowerCase().includes('confirm')) return;
         let resouce = abp.localization.getResource('AbpIdentity'),
             settings = abp.setting.values;
         for (let setting of PASSWORD_SETTING) {
             let name = setting.replace(`${PASSWORD_SETTING_PRIFIX}.Require`, '').toLowerCase(),
                 value = settings[setting];
-            if(name.startsWith('uni')) continue;
+            if (name.startsWith('uni')) continue;
             if (name === 'length') {
                 rules.length['min'] = value;
                 continue;
             }
             if (value !== 'True') continue
-            rules[name] = { message: resouce(`DisplayName:${setting}`)}
-                
+            rules[name] = { message: resouce(`DisplayName:${setting}`) }
+
         }
 
     }
@@ -106,20 +106,20 @@ export default class Input {
             root = document.createElement('div'),
             html = "",
             attachCls = el.getAttribute('controlCls') || '',
-            labelCols = parseInt(el.getAttribute('labelCols') ??  '') || 12,
-            inputCols = labelCols === 12 ? 12 : 12-labelCols,
+            labelCols = parseInt(el.getAttribute('labelCols') ?? '') || 12,
+            inputCols = labelCols === 12 ? 12 : 12 - labelCols,
             label = el.getAttribute('label'),
             id = el.id,
             type = el.type,
             autocomplete = el.autocomplete;
         me.isPasswordField = type === 'password';
         autocomplete = autocomplete ? autocomplete : 'off';
-        
+
         root.className = `grid grid-cols-12 w-full gap-1 mb-4 ${attachCls}`;
         html += me.createLabel(labelCols, label, id);
 
         html += me.createInputWrap(el, inputCols, id, autocomplete);
-        html += me.createPasswordIndicator(id,autocomplete,inputCols);
+        html += me.createPasswordIndicator(id, autocomplete, inputCols);
         html += me.createErrorWarp(inputCols);
         html += "</div>";
         root.innerHTML = html;
@@ -127,11 +127,11 @@ export default class Input {
         el.parentElement?.replaceChild(root, el);
     }
 
-    private createLabel(labelCols: number,  label: string | null, id: string): string {
+    private createLabel(labelCols: number, label: string | null, id: string): string {
         return label ? `<label class="label col-span-${labelCols}"  for="${id}">${label}</label>` : '';
     }
 
-    private createInputWrap(el: HTMLInputElement, inputCols: number, id: string, autocomplete: string) : string{
+    private createInputWrap(el: HTMLInputElement, inputCols: number, id: string, autocomplete: string): string {
         let me = this,
             html = `<div class="input input-bordered focus:border-primary focus-within:border-primary flex items-center gap-2 col-span-${inputCols}">`,
             value = el.value;
@@ -152,7 +152,7 @@ export default class Input {
         return cls ? `<i class="${cls} w-4 h-4  opacity-70}"></i>` : '';
     }
 
-    private createInputElement(el: HTMLInputElement, id: string , value: string | null, autocomplete: string): string {
+    private createInputElement(el: HTMLInputElement, id: string, value: string | null, autocomplete: string): string {
         return `<input id="${id}" name="${el.name}" type="${el.type}" value="${value}" autocomplete="${autocomplete}" placeholder="${el.placeholder}"  class="${el.className} grow" pattern=".*" />`
     }
 
@@ -169,9 +169,9 @@ export default class Input {
             : `<button tabindex="-1" type="button"  class="show-password-button ${hidden}" ><i class="fas fa-eye w-5 h-5 text-base opactity-70"></i></button>`;
     }
 
-    private createPasswordIndicator(id: string, autocomplete: string,inputCols: number) : string{
-        if(!this.isPasswordField || id.toLowerCase().includes('confirm') || autocomplete !== 'new-password') return ''
-        let start = inputCols === 12 ? '' : `col-start-${13-inputCols}`;
+    private createPasswordIndicator(id: string, autocomplete: string, inputCols: number): string {
+        if (!this.isPasswordField || id.toLowerCase().includes('confirm') || autocomplete !== 'new-password') return ''
+        let start = inputCols === 12 ? '' : `col-start-${13 - inputCols}`;
         let html = `<div class="indicator flex w-full justify-between space-x-1 items-center mt-1 ${start} col-span-${inputCols}">`;
         for (let i = 0; i <= 4; i++) {
             html += `<progress  class="w-1/5 progress progress-gray-200" value="0" max="100"></progress >`;
@@ -181,7 +181,7 @@ export default class Input {
     }
 
     private createErrorWarp(inputCols: number): string {
-        let start = inputCols === 12 ? '' : `col-start-${13-inputCols}`;
+        let start = inputCols === 12 ? '' : `col-start-${13 - inputCols}`;
         return `<div class="label hidden ${start} col-span-${inputCols}"><span class="flabel-text-alt text-xs text-error"></span></div>`;
     }
 
@@ -199,16 +199,16 @@ export default class Input {
     }
 
     private onClearInputValue(event: Event) {
-        let input = this.input!  as HTMLInputElement;
+        let input = this.input! as HTMLInputElement;
         input.value = "";
         let e = new Event('input');
-		input.dispatchEvent(e);
+        input.dispatchEvent(e);
     }
 
     private onSwitchInputType(event: Event) {
         let input = this.input!;
         let currentType = this.currentPasswordType;
-        this.currentPasswordType = currentType === 'password' ? "text": "password";
+        this.currentPasswordType = currentType === 'password' ? "text" : "password";
         input.setAttribute('type', this.currentPasswordType);
         this.switchEyeButtonState(true);
     }
@@ -217,18 +217,18 @@ export default class Input {
         const me = this;
         const changeTask = me.changeTask;
 
-         if (changeTask) {
+        if (changeTask) {
             clearTimeout(changeTask);
             me.changeTask = undefined;
         }
-        me.changeTask = setTimeout(function() {
+        me.changeTask = setTimeout(function () {
             me.changeTask = undefined;
             me.onValueChange(event);
         }, 500);
 
     }
 
-    private onValueChange(event:Event) {
+    private onValueChange(event: Event) {
         const me = this,
             value = me.input!.value,
             indicatorElement = me.indicatorElement as HTMLElement;
@@ -251,8 +251,8 @@ export default class Input {
             nodes = el.children,
             result = zxcvbn(value),
             score = result.guesses_log10,
-            present = Math.floor(score / 12*100),
-            mainClors = present <= 50 ? 'error' : present<=75 ? 'warning' : 'success';
+            present = Math.floor(score / 12 * 100),
+            mainClors = present <= 50 ? 'error' : present <= 75 ? 'warning' : 'success';
         present = present > 100 ? 100 : present;
         for (let i = 0; i <= 4; i++) {
             if (present < 0) {
@@ -271,7 +271,7 @@ export default class Input {
     }
 
     private setIndicatorValue(el: HTMLProgressElement, value: number, classname: string) {
-        let classList  = el.classList;
+        let classList = el.classList;
         el.value = value;
         classList.remove('progress-error', 'progress-warning', 'progress-success', 'progress-gray-200');
         classList.add(`progress-${classname}`);
@@ -280,14 +280,14 @@ export default class Input {
 
     private switchEyeButtonState(isShow: boolean) {
         const button = this.eyeButton as HTMLElement;
-        if(!button) return;
+        if (!button) return;
         if (isShow) {
             const icon = button.querySelector('i') as HTMLElement;
             button.classList.remove('hidden');
             icon.classList.remove('fa-eye');
             icon.classList.remove('fa-eye-slash')
             icon.classList.add(this.currentPasswordType === 'text' ? 'fa-eye-slash' : 'fa-eye');
-            return 
+            return
 
         }
         button.classList.add('hidden');

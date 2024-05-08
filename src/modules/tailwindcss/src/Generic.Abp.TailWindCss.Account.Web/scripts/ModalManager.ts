@@ -18,14 +18,12 @@
         this.onOpenCallbacks = [];
         this.onCloseCallbacks = [];
         this.onResultCallbacks = [];
-        this.createContainer();
     }
 
-    open(data:any) {
+    open(data?:any | undefined) {
         data = data || {};
         let me = this;
-        for(var a in )
-        fetch(me.viewUrl, data).then(me.getModalSuccess.bind(me), me.getModalFailure.bind(me))
+        abp.axiosManager.get(me.viewUrl+"1", data).then(me.getModalSuccess.bind(me), me.getModalFailure.bind(me))
     }
 
     onResult(callback: Function) {
@@ -41,8 +39,10 @@
     }
 
     private getModalSuccess(response: any) {
+        let me = this;
         console.log(response);
-        this.initAndShowModal()
+        me.createContainer();
+        me.initAndShowModal()
     }
 
     private getModalFailure(response: any) {
@@ -51,9 +51,13 @@
     }
 
     private createContainer() {
-        let div = document.createElement('div');
+        let me = this,
+            div = document.createElement('div');
+        if (me.modalContainer) {
+            me.removeContainer(me.modalContainer);
+        }
         div.id = this.containerId;
-        this.modalContainer = div;
+        me.modalContainer = div;
         document.body.appendChild(div);
     }
 

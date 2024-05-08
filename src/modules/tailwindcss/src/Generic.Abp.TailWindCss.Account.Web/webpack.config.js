@@ -1,5 +1,5 @@
 ﻿const path = require('path');
-
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 module.exports = {
   entry: './scripts/index.ts', // 入口文件
   output: {
@@ -17,5 +17,17 @@ module.exports = {
   },
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx'] // 添加这一行
+  },
+  //plugins: [
+  //  new BundleAnalyzerPlugin()
+  //],
+  stats: {
+    colors: true,
+    modules: false,
+    children: false,
+    chunks: false,
+    chunkModules: false,
+    warnings: true,
+    errors: true
   }
 };
