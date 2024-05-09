@@ -1,17 +1,17 @@
-﻿using Generic.Abp.Identity.EntityFrameworkCore;
-using Generic.Abp.MenuManagement;
-using Generic.Abp.MenuManagement.EntityFrameworkCore;
+﻿using System;
 using Microsoft.Extensions.DependencyInjection;
-using QuickTemplate.Infrastructures.EntityFrameworkCore;
+using Volo.Abp.Uow;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.MySQL;
+using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 using Volo.Abp.OpenIddict.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
+using Volo.Abp.TenantManagement.EntityFrameworkCore;
 
 namespace QuickTemplate.EntityFrameworkCore;
 
@@ -24,9 +24,8 @@ namespace QuickTemplate.EntityFrameworkCore;
     typeof(AbpEntityFrameworkCoreMySQLModule),
     typeof(AbpBackgroundJobsEntityFrameworkCoreModule),
     typeof(AbpAuditLoggingEntityFrameworkCoreModule),
-    typeof(GenericAbpIdentityEntityFrameworkCoreModule),
-    typeof(QuickTemplateInfrastructuresEntityFrameworkCoreModule),
-    typeof(GenericAbpMenuManagementEntityFrameworkCoreModule)
+    typeof(AbpTenantManagementEntityFrameworkCoreModule),
+    typeof(AbpFeatureManagementEntityFrameworkCoreModule)
 )]
 public class QuickTemplateEntityFrameworkCoreModule : AbpModule
 {

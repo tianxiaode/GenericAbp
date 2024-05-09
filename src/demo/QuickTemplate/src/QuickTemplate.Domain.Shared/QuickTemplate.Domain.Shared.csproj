@@ -9,17 +9,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Generic.Abp.Enumeration.Domain.Shared" Version="$(GenericAbpVersion)" />
-    <PackageReference Include="Volo.Abp.OpenIddict.Domain.Shared" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.Identity.Domain.Shared" Version="$(AbpVersion)" />
     <PackageReference Include="Volo.Abp.BackgroundJobs.Domain.Shared" Version="$(AbpVersion)" />
     <PackageReference Include="Volo.Abp.AuditLogging.Domain.Shared" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.TenantManagement.Domain.Shared" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.FeatureManagement.Domain.Shared" Version="$(AbpVersion)" />
     <PackageReference Include="Volo.Abp.PermissionManagement.Domain.Shared" Version="$(AbpVersion)" />
     <PackageReference Include="Volo.Abp.SettingManagement.Domain.Shared" Version="$(AbpVersion)" />
-    <PackageReference Include="Generic.Abp.BusinessException" Version="$(GenericAbpVersion)" />
-    <PackageReference Include="Generic.Abp.Identity.Domain.Shared" Version="$(GenericAbpVersion)" />
-    <PackageReference Include="Generic.Abp.OpenIddict.Domain.Shared" Version="$(GenericAbpVersion)" />
-    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="$(FileProvidersEmbeddedVersion)" />
-    <PackageReference Include="Generic.Abp.MenuManagement.Domain.Shared" Version="$(GenericAbpVersion)" />
+    <PackageReference Include="Volo.Abp.OpenIddict.Domain.Shared" Version="$(AbpVersion)" />
   </ItemGroup>
   
 

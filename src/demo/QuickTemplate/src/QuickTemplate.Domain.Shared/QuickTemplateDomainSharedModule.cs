@@ -1,11 +1,7 @@
-﻿using Generic.Abp.Enumeration;
-using Generic.Abp.Identity;
-using Generic.Abp.MenuManagement;
-using Generic.Abp.OpenIddict;
-using QuickTemplate.Infrastructures;
-using QuickTemplate.Localization;
+﻿using Generic.Abp.Host.Localization;
 using Volo.Abp.AuditLogging;
 using Volo.Abp.BackgroundJobs;
+using Volo.Abp.FeatureManagement;
 using Volo.Abp.Identity;
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.ExceptionHandling;
@@ -13,26 +9,21 @@ using Volo.Abp.Modularity;
 using Volo.Abp.OpenIddict;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.SettingManagement;
+using Volo.Abp.TenantManagement;
 using Volo.Abp.Validation.Localization;
 using Volo.Abp.VirtualFileSystem;
 
 namespace QuickTemplate;
-//typeof(GenericAbpEnumerationDomainSharedModule),
-//typeof(GenericAbpOpenIddictDomainSharedModule),
-//typeof(GenericAbpPhoneLoginDomainSharedModule)
 
 [DependsOn(
     typeof(AbpAuditLoggingDomainSharedModule),
     typeof(AbpBackgroundJobsDomainSharedModule),
+    typeof(AbpFeatureManagementDomainSharedModule),
     typeof(AbpIdentityDomainSharedModule),
     typeof(AbpOpenIddictDomainSharedModule),
     typeof(AbpPermissionManagementDomainSharedModule),
     typeof(AbpSettingManagementDomainSharedModule),
-    typeof(GenericAbpIdentityDomainSharedModule),
-    typeof(GenericAbpEnumerationDomainSharedModule),
-    typeof(GenericAbpOpenIddictDomainSharedModule),
-    typeof(QuickTemplateInfrastructuresDomainSharedModule),
-    typeof(GenericAbpMenuManagementDomainSharedModule)
+    typeof(AbpTenantManagementDomainSharedModule)
 )]
 public class QuickTemplateDomainSharedModule : AbpModule
 {

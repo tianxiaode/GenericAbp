@@ -8,29 +8,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Identity\**" />
-    <EmbeddedResource Remove="Identity\**" />
-    <None Remove="Identity\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\modules\QuickTemplate.Infrastructures\src\QuickTemplate.Infrastructures.HttpApi\QuickTemplate.Infrastructures.HttpApi.csproj" />
     <ProjectReference Include="..\QuickTemplate.Application.Contracts\QuickTemplate.Application.Contracts.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Volo.Abp.Account.HttpApi" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.Identity.HttpApi" Version="$(AbpVersion)" />
     <PackageReference Include="Volo.Abp.PermissionManagement.HttpApi" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.TenantManagement.HttpApi" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.FeatureManagement.HttpApi" Version="$(AbpVersion)" />
     <PackageReference Include="Volo.Abp.SettingManagement.HttpApi" Version="$(AbpVersion)" />
-    <PackageReference Include="Generic.Abp.Enumeration.HttpApi" Version="$(GenericAbpVersion)" />
-    <PackageReference Include="Generic.Abp.MenuManagement.HttpApi" Version="$(GenericAbpVersion)" />
-    <PackageReference Include="Generic.Abp.Identity.HttpApi" Version="$(GenericAbpVersion)" />
-    <PackageReference Include="Generic.Abp.OpenIddict.HttpApi" Version="$(GenericAbpVersion)" />
-    <PackageReference Include="Generic.Abp.Application" Version="$(GenericAbpVersion)" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
 
 </Project>

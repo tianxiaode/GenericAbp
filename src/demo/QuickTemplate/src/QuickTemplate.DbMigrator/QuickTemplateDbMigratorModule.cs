@@ -1,6 +1,5 @@
 ﻿using QuickTemplate.EntityFrameworkCore;
 using Volo.Abp.Autofac;
-using Volo.Abp.BackgroundJobs;
 using Volo.Abp.Modularity;
 
 namespace QuickTemplate.DbMigrator;
@@ -12,8 +11,4 @@ namespace QuickTemplate.DbMigrator;
     )]
 public class QuickTemplateDbMigratorModule : AbpModule
 {
-    public override void ConfigureServices(ServiceConfigurationContext context)
-    {
-        Configure<AbpBackgroundJobOptions>(options => options.IsJobExecutionEnabled = false);
-    }
 }

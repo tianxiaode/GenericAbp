@@ -31,24 +31,19 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AspNet.Security.OAuth.GitHub" Version="8.0.0" />
-    <PackageReference Include="Serilog.AspNetCore" Version="6.1.0" />
-    <PackageReference Include="Serilog.Sinks.Async" Version="1.5.0" />
+    <PackageReference Include="AspNet.Security.OAuth.GitHub" Version="$(OAuthGitHubVersion)" />
+    <PackageReference Include="Serilog.AspNetCore" Version="$(SerilogAspNetCoreVersion)" />
+    <PackageReference Include="Serilog.Sinks.Async" Version="$(SerilogSinksAsyncVersion)" />
+    <PackageReference Include="Volo.Abp.AspNetCore.MultiTenancy" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.Autofac" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.AspNetCore.Serilog" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.Swashbuckle" Version="$(AbpVersion)" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\QuickTemplate.Application\QuickTemplate.Application.csproj" />
     <ProjectReference Include="..\QuickTemplate.HttpApi\QuickTemplate.HttpApi.csproj" />
     <ProjectReference Include="..\QuickTemplate.EntityFrameworkCore\QuickTemplate.EntityFrameworkCore.csproj" />
-    <PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI" Version="$(AbpVersion)" />
-    <PackageReference Include="Volo.Abp.Autofac" Version="$(AbpVersion)" />
-    <PackageReference Include="Volo.Abp.AspNetCore.Serilog" Version="$(AbpVersion)" />
-    <PackageReference Include="Volo.Abp.Swashbuckle" Version="$(AbpVersion)" />
-    <PackageReference Include="Generic.Abp.Metro.UI.Account.Web.OpenIddict" Version="$(GenericAbpVersion)" />
-    <PackageReference Include="Generic.Abp.Metro.UI.Identity.Web" Version="$(GenericAbpVersion)" />
-    <PackageReference Include="Generic.Abp.Metro.UI.OpenIddict.Web" Version="$(GenericAbpVersion)" />
-    <PackageReference Include="Generic.Abp.Metro.UI.Theme.Basic.Demo" Version="$(GenericAbpVersion)" />
-    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="$(FileProvidersEmbeddedVersion)" />
   </ItemGroup>
 
   <ItemGroup>

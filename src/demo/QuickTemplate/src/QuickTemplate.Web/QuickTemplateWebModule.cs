@@ -1,42 +1,28 @@
-using Generic.Abp.Metro.UI.Account.Web;
-using Generic.Abp.Metro.UI.Identity.Web;
-using Generic.Abp.Metro.UI.OpenIddict.Web;
-using Generic.Abp.Metro.UI.Packages.FontAwesome;
-using Generic.Abp.Metro.UI.Theme.Basic.Bundling;
-using Generic.Abp.Metro.UI.Theme.Basic.Demo;
+using Generic.Abp.Host.EntityFrameworkCore;
+using Generic.Abp.Host.MultiTenancy;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using OpenIddict.Validation.AspNetCore;
-using QuickTemplate.EntityFrameworkCore;
-using QuickTemplate.Localization;
-using QuickTemplate.Web.Components;
-using QuickTemplate.Web.Menus;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Generic.Abp.Metro.UI.Theme.Shared;
-using QuickTemplate.MultiTenancy;
+using Generic.Abp.TailWindCss.Account.Web.Microsoft.AspNetCore.Builder;
 using Volo.Abp;
 using Volo.Abp.Account;
+using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc;
-using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
-using Volo.Abp.AutoMapper;
 using Volo.Abp.Modularity;
+using Volo.Abp.Security.Claims;
 using Volo.Abp.Swashbuckle;
-using Volo.Abp.Timing;
-using Volo.Abp.Ui.LayoutHooks;
-using Volo.Abp.UI.Navigation;
 using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.VirtualFileSystem;
 
@@ -44,13 +30,10 @@ namespace QuickTemplate.Web;
 
 [DependsOn(
     typeof(QuickTemplateHttpApiModule),
-    typeof(QuickTemplateApplicationModule),
-    typeof(QuickTemplateEntityFrameworkCoreModule),
     typeof(AbpAutofacModule),
-    typeof(GenericAbpMetroUiOpenIddictWebModule),
-    typeof(GenericAbpMetroUiIdentityWebModule),
-    typeof(GenericAbpMetroUiAccountWebOpenIddictModule),
-    typeof(GenericAbpMetroUiThemeBasicDemoModule),
+    typeof(AbpAspNetCoreMultiTenancyModule),
+    typeof(QuickTemplateApplicationModule),
+    typeof(QuickTemplateEntityFrameworkCoreModule),    
     typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpSwashbuckleModule)
 )]
@@ -93,26 +76,20 @@ public class QuickTemplateWebModule : AbpModule
         var hostingEnvironment = context.Services.GetHostingEnvironment();
         var configuration = context.Services.GetConfiguration();
 
-        ConfigureBundles();
         ConfigureAuthentication(context, configuration);
+        ConfigureExternalProviders(context);
+        ConfigureBundles();
         ConfigureUrls(configuration);
         ConfigureAutoMapper();
         ConfigureVirtualFileSystem(hostingEnvironment);
         //ConfigureLocalizationServices();
-        ConfigureNavigationServices();
+        //ConfigureNavigationServices();
         ConfigureAutoApiControllers();
         ConfigureCors(context, configuration);
         ConfigureSwaggerServices(context.Services);
 
         Configure<AbpClockOptions>(options => { options.Kind = DateTimeKind.Utc; });
 
-        Configure<AbpBundlingOptions>(options =>
-        {
-            options
-                .StyleBundles
-                .Get(BasicThemeBundles.Styles.Global)
-                .AddContributors(typeof(FontAwesomeStyleContributor));
-        });
     }
 
     private void ConfigureUrls(IConfiguration configuration)
@@ -142,14 +119,22 @@ public class QuickTemplateWebModule : AbpModule
 
     private void ConfigureAuthentication(ServiceConfigurationContext context, IConfiguration configuration)
     {
+        context.Services.ForwardIdentityAuthenticationForBearer(OpenIddictValidationAspNetCoreDefaults
+            .AuthenticationScheme);
+        context.Services.Configure<AbpClaimsPrincipalFactoryOptions>(options =>
+        {
+            options.IsDynamicClaimsEnabled = true;
+        });
+    }
+
+    private void ConfigureExternalProviders(ServiceConfigurationContext context)
+    {
         context.Services.AddAuthentication()
             .AddGitHub(options =>
             {
                 options.ClientId = "7e3b22278e8222293563";
-                options.ClientSecret = "8c8675b6aa9130f1c5464ed254d61d1350351d66";
+                options.ClientSecret = "1111";
             });
-        context.Services.ForwardIdentityAuthenticationForBearer(OpenIddictValidationAspNetCoreDefaults
-            .AuthenticationScheme);
     }
 
     private void ConfigureAutoMapper()
@@ -276,6 +261,7 @@ public class QuickTemplateWebModule : AbpModule
 
 
         app.UseUnitOfWork();
+        app.UseDynamicClaims();
         app.UseAuthorization();
         app.UseSwagger();
         app.UseAbpSwaggerUI(options => { options.SwaggerEndpoint("/swagger/v1/swagger.json", "QuickTemplate API"); });

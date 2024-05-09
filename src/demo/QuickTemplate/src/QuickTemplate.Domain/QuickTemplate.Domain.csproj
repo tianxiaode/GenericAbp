@@ -13,15 +13,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Volo.Abp.OpenIddict.Domain" Version="$(AbpVersion)" />
-    <PackageReference Include="Volo.Abp.PermissionManagement.Domain.OpenIddict" Version="$(AbpVersion)" />
     <PackageReference Include="Volo.Abp.Emailing" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.Identity.Domain" Version="$(AbpVersion)" />
     <PackageReference Include="Volo.Abp.PermissionManagement.Domain.Identity" Version="$(AbpVersion)" />
     <PackageReference Include="Volo.Abp.BackgroundJobs.Domain" Version="$(AbpVersion)" />
     <PackageReference Include="Volo.Abp.AuditLogging.Domain" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.TenantManagement.Domain" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.FeatureManagement.Domain" Version="$(AbpVersion)" />
     <PackageReference Include="Volo.Abp.SettingManagement.Domain" Version="$(AbpVersion)" />
-    <PackageReference Include="Generic.Abp.Identity.Domain" Version="$(GenericAbpVersion)" />
-    <PackageReference Include="Generic.Abp.MenuManagement.Domain" Version="$(GenericAbpVersion)" />
+    <PackageReference Include="Volo.Abp.OpenIddict.Domain" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.PermissionManagement.Domain.OpenIddict" Version="$(AbpVersion)" />
   </ItemGroup>
 
 </Project>

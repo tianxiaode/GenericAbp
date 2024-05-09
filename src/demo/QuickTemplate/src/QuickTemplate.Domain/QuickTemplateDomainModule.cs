@@ -1,14 +1,10 @@
-﻿using Generic.Abp.BusinessException;
-using Generic.Abp.Enumeration;
-using Generic.Abp.Identity;
-using Generic.Abp.MenuManagement;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using QuickTemplate.Infrastructures;
-using QuickTemplate.MultiTenancy;
+using Generic.Abp.Host.MultiTenancy;
 using Volo.Abp.AuditLogging;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.Emailing;
+using Volo.Abp.FeatureManagement;
 using Volo.Abp.Identity;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
@@ -17,6 +13,7 @@ using Volo.Abp.OpenIddict;
 using Volo.Abp.PermissionManagement.Identity;
 using Volo.Abp.PermissionManagement.OpenIddict;
 using Volo.Abp.SettingManagement;
+using Volo.Abp.TenantManagement;
 
 namespace QuickTemplate;
 
@@ -24,17 +21,14 @@ namespace QuickTemplate;
     typeof(QuickTemplateDomainSharedModule),
     typeof(AbpAuditLoggingDomainModule),
     typeof(AbpBackgroundJobsDomainModule),
+    typeof(AbpFeatureManagementDomainModule),
     typeof(AbpIdentityDomainModule),
-    typeof(AbpPermissionManagementDomainIdentityModule),
     typeof(AbpOpenIddictDomainModule),
     typeof(AbpPermissionManagementDomainOpenIddictModule),
+    typeof(AbpPermissionManagementDomainIdentityModule),
     typeof(AbpSettingManagementDomainModule),
-    typeof(AbpEmailingModule),
-    typeof(GenericAbpBusinessExceptionModule),
-    typeof(GenericAbpEnumerationDomainSharedModule),
-    typeof(GenericAbpIdentityDomainModule),
-    typeof(QuickTemplateInfrastructuresDomainModule),
-    typeof(GenericAbpMenuManagementDomainModule)
+    typeof(AbpTenantManagementDomainModule),
+    typeof(AbpEmailingModule)
 )]
 public class QuickTemplateDomainModule : AbpModule
 {

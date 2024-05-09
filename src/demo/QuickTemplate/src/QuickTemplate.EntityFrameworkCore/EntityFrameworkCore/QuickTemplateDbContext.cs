@@ -75,7 +75,7 @@ public class QuickTemplateDbContext :
         //    b.ConfigureByConvention(); //auto configure for the base class props
         //    //...
         //});
-        builder.ConfigureMenuManagement();
-        builder.ConfigureInfrastructures();
+        //builder.ConfigureMenuManagement();
+        //builder.ConfigureInfrastructures();
     }
 }
