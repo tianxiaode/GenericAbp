@@ -1,0 +1,108 @@
+﻿{
+  "Menus": {
+    "Desktop": [
+      {
+        "Id": "3457533d-414e-4469-a99e-154ba3806ddb",
+        "LangText": "MainMenu.Dashboard",
+        "IconCls": "x-fa fa-home",
+        "ViewType": "dashboardView",
+        "Selectable": true,
+        "Order": 1,
+        "RequiredPermissionNames": []
+      },
+      {
+        "Id": "0a2cb2bd-3810-4a5d-9382-111a36bc3ff8",
+        "LangText": "MainMenu.System",
+        "IconCls": "x-fa fa-cogs",
+        "ViewType": "",
+        "Order": 2,
+        "RequiredPermissionNames": [
+          "AbpIdentity.Roles.ManagePermissions",
+          "SettingManagement.Emailing"
+        ]
+      },
+      {
+        "Id": "0a2cb2bd-3810-4a5d-9382-111a36bc3fe9",
+        "ParentId": "0a2cb2bd-3810-4a5d-9382-111a36bc3ff8",
+        "LangText": "SubMenu.User",
+        "IconCls": "x-fa fa-users",
+        "ViewType": "userView",
+        "Order": 200,
+        "Selectable": true,
+        "RequiredPermissionNames": [ "AbpIdentity.Users.ManagePermissions" ]
+      },
+      {
+        "Id": "0a2cb2bd-3810-4a5d-9382-111a36bc3ff9",
+        "ParentId": "0a2cb2bd-3810-4a5d-9382-111a36bc3ff8",
+        "LangText": "SubMenu.Role",
+        "IconCls": "x-fa fa-user-shield",
+        "ViewType": "roleView",
+        "Order": 210,
+        "Selectable": true,
+        "RequiredPermissionNames": [ "AbpIdentity.Roles.ManagePermissions" ]
+      },
+      {
+        "Id": "0a2cb2bd-3810-4a5d-9382-111a36bc3ffa",
+        "ParentId": "0a2cb2bd-3810-4a5d-9382-111a36bc3ff8",
+        "LangText": "SubMenu.Infrastructure",
+        "IconCls": "x-fa fa-hdd",
+        "ViewType": "infrastructureView",
+        "Order": 220,
+        "Selectable": true,
+        "RequiredPermissionNames": [
+          "Infrastructures.Districts.ManagePermissions"
+        ]
+      },
+      {
+        "Id": "0a2cb2bd-3810-4a5d-9382-111a36bc3ffb",
+        "ParentId": "0a2cb2bd-3810-4a5d-9382-111a36bc3ff8",
+        "LangText": "SubMenu.SystemSetting",
+        "IconCls": "x-fa fa-cog",
+        "ViewType": "systemSettingView",
+        "Selectable": true,
+        "Order": 230,
+        "RequiredPermissionNames": [
+          "SettingManagement.Emailing",
+          "SettingManagement.PasswordPolicy",
+          "SettingManagement.LookupPolicy"
+        ]
+      }
+    ],
+    "Mobile": [
+      {
+        "Id": "0a2cb2bd-3810-4a5d-9382-111a36bc3ff9",
+        "LangText": "SubMenu.Role",
+        "IconCls": "x-fa fa-user-shield",
+        "ViewType": "roleView",
+        "Category": "MobileMenuCategory.Identity",
+        "Color": "text-primary",
+        "Order": 210,
+        "RequiredPermissionNames": [ "AbpIdentity.Roles.ManagePermissions" ]
+      },
+      {
+        "Id": "0a2cb2bd-3810-4a5d-9382-111a36bc3ffa",
+        "LangText": "SubMenu.User",
+        "IconCls": "x-fa fa-users",
+        "ViewType": "userView",
+        "Category": "MobileMenuCategory.Identity",
+        "Color": "text-primary",
+        "Order": 211,
+        "RequiredPermissionNames": [ "AbpIdentity.Users.ManagePermissions" ]
+      },
+      {
+        "Id": "0a2cb2bd-3810-4a5d-9382-111a36bc3ffb",
+        "LangText": "SubMenu.District",
+        "IconCls": "x-fa fa-users",
+        "ViewType": "districtView",
+        "Category": "MobileMenuCategory.Infrastructures",
+        "Color": "text-info",
+        "Order": 212,
+        "RequiredPermissionNames": [ "Infrastructures.Districts.ManagePermissions" ]
+      }
+
+    ]
+  }
+
+
+
+}

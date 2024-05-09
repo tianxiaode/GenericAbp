@@ -1,0 +1,52 @@
+﻿@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using QuickTemplate.Localization
+@using Volo.Abp.Users
+@model QuickTemplate.Web.Pages.IndexModel
+@inject IHtmlLocalizer<QuickTemplateResource> L
+@inject ICurrentUser CurrentUser;
+@section styles {
+    <metro-style src="/Pages/Index.css" />
+}
+@section scripts {
+    <metro-script src="/Pages/Index.js" />
+}
+<div class="container">
+    <div class="row flex-nowrap pb-9 pt-9">
+        <div class="cell mr-4">
+            <h1>@L["AboutQuickTemplate"]</h1>
+            <p class="pt-5 pb-5 enlarge-3">@L["QuickTemplateDescription"]</p>
+            <div class="row">
+                <a href="https://github.com/tianxiaode/QuickTemplate" class="button info large mr-2" style="min-width:100px;"><span class="fas fa-code mr-2"></span>@L["SourceCode"]</a>
+                <a class="button primary large" style="min-width:100px;">@L["GetStarted"]<span class="fa fa-arrow-right ml-2"></span></a>
+            </div>
+            
+        </div>
+        <div class="cell flex-align-center ml-4">
+            <img src="images/quicktemplate.png" alt="quick template" />
+        </div>
+    </div>
+    <div class="row flex-nowrap pt-9 pb-9 enlarge-3">
+        <div class="cell mr-4">
+            <p class="py-1 pt-1 m-0"><a href="https://abp.io" target="_blank"><img src="images/abp-logo.svg" alt="abp" style="height:60px;"/></a></p>
+            <p>@L["Abp"]</p>
+        </div>
+        <div class="cell ml-4">
+            <p class="py-1 pt-1 m-0"><a href="https://www.sencha.com" target="_blank"><img src="images/Extjs-logo.svg" class="mr-2" style="height:60px;"/></a></p>
+            <p>@L["ExtJs"]</p>
+        </div>
+    </div>
+    <div class="row flex-nowrap pt-9 pb-9 enlarge-3">
+        <div class="cell  mr-4">
+            <p class="py-1 pt-1 m-0"><a href="https://korzh.com/metroui" target="_blank"><img src="images/metro-logo.png" style="height:60px;" alt="Metro UI" /></a></p>
+            <p>@L["MetroUI"]</p>
+        </div>
+        <div class="cell  ml-4">
+            <p class="py-1 pt-1 m-0"><a href="https://w2ui.com/web/home" target="_blank" style="line-height:60px;font-size:xx-large;font-weight:700;">W2UI</a></p>
+            <p>@L["W2UI"]</p>
+        </div>
+
+    </div>
+</div>
+
+            

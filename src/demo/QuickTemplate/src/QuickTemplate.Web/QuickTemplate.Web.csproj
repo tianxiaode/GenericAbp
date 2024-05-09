@@ -1,0 +1,85 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <Import Project="..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>QuickTemplate.Web</RootNamespace>
+    <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+    <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+    <MvcRazorExcludeRefAssembliesFromPublish>false</MvcRazorExcludeRefAssembliesFromPublish>
+    <PreserveCompilationReferences>true</PreserveCompilationReferences>
+    <UserSecretsId>QuickTemplate-4681b4fd-151f-4221-84a4-929d86723e4c</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Logs\**" />
+    <Content Remove="Logs\**" />
+    <EmbeddedResource Remove="Logs\**" />
+    <None Remove="Logs\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Pages\**\*.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Pages\**\*.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AspNet.Security.OAuth.GitHub" Version="8.0.0" />
+    <PackageReference Include="Serilog.AspNetCore" Version="6.1.0" />
+    <PackageReference Include="Serilog.Sinks.Async" Version="1.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\QuickTemplate.Application\QuickTemplate.Application.csproj" />
+    <ProjectReference Include="..\QuickTemplate.HttpApi\QuickTemplate.HttpApi.csproj" />
+    <ProjectReference Include="..\QuickTemplate.EntityFrameworkCore\QuickTemplate.EntityFrameworkCore.csproj" />
+    <PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.Autofac" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.AspNetCore.Serilog" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.Swashbuckle" Version="$(AbpVersion)" />
+    <PackageReference Include="Generic.Abp.Metro.UI.Account.Web.OpenIddict" Version="$(GenericAbpVersion)" />
+    <PackageReference Include="Generic.Abp.Metro.UI.Identity.Web" Version="$(GenericAbpVersion)" />
+    <PackageReference Include="Generic.Abp.Metro.UI.OpenIddict.Web" Version="$(GenericAbpVersion)" />
+    <PackageReference Include="Generic.Abp.Metro.UI.Theme.Basic.Demo" Version="$(GenericAbpVersion)" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="$(FileProvidersEmbeddedVersion)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\libs\abp\core\abp.js" />
+    <None Include="wwwroot\libs\abp\metro\debug.log" />
+    <None Include="wwwroot\libs\abp\metro\metro-alert.js" />
+    <None Include="wwwroot\libs\abp\metro\metro-crud-toolbar.js" />
+    <None Include="wwwroot\libs\abp\metro\metro-extensions.js" />
+    <None Include="wwwroot\libs\abp\metro\metro-modal.js" />
+    <None Include="wwwroot\libs\abp\metro\modal-manager.js" />
+    <None Include="wwwroot\libs\abp\utils\abp-utils.umd.js" />
+    <None Include="wwwroot\libs\abp\utils\abp-utils.umd.js.map" />
+    <None Include="wwwroot\libs\abp\utils\abp-utils.umd.min.js" />
+    <None Include="wwwroot\libs\abp\utils\abp-utils.umd.min.js.map" />
+    <None Include="wwwroot\libs\fontawesome\webfonts\fa-brands-400.woff2" />
+    <None Include="wwwroot\libs\fontawesome\webfonts\fa-regular-400.woff2" />
+    <None Include="wwwroot\libs\fontawesome\webfonts\fa-solid-900.woff2" />
+    <None Include="wwwroot\libs\fontawesome\webfonts\fa-v4compatibility.woff2" />
+    <None Include="wwwroot\libs\lodash\lodash.min.js" />
+    <None Include="wwwroot\libs\metro\abp.metro.js" />
+    <None Include="wwwroot\libs\metro\metro.js" />
+    <None Include="wwwroot\libs\metro\metro.min.js" />
+    <None Include="wwwroot\libs\metro\metro.min.js.map" />
+    <None Include="wwwroot\libs\mif\metro.svg" />
+    <None Include="wwwroot\libs\w2ui\extensions.js" />
+    <None Include="wwwroot\libs\w2ui\grid-extension.js" />
+    <None Include="wwwroot\libs\w2ui\item-grid.js" />
+    <None Include="wwwroot\libs\w2ui\multilingual-grid.js" />
+    <None Include="wwwroot\libs\w2ui\permission-grid.js" />
+    <None Include="wwwroot\libs\w2ui\property-grid.js" />
+    <None Include="wwwroot\libs\w2ui\w2ui.min.js" />
+  </ItemGroup>
+
+</Project>

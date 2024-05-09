@@ -1,0 +1,25 @@
+﻿@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using QuickTemplate.Localization
+@model QuickTemplate.Web.Pages.AboutModel
+@inject IHtmlLocalizer<QuickTemplateResource> Localizer;
+@{
+}
+
+<div class="container">
+    <p class="h6"><b>网名</b>： 上将军</p>
+    <p>Sencha Mvp</p>
+    <p>@Localizer["AboutMe"]</p>
+    <p>@Localizer["Blog"]: <a href="https://huangdengqiao.blog.csdn.net/">https://huangdengqiao.blog.csdn.net/</a></p>
+    <p>Github: <a href="https://github.com/tianxiaode/">https://github.com/tianxiaode/</a></p>
+    <h4>@Localizer["Portfolios"]:</h4>
+    <p class="text-center"><img src="images/extjs4.jpg" style="height:600px" /></p>
+    <p class="text-center"><img src="images/SenchaTouch.png" style="height:600px" /></p>
+    <p class="text-center"><img src="images/Extjs42.jpg" style="height:600px" /></p>
+    <div class="row">
+        <div class="col-6"><p class="text-center"><img src="images/extjs6-1.jpg" style="height:600px" /></p></div>
+        <div class="col-6"><p class="text-center"><img src="images/extjs6-2.jpg" style="height:600px" /></p></div>
+    </div>
+    <p class="text-center"><img src="images/ecmascript.jpg" style="height:600px"  /></p>
+
+</div>

@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>QuickTemplate</RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <NoWarn>$(NoWarn);CS1591;NU1803;</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <NoWarn>$(NoWarn);CS1591;NU1803;</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\modules\QuickTemplate.Infrastructures\src\QuickTemplate.Infrastructures.Application\QuickTemplate.Infrastructures.Application.csproj" />
+    <ProjectReference Include="..\QuickTemplate.Domain\QuickTemplate.Domain.csproj" />
+    <ProjectReference Include="..\QuickTemplate.Application.Contracts\QuickTemplate.Application.Contracts.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Volo.Abp.Account.Application" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.PermissionManagement.Application" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.SettingManagement.Application" Version="$(AbpVersion)" />
+    <PackageReference Include="Generic.Abp.Enumeration.Application" Version="$(GenericAbpVersion)" />
+    <PackageReference Include="Generic.Abp.MenuManagement.Application" Version="$(GenericAbpVersion)" />
+    <PackageReference Include="Generic.Abp.Identity.Application" Version="$(GenericAbpVersion)" />
+    <PackageReference Include="Generic.Abp.OpenIddict.Application" Version="$(GenericAbpVersion)" />
+  </ItemGroup>
+
+</Project>

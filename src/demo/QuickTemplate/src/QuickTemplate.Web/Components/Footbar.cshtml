@@ -1,0 +1,29 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@using QuickTemplate.Localization
+@inject IHtmlLocalizer<QuickTemplateResource> Localizer;
+
+<footer class="bg-dark mt-2">
+    <div class="container p-2">
+        <div class="row">
+            <div class="cell-4">
+                <p><img src="images/logo.png" style="height:54px;"/></p>
+                <p class="">2020 - @DateTime.Today.Year ©  <a href="/">ExtJs.Tech</a></p>
+                <p>@Localizer["OpenSourceLicenseWith"] <a href="https://github.com/tianxiaode/QuickTemplate/blob/master/LICENSE">MIT</a></p>
+                <p><a href="https://beian.miit.gov.cn/" >粤ICP备2022031812号</a></p>
+            </div>
+            <div class="cell-8">
+                <div class="row h-50 flex-align-center">
+                    <div class="cell-4"><a href="https://github.com/tianxiaode/QuickTemplate">GitHub</a></div>
+                    <div class="cell-4"><a href="/About">@Localizer["AboutUs"]</a></div>
+                    <div class="cell-4">@Localizer["Documents"]</div>
+                </div>
+                <div class="row h-50 flex-align-center" >
+                    <div class="cell-4"><a href="https://d.extjs.tech">@Localizer["DesktopClient"]</a></div>
+                    <div class="cell-4"><a href="https://m.extjs.tex">@Localizer["MobileClient"]</a></div>
+                    <div class="cell-4"><a href="/tag-helpers">@Localizer["TagHelpers"]</a></div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</footer>

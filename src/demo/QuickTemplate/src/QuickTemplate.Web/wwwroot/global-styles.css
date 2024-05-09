@@ -1,0 +1,26 @@
+/* Your Global Styles */
+
+:root .lpx-brand-logo {
+    --lpx-logo: url('/images/logo/leptonx/logo-light.png');
+    --lpx-logo-icon: url('/images/logo/leptonx/logo-light-thumbnail.png');
+}
+body{
+    min-height: calc(v100);
+}
+footer {
+    color: #b1bcc9;
+}
+footer p, footer h3{
+    margin: 2px 0;
+    padding:0;
+}
+footer a {
+    color: #b1bcc9 !important;
+    text-decoration: none !important;
+}
+footer a:hover {
+    color: #fff !important;
+}
+.brand img {
+    padding: 0 !important;
+}

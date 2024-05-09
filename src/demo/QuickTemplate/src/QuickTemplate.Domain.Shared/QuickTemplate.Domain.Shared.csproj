@@ -1,0 +1,39 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <RootNamespace>QuickTemplate</RootNamespace>
+    <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Generic.Abp.Enumeration.Domain.Shared" Version="$(GenericAbpVersion)" />
+    <PackageReference Include="Volo.Abp.OpenIddict.Domain.Shared" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.BackgroundJobs.Domain.Shared" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.AuditLogging.Domain.Shared" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.PermissionManagement.Domain.Shared" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.SettingManagement.Domain.Shared" Version="$(AbpVersion)" />
+    <PackageReference Include="Generic.Abp.BusinessException" Version="$(GenericAbpVersion)" />
+    <PackageReference Include="Generic.Abp.Identity.Domain.Shared" Version="$(GenericAbpVersion)" />
+    <PackageReference Include="Generic.Abp.OpenIddict.Domain.Shared" Version="$(GenericAbpVersion)" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="$(FileProvidersEmbeddedVersion)" />
+    <PackageReference Include="Generic.Abp.MenuManagement.Domain.Shared" Version="$(GenericAbpVersion)" />
+  </ItemGroup>
+  
+
+
+  <ItemGroup>
+    <EmbeddedResource Include="Localization\QuickTemplate\*.json" />
+    <Content Remove="Localization\QuickTemplate\*.json" />
+  </ItemGroup>
+  
+
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\modules\QuickTemplate.Infrastructures\src\QuickTemplate.Infrastructures.Domain.Shared\QuickTemplate.Infrastructures.Domain.Shared.csproj" />
+  </ItemGroup>
+
+
+</Project>
