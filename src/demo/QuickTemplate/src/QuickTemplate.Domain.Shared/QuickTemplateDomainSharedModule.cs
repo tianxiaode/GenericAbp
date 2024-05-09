@@ -1,4 +1,4 @@
-﻿using Generic.Abp.Host.Localization;
+﻿using QuickTemplate.Localization;
 using Volo.Abp.AuditLogging;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.FeatureManagement;

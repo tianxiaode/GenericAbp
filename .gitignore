@@ -39,9 +39,32 @@ bld/
 # Visual Studio 2017 auto generated files
 Generated\ Files/
 
+#extjs
+ext/
+.architect
+classic.json
+classic.jsonp
+modern.json
+modern.jsonp
+resources/sass/.sass-cache/
+resources/.arch-internal-preview.css
+.arch-internal-preview.css
+.sencha/
+generatedFiles/
+cordova/
+node_modules/
+upload/
+workspace/build
+bootstrap.*
+classic.json*
+modern.json*
+.sencha
+client/**/dist/
+
 # MSTest test Results
 [Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*
+/src/**/[Ll]ogs/
 
 # NUnit
 *.VisualState.xml

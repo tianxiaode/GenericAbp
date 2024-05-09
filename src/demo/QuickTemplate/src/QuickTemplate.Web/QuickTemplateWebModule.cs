@@ -1,28 +1,31 @@
-using Generic.Abp.Host.EntityFrameworkCore;
-using Generic.Abp.Host.MultiTenancy;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using OpenIddict.Validation.AspNetCore;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Generic.Abp.TailWindCss.Account.Web.Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
+using QuickTemplate.EntityFrameworkCore;
+using QuickTemplate.Localization;
+using QuickTemplate.MultiTenancy;
 using Volo.Abp;
 using Volo.Abp.Account;
 using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc;
-using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
+using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
+using Volo.Abp.AutoMapper;
 using Volo.Abp.Modularity;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.Swashbuckle;
+using Volo.Abp.Timing;
+using Volo.Abp.Ui.LayoutHooks;
+using Volo.Abp.UI.Navigation;
 using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.VirtualFileSystem;
 
@@ -33,7 +36,7 @@ namespace QuickTemplate.Web;
     typeof(AbpAutofacModule),
     typeof(AbpAspNetCoreMultiTenancyModule),
     typeof(QuickTemplateApplicationModule),
-    typeof(QuickTemplateEntityFrameworkCoreModule),    
+    typeof(QuickTemplateEntityFrameworkCoreModule),
     typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpSwashbuckleModule)
 )]
@@ -55,19 +58,19 @@ public class QuickTemplateWebModule : AbpModule
 
         PreConfigure<OpenIddictBuilder>(builder =>
         {
-            builder.AddServer(m =>
-            {
-                m.SetAccessTokenLifetime(TimeSpan.FromDays(3));
-                m.SetRefreshTokenLifetime(TimeSpan.FromDays(4));
-            });
-            builder.AddValidation(options =>
-            {
-                options.AddAudiences("QuickTemplate"); // Replace with your application Name
-                options.UseLocalServer();
-                //options.EnableAuthorizationEntryValidation();
-                //options.EnableTokenEntryValidation();
-                options.UseAspNetCore();
-            });
+            //builder.AddServer(m =>
+            //{
+            //    m.SetAccessTokenLifetime(TimeSpan.FromDays(3));
+            //    m.SetRefreshTokenLifetime(TimeSpan.FromDays(4));
+            //});
+            //builder.AddValidation(options =>
+            //{
+            //    options.AddAudiences("QuickTemplate"); // Replace with your application Name
+            //    options.UseLocalServer();
+            //    //options.EnableAuthorizationEntryValidation();
+            //    //options.EnableTokenEntryValidation();
+            //    options.UseAspNetCore();
+            //});
         });
     }
 
@@ -89,7 +92,6 @@ public class QuickTemplateWebModule : AbpModule
         ConfigureSwaggerServices(context.Services);
 
         Configure<AbpClockOptions>(options => { options.Kind = DateTimeKind.Utc; });
-
     }
 
     private void ConfigureUrls(IConfiguration configuration)
@@ -107,20 +109,20 @@ public class QuickTemplateWebModule : AbpModule
 
     private void ConfigureBundles()
     {
-        Configure<AbpBundlingOptions>(options =>
-        {
-            options.StyleBundles.Configure(
-                BasicThemeBundles.Styles.Global,
-                bundle => { bundle.AddFiles("/global-styles.css"); }
-            );
-        });
+        //Configure<AbpBundlingOptions>(options =>
+        //{
+        //    options.StyleBundles.Configure(
+        //        BasicThemeBundles.Styles.Global,
+        //        bundle => { bundle.AddFiles("/global-styles.css"); }
+        //    );
+        //});
     }
 
 
     private void ConfigureAuthentication(ServiceConfigurationContext context, IConfiguration configuration)
     {
-        context.Services.ForwardIdentityAuthenticationForBearer(OpenIddictValidationAspNetCoreDefaults
-            .AuthenticationScheme);
+        //context.Services.ForwardIdentityAuthenticationForBearer(OpenIddictValidationAspNetCoreDefaults
+        //    .AuthenticationScheme);
         context.Services.Configure<AbpClaimsPrincipalFactoryOptions>(options =>
         {
             options.IsDynamicClaimsEnabled = true;
@@ -165,21 +167,6 @@ public class QuickTemplateWebModule : AbpModule
         }
     }
 
-    private void ConfigureNavigationServices()
-    {
-        Configure<AbpNavigationOptions>(options =>
-        {
-            options.MenuContributors.Add(new QuickTemplateMenuContributor());
-        });
-
-        Configure<AbpLayoutHookOptions>(options =>
-        {
-            options.Add(
-                LayoutHooks.Body.Last, //The hook name
-                typeof(FootBarComponent) //The component to add
-            );
-        });
-    }
 
     private void ConfigureAutoApiControllers()
     {
@@ -236,7 +223,7 @@ public class QuickTemplateWebModule : AbpModule
 
         if (!env.IsDevelopment())
         {
-            app.UseErrorPage();
+            //app.UseErrorPage();
         }
 
         app.UseCorrelationId();
@@ -246,7 +233,7 @@ public class QuickTemplateWebModule : AbpModule
 
         app.UseAuthentication();
 
-        app.UseAbpOpenIddictValidation();
+        //app.UseAbpOpenIddictValidation();
 
         if (MultiTenancyConsts.IsEnabled)
         {

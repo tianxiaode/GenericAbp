@@ -1,4 +1,5 @@
 ﻿using Localization.Resources.AbpUi;
+using QuickTemplate.Localization;
 using Volo.Abp.Account;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.Identity;

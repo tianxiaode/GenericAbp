@@ -17,8 +17,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{04DBDB01-7
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuickTemplate.Application.Tests", "test\QuickTemplate.Application.Tests\QuickTemplate.Application.Tests.csproj", "{50B2631D-129C-47B3-A587-029CCD6099BC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuickTemplate.Web.Tests", "test\QuickTemplate.Web.Tests\QuickTemplate.Web.Tests.csproj", "{5F1B28C6-8D0C-4155-92D0-252F7EA5F674}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuickTemplate.Domain.Shared", "src\QuickTemplate.Domain.Shared\QuickTemplate.Domain.Shared.csproj", "{42F719ED-8413-4895-B5B4-5AB56079BC66}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuickTemplate.Application.Contracts", "src\QuickTemplate.Application.Contracts\QuickTemplate.Application.Contracts.csproj", "{520659C8-C734-4298-A3DA-B539DB9DFC0B}"
@@ -39,19 +37,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuickTemplate.DbMigrator", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "modules", "modules", "{A1791027-70D6-47D0-9285-52C6D205B744}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "infrastructures", "infrastructures", "{B83B8111-B009-4BA5-966E-13DBE001E636}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuickTemplate.Infrastructures.Domain.Shared", "..\modules\QuickTemplate.Infrastructures\src\QuickTemplate.Infrastructures.Domain.Shared\QuickTemplate.Infrastructures.Domain.Shared.csproj", "{A78AAA5A-CE3A-477E-A315-31DA36D07085}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuickTemplate.Infrastructures.Domain", "..\modules\QuickTemplate.Infrastructures\src\QuickTemplate.Infrastructures.Domain\QuickTemplate.Infrastructures.Domain.csproj", "{2C7B5D32-B169-4F95-A296-32AB9718D6A4}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuickTemplate.Infrastructures.Application.Contracts", "..\modules\QuickTemplate.Infrastructures\src\QuickTemplate.Infrastructures.Application.Contracts\QuickTemplate.Infrastructures.Application.Contracts.csproj", "{7A39A349-F227-4C33-AB58-3605FDB7A53B}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuickTemplate.Infrastructures.Application", "..\modules\QuickTemplate.Infrastructures\src\QuickTemplate.Infrastructures.Application\QuickTemplate.Infrastructures.Application.csproj", "{40EA2894-37F8-43E8-84B1-4FB8CE21FA32}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuickTemplate.Infrastructures.HttpApi", "..\modules\QuickTemplate.Infrastructures\src\QuickTemplate.Infrastructures.HttpApi\QuickTemplate.Infrastructures.HttpApi.csproj", "{2CE43604-4C50-4954-9B87-B8B8BA3DCB80}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuickTemplate.Infrastructures.EntityFrameworkCore", "..\modules\QuickTemplate.Infrastructures\src\QuickTemplate.Infrastructures.EntityFrameworkCore\QuickTemplate.Infrastructures.EntityFrameworkCore.csproj", "{BB062346-AB66-4BC6-8AE0-6FF1C729778A}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tailwindcss", "tailwindcss", "{4A50F7F6-9423-4ECA-9621-EB621E2D858A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -79,10 +65,6 @@ Global
 		{50B2631D-129C-47B3-A587-029CCD6099BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{50B2631D-129C-47B3-A587-029CCD6099BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{50B2631D-129C-47B3-A587-029CCD6099BC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5F1B28C6-8D0C-4155-92D0-252F7EA5F674}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5F1B28C6-8D0C-4155-92D0-252F7EA5F674}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5F1B28C6-8D0C-4155-92D0-252F7EA5F674}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5F1B28C6-8D0C-4155-92D0-252F7EA5F674}.Release|Any CPU.Build.0 = Release|Any CPU
 		{42F719ED-8413-4895-B5B4-5AB56079BC66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{42F719ED-8413-4895-B5B4-5AB56079BC66}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{42F719ED-8413-4895-B5B4-5AB56079BC66}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -119,30 +101,6 @@ Global
 		{AA94D832-1CCC-4715-95A9-A483F23A1A5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AA94D832-1CCC-4715-95A9-A483F23A1A5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AA94D832-1CCC-4715-95A9-A483F23A1A5D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A78AAA5A-CE3A-477E-A315-31DA36D07085}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A78AAA5A-CE3A-477E-A315-31DA36D07085}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A78AAA5A-CE3A-477E-A315-31DA36D07085}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A78AAA5A-CE3A-477E-A315-31DA36D07085}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2C7B5D32-B169-4F95-A296-32AB9718D6A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2C7B5D32-B169-4F95-A296-32AB9718D6A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2C7B5D32-B169-4F95-A296-32AB9718D6A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2C7B5D32-B169-4F95-A296-32AB9718D6A4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7A39A349-F227-4C33-AB58-3605FDB7A53B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7A39A349-F227-4C33-AB58-3605FDB7A53B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7A39A349-F227-4C33-AB58-3605FDB7A53B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7A39A349-F227-4C33-AB58-3605FDB7A53B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{40EA2894-37F8-43E8-84B1-4FB8CE21FA32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{40EA2894-37F8-43E8-84B1-4FB8CE21FA32}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{40EA2894-37F8-43E8-84B1-4FB8CE21FA32}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{40EA2894-37F8-43E8-84B1-4FB8CE21FA32}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2CE43604-4C50-4954-9B87-B8B8BA3DCB80}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2CE43604-4C50-4954-9B87-B8B8BA3DCB80}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2CE43604-4C50-4954-9B87-B8B8BA3DCB80}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2CE43604-4C50-4954-9B87-B8B8BA3DCB80}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BB062346-AB66-4BC6-8AE0-6FF1C729778A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BB062346-AB66-4BC6-8AE0-6FF1C729778A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BB062346-AB66-4BC6-8AE0-6FF1C729778A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BB062346-AB66-4BC6-8AE0-6FF1C729778A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -153,7 +111,6 @@ Global
 		{C956DD76-69C8-4A9C-83EA-D17DF83340FD} = {CA9AC87F-097E-4F15-8393-4BC07735A5B0}
 		{068855E8-9240-4F1A-910B-CF825794513B} = {CA9AC87F-097E-4F15-8393-4BC07735A5B0}
 		{50B2631D-129C-47B3-A587-029CCD6099BC} = {04DBDB01-70F4-4E06-B468-8F87850B22BE}
-		{5F1B28C6-8D0C-4155-92D0-252F7EA5F674} = {04DBDB01-70F4-4E06-B468-8F87850B22BE}
 		{42F719ED-8413-4895-B5B4-5AB56079BC66} = {CA9AC87F-097E-4F15-8393-4BC07735A5B0}
 		{520659C8-C734-4298-A3DA-B539DB9DFC0B} = {CA9AC87F-097E-4F15-8393-4BC07735A5B0}
 		{4164BDF7-F527-4E85-9CE6-E3C2D7426A27} = {CA9AC87F-097E-4F15-8393-4BC07735A5B0}
@@ -163,13 +120,7 @@ Global
 		{E512F4D9-9375-480F-A2F6-A46509F9D824} = {04DBDB01-70F4-4E06-B468-8F87850B22BE}
 		{EF480016-9127-4916-8735-D2466BDBC582} = {04DBDB01-70F4-4E06-B468-8F87850B22BE}
 		{AA94D832-1CCC-4715-95A9-A483F23A1A5D} = {CA9AC87F-097E-4F15-8393-4BC07735A5B0}
-		{B83B8111-B009-4BA5-966E-13DBE001E636} = {A1791027-70D6-47D0-9285-52C6D205B744}
-		{A78AAA5A-CE3A-477E-A315-31DA36D07085} = {B83B8111-B009-4BA5-966E-13DBE001E636}
-		{2C7B5D32-B169-4F95-A296-32AB9718D6A4} = {B83B8111-B009-4BA5-966E-13DBE001E636}
-		{7A39A349-F227-4C33-AB58-3605FDB7A53B} = {B83B8111-B009-4BA5-966E-13DBE001E636}
-		{40EA2894-37F8-43E8-84B1-4FB8CE21FA32} = {B83B8111-B009-4BA5-966E-13DBE001E636}
-		{2CE43604-4C50-4954-9B87-B8B8BA3DCB80} = {B83B8111-B009-4BA5-966E-13DBE001E636}
-		{BB062346-AB66-4BC6-8AE0-6FF1C729778A} = {B83B8111-B009-4BA5-966E-13DBE001E636}
+		{4A50F7F6-9423-4ECA-9621-EB621E2D858A} = {A1791027-70D6-47D0-9285-52C6D205B744}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {28315BFD-90E7-4E14-A2EA-F3D23AF4126F}

@@ -8,7 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\modules\QuickTemplate.Infrastructures\src\QuickTemplate.Infrastructures.Domain\QuickTemplate.Infrastructures.Domain.csproj" />
     <ProjectReference Include="..\QuickTemplate.Domain.Shared\QuickTemplate.Domain.Shared.csproj" />
   </ItemGroup>
 

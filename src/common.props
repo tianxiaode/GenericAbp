@@ -18,6 +18,11 @@
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <!-- 定义输出根目录 -->
+    <BaseOutputPath>$(MSBuildThisFileDirectory)output\$(SolutionName)\$(MSBuildProjectName)</BaseOutputPath>
+  </PropertyGroup>
+
 
   <ItemGroup>
     <PackageReference Include="ConfigureAwait.Fody" Version="3.3.2" PrivateAssets="All" />

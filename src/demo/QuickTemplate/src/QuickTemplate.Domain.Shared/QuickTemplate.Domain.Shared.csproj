@@ -28,9 +28,6 @@
   
 
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\modules\QuickTemplate.Infrastructures\src\QuickTemplate.Infrastructures.Domain.Shared\QuickTemplate.Infrastructures.Domain.Shared.csproj" />
-  </ItemGroup>
 
 
 </Project>

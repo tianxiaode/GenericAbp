@@ -1,6 +1,4 @@
-﻿using Generic.Abp.MenuManagement.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
-using QuickTemplate.Infrastructures.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
 using Volo.Abp.Data;
