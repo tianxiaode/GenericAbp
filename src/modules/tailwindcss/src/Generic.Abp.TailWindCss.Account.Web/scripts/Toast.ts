@@ -1,5 +1,5 @@
 ﻿export default class Toast {
-     static toasts: { type: string, message: string, duration: number }[] = [];
+    static toasts: { type: string, message: string, duration: number }[] = [];
     static showMessage(type: string, message: string, duration: number = 3000) {
 
         const toast = document.createElement('div');
@@ -20,7 +20,8 @@
                 const nextToast = this.toasts[0]; // Get the next toast in the queue
                 this.showMessage(nextToast.type, nextToast.message, nextToast.duration);
             }
-        }, duration + 1000);    }
+        }, duration + 1000);
+    }
 
     static addToast(type: string, message: string, duration: number = 3000) {
         this.toasts.push({ type, message, duration });
@@ -32,7 +33,7 @@
     }
 
     static success(message: string, duration: number = 3000) {
-        this.addToast("success", message, duration); 
+        this.addToast("success", message, duration);
     }
 
     static error(message: string, duration: number = 3000) {
@@ -41,11 +42,11 @@
 
 
     static warning(message: string, duration: number = 3000) {
-        this.addToast("warning", message, duration);   
+        this.addToast("warning", message, duration);
     }
 
 
     static info(message: string, duration: number = 3000) {
-        this.addToast("info", message, duration);   
+        this.addToast("info", message, duration);
     }
 }

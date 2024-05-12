@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "Generic.Abp.TailWind": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:58571;http://localhost:58572"
+    }
+  }
+}

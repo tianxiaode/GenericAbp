@@ -22,7 +22,6 @@
 
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\modules\tailwindcss\src\Generic.Abp.TailWindCss.Account.Web\Generic.Abp.TailWindCss.Account.Web.csproj" />
     <ProjectReference Include="..\Generic.Abp.Host.Application\Generic.Abp.Host.Application.csproj" />
     <ProjectReference Include="..\Generic.Abp.Host.EntityFrameworkCore\Generic.Abp.Host.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\Generic.Abp.Host.HttpApi\Generic.Abp.Host.HttpApi.csproj" />

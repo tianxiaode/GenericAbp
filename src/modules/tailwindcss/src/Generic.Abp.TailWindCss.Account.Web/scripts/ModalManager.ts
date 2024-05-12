@@ -109,12 +109,14 @@ export default class ModalManager {
     private onPostSuccess(response: any) {
         let me = this;
         me.hideMask();
+        this.triggerAll(null, this.onResultCallbacks, response);
         console.log('onPostSuccess',response)
 
     }
 
     private onPostFailure(response: any) {
         this.hideMask();
+        this.triggerAll(null, this.onResultCallbacks, response);
         console.log('onPostFailure',response)
     }
 

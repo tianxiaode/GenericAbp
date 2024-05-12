@@ -37,10 +37,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Generic.Abp.Host.HttpApi.Ho
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "modules", "modules", "{AEE52F56-DD23-4ADF-AAD0-41A377C80FF7}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tailwindcss", "tailwindcss", "{C701B34C-CCF2-4C05-8991-BEA2A50F8F71}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Generic.Abp.TailWindCss.Account.Web", "..\..\modules\tailwindcss\src\Generic.Abp.TailWindCss.Account.Web\Generic.Abp.TailWindCss.Account.Web.csproj", "{596C5E62-3486-4F62-8102-484E6887ADE1}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -103,10 +99,6 @@ Global
 		{748584B1-BA69-4F6A-81AA-F4BDE6BCE29D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{748584B1-BA69-4F6A-81AA-F4BDE6BCE29D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{748584B1-BA69-4F6A-81AA-F4BDE6BCE29D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{596C5E62-3486-4F62-8102-484E6887ADE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{596C5E62-3486-4F62-8102-484E6887ADE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{596C5E62-3486-4F62-8102-484E6887ADE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{596C5E62-3486-4F62-8102-484E6887ADE1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -126,8 +118,6 @@ Global
 		{EF480016-9127-4916-8735-D2466BDBC582} = {04DBDB01-70F4-4E06-B468-8F87850B22BE}
 		{AA94D832-1CCC-4715-95A9-A483F23A1A5D} = {CA9AC87F-097E-4F15-8393-4BC07735A5B0}
 		{748584B1-BA69-4F6A-81AA-F4BDE6BCE29D} = {CA9AC87F-097E-4F15-8393-4BC07735A5B0}
-		{C701B34C-CCF2-4C05-8991-BEA2A50F8F71} = {AEE52F56-DD23-4ADF-AAD0-41A377C80FF7}
-		{596C5E62-3486-4F62-8102-484E6887ADE1} = {C701B34C-CCF2-4C05-8991-BEA2A50F8F71}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {28315BFD-90E7-4E14-A2EA-F3D23AF4126F}
