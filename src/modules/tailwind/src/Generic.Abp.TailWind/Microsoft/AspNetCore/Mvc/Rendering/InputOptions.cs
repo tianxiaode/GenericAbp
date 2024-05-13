@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc.ViewFeatures;
+﻿namespace Generic.Abp.Tailwind.Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace Generic.Abp.Tailwind.Microsoft.AspNetCore.Mvc.Rendering;
-
-public class InputAttribute(
+public class InputOptions(
     int labelCols = 3,
     InputType type = InputType.Text,
     object? formControlAttributes = null,
@@ -14,6 +12,8 @@ public class InputAttribute(
     bool hasPasswordIndicator = true,
     string autocomplete = "off",
     string? placeholder = "auto",
+    bool requiredSymbol = false,
+    string? labelText = null,
     string? iconCls = null)
 {
     public InputType Type { get; set; } = type;
@@ -27,8 +27,10 @@ public class InputAttribute(
     public bool HasPasswordIndicator { get; set; } = hasPasswordIndicator;
     public string Autocomplete { get; set; } = autocomplete;
     public string? IconCls { get; set; } = iconCls;
-    public int InputClos { get; } = 12 - labelCols;
+    public int InputClos { get; } = labelCols == 12 ? 12 : 12 - labelCols;
     public string? Placeholder { get; set; } = placeholder;
+    public bool RequiredSymbol { get; set; } = requiredSymbol;
+    public string? LabelText { get; set; } = labelText;
 
     public string GetStartCls()
     {

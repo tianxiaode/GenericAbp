@@ -14,8 +14,8 @@
         @if (Model.EnableLocalLogin)
         {
             <form method="post">
-                @Html.TailwindInputFor(m => m.LoginInput.UserNameOrEmailAddress, new InputAttribute(0,autocomplete:"username", iconCls:"fas fa-user text-primary"))
-                @Html.TailwindInputFor(m => m.LoginInput.Password, new InputAttribute(type:InputType.Password, autocomplete:"current-password", iconCls:"fas fa-key text-primary"))
+                @Html.TailwindInputFor(m => m.LoginInput.UserNameOrEmailAddress, new InputOptions(0,autocomplete:"username", iconCls:"fas fa-user text-primary"))
+                @Html.TailwindInputFor(m => m.LoginInput.Password, new InputOptions(type:InputType.Password, autocomplete:"current-password", iconCls:"fas fa-key text-primary"))
                 <div class="flex justify-between items-center mt-4">
                     <div class="form-control">
                         <label class="label cursor-pointer">

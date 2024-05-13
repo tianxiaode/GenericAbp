@@ -10,7 +10,7 @@ public static class HtmlHelperInputExtensions
     public static IHtmlContent TailwindInputFor<TModel, TResult>(
         this IHtmlHelper<TModel> htmlHelper,
         Expression<Func<TModel, TResult>> expression,
-        InputAttribute inputAttribute)
+        InputOptions inputOptions)
     {
         ArgumentNullException.ThrowIfNull(htmlHelper);
         ArgumentNullException.ThrowIfNull(expression);
@@ -19,20 +19,19 @@ public static class HtmlHelperInputExtensions
         divBuilder.AddCssClass("grid grid-cols-12 w-full gap-1 mb-4");
 
         var innerHtml = divBuilder.InnerHtml;
-        HtmlContentUtilities.AddAttributes(divBuilder, inputAttribute.FormControlAttributes);
+        HtmlContentUtilities.AddAttributes(divBuilder, inputOptions.FormControlAttributes);
 
 
-        if (inputAttribute.LabelCols > 0)
+        if (inputOptions.LabelCols > 0)
         {
-            innerHtml.AppendHtml(CreateLabel(htmlHelper, expression, inputAttribute.LabelCols,
-                inputAttribute.LabelAttributes));
+            innerHtml.AppendHtml(CreateLabel(htmlHelper, expression, inputOptions));
         }
 
-        innerHtml.AppendHtml(CreateInput(htmlHelper, expression, inputAttribute));
+        innerHtml.AppendHtml(CreateInput(htmlHelper, expression, inputOptions));
 
-        if (inputAttribute.Type == InputType.Password)
+        if (inputOptions.Type == InputType.Password)
         {
-            CreatePasswordIndicator(innerHtml, inputAttribute);
+            CreatePasswordIndicator(innerHtml, inputOptions);
         }
 
 
@@ -41,41 +40,46 @@ public static class HtmlHelperInputExtensions
     }
 
     public static IHtmlContent CreateLabel<TModel, TResult>(IHtmlHelper<TModel> htmlHelper,
-        Expression<Func<TModel, TResult>> expression, int labelCols,
-        object? labelAttributes = null)
+        Expression<Func<TModel, TResult>> expression, InputOptions inputOptions)
     {
-        var attributes = HtmlHelper.AnonymousObjectToHtmlAttributes(labelAttributes) ??
-                         new Dictionary<string, object>();
-        var classname = $"label col-span-{labelCols} ";
-        if (attributes.ContainsKey("classname"))
+        var builder = new TagBuilder("label");
+        builder.AddCssClass($"label col-span-{inputOptions.LabelCols} ");
+        builder.Attributes.Add("for", htmlHelper.IdFor(expression));
+        HtmlContentUtilities.AddAttributes(builder, inputOptions.LabelAttributes);
+        var text = inputOptions.LabelText ?? htmlHelper.DisplayNameFor(expression);
+
+        if (inputOptions.RequiredSymbol)
         {
-            classname += attributes["classname"];
-            attributes.Remove("classname");
+            text += "<i class=\"text-error\">*</i>";
         }
 
-        attributes.Add("class", classname);
-        return htmlHelper.LabelFor(expression, attributes);
+        builder.InnerHtml.AppendHtml($"<span>{text}</span>");
+
+        return builder;
     }
 
     public static IHtmlContent CreateInput<TModel, TResult>(IHtmlHelper<TModel> htmlHelper,
-        Expression<Func<TModel, TResult>> expression, InputAttribute inputAttribute)
+        Expression<Func<TModel, TResult>> expression, InputOptions inputOptions)
     {
         var divWrap = new TagBuilder("div");
+        HtmlContentUtilities.AddAttributes(divWrap, inputOptions.InputWrapAttributes);
         divWrap.AddCssClass(
-            $"input input-bordered focus:border-primary focus-within:border-primary flex items-center gap-2 col-span-{inputAttribute.InputClos}");
+            $"input input-bordered focus:border-primary focus-within:border-primary flex items-center gap-2 col-span-{inputOptions.InputClos}");
 
         var innerHtml = divWrap.InnerHtml;
 
-        CreateInputIcon(innerHtml, inputAttribute.IconCls);
+        CreateInputIcon(innerHtml, inputOptions.IconCls);
 
-        var inputAttributes = HtmlHelper.AnonymousObjectToHtmlAttributes(inputAttribute.InputAttributes) ??
+        var inputAttributes = HtmlHelper.AnonymousObjectToHtmlAttributes(inputOptions.InputAttributes) ??
                               new Dictionary<string, object>();
-        if (inputAttribute.Placeholder == "auto")
+        if (inputOptions.Placeholder == "auto")
         {
             inputAttributes.Add("placeholder", htmlHelper.DisplayNameFor(expression));
         }
 
-        switch (inputAttribute.Type)
+        inputAttributes.Add("autocomplete", inputOptions.Autocomplete);
+
+        switch (inputOptions.Type)
         {
             case InputType.Text:
                 innerHtml.AppendHtml(htmlHelper.TextBoxFor(expression, inputAttributes));
@@ -86,12 +90,12 @@ public static class HtmlHelperInputExtensions
             case InputType.Select:
                 break;
             default:
-                throw new ArgumentOutOfRangeException(nameof(inputAttribute.Type), inputAttribute.Type, null);
+                throw new ArgumentOutOfRangeException(nameof(inputOptions.Type), inputOptions.Type, null);
         }
 
-        CreateClearButton(innerHtml, inputAttribute);
+        CreateClearButton(innerHtml, inputOptions);
 
-        if (inputAttribute.Type == InputType.Password)
+        if (inputOptions.Type == InputType.Password)
         {
             CreateEyeButton(innerHtml);
         }
@@ -109,7 +113,7 @@ public static class HtmlHelperInputExtensions
         innerHtml.AppendHtml($"<i class=\"{iconCls} w-4 h-4  opacity-70\"></i>");
     }
 
-    public static void CreateClearButton(IHtmlContentBuilder innerHtml, InputAttribute inputAttribute)
+    public static void CreateClearButton(IHtmlContentBuilder innerHtml, InputOptions inputAttribute)
     {
         if (inputAttribute.Clearable)
         {
@@ -124,9 +128,9 @@ public static class HtmlHelperInputExtensions
             "<button tabindex=\"-1\" type=\"button\"  class=\"show-password-button hidden\" ><i class=\"fas fa-eye w-5 h-5 text-base opactity-70\"></i></button>");
     }
 
-    public static void CreatePasswordIndicator(IHtmlContentBuilder innerHtml, InputAttribute inputAttribute)
+    public static void CreatePasswordIndicator(IHtmlContentBuilder innerHtml, InputOptions inputAttribute)
     {
-        if (inputAttribute.Autocomplete != "new-password")
+        if (inputAttribute.Autocomplete != "new-password" || !inputAttribute.HasPasswordIndicator)
         {
             return;
         }
@@ -142,7 +146,7 @@ public static class HtmlHelperInputExtensions
         innerHtml.AppendHtml(html);
     }
 
-    public static void CreateErrorWarp(IHtmlContentBuilder innerHtml, InputAttribute inputAttribute)
+    public static void CreateErrorWarp(IHtmlContentBuilder innerHtml, InputOptions inputAttribute)
     {
         var builder = new TagBuilder("div");
         builder.AddCssClass(inputAttribute.GetStartCls());
