@@ -1,0 +1,11 @@
+﻿@page
+@model Generic.Abp.Tailwind.Pages.Account.AccessDeniedModel
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.Account.Localization
+@inject IHtmlLocalizer<AccountResource> L
+
+<h2 class="card-title">@L["AccessDenied"]</h2>
+<p class="text-sm text-secondary mb-4">@L["AccessDeniedMessage"]</p>
+<form method="post">
+    @await Html.PartialAsync("Shared/_BackToLogin")
+</form>

@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npm run css:build && webpack --mode=production --node-env=production",
-    "css:build": "npx tailwindcss -i ./src/styles/main.css -o ./wwwroot/css/tailwind.css",
+    "css:build": "npx tailwind build -i ./src/styles/main.css -o ./wwwroot/css/tailwind.css",
     "build:dev": "webpack --mode=development",
     "build:prod": "webpack --mode=production --node-env=production",
     "watch": "webpack --watch"

@@ -16,9 +16,21 @@
 
   <ItemGroup>
     <Compile Remove="Logs\**" />
+    <Compile Remove="wwwroot\libs\metro\**" />
+    <Compile Remove="wwwroot\libs\mif\**" />
+    <Compile Remove="wwwroot\libs\w2ui\**" />
     <Content Remove="Logs\**" />
+    <Content Remove="wwwroot\libs\metro\**" />
+    <Content Remove="wwwroot\libs\mif\**" />
+    <Content Remove="wwwroot\libs\w2ui\**" />
     <EmbeddedResource Remove="Logs\**" />
+    <EmbeddedResource Remove="wwwroot\libs\metro\**" />
+    <EmbeddedResource Remove="wwwroot\libs\mif\**" />
+    <EmbeddedResource Remove="wwwroot\libs\w2ui\**" />
     <None Remove="Logs\**" />
+    <None Remove="wwwroot\libs\metro\**" />
+    <None Remove="wwwroot\libs\mif\**" />
+    <None Remove="wwwroot\libs\w2ui\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -32,6 +44,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\modules\tailwind\src\Generic.Abp.TailWind\Generic.Abp.Tailwind.csproj" />
     <ProjectReference Include="..\QuickTemplate.Application\QuickTemplate.Application.csproj" />
     <ProjectReference Include="..\QuickTemplate.HttpApi\QuickTemplate.HttpApi.csproj" />
     <ProjectReference Include="..\QuickTemplate.EntityFrameworkCore\QuickTemplate.EntityFrameworkCore.csproj" />
@@ -54,18 +67,6 @@
     <None Include="wwwroot\libs\fontawesome\webfonts\fa-solid-900.woff2" />
     <None Include="wwwroot\libs\fontawesome\webfonts\fa-v4compatibility.woff2" />
     <None Include="wwwroot\libs\lodash\lodash.min.js" />
-    <None Include="wwwroot\libs\metro\abp.metro.js" />
-    <None Include="wwwroot\libs\metro\metro.js" />
-    <None Include="wwwroot\libs\metro\metro.min.js" />
-    <None Include="wwwroot\libs\metro\metro.min.js.map" />
-    <None Include="wwwroot\libs\mif\metro.svg" />
-    <None Include="wwwroot\libs\w2ui\extensions.js" />
-    <None Include="wwwroot\libs\w2ui\grid-extension.js" />
-    <None Include="wwwroot\libs\w2ui\item-grid.js" />
-    <None Include="wwwroot\libs\w2ui\multilingual-grid.js" />
-    <None Include="wwwroot\libs\w2ui\permission-grid.js" />
-    <None Include="wwwroot\libs\w2ui\property-grid.js" />
-    <None Include="wwwroot\libs\w2ui\w2ui.min.js" />
   </ItemGroup>
 
 </Project>

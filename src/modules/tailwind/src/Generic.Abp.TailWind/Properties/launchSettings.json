@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "Generic.Abp.TailWind": {
+    "Generic.Abp.Tailwind": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {

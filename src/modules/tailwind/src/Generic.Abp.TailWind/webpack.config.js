@@ -13,11 +13,12 @@ const config = {
     entry: './src/index.ts',
     output: {
         path: path.resolve(__dirname, 'wwwroot/js'),
-        filename: 'tailwind.js' // Êä³öÎÄ¼þÃû
+        filename: 'tailwind.js' // ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½
     },
     plugins: [
         // Add your plugins here
         // Learn more about plugins from https://webpack.js.org/configuration/plugins/
+//      new BundleAnalyzerPlugin()
     ],
     module: {
         rules: [
@@ -46,9 +47,6 @@ const config = {
     resolve: {
         extensions: ['.tsx', '.ts', '.jsx', '.js', '...'],
     },
-//    plugins: [
-//      new BundleAnalyzerPlugin()
-//    ],
 };
 
 module.exports = () => {

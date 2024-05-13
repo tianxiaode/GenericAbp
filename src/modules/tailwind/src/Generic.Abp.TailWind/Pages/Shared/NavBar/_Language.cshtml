@@ -1,0 +1,25 @@
+﻿@using Volo.Abp.Localization
+@using Microsoft.AspNetCore.Http.Extensions
+@inject ILanguageProvider LanguageProvider
+@{
+    var currentCulture = CultureInfo.CurrentUICulture.Name;
+    var languages = await LanguageProvider.GetLanguagesAsync();
+    var currentLanguage = languages.FirstOrDefault(m => m.CultureName == currentCulture);
+}
+
+<div class="dropdown dropdown-hover md:hover:bg-gray-700">
+    <button class="text-white px-3 py-2 text-sm font-medium" id="languageMenuButton">
+        <i class="fa-solid fa-globe" ></i>  @currentLanguage?.DisplayName
+    </button>
+    <ul id="languageMenu" class="dropdown-content z-[1] menu p-2 shadow bg-white text-gray-700 w-52 absolute right-0"  style="display:none">
+        @foreach (var lang in languages)
+        {
+            var selected = currentCulture == lang.CultureName ? "selected" : "";
+            <li class="@selected">
+                <a href="~/Abp/Languages/Switch?culture=@(lang.CultureName)&uiCulture=@(lang.UiCultureName)&returnUrl=@(System.Net.WebUtility.UrlEncode(Context.Request.GetEncodedPathAndQuery()))">@lang.DisplayName</a>
+            </li>
+        }
+    </ul>
+</div>
+
+

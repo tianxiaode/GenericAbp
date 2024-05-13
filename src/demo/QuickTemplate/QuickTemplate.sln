@@ -39,7 +39,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "modules", "modules", "{A179
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tailwindcss", "tailwindcss", "{4A50F7F6-9423-4ECA-9621-EB621E2D858A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Generic.Abp.TailWind", "..\..\modules\tailwind\src\Generic.Abp.TailWind\Generic.Abp.TailWind.csproj", "{92B07B43-A921-4613-97C6-DBB70FE2EA0A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Generic.Abp.Tailwind", "..\..\modules\tailwind\src\Generic.Abp.TailWind\Generic.Abp.Tailwind.csproj", "{92B07B43-A921-4613-97C6-DBB70FE2EA0A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

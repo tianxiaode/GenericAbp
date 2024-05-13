@@ -1,0 +1,14 @@
+﻿<div class="navbar bg-gray-900 text-neutral-content px-2 sm:px-6 lg:px-8">
+    <div class="flex-none">
+        @await Html.PartialAsync("NavBar/_MobileNavButton")
+        @await Html.PartialAsync("NavBar/_Logo")
+    </div>
+    <div class="flex-1">
+        @await Html.PartialAsync("NavBar/_MainMenu")
+    </div>
+    <div class="flex-none">
+        @await Html.PartialAsync("NavBar/_RightMenu")
+    </div>
+</div>
+@await Html.PartialAsync("NavBar/_MobileMenu")
+

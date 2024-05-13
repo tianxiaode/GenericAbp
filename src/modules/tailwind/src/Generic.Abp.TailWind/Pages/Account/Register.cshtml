@@ -1,0 +1,53 @@
+﻿@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Generic.Abp.Tailwind.Localization
+@using Generic.Abp.Tailwind.Microsoft.AspNetCore.Mvc.Rendering
+@using InputType = Generic.Abp.Tailwind.Microsoft.AspNetCore.Mvc.Rendering.InputType
+@model Generic.Abp.Tailwind.Pages.Account.RegisterModel
+@inject IHtmlLocalizer<TailwindResource> L
+<h2 class="card-title">@L["Register"]</h2>
+<form method="post">
+    @if (Model.EnableLocalRegister || Model.IsExternalLogin)
+    {
+        @Html.TailwindInputFor(m => m.Input.UserName, new InputAttribute(0, iconCls: "fas fa-user text-primary"))
+    }
+
+    @if (Model.EnableLocalRegister || Model.IsExternalLogin)
+    {
+        <input asp-for="Input.EmailAddress" data-role="input" iconCls="fas fa-at text-info" placeholder="@L["DisplayName:EmailAddress"]" />
+    }
+
+    @if (!Model.IsExternalLogin && Model.EnableLocalRegister)
+    {
+        @Html.TailwindInputFor(m => m.Input.Password, new InputAttribute(labelCols:0, type: InputType.Password, autocomplete: "new-password", iconCls: "fas fa-key text-primary"))
+        @Html.TailwindInputFor(m => m.Input.ConfirmPassword, new InputAttribute(labelCols: 0, type: InputType.Password, autocomplete: "confirm-password", iconCls: "fas fa-key text-primary"))
+    }
+
+    @if (Model.EnableLocalRegister || Model.IsExternalLogin)
+    {
+        <button type="submit" class="btn btn-primary w-full text-white text-lg mt-4">@L["Register"]</button>
+    }
+
+</form>
+
+@if (!Model.IsExternalLogin && Model.VisibleExternalProviders.Any())
+{
+    <h4 class="text-center">@L["LoginWithThird"]</h4>
+    <div class="text-center">
+        <form asp-page="./Login" asp-page-handler="ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" asp-route-returnUrlHash="@Model.ReturnUrlHash" method="post">
+            @foreach (var provider in Model.VisibleExternalProviders)
+            {
+                <button type="submit" class="m-1 rounded-full" name="provider" value="@provider.AuthenticationScheme" title="@L["LogInUsingYourProviderAccount", provider.DisplayName]">
+                    <i class="fab fa-@provider?.DisplayName.ToLower() text-external-login-icon"></i>
+                </button>
+            }
+        </form>
+    </div>
+}
+
+
+<strong>
+    @L["AlreadyRegistered"]
+    <a href="@Url.Page("./Login", new {returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash})" class="text-sm text-primary">@L["Login"]</a>
+</strong>

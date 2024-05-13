@@ -1,6 +1,11 @@
-/** @type {import('tailwindcss').Config} */
+/** @type {import('Tailwindcss').Config} */
 module.exports = {
-  content: [],
+  content: [
+      "./Pages/**/*.{html,js,cshtml,ts,css,scss,sass}",
+      "./Views/**/*.{html,js,cshtml,ts,css,scss,sass}",
+      "./Theme/**/*.{html,js,cshtml,ts,css,scss,sass}",
+      "./scripts/**/*.ts}"
+  ],
   theme: {
     extend: {},
   },
@@ -8,6 +13,34 @@ module.exports = {
     require("daisyui"),
     require('tailwindcss-rtl')
   ],
+  safelist: [
+      'bg-success',
+      'bg-info',
+      'bg-warning',
+      'bg-error',
+      'text-success',
+      'text-info',
+      'text-warning',
+      'text-error',
+      "progress",
+      'progress-success',
+      'progress-info',
+      'progress-warning',
+      'progress-error',
+      "progress-gray-200",
+      "grid",
+      "grid-cols-12",
+      "input-bordered",
+      "focus:border-primary",
+      "focus-within:border-primary",
+      "flex",
+      "items-center",
+      "gap-1",
+      "gap-2",
+    {
+      pattern: /col-(span|start)-(\d)/,
+    },
+   ],
   daisyui: {
     themes: [
       {

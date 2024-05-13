@@ -1,0 +1,8 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@using Generic.Abp.Tailwind.Localization
+@inject IHtmlLocalizer<TailwindResource> L
+<div class=" font-bold text-sm mt-1">
+    <a asp-page="./Login" class="text-sm text-primary">
+        <i class="fa fa-long-arrow-left"></i> @L["Login"]
+    </a>
+</div>

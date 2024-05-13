@@ -7,6 +7,7 @@ using Microsoft.OpenApi.Models;
 using System;
 using System.IO;
 using System.Linq;
+using Generic.Abp.Tailwind;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
 using QuickTemplate.EntityFrameworkCore;
@@ -35,6 +36,7 @@ namespace QuickTemplate.Web;
     typeof(QuickTemplateHttpApiModule),
     typeof(AbpAutofacModule),
     typeof(AbpAspNetCoreMultiTenancyModule),
+    typeof(GenericAbpTailwindModule),
     typeof(QuickTemplateApplicationModule),
     typeof(QuickTemplateEntityFrameworkCoreModule),
     typeof(AbpAspNetCoreSerilogModule),

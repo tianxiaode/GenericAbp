@@ -1,0 +1,38 @@
+﻿@using Generic.Abp.Tailwind.Providers
+@inject ILayoutDataProvider LayoutDataProvider
+@{
+    Layout = "_Layout";
+    var error = ViewData.Model.Error;
+}
+
+@section styles
+{
+    @await RenderSectionAsync("styles", false)
+
+}
+<div class="hero min-h-screen bg-hero" style="background-image:url('@LayoutDataProvider.AccountHeroBackgroundUrl')">
+    <div>
+    @if (error != null)
+    {
+
+        <div class="toast-center account-layout-error pb-4">
+            <div class="body p-2 bg-error font-bold text-white rounded opactity-70">
+                <span>@error</span>
+            </div>
+        </div>
+
+    }
+    
+
+    <div class="card w-96 bg-base-100 shadow-xl">
+        <div class="card-body">
+            @RenderBody()
+        </div>
+    </div>
+    </div>
+</div>
+
+@section scripts {
+    @await RenderSectionAsync("scripts", false)    
+}
+

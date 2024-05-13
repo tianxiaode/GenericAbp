@@ -149,7 +149,7 @@ export default class Input {
 
     private createInputIcon(el: HTMLInputElement): string {
         let cls = el.getAttribute('iconCls');
-        return cls ? `<i class="${cls} w-4 h-4  opacity-70}"></i>` : '';
+        return cls ? `<i class="${cls} w-4 h-4  opacity-70"></i>` : '';
     }
 
     private createInputElement(el: HTMLInputElement, id: string, value: string | null, autocomplete: string): string {

@@ -1,0 +1,22 @@
+﻿@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Generic.Abp.Tailwind.Localization
+@model Generic.Abp.Tailwind.Pages.Abp.MultiTenancy.TenantSwitchModalModel
+@inject IHtmlLocalizer<TailwindResource> L
+@{
+    Layout = null;
+}
+<dialog class="modal">
+    <div class="modal-box">
+        <button class="btn btn-sm  btn-ghost absolute right-2 top-2 btn-times hover:bg-transparent"><i class="fas fa-times h-6 w-6 text-2xl"></i></button>
+        <h3 class="font-bold text-lg">@L["SwitchTenant"].Value</h3>
+        <form asp-page="/Abp/MultiTenancy/TenantSwitchModal">
+            <input asp-for="@Model.Input.Name" data-role="input" label="@L["Name"]" labelCols="3"/>
+            <div class="modal-action">
+                <button class="btn btn-cancel min-w-20">@L["Cancel"]</button>
+                <button class="btn text-white btn-primary  btn-ok min-w-20">@L["Yes"]</button>
+            </div>
+        </form>
+    </div>
+</dialog>

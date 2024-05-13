@@ -25,8 +25,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Pages\Shared\Form\" />
     <Folder Include="src\scripts\" />
-    <Folder Include="src\types\" />
     <Folder Include="wwwroot\css\" />
     <Folder Include="wwwroot\js\" />
   </ItemGroup>
@@ -42,11 +42,7 @@
     <EmbeddedResource Include="Views\**\*.css" />
     <EmbeddedResource Include="wwwroot\**\*.*" />
     <EmbeddedResource Include="Localization\Resources\*.json" />
-    <Content Remove="Pages\**\*.js" />
-    <Content Remove="Pages\**\*.css" />
-    <Content Remove="Views\**\*.js" />
-    <Content Remove="Views\**\*.css" />
     <Content Remove="wwwroot\**\*.*" />
-    <Content Remove="Localization\Resources\*.json" />
   </ItemGroup>
+
 </Project>
