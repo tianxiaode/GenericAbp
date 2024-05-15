@@ -12,7 +12,7 @@
         `;
         document.body.appendChild(toast);
         setTimeout(() => {
-            //toast.remove();
+            toast.remove();
             this.toasts.shift(); // Remove the current toast from the queue
             if (this.toasts.length > 0) {
                 const nextToast = this.toasts[0]; // Get the next toast in the queue

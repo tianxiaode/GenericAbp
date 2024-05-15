@@ -13,8 +13,10 @@ export default class Input {
     private eyeButton: HTMLButtonElement | null = null;
     private errorElement: HTMLElement | null = null;
     private indicatorElement: HTMLElement | null = null;
+    private inputWrap: HTMLElement 
     constructor(el: HTMLElement) {
-        this.input = el.querySelector('input') as HTMLInputElement;
+        this.inputWrap = el.querySelector('.input') as HTMLElement;
+        this.input = this.inputWrap.querySelector('input') as HTMLInputElement;
         this.id = this.input.id;
 
         this.rules = {};
@@ -35,6 +37,11 @@ export default class Input {
             message += `${rule.message}<br>`;
         }
         this.error = message;
+        if (isValid) {
+            this.inputWrap.classList.remove('input-error');
+        } else {
+            this.inputWrap.classList.add('input-error');
+        }
         return isValid;
     }
 

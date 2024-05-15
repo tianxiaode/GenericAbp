@@ -4,7 +4,6 @@ export default class LoadingMask {
     constructor(message: string, element: HTMLElement | null = null) {
         this.element = document.createElement('div');
         this.element.className = 'loading-mask';
-        this.element.style.zIndex = '9999';
         this.element.innerHTML = `
             <div class="join join-vertical">
                 <div class="join-item mx-auto loading loading-lg loading-spinner text-gray-200 opacity-80"></div>
