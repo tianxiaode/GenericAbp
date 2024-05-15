@@ -9,7 +9,6 @@ export default class Input {
     private input: HTMLInputElement | null = null
     private changeTask: string | number | NodeJS.Timeout | undefined = undefined
     private clearButton: HTMLButtonElement | null = null;
-    private isPasswordField: boolean = false;
     private currentPasswordType: string = "password"
     private eyeButton: HTMLButtonElement | null = null;
     private errorElement: HTMLElement | null = null;
@@ -111,7 +110,6 @@ export default class Input {
         me.eyeButton = el.querySelector('button.show-password-button');
         me.eyeButton?.addEventListener('click', me.onSwitchInputType.bind(me));
         me.errorElement = el.querySelector('.text-error');
-        console.log(this.errorElement)
         me.indicatorElement = el.querySelector('.indicator');
 
     }
