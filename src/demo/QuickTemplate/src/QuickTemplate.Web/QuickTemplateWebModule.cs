@@ -219,17 +219,17 @@ public class QuickTemplateWebModule : AbpModule
         var app = context.GetApplicationBuilder();
         var env = context.GetEnvironment();
 
-        if (env.IsDevelopment())
-        {
-            app.UseDeveloperExceptionPage();
-        }
+        //if (env.IsDevelopment())
+        //{
+        //    app.UseDeveloperExceptionPage();
+        //}
 
         app.UseAbpRequestLocalization();
 
-        if (!env.IsDevelopment())
-        {
-            app.UseErrorPage();
-        }
+        //if (!env.IsDevelopment())
+        //{
+        app.UseErrorPage();
+        //}
 
         app.UseCorrelationId();
         app.UseStaticFiles();

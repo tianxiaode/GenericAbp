@@ -40,11 +40,11 @@ public class LoginModel(
 {
     [HiddenInput]
     [BindProperty(SupportsGet = true)]
-    public string ReturnUrl { get; set; } = string.Empty;
+    public string? ReturnUrl { get; set; } = string.Empty;
 
     [HiddenInput]
     [BindProperty(SupportsGet = true)]
-    public string ReturnUrlHash { get; set; } = string.Empty;
+    public string? ReturnUrlHash { get; set; } = string.Empty;
 
     [BindProperty] public LoginInputModel LoginInput { get; set; } = new();
 
@@ -110,7 +110,7 @@ public class LoginModel(
         return Page();
     }
 
-    public virtual async Task<IActionResult> OnPostAsync(string action)
+    public virtual async Task<IActionResult> OnPostAsync(string? action)
     {
         if (action == "Cancel")
         {
