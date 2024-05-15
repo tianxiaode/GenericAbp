@@ -26,7 +26,6 @@
 
   <ItemGroup>
     <Folder Include="Pages\Shared\Form\" />
-    <Folder Include="src\scripts\" />
     <Folder Include="wwwroot\css\" />
     <Folder Include="wwwroot\js\" />
   </ItemGroup>

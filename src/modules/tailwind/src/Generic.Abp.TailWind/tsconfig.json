@@ -1,14 +1,14 @@
 {
   "compilerOptions": {
     "baseUrl": "./",
-    "allowSyntheticDefaultImports": true,
-    "noImplicitAny": true,
     "module": "commonjs",
     "target": "es2016",
-    "allowJs": true
-  },
-  "files": [ "src/index.ts" ],
-  "paths": {
-    "*": [ "src/types/*" ]
+    "strict": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "paths": {
+      "*": [ "src/types/*" ]
+    }
   }
 }

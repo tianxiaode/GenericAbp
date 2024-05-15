@@ -13,7 +13,7 @@ const config = {
     entry: './src/index.ts',
     output: {
         path: path.resolve(__dirname, 'wwwroot/js'),
-        filename: 'tailwind.js' // ����ļ���
+        filename: 'tailwind.js' 
     },
     plugins: [
         // Add your plugins here

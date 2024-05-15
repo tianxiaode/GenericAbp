@@ -1,1 +1,3 @@
-﻿declare let abp : Record<string, any>;
+﻿declare const abp : Record<string, any>;
+
+

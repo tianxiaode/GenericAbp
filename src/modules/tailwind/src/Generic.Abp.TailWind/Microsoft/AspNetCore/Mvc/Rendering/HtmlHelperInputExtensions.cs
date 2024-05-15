@@ -16,7 +16,7 @@ public static class HtmlHelperInputExtensions
         ArgumentNullException.ThrowIfNull(expression);
 
         var divBuilder = new TagBuilder("div");
-        divBuilder.AddCssClass("grid grid-cols-12 w-full gap-1 mb-4");
+        divBuilder.AddCssClass("grid grid-cols-12 w-full gap-1 mb-4 input-group");
 
         var innerHtml = divBuilder.InnerHtml;
         HtmlContentUtilities.AddAttributes(divBuilder, inputOptions.FormControlAttributes);
@@ -34,6 +34,7 @@ public static class HtmlHelperInputExtensions
             CreatePasswordIndicator(innerHtml, inputOptions);
         }
 
+        CreateErrorWarp(innerHtml, inputOptions);
 
         return divBuilder;
         ;
@@ -72,6 +73,16 @@ public static class HtmlHelperInputExtensions
 
         var inputAttributes = HtmlHelper.AnonymousObjectToHtmlAttributes(inputOptions.InputAttributes) ??
                               new Dictionary<string, object>();
+
+        if (inputAttributes.ContainsKey("class"))
+        {
+            inputAttributes["class"] += " w-full";
+        }
+        else
+        {
+            inputAttributes.Add("class", "w-full");
+        }
+
         if (inputOptions.Placeholder == "auto")
         {
             inputAttributes.Add("placeholder", htmlHelper.DisplayNameFor(expression));
@@ -153,6 +164,7 @@ public static class HtmlHelperInputExtensions
         builder.AddCssClass($"col-span-{inputAttribute.InputClos}");
         builder.AddCssClass("label hidden");
         HtmlContentUtilities.AddAttributes(builder, inputAttribute.ErrorAttributes);
-        builder.InnerHtml.AppendHtml("<span class=\"flabel-text-alt text-xs text-error\"></span>");
+        builder.InnerHtml.AppendHtml("<span class=\"label-text-alt text-xs text-error \"></span>");
+        innerHtml.AppendHtml(builder);
     }
 }

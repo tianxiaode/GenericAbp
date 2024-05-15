@@ -34,11 +34,11 @@ public class ResetPasswordModel(
 
     [HiddenInput]
     [BindProperty(SupportsGet = true)]
-    public string ReturnUrl { get; set; } = string.Empty;
+    public string? ReturnUrl { get; set; } = string.Empty;
 
     [HiddenInput]
     [BindProperty(SupportsGet = true)]
-    public string ReturnUrlHash { get; set; } = string.Empty;
+    public string? ReturnUrlHash { get; set; } = string.Empty;
 
     [Required]
     [BindProperty]

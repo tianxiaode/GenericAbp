@@ -8,8 +8,11 @@ using System;
 using System.IO;
 using System.Linq;
 using Generic.Abp.Tailwind;
+using Generic.Abp.Tailwind.Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
+using OpenIddict.Validation.AspNetCore;
 using QuickTemplate.EntityFrameworkCore;
 using QuickTemplate.Localization;
 using QuickTemplate.MultiTenancy;
@@ -65,14 +68,14 @@ public class QuickTemplateWebModule : AbpModule
             //    m.SetAccessTokenLifetime(TimeSpan.FromDays(3));
             //    m.SetRefreshTokenLifetime(TimeSpan.FromDays(4));
             //});
-            //builder.AddValidation(options =>
-            //{
-            //    options.AddAudiences("QuickTemplate"); // Replace with your application Name
-            //    options.UseLocalServer();
-            //    //options.EnableAuthorizationEntryValidation();
-            //    //options.EnableTokenEntryValidation();
-            //    options.UseAspNetCore();
-            //});
+            builder.AddValidation(options =>
+            {
+                options.AddAudiences("QuickTemplate"); // Replace with your application Name
+                options.UseLocalServer();
+                //options.EnableAuthorizationEntryValidation();
+                //options.EnableTokenEntryValidation();
+                options.UseAspNetCore();
+            });
         });
     }
 
@@ -123,8 +126,8 @@ public class QuickTemplateWebModule : AbpModule
 
     private void ConfigureAuthentication(ServiceConfigurationContext context, IConfiguration configuration)
     {
-        //context.Services.ForwardIdentityAuthenticationForBearer(OpenIddictValidationAspNetCoreDefaults
-        //    .AuthenticationScheme);
+        context.Services.ForwardIdentityAuthenticationForBearer(OpenIddictValidationAspNetCoreDefaults
+            .AuthenticationScheme);
         context.Services.Configure<AbpClaimsPrincipalFactoryOptions>(options =>
         {
             options.IsDynamicClaimsEnabled = true;
@@ -225,7 +228,7 @@ public class QuickTemplateWebModule : AbpModule
 
         if (!env.IsDevelopment())
         {
-            //app.UseErrorPage();
+            app.UseErrorPage();
         }
 
         app.UseCorrelationId();
@@ -235,7 +238,7 @@ public class QuickTemplateWebModule : AbpModule
 
         app.UseAuthentication();
 
-        //app.UseAbpOpenIddictValidation();
+        app.UseAbpOpenIddictValidation();
 
         if (MultiTenancyConsts.IsEnabled)
         {
