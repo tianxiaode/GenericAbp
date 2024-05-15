@@ -26,10 +26,10 @@ export default class App {
     }
 
     private initForm() {
-        const els = document.querySelectorAll('form');
-        els.forEach( (el : Element) => {
-            new Form(el as HTMLFormElement);
-        })
+    //    const els = document.querySelectorAll('form');
+    //    els.forEach( (el : Element) => {
+    //        new Form(el as HTMLFormElement);
+    //    })
     }
 
     private initNav() {

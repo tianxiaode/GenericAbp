@@ -30,15 +30,15 @@ public class RegisterModel(
     : AccountPageModel(accountAppService, signInManager, userManager, identitySecurityLogManager, identityOptions,
         exceptionToErrorInfoConverter)
 {
-    [BindProperty(SupportsGet = true)] public string ReturnUrl { get; set; } = string.Empty;
+    [BindProperty(SupportsGet = true)] public string? ReturnUrl { get; set; }
 
-    [BindProperty(SupportsGet = true)] public string ReturnUrlHash { get; set; } = string.Empty;
+    [BindProperty(SupportsGet = true)] public string? ReturnUrlHash { get; set; }
 
     [BindProperty] public PostInput Input { get; set; } = new();
 
     [BindProperty(SupportsGet = true)] public bool IsExternalLogin { get; set; }
 
-    [BindProperty(SupportsGet = true)] public string ExternalLoginAuthSchema { get; set; } = string.Empty;
+    [BindProperty(SupportsGet = true)] public string? ExternalLoginAuthSchema { get; set; }
 
     public IEnumerable<ExternalProviderModel> ExternalProviders { get; set; } = new List<ExternalProviderModel>();
 

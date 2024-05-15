@@ -10,7 +10,7 @@ namespace Generic.Abp.Tailwind.Pages.Account;
 
 public class AccessDeniedModel(
     IAccountAppService accountAppService,
-    global::Microsoft.AspNetCore.Identity.SignInManager<IdentityUser> signInManager,
+    SignInManager<IdentityUser> signInManager,
     IdentityUserManager userManager,
     IdentitySecurityLogManager identitySecurityLogManager,
     IOptions<IdentityOptions> identityOptions,
@@ -18,9 +18,9 @@ public class AccessDeniedModel(
     : AccountPageModel(accountAppService, signInManager, userManager, identitySecurityLogManager, identityOptions,
         exceptionToErrorInfoConverter)
 {
-    [BindProperty(SupportsGet = true)] public string ReturnUrl { get; set; } = string.Empty;
+    [BindProperty(SupportsGet = true)] public string? ReturnUrl { get; set; }
 
-    [BindProperty(SupportsGet = true)] public string ReturnUrlHash { get; set; } = string.Empty;
+    [BindProperty(SupportsGet = true)] public string? ReturnUrlHash { get; set; }
 
     public virtual Task<IActionResult> OnGetAsync()
     {

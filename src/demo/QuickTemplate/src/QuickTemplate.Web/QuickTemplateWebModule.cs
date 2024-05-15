@@ -1,21 +1,21 @@
+using Generic.Abp.Tailwind;
+using Generic.Abp.Tailwind.Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using System;
-using System.IO;
-using System.Linq;
-using Generic.Abp.Tailwind;
-using Generic.Abp.Tailwind.Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpOverrides;
 using OpenIddict.Validation.AspNetCore;
 using QuickTemplate.EntityFrameworkCore;
 using QuickTemplate.Localization;
 using QuickTemplate.MultiTenancy;
+using System;
+using System.IO;
+using System.Linq;
 using Volo.Abp;
 using Volo.Abp.Account;
 using Volo.Abp.AspNetCore.MultiTenancy;
@@ -28,8 +28,6 @@ using Volo.Abp.Modularity;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.Swashbuckle;
 using Volo.Abp.Timing;
-using Volo.Abp.Ui.LayoutHooks;
-using Volo.Abp.UI.Navigation;
 using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.VirtualFileSystem;
 
@@ -140,7 +138,7 @@ public class QuickTemplateWebModule : AbpModule
             .AddGitHub(options =>
             {
                 options.ClientId = "7e3b22278e8222293563";
-                options.ClientSecret = "1111";
+                options.ClientSecret = "3423423";
             });
     }
 

@@ -1,4 +1,5 @@
-﻿using Generic.Abp.Tailwind.Providers;
+﻿#nullable enable
+using Generic.Abp.Tailwind.Providers;
 using Volo.Abp.DependencyInjection;
 
 namespace QuickTemplate.Web.Providers;

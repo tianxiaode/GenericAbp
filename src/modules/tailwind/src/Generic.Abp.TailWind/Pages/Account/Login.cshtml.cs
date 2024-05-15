@@ -88,7 +88,7 @@ public class LoginModel(
             return await OnPostExternalLogin(ExternalProviders.First().AuthenticationScheme);
         }
 
-        var request = await OpenIddictRequestHelper.GetFromReturnUrlAsync(ReturnUrl);
+        var request = await OpenIddictRequestHelper.GetFromReturnUrlAsync(ReturnUrl ?? "~/");
 
         if (request == null)
         {
@@ -114,7 +114,7 @@ public class LoginModel(
     {
         if (action == "Cancel")
         {
-            var request = await OpenIddictRequestHelper.GetFromReturnUrlAsync(ReturnUrl);
+            var request = await OpenIddictRequestHelper.GetFromReturnUrlAsync(ReturnUrl ?? "~/");
 
             var transaction = HttpContext.GetOpenIddictServerTransaction();
             if (request?.ClientId == null || transaction == null)
@@ -193,7 +193,7 @@ public class LoginModel(
         // Clear the dynamic claims cache.
         await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(user.Id, user.TenantId);
 
-        return await RedirectSafelyAsync(ReturnUrl, ReturnUrlHash);
+        return await RedirectSafelyAsync(ReturnUrl ?? "~/", ReturnUrlHash);
     }
 
     /// <summary>
@@ -249,7 +249,7 @@ public class LoginModel(
         }
 
         await IdentityOptions.SetAsync();
-
+        var query = Request.QueryString;
         var loginInfo = await SignInManager.GetExternalLoginInfoAsync();
         if (loginInfo == null)
         {

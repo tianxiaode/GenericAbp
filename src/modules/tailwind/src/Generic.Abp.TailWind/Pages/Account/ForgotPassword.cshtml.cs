@@ -11,7 +11,15 @@ using IdentityUser = Volo.Abp.Identity.IdentityUser;
 
 namespace Generic.Abp.Tailwind.Pages.Account;
 
-public class ForgotPasswordModel : AccountPageModel
+public class ForgotPasswordModel(
+    IAccountAppService accountAppService,
+    SignInManager<IdentityUser> signInManager,
+    IdentityUserManager userManager,
+    IdentitySecurityLogManager identitySecurityLogManager,
+    IOptions<IdentityOptions> identityOptions,
+    IExceptionToErrorInfoConverter exceptionToErrorInfoConverter)
+    : AccountPageModel(accountAppService, signInManager, userManager, identitySecurityLogManager, identityOptions,
+        exceptionToErrorInfoConverter)
 {
     [Required]
     [EmailAddress]
@@ -21,20 +29,11 @@ public class ForgotPasswordModel : AccountPageModel
 
     [HiddenInput]
     [BindProperty(SupportsGet = true)]
-    public string ReturnUrl { get; set; } = string.Empty;
+    public string? ReturnUrl { get; set; }
 
     [HiddenInput]
     [BindProperty(SupportsGet = true)]
-    public string ReturnUrlHash { get; set; } = string.Empty;
-
-    public ForgotPasswordModel(IAccountAppService accountAppService,
-        global::Microsoft.AspNetCore.Identity.SignInManager<IdentityUser> signInManager,
-        IdentityUserManager userManager, IdentitySecurityLogManager identitySecurityLogManager,
-        IOptions<IdentityOptions> identityOptions, IExceptionToErrorInfoConverter exceptionToErrorInfoConverter) : base(
-        accountAppService, signInManager, userManager, identitySecurityLogManager, identityOptions,
-        exceptionToErrorInfoConverter)
-    {
-    }
+    public string? ReturnUrlHash { get; set; }
 
     public virtual Task<IActionResult> OnGetAsync()
     {

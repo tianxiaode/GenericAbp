@@ -14,7 +14,7 @@ namespace Generic.Abp.Tailwind.Pages.Account;
 //TODO: Implement live password complexity check on the razor view!
 public class ResetPasswordModel(
     IAccountAppService accountAppService,
-    global::Microsoft.AspNetCore.Identity.SignInManager<IdentityUser> signInManager,
+    SignInManager<IdentityUser> signInManager,
     IdentityUserManager userManager,
     IdentitySecurityLogManager identitySecurityLogManager,
     IOptions<IdentityOptions> identityOptions,
@@ -34,11 +34,11 @@ public class ResetPasswordModel(
 
     [HiddenInput]
     [BindProperty(SupportsGet = true)]
-    public string? ReturnUrl { get; set; } = string.Empty;
+    public string? ReturnUrl { get; set; }
 
     [HiddenInput]
     [BindProperty(SupportsGet = true)]
-    public string? ReturnUrlHash { get; set; } = string.Empty;
+    public string? ReturnUrlHash { get; set; }
 
     [Required]
     [BindProperty]

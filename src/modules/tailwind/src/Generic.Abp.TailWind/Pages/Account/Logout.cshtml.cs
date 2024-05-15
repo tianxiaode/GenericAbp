@@ -12,7 +12,7 @@ namespace Generic.Abp.Tailwind.Pages.Account;
 
 public class LogoutModel(
     IAccountAppService accountAppService,
-    global::Microsoft.AspNetCore.Identity.SignInManager<IdentityUser> signInManager,
+    SignInManager<IdentityUser> signInManager,
     IdentityUserManager userManager,
     IdentitySecurityLogManager identitySecurityLogManager,
     IOptions<IdentityOptions> identityOptions,
@@ -22,11 +22,11 @@ public class LogoutModel(
 {
     [HiddenInput]
     [BindProperty(SupportsGet = true)]
-    public string ReturnUrl { get; set; } = string.Empty;
+    public string? ReturnUrl { get; set; }
 
     [HiddenInput]
     [BindProperty(SupportsGet = true)]
-    public string ReturnUrlHash { get; set; } = string.Empty;
+    public string? ReturnUrlHash { get; set; }
 
     public virtual async Task<IActionResult> OnGetAsync()
     {
