@@ -5,20 +5,17 @@ using Volo.Abp.Text.Formatting;
 namespace Generic.Abp.Tailwind.OpenIddict.WildcardDomains;
 
 public abstract class AbpOpenIddictWildcardDomainBase<THandler, TContext> : IOpenIddictServerHandler<TContext>
-    where THandler : class, new()
+    where THandler : class
     where TContext : OpenIddictServerEvents.BaseContext
 {
-    protected THandler? Handler { get; set; }
+    protected THandler Handler { get; set; }
     protected AbpOpenIddictWildcardDomainOptions WildcardDomainOptions { get; }
 
     protected AbpOpenIddictWildcardDomainBase(IOptions<AbpOpenIddictWildcardDomainOptions> wildcardDomainOptions,
-        bool initHandler = true)
+        THandler handler)
     {
         WildcardDomainOptions = wildcardDomainOptions.Value;
-        if (initHandler)
-        {
-            Handler = new THandler();
-        }
+        Handler = handler;
     }
 
     public abstract ValueTask HandleAsync(TContext context);

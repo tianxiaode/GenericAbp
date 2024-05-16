@@ -16,14 +16,18 @@ public class
 
     public ValueTask HandleAsync(OpenIddictServerEvents.ProcessSignInContext context)
     {
-        if (context.Request.IsClientCredentialsGrantType())
+        if (!context.Request.IsClientCredentialsGrantType())
         {
-            if (context.Principal != null)
-            {
-                context.Principal.RemoveClaims(OpenIddictConstants.Claims.Subject);
-                context.Principal.RemoveClaims(OpenIddictConstants.Claims.PreferredUsername);
-            }
+            return default;
         }
+
+        if (context.Principal == null)
+        {
+            return default;
+        }
+
+        context.Principal.RemoveClaims(OpenIddictConstants.Claims.Subject);
+        context.Principal.RemoveClaims(OpenIddictConstants.Claims.PreferredUsername);
 
         return default;
     }

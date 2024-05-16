@@ -15,25 +15,25 @@ public class OpenIddictClaimsPrincipalContributor : IAbpClaimsPrincipalContribut
     public Task ContributeAsync(AbpClaimsPrincipalContributorContext context)
     {
         var identity = context.ClaimsPrincipal.Identities.FirstOrDefault();
-        if (identity != null)
+        if (identity == null)
         {
-            var options = context.ServiceProvider.GetRequiredService<IOptions<IdentityOptions>>().Value;
-            var usernameClaim = identity.FindFirst(options.ClaimsIdentity.UserNameClaimType);
-            if (usernameClaim != null)
-            {
-                identity.AddIfNotContains(new Claim(OpenIddictConstants.Claims.PreferredUsername, usernameClaim.Value));
-                identity.AddIfNotContains(new Claim(JwtRegisteredClaimNames.UniqueName, usernameClaim.Value));
-            }
+            return Task.CompletedTask;
+        }
 
-            var httpContext = context.ServiceProvider.GetRequiredService<IHttpContextAccessor>().HttpContext;
-            if (httpContext != null)
-            {
-                var clientId = httpContext.GetOpenIddictServerRequest()?.ClientId;
-                if (clientId != null)
-                {
-                    identity.AddClaim(OpenIddictConstants.Claims.ClientId, clientId);
-                }
-            }
+        var options = context.ServiceProvider.GetRequiredService<IOptions<IdentityOptions>>().Value;
+        var usernameClaim = identity.FindFirst(options.ClaimsIdentity.UserNameClaimType);
+        if (usernameClaim != null)
+        {
+            identity.AddIfNotContains(new Claim(OpenIddictConstants.Claims.PreferredUsername, usernameClaim.Value));
+            identity.AddIfNotContains(new Claim(JwtRegisteredClaimNames.UniqueName, usernameClaim.Value));
+        }
+
+        var httpContext = context.ServiceProvider.GetRequiredService<IHttpContextAccessor>().HttpContext;
+
+        var clientId = httpContext?.GetOpenIddictServerRequest()?.ClientId;
+        if (clientId != null)
+        {
+            identity.AddClaim(OpenIddictConstants.Claims.ClientId, clientId);
         }
 
         return Task.CompletedTask;

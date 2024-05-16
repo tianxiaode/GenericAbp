@@ -21,22 +21,22 @@ public class AbpValidateClientPostLogoutRedirectUri : AbpOpenIddictWildcardDomai
     public AbpValidateClientPostLogoutRedirectUri(
         IOptions<AbpOpenIddictWildcardDomainOptions> wildcardDomainsOptions,
         IOpenIddictApplicationManager applicationManager)
-        : base(wildcardDomainsOptions, false)
+        : base(wildcardDomainsOptions,
+            new OpenIddictServerHandlers.Session.ValidateClientPostLogoutRedirectUri(applicationManager))
     {
         Handler = new OpenIddictServerHandlers.Session.ValidateClientPostLogoutRedirectUri(applicationManager);
     }
 
-    public override async ValueTask HandleAsync(OpenIddictServerEvents.ValidateLogoutRequestContext context)
+    public async override ValueTask HandleAsync(OpenIddictServerEvents.ValidateLogoutRequestContext context)
     {
         Check.NotNull(context, nameof(context));
         Check.NotNullOrEmpty(context.PostLogoutRedirectUri, nameof(context.PostLogoutRedirectUri));
 
-
-        if (await CheckWildcardDomainAsync(context.PostLogoutRedirectUri!))
+        if (await CheckWildcardDomainAsync(context.PostLogoutRedirectUri))
         {
             return;
         }
 
-        await Handler!.HandleAsync(context);
+        await Handler.HandleAsync(context);
     }
 }

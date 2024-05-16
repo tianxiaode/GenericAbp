@@ -13,7 +13,7 @@ public static class ApplicationBuilderAbpOpenIddictMiddlewareExtension
             if (ctx.User.Identity?.IsAuthenticated != true)
             {
                 var result = await ctx.AuthenticateAsync(schema);
-                if (result.Succeeded && result.Principal != null)
+                if (result is { Succeeded: true, Principal: not null })
                 {
                     ctx.User = result.Principal;
                 }

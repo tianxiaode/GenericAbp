@@ -10,14 +10,18 @@ using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.OpenIddict.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
+using Volo.Abp.TenantManagement;
+using Volo.Abp.TenantManagement.EntityFrameworkCore;
 
 namespace QuickTemplate.EntityFrameworkCore;
 
 [ReplaceDbContext(typeof(IIdentityDbContext))]
+[ReplaceDbContext(typeof(ITenantManagementDbContext))]
 [ConnectionStringName("Default")]
 public class QuickTemplateDbContext :
     AbpDbContext<QuickTemplateDbContext>,
-    IIdentityDbContext
+    IIdentityDbContext,
+    ITenantManagementDbContext
 {
     /* Add DbSet properties for your Aggregate Roots / Entities here. */
 
@@ -41,12 +45,14 @@ public class QuickTemplateDbContext :
     public DbSet<OrganizationUnit> OrganizationUnits { get; set; }
     public DbSet<IdentitySecurityLog> SecurityLogs { get; set; }
     public DbSet<IdentityLinkUser> LinkUsers { get; set; }
+    public DbSet<IdentityUserDelegation> UserDelegations { get; }
 
     // Tenant Management
+    public DbSet<Tenant> Tenants { get; set; }
+    public DbSet<TenantConnectionString> TenantConnectionStrings { get; set; }
 
     #endregion
 
-    public DbSet<IdentityUserDelegation> UserDelegations { get; }
 
     public QuickTemplateDbContext(DbContextOptions<QuickTemplateDbContext> options)
         : base(options)
@@ -66,7 +72,7 @@ public class QuickTemplateDbContext :
         builder.ConfigureIdentity();
         builder.ConfigureOpenIddict();
         builder.ConfigureFeatureManagement();
-
+        builder.ConfigureTenantManagement();
         /* Configure your own tables/entities inside here */
 
         //builder.Entity<YourEntity>(b =>

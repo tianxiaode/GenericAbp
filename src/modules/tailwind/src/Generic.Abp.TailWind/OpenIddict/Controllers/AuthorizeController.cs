@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
 using OpenIddict.Abstractions;
 using OpenIddict.Server.AspNetCore;
+using Volo.Abp.AspNetCore.Security;
 
 namespace Generic.Abp.Tailwind.OpenIddict.Controllers;
 
@@ -15,6 +16,7 @@ public class AuthorizeController : AbpOpenIdDictControllerBase
 {
     [HttpGet, HttpPost]
     [IgnoreAntiforgeryToken]
+    [IgnoreAbpSecurityHeader]
     public virtual async Task<IActionResult> HandleAsync()
     {
         var request = await GetOpenIddictServerRequestAsync(HttpContext);
@@ -45,9 +47,9 @@ public class AuthorizeController : AbpOpenIdDictControllerBase
         // If a max_age parameter was provided, ensure that the cookie is not too old.
         // If the user principal can't be extracted or the cookie is too old, redirect the user to the login page.
         var result = await HttpContext.AuthenticateAsync(IdentityConstants.ApplicationScheme);
-        if (result is not { Succeeded: true } || (request.MaxAge != null && result.Properties?.IssuedUtc != null &&
-                                                  DateTimeOffset.UtcNow - result.Properties.IssuedUtc >
-                                                  TimeSpan.FromSeconds(request.MaxAge.Value)))
+        if (!result.Succeeded || (request.MaxAge != null && result.Properties?.IssuedUtc != null &&
+                                  DateTimeOffset.UtcNow - result.Properties.IssuedUtc >
+                                  TimeSpan.FromSeconds(request.MaxAge.Value)))
         {
             // If the client application requested promptless authentication,
             // return an error indicating that the user is not logged in.
@@ -73,29 +75,48 @@ public class AuthorizeController : AbpOpenIdDictControllerBase
         }
 
         // Retrieve the profile of the logged in user.
-        var user = await UserManager.GetUserAsync(result.Principal) ??
-                   throw new InvalidOperationException(L["TheUserDetailsCannotBbeRetrieved"]);
+        var dynamicPrincipal = await AbpClaimsPrincipalFactory.CreateDynamicAsync(result.Principal);
+        var user = await UserManager.GetUserAsync(dynamicPrincipal);
+        if (user == null)
+        {
+            return Challenge(
+                authenticationSchemes: IdentityConstants.ApplicationScheme,
+                properties: new AuthenticationProperties
+                {
+                    RedirectUri = Request.PathBase + Request.Path + QueryString.Create(
+                        Request.HasFormContentType ? Request.Form.ToList() : Request.Query.ToList())
+                });
+        }
 
-        if (request.ClientId.IsNullOrEmpty())
+        // Retrieve the application details from the database.
+
+        if (request.ClientId == null)
         {
             throw new InvalidOperationException(
                 L["DetailsConcerningTheCallingClientApplicationCannotBeFound"]);
         }
 
-        // Retrieve the application details from the database.
-        var application = await ApplicationManager.FindByClientIdAsync(request.ClientId) ??
-                          throw new InvalidOperationException(
-                              L["DetailsConcerningTheCallingClientApplicationCannotBeFound"]);
+        var application = await ApplicationManager.FindByClientIdAsync(request.ClientId);
+
+        if (application == null)
+        {
+            throw new InvalidOperationException(
+                L["DetailsConcerningTheCallingClientApplicationCannotBeFound"]);
+        }
+
+        var client = await ApplicationManager.GetIdAsync(application) ?? string.Empty;
 
         // Retrieve the permanent authorizations associated with the user and the calling client application.
         var authorizations = await AuthorizationManager.FindAsync(
             subject: await UserManager.GetUserIdAsync(user),
-            client: await ApplicationManager.GetIdAsync(application) ?? string.Empty,
+            client: client,
             status: OpenIddictConstants.Statuses.Valid,
             type: OpenIddictConstants.AuthorizationTypes.Permanent,
             scopes: request.GetScopes()).ToListAsync();
 
-        switch (await ApplicationManager.GetConsentTypeAsync(application))
+        var consentType = await ApplicationManager.GetConsentTypeAsync(application);
+
+        switch (consentType)
         {
             // If the consent is external (e.g when authorizations are granted by a sysadmin),
             // immediately return an error if no authorization can be found in the database.
@@ -132,15 +153,14 @@ public class AuthorizeController : AbpOpenIdDictControllerBase
                     authorization = await AuthorizationManager.CreateAsync(
                         principal: principal,
                         subject: await UserManager.GetUserIdAsync(user),
-                        client: await ApplicationManager.GetIdAsync(application) ?? string.Empty,
+                        client: client,
                         type: OpenIddictConstants.AuthorizationTypes.Permanent,
                         scopes: principal.GetScopes());
                 }
 
                 principal.SetAuthorizationId(await AuthorizationManager.GetIdAsync(authorization));
 
-                await SetClaimsDestinationsAsync(principal);
-
+                await OpenIddictClaimsPrincipalManager.HandleAsync(request, principal);
                 return SignIn(principal, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
 
             // At this point, no authorization was found in the database and an error must be returned
@@ -162,7 +182,7 @@ public class AuthorizeController : AbpOpenIdDictControllerBase
                 return View("Authorize", new AuthorizeViewModel
                 {
                     ApplicationName = await ApplicationManager.GetDisplayNameAsync(application) ?? string.Empty,
-                    Scope = request.Scope ?? string.Empty,
+                    Scope = request.Scope ?? string.Empty
                 });
         }
     }
@@ -185,12 +205,6 @@ public class AuthorizeController : AbpOpenIdDictControllerBase
         var user = await UserManager.GetUserAsync(User) ??
                    throw new InvalidOperationException(L["TheUserDetailsCannotBbeRetrieved"]);
 
-        if (request.ClientId.IsNullOrEmpty())
-        {
-            throw new InvalidOperationException(
-                L["DetailsConcerningTheCallingClientApplicationCannotBeFound"]);
-        }
-
         // Retrieve the application details from the database.
         var application = await ApplicationManager.FindByClientIdAsync(request.ClientId) ??
                           throw new InvalidOperationException(
@@ -199,7 +213,7 @@ public class AuthorizeController : AbpOpenIdDictControllerBase
         // Retrieve the permanent authorizations associated with the user and the calling client application.
         var authorizations = await AuthorizationManager.FindAsync(
             subject: await UserManager.GetUserIdAsync(user),
-            client: await ApplicationManager.GetIdAsync(application) ?? string.Empty,
+            client: await ApplicationManager.GetIdAsync(application),
             status: OpenIddictConstants.Statuses.Valid,
             type: OpenIddictConstants.AuthorizationTypes.Permanent,
             scopes: request.GetScopes()).ToListAsync();
@@ -212,7 +226,7 @@ public class AuthorizeController : AbpOpenIdDictControllerBase
         {
             return Forbid(
                 authenticationSchemes: OpenIddictServerAspNetCoreDefaults.AuthenticationScheme,
-                properties: new AuthenticationProperties(new Dictionary<string, string?>
+                properties: new AuthenticationProperties(new Dictionary<string, string>
                 {
                     [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.ConsentRequired,
                     [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] =
@@ -236,7 +250,7 @@ public class AuthorizeController : AbpOpenIdDictControllerBase
             authorization = await AuthorizationManager.CreateAsync(
                 principal: principal,
                 subject: await UserManager.GetUserIdAsync(user),
-                client: await ApplicationManager.GetIdAsync(application) ?? string.Empty,
+                client: await ApplicationManager.GetIdAsync(application),
                 type: OpenIddictConstants.AuthorizationTypes.Permanent,
                 scopes: principal.GetScopes());
         }
@@ -245,7 +259,7 @@ public class AuthorizeController : AbpOpenIdDictControllerBase
         principal.SetScopes(request.GetScopes());
         principal.SetResources(await GetResourcesAsync(request.GetScopes()));
 
-        await SetClaimsDestinationsAsync(principal);
+        await OpenIddictClaimsPrincipalManager.HandleAsync(request, principal);
 
         // Returning a SignInResult will ask OpenIddict to issue the appropriate access/identity tokens.
         return SignIn(principal, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);

@@ -34,8 +34,6 @@ public class QuickTemplateDomainModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        Configure<AbpMultiTenancyOptions>(options => { options.IsEnabled = MultiTenancyConsts.IsEnabled; });
-
         Configure<AbpLocalizationOptions>(options =>
         {
             //options.Languages.Add(new LanguageInfo("ar", "ar", "العربية", "ae"));

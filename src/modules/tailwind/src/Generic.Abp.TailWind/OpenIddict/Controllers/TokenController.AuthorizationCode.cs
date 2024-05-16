@@ -13,19 +13,7 @@ public partial class TokenController
         // Retrieve the claims principal stored in the authorization code/device code/refresh token.
         var principal = (await HttpContext.AuthenticateAsync(OpenIddictServerAspNetCoreDefaults.AuthenticationScheme))
             .Principal;
-        if (principal == null)
-        {
-            return Forbid(
-                authenticationSchemes: OpenIddictServerAspNetCoreDefaults.AuthenticationScheme,
-                properties: new AuthenticationProperties(new Dictionary<string, string?>
-                {
-                    [OpenIddictServerAspNetCoreConstants.Properties.Error] =
-                        OpenIddictConstants.Errors.InvalidGrant,
-                    [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] =
-                        "The token is no longer valid."
-                }));
-        }
-
+        principal = await AbpClaimsPrincipalFactory.CreateDynamicAsync(principal);
         using (CurrentTenant.Change(principal.FindTenantId()))
         {
             // Retrieve the user profile corresponding to the authorization code/refresh token.
@@ -37,7 +25,7 @@ public partial class TokenController
             {
                 return Forbid(
                     authenticationSchemes: OpenIddictServerAspNetCoreDefaults.AuthenticationScheme,
-                    properties: new AuthenticationProperties(new Dictionary<string, string?>
+                    properties: new AuthenticationProperties(new Dictionary<string, string>
                     {
                         [OpenIddictServerAspNetCoreConstants.Properties.Error] =
                             OpenIddictConstants.Errors.InvalidGrant,
@@ -51,7 +39,7 @@ public partial class TokenController
             {
                 return Forbid(
                     authenticationSchemes: OpenIddictServerAspNetCoreDefaults.AuthenticationScheme,
-                    properties: new AuthenticationProperties(new Dictionary<string, string?>
+                    properties: new AuthenticationProperties(new Dictionary<string, string>
                     {
                         [OpenIddictServerAspNetCoreConstants.Properties.Error] =
                             OpenIddictConstants.Errors.InvalidGrant,
@@ -60,7 +48,7 @@ public partial class TokenController
                     }));
             }
 
-            await SetClaimsDestinationsAsync(principal);
+            await OpenIddictClaimsPrincipalManager.HandleAsync(request, principal);
 
             // Returning a SignInResult will ask OpenIddict to issue the appropriate access/identity tokens.
             return SignIn(principal, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);

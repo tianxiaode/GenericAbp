@@ -5,19 +5,18 @@ using OpenIddict.Abstractions;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Security.Claims;
 
-namespace Generic.Abp.Tailwind.OpenIddict.ClaimDestinations;
+namespace Generic.Abp.Tailwind.OpenIddict.Claims;
 
-public class AbpDefaultOpenIddictClaimDestinationsProvider : IAbpOpenIddictClaimDestinationsProvider,
-    ITransientDependency
+public class AbpDefaultOpenIddictClaimsPrincipalHandler : IAbpOpenIddictClaimsPrincipalHandler, ITransientDependency
 {
-    public virtual Task SetDestinationsAsync(AbpOpenIddictClaimDestinationsProviderContext context)
+    public virtual Task HandleAsync(AbpOpenIddictClaimsPrincipalHandlerContext context)
     {
         var securityStampClaimType = context
             .ScopeServiceProvider
             .GetRequiredService<IOptions<IdentityOptions>>().Value
             .ClaimsIdentity.SecurityStampClaimType;
 
-        foreach (var claim in context.Claims)
+        foreach (var claim in context.Principal.Claims)
         {
             if (claim.Type == AbpClaimTypes.TenantId)
             {

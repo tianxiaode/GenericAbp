@@ -13,19 +13,20 @@ public class AbpValidateClientRedirectUri : AbpOpenIddictWildcardDomainBase<
         = OpenIddictServerHandlerDescriptor.CreateBuilder<OpenIddictServerEvents.ValidateAuthorizationRequestContext>()
             .AddFilter<OpenIddictServerHandlerFilters.RequireDegradedModeDisabled>()
             .UseScopedHandler<AbpValidateClientRedirectUri>()
-            .SetOrder(OpenIddictServerHandlers.Authentication.ValidateClientType.Descriptor.Order + 1_000)
+            .SetOrder(OpenIddictServerHandlers.Authentication.ValidateResponseType.Descriptor.Order + 1_000)
             .SetType(OpenIddictServerHandlerType.BuiltIn)
             .Build();
 
     public AbpValidateClientRedirectUri(
         IOptions<AbpOpenIddictWildcardDomainOptions> wildcardDomainsOptions,
         IOpenIddictApplicationManager applicationManager)
-        : base(wildcardDomainsOptions, false)
+        : base(wildcardDomainsOptions,
+            new OpenIddictServerHandlers.Authentication.ValidateClientRedirectUri(applicationManager))
     {
         Handler = new OpenIddictServerHandlers.Authentication.ValidateClientRedirectUri(applicationManager);
     }
 
-    public override async ValueTask HandleAsync(OpenIddictServerEvents.ValidateAuthorizationRequestContext context)
+    public async override ValueTask HandleAsync(OpenIddictServerEvents.ValidateAuthorizationRequestContext context)
     {
         Check.NotNull(context, nameof(context));
 
@@ -34,6 +35,6 @@ public class AbpValidateClientRedirectUri : AbpOpenIddictWildcardDomainBase<
             return;
         }
 
-        await Handler!.HandleAsync(context);
+        await Handler.HandleAsync(context);
     }
 }

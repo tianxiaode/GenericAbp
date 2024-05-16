@@ -1,12 +1,12 @@
 ﻿using System.Collections.Immutable;
-using System.Security.Claims;
-using Generic.Abp.Tailwind.OpenIddict.ClaimDestinations;
+using Generic.Abp.Tailwind.OpenIddict.Claims;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Identity;
 using OpenIddict.Abstractions;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Identity;
 using Volo.Abp.OpenIddict.Localization;
+using Volo.Abp.Security.Claims;
 using IdentityUser = Volo.Abp.Identity.IdentityUser;
 
 namespace Generic.Abp.Tailwind.OpenIddict.Controllers;
@@ -30,8 +30,11 @@ public abstract class AbpOpenIdDictControllerBase : AbpController
     protected IOpenIddictTokenManager TokenManager =>
         LazyServiceProvider.LazyGetRequiredService<IOpenIddictTokenManager>();
 
-    protected AbpOpenIddictClaimDestinationsManager OpenIddictClaimDestinationsManager =>
-        LazyServiceProvider.LazyGetRequiredService<AbpOpenIddictClaimDestinationsManager>();
+    protected AbpOpenIddictClaimsPrincipalManager OpenIddictClaimsPrincipalManager =>
+        LazyServiceProvider.LazyGetRequiredService<AbpOpenIddictClaimsPrincipalManager>();
+
+    protected IAbpClaimsPrincipalFactory AbpClaimsPrincipalFactory =>
+        LazyServiceProvider.LazyGetRequiredService<IAbpClaimsPrincipalFactory>();
 
     protected AbpOpenIdDictControllerBase()
     {
@@ -60,11 +63,6 @@ public abstract class AbpOpenIdDictControllerBase : AbpController
         }
 
         return resources;
-    }
-
-    protected virtual async Task SetClaimsDestinationsAsync(ClaimsPrincipal principal)
-    {
-        await OpenIddictClaimDestinationsManager.SetAsync(principal);
     }
 
     protected virtual async Task<bool> HasFormValueAsync(string name)

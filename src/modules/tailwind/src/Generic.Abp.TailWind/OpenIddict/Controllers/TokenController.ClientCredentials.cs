@@ -1,5 +1,4 @@
-﻿using System.Collections.Immutable;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using OpenIddict.Abstractions;
@@ -13,11 +12,6 @@ public partial class TokenController
     {
         // Note: the client credentials are automatically validated by OpenIddict:
         // if client_id or client_secret are invalid, this action won't be invoked.
-        if (request.ClientId.IsNullOrEmpty())
-        {
-            throw new InvalidOperationException(L["TheApplicationDetailsCannotBeFound"]);
-        }
-
         var application = await ApplicationManager.FindByClientIdAsync(request.ClientId);
         if (application == null)
         {
@@ -32,10 +26,9 @@ public partial class TokenController
 
         // The Subject and PreferredUsername will be removed by <see cref="RemoveClaimsFromClientCredentialsGrantType"/>.
         // Use the client_id as the subject identifier.
-        identity.AddClaim(OpenIddictConstants.Claims.Subject,
-            await ApplicationManager.GetClientIdAsync(application) ?? string.Empty);
+        identity.AddClaim(OpenIddictConstants.Claims.Subject, await ApplicationManager.GetClientIdAsync(application));
         identity.AddClaim(OpenIddictConstants.Claims.PreferredUsername,
-            await ApplicationManager.GetDisplayNameAsync(application) ?? string.Empty);
+            await ApplicationManager.GetDisplayNameAsync(application));
 
         // Note: In the original OAuth 2.0 specification, the client credentials grant
         // doesn't return an identity token, which is an OpenID Connect concept.
@@ -51,28 +44,8 @@ public partial class TokenController
         principal.SetScopes(request.GetScopes());
         principal.SetResources(await GetResourcesAsync(request.GetScopes()));
 
-        foreach (var claim in principal.Claims)
-        {
-            claim.SetDestinations(GetDestinations(claim));
-        }
+        await OpenIddictClaimsPrincipalManager.HandleAsync(request, principal);
 
         return SignIn(principal, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
-    }
-
-
-    protected virtual IEnumerable<string> GetDestinations(Claim claim)
-    {
-        // Note: by default, claims are NOT automatically included in the access and identity tokens.
-        // To allow OpenIddict to serialize them, you must attach them a destination, that specifies
-        // whether they should be included in access tokens, in identity tokens or in both.
-
-        return claim.Type switch
-        {
-            OpenIddictConstants.Claims.PreferredUsername or OpenIddictConstants.Claims.Subject
-                => ImmutableArray.Create(OpenIddictConstants.Destinations.AccessToken,
-                    OpenIddictConstants.Destinations.IdentityToken),
-
-            _ => ImmutableArray.Create(OpenIddictConstants.Destinations.AccessToken)
-        };
     }
 }

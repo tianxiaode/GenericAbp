@@ -41,20 +41,14 @@ public partial class TokenController : AbpOpenIdDictControllerBase
             return await HandleClientCredentialsAsync(request);
         }
 
-        if (request.GrantType.IsNullOrEmpty())
-        {
-            throw new AbpException(string.Format(L["TheSpecifiedGrantTypeIsNotImplemented"], request.GrantType));
-        }
-
         var extensionGrantsOptions =
             HttpContext.RequestServices.GetRequiredService<IOptions<AbpOpenIddictExtensionGrantsOptions>>();
-
-        if (extensionGrantsOptions.Value.Grants.All(m => m.Key != request.GrantType))
+        var extensionTokenGrant = extensionGrantsOptions.Value.Find<ITokenExtensionGrant>(request.GrantType);
+        if (extensionTokenGrant != null)
         {
-            throw new AbpException(string.Format(L["TheSpecifiedGrantTypeIsNotImplemented"], request.GrantType));
+            return await extensionTokenGrant.HandleAsync(new ExtensionGrantContext(HttpContext, request));
         }
 
-        var extensionTokenGrant = extensionGrantsOptions.Value.Find<ITokenExtensionGrant>(request.GrantType);
-        return await extensionTokenGrant.HandleAsync(new ExtensionGrantContext(HttpContext, request));
+        throw new AbpException(string.Format(L["TheSpecifiedGrantTypeIsNotImplemented"], request.GrantType));
     }
 }

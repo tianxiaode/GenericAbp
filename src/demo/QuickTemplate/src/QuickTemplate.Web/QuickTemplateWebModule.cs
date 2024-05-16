@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -14,6 +13,7 @@ using QuickTemplate.EntityFrameworkCore;
 using QuickTemplate.Localization;
 using QuickTemplate.MultiTenancy;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Volo.Abp;
@@ -37,9 +37,9 @@ namespace QuickTemplate.Web;
     typeof(QuickTemplateHttpApiModule),
     typeof(AbpAutofacModule),
     typeof(AbpAspNetCoreMultiTenancyModule),
-    typeof(GenericAbpTailwindModule),
     typeof(QuickTemplateApplicationModule),
     typeof(QuickTemplateEntityFrameworkCoreModule),
+    typeof(GenericAbpTailwindModule),
     typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpSwashbuckleModule)
 )]
@@ -82,19 +82,40 @@ public class QuickTemplateWebModule : AbpModule
         var hostingEnvironment = context.Services.GetHostingEnvironment();
         var configuration = context.Services.GetConfiguration();
 
-        ConfigureAuthentication(context, configuration);
+        ConfigureAuthentication(context);
         ConfigureExternalProviders(context);
-        ConfigureBundles();
+        //ConfigureBundles();
         ConfigureUrls(configuration);
+        ConfigureConventionalControllers();
         ConfigureAutoMapper();
         ConfigureVirtualFileSystem(hostingEnvironment);
         //ConfigureLocalizationServices();
         //ConfigureNavigationServices();
-        ConfigureAutoApiControllers();
+        //ConfigureAutoApiControllers();
         ConfigureCors(context, configuration);
-        ConfigureSwaggerServices(context.Services);
+        ConfigureSwaggerServices(context.Services, configuration);
 
         Configure<AbpClockOptions>(options => { options.Kind = DateTimeKind.Utc; });
+    }
+
+    private void ConfigureAuthentication(ServiceConfigurationContext context)
+    {
+        context.Services.ForwardIdentityAuthenticationForBearer(OpenIddictValidationAspNetCoreDefaults
+            .AuthenticationScheme);
+        context.Services.Configure<AbpClaimsPrincipalFactoryOptions>(options =>
+        {
+            options.IsDynamicClaimsEnabled = true;
+        });
+    }
+
+    private void ConfigureExternalProviders(ServiceConfigurationContext context)
+    {
+        context.Services.AddAuthentication()
+            .AddGitHub(options =>
+            {
+                options.ClientId = "7e3b22278e8222293563";
+                options.ClientSecret = "3423423";
+            });
     }
 
     private void ConfigureUrls(IConfiguration configuration)
@@ -121,26 +142,6 @@ public class QuickTemplateWebModule : AbpModule
         //});
     }
 
-
-    private void ConfigureAuthentication(ServiceConfigurationContext context, IConfiguration configuration)
-    {
-        context.Services.ForwardIdentityAuthenticationForBearer(OpenIddictValidationAspNetCoreDefaults
-            .AuthenticationScheme);
-        context.Services.Configure<AbpClaimsPrincipalFactoryOptions>(options =>
-        {
-            options.IsDynamicClaimsEnabled = true;
-        });
-    }
-
-    private void ConfigureExternalProviders(ServiceConfigurationContext context)
-    {
-        context.Services.AddAuthentication()
-            .AddGitHub(options =>
-            {
-                options.ClientId = "7e3b22278e8222293563";
-                options.ClientSecret = "3423423";
-            });
-    }
 
     private void ConfigureAutoMapper()
     {
@@ -171,7 +172,7 @@ public class QuickTemplateWebModule : AbpModule
     }
 
 
-    private void ConfigureAutoApiControllers()
+    private void ConfigureConventionalControllers()
     {
         Configure<AbpAspNetCoreMvcOptions>(options =>
         {
@@ -179,9 +180,14 @@ public class QuickTemplateWebModule : AbpModule
         });
     }
 
-    private void ConfigureSwaggerServices(IServiceCollection services)
+    private void ConfigureSwaggerServices(IServiceCollection services, IConfiguration configuration)
     {
-        services.AddAbpSwaggerGen(
+        services.AddAbpSwaggerGenWithOAuth(
+            configuration["AuthServer:Authority"]!,
+            new Dictionary<string, string>
+            {
+                { "QuickTemplate", "QuickTemplate API" }
+            },
             options =>
             {
                 options.SwaggerDoc("v1", new OpenApiInfo { Title = "QuickTemplate API", Version = "v1" });
@@ -217,17 +223,17 @@ public class QuickTemplateWebModule : AbpModule
         var app = context.GetApplicationBuilder();
         var env = context.GetEnvironment();
 
-        //if (env.IsDevelopment())
-        //{
-        //    app.UseDeveloperExceptionPage();
-        //}
+        if (env.IsDevelopment())
+        {
+            app.UseDeveloperExceptionPage();
+        }
 
         app.UseAbpRequestLocalization();
 
-        //if (!env.IsDevelopment())
-        //{
-        app.UseErrorPage();
-        //}
+        if (!env.IsDevelopment())
+        {
+            app.UseErrorPage();
+        }
 
         app.UseCorrelationId();
         app.UseStaticFiles();
@@ -244,17 +250,24 @@ public class QuickTemplateWebModule : AbpModule
         }
 
 
-        app.UseForwardedHeaders(new ForwardedHeadersOptions
-        {
-            ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-        });
+        //app.UseForwardedHeaders(new ForwardedHeadersOptions
+        //{
+        //    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+        //});
 
 
         app.UseUnitOfWork();
         app.UseDynamicClaims();
         app.UseAuthorization();
         app.UseSwagger();
-        app.UseAbpSwaggerUI(options => { options.SwaggerEndpoint("/swagger/v1/swagger.json", "QuickTemplate API"); });
+        app.UseAbpSwaggerUI(options =>
+        {
+            options.SwaggerEndpoint("/swagger/v1/swagger.json", "QuickTemplate API");
+
+            var configuration = context.ServiceProvider.GetRequiredService<IConfiguration>();
+            options.OAuthClientId(configuration["AuthServer:SwaggerClientId"]);
+            options.OAuthScopes("QuickTemplate");
+        });
         app.UseAuditing();
         app.UseAbpSerilogEnrichers();
         app.UseConfiguredEndpoints();

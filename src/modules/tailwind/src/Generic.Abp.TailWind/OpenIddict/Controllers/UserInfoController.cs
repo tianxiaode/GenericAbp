@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OpenIddict.Abstractions;
@@ -18,12 +18,12 @@ public class UserInfoController : AbpOpenIdDictControllerBase
     [Produces("application/json")]
     public virtual async Task<IActionResult> Userinfo()
     {
-        var user = await UserManager.GetUserAsync(User);
-        if (user == null)
+        var claims = await GetUserInfoClaims();
+        if (claims == null)
         {
             return Challenge(
                 authenticationSchemes: OpenIddictServerAspNetCoreDefaults.AuthenticationScheme,
-                properties: new AuthenticationProperties(new Dictionary<string, string?>
+                properties: new AuthenticationProperties(new Dictionary<string, string>
                 {
                     [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.InvalidToken,
                     [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] =
@@ -31,7 +31,18 @@ public class UserInfoController : AbpOpenIdDictControllerBase
                 }));
         }
 
-        var claims = new Dictionary<string, object?>(StringComparer.Ordinal)
+        return Ok(claims);
+    }
+
+    protected virtual async Task<Dictionary<string, object>> GetUserInfoClaims()
+    {
+        var user = await UserManager.GetUserAsync(User);
+        if (user == null)
+        {
+            return null;
+        }
+
+        var claims = new Dictionary<string, object>(StringComparer.Ordinal)
         {
             // Note: the "sub" claim is a mandatory claim and must be included in the JSON response.
             [OpenIddictConstants.Claims.Subject] = await UserManager.GetUserIdAsync(user)
@@ -66,6 +77,6 @@ public class UserInfoController : AbpOpenIdDictControllerBase
         // Note: the complete list of standard claims supported by the OpenID Connect specification
         // can be found here: http://openid.net/specs/openid-connect-core-1_0.html#StandardClaims
 
-        return Ok(claims);
+        return claims;
     }
 }

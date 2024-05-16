@@ -16,11 +16,11 @@ public class AbpValidateRedirectUriParameter : AbpOpenIddictWildcardDomainBase<
             .Build();
 
     public AbpValidateRedirectUriParameter(IOptions<AbpOpenIddictWildcardDomainOptions> wildcardDomainsOptions)
-        : base(wildcardDomainsOptions)
+        : base(wildcardDomainsOptions, new OpenIddictServerHandlers.Authentication.ValidateRedirectUriParameter())
     {
     }
 
-    public override async ValueTask HandleAsync(OpenIddictServerEvents.ValidateAuthorizationRequestContext context)
+    public async override ValueTask HandleAsync(OpenIddictServerEvents.ValidateAuthorizationRequestContext context)
     {
         Check.NotNull(context, nameof(context));
 
@@ -29,6 +29,6 @@ public class AbpValidateRedirectUriParameter : AbpOpenIddictWildcardDomainBase<
             return;
         }
 
-        await Handler!.HandleAsync(context);
+        await Handler.HandleAsync(context);
     }
 }

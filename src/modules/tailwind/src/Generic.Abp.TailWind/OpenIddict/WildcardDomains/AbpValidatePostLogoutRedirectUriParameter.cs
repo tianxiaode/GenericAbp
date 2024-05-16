@@ -17,11 +17,11 @@ public class AbpValidatePostLogoutRedirectUriParameter : AbpOpenIddictWildcardDo
 
     public AbpValidatePostLogoutRedirectUriParameter(
         IOptions<AbpOpenIddictWildcardDomainOptions> wildcardDomainsOptions)
-        : base(wildcardDomainsOptions)
+        : base(wildcardDomainsOptions, new OpenIddictServerHandlers.Session.ValidatePostLogoutRedirectUriParameter())
     {
     }
 
-    public override async ValueTask HandleAsync(OpenIddictServerEvents.ValidateLogoutRequestContext context)
+    public async override ValueTask HandleAsync(OpenIddictServerEvents.ValidateLogoutRequestContext context)
     {
         Check.NotNull(context, nameof(context));
 
@@ -31,6 +31,6 @@ public class AbpValidatePostLogoutRedirectUriParameter : AbpOpenIddictWildcardDo
             return;
         }
 
-        await Handler!.HandleAsync(context);
+        await Handler.HandleAsync(context);
     }
 }

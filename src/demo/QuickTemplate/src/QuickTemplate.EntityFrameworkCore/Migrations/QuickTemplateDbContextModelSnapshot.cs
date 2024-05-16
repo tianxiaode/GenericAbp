@@ -21,162 +21,6 @@ namespace QuickTemplate.Migrations
                 .HasAnnotation("ProductVersion", "8.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("Generic.Abp.MenuManagement.Menus.Menu", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
-
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasMaxLength(127)
-                        .HasColumnType("varchar(127)")
-                        .UseCollation("ascii_general_ci");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .IsRequired()
-                        .HasMaxLength(40)
-                        .HasColumnType("varchar(40)")
-                        .HasColumnName("ConcurrencyStamp");
-
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime(6)")
-                        .HasColumnName("CreationTime");
-
-                    b.Property<Guid?>("CreatorId")
-                        .HasColumnType("char(36)")
-                        .HasColumnName("CreatorId");
-
-                    b.Property<string>("DisplayName")
-                        .IsRequired()
-                        .HasMaxLength(128)
-                        .HasColumnType("varchar(128)")
-                        .UseCollation("gbk_chinese_ci");
-
-                    b.Property<string>("ExtraProperties")
-                        .IsRequired()
-                        .HasColumnType("longtext")
-                        .HasColumnName("ExtraProperties");
-
-                    b.Property<string>("GroupName")
-                        .HasMaxLength(128)
-                        .HasColumnType("varchar(128)")
-                        .UseCollation("gbk_chinese_ci");
-
-                    b.Property<string>("Icon")
-                        .HasMaxLength(128)
-                        .HasColumnType("varchar(128)")
-                        .UseCollation("gbk_chinese_ci");
-
-                    b.Property<bool>("IsDisabled")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<bool>("IsSelectable")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("datetime(6)")
-                        .HasColumnName("LastModificationTime");
-
-                    b.Property<Guid?>("LastModifierId")
-                        .HasColumnType("char(36)")
-                        .HasColumnName("LastModifierId");
-
-                    b.Property<int>("Order")
-                        .HasColumnType("int");
-
-                    b.Property<Guid?>("ParentId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<string>("Router")
-                        .HasMaxLength(128)
-                        .HasColumnType("varchar(128)")
-                        .UseCollation("gbk_chinese_ci");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Code");
-
-                    b.HasIndex("DisplayName");
-
-                    b.HasIndex("GroupName");
-
-                    b.HasIndex("Order");
-
-                    b.HasIndex("ParentId");
-
-                    b.ToTable("MenuManagementMenus", (string)null);
-                });
-
-            modelBuilder.Entity("QuickTemplate.Infrastructures.Districts.District", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
-
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasMaxLength(127)
-                        .HasColumnType("varchar(127)")
-                        .UseCollation("ascii_general_ci");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .IsRequired()
-                        .HasMaxLength(40)
-                        .HasColumnType("varchar(40)")
-                        .HasColumnName("ConcurrencyStamp");
-
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime(6)")
-                        .HasColumnName("CreationTime");
-
-                    b.Property<Guid?>("CreatorId")
-                        .HasColumnType("char(36)")
-                        .HasColumnName("CreatorId");
-
-                    b.Property<string>("DisplayName")
-                        .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("varchar(256)")
-                        .UseCollation("gbk_chinese_ci");
-
-                    b.Property<string>("ExtraProperties")
-                        .IsRequired()
-                        .HasColumnType("longtext")
-                        .HasColumnName("ExtraProperties");
-
-                    b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("datetime(6)")
-                        .HasColumnName("LastModificationTime");
-
-                    b.Property<Guid?>("LastModifierId")
-                        .HasColumnType("char(36)")
-                        .HasColumnName("LastModifierId");
-
-                    b.Property<Guid?>("ParentId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<string>("Postcode")
-                        .IsRequired()
-                        .HasMaxLength(16)
-                        .HasColumnType("varchar(16)")
-                        .UseCollation("ascii_general_ci");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Code");
-
-                    b.HasIndex("DisplayName");
-
-                    b.HasIndex("ParentId");
-
-                    b.HasIndex("Postcode");
-
-                    b.ToTable("InfrastructuresDistricts", (string)null);
-                });
-
             modelBuilder.Entity("Volo.Abp.AuditLogging.AuditLog", b =>
                 {
                     b.Property<Guid>("Id")
@@ -498,6 +342,127 @@ namespace QuickTemplate.Migrations
                     b.HasIndex("IsAbandoned", "NextTryTime");
 
                     b.ToTable("AbpBackgroundJobs", (string)null);
+                });
+
+            modelBuilder.Entity("Volo.Abp.FeatureManagement.FeatureDefinitionRecord", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("AllowedProviders")
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
+
+                    b.Property<string>("DefaultValue")
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnType("longtext")
+                        .HasColumnName("ExtraProperties");
+
+                    b.Property<string>("GroupName")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("varchar(128)");
+
+                    b.Property<bool>("IsAvailableToHost")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("IsVisibleToClients")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("varchar(128)");
+
+                    b.Property<string>("ParentName")
+                        .HasMaxLength(128)
+                        .HasColumnType("varchar(128)");
+
+                    b.Property<string>("ValueType")
+                        .HasMaxLength(2048)
+                        .HasColumnType("varchar(2048)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GroupName");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("AbpFeatures", (string)null);
+                });
+
+            modelBuilder.Entity("Volo.Abp.FeatureManagement.FeatureGroupDefinitionRecord", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnType("longtext")
+                        .HasColumnName("ExtraProperties");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("varchar(128)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("AbpFeatureGroups", (string)null);
+                });
+
+            modelBuilder.Entity("Volo.Abp.FeatureManagement.FeatureValue", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("varchar(128)");
+
+                    b.Property<string>("ProviderKey")
+                        .HasMaxLength(64)
+                        .HasColumnType("varchar(64)");
+
+                    b.Property<string>("ProviderName")
+                        .HasMaxLength(64)
+                        .HasColumnType("varchar(64)");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("varchar(128)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name", "ProviderName", "ProviderKey")
+                        .IsUnique();
+
+                    b.ToTable("AbpFeatureValues", (string)null);
                 });
 
             modelBuilder.Entity("Volo.Abp.Identity.IdentityClaimType", b =>
@@ -1667,8 +1632,8 @@ namespace QuickTemplate.Migrations
                         .HasColumnType("char(36)");
 
                     b.Property<string>("DefaultValue")
-                        .HasMaxLength(256)
-                        .HasColumnType("varchar(256)");
+                        .HasMaxLength(2048)
+                        .HasColumnType("varchar(2048)");
 
                     b.Property<string>("Description")
                         .HasMaxLength(512)
@@ -1698,8 +1663,8 @@ namespace QuickTemplate.Migrations
                         .HasColumnType("varchar(128)");
 
                     b.Property<string>("Providers")
-                        .HasMaxLength(128)
-                        .HasColumnType("varchar(128)");
+                        .HasMaxLength(1024)
+                        .HasColumnType("varchar(1024)");
 
                     b.HasKey("Id");
 
@@ -1709,22 +1674,92 @@ namespace QuickTemplate.Migrations
                     b.ToTable("AbpSettingDefinitions", (string)null);
                 });
 
-            modelBuilder.Entity("Generic.Abp.MenuManagement.Menus.Menu", b =>
+            modelBuilder.Entity("Volo.Abp.TenantManagement.Tenant", b =>
                 {
-                    b.HasOne("Generic.Abp.MenuManagement.Menus.Menu", "Parent")
-                        .WithMany("Children")
-                        .HasForeignKey("ParentId");
+                    b.Property<Guid>("Id")
+                        .HasColumnType("char(36)");
 
-                    b.Navigation("Parent");
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnName("ConcurrencyStamp");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("CreationTime");
+
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnType("char(36)")
+                        .HasColumnName("CreatorId");
+
+                    b.Property<Guid?>("DeleterId")
+                        .HasColumnType("char(36)")
+                        .HasColumnName("DeleterId");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("DeletionTime");
+
+                    b.Property<int>("EntityVersion")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ExtraProperties")
+                        .IsRequired()
+                        .HasColumnType("longtext")
+                        .HasColumnName("ExtraProperties");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("tinyint(1)")
+                        .HasDefaultValue(false)
+                        .HasColumnName("IsDeleted");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("LastModificationTime");
+
+                    b.Property<Guid?>("LastModifierId")
+                        .HasColumnType("char(36)")
+                        .HasColumnName("LastModifierId");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("varchar(64)");
+
+                    b.Property<string>("NormalizedName")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("varchar(64)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name");
+
+                    b.HasIndex("NormalizedName");
+
+                    b.ToTable("AbpTenants", (string)null);
                 });
 
-            modelBuilder.Entity("QuickTemplate.Infrastructures.Districts.District", b =>
+            modelBuilder.Entity("Volo.Abp.TenantManagement.TenantConnectionString", b =>
                 {
-                    b.HasOne("QuickTemplate.Infrastructures.Districts.District", "Parent")
-                        .WithMany("Children")
-                        .HasForeignKey("ParentId");
+                    b.Property<Guid>("TenantId")
+                        .HasColumnType("char(36)");
 
-                    b.Navigation("Parent");
+                    b.Property<string>("Name")
+                        .HasMaxLength(64)
+                        .HasColumnType("varchar(64)");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(1024)
+                        .HasColumnType("varchar(1024)");
+
+                    b.HasKey("TenantId", "Name");
+
+                    b.ToTable("AbpTenantConnectionStrings", (string)null);
                 });
 
             modelBuilder.Entity("Volo.Abp.AuditLogging.AuditLogAction", b =>
@@ -1860,14 +1895,13 @@ namespace QuickTemplate.Migrations
                         .HasForeignKey("AuthorizationId");
                 });
 
-            modelBuilder.Entity("Generic.Abp.MenuManagement.Menus.Menu", b =>
+            modelBuilder.Entity("Volo.Abp.TenantManagement.TenantConnectionString", b =>
                 {
-                    b.Navigation("Children");
-                });
-
-            modelBuilder.Entity("QuickTemplate.Infrastructures.Districts.District", b =>
-                {
-                    b.Navigation("Children");
+                    b.HasOne("Volo.Abp.TenantManagement.Tenant", null)
+                        .WithMany("ConnectionStrings")
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Volo.Abp.AuditLogging.AuditLog", b =>
@@ -1903,6 +1937,11 @@ namespace QuickTemplate.Migrations
             modelBuilder.Entity("Volo.Abp.Identity.OrganizationUnit", b =>
                 {
                     b.Navigation("Roles");
+                });
+
+            modelBuilder.Entity("Volo.Abp.TenantManagement.Tenant", b =>
+                {
+                    b.Navigation("ConnectionStrings");
                 });
 #pragma warning restore 612, 618
         }
