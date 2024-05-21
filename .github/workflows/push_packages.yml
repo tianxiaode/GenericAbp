@@ -3,51 +3,65 @@ name: Push packages
 on:
   push:
     branches:
-      - master
+      - dev
     paths:
-      - 'src/**/*.cs'
-      - 'src/**/*.cshtml'
-      - 'src/**/*.csproj'
-      - 'src/**/*.razor'
+      - 'src/common.props'
 
-  pull_request:
-    paths:
-      - 'src/**/*.cs'
-      - 'src/**/*.cshtml'
-      - 'src/**/*.csproj'
-      - 'src/**/*.razor'
-    types:
-      - opened
-      - synchronize
-      - reopened
-      - ready_for_review
+  workflow_dispatch:
+
 permissions:
   contents: read
 
 jobs:
   build:
     runs-on: windows-latest
-    if: ${{ !github.event.pull_request.draft }}
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-dotnet@master
-      with:
-        dotnet-version: 7.0.100
+      - name: Checkout Code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # 获取完整的历史记录以进行diff
 
-    - name: Build All
-      run: .\build-all-release.ps1 
-      working-directory: .\build
-      shell: powershell
+      - name: Set Git Config
+        run: |
+          git config --global user.email "tianxiaode@htomail.com"
+          git config --global user.name "tianxiaode"
+      
+      - name: fetch branch
+        run: git fetch origin
 
-    - name: Pack All
-      run: .\pack.ps1
-      working-directory: .\nupkg
-      shell: powershell
+      - name: Check for Version Change
+        id: check_version
+        run: .\check_version.ps1 
+        working-directory: nupkg
+        shell: powershell
 
-    - name: Push All
-      run: .\push_packages.ps1 ${{ secrets.NugetKey }}
-      working-directory: .\nupkg
-      shell: powershell
+      - name: Merge to main and release if version changed
+        if: ${{ env.change }} == 'true'
+        run: |
+          git checkout main
+          git pull origin main
+          git merge dev        
 
+      - name: Setup Dotnet
+        if: ${{ env.change }} == 'true'
+        uses: actions/setup-dotnet@master
+        with:
+          dotnet-version: '8.x'
 
-  
+      - name: Build All
+        if: ${{ env.change }} == 'true'
+        run: .\build-all-release.ps1 
+        working-directory: build
+        shell: powershell
+
+      - name: Pack All
+        if: ${{ env.change }} == 'true'
+        run: .\pack.ps1
+        working-directory: nupkg
+        shell: powershell
+
+      - name: Push All
+        if: ${{ env.change }} == 'true'
+        run: .\push_packages.ps1 ${{ secrets.NugetKey }}
+        working-directory: nupkg
+        shell: powershell
