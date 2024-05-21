@@ -20,6 +20,13 @@ The demo is located in the `src\demo\Generic.Abp.Demo` folder. After you open th
 
 ## Module description
 
+### Generic.Abp.Tailwind
+
+Rewrote the default theme of ABP using Tailwind CSS and rewrote the login of the Account module and its related pages. This module only supports OpenIddict and does not support IdentityServer.
+This module also rewrites the Volo.Abp.OpenIddict.AspNetCore module, as the module's authorization page uses ABP's default theme, resulting in inconsistent styling.
+This module is for learning and reference only and is not recommended for use in a production environment.
+
+
 ### Generic.Abp.Application
 
 As long as the module has changed the `Configuration` related interface and the `Settings` interface to accommodate [Sencha](https://www.sencha.com) Ext JS development, you can view it through the `swagger` of the demo program.

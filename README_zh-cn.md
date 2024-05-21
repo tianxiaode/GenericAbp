@@ -19,6 +19,12 @@ Generic Abp是一套适用于[ABP Framework](https://github.com/abpframework/abp
 
 ## 模块说明
 
+### Generic.Abp.Tailwind
+
+使用Tailwind CSS重写了ABP的默认主题，并重写了Account模块的登录及其相关页面。本模块只支持OpenIddict，不支持IdentityServer。
+本模块还重写了Volo.Abp.OpenIddict.AspNetCore模块，因为该模块的授权页面使用了ABP的默认主题，导致样式不统一。
+该模块仅供学习和参考，不建议在生产环境中使用。
+
 ### Generic.Abp.Application
 
 该模块只要是为了适应[Sencha](https://www.sencha.com) Ext JS开发而更改了`Configuration`相关接口以及`Settings`接口，可通过演示程序的`swagger`查看。
