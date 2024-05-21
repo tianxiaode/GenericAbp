@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Volo.Abp;
+using static OpenIddict.Abstractions.OpenIddictConstants;
 
 namespace QuickTemplate.Controllers;
 
@@ -32,6 +33,7 @@ public class ExportController
         }
 
         result.File = "https://localhost:44320/global.js";
+
         return Task.FromResult(result);
     }
 }

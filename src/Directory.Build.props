@@ -24,6 +24,6 @@
     <MicrosoftDataSqliteVersion>8.0.0</MicrosoftDataSqliteVersion>
     <OAuthGitHubVersion>8.0.0</OAuthGitHubVersion>
     <OpenIddictVersion>5.1.0</OpenIddictVersion>
-		
+    <MicrosoftAccount>8.0.5</MicrosoftAccount>
   </PropertyGroup>
 </Project>

@@ -41,6 +41,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tailwindcss", "tailwindcss"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Generic.Abp.Tailwind", "..\..\modules\tailwind\src\Generic.Abp.TailWind\Generic.Abp.Tailwind.csproj", "{92B07B43-A921-4613-97C6-DBB70FE2EA0A}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ExternalAuthentication", "ExternalAuthentication", "{480B02CD-9953-45FA-94E3-DD9AEB2529D0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Generic.Abp.ExternalAuthentication.AspNetCore", "..\..\modules\ExternalAuthentication\src\Generic.Abp.ExternalAuthentication.AspNetCore\Generic.Abp.ExternalAuthentication.AspNetCore.csproj", "{BA02F3CC-3F62-4468-AA95-5E7813799738}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -107,6 +111,10 @@ Global
 		{92B07B43-A921-4613-97C6-DBB70FE2EA0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{92B07B43-A921-4613-97C6-DBB70FE2EA0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{92B07B43-A921-4613-97C6-DBB70FE2EA0A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA02F3CC-3F62-4468-AA95-5E7813799738}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA02F3CC-3F62-4468-AA95-5E7813799738}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA02F3CC-3F62-4468-AA95-5E7813799738}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA02F3CC-3F62-4468-AA95-5E7813799738}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -128,6 +136,8 @@ Global
 		{AA94D832-1CCC-4715-95A9-A483F23A1A5D} = {CA9AC87F-097E-4F15-8393-4BC07735A5B0}
 		{4A50F7F6-9423-4ECA-9621-EB621E2D858A} = {A1791027-70D6-47D0-9285-52C6D205B744}
 		{92B07B43-A921-4613-97C6-DBB70FE2EA0A} = {4A50F7F6-9423-4ECA-9621-EB621E2D858A}
+		{480B02CD-9953-45FA-94E3-DD9AEB2529D0} = {A1791027-70D6-47D0-9285-52C6D205B744}
+		{BA02F3CC-3F62-4468-AA95-5E7813799738} = {480B02CD-9953-45FA-94E3-DD9AEB2529D0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {28315BFD-90E7-4E14-A2EA-F3D23AF4126F}

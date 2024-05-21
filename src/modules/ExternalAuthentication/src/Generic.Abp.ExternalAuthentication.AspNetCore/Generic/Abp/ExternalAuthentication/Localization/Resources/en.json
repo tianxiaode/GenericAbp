@@ -1,0 +1,14 @@
+{
+  "culture": "en",
+  "texts": {
+    "ExternalAuthenticationProvider": "Provider",
+    "ExternalAuthenticationProviders": "Providers",
+    "Permission:ChangePermissions": "Change permissions",
+    "Permission:ExternalAuthenticationProvider": "External Authentication Provider",
+    "ExternalAuthentication.Provider.ManagePermissions": "Manage",
+    "ExternalAuthentication:Provider": "Provider",
+    "ExternalAuthentication:Enabled": "Enabled",
+    "ExternalAuthentication:ReturnUrl": "Return Url",
+    "ExternalAuthentication:ReturnUrlHash": "Return Url Hash"
+  }
+}
