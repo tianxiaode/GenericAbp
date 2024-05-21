@@ -10,10 +10,15 @@ using OpenIddict.Validation.AspNetCore;
 using QuickTemplate.EntityFrameworkCore;
 using QuickTemplate.Localization;
 using QuickTemplate.MultiTenancy;
+using QuickTemplate.Web.AuthenticationProvider;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.Extensions.Options;
+using Serilog;
+using Serilog.Core;
 using Volo.Abp;
 using Volo.Abp.Account;
 using Volo.Abp.AspNetCore.MultiTenancy;
@@ -86,7 +91,7 @@ public class QuickTemplateWebModule : AbpModule
         var configuration = context.Services.GetConfiguration();
 
         ConfigureAuthentication(context);
-        ConfigureExternalProviders(context);
+        ConfigureExternalProviders(context, configuration);
         //ConfigureBundles();
         ConfigureUrls(configuration);
         ConfigureConventionalControllers();
@@ -111,8 +116,16 @@ public class QuickTemplateWebModule : AbpModule
         });
     }
 
-    private void ConfigureExternalProviders(ServiceConfigurationContext context)
+    private void ConfigureExternalProviders(ServiceConfigurationContext context, IConfiguration configuration)
     {
+        //var services = context.Services;
+        //services.Configure<AuthenticationProvider.AuthenticationProvider>(
+        //    configuration.GetSection("AuthenticationProvider"));
+        //var authenticationOptions = services.BuildServiceProvider()
+        //    .GetRequiredService<IOptions<AuthenticationProvider.AuthenticationProvider>>()
+        //    .Value;
+        //Log.Debug($"ÍâÁ´ÅäÖÃ£º{System.Text.Json.JsonSerializer.Serialize(authenticationOptions)}");
+        Log.Debug($"ÍâÁ´ÅäÖÃ£º{configuration["AuthenticationProvider"]}");
         context.Services.AddAuthentication()
             .AddGitHub(options =>
             {
