@@ -1,8 +1,5 @@
-using Generic.Abp.Tailwind;
-using Generic.Abp.Tailwind.Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,15 +13,19 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Microsoft.AspNetCore.Extensions.DependencyInjection;
 using Volo.Abp;
 using Volo.Abp.Account;
 using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.Localization;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
+using Volo.Abp.Identity.AspNetCore;
 using Volo.Abp.Modularity;
+using Volo.Abp.OpenIddict;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.Swashbuckle;
 using Volo.Abp.Timing;
@@ -39,7 +40,9 @@ namespace QuickTemplate.Web;
     typeof(AbpAspNetCoreMultiTenancyModule),
     typeof(QuickTemplateApplicationModule),
     typeof(QuickTemplateEntityFrameworkCoreModule),
-    typeof(GenericAbpTailwindModule),
+    //typeof(GenericAbpTailwindModule),
+    typeof(AbpIdentityAspNetCoreModule),
+    typeof(AbpOpenIddictAspNetCoreModule),
     typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpSwashbuckleModule)
 )]

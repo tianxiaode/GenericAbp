@@ -45,10 +45,11 @@
     <PackageReference Include="Volo.Abp.Autofac" Version="$(AbpVersion)" />
     <PackageReference Include="Volo.Abp.AspNetCore.Serilog" Version="$(AbpVersion)" />
     <PackageReference Include="Volo.Abp.Swashbuckle" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.Identity.AspNetCore" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.OpenIddict.AspNetCore" Version="$(AbpVersion)" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\modules\tailwind\src\Generic.Abp.TailWind\Generic.Abp.Tailwind.csproj" />
     <ProjectReference Include="..\QuickTemplate.Application\QuickTemplate.Application.csproj" />
     <ProjectReference Include="..\QuickTemplate.HttpApi\QuickTemplate.HttpApi.csproj" />
     <ProjectReference Include="..\QuickTemplate.EntityFrameworkCore\QuickTemplate.EntityFrameworkCore.csproj" />
