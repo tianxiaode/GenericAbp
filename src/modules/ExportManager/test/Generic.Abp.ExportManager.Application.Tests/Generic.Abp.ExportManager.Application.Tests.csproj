@@ -1,17 +1,20 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="..\..\common.props" />
+  <Import Project="..\..\..\..\common.props" />
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
-    <RootNamespace>Generic.Abp.ExportManager</RootNamespace>
+    <RootNamespace />
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Generic.Abp.ExportManager.Application\Generic.Abp.ExportManager.Application.csproj" />
     <ProjectReference Include="..\Generic.Abp.ExportManager.Domain.Tests\Generic.Abp.ExportManager.Domain.Tests.csproj" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(TestSdkVersion)" />
   </ItemGroup>
 
 </Project>

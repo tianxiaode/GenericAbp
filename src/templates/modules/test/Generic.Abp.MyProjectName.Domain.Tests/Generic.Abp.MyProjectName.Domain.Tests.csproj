@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <RootNamespace/>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(TestSdkVersion)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Generic.Abp.MyProjectName.Domain\Generic.Abp.MyProjectName.Domain.csproj" />
+    <ProjectReference Include="..\Generic.Abp.MyProjectName.TestBase\Generic.Abp.MyProjectName.TestBase.csproj" />
+  </ItemGroup>
+
+
+</Project>

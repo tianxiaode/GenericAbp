@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\..\..\common.props" />
+  
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <RootNamespace />
+  </PropertyGroup>
+
+  <ItemGroup>
+  	<ProjectReference Include="..\..\..\ddd\src\Generic.Abp.DDD.Domain\Generic.Abp.DDD.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Generic.Abp.OAuthProviderManager.Domain.Shared\Generic.Abp.OAuthProviderManager.Domain.Shared.csproj" />
+  </ItemGroup>
+
+</Project>

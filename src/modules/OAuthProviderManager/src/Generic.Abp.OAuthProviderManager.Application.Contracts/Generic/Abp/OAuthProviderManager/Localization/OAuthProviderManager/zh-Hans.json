@@ -1,0 +1,14 @@
+{
+  "culture": "zh-Hans",
+  "texts": {
+    "OAuthProvider": "OAuth认证提供者",
+    "OAuthProviders": "OAuth认证提供者",
+    "Permission:ChangePermissions": "更改权限",
+    "Permission:OAuthProviderManager": "OAuth认证提供者管理",
+    "OAuthProviderManager.OAuthProviders.ManagePermissions": "管理",
+    "OAuthProvider:Provider": "提供者",
+    "OAuthProvider:Enabled": "开启",
+    "OAuthLogin:ReturnUrl": "跳转地址",
+    "OAuthLogin:ReturnUrlHash": "跳转地址哈希值"
+  }
+}

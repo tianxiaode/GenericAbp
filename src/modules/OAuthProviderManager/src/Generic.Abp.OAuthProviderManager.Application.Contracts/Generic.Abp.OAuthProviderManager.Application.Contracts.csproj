@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+     <RootNamespace />
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\businessexception\src\Generic.Abp.BusinessException\Generic.Abp.BusinessException.csproj" />
+  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Authorization" Version="$(AbpVersion)" />
+		<PackageReference Include="Volo.Abp.Ddd.Application.Contracts" Version="$(AbpVersion)" />
+	</ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Generic\Abp\OAuthProviderManager\Localization\OAuthProviderManager\*.json" />
+    <Content Remove="Generic\Abp\OAuthProviderManager\Localization\OAuthProviderManager\*.json" />
+  </ItemGroup>
+
+</Project>

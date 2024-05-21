@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace />
+  </PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.AspNetCore.Mvc" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.Identity.AspNetCore" Version="$(AbpVersion)" />
+	</ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Generic.Abp.OAuthProviderManager.Application.Contracts\Generic.Abp.OAuthProviderManager.Application.Contracts.csproj" />
+  </ItemGroup>
+
+</Project>
