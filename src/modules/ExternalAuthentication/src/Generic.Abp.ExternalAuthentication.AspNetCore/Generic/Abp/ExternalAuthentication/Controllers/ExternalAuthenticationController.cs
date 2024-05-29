@@ -1,14 +1,22 @@
-﻿using System.Security.Claims;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using Generic.Abp.ExternalAuthentication.Models;
 using Generic.Abp.ExternalAuthentication.Permissions;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using OpenIddict.Abstractions;
+using OpenIddict.Server.AspNetCore;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.Caching;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.AspNetCore;
@@ -26,7 +34,8 @@ public class ExternalAuthenticationController(
     IOptions<IdentityOptions> identityOptions,
     IdentitySecurityLogManager identitySecurityLogManager,
     IdentityUserManager userManager,
-    IdentityDynamicClaimsPrincipalContributorCache identityDynamicClaimsPrincipalContributorCache)
+    IdentityDynamicClaimsPrincipalContributorCache identityDynamicClaimsPrincipalContributorCache,
+    IDistributedCache<ExternalRegisterCacheItem> cache)
     : AbpController
 {
     protected readonly IAuthenticationSchemeProvider SchemeProvider = schemeProvider;
@@ -35,6 +44,8 @@ public class ExternalAuthenticationController(
     protected readonly IOptions<IdentityOptions> IdentityOptions = identityOptions;
     protected readonly IdentitySecurityLogManager IdentitySecurityLogManager = identitySecurityLogManager;
     protected readonly IdentityUserManager UserManager = userManager;
+    protected readonly IDistributedCache<ExternalRegisterCacheItem> Cache = cache;
+
 
     protected readonly IdentityDynamicClaimsPrincipalContributorCache IdentityDynamicClaimsPrincipalContributorCache =
         identityDynamicClaimsPrincipalContributorCache;
@@ -42,14 +53,24 @@ public class ExternalAuthenticationController(
     private const string SettingPrefix = "ExternalAuthenticationProvider.";
 
     [HttpGet]
-    [Route("/external-provider")]
+    [Route("/external-providers")]
     public virtual async Task<ListResultDto<ExternalProvider>> GetListAsync(ExternalProviderGetListInput input)
     {
         var schemes = await SchemeProvider.GetAllSchemesAsync();
         var result = new List<ExternalProvider>();
-        foreach (var scheme in schemes)
+        foreach (var scheme in schemes.Where(x => x.DisplayName != null))
         {
-            var enabledString = await SettingManager.GetOrNullForCurrentTenantAsync($"{SettingPrefix}${scheme.Name}");
+            var enabledString = "";
+            try
+            {
+                Logger.LogDebug($"Get setting for {scheme.Name}");
+                enabledString = await SettingManager.GetOrNullForCurrentTenantAsync($"{SettingPrefix}${scheme.Name}");
+            }
+            catch
+            {
+                // ignored
+            }
+
             var enabled = true;
             if (!enabledString.IsNullOrWhiteSpace())
             {
@@ -71,7 +92,7 @@ public class ExternalAuthenticationController(
 
     [Authorize(ExternalAuthenticationPermissions.ExternalAuthenticationProviders.ManagePermissions)]
     [HttpPost]
-    [Route("/external-provider")]
+    [Route("/external-providers")]
     public virtual async Task<ExternalProvider> UpdateAsync(string provider, ExternalProviderUpdate input)
     {
         var schemes = await SchemeProvider.GetAllSchemesAsync();
@@ -91,13 +112,13 @@ public class ExternalAuthenticationController(
         };
     }
 
-    [HttpPost]
+    [HttpGet]
     [Route("/external-login")]
     public virtual async Task<IActionResult> ExternalLoginAsync(ExternalLogin input)
     {
         var provider = input.Provider;
-        var redirectUrl =
-            Url.RouteUrl("/external-login-callback", values: new { input.ReturnUrl, input.ReturnUrlHash });
+        var redirectUrl = Url.Action("ExternalLoginCallback", "ExternalAuthentication",
+            new { input.ReturnUrl, input.ReturnUrlHash }, protocol: Request.Scheme);
         var properties = SignInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
         properties.Items["scheme"] = provider;
 
@@ -169,8 +190,6 @@ public class ExternalAuthenticationController(
                 // Clear the dynamic claims cache.
                 await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(user.Id, user.TenantId);
             }
-
-            return Redirect(url);
         }
 
         //TODO: Handle other cases for result!
@@ -180,14 +199,16 @@ public class ExternalAuthenticationController(
         if (email.IsNullOrWhiteSpace())
         {
             //重新定向到returnUrl + 注册页面
-            return Redirect(await GetRegisterRedirectUrlAsync(returnUrl, loginInfo.LoginProvider));
+            return await RedirectRegisterUrlAsync(loginInfo.LoginProvider, loginInfo.ProviderKey, returnUrl,
+                returnUrlHash);
         }
 
         user = await UserManager.FindByEmailAsync(email);
         if (user == null)
         {
             //重新定向到returnUrl + 注册页面
-            return Redirect(await GetRegisterRedirectUrlAsync(returnUrl, loginInfo.LoginProvider));
+            return await RedirectRegisterUrlAsync(loginInfo.LoginProvider, loginInfo.ProviderKey, returnUrl,
+                returnUrlHash, email);
         }
 
         if (await UserManager.FindByLoginAsync(loginInfo.LoginProvider, loginInfo.ProviderKey) == null)
@@ -207,27 +228,39 @@ public class ExternalAuthenticationController(
         // Clear the dynamic claims cache.
         await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(user.Id, user.TenantId);
 
-        return await RedirectSafelyAsync(returnUrl, returnUrlHash);
+        // Generate authorization code
+        var principal = await SignInManager.CreateUserPrincipalAsync(user);
+        var properties = new AuthenticationProperties
+        {
+            RedirectUri = returnUrl
+        };
+
+        // 使用 OpenIddict 生成授权码
+        return SignIn(principal, properties, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
+        //var a = SignIn(principal, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
+
+        //// 构建包含授权码的返回 URL
+        //var returnUrlWithCode = QueryHelpers.AddQueryString(returnUrl, "code", a.Principa);
+        //return await RedirectSafelyAsync(returnUrl, returnUrlHash);
     }
 
     [HttpPost]
     [Route("/external-register")]
-    public virtual async Task RegisterAsync(ExternalRegister input)
+    public virtual async Task ExternalRegisterAsync(ExternalRegister input)
     {
-        var externalLoginInfo = await SignInManager.GetExternalLoginInfoAsync();
-        if (externalLoginInfo == null)
+        var providerInfo = await Cache.GetAsync(input.RegisterKey);
+        if (providerInfo == null)
         {
-            Logger.LogWarning("External login info is not available");
-            throw new UserFriendlyException("Cannot proceed because external login info is not available!");
+            Logger.LogWarning("External provider info is not available");
+            throw new UserFriendlyException("Cannot proceed because provider login info is not available!");
         }
 
         if (input.UserName.IsNullOrWhiteSpace())
         {
-            input.UserName = await GetUserNameFromEmail(input.EmailAddress);
+            input.UserName = await GetUserNameFromEmailAsync(input.EmailAddress);
         }
 
-        await RegisterExternalUserAsync(externalLoginInfo, input.UserName, input.Password, input.EmailAddress,
-            input.Provider);
+        await RegisterExternalUserAsync(providerInfo, input.UserName, input.Password, input.EmailAddress);
     }
 
     protected virtual void CheckIdentityErrors(IdentityResult identityResult)
@@ -242,7 +275,7 @@ public class ExternalAuthenticationController(
         //identityResult.CheckErrors(LocalizationManager); //TODO: Get from old Abp
     }
 
-    protected virtual async Task<string> GetUserNameFromEmail(string email)
+    protected virtual async Task<string> GetUserNameFromEmailAsync(string email)
     {
         var userName = email.Split('@')[0];
         var existUser = await UserManager.FindByNameAsync(userName);
@@ -250,18 +283,20 @@ public class ExternalAuthenticationController(
         {
             var randomUserName = userName + RandomHelper.GetRandom(1000, 9999);
             existUser = await UserManager.FindByNameAsync(randomUserName);
-            if (existUser == null)
+            if (existUser != null)
             {
-                userName = randomUserName;
-                break;
+                continue;
             }
+
+            userName = randomUserName;
+            break;
         }
 
         return userName;
     }
 
 
-    protected virtual async Task RegisterExternalUserAsync(ExternalLoginInfo externalLoginInfo, string userName,
+    protected virtual async Task RegisterExternalUserAsync(ExternalRegisterCacheItem providerInfo, string userName,
         string password,
         string emailAddress, string externalLoginAuthSchema)
     {
@@ -275,15 +310,15 @@ public class ExternalAuthenticationController(
 
         var userLoginAlreadyExists = user.Logins.Any(x =>
             x.TenantId == user.TenantId &&
-            x.LoginProvider == externalLoginInfo.LoginProvider &&
-            x.ProviderKey == externalLoginInfo.ProviderKey);
+            x.LoginProvider == providerInfo.Provider &&
+            x.ProviderKey == providerInfo.ProviderKey);
 
         if (!userLoginAlreadyExists)
         {
             (await UserManager.AddLoginAsync(user, new UserLoginInfo(
-                externalLoginInfo.LoginProvider,
-                externalLoginInfo.ProviderKey,
-                externalLoginInfo.ProviderDisplayName
+                providerInfo.Provider,
+                providerInfo.ProviderKey,
+                null
             ))).CheckErrors();
         }
 
@@ -294,14 +329,46 @@ public class ExternalAuthenticationController(
     }
 
 
-    protected virtual async Task<string> GetRegisterRedirectUrlAsync(string returnUrl, string provider)
+    protected virtual async Task<RedirectResult> RedirectRegisterUrlAsync(string provider, string providerKey,
+        string returnUrl,
+        string? returnUrlHash, string? email = null)
     {
-        if (!returnUrl.Contains("?"))
+        var externalRegisterKey = Guid.NewGuid().ToString().Replace("-", string.Empty);
+        ;
+        await Cache.SetAsync(externalRegisterKey, new ExternalRegisterCacheItem(),
+            new DistributedCacheEntryOptions()
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5)
+            });
+        var userName = email != null ? await GetUserNameFromEmailAsync(email) : "";
+        var queryParams = new Dictionary<string, string?>
         {
-            returnUrl += "?";
-        }
+            { "registerKey", externalRegisterKey.ToString() },
+            { "token", await GenerateJwt(externalRegisterKey, email, userName) }
+        };
+        var returnUrlWithParams = QueryHelpers.AddQueryString(returnUrl, queryParams!);
+        return await RedirectSafelyAsync(returnUrlWithParams, returnUrlHash);
+    }
 
-        returnUrl += "register=true";
-        return await Task.FromResult(returnUrl);
+
+    protected virtual Task<string> GenerateJwt(string registerKey, string? email, string? userName)
+    {
+        var claims = new[]
+        {
+            new Claim("email", email ?? ""),
+            new Claim("userName", userName ?? "")
+        };
+
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(registerKey));
+        var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+        var token = new JwtSecurityToken(
+            issuer: "yourIssuer",
+            audience: "yourAudience",
+            claims: claims,
+            expires: DateTime.Now.AddMinutes(30),
+            signingCredentials: credentials);
+
+        return Task.FromResult(new JwtSecurityTokenHandler().WriteToken(token));
     }
 }

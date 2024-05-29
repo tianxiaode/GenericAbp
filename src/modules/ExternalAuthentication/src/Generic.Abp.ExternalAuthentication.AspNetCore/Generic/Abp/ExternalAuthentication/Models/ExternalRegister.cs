@@ -16,9 +16,9 @@ public class ExternalRegister
     [Required]
     public string ReturnUrlHash { get; set; } = string.Empty;
 
-    [DisplayName("ExternalAuthentication:Provider")]
+    [DisplayName("ExternalAuthentication:RegisterKey")]
     [Required]
-    public string Provider { get; set; } = string.Empty;
+    public string RegisterKey { get; set; } = string.Empty;
 
     [Required]
     [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxUserNameLength))]

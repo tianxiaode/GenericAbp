@@ -26,6 +26,7 @@ public class Program
             .MinimumLevel.Override("Microsoft.EntityFrameworkCore", LogEventLevel.Information)
             .MinimumLevel.Override("Microsoft.AspNetCore.Authentication", LogEventLevel.Information)
             .MinimumLevel.Override("OpenIddict", LogEventLevel.Information)
+            .MinimumLevel.Override("AspNet", LogEventLevel.Debug)
             .MinimumLevel.Override("QuickTemplate", LogEventLevel.Debug)
             .Enrich.FromLogContext()
             .WriteTo.Async(c => c.File("Logs/logs.txt", retainedFileCountLimit: 100, fileSizeLimitBytes: 10485760,

@@ -15,7 +15,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using AspNet.Security.OAuth.GitHub;
 using Generic.Abp.ExternalAuthentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.MicrosoftAccount;
+using Microsoft.AspNetCore.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Http;
 using Volo.Abp;
 using Volo.Abp.Account;
 using Volo.Abp.AspNetCore.MultiTenancy;
@@ -25,6 +30,7 @@ using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
+using Volo.Abp.Caching;
 using Volo.Abp.Identity.AspNetCore;
 using Volo.Abp.Modularity;
 using Volo.Abp.OpenIddict;
@@ -43,11 +49,12 @@ namespace QuickTemplate.Web;
     typeof(QuickTemplateApplicationModule),
     typeof(QuickTemplateEntityFrameworkCoreModule),
     typeof(AbpIdentityAspNetCoreModule),
-    typeof(AbpOpenIddictAspNetCoreModule),
+    //typeof(AbpOpenIddictAspNetCoreModule),
     //typeof(GenericAbpTailwindModule),
     typeof(GenericAbpExternalAuthenticationAspNetCoreModule),
     typeof(AbpAspNetCoreSerilogModule),
-    typeof(AbpSwashbuckleModule)
+    typeof(AbpSwashbuckleModule),
+    typeof(AbpCachingModule)
 )]
 public class QuickTemplateWebModule : AbpModule
 {
@@ -76,8 +83,8 @@ public class QuickTemplateWebModule : AbpModule
             {
                 options.AddAudiences("QuickTemplate"); // Replace with your application Name
                 options.UseLocalServer();
-                //options.EnableAuthorizationEntryValidation();
-                //options.EnableTokenEntryValidation();
+                options.EnableAuthorizationEntryValidation();
+                options.EnableTokenEntryValidation();
                 options.UseAspNetCore();
             });
         });
@@ -122,6 +129,11 @@ public class QuickTemplateWebModule : AbpModule
                 options.ClientId = configuration["Authentication:GitHub:ClientId"] ?? "";
                 options.ClientSecret = configuration["Authentication:GitHub:ClientSecret"] ?? "";
             })
+            .AddGitee(options =>
+            {
+                options.ClientId = configuration["Authentication:Gitee:ClientId"] ?? "";
+                options.ClientSecret = configuration["Authentication:Gitee:ClientSecret"] ?? "";
+            })
             .AddMicrosoftAccount(options =>
             {
                 options.ClientId = configuration["Authentication:Microsoft:ClientId"] ?? "";
@@ -137,8 +149,8 @@ public class QuickTemplateWebModule : AbpModule
             options.RedirectAllowedUrls.AddRange(configuration["App:RedirectAllowedUrls"]?.Split(',') ??
                                                  new string[] { });
 
-            options.Applications["Angular"].RootUrl = configuration["App:ClientUrl"];
-            options.Applications["Angular"].Urls[AccountUrlNames.PasswordReset] = "account/reset-password";
+            options.Applications["Angular"].RootUrl = configuration["App:CorsOrigins"];
+            options.Applications["Angular"].Urls[AccountUrlNames.PasswordReset] = "reset-password";
         });
     }
 
