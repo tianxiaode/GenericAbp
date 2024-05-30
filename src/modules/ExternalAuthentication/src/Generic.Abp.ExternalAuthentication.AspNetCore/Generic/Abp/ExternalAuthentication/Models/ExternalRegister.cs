@@ -35,10 +35,4 @@ public class ExternalRegister
     [DisableAuditing]
     [DisplayName("ExternalAuthentication:Password")]
     public string Password { get; set; } = string.Empty;
-
-    [Required]
-    [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxPasswordLength))]
-    [DisableAuditing]
-    [DisplayName("ExternalAuthentication:ConfirmPassword")]
-    public string ConfirmPassword { get; set; } = string.Empty;
 }

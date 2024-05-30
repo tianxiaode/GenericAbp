@@ -6,6 +6,12 @@ namespace Generic.Abp.ExternalAuthentication;
 [CacheName("ExternalRegister")]
 public class ExternalRegisterCacheItem
 {
-    public string Provider { get; set; } = string.Empty;
-    public string ProviderKey { get; set; } = string.Empty;
+    public string Provider { get; set; }
+    public string ProviderKey { get; set; }
+
+    public ExternalRegisterCacheItem(string provider, string providerKey)
+    {
+        Provider = provider;
+        ProviderKey = providerKey;
+    }
 }

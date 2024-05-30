@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Text;
 using Generic.Abp.ExternalAuthentication.Models;
 using Generic.Abp.ExternalAuthentication.Permissions;
+using IdentityModel;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -246,7 +247,7 @@ public class ExternalAuthenticationController(
 
     [HttpPost]
     [Route("/external-register")]
-    public virtual async Task ExternalRegisterAsync(ExternalRegister input)
+    public virtual async Task ExternalRegisterAsync([FromBody] ExternalRegister input)
     {
         var providerInfo = await Cache.GetAsync(input.RegisterKey);
         if (providerInfo == null)
@@ -255,12 +256,22 @@ public class ExternalAuthenticationController(
             throw new UserFriendlyException("Cannot proceed because provider login info is not available!");
         }
 
+        var schemes = await SchemeProvider.GetAllSchemesAsync();
+        var scheme = schemes.FirstOrDefault(m =>
+            string.Equals(m.Name.ToLower(), providerInfo.Provider.ToLower(), StringComparison.CurrentCulture));
+        if (scheme == null)
+        {
+            Logger.LogWarning("External scheme info is not available");
+            throw new UserFriendlyException("Cannot proceed because scheme login info is not available!");
+        }
+
         if (input.UserName.IsNullOrWhiteSpace())
         {
             input.UserName = await GetUserNameFromEmailAsync(input.EmailAddress);
         }
 
-        await RegisterExternalUserAsync(providerInfo, input.UserName, input.Password, input.EmailAddress);
+        await RegisterExternalUserAsync(providerInfo, input.UserName, input.Password, input.EmailAddress,
+            scheme.Name, input.ReturnUrl, input.ReturnUrlHash);
     }
 
     protected virtual void CheckIdentityErrors(IdentityResult identityResult)
@@ -296,9 +307,10 @@ public class ExternalAuthenticationController(
     }
 
 
-    protected virtual async Task RegisterExternalUserAsync(ExternalRegisterCacheItem providerInfo, string userName,
+    protected virtual async Task RegisterExternalUserAsync(ExternalRegisterCacheItem providerInfo,
+        string userName,
         string password,
-        string emailAddress, string externalLoginAuthSchema)
+        string emailAddress, string externalLoginAuthSchema, string returnUrl, string returnUrlHash)
     {
         await IdentityOptions.SetAsync();
 
@@ -322,10 +334,17 @@ public class ExternalAuthenticationController(
             ))).CheckErrors();
         }
 
-        await SignInManager.SignInAsync(user, isPersistent: true, externalLoginAuthSchema);
+        //var signInResult =
+        //    await SignInManager.PasswordSignInAsync(user.UserName, password, isPersistent: true,
+        //        lockoutOnFailure: false);
+        //if (!signInResult.Succeeded)
+        //{
+        //    throw new UserFriendlyException("Cannot proceed because user is not allowed!");
+        //}
+
+        //await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(user.Id, user.TenantId);
 
         // Clear the dynamic claims cache.
-        await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(user.Id, user.TenantId);
     }
 
 
@@ -335,19 +354,21 @@ public class ExternalAuthenticationController(
     {
         var externalRegisterKey = Guid.NewGuid().ToString().Replace("-", string.Empty);
         ;
-        await Cache.SetAsync(externalRegisterKey, new ExternalRegisterCacheItem(),
+        await Cache.SetAsync(externalRegisterKey, new ExternalRegisterCacheItem(provider, providerKey),
             new DistributedCacheEntryOptions()
             {
-                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5)
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10)
             });
         var userName = email != null ? await GetUserNameFromEmailAsync(email) : "";
         var queryParams = new Dictionary<string, string?>
         {
-            { "registerKey", externalRegisterKey.ToString() },
-            { "token", await GenerateJwt(externalRegisterKey, email, userName) }
+            { "registerKey", externalRegisterKey },
+            { "token", await GenerateJwt(externalRegisterKey, email, userName) },
+            { "returnUrlHash", returnUrlHash }
         };
         var returnUrlWithParams = QueryHelpers.AddQueryString(returnUrl, queryParams!);
-        return await RedirectSafelyAsync(returnUrlWithParams, returnUrlHash);
+        return Redirect(returnUrlWithParams);
+        //return await RedirectSafelyAsync(returnUrlWithParams, returnUrlHash);
     }
 
 

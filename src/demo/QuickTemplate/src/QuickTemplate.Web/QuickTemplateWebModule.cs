@@ -31,6 +31,7 @@ using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Caching;
+using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.Identity.AspNetCore;
 using Volo.Abp.Modularity;
 using Volo.Abp.OpenIddict;
@@ -54,7 +55,7 @@ namespace QuickTemplate.Web;
     typeof(GenericAbpExternalAuthenticationAspNetCoreModule),
     typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpSwashbuckleModule),
-    typeof(AbpCachingModule)
+    typeof(AbpCachingStackExchangeRedisModule)
 )]
 public class QuickTemplateWebModule : AbpModule
 {
