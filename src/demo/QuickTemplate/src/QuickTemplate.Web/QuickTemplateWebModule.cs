@@ -1,5 +1,8 @@
+using Generic.Abp.Tailwind;
+using Generic.Abp.Tailwind.Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,32 +12,19 @@ using OpenIddict.Validation.AspNetCore;
 using QuickTemplate.EntityFrameworkCore;
 using QuickTemplate.Localization;
 using QuickTemplate.MultiTenancy;
-using Serilog;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
-using AspNet.Security.OAuth.GitHub;
-using Generic.Abp.ExternalAuthentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.MicrosoftAccount;
-using Microsoft.AspNetCore.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Http;
 using Volo.Abp;
-using Volo.Abp.Account;
 using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.Localization;
-using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
-using Volo.Abp.Caching;
-using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.Identity.AspNetCore;
 using Volo.Abp.Modularity;
-using Volo.Abp.OpenIddict;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.Swashbuckle;
 using Volo.Abp.Timing;
@@ -51,11 +41,9 @@ namespace QuickTemplate.Web;
     typeof(QuickTemplateEntityFrameworkCoreModule),
     typeof(AbpIdentityAspNetCoreModule),
     //typeof(AbpOpenIddictAspNetCoreModule),
-    //typeof(GenericAbpTailwindModule),
-    typeof(GenericAbpExternalAuthenticationAspNetCoreModule),
+    typeof(GenericAbpTailwindModule),
     typeof(AbpAspNetCoreSerilogModule),
-    typeof(AbpSwashbuckleModule),
-    typeof(AbpCachingStackExchangeRedisModule)
+    typeof(AbpSwashbuckleModule)
 )]
 public class QuickTemplateWebModule : AbpModule
 {
@@ -151,7 +139,7 @@ public class QuickTemplateWebModule : AbpModule
                                                  new string[] { });
 
             options.Applications["Angular"].RootUrl = configuration["App:CorsOrigins"];
-            options.Applications["Angular"].Urls[AccountUrlNames.PasswordReset] = "reset-password";
+            //options.Applications["Angular"].Urls[AccountUrlNames.PasswordReset] = "reset-password";
         });
     }
 

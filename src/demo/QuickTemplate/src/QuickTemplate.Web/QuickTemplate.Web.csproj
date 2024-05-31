@@ -42,17 +42,14 @@
     <PackageReference Include="AspNet.Security.OAuth.Gitee" Version="$(OAuthGitHubVersion)" />
     <PackageReference Include="Serilog.AspNetCore" Version="$(SerilogAspNetCoreVersion)" />
     <PackageReference Include="Serilog.Sinks.Async" Version="$(SerilogSinksAsyncVersion)" />
-    <PackageReference Include="Volo.Abp.AspNetCore.MultiTenancy" Version="$(AbpVersion)" />
     <PackageReference Include="Volo.Abp.Autofac" Version="$(AbpVersion)" />
     <PackageReference Include="Volo.Abp.AspNetCore.Serilog" Version="$(AbpVersion)" />
     <PackageReference Include="Volo.Abp.Swashbuckle" Version="$(AbpVersion)" />
-    <PackageReference Include="Volo.Abp.Identity.AspNetCore" Version="$(AbpVersion)" />
-    <PackageReference Include="Volo.Abp.Caching.StackExchangeRedis" Version="$(AbpVersion)" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="$(MicrosoftAccount)" />
   </ItemGroup>
   
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\modules\ExternalAuthentication\src\Generic.Abp.ExternalAuthentication.AspNetCore\Generic.Abp.ExternalAuthentication.AspNetCore.csproj" />
+    <ProjectReference Include="..\..\..\..\modules\tailwind\src\Generic.Abp.TailWind\Generic.Abp.Tailwind.csproj" />
     <ProjectReference Include="..\QuickTemplate.Application\QuickTemplate.Application.csproj" />
     <ProjectReference Include="..\QuickTemplate.HttpApi\QuickTemplate.HttpApi.csproj" />
     <ProjectReference Include="..\QuickTemplate.EntityFrameworkCore\QuickTemplate.EntityFrameworkCore.csproj" />
