@@ -1,0 +1,40 @@
+{
+    "Home":"Welcome",
+    "Components":{
+
+    },
+    "Account":{
+        "Invalid username or password!":"Invalid username or password",
+        "LoginSuccess":"Login Success, redirecting..."
+    },
+    "Http":{
+        "Retrying": "Retrying, you have {retryCount} attempts left, retrying every {retryInterval} seconds. If you don't want to retry, you can cancel the request.",
+        "RetryFailed": "Retry Failed",
+        "UnknownError": "Unknown Error",
+        "Network Error": "Network Error",
+        "400": "Bad Request",
+        "401": "Unauthorized",
+        "403": "Forbidden",
+        "404": "Not Found",
+        "405": "Method Not Allowed",
+        "408": "Request Timeout",
+        "413": "Request Entity Too Large",
+        "414": "Request-URI Too Long",
+        "415": "Unsupported Media Type",
+        "416": "Requested Range Not Satisfiable",
+        "417": "Expectation Failed",
+        "500": "Internal Server Error",
+        "501": "Not Implemented",
+        "502": "Bad Gateway",
+        "503": "Service Unavailable",
+        "504": "Gateway Timeout",
+        "505": "HTTP Version Not Supported"
+    },
+    "Message":{
+        "DeleteConfirm": "Are you sure to delete this item?",
+        "DeleteSuccess": "Delete Success",
+        "DeleteFailed": "Delete Failed",
+        "SaveSuccess": "Save Success",
+        "SaveFailed": "Save Failed"
+    }
+}

@@ -1,0 +1,66 @@
+
+// :root {
+//   --ep-color-primary: red;
+// }
+
+body {
+  font-family: Inter, system-ui, Avenir, "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB",
+    "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+}
+
+a {
+  color: var(--ep-color-primary);
+}
+
+code {
+  border-radius: 2px;
+  padding: 2px 4px;
+  background-color: var(--ep-color-primary-light-9);
+  color: var(--ep-color-primary);
+}
+
+.spacer{
+    flex: 1;
+}
+.primary{
+    color: #409EFF;
+}
+.success{
+    color: #67C23A !important;
+}
+.warning{
+    color: #E6A23C;
+}
+.danger,.highlight{
+    color: #F56C6C;
+}
+.info{
+    color: #909399;
+}
+
+.bg-primary{
+    background-color: #409EFF;
+}
+.bg-success{
+    background-color: #67C23A;
+}
+.bg-warning{
+    background-color: #E6A23C;
+}
+.bg-danger{
+    background-color: #F56C6C;
+}
+.bg-info{
+    background-color: #909399;
+}
+
+.el-dialog__footer{
+    display: flex;
+}
+
+.none-border{
+    border: none;
+}

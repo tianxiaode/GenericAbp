@@ -1,8 +1,7 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System.Threading.Tasks;
 using Volo.Abp;
-using static OpenIddict.Abstractions.OpenIddictConstants;
 
 namespace QuickTemplate.Controllers;
 
@@ -35,5 +34,17 @@ public class ExportController
         result.File = "https://localhost:44320/global.js";
 
         return Task.FromResult(result);
+    }
+
+    [HttpPost]
+    [Route("test")]
+    public virtual Task<TestDto> TestAsync([FromBody] TestDto input)
+    {
+        return Task.FromResult(input);
+    }
+
+    public class TestDto
+    {
+        public string[] Names { get; set; }
     }
 }

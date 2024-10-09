@@ -63,11 +63,11 @@ public class QuickTemplateWebModule : AbpModule
 
         PreConfigure<OpenIddictBuilder>(builder =>
         {
-            //builder.AddServer(m =>
-            //{
-            //    m.SetAccessTokenLifetime(TimeSpan.FromDays(3));
-            //    m.SetRefreshTokenLifetime(TimeSpan.FromDays(4));
-            //});
+            builder.AddServer(m =>
+            {
+                m.SetAccessTokenLifetime(TimeSpan.FromDays(3));
+                m.SetRefreshTokenLifetime(TimeSpan.FromDays(4));
+            });
             builder.AddValidation(options =>
             {
                 options.AddAudiences("QuickTemplate"); // Replace with your application Name
