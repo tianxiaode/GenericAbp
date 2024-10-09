@@ -7,6 +7,7 @@ export const useLocalizationStore = defineStore('localization', {
     }),
     actions: {
         setLocale(locale: string) {
+            console.log('setLocale', locale);
             this.locale = locale; // 更新当前语言
             i18n.setLanguage(locale); // 更新 i18n 实例
             globalConfig.setLanguage(locale); // 更新全局配置

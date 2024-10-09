@@ -65,9 +65,11 @@ export class GlobalConfig {
 
     async loadConfig() {
         try {
+            
+            const configStore = useConfigStore();
+            configStore.refreshReadyState(false, false)
             const response = await http.get<GlobalConfigType>(this.configUrl, this.configParams);
             this.config = response;
-            const configStore = useConfigStore();
             configStore.refreshReadyState(!!response, response?.currentUser.isAuthenticated || false)
         } catch (error) {
             logger.error(this, `Error loading config: `, error);
@@ -79,11 +81,6 @@ export class GlobalConfig {
     }
 
     async setLanguage(language: string) {
-        if (!this.i18n) {
-            throw new Error(
-                "globalConfig.i18n is undefined. Please call globalConfig.init() first."
-            );
-        }
         BaseHttp.tokenStorage.setItem(BaseHttp.languageKey, language);
         await this.loadConfig();
     }
@@ -94,6 +91,10 @@ export class GlobalConfig {
             this.config?.localization?.currentCulture?.cultureName ||
             navigator.language
         );
+    }
+
+    get currentCulture() {
+        return this.config?.localization?.currentCulture;
     }
 
     get currentUser() {
@@ -182,13 +183,6 @@ export class GlobalConfig {
         result['default'] = permissions[prefix.substring(0, prefix.length - 1)];
 
         return result;
-    }
-
-    normalizedLanguage(language?: string) {
-        language = language || this.currentLanguage;
-        if (language === "zh-Hans") language = "zh-CN";
-        if (language === "zh-Hant") language = "zh-TW";
-        return language;
     }
 
     private initEnv() {

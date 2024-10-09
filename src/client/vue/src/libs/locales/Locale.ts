@@ -1,5 +1,5 @@
 // src/libs/locales/Locale.ts
-import { capitalize, deepMerge, isEmpty, logger } from "../utils";
+import { capitalize, deepMerge, isEmpty, logger, normalizedLanguage } from "../utils";
 import { http } from "../http"; // 确保引入 http 工具
 
 export interface LocaleConfig extends Record<string, any> {
@@ -33,6 +33,7 @@ export class Locale {
 
     async setLanguage(language: string): Promise<void> {
         if (language === this.language && this.isLoaded) return;
+        language = normalizedLanguage(language);
         if (!this.languagePacks[language]) {
             throw new Error(`Language pack for ${language} not found.`);
         }

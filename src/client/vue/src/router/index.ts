@@ -1,17 +1,14 @@
 import { createRouter, createWebHistory } from "vue-router";
-import Admin from "../views/Admin.vue"; // 主页组件
-import Login from "../views/Login.vue"; // 登录组件
 
 const routes = [
-    { path: "/", component: import("../views/Home.vue") },
-    { path: "/admin", component: Admin ,
+    { path: "/", component: ()=>import("../views/Home.vue") },
+    { path: "/admin", component: ()=>import("../views/Admin.vue"),
         children: [
             { path: "/roles", component: ()=>import("../components/roles/RoleView.vue") },
             { path: "/users", component: ()=>import("../components/users/UserView.vue") },
 
         ]        
     },
-    { path: "/login", component: Login },
     { path: "/:pathMatch(.*)*", redirect: "/" }
 ];
 

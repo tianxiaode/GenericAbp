@@ -133,3 +133,9 @@ export function textToHtml(text: string): string {
     if (isEmpty(text)) return "";
     return "<p>" + text.replace(/\n/g, "</p><p>") + "</p>";
 }
+
+export function normalizedLanguage(language: string) {
+    if (language === "zh-Hans") language = "zh-CN";
+    if (language === "zh-Hant") language = "zh-TW";
+    return language;
+}

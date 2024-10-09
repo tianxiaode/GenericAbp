@@ -1,6 +1,7 @@
 <template>
-Home
+    <Header></Header>
 </template>
 
 <script setup lang="ts">
+import Header from "../components/layouts/page/Header.vue";
 </script>

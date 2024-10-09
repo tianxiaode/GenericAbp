@@ -1,6 +1,3 @@
-export type LocalizationType = {
-    values: Record<string, any>;
-}
 
 export type LanguageType = {
     cultureName: string,
@@ -94,15 +91,19 @@ export type ObjectExtensionsType = {
     enums: Record<string, any>;
 }
 
+export type LocalizationType = {
+    defaultResourceName: string;
+    currentCulture: CurrentCultureType;
+    languages: LanguageType[];
+    values: Record<string, any>;
+    languagesMap:Record<string, any>;
+    languageFilesMap:Record<string, any>;
+    resources: Record<string, any>;
+}
 
 
 export type GlobalConfigType = {
     localization: LocalizationType;
-    languages: LanguageType[];
-    currentCulture: CurrentCultureType;
-    defaultResourceName: string;
-    languagesMap:Record<string, any>;
-    languageFilesMap:Record<string, any>;
     auth:AuthType;
     setting:SettingType;
     currentUser: CurrentUserType;

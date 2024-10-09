@@ -38,7 +38,7 @@ globalConfig.init({
 i18n.init({
     languagePacks: {
         en: [import('./libs/locales/en.json')],
-        zh: [import('./libs/locales/zh-CN.json')],
+        'zh-CN': [import('./libs/locales/zh-CN.json')],
     },
     defaultLanguage: 'en',
     remoteTextUrl: '/api/abp/application-localization',
