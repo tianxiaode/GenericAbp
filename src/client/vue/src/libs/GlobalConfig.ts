@@ -3,6 +3,8 @@ import { http, BaseHttp, HttpOptions } from "./http";
 import { camelCase, capitalize, logger, uncapitalize } from "./utils";
 import { useConfigStore } from "../store/useConfigStore";
 import { GlobalConfigType } from "./GlobalConfigType";
+import { i18n } from "./locales";
+import { toast } from "./Toast";
 
 export interface GlobalConfigOptions {
     configUrl?: string;
@@ -29,7 +31,7 @@ export class GlobalConfig {
         this.userManager = new UserManager({
             authority: this.oidcAuthority,
             client_id: this.oidcClientId,
-            redirect_uri: this.redirectUri,
+            redirect_uri: this.baseUrl + "callback",
             post_logout_redirect_uri: this.postLogoutRedirectUri,
             response_type: this.oidcResponseType,
             scope: this.oidcScope,
@@ -41,8 +43,14 @@ export class GlobalConfig {
         // 监听用户加载事件
         this.userManager.events.addUserLoaded((user) => {
             // 如果用户信息发生变化，可能是静默续签成功
+            logger.info(this,'[addUserLoaded]', `User loaded: `, user);
             if (user && user.access_token) {
                 BaseHttp.setToken(user.access_token);
+                this.loadConfig();
+                i18n.loadLanguage().then(() => {
+                    this.checkNeedSetPassword();
+                });
+                
             }
         });
     }
@@ -221,6 +229,14 @@ export class GlobalConfig {
 
     private toBoolean(value: string): boolean {
         return value === "True";
+    }
+
+    private async checkNeedSetPassword(): Promise<void> {
+        const result = await http.get("/need-set-password") as any;
+        if(result.need){
+            toast.error(i18n.get('SetPasswordTip', 'Message'));
+        }
+            toast.error(i18n.get('Message.SetPasswordTip'));
     }
 }
 

@@ -7,7 +7,7 @@ import "~/styles/index.scss";
 import "uno.css";
 
 import App from "./App.vue";
-import { logger, Repository,  globalConfig, i18n } from "./libs";
+import { logger, Repository,  globalConfig, i18n, BaseHttp, normalizedLanguage } from "./libs";
 import router from "./router"; // 引入 router.ts
 import { toast } from "./libs/Toast";
 import zhCn from "element-plus/es/locale/lang/zh-cn";
@@ -35,12 +35,14 @@ globalConfig.init({
     },
 });
 
+const defaultLanguage = normalizedLanguage(BaseHttp.tokenStorage.getItem("language") || 'en');
+
 i18n.init({
     languagePacks: {
         en: [import('./libs/locales/en.json')],
         'zh-CN': [import('./libs/locales/zh-CN.json')],
     },
-    defaultLanguage: 'en',
+    defaultLanguage: defaultLanguage,
     remoteTextUrl: '/api/abp/application-localization',
     remoteLanguageParam: 'CultureName',
 });

@@ -59,7 +59,7 @@ const submitForm = async () => {
         const t = inject('t') as Function;
         try {
             await Account.login(form.username, form.password);
-            message.value = t('LoginSuccess', 'Account');
+            message.value = 'LoginSuccess';
             alertType.value = 'success';
             let redirectPath = sessionStorage.getItem('redirectPath') || '/';
             if (redirectPath === '/login') {
@@ -68,7 +68,7 @@ const submitForm = async () => {
             router.push(redirectPath);
 
         } catch (error: any) {
-            message.value = t(error.message, 'Account');
+            message.value = error.message;
             alertType.value = 'error';
 
         }

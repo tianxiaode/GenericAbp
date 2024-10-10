@@ -76,6 +76,7 @@ public class LoginModel(
 
     public virtual async Task<IActionResult> OnGetAsync()
     {
+        Logger.LogDebug($"获取到登录页面，ReturnUrl={ReturnUrl}, ReturnUrlHash={ReturnUrlHash}");
         LoginInput = new LoginInputModel();
 
         ExternalProviders = await GetExternalProviders();

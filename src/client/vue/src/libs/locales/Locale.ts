@@ -29,6 +29,7 @@ export class Locale {
             this.remoteTextUrl = config.remoteTextUrl;
             this.remoteLanguageParam = config.remoteLanguageParam || 'CultureName';
         }
+        this.loadLanguage();
     }
 
     async setLanguage(language: string): Promise<void> {
@@ -38,7 +39,10 @@ export class Locale {
             throw new Error(`Language pack for ${language} not found.`);
         }
         this.language = language;
+        this.loadLanguage();
+    }
 
+    async loadLanguage(): Promise<void> {
         // 加载语言包和远程文本
         Promise.all([
             this.loadLanguagePacks(),
@@ -51,8 +55,6 @@ export class Locale {
             throw new Error("Failed to load language");
             
         });
-        // await this.loadLanguagePacks();
-        // await this.loadRemoteText(); // 自己加载远程文本
     }
 
     get(key: string, resourceName?: string, entity?: string, params: any = undefined): string {
@@ -101,6 +103,7 @@ export class Locale {
             logger.error(this, `No language packs found for ${this.language} or default language.`);
             return;
         }
+        console.log('languagePacks', languagePacks)
         try {
             const packs = await Promise.all(languagePacks);
             for (const pack of packs) {
@@ -128,6 +131,7 @@ export class Locale {
     getTranslationByPath(key: string): string {
         const keys = key.split('.');
         let current: any = this.translation;
+        console.log(current);
         for (let k of keys) {
             k = capitalize(k);
             if (k in current) {

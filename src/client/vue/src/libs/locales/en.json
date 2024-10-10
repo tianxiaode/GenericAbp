@@ -35,6 +35,7 @@
         "DeleteSuccess": "Delete Success",
         "DeleteFailed": "Delete Failed",
         "SaveSuccess": "Save Success",
-        "SaveFailed": "Save Failed"
+        "SaveFailed": "Save Failed",
+        "SetPasswordTip": "No password set, please set a password first."
     }
 }

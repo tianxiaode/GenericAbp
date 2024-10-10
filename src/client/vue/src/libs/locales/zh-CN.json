@@ -35,7 +35,8 @@
         "DeleteSuccess": "删除成功",
         "DeleteFailed": "删除失败",
         "SaveSuccess": "保存成功",
-        "SaveFailed": "保存失败"
+        "SaveFailed": "保存失败",
+        "SetPasswordTip": "您尚未设置密码，请设置密码。"
     }
 
 }

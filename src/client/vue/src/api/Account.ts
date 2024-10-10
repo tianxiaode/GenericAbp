@@ -12,8 +12,8 @@ export class Account {
             if(!user){
                 throw new Error("Invalid username or password!");                
             }
-            BaseHttp.setToken(user.access_token);
-            await globalConfig.loadConfig();            
+            // BaseHttp.setToken(user.access_token);
+            // await globalConfig.loadConfig();            
         } catch (error:any) {
             throw error;                        
         }

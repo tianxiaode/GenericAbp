@@ -24,7 +24,6 @@ const currentLanguage = ref<LanguageType>();
 const refresh = () => {
     languages.value = globalConfig.getLanguages();
     currentLanguage.value = globalConfig.currentCulture;
-    console.log('refresh', languages.value, currentLanguage.value);
 }
 
 const {} = useConfigStoreWatcher(refresh);
