@@ -42,24 +42,15 @@ namespace QuickTemplate.Web;
     typeof(AbpAspNetCoreMultiTenancyModule),
     typeof(QuickTemplateApplicationModule),
     typeof(QuickTemplateEntityFrameworkCoreModule),
-    typeof(AbpAspNetCoreSerilogModule),
-    typeof(AbpSwashbuckleModule)
+    typeof(AbpSwashbuckleModule),
+    typeof(AbpAspNetCoreSerilogModule)
 )]
 public class QuickTemplateWebModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
-        context.Services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
-        {
-            options.AddAssemblyResource(
-                typeof(QuickTemplateResource),
-                typeof(QuickTemplateDomainModule).Assembly,
-                typeof(QuickTemplateDomainSharedModule).Assembly,
-                typeof(QuickTemplateApplicationModule).Assembly,
-                typeof(QuickTemplateApplicationContractsModule).Assembly,
-                typeof(QuickTemplateWebModule).Assembly
-            );
-        });
+        var hostingEnvironment = context.Services.GetHostingEnvironment();
+        var configuration = context.Services.GetConfiguration();
 
         PreConfigure<OpenIddictBuilder>(builder =>
         {
@@ -77,12 +68,42 @@ public class QuickTemplateWebModule : AbpModule
                 options.UseAspNetCore();
             });
         });
+
+        context.Services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
+        {
+            options.AddAssemblyResource(
+                typeof(QuickTemplateResource),
+                typeof(QuickTemplateDomainModule).Assembly,
+                typeof(QuickTemplateDomainSharedModule).Assembly,
+                typeof(QuickTemplateApplicationModule).Assembly,
+                typeof(QuickTemplateApplicationContractsModule).Assembly,
+                typeof(QuickTemplateWebModule).Assembly
+            );
+        });
+
+        if (hostingEnvironment.IsDevelopment())
+        {
+            return;
+        }
+
+        PreConfigure<AbpOpenIddictAspNetCoreOptions>(options =>
+        {
+            options.AddDevelopmentEncryptionAndSigningCertificate = false;
+        });
+
+        PreConfigure<OpenIddictServerBuilder>(serverBuilder =>
+        {
+            serverBuilder.AddProductionEncryptionAndSigningCertificate("openiddict.pfx",
+                "dd0c34ad-293e-4c9c-865e-3334a4b16b0c");
+            serverBuilder.SetIssuer(new Uri(configuration["AuthServer:Authority"]!));
+        });
     }
 
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         var hostingEnvironment = context.Services.GetHostingEnvironment();
         var configuration = context.Services.GetConfiguration();
+
 
         ConfigureAuthentication(context);
         ConfigureExternalProviders(context, configuration);
@@ -247,9 +268,10 @@ public class QuickTemplateWebModule : AbpModule
             app.UseErrorPage();
         }
 
-        app.UseCorrelationId();
+        //app.UseCorrelationId();
         app.UseStaticFiles();
         app.UseRouting();
+        app.UseAbpSecurityHeaders();
         app.UseCors();
 
         app.UseAuthentication();

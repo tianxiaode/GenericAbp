@@ -1,12 +1,10 @@
 ﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
 using System;
-using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,36 +14,30 @@ public class Program
 {
     public async static Task<int> Main(string[] args)
     {
-        Log.Logger = new LoggerConfiguration()
+        try
+        {
+            Log.Information("Starting QuickTemplate.Web.");
+            var builder = WebApplication.CreateBuilder(args);
+            builder.Host
+                .AddAppSettingsSecretsJson()
+                .UseAutofac()
+                .UseSerilog((context, services, loggerConfiguration) =>
+                {
+                    loggerConfiguration
 #if DEBUG
-            .MinimumLevel.Debug()
+                        .MinimumLevel.Debug()
 #else
             .MinimumLevel.Information()
 #endif
-            .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
-            .MinimumLevel.Override("Microsoft.EntityFrameworkCore", LogEventLevel.Information)
-            .MinimumLevel.Override("Microsoft.AspNetCore.Authentication", LogEventLevel.Information)
-            .MinimumLevel.Override("OpenIddict", LogEventLevel.Information)
-            .MinimumLevel.Override("AspNet", LogEventLevel.Debug)
-            .MinimumLevel.Override("QuickTemplate", LogEventLevel.Debug)
-            .Enrich.FromLogContext()
-            .WriteTo.Async(c => c.File("Logs/logs.txt", retainedFileCountLimit: 100, fileSizeLimitBytes: 10485760,
-                encoding: Encoding.UTF8,
-                rollOnFileSizeLimit: true))
-#if DEBUG
-            .WriteTo.Async(c => c.Console())
-#endif
-            .CreateLogger();
-
-        try
-        {
-            Log.Information("Starting web host.");
-            var builder = WebApplication.CreateBuilder(args);
-            builder.Host
-                .UseContentRoot(Directory.GetCurrentDirectory())
-                .AddAppSettingsSecretsJson()
-                .UseAutofac()
-                .UseSerilog();
+                        .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+                        .MinimumLevel.Override("Microsoft.EntityFrameworkCore", LogEventLevel.Information)
+                        .Enrich.FromLogContext()
+                        .WriteTo.Async(c => c.File("Logs/logs.txt", retainedFileCountLimit: 100,
+                            fileSizeLimitBytes: 10485760,
+                            encoding: Encoding.UTF8,
+                            rollOnFileSizeLimit: true))
+                        .WriteTo.Async(c => c.Console());
+                });
             await builder.AddApplicationAsync<QuickTemplateWebModule>();
             var app = builder.Build();
             await app.InitializeApplicationAsync();
@@ -54,12 +46,17 @@ public class Program
         }
         catch (Exception ex)
         {
+            if (ex is HostAbortedException)
+            {
+                throw;
+            }
+
             Log.Fatal(ex, "Host terminated unexpectedly!");
             return 1;
         }
         finally
         {
-            await Log.CloseAndFlushAsync();
+            Log.CloseAndFlush();
         }
     }
 }

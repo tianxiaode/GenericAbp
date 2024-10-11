@@ -5,7 +5,8 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <RootNamespace>QuickTemplate.Web</RootNamespace>
-    <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
+    <Nullable>enable</Nullable>
+    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
@@ -16,36 +17,27 @@
 
   <ItemGroup>
     <Compile Remove="Logs\**" />
-    <Compile Remove="wwwroot\libs\metro\**" />
-    <Compile Remove="wwwroot\libs\mif\**" />
-    <Compile Remove="wwwroot\libs\w2ui\**" />
     <Content Remove="Logs\**" />
-    <Content Remove="wwwroot\libs\metro\**" />
-    <Content Remove="wwwroot\libs\mif\**" />
-    <Content Remove="wwwroot\libs\w2ui\**" />
     <EmbeddedResource Remove="Logs\**" />
-    <EmbeddedResource Remove="wwwroot\libs\metro\**" />
-    <EmbeddedResource Remove="wwwroot\libs\mif\**" />
-    <EmbeddedResource Remove="wwwroot\libs\w2ui\**" />
     <None Remove="Logs\**" />
-    <None Remove="wwwroot\libs\metro\**" />
-    <None Remove="wwwroot\libs\mif\**" />
-    <None Remove="wwwroot\libs\w2ui\**" />
   </ItemGroup>
 
-  <ItemGroup>
-    <_ContentIncludedByDefault Remove="wwwroot\images\bg.jpg" />
-  </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AspNet.Security.OAuth.GitHub" Version="$(OAuthGitHubVersion)" />
-    <PackageReference Include="AspNet.Security.OAuth.Gitee" Version="$(OAuthGitHubVersion)" />
+    <PackageReference Include="AspNetCore.HealthChecks.UI" Version="$(AspNetCoreHealthChecksVersion)" />
+    <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="$(AspNetCoreHealthChecksClientVersion)" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="$(MicrosoftEntityFrameworkCoreInMemoryVersion)" />
+    <PackageReference Include="AspNetCore.HealthChecks.UI.InMemory.Storage" Version="$(AspNetCoreHealthChecksUIInMemoryStorage)" />
     <PackageReference Include="Serilog.AspNetCore" Version="$(SerilogAspNetCoreVersion)" />
     <PackageReference Include="Serilog.Sinks.Async" Version="$(SerilogSinksAsyncVersion)" />
+    <PackageReference Include="AspNet.Security.OAuth.GitHub" Version="$(OAuthGitHubVersion)" />
+    <PackageReference Include="AspNet.Security.OAuth.Gitee" Version="$(OAuthGitHubVersion)" />
+    <PackageReference Include="Volo.Abp.AspNetCore.MultiTenancy" Version="$(AbpVersion)" />
+    
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="$(MicrosoftAccount)" />
     <PackageReference Include="Volo.Abp.Autofac" Version="$(AbpVersion)" />
     <PackageReference Include="Volo.Abp.AspNetCore.Serilog" Version="$(AbpVersion)" />
     <PackageReference Include="Volo.Abp.Swashbuckle" Version="$(AbpVersion)" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="$(MicrosoftAccount)" />
     <PackageReference Include="Volo.Abp.OpenIddict.AspNetCore" Version="$(AbpVersion)" />
     <PackageReference Include="Volo.Abp.Identity.AspNetCore" Version="$(AbpVersion)" />
   </ItemGroup>
@@ -56,30 +48,5 @@
     <ProjectReference Include="..\QuickTemplate.EntityFrameworkCore\QuickTemplate.EntityFrameworkCore.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Include="wwwroot\libs\abp\core\abp.js" />
-    <None Include="wwwroot\libs\abp\metro\debug.log" />
-    <None Include="wwwroot\libs\abp\metro\metro-alert.js" />
-    <None Include="wwwroot\libs\abp\metro\metro-crud-toolbar.js" />
-    <None Include="wwwroot\libs\abp\metro\metro-extensions.js" />
-    <None Include="wwwroot\libs\abp\metro\metro-modal.js" />
-    <None Include="wwwroot\libs\abp\metro\modal-manager.js" />
-    <None Include="wwwroot\libs\abp\utils\abp-utils.umd.js" />
-    <None Include="wwwroot\libs\abp\utils\abp-utils.umd.js.map" />
-    <None Include="wwwroot\libs\abp\utils\abp-utils.umd.min.js" />
-    <None Include="wwwroot\libs\abp\utils\abp-utils.umd.min.js.map" />
-    <None Include="wwwroot\libs\fontawesome\webfonts\fa-brands-400.woff2" />
-    <None Include="wwwroot\libs\fontawesome\webfonts\fa-regular-400.woff2" />
-    <None Include="wwwroot\libs\fontawesome\webfonts\fa-solid-900.woff2" />
-    <None Include="wwwroot\libs\fontawesome\webfonts\fa-v4compatibility.woff2" />
-    <None Include="wwwroot\libs\lodash\lodash.min.js" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Update="wwwroot\images\logo.png">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-  </ItemGroup>
 
 </Project>

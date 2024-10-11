@@ -38,7 +38,7 @@ public class QuickTemplateDomainModule : AbpModule
         {
             //options.Languages.Add(new LanguageInfo("ar", "ar", "العربية", "ae"));
             //options.Languages.Add(new LanguageInfo("cs", "cs", "Čeština"));
-            options.Languages.Add(new LanguageInfo("en", "en", "English", "gb"));
+            options.Languages.Add(new LanguageInfo("en", "en", "English"));
             //options.Languages.Add(new LanguageInfo("en-GB", "en-GB", "English (UK)"));
             //options.Languages.Add(new LanguageInfo("hu", "hu", "Magyar"));
             //options.Languages.Add(new LanguageInfo("fi", "fi", "Finnish", "fi"));

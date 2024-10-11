@@ -20,8 +20,8 @@ namespace QuickTemplate.EntityFrameworkCore;
 [ConnectionStringName("Default")]
 public class QuickTemplateDbContext :
     AbpDbContext<QuickTemplateDbContext>,
-    IIdentityDbContext,
-    ITenantManagementDbContext
+    ITenantManagementDbContext,
+    IIdentityDbContext
 {
     /* Add DbSet properties for your Aggregate Roots / Entities here. */
 
@@ -45,7 +45,8 @@ public class QuickTemplateDbContext :
     public DbSet<OrganizationUnit> OrganizationUnits { get; set; }
     public DbSet<IdentitySecurityLog> SecurityLogs { get; set; }
     public DbSet<IdentityLinkUser> LinkUsers { get; set; }
-    public DbSet<IdentityUserDelegation> UserDelegations { get; }
+    public DbSet<IdentityUserDelegation> UserDelegations { get; set; }
+    public DbSet<IdentitySession> Sessions { get; set; }
 
     // Tenant Management
     public DbSet<Tenant> Tenants { get; set; }
