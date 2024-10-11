@@ -1,5 +1,7 @@
+using Generic.Abp.ExternalAuthentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,21 +15,19 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Microsoft.AspNetCore.Extensions.DependencyInjection;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.Localization;
-using Volo.Abp.AspNetCore.Mvc.UI;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
-using Volo.Abp.Identity.AspNetCore;
 using Volo.Abp.Modularity;
 using Volo.Abp.OpenIddict;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.Swashbuckle;
+using Volo.Abp.Threading;
 using Volo.Abp.Timing;
 using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.VirtualFileSystem;
@@ -36,8 +36,7 @@ namespace QuickTemplate.Web;
 
 [DependsOn(
     typeof(QuickTemplateHttpApiModule),
-    typeof(AbpOpenIddictAspNetCoreModule),
-    typeof(AbpIdentityAspNetCoreModule),
+    typeof(GenericAbpExternalAuthenticationAspNetCoreModule),
     typeof(AbpAutofacModule),
     typeof(AbpAspNetCoreMultiTenancyModule),
     typeof(QuickTemplateApplicationModule),
@@ -47,6 +46,8 @@ namespace QuickTemplate.Web;
 )]
 public class QuickTemplateWebModule : AbpModule
 {
+    private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
+
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
         var hostingEnvironment = context.Services.GetHostingEnvironment();
@@ -146,8 +147,10 @@ public class QuickTemplateWebModule : AbpModule
             })
             .AddMicrosoftAccount(options =>
             {
-                options.ClientId = configuration["Authentication:Microsoft:ClientId"] ?? "";
-                options.ClientSecret = configuration["Authentication:Microsoft:ClientSecret"] ?? "";
+                options.ClientId =
+                    configuration["Authentication:Microsoft:ClientId"] ?? "";
+                options.ClientSecret =
+                    configuration["Authentication:Microsoft:ClientSecret"] ?? "";
             });
     }
 
@@ -305,5 +308,11 @@ public class QuickTemplateWebModule : AbpModule
         app.UseAuditing();
         app.UseAbpSerilogEnrichers();
         app.UseConfiguredEndpoints();
+
+        OneTimeRunner.Run(() =>
+        {
+            var hostedService = context.ServiceProvider.GetService<ExternalProviderUpdaterService>();
+            hostedService?.StartAsync(default).GetAwaiter().GetResult();
+        });
     }
 }

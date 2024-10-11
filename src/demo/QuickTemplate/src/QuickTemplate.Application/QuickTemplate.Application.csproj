@@ -7,6 +7,7 @@
     <RootNamespace>QuickTemplate</RootNamespace>
   </PropertyGroup>
 
+
   <ItemGroup>
     <ProjectReference Include="..\QuickTemplate.Domain\QuickTemplate.Domain.csproj" />
     <ProjectReference Include="..\QuickTemplate.Application.Contracts\QuickTemplate.Application.Contracts.csproj" />

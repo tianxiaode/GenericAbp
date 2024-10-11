@@ -29,5 +29,6 @@
     <OAuthGitHubVersion>8.2.0</OAuthGitHubVersion>
     <OpenIddictVersion>5.8.0</OpenIddictVersion>
     <MicrosoftAccount>8.0.10</MicrosoftAccount>
+    <MicrosoftAspNetCoreDataProtectionVersion>8.0.10</MicrosoftAspNetCoreDataProtectionVersion>
   </PropertyGroup>
 </Project>

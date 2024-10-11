@@ -9,6 +9,11 @@
     "ExternalAuthentication:Provider": "Provider",
     "ExternalAuthentication:Enabled": "Enabled",
     "ExternalAuthentication:ReturnUrl": "Return Url",
-    "ExternalAuthentication:ReturnUrlHash": "Return Url Hash"
+    "ExternalAuthentication:ReturnUrlHash": "Return Url Hash",
+    "GitHub": "GitHub",
+    "Gitee": "Gitee",
+    "MicrosoftAccount": "Microsoft Account",
+    "NewUserPrefix": "Prefix for created external users",
+    "NewUserEmailSuffix": "Email suffix for created external users"
   }
 }

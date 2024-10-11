@@ -7,10 +7,6 @@
     <RootNamespace>QuickTemplate.Web</RootNamespace>
     <Nullable>enable</Nullable>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
-    <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
-    <MvcRazorExcludeRefAssembliesFromPublish>false</MvcRazorExcludeRefAssembliesFromPublish>
     <PreserveCompilationReferences>true</PreserveCompilationReferences>
     <UserSecretsId>QuickTemplate-4681b4fd-151f-4221-84a4-929d86723e4c</UserSecretsId>
   </PropertyGroup>
@@ -22,6 +18,8 @@
     <None Remove="Logs\**" />
   </ItemGroup>
 
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'QuickTemplate.Web' " />
+
 
   <ItemGroup>
     <PackageReference Include="AspNetCore.HealthChecks.UI" Version="$(AspNetCoreHealthChecksVersion)" />
@@ -30,11 +28,7 @@
     <PackageReference Include="AspNetCore.HealthChecks.UI.InMemory.Storage" Version="$(AspNetCoreHealthChecksUIInMemoryStorage)" />
     <PackageReference Include="Serilog.AspNetCore" Version="$(SerilogAspNetCoreVersion)" />
     <PackageReference Include="Serilog.Sinks.Async" Version="$(SerilogSinksAsyncVersion)" />
-    <PackageReference Include="AspNet.Security.OAuth.GitHub" Version="$(OAuthGitHubVersion)" />
-    <PackageReference Include="AspNet.Security.OAuth.Gitee" Version="$(OAuthGitHubVersion)" />
     <PackageReference Include="Volo.Abp.AspNetCore.MultiTenancy" Version="$(AbpVersion)" />
-    
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="$(MicrosoftAccount)" />
     <PackageReference Include="Volo.Abp.Autofac" Version="$(AbpVersion)" />
     <PackageReference Include="Volo.Abp.AspNetCore.Serilog" Version="$(AbpVersion)" />
     <PackageReference Include="Volo.Abp.Swashbuckle" Version="$(AbpVersion)" />
@@ -43,9 +37,14 @@
   </ItemGroup>
   
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\modules\ExternalAuthentication\src\Generic.Abp.ExternalAuthentication.AspNetCore\Generic.Abp.ExternalAuthentication.AspNetCore.csproj" />
     <ProjectReference Include="..\QuickTemplate.Application\QuickTemplate.Application.csproj" />
     <ProjectReference Include="..\QuickTemplate.HttpApi\QuickTemplate.HttpApi.csproj" />
     <ProjectReference Include="..\QuickTemplate.EntityFrameworkCore\QuickTemplate.EntityFrameworkCore.csproj" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Folder Include="wwwroot\libs\" />
   </ItemGroup>
 
 

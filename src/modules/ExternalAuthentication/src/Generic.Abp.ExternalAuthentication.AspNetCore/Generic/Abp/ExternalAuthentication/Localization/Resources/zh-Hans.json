@@ -9,9 +9,10 @@
     "ExternalAuthentication:Provider": "提供者",
     "ExternalAuthentication:Enabled": "开启",
     "ExternalAuthentication:ReturnUrl": "跳转地址",
-    "ExternalAuthentication:UserName": "用户名",
-    "ExternalAuthentication:EmailAddress": "邮件地址",
-    "ExternalAuthentication:Password": "密码",
-    "ExternalAuthentication:ConfirmPassword": "确认密码"
+    "GitHub": "GitHub",
+    "Gitee": "Gitee",
+    "MicrosoftAccount": "微软账号",
+    "NewUserPrefix": "新建第三方认证用户时的前缀",
+    "NewUserEmailSuffix": "新建第三方认证用户时的邮箱后缀"
   }
 }

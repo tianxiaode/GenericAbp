@@ -1,4 +1,4 @@
-﻿namespace QuickTemplate.Web.Controllers;
+﻿namespace Generic.Abp.ExternalAuthentication;
 
 public class AbpAccountOptions
 {
