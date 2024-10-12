@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 
 const routes = [
-    { path: "/", component: ()=>import("../views/Page.vue") ,
+    { path: "/", component: ()=>import("~/components/layouts/PageLayout.vue") ,
         children: [
             { path: "", component: ()=>import("../views/Home.vue") },
             { path: "about", component: ()=>import("../views/About.vue") },
@@ -15,7 +15,7 @@ const routes = [
 
         ]        
     },
-    { path:'/callback', component: ()=>import('../views/ExternalLoginCallback.vue')},
+    { path:'/signin-oidc', component: ()=>import('../views/SigninOidc.vue')},
     { path: "/:pathMatch(.*)*", redirect: "/" }
 ];
 

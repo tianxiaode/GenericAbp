@@ -7,10 +7,10 @@ import "~/styles/index.scss";
 import "uno.css";
 
 import App from "./App.vue";
-import { logger, Repository,  globalConfig, i18n, BaseHttp, normalizedLanguage } from "./libs";
+import { logger, Repository, envConfig,  appConfig, i18n, BaseHttp, normalizedLanguage, account } from "./libs";
 import router from "./router"; // 引入 router.ts
 import { toast } from "./libs/Toast";
-import zhCn from "element-plus/es/locale/lang/zh-cn";
+import { LocalStorage } from "./libs/LocalStoreage";
 
 logger.setLevel(process.env.NODE_ENV === "development" ? "debug" : "info");
 
@@ -20,36 +20,56 @@ const app = createApp(App);
 const pinia = createPinia();
 app.use(pinia);
 
-
-
-globalConfig.init({
-    httpOptions: {
-        errorMessageHandler(error: any) {
-            logger.debug("http error", error.status, error.message);
-            const t = i18n.get.bind(i18n);
-            if (error.status === 200) {
-            } else {
+// 初始化 http
+BaseHttp.init({
+    ...envConfig.defaultHttpConfig,
+    errorMessageHandler(error: any) {
+        logger.debug("http error", error.status, error.message);
+        const t = i18n.get.bind(i18n);
+        switch (error.status) {
+            case 200:
+                break;
+            case 401: 
+                // 未登录
+                break;        
+            default:
                 toast.error(t(error.message, "Http"));
-            }
-        },
-    },
+                break;
+        }
+    }
 });
 
-const defaultLanguage = normalizedLanguage(BaseHttp.tokenStorage.getItem("language") || 'en');
+// 初始化 i18n
+const defaultLanguage = normalizedLanguage(LocalStorage.getLanguage());
 
 i18n.init({
     languagePacks: {
-        en: [import('./libs/locales/en.json')],
-        'zh-CN': [import('./libs/locales/zh-CN.json')],
+        en: [import('./libs/locales/en.json'), import('~/locales/en.json')],
+        'zh-CN': [import('./libs/locales/zh-CN.json'), import('~/locales/zh-CN.json')],
     },
     defaultLanguage: defaultLanguage,
     remoteTextUrl: '/api/abp/application-localization',
     remoteLanguageParam: 'CultureName',
 });
 
+// 初始化 appConfig
+appConfig.setLanguage(defaultLanguage);
+
+/// 初始化账户
+account.init({
+    authority: envConfig.oidcAuthority,
+    client_id: envConfig.oidcClientId,
+    redirect_uri:envConfig.baseUrl + "/oidc-callback",
+    response_type: envConfig.oidcResponseType,
+    scope: envConfig.oidcScope,
+    automaticSilentRenew: true,
+    loadUserInfo: false
+});
+
+// 初始化仓库
 Repository.initGlobalConfig({
     apiPrefix: "/api",
-    pageSizes: globalConfig.defaultPageSizes.split(",").map(Number),
+    pageSizes: envConfig.defaultPageSizes,
     pageSizeParamName: "MaxResultCount",
     deleteConfirmHandler: async (message: string): Promise<boolean> => {
         try {

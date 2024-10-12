@@ -1,6 +1,5 @@
-import { inject } from "vue";
-import { GlobalConfig } from "../GlobalConfig";
 import { isEmpty } from "./String";
+import { appConfig } from "../AppConfig";
 
 
 export const isGranted = (
@@ -8,8 +7,7 @@ export const isGranted = (
     entity: string,
     permission: string = ''
 ) => {
-    const globalConfig = inject('globalConfig') as GlobalConfig;
-    const permissions = globalConfig.getPermissions(resourceName, entity);
+    const permissions = appConfig.getPermissions(resourceName, entity);
     if(isEmpty(permission)) return permissions['default'] || false;
     return permissions[permission] || false;
 };

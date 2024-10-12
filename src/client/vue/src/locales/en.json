@@ -1,0 +1,143 @@
+{
+    "Company": "Quick Template",
+    "AppName": "快速模板",
+    "DatetimeFormat":"MM/dd/yyyy HH:mm:ss",
+    "DateFormat": "MM/dd/yyyy",
+    "TimeFormat": "HH:mm:ss",
+    "Tenant": {
+        "GivenTenantIsNotExist": "Given tenant doesn't exist: {0}",
+        "GivenTenantIsNotAvailable": "Given tenant isn't available: {0}",
+        "Tenant": "Tenant",
+        "Switch": "switch",
+        "Name": "Name",
+        "SwitchTenantHint": "Leave the name field blank to switch to the host side.",
+        "SwitchTenant": "Switch tenant",
+        "NotSelected": "Not selected"
+    },
+    "Nav": {
+        "Home": "Home",
+        "Examples": "Examples",
+        "Github": "GitHub",
+        "Docs": "Docs",
+        "Login": "Login",
+        "Desktop": "Desktop App Demo",
+        "Mobile": "Mobile App Demo",
+        "Swagger": "Swagger UI",
+        "About": "About Us",
+        "OpenSourceLicenseWith": "Open Source Licenses With",
+        "Zh-Hans": "Chinese (Simplified)",
+        "En": "English",
+        "Zh-Hant": "Chinese (Traditional)",
+        "Logout": "Logout",
+        "Admin": "Admin",
+        "Profile": "Profile"
+    },
+    "Pages": {
+        "Home": {
+            "quickTemplateDescription": "Quick Templates provide an out-of-the-box development framework for the rapid development of modern web applications by combining the respective advantages of ABP and Ext JS with the necessary encapsulation. Through this framework, you can learn both ABP and Ext JS knowledge. The quick templates also offer another option to write all the pages in Svelte, yes, including the admin interface.",
+            "getStarted": "Get Started",
+            "sourceCode": "Source Code"
+        },
+        "About": {
+            "nickname": "Nickname",
+            "description": "Quick Template is an open-source project maintained by the Admiral that demonstrates how to use frameworks such as ABP, ExtJS, and Svelte for rapid development.",
+            "aboutMe": "Senior web technology expert, with more than 20 years of work experience, has been committed to the research of web development frameworks.",
+            "blog": "Blog",
+            "portfolios": "Portfolios"
+        },
+        "404": {
+            "notFound": "Page Not Found"
+        },
+        "Login": {
+            "userNameAndEmailAndPhone": "Username/Email/Phone",
+            "userNameAndEmail": "Username/Email",
+            "password": "Password",
+            "rememberMe": "Remember Me",
+            "forgotPassword": "Forgot Password?",
+            "login": "Login",
+            "newUser": "Are you a new user?",
+            "register": "Register",
+            "Invalid username or password!": "Invalid username or password!",
+            "loggingIn": "Logging in...",
+            "loginSuccess": "Login Success",
+            "loginWithThird": "Log in with a third-party account",
+            "logInUsingYourProviderAccount": "Log in using your {0} account"
+        },
+        "forgotPassword": {
+            "forgotPassword": "Forgot Password",
+            "SendPasswordResetLink_Information": "A password reset link will be sent to your email to reset your password. If you don't get an email within a few minutes, please retry.",
+            "email": "Email",
+            "send": "Send",
+            "backToLogin": "Back To Login",
+            "sending": "Sending...",
+            "resend": "Resend after {0} seconds"
+        },
+        "register": {
+            "register": "Register",
+            "username": "Username",
+            "email": "Email",
+            "phone": "Phone",
+            "password": "Password",
+            "confirmPassword": "Confirm Password",
+            "alreadyRegistered": "Already registered?",
+            "login": "Please login",
+            "registerSuccess": "Registration Success, please check your email to activate your account.",
+            "submitting": "Submitting..."
+        },
+        "profile": {
+            "profile": "Profile",
+            "username": "Username",
+            "email": "Email",
+            "changePassword": "Change Password",
+            "currentPassword": "Current Password",
+            "newPassword": "New Password",
+            "confirmNewPassword": "Confirm New Password",
+            "save": "Save"
+        }
+    },
+    "validation":{
+        "equalTo": "'{0}' and '{1}' do not match.",
+        "required": "This field is required.",
+        "number": "The field must be a number.",
+        "date": "The field must be a date.",
+        "minDate": "The field must be on or after {0}.",
+        "maxDate": "The field must be on or before {0}.",
+        "invalidDate": "The field is not a valid date.",
+        "integer": "The field must between {0} and {1}.",
+        "min": "The field must be greater than or equal to {0}." ,
+        "max": "The field must be less than or equal to {0}.",
+        "minLength": "The field must be a string or array type with a minimum length of {0}.",
+        "maxLength": "The field must be a string or array type with a maximum length of {0}.",
+        "length": "The field must be a string or array type with a length of {0}.",
+        "regex": "The field format is invalid.",
+        "email": "The field must be a valid email address.",
+        "requireDigit": "The field must contain at least one digit.",
+        "requireLowercase": "The field must contain at least one lowercase letter.",
+        "requireUppercase": "The field must contain at least one uppercase letter.",
+        "requireNonAlphanumeric": "The field must contain at least one non-alphanumeric character.",
+        "url": "The field must be a valid URL."
+    },
+    "api":{
+        "saveSuccess": "Save Success!",
+        "saveFailed": "Save Failed!",
+        "deleteSuccess": "Delete Success!",
+        "deleteFailed": "Delete Failed!",
+        "operationFailed": "Operation Failed!",
+        "operationSuccess": "Operation Success!",
+        "confirmDelete": "Are you sure you want to delete this item?",
+        "hasDirtyData": "You have unsaved changes. Are you sure you want to leave this page?"
+    
+    },
+    "notify":{
+        "defaultInfoTitle": "Info",
+        "defaultSuccessTitle": "Success",
+        "defaultWarningTitle": "Warning",
+        "defaultErrorTitle": "Error",
+        "defaultConfirmTitle": "Confirm"
+    },
+    "AbpIdentity":{
+        "EditUser":"Edit User",
+        "EditRole":"Edit Role",
+        "ConfirmPassword":"Confirm Password"
+    }
+}

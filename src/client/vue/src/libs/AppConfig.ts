@@ -1,84 +1,39 @@
-import { UserManager } from "oidc-client-ts";
-import { http, BaseHttp, HttpOptions } from "./http";
-import { camelCase, capitalize, logger, uncapitalize } from "./utils";
-import { useConfigStore } from "../store/useConfigStore";
-import { GlobalConfigType } from "./GlobalConfigType";
+import { http, BaseHttp } from "./http";
+import { capitalize, logger, uncapitalize } from "./utils";
+import { useConfigStore } from "~/store";
+import { AppConfigType } from "./AppConfigType";
 import { i18n } from "./locales";
 import { toast } from "./Toast";
 
-export interface GlobalConfigOptions {
+export interface AppConfigOptions {
     configUrl?: string;
     configParams?: Record<string, any>;
-    httpOptions?: HttpOptions;
 }
 
-export class GlobalConfig {
-    [key: string]: any;
+export class AppConfig {
+    $className: string = "AppConfig";
     private configUrl: string = "/api/abp/application-configuration";
     private configParams: Record<string, any> = {
         includeLocalizationResources: false,
     };
     private config: Record<string, any> = {};
-    $className: string = "GlobalConfig";
-    userManager: UserManager | undefined = undefined;
 
-    constructor() {
-        this.initEnv();
-        this.initUserManager();
-    }
-
-    initUserManager() {
-        this.userManager = new UserManager({
-            authority: this.oidcAuthority,
-            client_id: this.oidcClientId,
-            redirect_uri: this.baseUrl + "callback",
-            post_logout_redirect_uri: this.postLogoutRedirectUri,
-            response_type: this.oidcResponseType,
-            scope: this.oidcScope,
-            silent_redirect_uri: this.silentRedirectUri,
-            automaticSilentRenew: true,
-            loadUserInfo: false,
-        });
-
-        // 监听用户加载事件
-        this.userManager.events.addUserLoaded((user) => {
-            // 如果用户信息发生变化，可能是静默续签成功
-            logger.info(this,'[addUserLoaded]', `User loaded: `, user);
-            if (user && user.access_token) {
-                BaseHttp.setToken(user.access_token);
-                this.loadConfig();
-                i18n.loadLanguage().then(() => {
-                    this.checkNeedSetPassword();
-                });
-                
-            }
-        });
-    }
-
-    initHttp(httpOptions?: HttpOptions) {
-        const options = {
-           ...this.getDefaultHttpOptions(),
-           ...httpOptions,
-        };
-        BaseHttp.init(options);
-    }
-
-    async init(options: GlobalConfigOptions) {
-        this.initHttp(options.httpOptions);
-        if (options.configUrl) this.configUrl = options.configUrl;
-        if (options.configParams) this.configParams = options.configParams;
-
-        this.loadConfig();
+    constructor(configUrl?: string, configParams?: Record<string, any>) {
+        if (configUrl) this.configUrl = configUrl;
+        if (configParams) this.configParams = configParams;
     }
 
     async loadConfig() {
         try {
             
             const configStore = useConfigStore();
-            configStore.refreshReadyState(false, false)
-            const response = await http.get<GlobalConfigType>(this.configUrl, this.configParams);
+            configStore.refreshState(false, false)
+            const response = await http.get<AppConfigType>(this.configUrl, this.configParams);
             this.config = response;
-            configStore.refreshReadyState(!!response, response?.currentUser.isAuthenticated || false)
+            if(this.currentUser.isAuthenticated){
+                this.checkNeedSetPassword();
+            }
+            configStore.refreshState(!!response, response?.currentUser.isAuthenticated || false)
         } catch (error) {
             logger.error(this, `Error loading config: `, error);
         }
@@ -88,14 +43,15 @@ export class GlobalConfig {
         return this.config?.localization?.languages || [];
     }
 
-    async setLanguage(language: string) {
-        BaseHttp.tokenStorage.setItem(BaseHttp.languageKey, language);
-        await this.loadConfig();
+    setLanguage(language: string) {
+        if(this.currentLanguage === language){
+            this.loadConfig();
+        }
     }
 
     get currentLanguage() {
         return (
-            localStorage.getItem(BaseHttp.languageKey) ||
+            localStorage.getItem(BaseHttp.languageName) ||
             this.config?.localization?.currentCulture?.cultureName ||
             navigator.language
         );
@@ -111,14 +67,6 @@ export class GlobalConfig {
 
     get currentTenant() {
         return this.config?.currentTenant;
-    }
-
-    get pageSizes() {
-        return this.defaultPageSizes.split(",").map(Number);
-    }
-
-    get pageSize() {
-        return this.pageSizes[0];
     }
 
     get passwordComplexitySetting() {
@@ -193,27 +141,6 @@ export class GlobalConfig {
         return result;
     }
 
-    private initEnv() {
-        Object.entries(process.env).forEach(([key, value]) => {
-            if (key.startsWith("VITE_")) {
-                const camelKey = camelCase(key.replace("VITE_", ""));
-                this[camelKey] = value;
-            }
-        });
-    }
-
-    private getDefaultHttpOptions(): HttpOptions {
-        return {
-            baseUrl: this.apiUrl,
-            tokenStorage: localStorage,
-            tokenStorageKey: this.tokenStorageKey,
-            languageKey: this.languageKey,
-            authHeaderName: this.authHeader,
-            xsrfCookieName: this.xsfrCookieName,
-            xsrfHeaderName: this.xsfrHeaderName,
-        };
-    }
-
     private assignPasswordComplexitySettings(
         settings: Record<string, string>,
         result: Record<string, any>,
@@ -240,6 +167,6 @@ export class GlobalConfig {
     }
 }
 
-export const globalConfig = new GlobalConfig();
+export const appConfig = new AppConfig();
 
 

@@ -19,8 +19,9 @@
 |*|
 \*/
 
-export const cookie = {
-    getItem: function (name: string) {
+
+export class Cookie {
+    static getItem(name: string) {
         return (
             decodeURIComponent(
                 document.cookie.replace(
@@ -36,9 +37,9 @@ export const cookie = {
                 )
             ) || null
         );
-    },
+    }
 
-    setItem: function (
+    static setItem(
         name: string,
         value: any,
         expires?: number | string | Date,
@@ -75,9 +76,9 @@ export const cookie = {
             (path ? "; path=" + path : "") +
             (secure ? "; secure" : "");
         return true;
-    },
+    }
 
-    removeItem: function (name: string, path?: string, domain?: string) {
+    static  removeItem(name: string, path?: string, domain?: string) {
         if (!name || !this.hasItem(name)) {
             return false;
         }
@@ -87,15 +88,17 @@ export const cookie = {
             (domain ? "; domain=" + domain : "") +
             (path ? "; path=" + path : "");
         return true;
-    },
-    hasItem: function (name: string) {
+    }
+    static hasItem(name: string) {
         return new RegExp(
             "(?:^|;\\s*)" +
                 encodeURIComponent(name).replace(/[-.+*]/g, "\\$&") +
                 "\\s*\\="
         ).test(document.cookie);
-    },
-    keys: /* optional method: you can safely remove it! */ function () {
+    }
+
+    /* optional method: you can safely remove it! */
+    static keys() {
         var aKeys = document.cookie
             .replace(
                 /((?:^|\s*;)[^\=]+)(?=;|$)|^\s*|\s*(?:\=[^;]*)?(?:\1|$)/g,
@@ -106,5 +109,29 @@ export const cookie = {
             aKeys[nIdx] = decodeURIComponent(aKeys[nIdx]);
         }
         return aKeys;
-    },
+    }
+    static clear(){
+        var cookies = document.cookie.split("; ");
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i];
+            var eqPos = cookie.indexOf("=");
+            var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+            document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+        }
+    }
+
+    static getAll(){
+        var cookies = {} as { [key: string]: string };
+        var pairs = document.cookie.split("; ");
+        for (var i = 0; i < pairs.length; i++) {
+            var pair = pairs[i].split("=");
+            var key = decodeURIComponent(pair[0]) as string;
+            cookies[key] = decodeURIComponent(pair[1]);
+        }
+        return cookies;
+    }
+
+    static key(){
+        return this.keys()[0];
+    }
 };

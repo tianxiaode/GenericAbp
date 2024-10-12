@@ -5,6 +5,7 @@
         menu
         <div class="flex-1"></div>
         <LanguageButton />
+        <UserButton />
     </div>
 </template>
 
@@ -12,6 +13,7 @@
 <script setup lang="ts">
 import LanguageButton from "../../buttons/LanguageButton.vue";
 import logo from "../../../assets/logo.png";
+import UserButton from "../../../components/buttons/UserButton.vue";
 
 
 </script>

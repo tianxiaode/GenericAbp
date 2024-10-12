@@ -13,7 +13,7 @@ export const useConfigStore = defineStore('config', {
         setAuthentication(status: boolean) {
             this.isAuthenticated = status; // 更新用户的认证状态
         },
-        refreshReadyState(isReady: boolean, isAuthenticated: boolean) {
+        refreshState(isReady: boolean, isAuthenticated: boolean) {
             // 配置已就绪，只需检查 response 是否存在
             this.setReadyState(isReady);
             

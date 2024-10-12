@@ -102,7 +102,7 @@ export type LocalizationType = {
 }
 
 
-export type GlobalConfigType = {
+export type AppConfigType = {
     localization: LocalizationType;
     auth:AuthType;
     setting:SettingType;

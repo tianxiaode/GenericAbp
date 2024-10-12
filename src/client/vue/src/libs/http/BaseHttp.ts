@@ -1,21 +1,22 @@
+import { LocalStorage } from "../LocalStoreage";
 import { logger } from "../utils";
 import { HttpDeferred } from "./HttpDeferred";
 import { HttpError } from "./HttpError";
 
 export interface HttpOptions {
     baseUrl?: string;
-    tokenStorageKey?: string;
-    tokenStorage?: any;
+    tokenStorageName?: string;
     authHeaderName?: string;
     authHeaderGenerator?: (token: string) => string; // 添加自定义授权头部生成函数
     isNestResponse?: boolean;
-    responseDataKey?: string;
-    loginHandler?: any;
-    languageKey?: string;
+    responseDataName?: string;
+    languageName?: string;
     xsrfCookieName?: string;
     xsrfHeaderName?: string;
+    timeout?: number;
     errorMessageHandler?: (error: HttpError) => void;
     customErrorHandler?: (deferred: HttpDeferred<any>, options: HttpRequestOptions, request: XMLHttpRequest) => void ;
+    createHeaders?: (options: HttpRequestOptions) => { [key: string]: string };
 }
 
 export interface HttpRequestOptions {
@@ -35,20 +36,20 @@ export interface HttpRequestOptions {
 
 export class BaseHttp {
     static baseUrl: string = '';
-    static tokenStorageKey: string = 'token';
+    static tokenStorageName: string = 'token';
     static tokenStorage: any = localStorage;
     static authHeaderName: string = 'Authorization';
     static authHeaderGenerator?: (token: string) => string; // 可选的自定义授权头部生成函数
     static isNestResponse: boolean = false;
-    static responseDataKey: string = 'data';
+    static responseDataName: string = 'items';
     static errorMessageHandler: ((error: HttpError) => void) | null = null;
     static customErrorHandler: ((deferred: HttpDeferred<any>, options: HttpRequestOptions, request: XMLHttpRequest) => void)  | null = null;
-    static languageKey: string = 'language';
+    static languageName: string = 'language';
     static xsrfValue: string = '';
     static xsrfHeaderName: string = 'X-XSRF-TOKEN';
-    static loginHandler: any = null;
     static initialized = false;
     static timeout: number = 30000;
+    static createHeaders: ((options: HttpRequestOptions) => { [key: string]: string }) | null = null;
 
     static init(options: HttpOptions) {
         Object.assign(BaseHttp, options);
@@ -66,14 +67,14 @@ export class BaseHttp {
         return url;
     }
 
-    public createHeaders(options?: HttpRequestOptions): { [key: string]: string } {
+    public defaultCreateHeaders(options?: HttpRequestOptions): { [key: string]: string } {
         options = options || {};
-        const me = BaseHttp;
-        const token = me.getToken();
+        const me = BaseHttp;        
+        const token = LocalStorage.getToken();
 
         const headers: { [key: string]: string } = {
             ...options.headers,
-            'Accept-Language': localStorage.getItem(me.languageKey) || navigator.language,
+            'Accept-Language': LocalStorage.getLanguage(),
             'Content-Type': options.data instanceof FormData ? 'multipart/form-data' : 'application/json',
         };
 
@@ -88,25 +89,7 @@ export class BaseHttp {
         return headers;
     }
 
-    static getToken(): string | null {
-        try {
-            return BaseHttp.tokenStorage?.getItem(BaseHttp.tokenStorageKey) || '';
-        } catch (error) {
-            logger.error('Error getting token:', error);
-            return null;
-        }
-    }
-
-    static setToken(token: string) {
-        try {
-            BaseHttp.tokenStorage?.setItem(BaseHttp.tokenStorageKey, token);
-        } catch (error) {
-            logger.error('Error setting token:', error);
-        }
-    }
-
     destroy() {
-        BaseHttp.tokenStorage = null;
         BaseHttp.errorMessageHandler = () => {};
         BaseHttp.customErrorHandler = () => {};
     }

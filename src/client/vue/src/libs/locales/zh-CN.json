@@ -1,10 +1,6 @@
 {
-    "Home":"欢迎",
-    "Components":{
-
-    },
     "Account":{
-        "Invalid username or password!":"用户名或密码错误",
+        "InvalidUsernameOrPassword":"用户名或密码错误",
         "LoginSuccess":"登录成功，正在跳转..."
     },
     "Http":{

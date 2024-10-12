@@ -1,6 +1,7 @@
 // src/libs/locales/Locale.ts
 import { capitalize, deepMerge, isEmpty, logger, normalizedLanguage } from "../utils";
 import { http } from "../http"; // 确保引入 http 工具
+import { useLocalizationStore } from "../../store/useLocalizationStore";
 
 export interface LocaleConfig extends Record<string, any> {
     languagePacks: {
@@ -44,12 +45,15 @@ export class Locale {
 
     async loadLanguage(): Promise<void> {
         // 加载语言包和远程文本
-        Promise.all([
+        const localeStore = useLocalizationStore();
+        localeStore.setReadyState(false);
+            Promise.all([
             this.loadLanguagePacks(),
             this.loadRemoteText(),
         ]).then(() => {
             Promise.resolve();
             this.isLoaded = true;
+            localeStore.setReadyState(true)
         }).catch((error: any) => {
             logger.error(this, 'Failed to load language', error);
             throw new Error("Failed to load language");
@@ -103,14 +107,12 @@ export class Locale {
             logger.error(this, `No language packs found for ${this.language} or default language.`);
             return;
         }
-        console.log('languagePacks', languagePacks)
         try {
             const packs = await Promise.all(languagePacks);
             for (const pack of packs) {
                 const json = pack.default || pack;
                 this.merge(json);
             }
-            this.isLoaded = true;
         } catch (error) {
             logger.error(this, 'Failed to load language packs', error);
         }
@@ -131,7 +133,6 @@ export class Locale {
     getTranslationByPath(key: string): string {
         const keys = key.split('.');
         let current: any = this.translation;
-        console.log(current);
         for (let k of keys) {
             k = capitalize(k);
             if (k in current) {

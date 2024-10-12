@@ -8,4 +8,5 @@ export * from './Object';
 export * from './String';
 export * from './Util';
 export * from './Validator';
+export * from './AccessControl';
 

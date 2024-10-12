@@ -1,4 +1,4 @@
-import { http } from "../libs";
+import { appConfig, http } from ".";
 
 export interface PermissionGroupItemInterface {
     name: String;
@@ -20,7 +20,7 @@ export interface PermissionGroupInterface {
     displayName: String;
     displayNameKey: String;
     displayNameResource: String;
-    permissions: PermissionGroupItemInterface[]
+    permissions: PermissionGroupItemInterface[];
 }
 
 export interface PermissionInterface {
@@ -33,7 +33,7 @@ export interface PermissionUpdateInterface {
     isGranted: Boolean;
 }
 
- class Permission {
+class Permission {
     $className: string = "Permission";
 
     static async get(
@@ -46,7 +46,7 @@ export interface PermissionUpdateInterface {
                 providerKey,
             });
         } catch (error) {
-            throw new Error("Failed to get permission");            
+            throw new Error("Failed to get permission");
         }
     }
 
@@ -54,15 +54,23 @@ export interface PermissionUpdateInterface {
         providerName: string,
         providerKey: string,
         permissions: PermissionUpdateInterface[]
-        ): Promise<void> {
+    ): Promise<void> {
         try {
-            await http.put(`/api/permission-management/permissions/?providerName=${providerName}&providerKey=${providerKey}`, {
-                permissions,
-            });
+            await http.put(
+                `/api/permission-management/permissions/?providerName=${providerName}&providerKey=${providerKey}`,
+                {
+                    permissions,
+                }
+            );
         } catch (error) {
             throw new Error("Failed to update permission");
         }
     }
+
+    static get getAll() {
+        return appConfig.getAllPermissions();
+    }
+
 }
 
-export const permissionApi = Permission;
+export const permission = Permission;

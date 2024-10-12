@@ -1,13 +1,10 @@
 <template>
-        <el-dropdown trigger="hover" size="large" role="navigation">
-            <el-text size="large" class="el-dropdown-link text-white">{{ currentLanguage?.displayName }}</el-text>
-            <template #dropdown>
-                <el-dropdown-menu>
-                    <el-dropdown-item v-for="item in languages" :key="item.cultureName"
-                        @click="changeLanguage(item.cultureName)">{{ item.displayName }}</el-dropdown-item>
-                </el-dropdown-menu>
-            </template>
-        </el-dropdown>
+    <el-sub-menu v-bind="$attrs" >
+        <template #title>{{ currentLanguage?.displayName }}</template>
+        <el-menu-item v-for="item in languages" :key="item.cultureName" @click="changeLanguage(item.cultureName)">{{
+            item.displayName }}
+        </el-menu-item>
+    </el-sub-menu>
 </template>
 
 <script setup lang="ts">
@@ -24,7 +21,7 @@ const refresh = () => {
     currentLanguage.value = appConfig.currentCulture;
 }
 
-const {} = useConfig(refresh);
+const { } = useConfig(refresh);
 
 const localizationStore = useLocalizationStore();
 
@@ -35,3 +32,6 @@ const changeLanguage = (cultureName: string) => {
 
 
 </script>
+
+<style lang="scss" scoped>
+</style>
