@@ -1,8 +1,11 @@
 <template>
-    <el-link v-if="!isAuthenticated" href="/login" >{{ t('Login') }}</el-link>
-    <el-popover v-if="isAuthenticated" placement="bottom-end" trigger="hover" width="300">
+    <el-link v-if="!isAuthenticated && !isMobile" href="/login" >{{ t('Login') }}</el-link>
+    <a href="/login" v-if="!isAuthenticated && isMobile">
+        <i class="fa fa-circle-user text-white font-size-6"></i>
+    </a>
+    <el-popover v-if="isAuthenticated" placement="bottom-end" :trigger="hasHover ? 'hover' : 'click'" width="300">
         <template #reference>
-            <el-avatar :src="avatar" />
+            <el-avatar :src="avatar" :size="isMobile ? 24: 32" />
         </template>
         <template #default>
                 <el-descriptions :column="1" size="large" border>
@@ -23,12 +26,13 @@
 
 
 <script setup lang="ts">
-import { useAuthentication,useI18n } from "../../composables";
+import { useAuthentication,useI18n,useBrowseEnv } from "../../composables";
 import avatar from "../../assets/avatar.png";
-import { appConfig } from "../../libs";
 
 const { isAuthenticated,currentUser } = useAuthentication();
 const { t } = useI18n();
+
+const { isMobile, hasHover } = useBrowseEnv()
 
 const logout = () => {
     // appConfig.logout();

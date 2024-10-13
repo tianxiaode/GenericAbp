@@ -148,9 +148,8 @@ export class AppConfig {
     private async checkNeedSetPassword(): Promise<void> {
         const result = await http.get("/need-set-password") as any;
         if(result.need){
-            toast.error(i18n.get('SetPasswordTip', 'Message'));
-        }
             toast.error(i18n.get('Message.SetPasswordTip'));
+        }
     }
 }
 

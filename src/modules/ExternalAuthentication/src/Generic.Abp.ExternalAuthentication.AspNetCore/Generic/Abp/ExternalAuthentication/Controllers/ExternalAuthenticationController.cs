@@ -197,6 +197,7 @@ namespace Generic.Abp.ExternalAuthentication.Controllers
             var user = await UserManager.FindByEmailAsync(currentUser.Email);
             if (user != null && string.IsNullOrEmpty(user.PasswordHash))
             {
+                Logger.LogDebug($"User found: {user.Email}, {user.PasswordHash}");
                 return new Dictionary<string, bool>()
                 {
                     { "need", true }

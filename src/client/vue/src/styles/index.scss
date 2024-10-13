@@ -68,3 +68,7 @@ code {
 :focus-visible {
     outline: none !important;
 }
+
+.el-dropdown-menu .is-active {
+    background-color: var(--el-color-primary-light-9);
+}

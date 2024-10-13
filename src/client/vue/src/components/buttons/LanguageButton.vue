@@ -1,10 +1,14 @@
 <template>
-        <el-dropdown trigger="hover" size="large" role="navigation">
-            <el-link class="el-dropdown-link">{{ currentLanguage?.displayName }}</el-link>
+        <el-dropdown :trigger="hasHover ? 'hover' : 'click'" role="navigation">
+            <i class="fa fa-globe text-white el-dropdown-link"
+                :class="isMobile ? 'font-size-6' : 'font-size-8'"
+            ></i>
             <template #dropdown>
                 <el-dropdown-menu>
                     <el-dropdown-item v-for="item in languages" :key="item.cultureName"
-                        @click="changeLanguage(item.cultureName)">{{ item.displayName }}</el-dropdown-item>
+                        :class="{ 'is-active': item.cultureName === currentLanguage?.cultureName }"
+                        @click="changeLanguage(item.cultureName)">{{ item.displayName }}
+                    </el-dropdown-item>
                 </el-dropdown-menu>
             </template>
         </el-dropdown>
@@ -13,8 +17,10 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useLocalizationStore } from '~/store';
-import { useConfig } from '~/composables';
+import { useBrowseEnv, useConfig } from '~/composables';
 import { appConfig, LanguageType } from '~/libs';
+
+const { isMobile, hasHover} = useBrowseEnv();
 
 const languages = ref<LanguageType[]>([]);
 const currentLanguage = ref<LanguageType>();
