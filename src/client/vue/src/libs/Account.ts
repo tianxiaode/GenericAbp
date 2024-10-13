@@ -3,6 +3,7 @@ import { logger } from "./utils";
 import { LocalStorage } from "./LocalStoreage";
 import { appConfig } from "./AppConfig";
 import { i18n } from "./locales";
+import { http } from "./http";
 
 class Account {
     $className = "Account";
@@ -51,6 +52,15 @@ class Account {
 
     resetPassword = async (email: string) => {
         try {
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    getExternalProviders = async () =>  {
+        try {
+            const providers = await http.get('/api/external-providers');
+            return providers;
         } catch (error) {
             throw error;
         }

@@ -17,4 +17,13 @@ public class ExternalProviderDto
         ClientSecret = clientSecret;
         Enabled = enabled;
     }
+
+    public ExternalProviderDto(string provider, string displayName)
+    {
+        Provider = provider;
+        DisplayName = displayName;
+        Enabled = true;
+        ClientId = "";
+        ClientSecret = "";
+    }
 }

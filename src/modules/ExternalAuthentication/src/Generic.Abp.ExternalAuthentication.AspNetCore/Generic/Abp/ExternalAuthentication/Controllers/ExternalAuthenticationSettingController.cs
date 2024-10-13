@@ -15,6 +15,7 @@ public class ExternalAuthenticationSettingController(IExternalAuthenticationSett
 
 
     [HttpGet]
+    [Authorize(ExternalAuthenticationPermissions.ExternalAuthenticationProviders.ManagePermissions)]
     public virtual async Task<ExternalSettingDto> GetAsync()
     {
         return await ExternalSettingManager.GetSettingAsync();

@@ -72,3 +72,13 @@ code {
 .el-dropdown-menu .is-active {
     background-color: var(--el-color-primary-light-9);
 }
+.hero{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+
+    &:nth-child(1){
+        height: calc(100vh - 60px);
+    }
+}
