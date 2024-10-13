@@ -1,6 +1,6 @@
 <template>
     <PageHeader />
-    <div class="content w-full h-full px-10">
+    <div class="content w-full h-full">
         <RouterView />
     </div>
 </template>

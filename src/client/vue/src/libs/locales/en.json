@@ -3,6 +3,28 @@
         "InvalidUsernameOrPassword!":"Invalid username or password",
         "LoginSuccess":"Login Success, redirecting..."
     },
+    "Components": {
+        "Lockout": "Lockout",
+        "RowNumber": "Row Number",
+        "Action": "Action",
+        "Loading": "Loading...",
+        "NoData": "No Data",
+        "New": "New",
+        "NewSomething": "New - {0}",
+        "Edit": "Edit",
+        "EditSomething": "Edit - {0}",
+        "Delete": "Delete",
+        "SelectedCount": "Selected Count: {0}",
+        "AdvancedSearch": "Advanced Search",
+        "Search": "Search",
+        "Back": "Back",
+        "Close": "Close",
+        "Ok": "OK",
+        "Cancel": "Cancel",
+        "Yes": "Yes",
+        "No": "No",
+        "Save": "Save"
+    },
     "Http":{
         "Retrying": "Retrying, you have {retryCount} attempts left, retrying every {retryInterval} seconds. If you don't want to retry, you can cancel the request.",
         "RetryFailed": "Retry Failed",
@@ -32,6 +54,90 @@
         "DeleteFailed": "Delete Failed",
         "SaveSuccess": "Save Success",
         "SaveFailed": "Save Failed",
-        "SetPasswordTip": "No password set, please set a password first."
+        "SetPasswordTip": "No password set, please set a password first.",
+        "OperationFailed": "Operation Failed!",
+        "OperationSuccess": "Operation Success!",
+        "ConfirmDelete": "Are you sure you want to delete this item?",
+        "HasDirtyData": "You have unsaved changes. Are you sure you want to leave this page?"
+    },
+    "Notify": {
+        "DefaultInfoTitle": "Info",
+        "DefaultSuccessTitle": "Success",
+        "DefaultWarningTitle": "Warning",
+        "DefaultErrorTitle": "Error",
+        "DefaultConfirmTitle": "Confirm"
+    },
+    "Validation": {
+        "EqualTo": "'{0}' and '{1}' do not match.",
+        "Required": "This field is required.",
+        "Number": "The field must be a number.",
+        "Date": "The field must be a date.",
+        "MinDate": "The field must be on or after {0}.",
+        "MaxDate": "The field must be on or before {0}.",
+        "InvalidDate": "The field is not a valid date.",
+        "Integer": "The field must between {0} and {1}.",
+        "Min": "The field must be greater than or equal to {0}.",
+        "Max": "The field must be less than or equal to {0}.",
+        "MinLength": "The field must be a string or array type with a minimum length of {0}.",
+        "MaxLength": "The field must be a string or array type with a maximum length of {0}.",
+        "Length": "The field must be a string or array type with a length of {0}.",
+        "Regex": "The field format is invalid.",
+        "Email": "The field must be a valid email address.",
+        "RequireDigit": "The field must contain at least one digit.",
+        "RequireLowercase": "The field must contain at least one lowercase letter.",
+        "RequireUppercase": "The field must contain at least one uppercase letter.",
+        "RequireNonAlphanumeric": "The field must contain at least one non-alphanumeric character.",
+        "Url": "The field must be a valid URL."
+    },
+    "Pages": {
+        "404": {
+            "NotFound": "Page Not Found"
+        },
+        "Login": {
+            "UserNameAndEmailAndPhone": "Username/Email/Phone",
+            "UserNameAndEmail": "Username/Email",
+            "Password": "Password",
+            "RememberMe": "Remember Me",
+            "ForgotPassword": "Forgot Password?",
+            "Login": "Login",
+            "NewUser": "Are you a new user?",
+            "Register": "Register",
+            "InvalidUsernameOrPassword": "Invalid username or password!",
+            "LoggingIn": "Logging in...",
+            "LoginSuccess": "Login Success",
+            "LoginWithThird": "Log in with a third-party account",
+            "LogInUsingYourProviderAccount": "Log in using your {0} account"
+        },
+        "ForgotPassword": {
+            "ForgotPassword": "Forgot Password",
+            "SendPasswordResetLinkInformation": "A password reset link will be sent to your email to reset your password. If you don't get an email within a few minutes, please retry.",
+            "Email": "Email",
+            "Send": "Send",
+            "BackToLogin": "Back To Login",
+            "Sending": "Sending...",
+            "ResendAfter": "Resend after {0} seconds"
+        },
+        "Register": {
+            "Register": "Register",
+            "Username": "Username",
+            "Email": "Email",
+            "Phone": "Phone",
+            "Password": "Password",
+            "ConfirmPassword": "Confirm Password",
+            "AlreadyRegistered": "Already registered?",
+            "Login": "Please login",
+            "RegisterSuccess": "Registration Success, please check your email to activate your account.",
+            "Submitting": "Submitting..."
+        },
+        "Profile": {
+            "Profile": "Profile",
+            "Username": "Username",
+            "Email": "Email",
+            "ChangePassword": "Change Password",
+            "CurrentPassword": "Current Password",
+            "NewPassword": "New Password",
+            "ConfirmNewPassword": "Confirm New Password",
+            "Save": "Save"
+        }
     }
 }

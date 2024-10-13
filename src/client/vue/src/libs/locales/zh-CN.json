@@ -3,6 +3,28 @@
         "InvalidUsernameOrPassword":"用户名或密码错误",
         "LoginSuccess":"登录成功，正在跳转..."
     },
+    "Components": {
+        "Lockout": "锁定",
+        "RowNumber": "行号",
+        "Action": "操作",
+        "Loading": "加载中...",
+        "NoData": "暂无数据",
+        "New": "新建",
+        "NewSomething": "新建{0}",
+        "Edit": "编辑",
+        "EditSomething": "编辑{0}",
+        "Delete": "删除",
+        "SelectedCount": "已选择 {count} 条数据:",
+        "AdvancedSearch": "高级搜索",
+        "Search": "搜索",
+        "Back": "返回",
+        "Close": "关闭",
+        "Ok": "确定",
+        "Cancel": "取消",
+        "Yes": "是",
+        "No": "否",
+        "Save": "保存"
+    },
     "Http":{
         "Retrying": "正在重试，还可以尝试 {retryCount} 次，每隔 {retryInterval} 秒重试一次，如果不想再重试，可以取消请求。",
         "RetryFailed": "重试失败",
@@ -32,7 +54,91 @@
         "DeleteFailed": "删除失败",
         "SaveSuccess": "保存成功",
         "SaveFailed": "保存失败",
-        "SetPasswordTip": "您尚未设置密码，请设置密码。"
+        "SetPasswordTip": "您尚未设置密码，请设置密码。",
+        "OperationFailed": "操作失败！",
+        "OperationSuccess": "操作成功！",
+        "ConfirmDelete": "确认删除？",
+        "HasDirtyData": "有未保存的数据，是否确认不保存并离开？"
+    },
+    "Notify": {
+        "DefaultInfoTitle": "信息",
+        "DefaultSuccessTitle": "成功",
+        "DefaultWarningTitle": "警告",
+        "DefaultErrorTitle": "错误",
+        "DefaultConfirmTitle": "确认"
+    },
+    "Validation": {
+        "EqualTo": "'{0}' 必须与 '{1}' 相同。",
+        "Required": "该字段是必填项。",
+        "Number": "该字段必须是数字。",
+        "Date": "该字段必须是日期。",
+        "MinDate": "该字段值必须大于或等于{0}。",
+        "MaxDate": "该字段值必须小于或等于{0}。",
+        "InvalidDate": "该字段值不是有效的日期。",
+        "Integer": "该字段必须在{0}到{1}之间。",
+        "Min": "该字段必须大于或等于{0}。",
+        "Max": "该字段必须小于或等于{0}。",
+        "MinLength": "该字段长度必须大于或等于{0}。",
+        "MaxLength": "该字段长度必须小于或等于{0}。",
+        "Length": "该字段长度必须是{0}。",
+        "Regex": "该字段格式不正确。",
+        "Email": "该字段必须是有效的电子邮件地址。",
+        "RequireDigit": "该字段必须包含至少一个数字。",
+        "RequireLowercase": "该字段必须包含至少一个小写字母。",
+        "RequireUppercase": "该字段必须包含至少一个大写字母。",
+        "RequireNonAlphanumeric": "该字段必须包含至少一个非字母数字字符。",
+        "Url": "该字段必须是有效的URL。"
+    },
+    "Pages": {
+        "404": {
+            "NotFound": "页面未找到"
+        },
+        "Login": {
+            "Username": "用户名/邮箱",
+            "UserNameAndEmailAndPhone": "用户名/邮箱/手机",
+            "UserNameAndEmail": "用户名/邮箱",
+            "Password": "密码",
+            "RememberMe": "记住我",
+            "ForgotPassword": "忘记密码？",
+            "Login": "登录",
+            "NewUser": "您是新用户？",
+            "Register": "注册",
+            "InvalidUsernameOrPassword": "用户名或密码错误！",
+            "LoggingIn": "登录中...",
+            "LoginSuccess": "登录成功",
+            "LoginWithThird": "第三方账号登录",
+            "LogInUsingYourProviderAccount": "使用您的 {0} 账户登录"
+        },
+        "ForgotPassword": {
+            "ForgotPassword": "忘记密码？",
+            "SendPasswordResetLink_Information": "密码重置链接将发送到您的电子邮件以重置密码. 如果您在几分钟内没有收到电子邮件,请重试.",
+            "Email": "电子邮件",
+            "Send": "发送",
+            "BackToLogin": "返回登录",
+            "Sending": "正在发送...",
+            "Resend": "{0} 秒后重新发送"
+        },
+        "Register": {
+            "Register": "注册",
+            "Username": "用户名",
+            "Email": "电子邮件",
+            "Phone": "手机号",
+            "Password": "密码",
+            "ConfirmPassword": "确认密码",
+            "AlreadyRegistered": "已注册?",
+            "Login": "请登录",
+            "RegisterSuccess": "注册成功，请检查您的电子邮件以激活您的账户。",
+            "Submitting": "正在提交..."
+        },
+        "Profile": {
+            "Profile": "Profile",
+            "Username": "Username",
+            "Email": "Email",
+            "ChangePassword": "Change Password",
+            "CurrentPassword": "Current Password",
+            "NewPassword": "New Password",
+            "ConfirmNewPassword": "Confirm New Password",
+            "Save": "Save"
+        }
     }
-
 }

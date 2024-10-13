@@ -31,7 +31,6 @@
 
 <script lang="ts" setup>
 import { inject, reactive, ref } from 'vue'
-import { Account } from '../api/Account';
 import router from '../router';
 import IconSelect from '../components/forms/IconSelect.vue';
 
@@ -53,27 +52,27 @@ const rules = {
     ],
 };
 
-const submitForm = async () => {
-    await formRef.value.validate(async (valid: boolean) => {
-        if (!valid) return;
-        const t = inject('t') as Function;
-        try {
-            await Account.login(form.username, form.password);
-            message.value = 'LoginSuccess';
-            alertType.value = 'success';
-            let redirectPath = sessionStorage.getItem('redirectPath') || '/';
-            if (redirectPath === '/login') {
-                redirectPath = '/';
-            }
-            router.push(redirectPath);
+// const submitForm = async () => {
+//     await formRef.value.validate(async (valid: boolean) => {
+//         if (!valid) return;
+//         const t = inject('t') as Function;
+//         try {
+//             await Account.login(form.username, form.password);
+//             message.value = 'LoginSuccess';
+//             alertType.value = 'success';
+//             let redirectPath = sessionStorage.getItem('redirectPath') || '/';
+//             if (redirectPath === '/login') {
+//                 redirectPath = '/';
+//             }
+//             router.push(redirectPath);
 
-        } catch (error: any) {
-            message.value = error.message;
-            alertType.value = 'error';
+//         } catch (error: any) {
+//             message.value = error.message;
+//             alertType.value = 'error';
 
-        }
-    })
-}
+//         }
+//     })
+// }
 
 const clearMessage = () => {
     message.value = ''; // 清空消息

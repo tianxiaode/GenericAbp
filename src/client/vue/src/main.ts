@@ -11,6 +11,7 @@ import { logger, Repository, envConfig,  appConfig, i18n, BaseHttp, normalizedLa
 import router from "./router"; // 引入 router.ts
 import { toast } from "./libs/Toast";
 import { LocalStorage } from "./libs/LocalStoreage";
+import { useLocalizationStore } from "./store";
 
 logger.setLevel(process.env.NODE_ENV === "development" ? "debug" : "info");
 
@@ -52,8 +53,9 @@ i18n.init({
     remoteLanguageParam: 'CultureName',
 });
 
-// 初始化 appConfig
-appConfig.setLanguage(defaultLanguage);
+// 初始化本地化
+const localizationStore = useLocalizationStore();
+localizationStore.setLocale(defaultLanguage);
 
 /// 初始化账户
 account.init({

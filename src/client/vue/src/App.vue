@@ -1,10 +1,13 @@
-<script setup lang="ts">
-</script>
-
 <template>
-    <RouterView />
+    <el-config-provider :locale="elementPlusLocale">
+        <RouterView />
+    </el-config-provider>
 </template>
 
-<style scoped>
+<script setup lang="ts">
+import { useI18n } from './composables';
 
-</style>
+const { elementPlusLocale } = useI18n();
+</script>
+
+<style scoped></style>

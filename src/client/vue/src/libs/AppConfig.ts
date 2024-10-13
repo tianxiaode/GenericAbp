@@ -4,6 +4,7 @@ import { useConfigStore } from "~/store";
 import { AppConfigType } from "./AppConfigType";
 import { i18n } from "./locales";
 import { toast } from "./Toast";
+import { LocalStorage } from "./LocalStoreage";
 
 export interface AppConfigOptions {
     configUrl?: string;
@@ -41,20 +42,6 @@ export class AppConfig {
 
     getLanguages() {
         return this.config?.localization?.languages || [];
-    }
-
-    setLanguage(language: string) {
-        if(this.currentLanguage === language){
-            this.loadConfig();
-        }
-    }
-
-    get currentLanguage() {
-        return (
-            localStorage.getItem(BaseHttp.languageName) ||
-            this.config?.localization?.currentCulture?.cultureName ||
-            navigator.language
-        );
     }
 
     get currentCulture() {

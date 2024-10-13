@@ -1,6 +1,6 @@
 <template>
         <el-dropdown trigger="hover" size="large" role="navigation">
-            <el-text size="large" class="el-dropdown-link text-white">{{ currentLanguage?.displayName }}</el-text>
+            <el-link class="el-dropdown-link">{{ currentLanguage?.displayName }}</el-link>
             <template #dropdown>
                 <el-dropdown-menu>
                     <el-dropdown-item v-for="item in languages" :key="item.cultureName"

@@ -1,6 +1,6 @@
 <template>
     <div class="logo">
-        <img :src="logo" alt="logo" class="h-full">
+        <a href="/" ><img :src="logo" alt="logo" class="h-full"></a>
     </div>
 </template>
 

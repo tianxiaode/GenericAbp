@@ -1,5 +1,5 @@
 <template>
-    <el-button v-if="!isAuthenticated" link  router-link="/login" >{{ t('Login') }}</el-button>
+    <el-link v-if="!isAuthenticated" href="/login" >{{ t('Login') }}</el-link>
     <el-popover v-if="isAuthenticated" placement="bottom-end" trigger="hover" width="300">
         <template #reference>
             <el-avatar :src="avatar" />

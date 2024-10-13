@@ -1,7 +1,15 @@
 // src/libs/locales/Locale.ts
-import { capitalize, deepMerge, isEmpty, logger, normalizedLanguage } from "../utils";
+import {
+    capitalize,
+    clone,
+    deepMerge,
+    isEmpty,
+    logger,
+    normalizedLanguage,
+} from "../utils";
 import { http } from "../http"; // 确保引入 http 工具
 import { useLocalizationStore } from "../../store/useLocalizationStore";
+import { LocalStorage } from "../LocalStoreage";
 
 export interface LocaleConfig extends Record<string, any> {
     languagePacks: {
@@ -13,88 +21,70 @@ export interface LocaleConfig extends Record<string, any> {
 }
 
 export class Locale {
-    $className: string = 'Locale';
+    $className: string = "Locale";
     translation: Record<string, any> = {};
-    private languagePacks: { [key: string]: Array<Promise<any>>; } = {};
-    language: string = 'en';  
-    defaultLanguage: string = 'en';
-    remoteTextUrl: string = '';
-    remoteLanguageParam: string = 'CultureName';
+    private languagePacks: { [key: string]: Array<Promise<any>> } = {};
+    language: string = "en";
+    defaultLanguage: string = "en";
+    remoteTextUrl: string = "";
+    remoteLanguageParam: string = "CultureName";
     isLoaded: boolean = false;
 
-    init(config: LocaleConfig){
+    init(config: LocaleConfig) {
         this.languagePacks = config.languagePacks;
-        this.defaultLanguage = config.defaultLanguage || 'en';
+        this.defaultLanguage = config.defaultLanguage || "en";
         this.language = this.defaultLanguage;
         if (config.remoteTextUrl) {
             this.remoteTextUrl = config.remoteTextUrl;
-            this.remoteLanguageParam = config.remoteLanguageParam || 'CultureName';
+            this.remoteLanguageParam =
+                config.remoteLanguageParam || "CultureName";
         }
-        this.loadLanguage();
-    }
-
-    async setLanguage(language: string): Promise<void> {
-        if (language === this.language && this.isLoaded) return;
-        language = normalizedLanguage(language);
-        if (!this.languagePacks[language]) {
-            throw new Error(`Language pack for ${language} not found.`);
-        }
-        this.language = language;
-        this.loadLanguage();
     }
 
     async loadLanguage(): Promise<void> {
         // 加载语言包和远程文本
         const localeStore = useLocalizationStore();
         localeStore.setReadyState(false);
-            Promise.all([
-            this.loadLanguagePacks(),
-            this.loadRemoteText(),
-        ]).then(() => {
-            Promise.resolve();
-            this.isLoaded = true;
-            localeStore.setReadyState(true)
-        }).catch((error: any) => {
-            logger.error(this, 'Failed to load language', error);
-            throw new Error("Failed to load language");
-            
-        });
+        Promise.all([
+            this.loadLanguagePacks(), 
+            this.loadRemoteText()
+        ])
+            .then(() => {
+                Promise.resolve();
+                this.isLoaded = true;
+                localeStore.setReadyState(true);
+            })
+            .catch((error: any) => {
+                logger.error(this, "Failed to load language", error);
+                throw new Error("Failed to load language");
+            });
     }
 
-    get(key: string, resourceName?: string, entity?: string, params: any = undefined): string {
+    get(...params: any[]): string {
+        let remainingParams: string[] = [];
+        let replacements: any = {};
 
-        const translation = this.translation;
-        let capitalizeKey = capitalize(key);
-
-        if (capitalizeKey in translation) {
-            return this.replaceParams(translation[capitalizeKey], params);
+        // 如果参数多于2个，且最后一个参数是对象，则将其视为替换值
+        if (
+            params.length > 2 &&
+            typeof params[params.length - 1] === "object"
+        ) {
+            replacements = params.pop(); // 移除最后一个参数并赋值为替换值
         }
 
-        if (capitalizeKey.includes('.')) {
-            const value = this.getTranslationByPath(capitalizeKey);
-            if (value) return this.replaceParams(value, params);
+        // 处理剩余参数
+        for (const param of params) {
+            const paramStr = param.toString();
+            paramStr.includes(".")
+                ? remainingParams.push(...paramStr.split("."))
+                : remainingParams.push(paramStr);
         }
 
-        if (!isEmpty(resourceName)) {
-            resourceName = capitalize(resourceName!);
-            let resourceKey = `${resourceName}.${capitalizeKey}`;
-            let value = this.getTranslationByPath(resourceKey);
-            if (value && value !== resourceKey) return this.replaceParams(value, params);
+        let value = this.getTranslationByPath(remainingParams);
 
-            const displayName = "DisplayName:";
-            const displayKey = `${resourceName}.${displayName}${capitalizeKey}`;
-            value = this.getTranslationByPath(displayKey);
-            if (value && value !== displayKey) return this.replaceParams(value, params);
-
-            if (!isEmpty(entity)) {
-                entity = capitalize(entity!);
-                const entityKey = `${resourceName}.${entity}:${capitalizeKey}`;
-                value = this.getTranslationByPath(entityKey);
-                if (value && value !== entityKey) return this.replaceParams(value, params);
-            }
-        }
-
-        return key;
+        return value
+            ? this.replaceParams(value, replacements)
+            : remainingParams.join(".");
     }
 
     merge(translation: Record<string, any>): void {
@@ -102,21 +92,30 @@ export class Locale {
     }
 
     private async loadLanguagePacks(): Promise<void> {
-        const languagePacks = this.languagePacks[this.language] || this.languagePacks[this.defaultLanguage];
-        if (!languagePacks) {
-            logger.error(this, `No language packs found for ${this.language} or default language.`);
+        const languagePacks = this.languagePacks;
+        if(isEmpty(languagePacks)) return;
+        const language = normalizedLanguage(LocalStorage.getLanguage());
+        const currentLanguagePacks =
+            languagePacks[language] ||
+            languagePacks[this.defaultLanguage];
+        if (!currentLanguagePacks) {
+            logger.error(
+                this,
+                `No language packs found for ${this.language} or default language.`
+            );
             return;
         }
         try {
-            const packs = await Promise.all(languagePacks);
+            const packs = await Promise.all(currentLanguagePacks);
             for (const pack of packs) {
                 const json = pack.default || pack;
                 this.merge(json);
             }
         } catch (error) {
-            logger.error(this, 'Failed to load language packs', error);
+            logger.error(this, "Failed to load language packs", error);
         }
     }
+
 
     private async loadRemoteText(): Promise<void> {
         if (isEmpty(this.remoteTextUrl)) return; // 确保有远程网址
@@ -124,32 +123,35 @@ export class Locale {
             const response = await http.get(this.remoteTextUrl, {
                 [this.remoteLanguageParam]: this.language, // 使用语言参数
             });
-            this.merge(response?.resources || {});
+            const resources = response?.resources || {};
+            for (const key in resources) {
+                const value = resources[key]?.texts;
+                if(!value) continue;
+                this.translation[key] = clone(value);
+            }
         } catch (error) {
-            logger.error(this, 'Failed to load remote text', error);
+            logger.error(this, "Failed to load remote text", error);
         }
     }
 
-    getTranslationByPath(key: string): string {
-        const keys = key.split('.');
+    getTranslationByPath(keys: string[]): string {
         let current: any = this.translation;
         for (let k of keys) {
             k = capitalize(k);
             if (k in current) {
                 current = current[k];
             } else {
-                return '';
+                return "";
             }
         }
         return current as string;
     }
 
-
     replaceParams(translation: string, params: any): string {
-        if (isEmpty(translation)) return '';
+        if (isEmpty(translation)) return "";
         if (isEmpty(params)) return translation;
         for (let key in params) {
-            const regex = new RegExp(`{${key}}`, 'g');
+            const regex = new RegExp(`{${key}}`, "g");
             translation = translation.replace(regex, params[key]);
         }
         return translation;

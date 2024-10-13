@@ -28,7 +28,7 @@ export class LocalStorage {
 
     static setItem(key: string, value: any) {
         try {
-            this.currentStorage.setItem(key, JSON.stringify(value));
+            this.currentStorage.setItem(key, value);
         } catch (error) {
             console.error("设置存储项失败:", error);
         }
