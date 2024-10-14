@@ -10,4 +10,3 @@ import { useI18n } from './composables';
 const { elementPlusLocale } = useI18n();
 </script>
 
-<style scoped></style>

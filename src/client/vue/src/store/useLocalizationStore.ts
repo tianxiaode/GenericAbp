@@ -4,16 +4,17 @@ import { LocalStorage } from '~/libs/LocalStoreage';
 
 export const useLocalizationStore = defineStore('localization', {
     state: () => ({
-        locale: 'en', // 默认语言
+        locale: LocalStorage.getLanguage(),
         isReady: false, // 语言是否加载完成
+        isFist: true // 是否是第一次加载
     }),
     actions: {
         setReadyState(status: boolean) {
             this.isReady = status; // 更新配置就绪状态
         },
         setLocale(locale: string) {
-            if (this.locale === locale) return; // 相同语言不更新
-
+            if (!this.isFist && this.locale === locale) return; // 相同语言不更新
+            this.isFist = false;
             this.locale = locale; // 更新当前语言
             // 更新 i18n 实例
             LocalStorage.setLanguage(locale); // 更新本地存储

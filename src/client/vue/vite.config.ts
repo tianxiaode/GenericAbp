@@ -48,4 +48,11 @@ export default defineConfig({
         "process.env": env,
         // 其他需要替换的环境变量
     },
+    css: {
+        preprocessorOptions: {
+            scss: {
+                api: 'modern-compiler', // or 'modern'
+            },
+        },
+    },
 });

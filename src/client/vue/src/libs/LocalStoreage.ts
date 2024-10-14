@@ -97,4 +97,14 @@ export class LocalStorage {
     static removeToken() {
         this.removeItem(envConfig.tokenStorageName);
     }
+
+    static setRedirectPath(path: string) {
+        this.setItem('redirectPath', path);
+    }
+
+    static getRedirectPath(): string | null {
+        return this.getItem('redirectPath');
+    }
+
+
 }

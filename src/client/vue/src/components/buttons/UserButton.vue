@@ -1,5 +1,5 @@
 <template>
-    <el-link v-if="!isAuthenticated && !isMobile" href="/login" >{{ t('Login') }}</el-link>
+    <el-link v-if="!isAuthenticated && !isMobile" href="/login" >{{  t("Pages.Login.Login")  }}</el-link>
     <a href="/login" v-if="!isAuthenticated && isMobile">
         <i class="fa fa-circle-user text-white font-size-6"></i>
     </a>

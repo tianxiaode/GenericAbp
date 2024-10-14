@@ -3,7 +3,7 @@ export type LanguageType = {
     cultureName: string,
     uiCultureName: string,
     displayName: string,
-    twoLetterISOLanguageName: string,
+    twoLetterIsoLanguageName: string,
     flagIcon: string,
 }
 

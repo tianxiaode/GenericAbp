@@ -1,6 +1,6 @@
 {
     "Account":{
-        "InvalidUsernameOrPassword!":"Invalid username or password",
+        "Invalid username or password!":"Invalid username or password",
         "LoginSuccess":"Login Success, redirecting..."
     },
     "Components": {

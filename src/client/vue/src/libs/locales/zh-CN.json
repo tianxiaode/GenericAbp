@@ -1,6 +1,6 @@
 {
     "Account":{
-        "InvalidUsernameOrPassword":"用户名或密码错误",
+        "Invalid username or password!":"用户名或密码错误",
         "LoginSuccess":"登录成功，正在跳转..."
     },
     "Components": {

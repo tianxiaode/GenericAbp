@@ -7,4 +7,5 @@ export * from './Repository';
 export * from './Toast'
 export * from './EnvConfig'
 export * from './Account'
+export * from './AccountType'
 export * from './Permission'

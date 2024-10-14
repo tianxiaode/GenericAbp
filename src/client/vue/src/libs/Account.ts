@@ -23,23 +23,35 @@ class Account {
 
     login = async (username: string, password: string) => {
         try {
-            const user = this.userManager!.signinResourceOwnerCredentials({
+            const user = await this.userManager!.signinResourceOwnerCredentials({
                 username: username,
                 password: password,
             });
             if (!user) {
-                throw new Error("InvalidUsernameOrPassword");
+                throw new Error("Invalid username or password!");
             }
-        } catch (error) {
-            throw error;
+        } catch (error:any) {
+            throw new Error('Account.' + error.error_description || error.message);
         }
     }
 
     logout = async () => {
         try {
             await this.userManager!.signoutSilent();
-        } catch (error) {
-            throw error;
+        } catch (error:any) {
+            throw new Error('Account.' + error.error_description || error.message);
+        }
+    }
+
+    loginWithExternalProvider = async (provider: string) => {
+        try {
+            await this.userManager!.signinRedirect({
+                extraQueryParams: {
+                    provider: provider,
+                }
+            });
+        } catch (error:any) {
+            throw new Error('Account.' + error.error_description || error.message);
         }
     }
 

@@ -2,25 +2,19 @@ import { storeToRefs } from "pinia";
 import { computed } from "vue";
 import { useLocalizationStore } from "~/store";
 import { i18n } from "~/libs";
-import  zhCn  from 'element-plus/es/locale/lang/zh-cn';
-import  en  from 'element-plus/es/locale/lang/en';
-import zhTw  from 'element-plus/es/locale/lang/zh-tw';
 
 export function useI18n() {
     const localeStore = useLocalizationStore();
     const { isReady, locale } = storeToRefs(localeStore);
 
-
-    const elementPlusLocale = computed(() => {
+    const elementPlusLocale = computed(async () => {
         switch (locale.value) {
-            case 'zh-CN':
-                return zhCn;
             case 'en':
-                return en;
+                return await import('element-plus/es/locale/lang/en');
             case 'zh-TW':
-                return zhTw;
+                return await import('element-plus/es/locale/lang/zh-tw');
             default:
-                return zhCn;
+                return await import('element-plus/es/locale/lang/zh-cn');
         }
     });
 
@@ -32,10 +26,12 @@ export function useI18n() {
                 return i18n.get(...args);
             } else {
                 // 如果尚未准备好，可以返回 key 或者其他占位符
-                return '';
+                return args.join('.');
             }
         };
     });
+
+
 
     return {
         isReady,
