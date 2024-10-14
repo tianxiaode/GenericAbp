@@ -1,4 +1,4 @@
-import { LocalStorage } from "../LocalStoreage";
+import { LocalStorage } from "../LocalStorage";
 import { logger } from "../utils";
 import { HttpDeferred } from "./HttpDeferred";
 import { HttpError } from "./HttpError";

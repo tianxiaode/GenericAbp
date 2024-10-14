@@ -9,7 +9,7 @@ import {
 } from "../utils";
 import { http } from "../http"; // 确保引入 http 工具
 import { useLocalizationStore } from "../../store/useLocalizationStore";
-import { LocalStorage } from "../LocalStoreage";
+import { LocalStorage } from "../LocalStorage";
 
 export interface LocaleConfig extends Record<string, any> {
     languagePacks: {

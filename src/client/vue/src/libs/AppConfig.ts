@@ -1,10 +1,9 @@
-import { http, BaseHttp } from "./http";
+import { http } from "./http";
 import { capitalize, logger, uncapitalize } from "./utils";
 import { useConfigStore } from "~/store";
 import { AppConfigType } from "./AppConfigType";
 import { i18n } from "./locales";
 import { toast } from "./Toast";
-import { LocalStorage } from "./LocalStoreage";
 
 export interface AppConfigOptions {
     configUrl?: string;

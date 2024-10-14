@@ -8,7 +8,7 @@
             <el-form v-bind="$attrs" ref="formRef" size="large">
                 <slot></slot>
                 <div class="w-full pt-2" v-if="message">
-                    <el-alert :title="t(message)" :type="alertType" show-icon closable style="margin-top: 10px;"
+                    <el-alert :title="t(message)" :type="messageType" show-icon closable style="margin-top: 10px;"
                         @close="clearMessage"></el-alert>
                 </div>
             </el-form>
@@ -28,22 +28,12 @@ defineProps({
         type: String,
         default: ""
     },
-    message: {
-        type: String,
-        default: ""
-    },
-    alertType: {
-        type: String,
-        default: ""
-    },
-    clearMessage: {
-        type: Function,
-        default: () => {}
-    }
 });
 
 
 const { t } = useI18n();
 
-const {formRef} = useFormExpose();
+const { formRef, clearMessage, message, messageType, exposeForm } = useFormExpose();
+
+defineExpose(exposeForm());
 </script>

@@ -21,9 +21,8 @@ const loginWithProvider = (provider: ExternalProviderType) => {
 onMounted(() => {
     account.getExternalProviders().then((result) => {
         providers.value = result;
-        console.log(result);
         providers.value = [
-            { provider: "google", displayName: "Google" },
+            { provider: "google", displayName: "Google1" },
             { provider: "GitHub", displayName: "GitHub" },
         ];
     });

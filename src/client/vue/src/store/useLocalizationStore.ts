@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia';
-import { appConfig, i18n } from '~/libs';
-import { LocalStorage } from '~/libs/LocalStoreage';
+import { appConfig, i18n,LocalStorage } from '~/libs';
 
 export const useLocalizationStore = defineStore('localization', {
     state: () => ({

@@ -1,6 +1,5 @@
 <template>
-    <AccountForm ref="formRef" :rules="rules" :message="message" :alert-type="alertType" title="Pages.Login.Login"
-        :model="formData" :clear-message="clearMessage">
+    <AccountForm ref="formRef" :rules="rules" title="Pages.Login.Login" :model="formData">
         <el-form-item prop="username" clearable>
             <el-input v-model="formData.username" :placeholder="t('Pages.Login.UserNameAndEmail')">
                 <template #prefix>
@@ -10,7 +9,7 @@
         </el-form-item>
         <el-form-item prop="password">
             <el-input v-model="formData.password" clearable show-password autocomplete="off"
-                :placeholder="t('Pages.Login.Password')" @keyup.enter="submitForm()">
+                :placeholder="t('Pages.Login.Password')" @keyup.enter="formRef.value.submit">
                 <template #prefix>
                     <i class="fa fa-lock"></i>
                 </template>
@@ -20,7 +19,7 @@
             <el-link type="primary" @click="$router.push('/forgot-password')">{{ t("Pages.Login.ForgotPassword")
                 }}</el-link>
         </div>
-        <el-button type="primary" @click="handleSubmit" class="w-full">
+        <el-button type="primary" @click="formRef.value.submit" class="w-full">
             {{ t("Pages.Login.Login") }}
         </el-button>
         <div class="w-full pt-2">
@@ -29,22 +28,22 @@
         <template #footer>
             <ExternalProviders />
         </template>
-        
+
     </AccountForm>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import AccountForm from './AccountForm.vue';
-import { useAccountForm, useI18n } from '~/composables'
-import { account, LoginType } from '~/libs';
+import { useI18n } from '~/composables'
+import { account, LocalStorage, LoginType } from '~/libs';
 import router from '~/router';
-import { LocalStorage } from '~/libs/LocalStoreage';
 import ExternalProviders from './ExternalProviders.vue';
 
 const { t } = useI18n();
-
-const rules =computed(() =>  ({
+const formRef = ref<any>();
+const formData = ref<LoginType>({} as LoginType);
+const rules = computed(() => ({
     username: [
         { required: true, trigger: 'blur', message: t.value('Validation.Required') },
     ],
@@ -54,11 +53,11 @@ const rules =computed(() =>  ({
 }));
 
 
-const submitForm = async () => {
+
+const login = async () => {
     try {
         await account.login(formData.value.username, formData.value.password);
-        message.value = 'LoginSuccess';
-        alertType.value = 'success';
+        formRef.value.setMessage('Pages.login.LoginSuccess', 'success');
         let redirectPath = LocalStorage.getItem('redirectPath') || '/';
         if (redirectPath === '/login') {
             redirectPath = '/';
@@ -66,14 +65,12 @@ const submitForm = async () => {
         router.push(redirectPath);
 
     } catch (error: any) {
-        message.value = error.message;
-        alertType.value = 'error';
-
+        formRef.value.setMessage(error.message, 'error');
     }
+
 
 }
 
-const { formRef, formData, message, alertType, handleSubmit, clearMessage } = useAccountForm<LoginType>(submitForm);
 
 
 </script>

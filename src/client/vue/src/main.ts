@@ -7,10 +7,8 @@ import "~/styles/index.scss";
 import "uno.css";
 
 import App from "./App.vue";
-import { logger, Repository, envConfig,  appConfig, i18n, BaseHttp, normalizedLanguage, account } from "./libs";
+import { logger, Repository, envConfig,  toast ,LocalStorage, i18n, BaseHttp, normalizedLanguage, account } from "./libs";
 import router from "./router"; // 引入 router.ts
-import { toast } from "./libs/Toast";
-import { LocalStorage } from "./libs/LocalStoreage";
 import { useLocalizationStore } from "./store";
 
 logger.setLevel(process.env.NODE_ENV === "development" ? "debug" : "info");

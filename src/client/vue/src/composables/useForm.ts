@@ -4,7 +4,7 @@ import { clone } from "../libs";
 
 export function useForm<T>(initialData: T, api: any, props: any) {
     
-    const formRef = ref<any>(null);
+    const formRef = ref<Exp>(null);
     const formData = ref<T>(clone(initialData));
     const initialValues = ref<T>(clone(initialData));
 

@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
-import { LocalStorage } from "~/libs/LocalStoreage";
+import { LocalStorage } from "~/libs";
 
 const routes = [
     { path: "/", component: ()=>import("~/components/layouts/PageLayout.vue") ,
@@ -7,7 +7,7 @@ const routes = [
             { path: "", component: ()=>import("~/views/Home.vue") },
             { path: "about", component: ()=>import("~/views/About.vue") },
             { path: "login", component: ()=>import("~/components/accounts/Login.vue") },
-            { path: "register", component: ()=>import("~/views/Register.vue") },
+            { path: "register", component: ()=>import("~/components/accounts/Register.vue") },
             { path: "forgot-password", component: ()=>import("~/views/ForgotPassword.vue") },
             { path: "reset-password", component: ()=>import("~/views/ResetPassword.vue") },
             { path: "profile", component: ()=>import("~/views/Profile.vue") },

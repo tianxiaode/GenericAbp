@@ -13,7 +13,7 @@
                 <LanguageButton />
                 <a href="https://github.com/tianxiaode/GenericAbp" target="_blank">
                     <i class="fab fa-github text-white "
-                       :class="isMobile ? 'font-size-6' : 'font-size-8'"
+                       :class="hasHover ? 'font-size-6' : 'font-size-6'"
                     >
                     </i>
                 </a>
@@ -30,7 +30,7 @@ import UserButton from '../buttons/UserButton.vue';
 import MobileNavButton from '../buttons/MobileNavButton.vue';
 
 const { t } = useI18n();
-const { isMobile} = useBrowseEnv();
+const { hasHover} = useBrowseEnv();
 
 
 

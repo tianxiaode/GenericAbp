@@ -1,6 +1,6 @@
 import { UserManager, UserManagerSettings, User, UserManagerEvents } from "oidc-client-ts";
 import { logger } from "./utils";
-import { LocalStorage } from "./LocalStoreage";
+import { LocalStorage } from "./LocalStorage";
 import { appConfig } from "./AppConfig";
 import { i18n } from "./locales";
 import { http } from "./http";
