@@ -66,7 +66,7 @@ export class Locale {
 
         // 如果参数多于2个，且最后一个参数是对象，则将其视为替换值
         if (
-            params.length > 2 &&
+            params.length >= 2 &&
             typeof params[params.length - 1] === "object"
         ) {
             replacements = params.pop(); // 移除最后一个参数并赋值为替换值
@@ -151,8 +151,7 @@ export class Locale {
         if (isEmpty(translation)) return "";
         if (isEmpty(params)) return translation;
         for (let key in params) {
-            const regex = new RegExp(`{${key}}`, "g");
-            translation = translation.replace(regex, params[key]);
+            translation = translation.replace(`{${key}}`, params[key]);
         }
         return translation;
     }

@@ -48,7 +48,7 @@ const formatLockoutDate = (date: string | null) => {
 
 
 watch (() => props.entityId, async () => {
-    userApi.getSingle(props.entityId).then((res) => {
+    userApi.getENtity(props.entityId).then((res) => {
         drawerTitle.value = '用户详情 -' + res.userName;
         data.value = res;
     });

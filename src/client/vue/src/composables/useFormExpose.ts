@@ -11,16 +11,14 @@ export type FormExposeType = {
     validateField: (field: string, callback: (valid: boolean) => void) => void;
     setMessage: (msg: string, type: string) => void;
     clearMessage: () => void;
-    submit:()=>void;
+    isValid: () => Promise<boolean>;
 };
 
-export function useFormExpose(handleSubmit: Function) {
+export function useFormExpose() {
     const formRef = ref<FormInstance>();
-    const message = ref('');
-    const messageType = ref('');
 
     // 暴露给父组件的功能
-    const exposeForm = () => {
+    const formExpose = () => {
         return {
             form: formRef,
             validate: (callback: (valid: boolean) => void) => formRef.value?.validate(callback),
@@ -29,31 +27,23 @@ export function useFormExpose(handleSubmit: Function) {
             fields : () => formRef.value?.fields,
             scrollToField: (field: string) => formRef.value?.scrollToField(field),
             validateField: (field: string, callback: (valid: boolean) => void) => formRef.value?.validateField(field, callback),
-            setMessage: (msg: string, type: string) => {
-                message.value = msg;
-                messageType.value = type;
+            isValid: async() =>{
+                const form = formRef.value;
+                const promise = new Promise<boolean>((resolve, _) => {
+                    if(!form) return resolve(false);
+
+                    form.validate((valid: boolean) => {
+                        resolve(valid);
+                    });
+                });
+                return promise;
             },
-            clearMessage: () => clearMessage(),
-            submit:async ()=>{
-                if(!formRef.value) return;
-                formRef.value.validate(async (valid) => {
-                    if(!valid) return;
-                    await handleSubmit();
-                });                
-            }
         };
     };
 
-    const clearMessage = () => {
-        message.value = '';
-        messageType.value = '';
-    };
 
     return {
         formRef,
-        message,
-        messageType,
-        clearMessage,
-        exposeForm,
+        formExpose
     };
 }

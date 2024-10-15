@@ -562,7 +562,7 @@ public addSearch = (key: any, value?: any): void => {
         }
     };
 
-    public getSingle = async (id: string | number): Promise<T> => {
+    public getEntity = async (id: string | number): Promise<T> => {
         const url = this.getUrl("read", id);
         const method = this.readMethod;
 
@@ -574,6 +574,12 @@ public addSearch = (key: any, value?: any): void => {
             throw error;
         }
     };
+
+    //如果需要分页等等功能，建议新建一个Repository实例
+    //该方法主要用于auto complete的功能
+    public getList = async (filter:string)=>{
+        return http.get(this.getUrl('GET') + '/?filter=' + filter);
+    }
 
     protected defaultSendFunction: SendFunctionType = async (
         url,

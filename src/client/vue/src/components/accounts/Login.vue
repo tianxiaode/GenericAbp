@@ -1,5 +1,5 @@
 <template>
-    <AccountForm ref="formRef" :rules="rules" title="Pages.Login.Login" :model="formData">
+    <AccountForm ref="formRef" :rules="rules" title="Pages.Login.Login" :form-data="formData">
         <el-form-item prop="username" clearable>
             <el-input v-model="formData.username" :placeholder="t('Pages.Login.UserNameAndEmail')">
                 <template #prefix>
@@ -9,7 +9,7 @@
         </el-form-item>
         <el-form-item prop="password">
             <el-input v-model="formData.password" clearable show-password autocomplete="off"
-                :placeholder="t('Pages.Login.Password')" @keyup.enter="formRef.value.submit">
+                :placeholder="t('Pages.Login.Password')" @keyup.enter="handleSubmit">
                 <template #prefix>
                     <i class="fa fa-lock"></i>
                 </template>
@@ -19,7 +19,7 @@
             <el-link type="primary" @click="$router.push('/forgot-password')">{{ t("Pages.Login.ForgotPassword")
                 }}</el-link>
         </div>
-        <el-button type="primary" @click="formRef.value.submit" class="w-full">
+        <el-button type="primary" @click="handleSubmit" class="w-full">
             {{ t("Pages.Login.Login") }}
         </el-button>
         <div class="w-full pt-2">
@@ -33,31 +33,23 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue';
-import AccountForm from './AccountForm.vue';
-import { useI18n } from '~/composables'
+import AccountForm from '../forms/AccountForm.vue';
+import { useForm, useFormRules, useI18n } from '~/composables'
 import { account, LocalStorage, LoginType } from '~/libs';
 import router from '~/router';
 import ExternalProviders from './ExternalProviders.vue';
 
 const { t } = useI18n();
-const formRef = ref<any>();
-const formData = ref<LoginType>({} as LoginType);
-const rules = computed(() => ({
-    username: [
-        { required: true, trigger: 'blur', message: t.value('Validation.Required') },
-    ],
-    password: [
-        { required: true, trigger: 'blur', message: t.value('Validation.Required') },
-    ],
-}));
 
+const formRules = {
+    username: { required: true},
+    password: { required: true},
+};
 
-
-const login = async () => {
+const onSubmit = async () => {
     try {
         await account.login(formData.value.username, formData.value.password);
-        formRef.value.setMessage('Pages.login.LoginSuccess', 'success');
+        formRef.value.success('Pages.login.LoginSuccess');
         let redirectPath = LocalStorage.getItem('redirectPath') || '/';
         if (redirectPath === '/login') {
             redirectPath = '/';
@@ -65,12 +57,12 @@ const login = async () => {
         router.push(redirectPath);
 
     } catch (error: any) {
-        formRef.value.setMessage(error.message, 'error');
+        formRef.value.error(error.message);
     }
-
-
 }
 
+const { formRef, formData,  handleSubmit } = useForm<LoginType>(formRules, onSubmit);
+const { rules} = useFormRules(formRules, formRef);
 
 
 </script>
