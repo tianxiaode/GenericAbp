@@ -8,9 +8,9 @@ const routes = [
             { path: "about", component: ()=>import("~/views/About.vue") },
             { path: "login", component: ()=>import("~/components/accounts/Login.vue") },
             { path: "register", component: ()=>import("~/components/accounts/Register.vue") },
-            { path: "forgot-password", component: ()=>import("~/views/ForgotPassword.vue") },
-            { path: "reset-password", component: ()=>import("~/views/ResetPassword.vue") },
-            { path: "profile", component: ()=>import("~/views/Profile.vue") },
+            { path: "forgot-password", component: ()=>import("~/components/accounts/ForgotPassword.vue") },
+            { path: "reset-password", component: ()=>import("~/components/accounts/ResetPassword.vue") },
+            { path: "profile", component: ()=>import("~/components/accounts/Profile.vue") },
             { path: "page404", component: ()=>import("~/views/Page404.vue") },
         ]
     },

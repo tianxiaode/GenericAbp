@@ -23,7 +23,8 @@
         "Cancel": "Cancel",
         "Yes": "Yes",
         "No": "No",
-        "Save": "Save"
+        "Save": "Save",
+        "Submit": "Submit"
     },
     "Http":{
         "Retrying": "Retrying, you have {retryCount} attempts left, retrying every {retryInterval} seconds. If you don't want to retry, you can cancel the request.",
@@ -54,7 +55,7 @@
         "DeleteFailed": "Delete Failed",
         "SaveSuccess": "Save Success",
         "SaveFailed": "Save Failed",
-        "SetPasswordTip": "No password set, please set a password first.",
+        "ResetPasswordTip": "No password set, please <a href='/forgot-password'>reset<a> your password first.",
         "OperationFailed": "Operation Failed!",
         "OperationSuccess": "Operation Success!",
         "ConfirmDelete": "Are you sure you want to delete this item?",
@@ -106,16 +107,18 @@
             "LoggingIn": "Logging in...",
             "LoginSuccess": "Login Success",
             "LoginWithThird": "Log in with a third-party account",
-            "LogInUsingYourProviderAccount": "Log in using your {0} account"
+            "LogInUsingYourProviderAccount": "Log in using your {0} account",
+            "Logout": "Logout"
         },
         "ForgotPassword": {
             "ForgotPassword": "Forgot Password",
             "SendPasswordResetLinkInformation": "A password reset link will be sent to your email to reset your password. If you don't get an email within a few minutes, please retry.",
+            "PasswordResetLinkSent": "Password reset link sent, please check your email.",
             "Email": "Email",
             "Send": "Send",
             "BackToLogin": "Back To Login",
             "Sending": "Sending...",
-            "ResendAfter": "Resend after {0} seconds"
+            "Resend": "Resend after {0} seconds"
         },
         "Register": {
             "Register": "Register",
@@ -126,18 +129,30 @@
             "ConfirmPassword": "Confirm Password",
             "AlreadyRegistered": "Already registered?",
             "Login": "Please login",
-            "RegisterSuccess": "Registration Success, please check your email to activate your account.",
+            "RegisterSuccess": "Registration Success, redirecting To Login page after 3 seconds...",
             "Submitting": "Submitting..."
+        },
+        "ResetPassword":{
+            "ResetPassword": "Reset Password",
+            "ResetPasswordInformation": "Please enter your new password.",
+            "ResetPasswordSuccess": "Password reset success, redirecting to login page after 3 seconds...",
+            "":""
         },
         "Profile": {
             "Profile": "Profile",
+            "PersonalInfo": "Personal Info",
             "Username": "Username",
             "Email": "Email",
             "ChangePassword": "Change Password",
             "CurrentPassword": "Current Password",
             "NewPassword": "New Password",
             "ConfirmNewPassword": "Confirm New Password",
-            "Save": "Save"
+            "Name": "Name",
+            "Surname": "Surname",
+            "Save": "Save",
+            "PhoneNumber": "Phone Number",
+            "ChangePasswordSuccess":"Password have Change.",
+            "UpdateProfileSuccess": "Personal Info have Update."
         }
     }
 }

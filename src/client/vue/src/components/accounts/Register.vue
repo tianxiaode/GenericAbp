@@ -27,7 +27,9 @@
 
         <el-form-item prop="confirmPassword">
             <el-input v-model="formData.confirmPassword" clearable show-password autocomplete="off"
-                :placeholder="t('Pages.Register.ConfirmPassword')">
+                :placeholder="t('Pages.Register.ConfirmPassword')"
+                @keyup.enter="handleSubmit"
+                >
                 <template #prefix>
                     <i class="fa fa-lock"></i>
                 </template>
@@ -48,35 +50,44 @@
 <script setup lang="ts">
 import ExternalProviders from './ExternalProviders.vue';
 import AccountForm from "../forms/AccountForm.vue";
-import { RegisterType } from '~/libs';
-import { useForm, useFormRules, useI18n } from '~/composables';
-import { onMounted } from 'vue';
+import { appConfig, account } from '~/libs';
+import { useConfig, useForm, useFormRules, useI18n } from '~/composables';
 import PasswordStrength from './PasswordStrength.vue';
+import router from '~/router';
 
 const { t } = useI18n();
 
-const formRules = {
+const formRules= {
     username: { required: true} ,
     email: { required: true, email: true },
-    password: { required: true, minLength: 6 },
-    confirmPassword: { required: true, minLength: 6, equalTo: 'password' },
+    password: { required: true },
+    confirmPassword: { required: true, equalTo: 'password' },
 };
+
+const refreshRules = () => {
+    updateRules('password', appConfig.passwordComplexitySetting);
+};
+
+const {  } = useConfig(refreshRules);
+
 
 
 const onSubmit = async () => {
     console.log(formData);
     try {
-        //formRef.value.success('Pages.login.LoginSuccess');
+        await account.register(formData.username, formData.email, formData.password);
+        formRef.value.success('Pages.Register.RegisterSuccess');
+        setTimeout(() => {
+            router.push('/login');            
+        }, 3000);
 
-    } catch (error: any) {
+    } catch (error: any) {        
         formRef.value.error(error.message);
     }
 }
 
-const { formRef, formData,  handleSubmit } = useForm<RegisterType>(onSubmit);
-const { rules} = useFormRules(formRules, formRef);
-
-
+const { formRef, formData,  handleSubmit } = useForm(onSubmit);
+const { rules, updateRules} = useFormRules(formRules, formRef);
 
 
 </script>

@@ -35,7 +35,7 @@
 <script setup lang="ts">
 import AccountForm from '../forms/AccountForm.vue';
 import { useForm, useFormRules, useI18n } from '~/composables'
-import { account, LocalStorage, LoginType } from '~/libs';
+import { account, LocalStorage } from '~/libs';
 import router from '~/router';
 import ExternalProviders from './ExternalProviders.vue';
 
@@ -48,7 +48,7 @@ const formRules = {
 
 const onSubmit = async () => {
     try {
-        await account.login(formData.value.username, formData.value.password);
+        await account.login(formData.username, formData.password);
         formRef.value.success('Pages.login.LoginSuccess');
         let redirectPath = LocalStorage.getItem('redirectPath') || '/';
         if (redirectPath === '/login') {
@@ -61,7 +61,7 @@ const onSubmit = async () => {
     }
 }
 
-const { formRef, formData,  handleSubmit } = useForm<LoginType>(formRules, onSubmit);
+const { formRef, formData,  handleSubmit } = useForm(onSubmit);
 const { rules} = useFormRules(formRules, formRef);
 
 

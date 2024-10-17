@@ -1,14 +1,18 @@
 <template>
     <div class="hero">
-        <el-card style="width: 400px;">
+        <el-card style="width: 400px; max-width: 95%;">
             <template #header>
                 <div class="text-center text-2xl font-bold">{{ t(title) }}</div>
             </template>
-            <el-form ref="formRef" v-bind="$attrs" :model="formData" size="large">
+            <el-form ref="formRef" v-bind="$attrs" :model="formData" size="large" :inline-message="true" :validate-on-rule-change="false" :scroll-to-error="true">
                 <slot></slot>
                 <div class="w-full pt-2" v-if="formMessage">
-                    <el-alert :title="t(formMessage)" :type="formMessageType" show-icon closable style="margin-top: 10px;"
-                        @close="clearFormMessage"></el-alert>
+                    <el-alert :type="formMessageType" show-icon closable style="margin-top: 10px;"
+                        @close="clearFormMessage">
+                        <template #title>
+                            <span v-html="t(formMessage)">    </span>
+                        </template>
+                    </el-alert>
                 </div>
             </el-form>
             <template #footer v-if="$slots.footer">

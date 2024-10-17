@@ -18,6 +18,7 @@ class EnvConfig {
     defaultArrayFormat: string | undefined;
     defaultPageSizes: number[];
     defaultPageSize: number;
+    appName: string;
 
     constructor() {
         const env = process.env;
@@ -40,6 +41,7 @@ class EnvConfig {
         this.defaultArrayFormat = env.VITE_DEFAULT_ARRAY_FORMAT;
         this.defaultPageSizes = env.VITE_DEFAULT_PAGE_SIZES?.split(',').map(Number) || [10, 20, 30, 50, 100];
         this.defaultPageSize = this.defaultPageSizes[0] || 10;
+        this.appName = env.VITE_APP_NAME || 'QuickTemplate';
     }
 
     get defaultHttpConfig(): any {

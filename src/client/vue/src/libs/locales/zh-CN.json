@@ -23,7 +23,8 @@
         "Cancel": "取消",
         "Yes": "是",
         "No": "否",
-        "Save": "保存"
+        "Save": "保存",
+        "Submit": "提交"
     },
     "Http":{
         "Retrying": "正在重试，还可以尝试 {retryCount} 次，每隔 {retryInterval} 秒重试一次，如果不想再重试，可以取消请求。",
@@ -54,7 +55,7 @@
         "DeleteFailed": "删除失败",
         "SaveSuccess": "保存成功",
         "SaveFailed": "保存失败",
-        "SetPasswordTip": "您尚未设置密码，请设置密码。",
+        "ResetPasswordTip": "您尚未设置密码，请<a href='/forgot-password'>点击此处</a>重置密码。",
         "OperationFailed": "操作失败！",
         "OperationSuccess": "操作成功！",
         "ConfirmDelete": "确认删除？",
@@ -107,11 +108,13 @@
             "LoggingIn": "登录中...",
             "LoginSuccess": "登录成功",
             "LoginWithThird": "第三方账号登录",
-            "LogInUsingYourProviderAccount": "使用您的 {0} 账户登录"
+            "LogInUsingYourProviderAccount": "使用您的 {0} 账户登录",
+            "Logout": "注销"
         },
         "ForgotPassword": {
             "ForgotPassword": "忘记密码？",
-            "SendPasswordResetLink_Information": "密码重置链接将发送到您的电子邮件以重置密码. 如果您在几分钟内没有收到电子邮件,请重试.",
+            "SendPasswordResetLinkInformation": "密码重置链接将发送到您的电子邮件以重置密码. 如果您在几分钟内没有收到电子邮件,请重试.",
+            "PasswordResetLinkSent": "密码重置链接已发送到您的电子邮件。",
             "Email": "电子邮件",
             "Send": "发送",
             "BackToLogin": "返回登录",
@@ -127,18 +130,29 @@
             "ConfirmPassword": "确认密码",
             "AlreadyRegistered": "已注册?",
             "Login": "请登录",
-            "RegisterSuccess": "注册成功，请检查您的电子邮件以激活您的账户。",
+            "RegisterSuccess": "注册成功，3秒后切换到登录页面。",
             "Submitting": "正在提交..."
         },
+        "ResetPassword":{
+            "ResetPassword": "重置密码",
+            "ResetPasswordInformation": "请输入您的新密码。",
+            "ResetPasswordSuccess": "密码已重置，3秒后切换到登录页面。"
+        },
         "Profile": {
-            "Profile": "Profile",
-            "Username": "Username",
-            "Email": "Email",
-            "ChangePassword": "Change Password",
-            "CurrentPassword": "Current Password",
-            "NewPassword": "New Password",
-            "ConfirmNewPassword": "Confirm New Password",
-            "Save": "Save"
+            "Profile": "个人中心",
+            "PersonalInfo": "个人信息",
+            "Username": "用户名",
+            "Email": "电子邮件",
+            "ChangePassword": "修改密码",
+            "CurrentPassword": "旧密码",
+            "NewPassword": "新密码",
+            "ConfirmNewPassword": "确认密码",
+            "Save": "保存",
+            "Name": "名",
+            "Surname": "姓",
+            "PhoneNumber": "手机号",
+            "ChangePasswordSuccess":"密码已修改，3秒后跳转到登录页。",
+            "UpdateProfileSuccess": "个人信息已更新。"
         }
     }
 }

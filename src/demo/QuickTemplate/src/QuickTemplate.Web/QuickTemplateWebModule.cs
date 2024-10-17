@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Volo.Abp;
+using Volo.Abp.Account;
 using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.Localization;
@@ -164,6 +165,8 @@ public class QuickTemplateWebModule : AbpModule
 
             options.Applications["Angular"].RootUrl = configuration["App:CorsOrigins"];
             //options.Applications["Angular"].Urls[AccountUrlNames.PasswordReset] = "reset-password";
+            options.Applications["QuickTemplate"].RootUrl = configuration["App:CorsOrigins"];
+            options.Applications["QuickTemplate"].Urls.Add(AccountUrlNames.PasswordReset, "reset-password");
         });
     }
 

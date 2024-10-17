@@ -1,5 +1,5 @@
 <template>
-    <div class="grid grid-cols-5 gap-2 w-full mt-2">
+    <div class="grid grid-cols-5 gap-2 w-full mt-2" v-if="value">
         <el-progress :show-text="false" :percentage="indicators[0]?.value" :status="indicators[0]?.status" />
         <el-progress :show-text="false" :percentage="indicators[1]?.value" :status="indicators[1]?.status" />
         <el-progress :show-text="false" :percentage="indicators[2]?.value" :status="indicators[2]?.status" />

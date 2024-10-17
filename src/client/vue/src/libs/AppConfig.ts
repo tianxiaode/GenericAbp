@@ -57,45 +57,15 @@ export class AppConfig {
 
     get passwordComplexitySetting() {
         const settings = this.config?.setting?.values || {};
-        const result: Record<string, any> = {};
 
-        this.assignPasswordComplexitySettings(
-            settings,
-            result,
-            "Abp.Identity.Password.RequiredLength",
-            "minLength",
-            parseInt
-        );
-        this.assignPasswordComplexitySettings(
-            settings,
-            result,
-            "Abp.Identity.Password.RequireDigit",
-            "requireDigit",
-            this.toBoolean
-        );
-        this.assignPasswordComplexitySettings(
-            settings,
-            result,
-            "Abp.Identity.Password.RequireLowercase",
-            "requireLowercase",
-            this.toBoolean
-        );
-        this.assignPasswordComplexitySettings(
-            settings,
-            result,
-            "Abp.Identity.Password.RequireUppercase",
-            "requireUppercase",
-            this.toBoolean
-        );
-        this.assignPasswordComplexitySettings(
-            settings,
-            result,
-            "Abp.Identity.Password.RequireNonAlphanumeric",
-            "requireNonAlphanumeric",
-            this.toBoolean
-        );
+        return {
+            minLength: parseInt(settings["Abp.Identity.Password.RequiredLength"]),
+            requireDigit: settings["Abp.Identity.Password.RequireDigit"] === "True",
+            requireLowercase: settings["Abp.Identity.Password.RequireLowercase"] === "True",
+            requireUppercase: settings["Abp.Identity.Password.RequireUppercase"] === "True",
+            requireNonAlphanumeric: settings["Abp.Identity.Password.RequireNonAlphanumeric"] === "True",
+        }
 
-        return result;
     }
 
     getAllPermissions(): Record<string, boolean> {
@@ -127,27 +97,10 @@ export class AppConfig {
         return result;
     }
 
-    private assignPasswordComplexitySettings(
-        settings: Record<string, string>,
-        result: Record<string, any>,
-        settingKey: string,
-        resultKey: string,
-        transform: (value: string) => any
-    ) {
-        const value = settings[settingKey];
-        if (value !== undefined) {
-            result[resultKey] = transform(value);
-        }
-    }
-
-    private toBoolean(value: string): boolean {
-        return value === "True";
-    }
-
     private async checkNeedSetPassword(): Promise<void> {
         const result = await http.get("/need-set-password") as any;
         if(result.need){
-            toast.error(i18n.get('Message.SetPasswordTip'));
+            toast.error(i18n.get('Message.ResetPasswordTip'));
         }
     }
 }

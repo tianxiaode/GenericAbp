@@ -32,7 +32,7 @@ BaseHttp.init({
                 // 未登录
                 break;        
             default:
-                toast.error(t(error.message, "Http"));
+                toast.error(t(error.message));
                 break;
         }
     }

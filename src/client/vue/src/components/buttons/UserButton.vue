@@ -16,7 +16,8 @@
                     <el-descriptions-item label="角色">{{ currentUser?.roles }}</el-descriptions-item>
                 </el-descriptions>
                 <div class="mt-2 text-center">
-                    <el-button plain  @click="logout">注销</el-button>
+                    <el-button plain  @click="router.push('/profile')">{{ t("Pages.Profile.Profile") }}</el-button>
+                    <el-button plain  @click="logout">{{ t("Pages.Login.Logout") }}</el-button>
                 </div>
                 
         </template>
@@ -28,6 +29,8 @@
 <script setup lang="ts">
 import { useAuthentication,useI18n,useBrowseEnv } from "../../composables";
 import avatar from "../../assets/avatar.png";
+import { account } from "~/libs";
+import router from "~/router";
 
 const { isAuthenticated,currentUser } = useAuthentication();
 const { t } = useI18n();
@@ -35,7 +38,7 @@ const { t } = useI18n();
 const { isMobile, hasHover } = useBrowseEnv()
 
 const logout = () => {
-    // appConfig.logout();
+    account.logout();
 };
 </script>
 

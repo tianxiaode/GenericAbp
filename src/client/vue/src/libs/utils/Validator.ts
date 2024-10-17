@@ -54,6 +54,7 @@ export class Validator {
             otherValue: string | number,
             _: RuleType
         ): boolean {
+            console.log(value, otherValue);
             return value === otherValue;
         },
 
@@ -127,18 +128,22 @@ export class Validator {
         },
 
         requireDigit(value: string | number): boolean {
+            if(isEmpty(value)) return true;
             return /[0-9]/.test(value.toString());
         },
 
         requireLowercase(value: string | number): boolean {
+            if(isEmpty(value)) return true;
             return /[a-z]/.test(value.toString());
         },
 
         requireUppercase(value: string | number): boolean {
+            if(isEmpty(value)) return true;
             return /[A-Z]/.test(value.toString());
         },
 
         requireNonAlphanumeric(value: string | number): boolean {
+            if(isEmpty(value)) return true;
             return /[^a-zA-Z0-9]/.test(value.toString());
         },
 

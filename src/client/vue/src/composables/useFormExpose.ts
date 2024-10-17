@@ -27,17 +27,6 @@ export function useFormExpose() {
             fields : () => formRef.value?.fields,
             scrollToField: (field: string) => formRef.value?.scrollToField(field),
             validateField: (field: string, callback: (valid: boolean) => void) => formRef.value?.validateField(field, callback),
-            isValid: async() =>{
-                const form = formRef.value;
-                const promise = new Promise<boolean>((resolve, _) => {
-                    if(!form) return resolve(false);
-
-                    form.validate((valid: boolean) => {
-                        resolve(valid);
-                    });
-                });
-                return promise;
-            },
         };
     };
 
