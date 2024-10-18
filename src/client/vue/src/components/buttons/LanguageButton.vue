@@ -1,5 +1,5 @@
 <template>
-        <el-dropdown :trigger="hasHover ? 'hover' : 'click'" role="navigation">
+        <el-dropdown :trigger="hasHover ? 'hover' : 'click'" role="navigation" size="large">
             <i v-if="!hasHover" class="el-dropdown-link text-white font-size-6 fa fa-globe" ></i>
             <span v-if="hasHover" class="el-dropdown-link text-white font-size-4.5">{{  currentLanguage?.displayName }}</span>
             <template #dropdown>

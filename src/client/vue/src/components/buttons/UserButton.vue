@@ -3,25 +3,22 @@
     <a href="/login" v-if="!isAuthenticated && isMobile">
         <i class="fa fa-circle-user text-white font-size-6"></i>
     </a>
-    <el-popover v-if="isAuthenticated" placement="bottom-end" :trigger="hasHover ? 'hover' : 'click'" width="300">
-        <template #reference>
-            <el-avatar :src="avatar" :size="isMobile ? 24: 32" />
-        </template>
-        <template #default>
-                <el-descriptions :column="1" size="large" border>
-                    <el-descriptions-item label="用户名">{{ currentUser?.userName }}</el-descriptions-item>
-                    <el-descriptions-item label="姓名">{{ currentUser?.surname }}</el-descriptions-item>
-                    <el-descriptions-item label="电子邮箱">{{ currentUser?.email }}</el-descriptions-item>
-                    <el-descriptions-item label="手机号">{{ currentUser?.phone }}</el-descriptions-item>
-                    <el-descriptions-item label="角色">{{ currentUser?.roles }}</el-descriptions-item>
-                </el-descriptions>
-                <div class="mt-2 text-center">
-                    <el-button plain  @click="router.push('/profile')">{{ t("Pages.Profile.Profile") }}</el-button>
-                    <el-button plain  @click="logout">{{ t("Pages.Login.Logout") }}</el-button>
-                </div>
-                
-        </template>
-    </el-popover>
+    <el-dropdown v-if="isAuthenticated" :trigger="hasHover ? 'hover' : 'click'" role="navigation" size="large" >
+        <el-avatar :src="avatar" :size="isMobile ? 24: 32" />
+        <template #dropdown>
+            <div class="text-center pt-3 pb-2 text-lg">{{ currentUser?.userName }}</div>
+        <el-dropdown-menu style="width: 200px;">
+            <el-dropdown-item :class="{'is-active': path === '/profile'}" @click="router.push('/profile')">
+                <i class="fa fa-user"></i>
+                {{ t("Pages.Profile.Profile") }}
+            </el-dropdown-item>
+            <el-dropdown-item @click="logout" >
+                <i class="fa fa-sign-out-alt"></i>
+                {{ t("Pages.Login.Logout") }}
+            </el-dropdown-item>
+        </el-dropdown-menu>
+    </template>
+    </el-dropdown>
 </template>
 
 
@@ -31,10 +28,11 @@ import { useAuthentication,useI18n,useBrowseEnv } from "../../composables";
 import avatar from "../../assets/avatar.png";
 import { account } from "~/libs";
 import router from "~/router";
-
+import { ref } from "vue";
+const path = ref(router.currentRoute.value.path);
 const { isAuthenticated,currentUser } = useAuthentication();
 const { t } = useI18n();
-
+console.log(currentUser)
 const { isMobile, hasHover } = useBrowseEnv()
 
 const logout = () => {
