@@ -1,7 +1,7 @@
 import { EntityInterface, isGranted } from "../libs";
 import { onMounted, onUnmounted, ref } from "vue";
 
-export function useTable<T extends EntityInterface>(api: any,createTitle:string, editTitle:string) {
+export function useTable<T extends EntityInterface>(api: any) {
 
     const resourceName = api.resourceName;
     const entity = api.entity;
@@ -24,20 +24,18 @@ export function useTable<T extends EntityInterface>(api: any,createTitle:string,
     }
 
     // Load data for the table
-    const loadData = async (records: T[]) => {
+    const loadData = (records: T[]) => {
         data.value = records;
     };
 
     // Add a new entry
     const create = () => {
-        dialogTitle.value = createTitle;
         dialogVisible.value = true;
         currentEntityId.value = '';
     };
 
     // Edit an existing entry
     const update = async (entity: T) => {
-        dialogTitle.value = editTitle;
         dialogVisible.value = true;
         currentEntityId.value = entity.id as string;
     };

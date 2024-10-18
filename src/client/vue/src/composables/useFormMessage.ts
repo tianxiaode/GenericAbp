@@ -11,39 +11,48 @@ export function useFormMessage() {
         formMessageType.value = "";
     };
 
-    const setFormMessage = (message: string, messageType: FormMessageTypeType) => {
+    const setFormMessage = (
+        message: string,
+        messageType: FormMessageTypeType
+    ) => {
         formMessage.value = message;
         formMessageType.value = messageType;
     };
 
+    const success = (message: string) => {
+        setFormMessage(message, "success");
+    };
+
+    const error = (message: string) => {
+        setFormMessage(message, "error");
+    };
+
+    const info = (message: string) => {
+        setFormMessage(message, "info");
+    };
+
+    const warning = (message: string) => {
+        setFormMessage(message, "warning");
+    };
+
     const formMessageExposed = () => {
         return {
-            formMessage,
-            formMessageType,
-            success(message: string){
-                setFormMessage(message, "success");
-            },
-            error(message: string){
-                setFormMessage(message, "error");
-            },
-            info(message: string){
-                setFormMessage(message, "info");
-            },
-            warning(message: string){
-                setFormMessage(message, "warning");
-            },
-            setFormMessage(message: string, messageType: FormMessageTypeType) {
-                setFormMessage(message, messageType);
-            },
-            clearFormMessage() {
-                clearFormMessage();
-            },
+            success,
+            error,
+            info,
+            warning,
+            clearFormMessage,
         };
     };
 
     return {
         formMessage,
         formMessageType,
+        setFormMessage,
+        success,
+        error,
+        info,
+        warning,
         clearFormMessage,
         formMessageExposed,
     };

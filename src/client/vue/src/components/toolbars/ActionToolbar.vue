@@ -6,12 +6,12 @@
             <div class="spacer" style="order:200;"></div>
             <el-input placeholder="请输入搜索内容" prefix-icon="el-icon-search" v-model="filterQuery"
                 @input="handleFilterInput" style="max-width: 200px; order:300;" clearable>
-                <template #prefix>
-                    <el-icon><font-awesome-icon icon="search"></font-awesome-icon></el-icon>
+                <template #prefix>                    
+                    <el-icon><i class="fa fa-search"></i></el-icon>
                 </template>
                 <template #suffix>
                     <el-icon v-if="showEllipsisIcon" @click="toggleAdvancedSearch" class="cursor-pointer">
-                        <font-awesome-icon icon="ellipsis"></font-awesome-icon>
+                        <i class="fa fa-ellipsis-v"></i>
                     </el-icon>
                 </template>
             </el-input>
@@ -58,7 +58,7 @@ const emit = defineEmits(['filter']);
 const defaultButtons = {
     create: {
         type: 'success',
-        icon: 'plus',
+        icon: 'fa fa-plus',
         order: 500,
         title: '新建',
         isVisible: () => true,  // 默认显示

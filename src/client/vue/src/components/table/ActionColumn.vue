@@ -43,7 +43,7 @@ const props = defineProps({
 const defaultButtons = {
     edit: {
         type: 'primary',
-        icon: 'edit',
+        icon: 'fa fa-edit',
         order: 100,
         title: '编辑',
         isVisible: () => true,  // 默认显示
@@ -51,7 +51,7 @@ const defaultButtons = {
     },
     delete: {
         type: 'danger',
-        icon: 'trash',
+        icon: 'fa fa-trash',
         order: 200,
         title: '删除',
         isVisible: () => true,

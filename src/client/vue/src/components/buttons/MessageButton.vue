@@ -1,44 +1,26 @@
 <template>
     <el-popover v-if="message" placement="top" :visible="visible" width="240">
         <template #default>
-            <span :class="buttonType" v-html="formattedMessage" ></span>
+            <span :class="type === 'error'? 'danger' :'success'" v-html="t(message)" ></span>
         </template>
         <template #reference>
-            <IconButton :icon="icon" :type="buttonType" circle slot="reference" @mouseenter="visible = true"
-                @mouseleave="visible = false" />
+            <i v-if="type !== 'error'" class="fa fa-check success" @mouseenter="visible = true"></i>
+            <i v-if ="type === 'error'" class="fa fa-x danger" @mouseenter="visible = true"></i>
         </template>
     </el-popover>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue';
-import IconButton from './IconButton.vue';
+import { ref, onMounted } from 'vue';
+import { useI18n } from '~/composables';
 
 const visible = ref(false)
 const props = defineProps({
-    isError: {
-        type: Boolean,
-        default: false
-    },
-    message: {
-        type: String,
-        required: true
-    }
+    type: String,
+    message: String
 });
 
-// 计算属性
-const icon = computed(() => {
-    return props.isError ? 'x' : 'check';
-});
-
-const buttonType = computed(() => {
-    return props.isError ? 'danger' : 'success';
-});
-
-const formattedMessage = computed(() => {
-    return props.message;
-});
-
+const {t} = useI18n();
 
 onMounted(() => {
     if (props.message !== '') {

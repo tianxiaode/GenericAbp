@@ -29,8 +29,7 @@
     </el-dialog>
 </template>
 <script setup lang="ts">
-import { toast } from '../../libs/Toast';
-import { permissionApi, PermissionInterface, PermissionGroupInterface, PermissionGroupItemInterface, PermissionUpdateInterface } from '../../api';
+import { toast, PermissionInterface, PermissionGroupInterface, PermissionGroupItemInterface, PermissionUpdateInterface, permission } from '~/libs';
 import { ref, onMounted, watch } from 'vue'
 
 const props = defineProps({
@@ -67,42 +66,41 @@ const handleClose = () => {
 const groupPermissionChange = (value: string, group: PermissionGroupInterface, permission: PermissionGroupItemInterface) => {
     permission.value = value === permission.name ? value as any : '';
     permission.isGranted = value === permission.name;
-    group.permissions.filter(m => m.parentName == permission.name).forEach(childPermission => {
+    group.permissions.filter((m: any) => m.parentName == permission.name).forEach((childPermission: any) => {
         childPermission.value = permission.isGranted ? childPermission.name as any : '';
         childPermission.isGranted = permission.isGranted;
     })
 }
 
 const childPermissionChange = (value: string, group: PermissionGroupInterface, permission: PermissionGroupItemInterface) => {
-    const parentPermission = group.permissions.find( (m:any) => m.name == permission.parentName) as PermissionGroupItemInterface;
+    const parentPermission = group.permissions.find((m: any) => m.name == permission.parentName) as PermissionGroupItemInterface;
     permission.value = value;
     permission.isGranted = value === permission.name;
-    const isAllGranted = group.permissions.filter( (m:any) => m.parentName == parentPermission.name).every(m => m.isGranted);
+    const isAllGranted = group.permissions.filter((m: any) => m.parentName == parentPermission.name).every(m => m.isGranted);
     parentPermission.value = isAllGranted ? parentPermission.name as any : '';
     parentPermission.isGranted = isAllGranted;
 };
 
 const handleSave = () => {
     const newPermissions: PermissionUpdateInterface[] = [];
-    permissions.value.groups.forEach( (group:any) => {
-        group.permissions.forEach( (permission:any) => {
+    permissions.value.groups.forEach((group: any) => {
+        group.permissions.forEach((permission: any) => {
             newPermissions.push({
                 name: permission.name,
                 isGranted: permission.isGranted,
             });
         });
     });
-    permissionApi.update(props.providerName, props.providerKey, newPermissions).then(() => {
+    permission.update(props.providerName, props.providerKey, newPermissions).then(() => {
         toast.success('权限设置保存成功');
         handleClose();
     });
 }
 
 onMounted(() => {
-    permissionApi.get(props.providerName, props.providerKey).then( (res:any) => {
+    permission.get(props.providerName, props.providerKey).then((res: any) => {
         permissions.value = res;
     });
 })
 
 </script>
-

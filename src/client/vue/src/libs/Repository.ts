@@ -149,6 +149,8 @@ export class Repository<T extends EntityInterface> extends BaseClass {
     entity: string;
     entityGroup: string;
     resourceName: string;
+    newTitle: string = '';
+    editTitle: string = '';
 
     constructor(config: RepositoryConfig<T> = {}) {
         super();

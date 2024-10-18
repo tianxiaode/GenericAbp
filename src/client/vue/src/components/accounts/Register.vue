@@ -73,7 +73,6 @@ const {  } = useConfig(refreshRules);
 
 
 const onSubmit = async () => {
-    console.log(formData);
     try {
         await account.register(formData.username, formData.email, formData.password);
         formRef.value.success('Pages.Register.RegisterSuccess');

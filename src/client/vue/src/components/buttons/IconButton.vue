@@ -1,7 +1,7 @@
 <template>
     <el-button v-bind="$attrs">
         <template #icon>
-            <font-awesome-icon :icon="icon" />
+            <i :class="icon"></i>
         </template>
     </el-button>
 </template>

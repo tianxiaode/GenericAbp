@@ -59,7 +59,8 @@
         "OperationFailed": "操作失败！",
         "OperationSuccess": "操作成功！",
         "ConfirmDelete": "确认删除？",
-        "HasDirtyData": "有未保存的数据，是否确认不保存并离开？"
+        "HasDirtyData": "有未保存的数据，是否确认不保存并离开？",
+        "SaveSuccessAndClose": "保存成功，3秒后关闭窗口。"
     },
     "Notify": {
         "DefaultInfoTitle": "信息",
@@ -152,7 +153,8 @@
             "Surname": "姓",
             "PhoneNumber": "手机号",
             "ChangePasswordSuccess":"密码已修改，3秒后跳转到登录页。",
-            "UpdateProfileSuccess": "个人信息已更新。"
+            "UpdateProfileSuccess": "个人信息已更新。",
+            "ManagementCenter": "管理中心"
         }
     }
 }

@@ -1,5 +1,5 @@
 <template>
-    <el-link v-if="!isAuthenticated && !isMobile" href="/login" >{{  t("Pages.Login.Login")  }}</el-link>
+    <el-link v-if="!isAuthenticated && !isMobile" href="/login" class="text-white" >{{  t("Pages.Login.Login")  }}</el-link>
     <a href="/login" v-if="!isAuthenticated && isMobile">
         <i class="fa fa-circle-user text-white font-size-6"></i>
     </a>
@@ -7,10 +7,14 @@
         <el-avatar :src="avatar" :size="isMobile ? 24: 32" />
         <template #dropdown>
             <div class="text-center pt-3 pb-2 text-lg">{{ currentUser?.userName }}</div>
-        <el-dropdown-menu style="width: 200px;">
+        <el-dropdown-menu style="width: 200px;">            
             <el-dropdown-item :class="{'is-active': path === '/profile'}" @click="router.push('/profile')">
                 <i class="fa fa-user"></i>
                 {{ t("Pages.Profile.Profile") }}
+            </el-dropdown-item>
+            <el-dropdown-item :class="{'is-active': path === '/admin'}" @click="router.push('/admin')">
+                <i class="fa fa-computer"></i>
+                {{ t("Pages.Profile.ManagementCenter") }}
             </el-dropdown-item>
             <el-dropdown-item @click="logout" >
                 <i class="fa fa-sign-out-alt"></i>
@@ -32,7 +36,6 @@ import { ref } from "vue";
 const path = ref(router.currentRoute.value.path);
 const { isAuthenticated,currentUser } = useAuthentication();
 const { t } = useI18n();
-console.log(currentUser)
 const { isMobile, hasHover } = useBrowseEnv()
 
 const logout = () => {

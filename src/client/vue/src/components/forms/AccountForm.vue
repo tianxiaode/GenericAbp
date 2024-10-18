@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import {  useFormData, useFormExpose,useFormMessage,useI18n } from '~/composables';
+import {  useFormExpose,useFormMessage,useI18n } from '~/composables';
 
 const { t } = useI18n();
 const props = defineProps({
@@ -31,12 +31,10 @@ const props = defineProps({
     formData: Object,    
 })
 
-const { formRef, formExpose } = useFormExpose();
-const { formData, formDataExpose } = useFormData(props.formData)
+const { formRef, formData, formExpose } = useFormExpose(props.formData);
 const { formMessage, formMessageType, clearFormMessage,formMessageExposed } = useFormMessage();
 
 defineExpose({
-    ...formDataExpose(),
     ...formExpose(),
     ...formMessageExposed()
 });

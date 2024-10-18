@@ -14,9 +14,10 @@ const routes = [
             { path: "page404", component: ()=>import("~/views/Page404.vue") },
         ]
     },
-    { path: "/admin", component: ()=>import("../views/Admin.vue"),
+    { path: "/admin", component: ()=>import("~/components/layouts/AdminLayout.vue"),
         children: [
-            { path: "/roles", component: ()=>import("../components/roles/RoleView.vue") },
+            { path: "", component: ()=>import("~/views/Dashboard.vue") },
+            { path: "/roles", component: ()=>import("~/components/roles/RoleView.vue") },
             { path: "/users", component: ()=>import("../components/users/UserView.vue") },
 
         ]        

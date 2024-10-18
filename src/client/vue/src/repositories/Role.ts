@@ -8,6 +8,8 @@ export interface RoleType extends EntityInterface {
 }
 
 class RoleRepository extends Repository<RoleType> {
+    newTitle = 'AbpIdentity.NewRole'
+    editTitle = 'AbpIdentity.EditRole'
 
     getAll(){
         return http.get(this.getUrl('GET') + '/all');

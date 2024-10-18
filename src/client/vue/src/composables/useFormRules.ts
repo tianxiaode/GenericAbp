@@ -75,10 +75,11 @@ export function useFormRules(initialRules: any, formRef: any) {
 
     const getField = (field: string) => {
 
-        let fields = formRef.value.fields;
+        let fields = formRef.value.fields;        
         if(isFunction(fields)){
             fields = fields(fields);
         }
+        console.log(fields);
         return fields.find((f: any) => f.prop === field);
     };
 

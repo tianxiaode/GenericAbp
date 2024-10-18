@@ -53,6 +53,7 @@ export class Locale {
                 Promise.resolve();
                 this.isLoaded = true;
                 localeStore.setReadyState(true);
+                console.log(this.translation)
             })
             .catch((error: any) => {
                 logger.error(this, "Failed to load language", error);
