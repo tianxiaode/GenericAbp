@@ -3,7 +3,7 @@ import { capitalize, logger, uncapitalize } from "./utils";
 import { useConfigStore } from "~/store";
 import { AppConfigType } from "./AppConfigType";
 import { i18n } from "./locales";
-import { toast } from "./Toast";
+import { ElMessage } from "element-plus";
 
 export interface AppConfigOptions {
     configUrl?: string;
@@ -100,7 +100,7 @@ export class AppConfig {
     private async checkNeedSetPassword(): Promise<void> {
         const result = await http.get("/need-set-password") as any;
         if(result.need){
-            toast.error(i18n.get('Message.ResetPasswordTip'));
+            ElMessage.error(i18n.get('Message.ResetPasswordTip'));
         }
     }
 }

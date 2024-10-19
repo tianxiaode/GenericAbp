@@ -29,8 +29,9 @@
     </el-dialog>
 </template>
 <script setup lang="ts">
-import { toast, PermissionInterface, PermissionGroupInterface, PermissionGroupItemInterface, PermissionUpdateInterface, permission } from '~/libs';
+import { PermissionInterface, PermissionGroupInterface, PermissionGroupItemInterface, PermissionUpdateInterface, permission } from '~/libs';
 import { ref, onMounted, watch } from 'vue'
+import { ElMessage } from 'element-plus';
 
 const props = defineProps({
     isVisible: {
@@ -92,7 +93,7 @@ const handleSave = () => {
         });
     });
     permission.update(props.providerName, props.providerKey, newPermissions).then(() => {
-        toast.success('权限设置保存成功');
+        ElMessage.success('权限设置保存成功');
         handleClose();
     });
 }

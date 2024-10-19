@@ -1,6 +1,5 @@
 import { onMounted, ref,reactive } from "vue";
 import { clone } from "~/libs";
-import { roleApi } from "~/repositories";
 
 export function useFormDialog(api: any, props: any) {
     const dialogTitle = ref<string>("");
@@ -32,11 +31,11 @@ export function useFormDialog(api: any, props: any) {
         if (props.entityId) {
             api.getEntity(props.entityId).then((res: any) => {
                 formRef.value.setInitValue(clone(res));
-                dialogTitle.value = roleApi.editTitle;
+                dialogTitle.value = api.updateTitle;
             });
         }else{
             formRef.value.setInitValue({});
-            dialogTitle.value = roleApi.newTitle;
+            dialogTitle.value = api.createTitle;
         }
     });
 

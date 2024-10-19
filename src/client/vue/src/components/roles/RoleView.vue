@@ -26,16 +26,18 @@
 import ActionToolbar from '../toolbars/ActionToolbar.vue';
 import Pagination from '../toolbars/PaginationToolbar.vue'
 import RoleForm from './RoleForm.vue';
-import { RoleType, roleApi } from '~/repositories';
+import { RoleType } from '~/repositories';
 import HighlightColumn from '../table/HighlightColumn.vue';
 import CheckColumn from '../table/CheckColumn.vue';
-import { useTable } from '~/composables';
+import { useTable, useRepository } from '~/composables';
 import ActionColumn from '../table/ActionColumn.vue';
 import PermissionView from '../permissions/PermissionView.vue';
 import { ref } from 'vue';
 
 const permissionVisible = ref(false);
 const providerKey = ref('');
+
+const roleApi = useRepository('Role');
 
 const openPermissionWindow = (row: RoleType) => {
     // TODO: 打开权限定义窗口

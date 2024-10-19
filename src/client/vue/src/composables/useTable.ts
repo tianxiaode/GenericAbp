@@ -49,7 +49,7 @@ export function useTable<T extends EntityInterface>(api: any) {
     // Filter data based on the filterText
     const filter = (filter: string) => {
         filterText.value = filter;
-        api.filter(filter);
+        api.filter = filter;
     };
 
     const checkChange = (entity:T)=>{
@@ -58,7 +58,7 @@ export function useTable<T extends EntityInterface>(api: any) {
 
     const sortChange = (sort: any) => {
         console.log(sort);
-        api.setSort(sort.prop, sort.order === 'ascending' ? 'asc' : 'desc');
+        api.sort(sort.prop, sort.order === 'ascending' ? 'asc' : 'desc');
     };
 
     onMounted(() => {

@@ -1,15 +1,17 @@
 import { createApp } from "vue";
 import { createPinia } from 'pinia';
-import ElementPlus, { ElMessageBox } from "element-plus";
+import ElementPlus, { ElMessage, ElMessageBox } from "element-plus";
 import '@fortawesome/fontawesome-free/css/all.css'; 
 import "element-plus/dist/index.css";
 import "~/styles/index.scss";
 import "uno.css";
 
 import App from "./App.vue";
-import { logger, Repository, envConfig,  toast ,LocalStorage, i18n, BaseHttp, normalizedLanguage, account } from "./libs";
+import { logger, envConfig,  LocalStorage, i18n, BaseHttp, normalizedLanguage, account, RepositoryGlobalConfig, RepositoryFactory } from "./libs";
 import router from "./router"; // 引入 router.ts
 import { useLocalizationStore } from "./store";
+import { Logger } from "oidc-client-ts";
+import {repositoryRegisters} from "./repositories"
 
 logger.setLevel(process.env.NODE_ENV === "development" ? "debug" : "info");
 
@@ -32,7 +34,7 @@ BaseHttp.init({
                 // 未登录
                 break;        
             default:
-                toast.error(t(error.message));
+                ElMessage.error(t(error.message));
                 break;
         }
     }
@@ -66,15 +68,25 @@ account.init({
     loadUserInfo: false
 });
 
+Logger.debug('[main.ts]',"app started");
 // 初始化仓库
-Repository.initGlobalConfig({
-    apiPrefix: "/api",
-    pageSizes: envConfig.defaultPageSizes,
-    pageSizeParamName: "MaxResultCount",
-    deleteConfirmHandler: async (message: string): Promise<boolean> => {
+RepositoryGlobalConfig.init({
+    api:{
+        prefix: "/api",
+    },
+    paging:{
+        sizes: envConfig.defaultPageSizes || [10, 20, 50, 100],
+        pageSizeParamName: "MaxResultCount",
+        skipCountParamName: "SkipCount",
+    },
+    sorting:{
+        sortParamName: "Sorting",
+    },
+    filterParamName: "filter",
+    deleteConfirmHandler: async (message: (string | number)[]): Promise<boolean> => {
         try {
             const t = i18n.get.bind(i18n);
-            await ElMessageBox.confirm(message, t("Message.DeleteConfirm"), {
+            await ElMessageBox.confirm(message.join("\n"), t("Message.DeleteConfirm"), {
                 confirmButtonText: t("Confirm"),
                 cancelButtonText: t("Cancel"),
                 type: "warning",
@@ -87,12 +99,24 @@ Repository.initGlobalConfig({
     messageHandler: (message: string, type: string) => {
         const t = i18n.get.bind(i18n);
         message = t(message);
-        if(type === "success") toast.success(message);
-        else if(type === "error") toast.error(message);
-        else if(type === "warning") toast.warning(message);
-        else if(type === "info") toast.info(message);
+        switch (type) {
+            case 'success':
+                ElMessage.success(message);                
+                break;
+            case 'error':
+                ElMessage.error(message);
+                break;
+            case 'warning':
+                ElMessage.warning(message);
+                break;
+            default:
+                ElMessage.info(message);
+                break;
+        }
     },
 });
+
+RepositoryFactory.register(repositoryRegisters);
 
 // 使用路由
 app.use(router);

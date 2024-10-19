@@ -21,21 +21,14 @@ export interface UserType extends EntityInterface {
 class UserRepository extends Repository<UserType> {
 
     getRoles(id: string,){
-        return http.get(this.getUrl('GET') + `/${id}/roles`);
+        return http.get(this.getUrl() + `/${id}/roles`);
     }
 
     updateRoles(id: string, roles: string[]){
-        return http.put(this.getUrl('PUT') + `/${id}/roles`, { roleName: roles });
+        return http.put(this.getUrl() + `/${id}/roles`, { roleName: roles });
     }
 
 
 }
 
-export const userApi = new UserRepository({
-    entity: "users",
-    resourceName: "AbpIdentity",
-    entityGroup: 'identity',
-    messageField: 'userName',
-    // 其他配置可以在这里添加，例如 apiPrefix 等
-});
 

@@ -20,9 +20,9 @@
 
 <script setup lang="ts">
 import FormDialog from '../dialogs/FormDialog.vue';
-import { roleApi } from '~/repositories';
-import { useFormDialog } from '~/composables';
+import { useFormDialog,useRepository } from '~/composables';
 
+const roleApi = useRepository('Role');
 const props = defineProps({
     visible: {
         type: Boolean,

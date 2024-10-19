@@ -2,8 +2,8 @@ import { onMounted, onUnmounted, ref } from "vue";
 
 export function usePagination(api: any) {
     const currentPage = ref(1);
-    const pageSizes = ref(api.getPageSizes());
-    const pageSize = ref(api.getPageSize());
+    const pageSizes = ref(api.pageSizes);
+    const pageSize = ref(api.pageSize);
     const totalRecords = ref(0);
 
     // Load data for the table
@@ -13,12 +13,12 @@ export function usePagination(api: any) {
 
     const pageChange = (page: number) => {
         currentPage.value = page;
-        api.setPage(page);
+        api.page = page;
     };
 
     const pageSizeChange = (size: number) => {
         pageSize.value = size;
-        api.setPageSize(size);
+        api.pageSize = size;
     };
 
 
