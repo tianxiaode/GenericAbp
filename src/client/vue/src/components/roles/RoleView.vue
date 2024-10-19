@@ -59,7 +59,7 @@ const toolbarButtons = {
 
 const tableButtons = {
     edit: { isDisabled: (row: RoleType) => !row.isStatic, action: update , isVisible: allowedUpdate },
-    delete: { isDisabled: (row: RoleType) => !row.isStatic, action: remove , isVisible: allowedDelete },
+    delete: { isDisabled: (row: RoleType) => row.isStatic, action: remove , isVisible: allowedDelete },
     permission:{ action: openPermissionWindow, icon: 'fa fa-lock', title: '权限定义', order:300, type: 'primary', isVisible: allowedUpdate }
 }
 

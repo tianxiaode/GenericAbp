@@ -1,5 +1,5 @@
 <template>
-    <AccountForm ref="formRef" :rules="rules" title="Pages.ForgotPassword.ForgotPassword" :form-data="formData">
+    <AccountForm ref="formRef" :rules="rules" title="Pages.ForgotPassword.ForgotPassword" v-model="formData">
         <div class="text-sm text-gray-500 mb-4">
             {{ t('Pages.ForgotPassword.SendPasswordResetLinkInformation') }}
         </div>

@@ -12,7 +12,7 @@ export class RoleRepository extends Repository<RoleType> {
 
     initialize() {
         logger.debug(this,'[initialize]', 'RoleRepository initialized')
-        this.entity = 'roles';
+        this.entity = 'role';
         this.resourceName = "AbpIdentity";
         this.entityGroup = "identity";  
         this.messageField = "name";

@@ -1,5 +1,5 @@
 <template>
-    <FormDialog ref="formRef"  :form-data="formData" :rules="rules" :on-ok="submitForm"
+    <FormDialog ref="formRef"  v-model="formData" :rules="rules" :on-ok="submitForm"
         :title = "dialogTitle" :visible="dialogVisible"
     >
         <template #form-items>

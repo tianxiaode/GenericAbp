@@ -12,15 +12,15 @@ export function useTable<T extends EntityInterface>(api: any) {
     const currentEntityId = ref('');
 
     const allowedCreate = () => {
-        return isGranted(resourceName, entity, 'create');
+        return isGranted(resourceName, api.entityPlural, 'create');
     }
 
     const allowedUpdate = () => {
-        return isGranted(resourceName, entity, 'update');
+        return isGranted(resourceName, api.entityPlural, 'update');
     }
 
     const allowedDelete = () => {
-        return isGranted(resourceName, entity, 'delete');
+        return isGranted(resourceName, api.entityPlural, 'delete');
     }
 
     // Load data for the table

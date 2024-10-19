@@ -274,11 +274,17 @@ export class BaseRepository<T extends EntityInterface> extends BaseClass {
     }
 
     get createTitle(): string {
-        return this.config.createTitle || "New" + capitalize(this.entity);
+        if(!isEmpty(this.config.createTitle)) return this.config.createTitle!;
+        let title = "New" + capitalize(this.entity);
+        if(this.resourceName) title = this.resourceName + '.' + title;
+        return title;
     }
 
     get updateTitle(): string {
-        return this.config.updateTitle || "Edit" + capitalize(this.entity);
+        if(!isEmpty(this.config.updateTitle)) return this.config.updateTitle!;
+        let title = "Edit" + capitalize(this.entity);
+        if(this.resourceName) title = this.resourceName + '.' + title;
+        return title;
     }
 
     send = async (url: string, method: string, data?: any, params?: any) => {

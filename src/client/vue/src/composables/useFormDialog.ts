@@ -4,7 +4,7 @@ import { clone } from "~/libs";
 export function useFormDialog(api: any, props: any) {
     const dialogTitle = ref<string>("");
     const formRef = ref<any>(null as any);
-    const formData = reactive<any>({});
+    const formData = ref<any>({});
     const dialogVisible = ref(props.visible);
 
 
@@ -30,7 +30,8 @@ export function useFormDialog(api: any, props: any) {
     onMounted(() => {
         if (props.entityId) {
             api.getEntity(props.entityId).then((res: any) => {
-                formRef.value.setInitValue(clone(res));
+                console.log('onMounted getEntity',res, clone(res));
+                formRef.value.setInitValue(res);
                 dialogTitle.value = api.updateTitle;
             });
         }else{

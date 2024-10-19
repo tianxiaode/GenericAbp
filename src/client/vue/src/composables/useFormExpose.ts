@@ -1,5 +1,5 @@
 import { FormInstance } from 'element-plus';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { clone } from '~/libs';
 
 export type FormExposeType = {
@@ -15,15 +15,24 @@ export type FormExposeType = {
     isValid: () => Promise<boolean>;
 };
 
-export function useFormExpose(parentFormData: any) {
+export function useFormExpose(props: any, emit: any) {
     const formRef = ref<FormInstance>();
-    const formData = ref<any>(parentFormData);
+    const formData = computed({
+        get() {
+            return props.modelValue;
+        },
+        set(value) {
+            emit('update:modelValue', value);
+        }
+    });    
+    
     const initValues = ref<any>({});
 
 
-    const setInitValues = (data: any) => {
+    const setInitValue = (data: any) => {
         formData.value = { ...formData.value, ...clone(data) };
         initValues.value = { ...initValues.value,  ...clone(data) };
+        console.log('formData', formData.value, initValues.value);
     };
 
     const hasChange = () => {
@@ -32,7 +41,7 @@ export function useFormExpose(parentFormData: any) {
 
     const resetForm = () => {
         formRef.value?.resetFields();
-        formData.value = {...initValues.value };
+        emit('update:modelValue', clone(initValues.value));
     };
 
     // 暴露给父组件的功能
@@ -45,7 +54,7 @@ export function useFormExpose(parentFormData: any) {
             fields : () => formRef.value?.fields,
             scrollToField: (field: string) => formRef.value?.scrollToField(field),
             validateField: (field: string, callback: (valid: boolean) => void) => formRef.value?.validateField(field, callback),
-            setInitValues,
+            setInitValue,
             hasChange
         };
     };
@@ -54,7 +63,7 @@ export function useFormExpose(parentFormData: any) {
     return {
         formRef,
         formData,
-        setInitValues,
+        setInitValue,
         hasChange,
         resetForm,
         formExpose

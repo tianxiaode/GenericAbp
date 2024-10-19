@@ -28,10 +28,13 @@ import {  useFormExpose,useFormMessage,useI18n } from '~/composables';
 const { t } = useI18n();
 const props = defineProps({
     title: String,
-    formData: Object,    
+    modelValue: {
+        type: Object,
+        required: true,
+    },
 })
-
-const { formRef, formData, formExpose } = useFormExpose(props.formData);
+const emit = defineEmits(['update:modelValue']);
+const { formRef, formData, formExpose } = useFormExpose(props, emit);
 const { formMessage, formMessageType, clearFormMessage,formMessageExposed } = useFormMessage();
 
 defineExpose({
