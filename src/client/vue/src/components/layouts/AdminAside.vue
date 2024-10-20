@@ -1,5 +1,5 @@
 <template>
-    <el-aside :class="asideStore.isExpanded ? '' : 'collapsed'" class="aside">
+    <el-aside :class="asideStore.isExpanded ? 'collapsed' : ''" class="aside">
         <el-menu router :collapse="asideStore.isExpanded" :default-active="$route.path" size="large"
             style="--el-menu-text-color:var(--el-color-info);"
         >
@@ -39,7 +39,7 @@ const asideStore = useAsideStore();
     /* 添加平滑过渡效果 */
 }
 
-.aside .collapsed {
+.aside.collapsed {
     width: 60px;
 }
 

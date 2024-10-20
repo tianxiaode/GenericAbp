@@ -1,9 +1,9 @@
 <template>
-    <el-table-column v-bind="$attrs" :label="label" align="center">
+    <el-table-column v-bind="$attrs" :label="t(label)" align="center">
         <template #default="scope">
             <div class="flex justify-center items-center gap-2">
                 <!-- 按钮循环渲染 -->
-                <div v-for="(button, icon) in mergedButtons" :key="icon" :style="{ order: button.order }" :title="button.title">
+                <div v-for="(button, icon) in mergedButtons" :key="icon" :style="{ order: button.order }" :title="t(button.title)">
                     <IconButton
                         v-if="!button.isVisible || button.isVisible()"
                         :type="button.type"
@@ -23,6 +23,7 @@
 </template>
 
 <script setup lang="ts">
+import { useI18n } from '~/composables';
 import { clone, deepMerge } from '../../libs';
 import IconButton from '../buttons/IconButton.vue';
 import { computed } from 'vue';
@@ -31,7 +32,7 @@ import { computed } from 'vue';
 const props = defineProps({
     label: {
         type: String,
-        default: '操作'
+        default: 'Components.Action'
     },
     buttons: {
         type: Object,  // 改为对象
@@ -45,7 +46,7 @@ const defaultButtons = {
         type: 'primary',
         icon: 'fa fa-edit',
         order: 100,
-        title: '编辑',
+        title: 'AbpUi.Edit',
         isVisible: () => true,  // 默认显示
         isDisabled: (row:any) => row.status === 'inactive'  // 默认禁用条件
     },
@@ -53,12 +54,13 @@ const defaultButtons = {
         type: 'danger',
         icon: 'fa fa-trash',
         order: 200,
-        title: '删除',
+        title: 'AbpUi.Delete',
         isVisible: () => true,
         isDisabled: (row:any) => row.isProtected === true
     }
 };
 
+const {t} = useI18n();
 // 合并自定义和默认按钮配置
 const mergedButtons = computed(() => {
     // 合并每个按钮的配置，允许用户只修改部分属性

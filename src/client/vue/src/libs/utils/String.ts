@@ -131,9 +131,12 @@ export function splitWithEscaping(str: string, separator: string): string[] {
 }
 
 // 将文本转换为html格式，每个换行使用P标签包裹
-export function textToHtml(text: string): string {
+export function textToHtml(text: string | string[], className: string = ""): string {
     if (isEmpty(text)) return "";
-    return "<p>" + text.replace(/\n/g, "</p><p>") + "</p>";
+    if (Array.isArray(text)) {
+        return text.map(t => textToHtml(t, className)).join("");
+    }
+    return `<p class="${className}">` + text.replace(/\n/g, `</p><p class="${className}">`) + "</p>";
 }
 
 export function normalizedLanguage(language: string) {

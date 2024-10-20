@@ -60,6 +60,7 @@ export interface RepositoryGlobalConfigType extends Record<string, any> {
     useCache?: boolean;
     filterParamName?: string;
     idFieldName?: string;
+    idParamName?: string;
     send?: SendFunctionType;
     deleteConfirmHandler?: DeleteConfirmHandlerType;
     messageHandler?: MessageHandlerType;

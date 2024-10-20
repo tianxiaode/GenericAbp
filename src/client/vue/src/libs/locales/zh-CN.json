@@ -3,6 +3,10 @@
         "Invalid username or password!":"用户名或密码错误",
         "LoginSuccess":"登录成功，正在跳转..."
     },
+    "AbpIdentity":{
+        "EditRole": "编辑角色",
+        "EditUser": "编辑用户"
+    },
     "Components": {
         "Lockout": "锁定",
         "RowNumber": "行号",
@@ -58,9 +62,11 @@
         "ResetPasswordTip": "您尚未设置密码，请<a href='/forgot-password'>点击此处</a>重置密码。",
         "OperationFailed": "操作失败！",
         "OperationSuccess": "操作成功！",
-        "ConfirmDelete": "确认删除？",
+        "ConfirmDeleteTitle": "确认删除",
+        "ConfirmDeleteMessage": "<p class='p-2'>确认要删除以下数据吗？</p>",
         "HasDirtyData": "有未保存的数据，是否确认不保存并离开？",
-        "SaveSuccessAndClose": "保存成功，3秒后关闭窗口。"
+        "SaveSuccessAndClose": "保存成功，3秒后关闭窗口。",
+        "ConfirmNotSavedTitle": "未保存数据"
     },
     "Notify": {
         "DefaultInfoTitle": "信息",

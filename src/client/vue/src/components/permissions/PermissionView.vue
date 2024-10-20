@@ -1,37 +1,51 @@
 <template>
-    <el-dialog :title="title" width="50%" destroy-on-close v-model="internalVisible">
+    <el-dialog width="50%" destroy-on-close v-model="internalVisible">
+        <template #header>
+            {{ t('AbpIdentity.Permissions') }} - {{ providerKey }}
+        </template>
         <form>
-            <div v-for="group in permissions.groups">
-                <h3>{{ group.displayName }}</h3>
-                <div v-for="groupPermission in group.permissions.filter(m => m.parentName == null)">
-                    <el-checkbox v-model="groupPermission.value" :checked="groupPermission.isGranted"
-                        :true-value="groupPermission.name"
-                        @change="(value: string) => groupPermissionChange(value, group, groupPermission)">
-                        <h4>{{ groupPermission.displayName }}</h4>
-                    </el-checkbox>
-                    <div class="grid cols-5 ml-6">
-                        <el-checkbox
-                            v-for="childPermission in group.permissions.filter(m => m.parentName == groupPermission.name)"
-                            v-model="childPermission.value" :checked="childPermission.isGranted"
-                            :true-value="childPermission.name"
-                            @change="(value: string) => childPermissionChange(value, group, childPermission)">
-                            {{ childPermission.displayName }}
+            <el-container>
+                <aside>
+                    <el-menu :default-active="currentGroup.name">
+                        <el-menu-item v-for="group in groups" :index="group.name"
+                            @click="() => handleSelect(group)">
+                            {{ group.displayName }}
+                        </el-menu-item>
+                    </el-menu>
+                </aside>
+                <main>
+                    <div class="p-2" v-for="groupPermission in currentGroup.permissions?.filter(m => m.parentName == null)">
+                        <el-checkbox v-model="groupPermission.isGranted"
+                            @change="()=>groupPermissionChange(groupPermission)"
+                        >
+                            <h4>{{ groupPermission.displayName }}</h4>
                         </el-checkbox>
+                        <div class="grid cols-1 ml-6">
+                            <el-checkbox v-for="childPermission in currentGroup.permissions?.filter(m => m.parentName == groupPermission.name)" 
+                                v-model="childPermission.isGranted"
+                                @change="()=>childPermissionChange(childPermission)"
+                                >
+                                {{ childPermission.displayName }}
+                            </el-checkbox>
+                        </div>
+
                     </div>
-                </div>
-            </div>
+
+                </main>
+            </el-container>
         </form>
         <template #footer>
             <div class="spacer"></div>
-            <el-button @click="handleClose">取消</el-button>
-            <el-button type="primary" @click="handleSave">保存</el-button>
+            <el-button @click="handleClose">{{ t('Components.Cancel') }}</el-button>
+            <el-button type="primary" @click="handleSave">{{ t('Components.Save') }}</el-button>
         </template>
     </el-dialog>
 </template>
 <script setup lang="ts">
-import { PermissionInterface, PermissionGroupInterface, PermissionGroupItemInterface, PermissionUpdateInterface, permission } from '~/libs';
-import { ref, onMounted, watch } from 'vue'
+import {  PermissionGroupInterface, PermissionGroupItemInterface, PermissionUpdateInterface, permission, i18n } from '~/libs';
+import { ref, onMounted, watch, reactive } from 'vue'
 import { ElMessage } from 'element-plus';
+import { useI18n } from '~/composables';
 
 const props = defineProps({
     isVisible: {
@@ -48,10 +62,10 @@ const props = defineProps({
     }
 })
 
-const title = ref(`权限设置 - ${props.providerKey}`);
+const { t } = useI18n();
 const internalVisible = ref(props.isVisible);
-const permissions = ref({} as PermissionInterface);
-
+const groups = ref([] as PermissionGroupInterface[]);
+const currentGroup = ref({} as PermissionGroupInterface);
 const emit = defineEmits(['update:isVisible']);
 
 // 用于监听属性变化
@@ -64,27 +78,26 @@ const handleClose = () => {
     emit('update:isVisible', false);
 }
 
-const groupPermissionChange = (value: string, group: PermissionGroupInterface, permission: PermissionGroupItemInterface) => {
-    permission.value = value === permission.name ? value as any : '';
-    permission.isGranted = value === permission.name;
+const groupPermissionChange = (permission: PermissionGroupItemInterface) => {
+    const groupName = permission.name.split('.')[0];
+    const group = groups.value.find((m: any) => m.name == groupName) as PermissionGroupInterface;
     group.permissions.filter((m: any) => m.parentName == permission.name).forEach((childPermission: any) => {
-        childPermission.value = permission.isGranted ? childPermission.name as any : '';
         childPermission.isGranted = permission.isGranted;
     })
 }
 
-const childPermissionChange = (value: string, group: PermissionGroupInterface, permission: PermissionGroupItemInterface) => {
+const childPermissionChange = (permission: PermissionGroupItemInterface) => {
+    const groupName = permission.name.split('.')[0];
+    const group = groups.value.find((m: any) => m.name == groupName) as PermissionGroupInterface;
     const parentPermission = group.permissions.find((m: any) => m.name == permission.parentName) as PermissionGroupItemInterface;
-    permission.value = value;
-    permission.isGranted = value === permission.name;
     const isAllGranted = group.permissions.filter((m: any) => m.parentName == parentPermission.name).every(m => m.isGranted);
-    parentPermission.value = isAllGranted ? parentPermission.name as any : '';
     parentPermission.isGranted = isAllGranted;
 };
 
+
 const handleSave = () => {
     const newPermissions: PermissionUpdateInterface[] = [];
-    permissions.value.groups.forEach((group: any) => {
+    groups.value.forEach((group: any) => {
         group.permissions.forEach((permission: any) => {
             newPermissions.push({
                 name: permission.name,
@@ -93,14 +106,20 @@ const handleSave = () => {
         });
     });
     permission.update(props.providerName, props.providerKey, newPermissions).then(() => {
-        ElMessage.success('权限设置保存成功');
+        ElMessage.success(i18n.get('Message.SaveSuccess'));
         handleClose();
     });
 }
 
+const handleSelect = (group: PermissionGroupInterface) => {
+    currentGroup.value = group;
+}
+
+
 onMounted(() => {
     permission.get(props.providerName, props.providerKey).then((res: any) => {
-        permissions.value = res;
+        groups.value = res.groups.sort((a: any, b: any) => a.displayName.localeCompare(b.displayName));
+        currentGroup.value = res.groups[0];
     });
 })
 

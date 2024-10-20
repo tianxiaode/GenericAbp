@@ -1,5 +1,5 @@
 <template>
-    <AccountForm ref="formRef" :rules="rules" title="Pages.ForgotPassword.ForgotPassword" v-model="formData">
+    <AccountForm ref="formRef" :rules="rules" title="Pages.ForgotPassword.ForgotPassword" :form-data="formData">
         <div class="text-sm text-gray-500 mb-4">
             {{ t('Pages.ForgotPassword.SendPasswordResetLinkInformation') }}
         </div>
@@ -26,7 +26,7 @@
 import { ref } from 'vue';
 import AccountForm from '../forms/AccountForm.vue';
 import { useForm, useFormRules, useI18n } from '~/composables'
-import { account,  LocalStorage, LoginType } from '~/libs';
+import { account,  LocalStorage } from '~/libs';
 
 const { t } = useI18n();
 const disabled = ref(false);

@@ -8,11 +8,20 @@ export class Repository<T extends EntityInterface> extends BaseRepository<T> {
 
     set page(value: number) {
         this._page = value;
-        this.load();
+        this.load(true);
     }
 
     get page(): number {
         return this._page;
+    }
+
+    get pageSize(): number {
+        return this._pageSize;
+    }
+
+    set pageSize(value: number) {
+        this._pageSize = value;
+        this.load(true);
     }
 
     set filter(value: string) {
@@ -81,9 +90,7 @@ export class Repository<T extends EntityInterface> extends BaseRepository<T> {
     };
 
     getEntity = async (id: string | number): Promise<T | undefined> => {
-        const url = this.useQueryParamForId
-            ? `${this.readUrl}?${this.idFieldName}=${id}`
-            : `${this.readUrl}/${id}`;
+        const url = this.handleUrlId(this.readUrl, id);
         try {
             return await this.send(url, this.readMethod);
         } catch (error) {
@@ -111,7 +118,7 @@ export class Repository<T extends EntityInterface> extends BaseRepository<T> {
         }
     };
 
-    async create(entity: T): Promise<T | undefined> {
+    create = async (entity: T): Promise<T | undefined> => {
         if (!this.beforeCreate(entity)) return undefined;
 
         const url = this.createUrl;
@@ -127,10 +134,10 @@ export class Repository<T extends EntityInterface> extends BaseRepository<T> {
         }
     }
 
-    async update(entity: T): Promise<T | undefined> {
+    update = async (entity: T): Promise<T | undefined> => {
         if (!this.beforeUpdate(entity)) return undefined;
 
-        const url = this.updateUrl;
+        const url = this.handleUrlId(this.updateUrl, (entity as any)[this.idFieldName] as string | number);
         try {
             const data = await this.send(url, this.updateMethod, entity);
             this.fireEvent("update");
@@ -143,11 +150,11 @@ export class Repository<T extends EntityInterface> extends BaseRepository<T> {
         }
     }
 
-    async delete(id: string | number): Promise<void> {
+    delete = async (id: string | number): Promise<void> => {
         await this.performDelete(id, false);
     }
 
-    async batchDelete(ids: (string | number)[]): Promise<void> {
+    batchDelete = async (ids: (string | number)[]): Promise<void> => {
         await this.performDelete(ids, true);
     }
 
@@ -245,8 +252,8 @@ export class Repository<T extends EntityInterface> extends BaseRepository<T> {
 
         const method = this.deleteMethod;
         let url = this.deleteUrl;
-        if (!isBatch && this.useQueryParamForId) {
-            url += `?${this.idFieldName}=${ids}`;
+        if (!isBatch) {
+            url = this.handleUrlId(url, ids as string | number);
         }
 
         try {
@@ -268,7 +275,16 @@ export class Repository<T extends EntityInterface> extends BaseRepository<T> {
             );
             throw error;
         }
-    };
+    }
+
+    //处理url中id参数
+    private handleUrlId  = (url:string, id: string | number): string => {
+        if (this.useQueryParamForId) {
+            const separator = url.includes("?") ? "&" : "?";
+            return `${url}${separator}${this.idParamName}=${id}`;
+        }
+        return `${url}/${id}`;
+    }
 
     destroy(): void {
         this.cache.clear();

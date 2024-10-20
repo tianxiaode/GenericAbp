@@ -1,18 +1,18 @@
 <template>
-    <FormDialog ref="formRef"  v-model="formData" :rules="rules" :on-ok="submitForm"
-        :title = "dialogTitle" :visible="dialogVisible"
+    <FormDialog ref="formRef"  :form-data="formData"  :rules="rules" :on-ok="submitForm"
+        :title = "dialogTitle" v-bind="$attrs" :reset="resetForm"  :before-close="checkChange"
     >
         <template #form-items>
-            <el-form-item label="角色名称" prop="name">
-                <el-input v-model="formData.name" placeholder="请输入角色名称" clearable></el-input>
+            <el-form-item :label="t('AbpIdentity.DisplayName:RoleName')" prop="name">
+                <el-input v-model="formData.name" :placeholder="t('AbpIdentity.DisplayName:RoleName')" clearable></el-input>
             </el-form-item>
 
-            <el-form-item label="是否默认">
-                <el-switch v-model="formData.isDefault" active-text="是" inactive-text="否"></el-switch>
+            <el-form-item :label="t('AbpIdentity.DisplayName:IsDefault')">
+                <el-switch v-model="formData.isDefault" :active-text="t('Components.Yes')" :inactive-text="t('Components.No')"></el-switch>
             </el-form-item>
 
-            <el-form-item label="是否公开">
-                <el-switch v-model="formData.isPublic" active-text="是" inactive-text="否"></el-switch>
+            <el-form-item :label="t('AbpIdentity.DisplayName:IsPublic')">
+                <el-switch v-model="formData.isPublic" :active-text="t('Components.Yes')" :inactive-text="t('Components.No')"></el-switch>
             </el-form-item>
         </template>
     </FormDialog>
@@ -20,8 +20,9 @@
 
 <script setup lang="ts">
 import FormDialog from '../dialogs/FormDialog.vue';
-import { useFormDialog,useRepository } from '~/composables';
+import { useEntityForm,useI18n,useRepository } from '~/composables';
 
+const { t } = useI18n();
 const roleApi = useRepository('Role');
 const props = defineProps({
     visible: {
@@ -34,7 +35,7 @@ const props = defineProps({
     }
 });
 
-const { formRef, formData, dialogTitle,dialogVisible, submitForm } = useFormDialog(roleApi, props);
+const { formRef, formData, dialogTitle, resetForm, submitForm, checkChange } = useEntityForm(roleApi, props);
 
 const rules = {
     name: [

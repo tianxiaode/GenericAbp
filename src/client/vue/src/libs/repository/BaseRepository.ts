@@ -39,9 +39,6 @@ export class BaseRepository<T extends EntityInterface> extends BaseClass {
         logger.debug(this, "[initialize]", "BaseRepository initialize");
     }
 
-    get pageSize(): number {
-        return this._pageSize;
-    }
 
 
     set total(value: number) {
@@ -233,6 +230,14 @@ export class BaseRepository<T extends EntityInterface> extends BaseClass {
         );
     }
 
+    get idParamName(): string {
+        return (
+            this.config.idParamName ||
+            RepositoryGlobalConfig.idParamName ||
+            "id"
+        );
+    }
+
     get createUrl(): string {
          return this.config.createUrl || this.getUrl();
     }
@@ -362,8 +367,9 @@ export class BaseRepository<T extends EntityInterface> extends BaseClass {
     };
 
     confirmDelete = async (message: (string | number)[]): Promise<boolean> => {
-        if(!this.config.deleteConfirmHandler) return Promise.resolve(true);
-        return this.config.deleteConfirmHandler.call(this, message);
+        if(this.config.deleteConfirmHandler) return await this.config.deleteConfirmHandler.call(this, message);
+        if(RepositoryGlobalConfig.deleteConfirmHandler) return await RepositoryGlobalConfig.deleteConfirmHandler.call(this, message);
+        return true;
     };
 
     message = (message: string, type: string = "info") => {
@@ -411,9 +417,9 @@ export class BaseRepository<T extends EntityInterface> extends BaseClass {
         if (this.pageParamName) {
             params[this.pageParamName] = this._page;
         }
-        params[this.pageSizeParamName] = this.pageSize;
+        params[this.pageSizeParamName] = this._pageSize;
         if (this.skipCountParamName) {
-            params[this.skipCountParamName] = (this._page - 1) * this.pageSize;
+            params[this.skipCountParamName] = (this._page - 1) * this._pageSize;
         }
         if (!isEmpty(this._filter)) {
             params[this.filterParamName] = this._filter;

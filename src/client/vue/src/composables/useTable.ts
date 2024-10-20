@@ -61,6 +61,11 @@ export function useTable<T extends EntityInterface>(api: any) {
         api.sort(sort.prop, sort.order === 'ascending' ? 'asc' : 'desc');
     };
 
+    const formClose = () => {
+        dialogVisible.value = false;
+        api.load(true);
+    };
+
     onMounted(() => {
         api.on('load', loadData);
         api.load();
@@ -87,5 +92,6 @@ export function useTable<T extends EntityInterface>(api: any) {
         filter,
         checkChange,
         sortChange,
+        formClose
     };
 }

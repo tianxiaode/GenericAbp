@@ -82,3 +82,29 @@ code {
         height: calc(100vh - 60px);
     }
 }
+
+/* 使用before伪类在文字前加上小圆点，可设置不同演示 */
+// 定义一个混入，用于处理前置内容的样式
+@mixin dot-style($color) {
+    content: "•";  // 默认内容
+    font-size: larger;
+    margin-right: 5px;
+    color: $color;  // 接收颜色参数
+}
+
+.dot-danger:before {
+    @include dot-style(var(--el-color-error));  // 使用混入，传入警告色
+}
+
+.dot-success:before {
+    @include dot-style(var(--el-color-success));  // 使用混入，传入成功色
+}
+
+.dot-warning:before {
+    @include dot-style(var(--el-color-warning));  // 使用混入，传入警告色
+}
+
+.dot-info:before {
+    @include dot-style(var(--el-color-info));  // 使用混入，传入信息色
+}
+

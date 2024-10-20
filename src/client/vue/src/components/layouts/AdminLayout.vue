@@ -5,9 +5,9 @@
         </el-header>
         <el-container>
             <AdminAside />
-                <el-main>
-                    <router-view />
-                </el-main>
+            <el-main>
+                <router-view />
+            </el-main>
         </el-container>
     </el-container>
 </template>

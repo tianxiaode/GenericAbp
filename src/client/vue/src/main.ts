@@ -7,15 +7,16 @@ import "~/styles/index.scss";
 import "uno.css";
 
 import App from "./App.vue";
-import { logger, envConfig,  LocalStorage, i18n, BaseHttp, normalizedLanguage, account, RepositoryGlobalConfig, RepositoryFactory } from "./libs";
+import { logger, envConfig,  LocalStorage, i18n, BaseHttp, normalizedLanguage, account, RepositoryGlobalConfig, RepositoryFactory,textToHtml } from "./libs";
 import router from "./router"; // 引入 router.ts
 import { useLocalizationStore } from "./store";
 import { Logger } from "oidc-client-ts";
 import {repositoryRegisters} from "./repositories"
+import { useConfirm } from "./composables";
 
 logger.setLevel(process.env.NODE_ENV === "development" ? "debug" : "info");
 
-
+const { confirm } = useConfirm();
 
 const app = createApp(App);
 const pinia = createPinia();
@@ -86,11 +87,8 @@ RepositoryGlobalConfig.init({
     deleteConfirmHandler: async (message: (string | number)[]): Promise<boolean> => {
         try {
             const t = i18n.get.bind(i18n);
-            await ElMessageBox.confirm(message.join("\n"), t("Message.DeleteConfirm"), {
-                confirmButtonText: t("Confirm"),
-                cancelButtonText: t("Cancel"),
-                type: "warning",
-            });
+            const messageStr = textToHtml(message as string[], 'dot-danger');
+            await confirm(t('Message.ConfirmDeleteMessage') + messageStr, t('Message.ConfirmDeleteTitle'));
             return true; // 用户点击"确定"
         } catch {
             return false; // 用户点击"取消"

@@ -1,5 +1,5 @@
 <template>
-    <AccountForm ref="formRef" :rules="rules" title="Pages.Register.Register"  v-model="formData">
+    <AccountForm ref="formRef" :rules="rules" title="Pages.Register.Register"  :form-data="formData">
         <el-form-item prop="username" clearable>
             <el-input v-model="formData.username"             
             :placeholder="t('Pages.Register.Username')">

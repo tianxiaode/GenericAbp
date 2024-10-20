@@ -1,7 +1,6 @@
 // src/libs/locales/Locale.ts
 import {
     capitalize,
-    clone,
     deepMerge,
     isEmpty,
     logger,
@@ -65,12 +64,13 @@ export class Locale {
         let remainingParams: string[] = [];
         let replacements: any = {};
 
+
         // 如果参数多于2个，且最后一个参数是对象，则将其视为替换值
         if (
             params.length >= 2 &&
             typeof params[params.length - 1] === "object"
         ) {
-            replacements = params.pop(); // 移除最后一个参数并赋值为替换值
+            replacements = params.pop(); // 自定义替换值
         }
 
         // 处理剩余参数
@@ -122,13 +122,14 @@ export class Locale {
         if (isEmpty(this.remoteTextUrl)) return; // 确保有远程网址
         try {
             const response = await http.get(this.remoteTextUrl, {
-                [this.remoteLanguageParam]: this.language, // 使用语言参数
+                [this.remoteLanguageParam]: LocalStorage.getLanguage(), // 使用语言参数
             });
             const resources = response?.resources || {};
             for (const key in resources) {
                 const value = resources[key]?.texts;
                 if(!value) continue;
-                this.translation[key] = clone(value);
+                const source = this.translation[key];
+                source ? Object.assign(source, value) : this.translation[key] = value;
             }
         } catch (error) {
             logger.error(this, "Failed to load remote text", error);

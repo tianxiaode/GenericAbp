@@ -2,28 +2,24 @@ import { storeToRefs } from "pinia";
 import { computed, onMounted, ref, watch } from "vue";
 import { useLocalizationStore } from "~/store";
 import { i18n } from "~/libs";
-import zhCn  from 'element-plus/es/locale/lang/zh-cn'
+import zhCn from "element-plus/es/locale/lang/zh-cn";
+import en from "element-plus/es/locale/lang/en";
+import zhTw from "element-plus/es/locale/lang/zh-tw";
 export function useI18n() {
     const localeStore = useLocalizationStore();
     const { isReady, locale } = storeToRefs(localeStore);
-    const elementPlusLocale = ref<any>(null);
 
-    watch(locale, async (newLocale) => {
-        switch (newLocale) {
+    const elementPlusLocale = computed(() => {
+        switch (locale.value) {
             case "en":
-                elementPlusLocale.value = await import(
-                    "element-plus/es/locale/lang/en"
-                );
-                break;
+                return en;
             case "zh-TW":
-                elementPlusLocale.value = await import(
-                    "element-plus/es/locale/lang/zh-tw"
-                );
-                break;
+                return zhTw;
             default:
-                elementPlusLocale.value = zhCn;
+                return zhCn;
         }
     });
+
     // 动态计算 t 函数，基于 isReady.value 的状态
     const t = computed(() => {
         return (...args: any[]) => {
@@ -35,11 +31,6 @@ export function useI18n() {
                 return args.join(".");
             }
         };
-    });
-
-    onMounted(async () => {
-        // 加载默认语言包
-        elementPlusLocale.value = zhCn;
     });
 
     return {

@@ -72,6 +72,10 @@ export class RepositoryGlobalConfig {
         return this.config.idFieldName || "id";
     }
 
+    static get idParamName(): string {
+        return this.config.idParamName || "id";
+    }
+
     static get send(): SendFunctionType | undefined {
         return this.config.send;
     }

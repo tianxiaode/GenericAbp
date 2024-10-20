@@ -1,6 +1,7 @@
 {
     "Company": "Quick Template",
-    "AppName": "快速模板",
+    "AppName": "Quick Template",
+    "AppShortName": "Q-Template",
     "DatetimeFormat": "MM/dd/yyyy HH:mm:ss",
     "DateFormat": "MM/dd/yyyy",
     "TimeFormat": "HH:mm:ss",

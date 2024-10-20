@@ -1,19 +1,22 @@
 <template>
-    <div class="bg-primary pr-5 flex justify-between items-center h-full w-full box-border text-white">
-            <div :class="['logo-wrap', { collapse }]" class="flex pl-4">
-                <img src='/logo.png' alt="Logo" class="logo-icon cursor-pointer" @click="router.push('/')" />
-                <span v-if="!collapse" class="logo-text cursor-pointer" @click="router.push('/')">{{ t("AppName") }}</span>
-            </div>
-            <el-icon class="trigger" @click="toggleCollapse" :rotate="collapse ? 'el-icon-s-fold' : 'el-icon-s-unfold'">
-                <template v-if="collapse">
-                    <Expand />
-                </template>
-                <template v-else>
-                    <Fold />
-                </template>
-            </el-icon>
-            <div class="spacer"></div>
-            <UserButton />
+    <div class="bg-primary pr-5 flex justify-between items-center h-full w-full box-border text-white gap-2">
+        <div :class="['logo-wrap', { collapse }]" class="flex pl-4 ">
+            <img src='/logo.png' alt="Logo" class="logo-icon cursor-pointer" @click="router.push('/')" />
+            <span v-if="!collapse" class="logo-text cursor-pointer overflow-hidden" @click="router.push('/')">
+                {{ t("AppShortName") }}
+            </span>
+        </div>
+        <el-icon class="trigger" @click="toggleCollapse" :rotate="collapse ? 'el-icon-s-fold' : 'el-icon-s-unfold'">
+            <template v-if="collapse">
+                <Expand />
+            </template>
+            <template v-else>
+                <Fold />
+            </template>
+        </el-icon>
+        <div class="spacer"></div>
+        <LanguageButton />
+        <UserButton />
     </div>
 </template>
 
@@ -24,9 +27,10 @@ import UserButton from '../buttons/UserButton.vue';
 import { useI18n } from '~/composables';
 import { useAsideStore } from '~/store';
 import router from '~/router';
+import LanguageButton from '../buttons/LanguageButton.vue';
 const collapse = ref(false);
 
-const { t} = useI18n();
+const { t } = useI18n();
 const asideStore = useAsideStore();
 const toggleCollapse = () => {
     collapse.value = !collapse.value;
@@ -36,7 +40,6 @@ const toggleCollapse = () => {
 </script>
 
 <style scoped>
-
 .logo-wrap {
     /* 垂直居中对齐 */
     font-size: 24px;

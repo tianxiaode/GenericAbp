@@ -1,6 +1,7 @@
 {
     "Company": "快速模板",
     "AppName": "快速模板",
+    "AppShortName": "快速模板",
     "DatetimeFormat": "yyyy-MM-dd HH:mm:ss",
     "DateFormat": "yyyy-MM-dd",
     "TimeFormat": "HH:mm:ss",

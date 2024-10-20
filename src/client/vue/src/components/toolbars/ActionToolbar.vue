@@ -4,7 +4,7 @@
             <slot name="action-items"></slot>
             <h3 class="title" style="order:100;">{{ title }}</h3> <!-- 显示父视图传递过来的 title -->
             <div class="spacer" style="order:200;"></div>
-            <el-input placeholder="请输入搜索内容" prefix-icon="el-icon-search" v-model="filterQuery"
+            <el-input :placeholder="t('Components.Search')" prefix-icon="el-icon-search" v-model="filterQuery"
                 @input="handleFilterInput" style="max-width: 200px; order:300;" clearable>
                 <template #prefix>                    
                     <el-icon><i class="fa fa-search"></i></el-icon>
@@ -17,7 +17,7 @@
             </el-input>
             <div class="spacer" style="order: 400;"></div>
             <div v-for="(button, icon) in mergedButtons" :key="icon" :style="{ order: button.order }"
-                :title="button.title">
+                :title="t(button.title)">
                 <IconButton v-if="button.isVisible && button.isVisible()" :type="button.type" :icon="button.icon" circle
                     :disabled="button.isDisabled && button.isDisabled()" @click="button.action()">
                 </IconButton>
@@ -41,6 +41,7 @@
 import { ref,  computed, } from 'vue';
 import IconButton from '../buttons/IconButton.vue';
 import { clone, deepMerge } from '../../libs';
+import { useI18n } from '~/composables';
 // 定义 props 接收父组件传递的标题、是否显示新建按钮、是否显示 ellipsis 图标
 const props = defineProps({
     title: { type: String, required: true },
@@ -53,6 +54,7 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['filter']);
+const {t} = useI18n();
 
 // 默认按钮配置
 const defaultButtons = {
@@ -60,7 +62,7 @@ const defaultButtons = {
         type: 'success',
         icon: 'fa fa-plus',
         order: 500,
-        title: '新建',
+        title: 'Components.New',
         isVisible: () => true,  // 默认显示
         isDisabled: () => false  // 默认禁用条件
     }
