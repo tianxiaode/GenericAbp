@@ -1,7 +1,7 @@
 <template>
     <el-dialog width="50%" destroy-on-close v-model="internalVisible">
         <template #header>
-            {{ t('AbpIdentity.Permissions') }} - {{ providerKey }}
+            {{ t('AbpIdentity.Permissions') }} - {{ title }}
         </template>
         <form>
             <el-container style="min-height: 500px;">
@@ -61,7 +61,8 @@ import { useI18n } from '~/composables';
 const props = defineProps({
     isVisible: { type: Boolean, default: false },
     providerName: { type: String, required: true },
-    providerKey: { type: String, required: true }
+    providerKey: { type: String, required: true },
+    title: { type: String, required: true },
 });
 
 const { t } = useI18n();

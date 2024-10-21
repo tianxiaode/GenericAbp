@@ -5,7 +5,10 @@
     },
     "AbpIdentity":{
         "EditRole": "Edit Role",
-        "EditUser": "Edit User"
+        "EditUser": "Edit User",
+        "Locked": "Locked",
+        "NotLocked": "Not locked",
+        "Details": "Details"
     },
     "Components": {
         "Lockout": "Lockout",

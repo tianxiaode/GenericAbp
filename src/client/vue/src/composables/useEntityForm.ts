@@ -72,6 +72,7 @@ export function useEntityForm(api: any, props: any) {
     return {
         formRef,
         formData,
+        initValues,
         dialogVisible,
         dialogTitle,
         checkChange,

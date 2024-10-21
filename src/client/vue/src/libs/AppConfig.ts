@@ -30,9 +30,9 @@ export class AppConfig {
             configStore.refreshState(false, false)
             const response = await http.get<AppConfigType>(this.configUrl, this.configParams);
             this.config = response;
-            if(this.currentUser.isAuthenticated){
-                this.checkNeedSetPassword();
-            }
+            // if(this.currentUser.isAuthenticated){
+            //     this.checkNeedSetPassword();
+            // }
             configStore.refreshState(!!response, response?.currentUser.isAuthenticated || false)
         } catch (error) {
             logger.error(this, `Error loading config: `, error);

@@ -1,4 +1,4 @@
-import { EntityInterface, http, Repository } from "../libs";
+import { EntityInterface, http, logger, Repository } from "../libs";
 
 export interface UserType extends EntityInterface {
     userName: String,
@@ -18,7 +18,18 @@ export interface UserType extends EntityInterface {
     roleNames?: String[]
 }
 
-class UserRepository extends Repository<UserType> {
+export class UserRepository extends Repository<UserType> {
+
+    $className = 'UserRepository';
+
+    initialize() {
+        logger.debug(this,'[initialize]', 'RoleRepository initialized')
+        this.entity = 'user';
+        this.resourceName = "AbpIdentity";
+        this.entityGroup = "identity";  
+        this.messageField = "userName";
+    };
+
 
     getRoles(id: string,){
         return http.get(this.getUrl() + `/${id}/roles`);
@@ -27,7 +38,6 @@ class UserRepository extends Repository<UserType> {
     updateRoles(id: string, roles: string[]){
         return http.put(this.getUrl() + `/${id}/roles`, { roleName: roles });
     }
-
 
 }
 

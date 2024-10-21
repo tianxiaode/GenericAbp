@@ -8,7 +8,6 @@ export function useTable<T extends EntityInterface>(api: any) {
     const data = ref<T[]>([]);
     const filterText = ref('');
     const dialogVisible = ref(false);
-    const dialogTitle = ref('');
     const currentEntityId = ref('');
 
     const allowedCreate = () => {
@@ -85,7 +84,6 @@ export function useTable<T extends EntityInterface>(api: any) {
         data,
         filterText,
         dialogVisible,
-        dialogTitle,
         currentEntityId,
         allowedCreate,
         allowedUpdate,

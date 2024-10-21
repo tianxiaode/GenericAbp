@@ -5,7 +5,10 @@
     },
     "AbpIdentity":{
         "EditRole": "编辑角色",
-        "EditUser": "编辑用户"
+        "EditUser": "编辑用户",
+        "Locked": "已锁定",
+        "NotLocked": "未锁定",
+        "Details": "详情"
     },
     "Components": {
         "Lockout": "锁定",

@@ -1,7 +1,10 @@
 <template>
-    <el-dialog :title="t(title)" v-bind="$attrs" :before-close="dialogBeforeClose" destroy-on-close>
+    <el-dialog :title="t(title)" v-bind="$attrs" :before-close="dialogBeforeClose" destroy-on-close align-center>
         <el-form ref="formRef" :rules="rules" :model="formData" size="large" :inline-message="true"
-            :validate-on-rule-change="false" :scroll-to-error="true" require-asterisk-position="right">
+            :validate-on-rule-change="false" :scroll-to-error="true" require-asterisk-position="right"
+            :label-width="labelWidth"
+            label-suffix=":"
+        >
             <el-input type="hidden" v-model="formData.id" />
             <el-input type="hidden" v-model="formData.concurrencyStamp" />
             <slot name="form-items"></slot>
@@ -31,6 +34,10 @@ import IconButton from '../buttons/IconButton.vue';
 
 const props = defineProps({
     title: String,
+    labelWidth: {
+        type: Number,
+        default: 140,
+    },
     rules: Object,
     formData: {
         type: Object,

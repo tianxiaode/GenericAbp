@@ -22,7 +22,7 @@
     <RoleForm v-if="dialogVisible" v-model="dialogVisible" :entity-id="currentEntityId" @close="formClose" />
 
     <PermissionView v-if="permissionVisible" v-model:isVisible="permissionVisible" provider-name="R"
-        :provider-key="providerKey"></PermissionView>
+        :provider-key="providerKey" :title="providerKey"></PermissionView>
 </template>
 
 <script setup lang="ts">

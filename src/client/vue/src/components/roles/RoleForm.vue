@@ -8,11 +8,11 @@
             </el-form-item>
 
             <el-form-item :label="t('AbpIdentity.DisplayName:IsDefault')">
-                <el-switch v-model="formData.isDefault" :active-text="t('Components.Yes')" :inactive-text="t('Components.No')"></el-switch>
+                <Switch v-model="formData.isDefault" />
             </el-form-item>
 
             <el-form-item :label="t('AbpIdentity.DisplayName:IsPublic')">
-                <el-switch v-model="formData.isPublic" :active-text="t('Components.Yes')" :inactive-text="t('Components.No')"></el-switch>
+                <Switch v-model="formData.isPublic" />
             </el-form-item>
         </template>
     </FormDialog>
@@ -21,6 +21,7 @@
 <script setup lang="ts">
 import FormDialog from '../dialogs/FormDialog.vue';
 import { useEntityForm,useI18n,useRepository } from '~/composables';
+import Switch from '../forms/Switch.vue';
 
 const { t } = useI18n();
 const roleApi = useRepository('Role');
@@ -38,9 +39,7 @@ const props = defineProps({
 const { formRef, formData, dialogTitle, resetForm, submitForm, checkChange } = useEntityForm(roleApi, props);
 
 const rules = {
-    name: [
-        { required: true, message: '请输入角色名称', trigger: 'blur' }
-    ]
+    name: { required: true}
 };
 
 

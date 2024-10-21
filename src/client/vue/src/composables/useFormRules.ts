@@ -18,6 +18,9 @@ export function useFormRules(initialRules: any, formRef: any) {
         for (const name in fieldRules) {
             let isValid = true;
             const otherField = name === "equalTo" ?  fieldRules['equalTo'] : "";
+            if(name === "required" && fieldRules[name] === false && isEmpty(value)){
+                break;
+            };
             if (Validator.validates.hasOwnProperty(name)) {
                 isValid =
                     name === "custom"
@@ -64,10 +67,15 @@ export function useFormRules(initialRules: any, formRef: any) {
     };
 
     // 允许外部更新动态规则
-    const updateRules = (fieldName: string, newRules: any) => {
-        if (rules[fieldName]) {
-            rules[fieldName] = { ...rules[fieldName], ...newRules }; // 更新特定字段的动态规则
+    const updateRules = (...args: any[]) => {
+        let newRules = args[0];
+        if(typeof newRules === 'string'){
+            newRules = {[args[0]]: args[1]}
         }
+        for (const fieldName in newRules) {
+            rules[fieldName] = { ...rules[fieldName],...newRules[fieldName] };
+        }
+                
     };
 
     // 执行初始规则设置
