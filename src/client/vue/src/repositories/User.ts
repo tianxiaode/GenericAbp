@@ -1,4 +1,4 @@
-import { EntityInterface, http, logger, Repository } from "../libs";
+import { EntityInterface, http, isGranted, logger, Repository } from "../libs";
 
 export interface UserType extends EntityInterface {
     userName: String,
@@ -30,6 +30,13 @@ export class UserRepository extends Repository<UserType> {
         this.messageField = "userName";
     };
 
+    get canManagePermissions(): boolean {
+        return isGranted(`${this.resourceName}.${this.entityPlural}.ManagePermissions`);
+    }
+
+    get canManageRoles(): boolean {
+        return isGranted(`${this.resourceName}.${this.entityPlural}.update.ManageRoles`);
+    }
 
     getRoles(id: string,){
         return http.get(this.getUrl() + `/${id}/roles`);

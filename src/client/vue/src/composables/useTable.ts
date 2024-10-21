@@ -10,22 +10,6 @@ export function useTable<T extends EntityInterface>(api: any) {
     const dialogVisible = ref(false);
     const currentEntityId = ref('');
 
-    const allowedCreate = () => {
-        return isGranted(resourceName, api.entityPlural, 'create');
-    }
-
-    const allowedUpdate = () => {
-        return isGranted(resourceName, api.entityPlural, 'update');
-    }
-
-    const allowedDelete = () => {
-        return isGranted(resourceName, api.entityPlural, 'delete');
-    }
-
-    const checkPermission = (permission: string) => {
-        return ()=>isGranted(resourceName, api.entityPlural, permission);
-    }
-
     // Load data for the table
     const loadData = (records: T[]) => {
         data.value = records;
@@ -85,10 +69,6 @@ export function useTable<T extends EntityInterface>(api: any) {
         filterText,
         dialogVisible,
         currentEntityId,
-        allowedCreate,
-        allowedUpdate,
-        allowedDelete,
-        checkPermission,
         create,
         update,
         remove,

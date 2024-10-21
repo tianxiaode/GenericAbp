@@ -1,30 +1,23 @@
-import { isEmpty, uncapitalize } from "./String";
+import { isEmpty, capitalize } from "./String";
 import { appConfig } from "../AppConfig";
 
 
-export const isGranted = (
-    resourceName: string,
-    entity: string,
-    permission: string = ''
-) => {
-    const permissions = appConfig.getPermissions(resourceName, entity);
-    permission = uncapitalize(permission);
-    if(isEmpty(permission)) return permissions['default'] || false;
-    return permissions[permission] || false;
+export const isGranted = (...args: string[]) => {
+    const permissions = appConfig.permissions;
+    if(isEmpty(permissions)) return false;
+    let hasPermission = false;
+    for (const permission of args) {
+        //将每一个权限先根据.拆分，然后将每个部件头字母大写，再用.连接起来，最后从permissions中取出对应的权限
+        const permissionArray = permission.split('.');
+        let permissionName = '';
+        for (const part of permissionArray) {
+            permissionName += capitalize(part) + '.';
+        }
+        if(permissions[permissionName.slice(0, -1)]) {
+            hasPermission = true;
+            break;
+        }    
+    }
+    return hasPermission;
 };
 
-export const allowedRead = (resourceName: string, entity: string) => {
-    return isGranted(resourceName, entity,'read');
-};
-
-export const allowedCreate = (resourceName: string, entity: string) => {
-    return isGranted(resourceName, entity, 'create');
-};
-
-export const allowedEdit = (resourceName: string, entity: string) => {
-    return isGranted(resourceName, entity, 'edit');
-};
-
-export const allowedDelete = (resourceName: string, entity: string) => {
-    return isGranted(resourceName, entity, 'delete');
-};

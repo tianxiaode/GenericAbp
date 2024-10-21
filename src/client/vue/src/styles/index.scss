@@ -108,3 +108,6 @@ code {
     @include dot-style(var(--el-color-info));  // 使用混入，传入信息色
 }
 
+.el-form-item__label{
+    justify-content: flex-start;
+}

@@ -16,10 +16,10 @@
                 </template>
             </el-input>
             <div class="spacer" style="order: 400;"></div>
-            <div v-for="(button, icon) in mergedButtons" :key="icon" :style="{ order: button.order }"
+            <div v-for="(button, icon) in buttonsList" :key="icon" :style="{ order: button.order }"
                 :title="t(button.title)">
-                <IconButton v-if="button.isVisible && button.isVisible()" :type="button.type" :icon="button.icon" circle
-                    :disabled="button.isDisabled && button.isDisabled()" @click="button.action()">
+                <IconButton v-if="handleButtonVisibility(button)" :type="button.type" :icon="button.icon" circle
+                    :disabled="handleButtonDisabled(button)" @click="handleButtonClick(button)">
                 </IconButton>
 
             </div>
@@ -38,10 +38,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref,  computed, } from 'vue';
+import { ref,  } from 'vue';
 import IconButton from '../buttons/IconButton.vue';
-import { clone, deepMerge } from '../../libs';
-import { useI18n } from '~/composables';
+import { useActionButtons, useI18n } from '~/composables';
 // 定义 props 接收父组件传递的标题、是否显示新建按钮、是否显示 ellipsis 图标
 const props = defineProps({
     title: { type: String, required: true },
@@ -68,13 +67,7 @@ const defaultButtons = {
     }
 };
 
-// 合并自定义和默认按钮配置
-const mergedButtons = computed(() => {
-    // 合并每个按钮的配置，允许用户只修改部分属性
-    const result = deepMerge(clone(defaultButtons), props.buttons);
-    return result;
-});
-
+const { buttonsList, handleButtonClick, handleButtonDisabled, handleButtonVisibility } = useActionButtons(defaultButtons,props.buttons);
 const isAdvancedSearchVisible = ref(false);
 const selectedCount = ref(0);
 const selectedItems = ref<string[]>([]);

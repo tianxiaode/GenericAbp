@@ -12,15 +12,15 @@
                     <el-icon><i class="fa fa-cogs"></i></el-icon>
                     <span>系统管理</span>                    
                 </template>
-                <el-menu-item index="/users" v-if="isGranted('AbpIdentity', 'Users')">
+                <el-menu-item index="/users" v-if="isGranted('AbpIdentity.Users')">
                     <el-icon><i class="fa fa-users"></i></el-icon>
                     <span>用户管理</span>                    
                 </el-menu-item>
-                <el-menu-item index="/roles" v-if="isGranted('AbpIdentity', 'Roles')">
+                <el-menu-item index="/roles" v-if="isGranted('AbpIdentity.Roles')">
                     <el-icon><i class="fa fa-lock"></i></el-icon>
                     <span>角色管理</span>                    
                 </el-menu-item>
-                <el-menu-item index="/settings" v-if="isGranted('AbpIdentity', 'Roles')">
+                <el-menu-item index="/settings" v-if="isGranted('AbpIdentity.Roles')">
                     <el-icon><i class="fa fa-cog"></i></el-icon>
                     <span>设置</span>                    
                 </el-menu-item>

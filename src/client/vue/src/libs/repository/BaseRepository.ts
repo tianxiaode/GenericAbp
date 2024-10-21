@@ -1,6 +1,6 @@
 import { BaseClass } from "../BaseClass";
 import { http } from "../http";
-import { isEmpty, Plural, logger, camelCaseToDash, capitalize } from "../utils";
+import { isEmpty, Plural, logger, camelCaseToDash, capitalize, isGranted } from "../utils";
 import { RepositoryGlobalConfig } from "./RepositoryGlobalConfig";
 import { RepositoryConfig, EntityInterface } from "./RepositoryType";
 
@@ -290,6 +290,20 @@ export class BaseRepository<T extends EntityInterface> extends BaseClass {
         let title = "Edit" + capitalize(this.entity);
         if(this.resourceName) title = this.resourceName + '.' + title;
         return title;
+    }
+
+    get canCreate(): boolean {
+        return isGranted(`${this.resourceName}.${this.entityPlural}.create`);
+    }
+    get canUpdate(): boolean {
+        return isGranted(`${this.resourceName}.${this.entityPlural}.update`);
+    }
+    get canDelete(): boolean {
+        return isGranted(`${this.resourceName}.${this.entityPlural}.delete`);
+    }
+
+    get canRead(): boolean {
+        return isGranted(`${this.resourceName}.${this.entityPlural}`);
     }
 
     send = async (url: string, method: string, data?: any, params?: any) => {

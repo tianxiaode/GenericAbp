@@ -63,12 +63,11 @@ const formatLockoutDate = (date: string | null) => {
 const {
     data, dialogVisible, currentEntityId,
     filterText,
-    allowedCreate, allowedUpdate, allowedDelete,
     create, update, remove, filter, checkChange,
-    sortChange, checkPermission,formClose } = useTable<UserType>(userApi);
+    sortChange, formClose } = useTable<UserType>(userApi);
 
 const toolbarButtons = {
-    create: { action: create, isVisible: allowedCreate }
+    create: { action: create, isVisible: userApi.canCreate },
 }
 
 const detailVisible = ref(false);
@@ -90,9 +89,9 @@ const openPermissionWindow = (row: any) => {
 const tableButtons = {
     detail: { 
         action: showDetail, icon: 'fa fa-ellipsis', title: t.value(''), order: 1 },
-    edit: { action: update, isVisible: allowedUpdate },
-    delete: { action: remove, isVisible: allowedDelete },
-    permission: { action: openPermissionWindow, icon: 'fa fa-lock', title: 'AbpIdentity.Permissions', order: 300, type: 'primary', isVisible: checkPermission('ManagePermissions') }
+    edit: { action: update, isVisible: userApi.canUpdate },
+    delete: { action: remove, isVisible: userApi.canDelete },
+    permission: { action: openPermissionWindow, icon: 'fa fa-lock', title: 'AbpIdentity.Permissions', order: 300, type: 'primary', isVisible: userApi.canManagePermissions }
 }
 
 

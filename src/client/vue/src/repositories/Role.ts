@@ -1,4 +1,4 @@
-import { EntityInterface, http, logger, Repository, RepositoryFactory } from "../libs";
+import { EntityInterface, http, isGranted, logger, Repository } from "../libs";
 
 export interface RoleType extends EntityInterface {
   name: string;
@@ -17,6 +17,10 @@ export class RoleRepository extends Repository<RoleType> {
         this.entityGroup = "identity";  
         this.messageField = "name";
     };
+
+    get canManagePermissions(): boolean {
+        return isGranted(`${this.resourceName}.${this.entityPlural}.ManagePermissions`);
+    }
 
     getAll(){
         return http.get(this.readUrl + '/all');

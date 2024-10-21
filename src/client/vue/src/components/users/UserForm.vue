@@ -71,7 +71,7 @@ import FormDialog from '../dialogs/FormDialog.vue';
 import PasswordStrength from '../accounts/PasswordStrength.vue';
 
 import { useConfig, useEntityForm, useRepository, useFormRules, useI18n } from '~/composables'
-import { appConfig, isGranted } from '~/libs';
+import { appConfig } from '~/libs';
 import { onMounted, ref } from 'vue';
 import Switch from '../forms/Switch.vue';
 
@@ -80,7 +80,7 @@ const allRoles = ref([] as string[]);
 const { t } = useI18n();
 const userApi = useRepository('user');
 const roleApi = useRepository('role');
-const allowedManageRoles = isGranted('AbpIdentity', 'Users', 'Update.ManageRoles');
+const allowedManageRoles = userApi.canManageRoles;
 const props = defineProps({
     visible: {
         type: Boolean,

@@ -53,18 +53,16 @@ const openPermissionWindow = (row: RoleType) => {
 const {
     data, dialogVisible, currentEntityId,
     filterText,
-    allowedCreate, allowedUpdate, allowedDelete,
     create, update, remove, filter, checkChange,
-    sortChange, formClose, checkPermission } = useTable<RoleType>(roleApi);
+    sortChange, formClose,  } = useTable<RoleType>(roleApi);
 
 const toolbarButtons = {
-    create: { action: create, isVisible: allowedCreate }
+    create: { action: create, isVisible: roleApi.canCreate },
 }
-
 const tableButtons = {
-    edit: { isDisabled: (row: RoleType) => row.isStatic, action: update, isVisible: allowedUpdate },
-    delete: { isDisabled: (row: RoleType) => row.isStatic, action: remove, isVisible: allowedDelete },
-    permission: { action: openPermissionWindow, icon: 'fa fa-lock', title: 'AbpIdentity.Permissions', order: 300, type: 'primary', isVisible: checkPermission('ManagePermissions') }
+    edit: { isDisabled: (row: RoleType) => row.isStatic, action: update, isVisible: roleApi.canUpdate },
+    delete: { isDisabled: (row: RoleType) => row.isStatic, action: remove, isVisible: roleApi.canDelete },
+    permission: { action: openPermissionWindow, icon: 'fa fa-lock', title: 'AbpIdentity.Permissions', order: 300, type: 'primary', isVisible: roleApi.canManagePermissions },
 }
 
 </script>
