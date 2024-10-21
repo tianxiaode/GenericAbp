@@ -23,7 +23,7 @@ export function usePagination(api: any) {
 
 
     const refresh = () => {
-        api.load();
+        api.load(true);
     }
 
     onMounted(() => {

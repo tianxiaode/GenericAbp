@@ -1,4 +1,4 @@
-import { isEmpty } from "./String";
+import { isEmpty, uncapitalize } from "./String";
 import { appConfig } from "../AppConfig";
 
 
@@ -8,6 +8,7 @@ export const isGranted = (
     permission: string = ''
 ) => {
     const permissions = appConfig.getPermissions(resourceName, entity);
+    permission = uncapitalize(permission);
     if(isEmpty(permission)) return permissions['default'] || false;
     return permissions[permission] || false;
 };

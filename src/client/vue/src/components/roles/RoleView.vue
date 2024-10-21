@@ -6,9 +6,12 @@
         <!-- 数据展示区域 -->
         <el-table :data="data" stripe border style="width: 100%" @sort-change="sortChange"
             :default-sort="{ prop: 'name', order: 'ascending' }">
-            <HighlightColumn :label="t('AbpIdentity.DisplayName:RoleName')" prop="name" width="full" sortable :filterText="filterText" />
-            <CheckColumn :label="t('AbpIdentity.DisplayName:IsDefault')" width="120" sortable :check-change="checkChange" prop="isDefault"></CheckColumn>
-            <CheckColumn :label="t('AbpIdentity.DisplayName:IsPublic')" width="120" sortable :check-change="checkChange" prop="isPublic"></CheckColumn>
+            <HighlightColumn :label="t('AbpIdentity.DisplayName:RoleName')" prop="name" width="full" sortable
+                :filterText="filterText" />
+            <CheckColumn :label="t('AbpIdentity.DisplayName:IsDefault')" width="120" sortable
+                :check-change="checkChange" prop="isDefault"></CheckColumn>
+            <CheckColumn :label="t('AbpIdentity.DisplayName:IsPublic')" width="120" sortable :check-change="checkChange"
+                prop="isPublic"></CheckColumn>
             <ActionColumn width="120" align="center" :buttons="tableButtons"></ActionColumn>
         </el-table>
 
@@ -16,10 +19,10 @@
         <Pagination style="margin-top: 10px;" :api="roleApi" />
     </div>
 
-    <RoleForm v-if="dialogVisible" v-model="dialogVisible"
-        :entity-id="currentEntityId" @close="formClose" />  
+    <RoleForm v-if="dialogVisible" v-model="dialogVisible" :entity-id="currentEntityId" @close="formClose" />
 
-    <PermissionView v-if="permissionVisible" v-model:isVisible="permissionVisible" provider-name="R" :provider-key="providerKey"></PermissionView>
+    <PermissionView v-if="permissionVisible" v-model:isVisible="permissionVisible" provider-name="R"
+        :provider-key="providerKey"></PermissionView>
 </template>
 
 <script setup lang="ts">
@@ -52,17 +55,16 @@ const {
     filterText,
     allowedCreate, allowedUpdate, allowedDelete,
     create, update, remove, filter, checkChange,
-    sortChange,formClose } = useTable<RoleType>(roleApi);
+    sortChange, formClose, checkPermission } = useTable<RoleType>(roleApi);
 
 const toolbarButtons = {
     create: { action: create, isVisible: allowedCreate }
 }
 
 const tableButtons = {
-    edit: { isDisabled: (row: RoleType) => row.isStatic, action: update , isVisible: allowedUpdate },
-    delete: { isDisabled: (row: RoleType) => row.isStatic, action: remove , isVisible: allowedDelete },
-    permission:{ action: openPermissionWindow, icon: 'fa fa-lock', title: 'AbpIdentity.Permissions', order:300, type: 'primary', isVisible: allowedUpdate }
+    edit: { isDisabled: (row: RoleType) => row.isStatic, action: update, isVisible: allowedUpdate },
+    delete: { isDisabled: (row: RoleType) => row.isStatic, action: remove, isVisible: allowedDelete },
+    permission: { action: openPermissionWindow, icon: 'fa fa-lock', title: 'AbpIdentity.Permissions', order: 300, type: 'primary', isVisible: checkPermission('ManagePermissions') }
 }
 
 </script>
-
