@@ -19,7 +19,7 @@ const routes = [
             { path: "dashboard", component: ()=>import("~/views/Dashboard.vue") },
             { path: "roles", component: ()=>import("~/components/roles/RoleView.vue") },
             { path: "users", component: ()=>import("~/components/users/UserView.vue") },
-            { path: "settings", component: ()=>import("~/components/settings/SettingsView.vue") }
+            { path: "settings", component: ()=>import("~/components/settings/SettingManagement.vue") }
 
         ]        
     },

@@ -76,6 +76,17 @@ export class Locale {
         // 处理剩余参数
         for (const param of params) {
             const paramStr = param.toString();
+            //如果paramStr包含冒号，则冒号对冒号之前的.进行拆分，冒号之后的作为remainingParams的一部分，
+            //譬如AbpIdentity.DisplayName:Abp.Identity.Password.RequiredLength
+            //则拆分为["AbpIdentity","DisplayName:Abp.Identity.Password.RequiredLength"]这样才能正确按路径取值
+            if (paramStr.includes(":")) {
+                let [path, value] = paramStr.split(":");
+                // path要对.进行拆分，且最后一个点后面部分与value一起作为remainingParams的一部分
+                const paths = path.split(".");
+                value = paths.pop() + ":" + value;
+                remainingParams.push(...paths, value);
+                continue;
+            } 
             paramStr.includes(".")
                 ? remainingParams.push(...paramStr.split("."))
                 : remainingParams.push(paramStr);
