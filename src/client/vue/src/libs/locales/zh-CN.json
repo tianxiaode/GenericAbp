@@ -12,6 +12,9 @@
         "Permission:PasswordPolicy": "密码策略",
         "Permission:LookupPolicy": "锁定策略"
     },
+    "SettingManagement":{
+        "NoSettings": "暂无设置"
+    },
     "Components": {
         "Lockout": "锁定",
         "RowNumber": "行号",
