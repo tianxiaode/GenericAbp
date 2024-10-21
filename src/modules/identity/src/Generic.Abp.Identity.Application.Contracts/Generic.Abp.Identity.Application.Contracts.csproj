@@ -1,19 +1,22 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="..\..\..\..\common.props" />
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <RootNamespace />
+    <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Volo.Abp.Identity.Application.Contracts" Version="$(AbpVersion)" />
     <PackageReference Include="Volo.Abp.SettingManagement.Application.Contracts" Version="$(AbpVersion)" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="$(MicrosoftExtensionsFileProvidersEmbeddedVersion)" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Generic.Abp.Identity.Domain.Shared\Generic.Abp.Identity.Domain.Shared.csproj" />
+    <EmbeddedResource Include="Generic\Abp\Identity\Localization\Identity\*.json" />
+    <Content Remove="Generic\Abp\Identity\Localization\Identity\*.json" />
   </ItemGroup>
 
 </Project>

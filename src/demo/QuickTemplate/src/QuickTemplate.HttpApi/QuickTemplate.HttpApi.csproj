@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\modules\identity\src\Generic.Abp.Identity.HttpApi\Generic.Abp.Identity.HttpApi.csproj" />
     <ProjectReference Include="..\QuickTemplate.Application.Contracts\QuickTemplate.Application.Contracts.csproj" />
   </ItemGroup>
 

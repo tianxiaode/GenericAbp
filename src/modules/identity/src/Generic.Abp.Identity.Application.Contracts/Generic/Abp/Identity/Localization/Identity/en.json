@@ -1,0 +1,11 @@
+{
+  "culture": "en",
+  "texts": {
+    "SelectedOrNot:All": "All",
+    "SelectedOrNot:Selected": "Selected",
+    "SelectedOrNot:NotSelected": "Not Selected",
+    "Permission:PasswordPolicy": "Password policy",
+    "Permission:LookupPolicy": "User lookup policy",
+    "DisplayName:ConfirmPassword": "Confirm password"
+  }
+}

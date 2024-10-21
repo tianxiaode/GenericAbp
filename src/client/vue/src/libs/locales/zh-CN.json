@@ -8,7 +8,9 @@
         "EditUser": "编辑用户",
         "Locked": "已锁定",
         "NotLocked": "未锁定",
-        "Details": "详情"
+        "Details": "详情",
+        "Permission:PasswordPolicy": "密码策略",
+        "Permission:LookupPolicy": "锁定策略"
     },
     "Components": {
         "Lockout": "锁定",

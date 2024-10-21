@@ -1,4 +1,5 @@
-﻿using Volo.Abp.Account;
+﻿using Generic.Abp.Identity;
+using Volo.Abp.Account;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.Identity;
 using Volo.Abp.Modularity;
@@ -14,6 +15,7 @@ namespace QuickTemplate;
     typeof(AbpAccountApplicationContractsModule),
     typeof(AbpFeatureManagementApplicationContractsModule),
     typeof(AbpIdentityApplicationContractsModule),
+    typeof(GenericAbpIdentityApplicationContractsModule),
     typeof(AbpPermissionManagementApplicationContractsModule),
     typeof(AbpSettingManagementApplicationContractsModule),
     typeof(AbpTenantManagementApplicationContractsModule),

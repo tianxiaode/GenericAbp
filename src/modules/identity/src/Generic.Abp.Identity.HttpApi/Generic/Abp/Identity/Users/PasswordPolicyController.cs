@@ -1,15 +1,14 @@
 ﻿using System.Threading.Tasks;
+using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Generic.Abp.Identity.Users;
 
 [Area("Settings")]
 [ControllerName("Settings")]
-[Route("api/settings/password-policy")]
-
-public class PasswordPolicyController: IdentityController,IPasswordPolicyAppService
+[Route("api/setting-management/password-policy")]
+public class PasswordPolicyController : IdentityController, IPasswordPolicyAppService
 {
-
     public PasswordPolicyController(IPasswordPolicyAppService passwordPolicyAppService)
     {
         PasswordPolicyAppService = passwordPolicyAppService;

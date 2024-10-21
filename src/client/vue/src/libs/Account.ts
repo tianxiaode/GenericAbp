@@ -50,9 +50,10 @@ class Account {
             appConfig.loadConfig();
             i18n.loadLanguage();
         } catch (error: any) {
-            throw new Error(
-                "Account." + error.error_description || error.message
-            );
+            logger.error(this, ["logout"], error);
+            // throw new Error(
+            //     error.error_description || error.message
+            // );
         }
     };
 

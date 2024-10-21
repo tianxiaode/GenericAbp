@@ -3,7 +3,7 @@
         <el-menu router :collapse="asideStore.isExpanded" :default-active="$route.path" size="large"
             style="--el-menu-text-color:var(--el-color-info);"
         >
-            <el-menu-item index="/" >
+            <el-menu-item index="/dashboard" >
                 <el-icon><i class="fa fa-home"></i></el-icon>
                 <span>首页</span>
             </el-menu-item>

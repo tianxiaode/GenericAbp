@@ -8,7 +8,9 @@
         "EditUser": "Edit User",
         "Locked": "Locked",
         "NotLocked": "Not locked",
-        "Details": "Details"
+        "Details": "Details",
+        "Permission:PasswordPolicy": "Password Policy",
+        "Permission:LookupPolicy": "Lookup Policy"
     },
     "Components": {
         "Lockout": "Lockout",

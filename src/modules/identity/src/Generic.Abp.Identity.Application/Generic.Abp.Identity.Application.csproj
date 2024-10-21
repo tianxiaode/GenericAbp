@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="..\..\..\..\common.props" />
 
@@ -9,11 +9,11 @@
 
   <ItemGroup>
 	  <PackageReference Include="Volo.Abp.Identity.Application" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.SettingManagement.Domain" Version="$(AbpVersion)" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Generic.Abp.Identity.Application.Contracts\Generic.Abp.Identity.Application.Contracts.csproj" />
-    <ProjectReference Include="..\Generic.Abp.Identity.Domain\Generic.Abp.Identity.Domain.csproj" />
   </ItemGroup>
 
 </Project>

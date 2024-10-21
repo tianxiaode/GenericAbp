@@ -1,6 +1,6 @@
 <template>
-    <el-link v-if="!isAuthenticated && !isMobile" href="/login" class="text-white" >{{  t("Pages.Login.Login")  }}</el-link>
-    <a href="/login" v-if="!isAuthenticated && isMobile">
+    <el-link v-if="!isAuthenticated && !isMobile" @click="router.push('/login')" class="text-white font-size-4.5" >{{  t("Pages.Login.Login")  }}</el-link>
+    <a @click="router.push('/login')" v-if="!isAuthenticated && isMobile">
         <i class="fa fa-circle-user text-white font-size-6"></i>
     </a>
     <el-dropdown v-if="isAuthenticated" :trigger="hasHover ? 'hover' : 'click'" role="navigation" size="large" >
@@ -12,7 +12,7 @@
                 <i class="fa fa-user"></i>
                 {{ t("Pages.Profile.Profile") }}
             </el-dropdown-item>
-            <el-dropdown-item :class="{'is-active': path === '/admin'}" @click="router.push('/admin')">
+            <el-dropdown-item :class="{'is-active': path === '/dashboard'}" @click="router.push('/dashboard')">
                 <i class="fa fa-computer"></i>
                 {{ t("Pages.Profile.ManagementCenter") }}
             </el-dropdown-item>

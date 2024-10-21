@@ -1,4 +1,5 @@
-﻿using Localization.Resources.AbpUi;
+﻿using Generic.Abp.Identity;
+using Localization.Resources.AbpUi;
 using QuickTemplate.Localization;
 using Volo.Abp.Account;
 using Volo.Abp.FeatureManagement;
@@ -15,6 +16,7 @@ namespace QuickTemplate;
     typeof(QuickTemplateApplicationContractsModule),
     typeof(AbpAccountHttpApiModule),
     typeof(AbpIdentityHttpApiModule),
+    typeof(GenericAbpIdentityHttpApiModule),
     typeof(AbpPermissionManagementHttpApiModule),
     typeof(AbpTenantManagementHttpApiModule),
     typeof(AbpFeatureManagementHttpApiModule),

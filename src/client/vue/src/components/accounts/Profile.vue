@@ -1,5 +1,5 @@
 <template>
-    <div class="container mx-auto flex justify-between items-start h-full gap-4 py-2 box-border"
+    <div v-if="isAuthenticated" class="container mx-auto flex justify-between items-start h-full gap-4 py-2 box-border"
         style="min-height: calc(100vh - 60px);"
         :class="isMobile ? 'flex-col' : 'flex-row'"
     >
@@ -26,7 +26,7 @@
 
 <script setup lang="ts">
 import {  ref } from 'vue';
-import { useBrowseEnv, useI18n } from '~/composables';
+import { useAuthentication, useBrowseEnv, useI18n } from '~/composables';
 import ChangePassword from './ChangePassword.vue';
 import PersonalInfo from './PersonalInfo.vue';
 
@@ -37,6 +37,8 @@ const { isMobile} = useBrowseEnv();
 const handlerMenuSelect = (index:number)=>{
     currentIndex.value = index;
 }
+
+const { isAuthenticated } = useAuthentication(true);
 
 
 </script>

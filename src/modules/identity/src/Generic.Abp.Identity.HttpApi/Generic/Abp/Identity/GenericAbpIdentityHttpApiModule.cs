@@ -20,7 +20,6 @@ namespace Generic.Abp.Identity
             {
                 options.AddAssemblyResource(typeof(IdentityResource),
                     typeof(GenericAbpIdentityApplicationContractsModule).Assembly,
-                    typeof(GenericAbpIdentityDomainSharedModule).Assembly,
                     typeof(GenericAbpIdentityHttpApiModule).Assembly
                 );
             });

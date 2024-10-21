@@ -50,7 +50,8 @@ const onSubmit = async () => {
     try {
         await account.login(formData.username, formData.password);
         formRef.value.success('Pages.login.LoginSuccess');
-        let redirectPath = LocalStorage.getItem('redirectPath') || '/';
+        let redirectPath = LocalStorage.getRedirectPath() || '/';
+        console.log('redirectPath', redirectPath)
         if (redirectPath === '/login') {
             redirectPath = '/';
         }
