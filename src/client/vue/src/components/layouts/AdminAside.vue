@@ -20,6 +20,10 @@
                     <el-icon><i class="fa fa-lock"></i></el-icon>
                     <span>角色管理</span>                    
                 </el-menu-item>
+                <el-menu-item index="/settings" v-if="isGranted('AbpIdentity', 'Roles')">
+                    <el-icon><i class="fa fa-cog"></i></el-icon>
+                    <span>设置</span>                    
+                </el-menu-item>
             </el-sub-menu>
         </el-menu>
     </el-aside>

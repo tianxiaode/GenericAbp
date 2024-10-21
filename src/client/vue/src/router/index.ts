@@ -18,7 +18,13 @@ const routes = [
         children: [
             { path: "", component: ()=>import("~/views/Dashboard.vue") },
             { path: "/roles", component: ()=>import("~/components/roles/RoleView.vue") },
-            { path: "/users", component: ()=>import("../components/users/UserView.vue") },
+            { path: "/users", component: ()=>import("~/components/users/UserView.vue") },
+            { path: "/settings", component: ()=>import("~/components/settings/SettingsView.vue") ,
+                children: [
+                    { path: "", component: ()=>import("~/components/settings/IdentitySetting.vue") },
+                    { path: "/identity", component: ()=>import("~/components/settings/IdentitySetting.vue") },
+                ]
+            }
 
         ]        
     },
