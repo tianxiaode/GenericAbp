@@ -58,7 +58,7 @@ if (settingManagement.canManageExternalAuthentication && !activeMenu.value) {
     activeMenu.value = 'externalAuthentication';
 }
 
-activeMenu.value = 'externalAuthentication'
+//activeMenu.value = 'externalAuthentication'
 
 const handleSelect = (index: string) => {
     activeMenu.value = index;

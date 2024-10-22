@@ -21,10 +21,6 @@ const loginWithProvider = (provider: ExternalProviderType) => {
 onMounted(() => {
     account.getExternalProviders().then((result) => {
         providers.value = result.items;
-        providers.value = [
-            { provider: "google", displayName: "Google1" },
-            { provider: "GitHub", displayName: "GitHub" },
-        ];
     });
 });
 

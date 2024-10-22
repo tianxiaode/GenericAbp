@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Volo.Abp.Data;
+﻿using Volo.Abp.Data;
 
 namespace Generic.Abp.Domain.Extensions;
 
@@ -18,7 +17,7 @@ public static class TranslationExtensions
     {
         var str = entity.GetProperty<string>(TranslationsPropertyName);
         return string.IsNullOrEmpty(str)
-            ? new List<TTranslation>()
-            : System.Text.Json.JsonSerializer.Deserialize<List<TTranslation>>(str) ?? new List<TTranslation>();
+            ? []
+            : System.Text.Json.JsonSerializer.Deserialize<List<TTranslation>>(str!) ?? [];
     }
 }

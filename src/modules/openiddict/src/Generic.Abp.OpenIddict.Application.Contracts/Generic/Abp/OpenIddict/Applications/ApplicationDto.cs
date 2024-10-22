@@ -7,30 +7,34 @@ namespace Generic.Abp.OpenIddict.Applications
 {
     public class ApplicationDto : ExtensibleAuditedEntityDto<Guid>, IHasConcurrencyStamp
     {
-        public string ClientId { get; set; }
+        public string ApplicationType { get; set; } = string.Empty;
+        public string ClientId { get; set; } = string.Empty;
 
-        public string ClientSecret { get; set; }
+        public string ClientSecret { get; set; } = string.Empty;
 
-        public string ConsentType { get; set; }
+        public string ClientType { get; set; } = string.Empty;
+        public string ConsentType { get; set; } = string.Empty;
 
-        public string DisplayName { get; set; }
+        public string DisplayName { get; set; } = string.Empty;
 
-        //public List<string> Permissions { get; set; }
+        public string DisplayNames { get; set; } = string.Empty;
 
-        //public List<string> PostLogoutRedirectUris { get; set; }
+        public string JsonWebKeySet { get; set; } = string.Empty;
 
-        //public List<string> Properties { get; set; }
+        public List<string> Permissions { get; set; } = [];
 
-        //public List<string> RedirectUris { get; set; }
+        public List<string> PostLogoutRedirectUris { get; set; } = [];
 
-        //public List<string> Requirements { get; set; }
+        public List<string> Properties { get; set; } = [];
 
-        public string ApplicationType { get; set; }
-        public string ClientType { get; set; }
+        public List<string> RedirectUris { get; set; } = [];
 
-        public string ClientUri { get; set; }
+        public List<string> Requirements { get; set; } = [];
 
-        public string LogoUri { get; set; }
-        public string ConcurrencyStamp { get; set; }
+        public List<string> Settings { get; set; } = [];
+        public string ClientUri { get; set; } = string.Empty;
+
+        public string LogoUri { get; set; } = string.Empty;
+        public string ConcurrencyStamp { get; set; } = string.Empty;
     }
 }

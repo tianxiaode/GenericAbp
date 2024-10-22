@@ -1,0 +1,17 @@
+{
+  "culture": "en",
+  "texts": {
+    "Generic.Abp.BusinessException:000001": "{Name} '{Value}' is already taken.",
+    "Generic.Abp.BusinessException:000002": "{ObjectName} '{ObjectValue}' with children cannot be deleted",
+    "Generic.Abp.BusinessException:000003": "The value '{Value}' has exceeded the field allowed length of '{Length}'.",
+    "Generic.Abp.BusinessException:000004": "You do not have permission to access the {Name}  `{Value}`.",
+    "Generic.Abp.BusinessException:000005": "You do not have permission to edit the {Name}  `{Value}`.",
+    "Generic.Abp.BusinessException:000006": "You do not have permission to delete the {Name}  `{Value}`.",
+    "Generic.Abp.BusinessException:000007": "The organization could not be determined.",
+    "Generic.Abp.BusinessException:000008": "The maximum span for a single query date is {Value} month",
+    "Generic.Abp.BusinessException:000009": "The maximum span for a single query date is {Value} days",
+    "Generic.Abp.BusinessException:000010": "{Name} {Value} was not found.",
+    "Generic.Abp.BusinessException:000011": "{Name} {Value} cannot be deleted.",
+    "Generic.Abp.BusinessException:000012": "The parent could not be determined."
+  }
+}

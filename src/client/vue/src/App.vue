@@ -1,6 +1,6 @@
 <template>
     <LoadingProgress />
-    <el-config-provider :locale="elementPlusLocale">
+    <el-config-provider :locale="elementPlusLocale" size="large">
         <RouterView />
     </el-config-provider>
 </template>
