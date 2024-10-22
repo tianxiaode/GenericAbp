@@ -5,16 +5,8 @@ class SettingManagement {
     static $className = "SettingManagement";
     static apiSuffix = '/api/setting-management';
 
-    static get canManagePasswordPolicy() {
-        return isGranted('SettingManagement.PasswordPolicy');
-    }
-
-    static get canManageLookupPolicy() {
-        return isGranted('SettingManagement.LookupPolicy');
-    }
-
-    static get canManagerIdentitySettings() {
-        return SettingManagement.canManagePasswordPolicy || SettingManagement.canManageLookupPolicy;
+    static get canManageIdentitySettings() {
+        return isGranted('SettingManagement.IdentityManagement');
     }
 
     static get canManageEmailingSettings(){
@@ -33,41 +25,34 @@ class SettingManagement {
         return isGranted('SettingManagement.TimeZone');
     }
 
+    static get canManageExternalAuthentication(): boolean {
+        return isGranted('SettingManagement.ExternalAuthenticationManagement');
+    }
+
     static get canManageSettings(){
-        return SettingManagement.canManagerIdentitySettings || SettingManagement.canManageEmailing || SettingManagement.canManageTimeZone;
+        return SettingManagement.canManageIdentitySettings || 
+            SettingManagement.canManageEmailing || 
+            SettingManagement.canManageTimeZone || 
+            SettingManagement.canManageExternalAuthentication;
     }
 
-    static getPasswordPolicy() {
+
+    static getIdentitySettings() {
         try {
-            return http.get(SettingManagement.getUrl('password-policy'));
+            return http.get(SettingManagement.getUrl('identity'));
         } catch (error) {
             throw error;
         }
     }
 
-    static updatePasswordPolicy(data: any) {
+    static updateIdentitySettings(data: any) {
         try {
-            return http.post(SettingManagement.getUrl('password-policy'), data);
+            return http.put(SettingManagement.getUrl('identity'), data);
         } catch (error) {
             throw error;
         }
     }
 
-    static getLookupPolicy() {
-        try {
-            return http.get(SettingManagement.getUrl('lookup-policy'));
-        } catch (error) {
-            throw error;
-        }
-    }
-
-    static updateLookupPolicy(data: any) {
-        try {
-            return http.post(SettingManagement.getUrl('lookup-policy'), data);
-        } catch (error) {
-            throw error;
-        }
-    }
 
     static getEmailingSettings() {
         try {
@@ -85,9 +70,11 @@ class SettingManagement {
         }
     }
 
-    static testEmailingSettings(data: any) {
+    static sendTestEmail(data: any) {
         try {
-            return http.post(settingManagement.getUrl('emailing/send-test-email'), data);
+            return http.post(settingManagement.getUrl('emailing/send-test-email'), data, {
+                timeout: 100000,
+            });
         } catch (error) {
             throw error;
         }
@@ -95,7 +82,9 @@ class SettingManagement {
 
     static getTimeZone() {
         try {
-            return http.get(SettingManagement.getUrl('timezone'));
+            return http.get(SettingManagement.getUrl('timezone'),{},{
+                responseType:'text'
+            });
         } catch (error) {
             throw error;
         }
@@ -109,13 +98,29 @@ class SettingManagement {
         }
     }
 
-    static updateTimeZone(data: any) {
+    static updateTimeZone(timezone: string) {
         try {
-            return http.post(settingManagement.getUrl('timezone'), data);
+            return http.post(settingManagement.getUrl('timezone') +'?timezone='+timezone, {});
         } catch (error) {
             throw error;
         }
     }
+
+    static getExternalAuthenticationSettings() {
+        try {
+            return http.get(SettingManagement.getUrl('external-authentication'));
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    static updateExternalAuthenticationSettings(data: any) {
+        try {
+            return http.put(SettingManagement.getUrl('external-authentication'), data);
+        } catch (error) {
+            throw error;
+        }
+    }   
 
     static getUrl(url: string) {
         return `${SettingManagement.apiSuffix}/${url}`;

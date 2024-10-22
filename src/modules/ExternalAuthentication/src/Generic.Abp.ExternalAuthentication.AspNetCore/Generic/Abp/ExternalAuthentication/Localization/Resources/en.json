@@ -3,8 +3,8 @@
   "texts": {
     "ExternalAuthenticationProvider": "Provider",
     "ExternalAuthenticationProviders": "Providers",
-    "Permission:ChangePermissions": "Change permissions",
-    "Permission:ExternalAuthenticationProvider": "External Authentication Provider",
+    "Permission:ExternalAuthenticationManagement": "External Authentication Management",
+    "Menu:ExternalAuthenticationManagement": "External Authentication",
     "ExternalAuthentication.Provider.ManagePermissions": "Manage",
     "ExternalAuthentication:Provider": "Provider",
     "ExternalAuthentication:Enabled": "Enabled",
@@ -14,6 +14,9 @@
     "Gitee": "Gitee",
     "MicrosoftAccount": "Microsoft Account",
     "NewUserPrefix": "Prefix for created external users",
-    "NewUserEmailSuffix": "Email suffix for created external users"
+    "NewUserEmailSuffix": "Email suffix for created external users",
+    "ClientId": "Client Id",
+    "ClientSecret": "Client Secret",
+    "Enabled": "Enabled"
   }
 }

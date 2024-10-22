@@ -64,7 +64,7 @@ if(resendCount > 0){
 const onSubmit = async () => {
     try {
         disabled.value = true;
-        await account.sendPasswordResetCode(formData.email);
+        await account.sendPasswordResetCode(formData.value.email);
         resendCount = 300;
         formRef.value.success('Pages.ForgotPassword.PasswordResetLinkSent');
         handleResend();

@@ -1,11 +1,11 @@
 {
   "culture": "en",
   "texts": {
-    "SelectedOrNot:All": "All",
-    "SelectedOrNot:Selected": "Selected",
-    "SelectedOrNot:NotSelected": "Not Selected",
-    "Permission:PasswordPolicy": "Password policy",
-    "Permission:LookupPolicy": "User lookup policy",
-    "DisplayName:ConfirmPassword": "Confirm password"
+    "Permission:IdentityManagement": "Identity management",
+    "PasswordSettings": "Password settings",
+    "PasswordRenewingSettings": "Password Renewing settings",
+    "LockoutSettings": "Lockout settings",
+    "SigninSettings": "Signin settings",
+    "UserSettings": "User settings"
   }
 }

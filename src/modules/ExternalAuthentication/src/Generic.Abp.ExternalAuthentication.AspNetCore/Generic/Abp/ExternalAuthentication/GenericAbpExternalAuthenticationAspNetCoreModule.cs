@@ -17,6 +17,7 @@ namespace Generic.Abp.ExternalAuthentication;
 
 [DependsOn(
     typeof(AbpSettingManagementDomainModule),
+    typeof(AbpSettingManagementApplicationContractsModule),
     typeof(AbpIdentityAspNetCoreModule),
     typeof(AbpOpenIddictAspNetCoreModule),
     typeof(AbpValidationModule),

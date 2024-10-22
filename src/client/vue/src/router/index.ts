@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from "vue-router";
-import { LocalStorage } from "~/libs";
 
 const routes = [
     { path: "/", component: ()=>import("~/components/layouts/PageLayout.vue") ,
@@ -35,9 +34,6 @@ const router = createRouter({
 // 路由守卫
 router.beforeEach(async (to, from) => {
 
-    if (to.path === '/signin-oidc' || to.path === '/login') {
-        LocalStorage.setRedirectPath(from.path);
-    }
 
 });
 

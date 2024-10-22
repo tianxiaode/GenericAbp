@@ -36,6 +36,7 @@ namespace Generic.Abp.ExternalAuthentication.Controllers
             IdentityDynamicClaimsPrincipalContributorCache identityDynamicClaimsPrincipalContributorCache,
             SettingManager settingManager)
         {
+            ObjectMapperContext = typeof(GenericAbpExternalAuthenticationAspNetCoreModule);
             LocalizationResource = typeof(ExternalAuthenticationResource);
             SignInManager = signInManager;
             AccountOptions = accountOptions.Value;

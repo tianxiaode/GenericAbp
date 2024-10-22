@@ -1,11 +1,11 @@
 {
   "culture": "zh-Hans",
   "texts": {
-    "SelectedOrNot:All": "全部",
-    "SelectedOrNot:Selected": "已选",
-    "SelectedOrNot:NotSelected": "未选",
-    "Permission:PasswordPolicy": "密码策略",
-    "Permission:LookupPolicy": "用户锁定策略",
-    "DisplayName:ConfirmPassword": "确认密码"
+    "Permission:IdentityManagement": "身份管理",
+    "PasswordSettings": "密码设置",
+    "PasswordRenewingSettings": "密码更新设置",
+    "LockoutSettings": "锁定设置",
+    "SigninSettings": "登录设置",
+    "UserSettings": "用户设置"
   }
 }

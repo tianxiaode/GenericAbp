@@ -12,8 +12,10 @@
         "Permission:PasswordPolicy": "Password Policy",
         "Permission:LookupPolicy": "Lookup Policy"
     },
-    "SettingManagement":{
-        "NoSettings": "No settings found for this application."
+    "AbpSettingManagement":{
+        "NoSettings": "No settings found for this application.",
+        "BasicSettings": "Basic Settings",
+        "MailingTest": "Mailing Test"
     },
     "Components": {
         "Lockout": "Lockout",

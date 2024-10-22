@@ -63,7 +63,7 @@ const { } = useConfig(refreshRules);
 
 const onSubmit = async () => {
     try {
-        await account.changePassword(formData.currentPassword, formData.newPassword);
+        await account.changePassword(formData.value.currentPassword, formData.value.newPassword);
         formMessage.value ='Pages.Profile.ChangePasswordSuccess';
         formMessageType.value = 'success';
         setTimeout(() => {

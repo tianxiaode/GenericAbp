@@ -61,7 +61,7 @@ const {  } = useConfig(refreshRules);
 
 const onSubmit = async () => {
     try {
-        await account.resetPassword(userId, resetToken, formData.password);
+        await account.resetPassword(userId, resetToken, formData.value.password);
         formRef.value.success('Pages.ResetPassword.ResetPasswordSuccess');
         setTimeout(() => {
             router.push('/login');

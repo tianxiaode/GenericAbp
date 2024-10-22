@@ -1,13 +1,25 @@
-﻿namespace Generic.Abp.ExternalAuthentication.dtos;
+﻿using Volo.Abp.Auditing;
+
+namespace Generic.Abp.ExternalAuthentication.dtos;
 
 [Serializable]
 public class ExternalProviderDto
 {
-    public string ClientId { get; set; }
-    public string ClientSecret { get; set; }
+    [DisableAuditing] public string ClientId { get; set; }
+
+    [DisableAuditing] public string ClientSecret { get; set; }
     public string Provider { get; set; }
     public string DisplayName { get; set; }
     public bool Enabled { get; set; }
+
+    public ExternalProviderDto()
+    {
+        ClientId = "";
+        ClientSecret = "";
+        Enabled = true;
+        Provider = "";
+        DisplayName = "";
+    }
 
     public ExternalProviderDto(string provider, string displayName, string clientId, string clientSecret, bool enabled)
     {

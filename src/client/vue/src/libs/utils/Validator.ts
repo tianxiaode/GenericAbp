@@ -1,6 +1,6 @@
 import { isDate } from "./Date";
 import { isInteger, isNumber } from "./Number";
-import { isEmpty, isString } from "./String";
+import { isEmpty } from "./String";
 
 export type CustomValidator = (
     element: HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement,

@@ -1,4 +1,3 @@
-import { ElMessageBox } from "element-plus";
 import { onMounted, ref } from "vue";
 import { i18n } from "~/libs";
 import { useConfirm } from "./useConfirm";

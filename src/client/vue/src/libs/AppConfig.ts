@@ -73,6 +73,15 @@ export class AppConfig {
         
     }
 
+    get isEmailUpdateEnabled() {
+        return this.config?.setting?.values?.["Abp.Identity.User.IsEmailUpdateEnabled"] === "True";
+    }
+
+    get isUserNameUpdateEnabled(){
+        return this.config?.setting?.values?.["Abp.Identity.User.IsUserNameUpdateEnabled"] === "True";
+    }
+
+
 
     // getPermissions(
     //     resource: string,

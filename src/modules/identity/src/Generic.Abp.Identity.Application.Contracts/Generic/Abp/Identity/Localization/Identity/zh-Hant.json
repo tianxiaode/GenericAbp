@@ -1,5 +1,11 @@
 {
   "culture": "zh-Hant",
   "texts": {
+    "Permission:IdentityManagement": "身份管理",
+    "PasswordSettings": "密碼設置",
+    "PasswordRenewingSettings": "密碼更新設置",
+    "LockoutSettings": "鎖定設置",
+    "SigninSettings": "登入設置",
+    "UserSettings": "用戶設置"
   }
 }

@@ -87,7 +87,6 @@ export function useFormRules(initialRules: any, formRef: any) {
         if(isFunction(fields)){
             fields = fields(fields);
         }
-        console.log(fields);
         return fields.find((f: any) => f.prop === field);
     };
 

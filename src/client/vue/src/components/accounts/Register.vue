@@ -74,7 +74,7 @@ const {  } = useConfig(refreshRules);
 
 const onSubmit = async () => {
     try {
-        await account.register(formData.username, formData.email, formData.password);
+        await account.register(formData.value.username, formData.value.email, formData.value.password);
         formRef.value.success('Pages.Register.RegisterSuccess');
         setTimeout(() => {
             router.push('/login');            

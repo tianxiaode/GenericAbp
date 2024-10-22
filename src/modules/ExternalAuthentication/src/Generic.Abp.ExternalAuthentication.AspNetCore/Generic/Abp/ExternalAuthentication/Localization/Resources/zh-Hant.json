@@ -3,8 +3,8 @@
   "texts": {
     "ExternalAuthenticationProvider": "提供者",
     "ExternalAuthenticationProviders": "提供者",
-    "Permission:ChangePermissions": "更改權限",
-    "Permission:ExternalAuthenticationProvider": "第三方認證提供者",
+    "Permission:ExternalAuthenticationManagement": "第三方認證管理",
+    "Menu:ExternalAuthenticationManagement": "第三方認證",
     "ExternalAuthentication.Provider.ManagePermissions": "管理",
     "ExternalAuthentication:Provider": "提供者",
     "ExternalAuthentication:Enabled": "開啓",
@@ -13,6 +13,9 @@
     "Gitee": "Gitee",
     "MicrosoftAccount": "微軟賬戶",
     "NewUserPrefix": "新建第三放認證用戶時的前綴",
-    "NewUserEmailSuffix": "新建第三方認證用戶的電子郵件的後綴"
+    "NewUserEmailSuffix": "新建第三方認證用戶的電子郵件的後綴",
+    "ClientId": "Client Id",
+    "ClientSecret": "Client Secret",
+    "Enabled": "開啓"
   }
 }

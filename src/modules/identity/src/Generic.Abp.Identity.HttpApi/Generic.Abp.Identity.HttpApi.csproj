@@ -17,4 +17,8 @@
     <ProjectReference Include="..\Generic.Abp.Identity.Application.Contracts\Generic.Abp.Identity.Application.Contracts.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Generic\Abp\Identity\Settings\" />
+  </ItemGroup>
+
 </Project>

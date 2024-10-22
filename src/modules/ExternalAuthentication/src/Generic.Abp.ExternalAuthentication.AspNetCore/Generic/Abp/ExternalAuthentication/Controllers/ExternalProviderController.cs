@@ -1,4 +1,5 @@
 ﻿using Generic.Abp.ExternalAuthentication.dtos;
+using Generic.Abp.ExternalAuthentication.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.AspNetCore.Mvc;
@@ -13,6 +14,8 @@ public class ExternalProviderController : AbpControllerBase
 
     public ExternalProviderController(IExternalAuthenticationSettingManager externalAuthenticationSettingManager)
     {
+        ObjectMapperContext = typeof(GenericAbpExternalAuthenticationAspNetCoreModule);
+        LocalizationResource = typeof(ExternalAuthenticationResource);
         ExternalAuthenticationSettingManager = externalAuthenticationSettingManager;
     }
 

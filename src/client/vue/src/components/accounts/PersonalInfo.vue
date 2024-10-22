@@ -4,7 +4,8 @@
         require-asterisk-position="right">
         <el-input type="hidden" v-model="formData.concurrencyStamp" />
         <el-form-item prop="userName" :label="t('Pages.Profile.Username')">
-            <el-input v-model="formData.userName" clearable  autocomplete="off" disabled
+            <el-input v-model="formData.userName" clearable  autocomplete="off" 
+            :disabled="!appConfig.isUserNameUpdateEnabled"
                 :placeholder="t('Pages.Profile.Username')">
             </el-input>
         </el-form-item>
@@ -20,6 +21,7 @@
         </el-form-item>
         <el-form-item prop="email" :label="t('Pages.Profile.email')">
             <el-input v-model="formData.email" clearable  autocomplete="off"
+                :disable="!appConfig.isEmailUpdateEnabled"
                 :placeholder="t('Pages.Profile.email')">
             </el-input>
         </el-form-item>
@@ -43,16 +45,25 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import { useForm, useFormMessage, useFormRules, useI18n } from '~/composables'
-import { account} from '~/libs';
+import { useConfig, useForm, useFormMessage, useFormRules, useI18n } from '~/composables'
+import { account, appConfig} from '~/libs';
 
 const { t } = useI18n();
 const formData = ref<any>({});
 
 const formRules = {
+    userName: {required:true},
     email: { required: true, email: true }
 };
 
+const refreshRules = () => {
+    updateRules({
+        userName: {required:appConfig.isUserNameUpdateEnabled},
+        email: {required:appConfig.isEmailUpdateEnabled},
+    });
+};
+
+const { } = useConfig(refreshRules);
 
 
 const onSubmit = async () => {
@@ -67,7 +78,7 @@ const onSubmit = async () => {
 }
 
 const { formRef, handleSubmit } = useForm(onSubmit);
-const { rules } = useFormRules(formRules, formRef);
+const { rules, updateRules } = useFormRules(formRules, formRef);
 const { formMessage, formMessageType, clearFormMessage } = useFormMessage();
 
 onMounted(() => {

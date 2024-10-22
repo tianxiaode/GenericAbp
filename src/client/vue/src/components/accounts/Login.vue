@@ -48,7 +48,7 @@ const formRules = {
 
 const onSubmit = async () => {
     try {
-        await account.login(formData.username, formData.password);
+        await account.login(formData.value.username, formData.value.password);
         formRef.value.success('Pages.login.LoginSuccess');
         let redirectPath = LocalStorage.getRedirectPath() || '/';
         console.log('redirectPath', redirectPath)
