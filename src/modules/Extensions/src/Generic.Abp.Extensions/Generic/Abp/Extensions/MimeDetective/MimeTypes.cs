@@ -81,9 +81,17 @@ namespace Generic.Abp.Extensions.MimeDetective
 
             foreach (var allowFileType in allowFileTypes)
             {
-                if (allowFileType.Header == null) continue;
+                if (allowFileType.Header == null)
+                {
+                    continue;
+                }
+
                 var matchingCount = GetFileMatchingCount(header, allowFileType.Header, allowFileType.HeaderOffset);
-                if (matchingCount != allowFileType.Header.Length) continue;
+                if (matchingCount != allowFileType.Header.Length)
+                {
+                    continue;
+                }
+
                 fileType = allowFileType;
                 break;
             }
