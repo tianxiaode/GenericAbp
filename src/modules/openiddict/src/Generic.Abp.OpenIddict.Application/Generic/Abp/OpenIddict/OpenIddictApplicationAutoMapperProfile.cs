@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Generic.Abp.OpenIddict.Applications;
 using Generic.Abp.OpenIddict.Scopes;
-using System.Collections.Generic;
 using Volo.Abp.OpenIddict.Applications;
 using Volo.Abp.OpenIddict.Scopes;
 
@@ -16,15 +15,40 @@ namespace Generic.Abp.OpenIddict
              * into multiple profile classes for a better organization. */
 
             CreateMap<OpenIddictScope, ScopeDto>()
-                .ForMember(m => m.Properties, opts => opts.MapFrom(m => System.Text.Json.JsonSerializer.Deserialize<List<string>>(m.Properties, new System.Text.Json.JsonSerializerOptions())))
-                .ForMember(m => m.Resources, opts => opts.MapFrom(m => System.Text.Json.JsonSerializer.Deserialize<List<string>>(m.Resources, new System.Text.Json.JsonSerializerOptions())));
+                .ForMember(m => m.Properties,
+                    opts => opts.MapFrom(m =>
+                        System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, object>>(m.Properties,
+                            new System.Text.Json.JsonSerializerOptions())))
+                .ForMember(m => m.Resources,
+                    opts => opts.MapFrom(m =>
+                        System.Text.Json.JsonSerializer.Deserialize<HashSet<string>>(m.Resources,
+                            new System.Text.Json.JsonSerializerOptions())));
 
-            CreateMap<OpenIddictApplication, ApplicationDto>();
-            //.ForMember(m => m.Properties, opts => opts.MapFrom(m => System.Text.Json.JsonSerializer.Deserialize<List<string>>(m.Properties, new System.Text.Json.JsonSerializerOptions())))
-            //.ForMember(m => m.PostLogoutRedirectUris, opts => opts.MapFrom(m => System.Text.Json.JsonSerializer.Deserialize<List<string>>(m.PostLogoutRedirectUris, new System.Text.Json.JsonSerializerOptions())))
-            //.ForMember(m => m.RedirectUris, opts => opts.MapFrom(m => System.Text.Json.JsonSerializer.Deserialize<List<string>>(m.RedirectUris, new System.Text.Json.JsonSerializerOptions())))
-            //.ForMember(m => m.Requirements, opts => opts.MapFrom(m => System.Text.Json.JsonSerializer.Deserialize<List<string>>(m.Requirements, new System.Text.Json.JsonSerializerOptions())))
-            //.ForMember(m => m.Permissions, opts => opts.MapFrom(m => System.Text.Json.JsonSerializer.Deserialize<List<string>>(m.Permissions, new System.Text.Json.JsonSerializerOptions())));
+            CreateMap<OpenIddictApplication, ApplicationDto>()
+                .ForMember(m => m.Properties,
+                    opts => opts.MapFrom(m =>
+                        System.Text.Json.JsonSerializer.Deserialize<List<string>>(m.Properties,
+                            new System.Text.Json.JsonSerializerOptions())))
+                .ForMember(m => m.PostLogoutRedirectUris,
+                    opts => opts.MapFrom(m =>
+                        System.Text.Json.JsonSerializer.Deserialize<List<string>>(m.PostLogoutRedirectUris,
+                            new System.Text.Json.JsonSerializerOptions())))
+                .ForMember(m => m.RedirectUris,
+                    opts => opts.MapFrom(m =>
+                        System.Text.Json.JsonSerializer.Deserialize<List<string>>(m.RedirectUris,
+                            new System.Text.Json.JsonSerializerOptions())))
+                .ForMember(m => m.Requirements,
+                    opts => opts.MapFrom(m =>
+                        System.Text.Json.JsonSerializer.Deserialize<List<string>>(m.Requirements,
+                            new System.Text.Json.JsonSerializerOptions())))
+                .ForMember(m => m.Settings,
+                    opts => opts.MapFrom(m =>
+                        System.Text.Json.JsonSerializer.Deserialize<List<string>>(m.Settings,
+                            new System.Text.Json.JsonSerializerOptions())))
+                .ForMember(m => m.Permissions,
+                    opts => opts.MapFrom(m =>
+                        System.Text.Json.JsonSerializer.Deserialize<List<string>>(m.Permissions,
+                            new System.Text.Json.JsonSerializerOptions())));
         }
     }
 }

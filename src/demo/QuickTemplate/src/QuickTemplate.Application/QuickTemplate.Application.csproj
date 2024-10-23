@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\modules\identity\src\Generic.Abp.Identity.Application\Generic.Abp.Identity.Application.csproj" />
+    <ProjectReference Include="..\..\..\..\modules\openiddict\src\Generic.Abp.OpenIddict.Application\Generic.Abp.OpenIddict.Application.csproj" />
     <ProjectReference Include="..\QuickTemplate.Domain\QuickTemplate.Domain.csproj" />
     <ProjectReference Include="..\QuickTemplate.Application.Contracts\QuickTemplate.Application.Contracts.csproj" />
   </ItemGroup>

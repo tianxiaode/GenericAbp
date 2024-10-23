@@ -1,5 +1,6 @@
 ﻿using Generic.Abp.ExternalAuthentication.AuthenticationProviderHandlers;
 using Generic.Abp.ExternalAuthentication.Localization;
+using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Caching;
 using Volo.Abp.Identity.AspNetCore;
@@ -28,6 +29,12 @@ public class GenericAbpExternalAuthenticationAspNetCoreModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
+        context.Services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
+        {
+            options.AddAssemblyResource(typeof(ExternalAuthenticationResource),
+                typeof(GenericAbpExternalAuthenticationAspNetCoreModule).Assembly);
+        });
+
         PreConfigure<IMvcBuilder>(mvcBuilder =>
         {
             mvcBuilder.AddApplicationPartIfNotExists(typeof(GenericAbpExternalAuthenticationAspNetCoreModule)

@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Volo.Abp.Application.Dtos;
+﻿using Volo.Abp.Application.Dtos;
 
 namespace Generic.Abp.OpenIddict.Applications
 {
+    [Serializable]
     public class ApplicationGetListInput : PagedAndSortedResultRequestDto
     {
+        public string? Filter { get; set; } = default!;
     }
 }

@@ -12,6 +12,7 @@ export function useFormRules(initialRules: any, formRef: any) {
 
     // 定义验证函数
     const validateField = (fieldName: string, rule: any, value: any, callback: any) => {
+        if(isEmpty(formRef.value)) return;
         const errors = [];
         const fieldRules = rules[fieldName];
 
@@ -20,19 +21,12 @@ export function useFormRules(initialRules: any, formRef: any) {
             const otherField = name === "equalTo" ?  fieldRules['equalTo'] : "";
             if(name === "required" && fieldRules[name] === false && isEmpty(value)){
                 break;
-            };
-            if (Validator.validates.hasOwnProperty(name)) {
-                isValid =
-                    name === "custom"
-                        ? fieldRules["custom"](fieldName, rule, value, callback, formRef.value)
-                        : name === "equalTo"
-                        ? value === getFieldValue(otherField)
-                        : Validator.validate(
-                              name,
-                              value,
-                              fieldRules[name],
-                              formRef.value.fields
-                          );
+            }else if(name === 'custom'){
+                isValid = fieldRules[name](fieldName, rule, value, callback, formRef.value);
+            }else if (name === "equalTo") {
+                isValid = value === getFieldValue(otherField);            
+            }else if (Validator.validates.hasOwnProperty(name)) {
+                isValid = Validator.validate(name, value, fieldRules[name], getFields() as any);                
             }
             if (!isValid) {
                 errors.push(
@@ -81,12 +75,15 @@ export function useFormRules(initialRules: any, formRef: any) {
     // 执行初始规则设置
     setupInitialRules();
 
-    const getField = (field: string) => {
-
+    const getFields = () => {   
         let fields = formRef.value.fields;        
         if(isFunction(fields)){
             fields = fields(fields);
         }
+    }
+
+    const getField = (field: string) => {
+        const fields = getFields() as any;
         return fields.find((f: any) => f.prop === field);
     };
 

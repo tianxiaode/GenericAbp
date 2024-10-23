@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\modules\identity\src\Generic.Abp.Identity.Application.Contracts\Generic.Abp.Identity.Application.Contracts.csproj" />
+    <ProjectReference Include="..\..\..\..\modules\openiddict\src\Generic.Abp.OpenIddict.Application.Contracts\Generic.Abp.OpenIddict.Application.Contracts.csproj" />
     <ProjectReference Include="..\QuickTemplate.Domain.Shared\QuickTemplate.Domain.Shared.csproj" />
   </ItemGroup>
 

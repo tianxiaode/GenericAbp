@@ -40,7 +40,6 @@ export class BaseRepository<T extends EntityInterface> extends BaseClass {
     }
 
 
-
     set total(value: number) {
         this._total = value;
     }

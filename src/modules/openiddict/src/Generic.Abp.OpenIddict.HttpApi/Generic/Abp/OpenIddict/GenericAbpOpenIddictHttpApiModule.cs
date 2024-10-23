@@ -18,7 +18,6 @@ namespace Generic.Abp.OpenIddict
             {
                 options.AddAssemblyResource(typeof(OpenIddictResource),
                     typeof(GenericAbpOpenIddictApplicationContractsModule).Assembly,
-                    typeof(GenericAbpOpenIddictDomainSharedModule).Assembly,
                     typeof(GenericAbpOpenIddictHttpApiModule).Assembly
                 );
             });

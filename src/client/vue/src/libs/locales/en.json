@@ -38,7 +38,8 @@
         "Yes": "Yes",
         "No": "No",
         "Save": "Save",
-        "Submit": "Submit"
+        "Submit": "Submit",
+        "Details":"Details"
     },
     "Http":{
         "Retrying": "Retrying, you have {retryCount} attempts left, retrying every {retryInterval} seconds. If you don't want to retry, you can cancel the request.",
@@ -109,7 +110,8 @@
     },
     "Pages": {
         "404": {
-            "NotFound": "Page Not Found"
+            "Title": "Page Not Found",
+            "Description": "The page you are looking for does not exist."
         },
         "Login": {
             "UserNameAndEmailAndPhone": "Username/Email/Phone",

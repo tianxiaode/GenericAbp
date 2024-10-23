@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Asp.Versioning;
 using Volo.Abp.Application.Dtos;
 
 namespace Generic.Abp.OpenIddict.Scopes
@@ -31,6 +32,13 @@ namespace Generic.Abp.OpenIddict.Scopes
             return AppService.GetListAsync(input);
         }
 
+        [HttpGet]
+        [Route("all")]
+        public Task<ListResultDto<ScopeDto>> GetAllAsync()
+        {
+            return AppService.GetAllAsync();
+        }
+
         [HttpPost]
         public Task<ScopeDto> CreateAsync([FromBody] ScopeCreateInput input)
         {
@@ -45,51 +53,10 @@ namespace Generic.Abp.OpenIddict.Scopes
         }
 
         [HttpDelete]
-        public Task<ListResultDto<ScopeDto>> DeleteAsync([FromBody] List<Guid> ids)
+        [Route("{id:guid}")]
+        public Task DeleteAsync(Guid id)
         {
-            return AppService.DeleteAsync(ids);
-        }
-
-        [HttpGet]
-        [Route("{id:guid}/properties")]
-        public Task<List<string>> GetPropertiesAsync(Guid id)
-        {
-            return AppService.GetPropertiesAsync(id);
-        }
-
-        [HttpPut]
-        [Route("{id:guid}/properties")]
-        public Task AddPropertyAsync(Guid id, [FromBody] ScopePropertyCreateInput input)
-        {
-            return AppService.AddPropertyAsync(id, input);
-        }
-
-        [HttpDelete]
-        [Route("{id:guid}/properties")]
-        public Task RemovePropertyAsync(Guid id, [FromBody] ScopePropertyDeleteInput input)
-        {
-            return AppService.RemovePropertyAsync(id, input);
-        }
-
-        [HttpGet]
-        [Route("{id:guid}/resources")]
-        public Task<List<string>> GetResourcesAsync(Guid id)
-        {
-            return AppService.GetResourcesAsync(id);
-        }
-
-        [HttpPut]
-        [Route("{id:guid}/resources")]
-        public Task AddResourceAsync(Guid id, [FromBody] ScopeResourceCreateInput input)
-        {
-            return AppService.AddResourceAsync(id, input);
-        }
-
-        [HttpDelete]
-        [Route("{id:guid}/resources")]
-        public Task RemoveResourceAsync(Guid id, [FromBody] ScopeResourceDeleteInput input)
-        {
-            return AppService.RemoveResourceAsync(id, input);
+            return AppService.DeleteAsync(id);
         }
     }
 }

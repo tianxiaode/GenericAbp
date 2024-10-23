@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="..\..\..\..\common.props" />
 
@@ -9,12 +9,20 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace />
     <Nullable>enable</Nullable>
+    <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
   </PropertyGroup>
 
   <ItemGroup>
+    
     <PackageReference Include="Volo.Abp.Authorization" Version="$(AbpVersion)" />
     <PackageReference Include="Volo.Abp.Ddd.Application.Contracts" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.OpenIddict.Domain.Shared" Version="$(AbpVersion)" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="$(MicrosoftExtensionsFileProvidersEmbeddedVersion)" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EmbeddedResource Include="Generic\Abp\OpenIddict\Localization\Resources\*.json" />
+    <Content Remove="Generic\Abp\OpenIddict\Localization\Resources\*.json" />
+  </ItemGroup>
 
 </Project>

@@ -20,6 +20,14 @@
                     <el-icon><i class="fa fa-lock"></i></el-icon>
                     <span>角色管理</span>                    
                 </el-menu-item>
+                <el-sub-menu index="4-1">
+                    <template #title>
+                        <el-icon><i class="fa fa-user-shield"></i></el-icon>
+                        <span>OpenIddict</span>                    
+                    </template>
+                    <el-menu-item index="/applications">Applications</el-menu-item>
+                    <el-menu-item index="/scopes">Scopes</el-menu-item>
+                </el-sub-menu>
                 <el-menu-item index="/settings" v-if="isGranted('AbpIdentity.Roles')">
                     <el-icon><i class="fa fa-cog"></i></el-icon>
                     <span>设置</span>                    
