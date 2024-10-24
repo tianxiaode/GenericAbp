@@ -68,7 +68,7 @@ class Permission {
     }
 
     static get getAll() {
-        return appConfig.getAllPermissions();
+        return appConfig.permissions;
     }
 
 }

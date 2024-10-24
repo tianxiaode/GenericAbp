@@ -1,7 +1,9 @@
-<script setup lang="ts">
-import { Hero } from '~/components';
-</script>
 
 <template>
-    <Hero title="About Us" />
+    <div class="hreo">
+
+    </div>
 </template>
+
+<script setup lang="ts">
+</script>

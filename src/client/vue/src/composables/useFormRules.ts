@@ -28,9 +28,9 @@ export function useFormRules(initialRules: any, formRef: any) {
                 break;
             } else if (name === "custom") {
                 isValid = fieldRules[name](
+                    value,
                     fieldName,
                     rule,
-                    value,
                     formRef.value
                 );
                 if (isValid !== true) {

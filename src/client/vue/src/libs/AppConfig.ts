@@ -1,9 +1,7 @@
 import { http } from "./http";
-import { capitalize, logger, uncapitalize } from "./utils";
+import {  logger } from "./utils";
 import { useConfigStore } from "~/store";
 import { AppConfigType } from "./AppConfigType";
-import { i18n } from "./locales";
-import { ElMessage } from "element-plus";
 
 export interface AppConfigOptions {
     configUrl?: string;
@@ -82,36 +80,12 @@ export class AppConfig {
     }
 
 
-
-    // getPermissions(
-    //     resource: string,
-    //     pluralizeEntity: string
-    // ): Record<string, boolean> {
-    //     const permissions: Record<string, boolean> =
-    //         this.config?.auth?.grantedPolicies || {};
-    //     const prefix = `${capitalize(resource)}.${capitalize(
-    //         pluralizeEntity
-    //     )}.`;
-    //     const result: Record<string, boolean> = {};
-
-    //     Object.keys(permissions).forEach((key) => {
-    //         if (key.startsWith(prefix)) {
-    //             result[uncapitalize(key.replace(prefix, ""))] =
-    //                 permissions[key];
-    //         }
-    //     });
-
-    //     result['default'] = permissions[prefix.substring(0, prefix.length - 1)];
-
-    //     return result;
+    // private async checkNeedSetPassword(): Promise<void> {
+    //     const result = await http.get("/need-set-password") as any;
+    //     if(result.need){
+    //         ElMessage.error(i18n.get('Message.ResetPasswordTip'));
+    //     }
     // }
-
-    private async checkNeedSetPassword(): Promise<void> {
-        const result = await http.get("/need-set-password") as any;
-        if(result.need){
-            ElMessage.error(i18n.get('Message.ResetPasswordTip'));
-        }
-    }
 }
 
 export const appConfig = new AppConfig();

@@ -10,11 +10,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import { useLocalizationStore } from '~/store';
 import { useAuthentication,useI18n } from "~/composables";
 import avatar from "~/assets/avatar.png";
-import { appConfig } from "../../libs";
 
 const { isAuthenticated,currentUser } = useAuthentication();
 const { t } = useI18n();

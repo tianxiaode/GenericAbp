@@ -51,12 +51,8 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { isGranted } from '../libs';
-import UserButton from '../components/buttons/UserButton.vue';
 const collapse = ref(false);
 
-const toggleCollapse = () => {
-    collapse.value = !collapse.value;
-};
 
 
 

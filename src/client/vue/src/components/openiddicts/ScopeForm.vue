@@ -2,20 +2,27 @@
     <FormDialog ref="formRef" width="800px" :form-data="formData" :rules="rules" :on-ok="submitForm"
         :title="dialogTitle" v-bind="$attrs" :reset="resetForm" :before-close="checkChange" :label-width="160">
         <template #form-items>
-                <el-form-item :label="t('OpenIddict.Scope:Name')" prop="name">
-                    <el-input v-model="formData.name"></el-input>
-                </el-form-item>
-                <el-form-item :label="t('OpenIddict.Scope:DisplayName')" prop="displayName">
-                    <el-input v-model="formData.displayName"></el-input>
-                </el-form-item>
-                <el-form-item :label="t('OpenIddict.Scope:Description')" prop="description">
-                    <el-input type="textarea" v-model="formData.description" :row="3"></el-input>
-                </el-form-item>
-                <div class="flex flex-row gap-4 " style="height: 300px; ">
-                    <PropertyInput v-model="formData.properties" class="flex-1"></PropertyInput>
-                    <ValueListInput v-model="formData.resources" class="flex-1" :label="t('OpenIddict.Scope:Resources')"></ValueListInput>
-                </div>
-                
+            <el-form-item :label="t('OpenIddict.Scope:Name')" prop="name">
+                <el-input v-model="formData.name"></el-input>
+            </el-form-item>
+            <el-form-item :label="t('OpenIddict.Scope:DisplayName')" prop="displayName">
+                <el-input v-model="formData.displayName"></el-input>
+            </el-form-item>
+            <el-form-item :label="t('OpenIddict.Scope:Description')" prop="description">
+                <el-input type="textarea" v-model="formData.description" :row="3"></el-input>
+            </el-form-item>
+            <div class="flex flex-row gap-4 " style="height: 300px; ">
+                <fieldset class="flex-1 stretch ">
+                    <legend class="text-lg font-bold">{{ t('OpenIddict.Scope:Properties') }}</legend>
+                    <PropertyInput v-model="formData.properties" class="h-full"></PropertyInput>
+                </fieldset>
+                <fieldset class="flex-1 stretch ">
+                    <legend class="text-lg font-bold">{{ t('OpenIddict.Scope:Resources') }}</legend>
+                    <ValueListInput v-model="formData.resources" class="h-full">
+                    </ValueListInput>
+                </fieldset>
+            </div>
+
         </template>
     </FormDialog>
 </template>
@@ -43,7 +50,7 @@ const props = defineProps({
 });
 
 const formRules = {
-    name: {required: true}
+    name: { required: true }
 };
 
 
@@ -56,11 +63,11 @@ onMounted(() => {
     if (props.entityId) {
         api.getEntity(props.entityId).then((res: any) => {
             console.log(res);
-            if(isEmpty(res.properties)) res.properties = {};
-            if(isEmpty(res.resources)) res.resources = [];
+            if (isEmpty(res.properties)) res.properties = {};
+            if (isEmpty(res.resources)) res.resources = [];
             formData.value = res;
         })
-    }else{
+    } else {
         formData.value = {
             properties: {},
             resources: []
@@ -69,4 +76,3 @@ onMounted(() => {
 });
 
 </script>
-

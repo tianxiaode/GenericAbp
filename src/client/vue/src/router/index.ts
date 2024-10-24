@@ -34,7 +34,7 @@ const router = createRouter({
 });
 
 // 路由守卫
-router.beforeEach(async (to, from) => {
+router.beforeEach(async () => {
 
 
 });

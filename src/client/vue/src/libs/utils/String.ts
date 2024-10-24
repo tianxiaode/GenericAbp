@@ -1,5 +1,3 @@
-import exp from "constants";
-
 export type CssUnitType = string | number | null | undefined;
 
 export function isEmpty(str: any): boolean {

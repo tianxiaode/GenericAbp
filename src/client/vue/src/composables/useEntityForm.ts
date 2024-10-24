@@ -2,7 +2,7 @@ import { onMounted, ref } from "vue";
 import { i18n } from "~/libs";
 import { useConfirm } from "./useConfirm";
 
-export function useEntityForm(api: any, props: any) {
+export function useEntityForm(api: any, props: any,afterGetData?:any) {
     const dialogTitle = ref<string>("");
     const formRef = ref<any>(null as any);
     const formData = ref<any>({});
@@ -63,6 +63,7 @@ export function useEntityForm(api: any, props: any) {
                 formData.value = { ...res };
                 initValues.value = { ...res };
                 dialogTitle.value = api.updateTitle;
+                afterGetData(res);
             });
         } else {
             formData.value = {};

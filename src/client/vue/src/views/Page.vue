@@ -4,5 +4,5 @@
 </template>
 
 <script setup lang="ts">
-import Header from '../components/layouts/page/Header.vue'
+import Header from '../components/layouts/PageHeader.vue'
 </script>

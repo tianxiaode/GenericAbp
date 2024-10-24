@@ -1,5 +1,5 @@
 import { storeToRefs } from "pinia";
-import { computed, onMounted, ref, watch } from "vue";
+import { computed } from "vue";
 import { useLocalizationStore } from "~/store";
 import { i18n } from "~/libs";
 import zhCn from "element-plus/es/locale/lang/zh-cn";

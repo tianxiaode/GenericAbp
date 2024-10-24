@@ -52,7 +52,7 @@ const openPermissionWindow = (row: RoleType) => {
 const {
     data, dialogVisible, currentEntityId,
     filterText,
-    create, update, remove, filter, checkChange,
+    create, update, remove, filter,
     sortChange, formClose,  } = useTable<RoleType>(api);
 
 const toolbarButtons = {

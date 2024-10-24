@@ -1,4 +1,4 @@
-import { EntityInterface, http, isGranted, logger, Repository } from "../libs";
+import { EntityInterface, http, logger, Repository } from "../libs";
 
 export interface ScopeType extends EntityInterface {
   name: string;

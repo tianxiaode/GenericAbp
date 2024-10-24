@@ -1,4 +1,4 @@
-import { EntityInterface, isGranted } from "../libs";
+import { EntityInterface } from "../libs";
 import { onMounted, onUnmounted, ref } from "vue";
 
 export function useTable<T extends EntityInterface>(api: any) {

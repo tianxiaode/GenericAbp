@@ -1,5 +1,4 @@
-import exp from "constants";
-import { EntityInterface, http, isGranted, logger, Repository } from "../libs";
+import { EntityInterface, isGranted, logger, Repository } from "../libs";
 
 export interface ApplicationType extends EntityInterface {
     applicationType: string;

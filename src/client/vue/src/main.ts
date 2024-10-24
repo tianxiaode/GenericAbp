@@ -1,6 +1,6 @@
 import { createApp } from "vue";
 import { createPinia } from 'pinia';
-import ElementPlus, { ElMessage, ElMessageBox } from "element-plus";
+import ElementPlus, { ElMessage } from "element-plus";
 import '@fortawesome/fontawesome-free/css/all.css'; 
 import "element-plus/dist/index.css";
 import "~/styles/index.scss";

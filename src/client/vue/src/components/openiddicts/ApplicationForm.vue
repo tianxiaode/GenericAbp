@@ -40,57 +40,85 @@
                     <el-input v-model="formData.logoUri"></el-input>
                 </el-form-item>
             </div>
-            <el-tabs v-model="activeTab">
-                <el-tab-pane :label="t('OpenIddict.Application:RedirectUris')" name="redirectUris">
-
-                </el-tab-pane>
-                <el-tab-pane :label="t('OpenIddict.Application:PostLogoutRedirectUris')" name="postLogoutRedirectUris">
-
-                </el-tab-pane>
-                <el-tab-pane :label="t('OpenIddict.Application:Permissions')" name="permissions">
-                        <div class="grid grid-cols-2 gap-2">
+            <div class="w-full h-80">
+                <el-tabs v-model="activeTab" class="h-full w-full">
+                    <el-tab-pane :label="t('OpenIddict.Application:Permissions')" name="permissions">
+                        <div class="grid grid-cols-2 gap-1 overflow-auto h-full">
                             <el-checkbox-group v-model="formData.permissions">
                                 <div class="flex flex-col">
-                                    <el-checkbox 
-                                    v-for="permission in ApplicationPermissions.filter(p => p.type === 'endpoint')" 
-                                    :value="permission.value">{{ t(permission.display) }}</el-checkbox>
+                                    <el-checkbox
+                                        v-for="permission in ApplicationPermissions.filter(p => p.type === 'endpoint')"
+                                        :value="permission.value">
+                                        {{ t(permission.display) }}
+                                    </el-checkbox>
                                 </div>
                             </el-checkbox-group>
                             <el-checkbox-group v-model="formData.permissions">
                                 <div class="flex flex-col">
-                                    <el-checkbox 
-                                    v-for="permission in ApplicationPermissions.filter(p => p.type === 'grant_type')" 
-                                    :value="permission.value">{{ t(permission.display) }}</el-checkbox>
-                                </div>                                
+                                    <el-checkbox
+                                        v-for="permission in ApplicationPermissions.filter(p => p.type === 'grant_type')"
+                                        :value="permission.value">
+                                        {{ t(permission.display) }}
+                                    </el-checkbox>
+                                </div>
                             </el-checkbox-group>
                         </div>
-                </el-tab-pane>
-                <el-tab-pane :label="t('OpenIddict.Scopes')" name="scopes">
+                    </el-tab-pane>
+                    <el-tab-pane :label="t('OpenIddict.Scopes')" name="scopes">
+                        <el-checkbox-group v-model="formData.permissions">
+                            <div class="grid grid-cols-2 gap-1 overflow-auto">
+                                <el-checkbox v-for="scope in ApplicationDefaultScopes" :value="scope.value">
+                                    {{ t(scope.display) }}
+                                </el-checkbox>
+                                <el-checkbox v-for="scope in allScopes" :value="`scp:${scope}`">
+                                    {{ capitalize(scope) }}
+                                </el-checkbox>
 
-</el-tab-pane>
-</el-tabs>
+                            </div>
+                        </el-checkbox-group>
+                    </el-tab-pane>
+                    <el-tab-pane :label="t('OpenIddict.Application:RedirectUris')" name="redirectUris" class="h-full">
+                        <ValueListInput :label="''" :rules="{ url: true }" v-model="formData.redirectUris"
+                            class="flex-1">
+                        </ValueListInput>
+                    </el-tab-pane>
+                    <el-tab-pane :label="t('OpenIddict.Application:PostLogoutRedirectUris')" class="h-full"
+                        name="postLogoutRedirectUris">
+                        <ValueListInput :label="''" :rules="{ url: true }" v-model="formData.postLogoutRedirectUris"
+                            class="flex-1"></ValueListInput>
+                    </el-tab-pane>
+                    <el-tab-pane :label="t('OpenIddict.Application:Settings')" name="settings" class="h-full">
+                        <div class="grid grid-cols-2 gap-1 overflow-auto h-full flex-1">
+                            <el-form-item v-for="setting in ApplicationSettings" :label="t(setting.display)"
+                                prop="settings">
+                                <el-input v-model="setting.value"></el-input>
+                            </el-form-item>
+                        </div>
+                    </el-tab-pane>
+                    <el-tab-pane :label="t('OpenIddict.Application:Properties')" name="properties" class="h-full">
+                        <PropertyInput :label="''" v-model="formData.properties" class="h-full"></PropertyInput>
+                    </el-tab-pane>
+                </el-tabs>
+            </div>
         </template>
     </FormDialog>
 </template>
 
 <script setup lang="ts">
 import FormDialog from '../dialogs/FormDialog.vue';
-import PasswordStrength from '../accounts/PasswordStrength.vue';
 
-import { useConfig, useEntityForm, useRepository, useFormRules, useI18n } from '~/composables'
-import { appConfig } from '~/libs';
+import { useEntityForm, useRepository, useFormRules, useI18n } from '~/composables'
 import { onMounted, ref } from 'vue';
-import Switch from '../forms/Switch.vue';
-import { ApplicationClientTypes, ApplicationConsentTypes, ApplicationPermissions, ApplicationTypes } from '~/repositories';
-import { el } from 'element-plus/es/locales.mjs';
+import { ApplicationClientTypes, ApplicationConsentTypes, ApplicationDefaultScopes, ApplicationPermissions, ApplicationSettings, ApplicationTypes } from '~/repositories';
+import { capitalize } from '~/libs';
+import ValueListInput from '../forms/ValueListInput.vue';
+import PropertyInput from '../forms/PropertyInput.vue';
 
-const activeTab = ref('basic');
-const allRoles = ref([] as string[]);
+const activeTab = ref('permissions');
+const allScopes = ref([] as string[]);
 const { t } = useI18n();
 const api = useRepository('application');
-const applicationTypes = ref([] as string[]);
-const consentTypes = ref([] as string[]);
-const allowedManageRoles = api.canManageRoles;
+const scopeApi = useRepository('scope');
 const props = defineProps({
     visible: {
         type: Boolean,
@@ -103,7 +131,7 @@ const props = defineProps({
 });
 
 const formRules = {
-    clientId: {required: true}
+    clientId: { required: true }
 };
 
 
@@ -113,11 +141,10 @@ const { rules } = useFormRules(formRules, formRef);
 
 
 onMounted(() => {
-    if (props.entityId) {
-        api.getEntity(props.entityId).then((res: any) => {
-            formRef.value.se
-        })
-    } else {
+    scopeApi.getAll().then((res: any) => {
+        allScopes.value = res.items.map((item: any) => item.name);
+    })
+    if (!props.entityId) {
         const defaultValue = {
             applicationType: ApplicationTypes[1].value,
             clientType: ApplicationClientTypes[1].value,
