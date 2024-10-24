@@ -18,6 +18,7 @@
     <PackageReference Include="Volo.Abp.Ddd.Application.Contracts" Version="$(AbpVersion)" />
     <PackageReference Include="Volo.Abp.OpenIddict.Domain.Shared" Version="$(AbpVersion)" />
     <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="$(MicrosoftExtensionsFileProvidersEmbeddedVersion)" />
+    <ProjectReference Include="..\..\..\Extensions\src\Generic.Abp.Extensions\Generic.Abp.Extensions.csproj" />
   </ItemGroup>
 
   <ItemGroup>

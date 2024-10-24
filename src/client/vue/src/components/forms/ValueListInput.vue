@@ -7,11 +7,6 @@
 
         <el-form ref="formRef" :model="formData" :rules="rules" :validate-on-rule-change="false" v-if="formVisible">
             <div class="flex flex-row w-full gap-2">
-                <el-form-item prop="name" class="flex-1" >
-                    <el-input v-model="formData.name" size="small" :placeholder="t('Components.PropertyInput.Name')" 
-                    auto-complete="off"
-                    />
-                </el-form-item>
                 <el-form-item prop="value" class="flex-1">
                     <el-input v-model="formData.value" size="small" 
                         :placeholder="t('Components.PropertyInput.Value')" />
@@ -25,11 +20,10 @@
             </div>
         </el-form>
         <div class="flex-1 overflow-auto">
-            <div class="flex flex-row w-full gap-2 py-1" v-for="key in Object.keys(properties)" >
-                <div class="flex-1">{{ key }}</div>
-                <div class="flex-1">{{ properties[key] }}</div>
+            <div class="flex flex-row w-full gap-2 py-1" v-for="(item, index) in properties" :key="index">
+                <div class="flex-1">{{ item }}</div>
                 <div class="w-10 text-center">
-                    <IconButton @click="removeProperty(key)" icon="fa fa-trash danger" size="small" circle>
+                    <IconButton @click="removeProperty(item)" icon="fa fa-trash danger" size="small" circle>
                     </IconButton>
                 </div>
             </div>
@@ -44,8 +38,8 @@ import { useForm, useFormRules, useI18n } from '~/composables';
 
 const props = defineProps({
     modelValue: {
-        type: Object,
-        default: () => ({})
+        type: Array,
+        default: () => ([])
     },
     label: {
         type: String,
@@ -56,10 +50,11 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue']);
 const { t } = useI18n();
 const formVisible = ref(false);
-const properties = ref<Record<string, any>>(props.modelValue);
-// 监听 properties 的变化，及时更新 modelValue
-watch(properties, (newValue) => {
-    emit('update:modelValue', newValue);
+const properties = ref(props.modelValue);
+
+watch(properties, (value) => {
+    console.log(value);
+    emit('update:modelValue', value);
 });
 
 watch(() => props.modelValue, (newValue) => {
@@ -67,12 +62,13 @@ watch(() => props.modelValue, (newValue) => {
 });
 
 const formRules = {
-    name: {
+    value: {
         required: true,
         custom: (field: string, rule: any, value: any) => {
-            const exists = properties.value.hasOwnProperty(value);
+            console.log(field, value);
+            const exists = properties.value.includes(value);
             if (exists) {
-                return (t.value('Components.PropertyInput.AlreadyExists'));
+                return (t.value('Components.ValueAlreadyExist'));
             }
             return true;
         }
@@ -82,14 +78,14 @@ const formRules = {
 const { formData, formRef, handleSubmit } = useForm(addProperty)
 const { rules } = useFormRules(formRules, formRef)
 function addProperty() {
-    properties.value[formData.value.name] = formData.value.value;
-    formData.value = { name: '', value: '' };
+    properties.value.push(formData.value.value);
+    formData.value.value = '';
     formRef.value.clearValidate();
     formVisible.value = false;
 }
 
-function removeProperty(key: any) {
-    delete properties.value[key];
+function removeProperty(value: any) {
+    properties.value = properties.value.filter(item => item !== value);
 }
 </script>
 

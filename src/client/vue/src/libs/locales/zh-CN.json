@@ -39,7 +39,13 @@
         "No": "否",
         "Save": "保存",
         "Submit": "提交",
-        "Details":"详情"
+        "Details":"详情",
+        "PropertyInput":{
+            "Name": "名称",
+            "Value": "值",
+            "AlreadyExists": "名称已存在！"
+        },
+        "ValueAlreadyExist": "值已存在！"
     },
     "Http":{
         "Retrying": "正在重试，还可以尝试 {retryCount} 次，每隔 {retryInterval} 秒重试一次，如果不想再重试，可以取消请求。",

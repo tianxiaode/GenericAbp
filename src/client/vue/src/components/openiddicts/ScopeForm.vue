@@ -9,11 +9,13 @@
                     <el-input v-model="formData.displayName"></el-input>
                 </el-form-item>
                 <el-form-item :label="t('OpenIddict.Scope:Description')" prop="description">
-                    <el-input type="textarea" v-model="formData.Description" :row="3"></el-input>
+                    <el-input type="textarea" v-model="formData.description" :row="3"></el-input>
                 </el-form-item>
-                <el-form-item :label="t('OpenIddict.Scope:Properties')" prop="properties">
-                    <PropertyInput v-model="formData.properties"></PropertyInput>
-                </el-form-item>
+                <div class="flex flex-row gap-4 " style="height: 300px; ">
+                    <PropertyInput v-model="formData.properties" class="flex-1"></PropertyInput>
+                    <ValueListInput v-model="formData.resources" class="flex-1" :label="t('OpenIddict.Scope:Resources')"></ValueListInput>
+                </div>
+                
         </template>
     </FormDialog>
 </template>
@@ -24,6 +26,8 @@ import FormDialog from '../dialogs/FormDialog.vue';
 import { useEntityForm, useRepository, useFormRules, useI18n } from '~/composables'
 import { onMounted } from 'vue';
 import PropertyInput from '../forms/PropertyInput.vue';
+import ValueListInput from '../forms/ValueListInput.vue';
+import { isEmpty } from '~/libs';
 
 const { t } = useI18n();
 const api = useRepository('scope');
@@ -51,9 +55,17 @@ const { rules } = useFormRules(formRules, formRef);
 onMounted(() => {
     if (props.entityId) {
         api.getEntity(props.entityId).then((res: any) => {
-            formRef.value = res;
+            console.log(res);
+            if(isEmpty(res.properties)) res.properties = {};
+            if(isEmpty(res.resources)) res.resources = [];
+            formData.value = res;
         })
-    } 
+    }else{
+        formData.value = {
+            properties: {},
+            resources: []
+        }
+    }
 });
 
 </script>

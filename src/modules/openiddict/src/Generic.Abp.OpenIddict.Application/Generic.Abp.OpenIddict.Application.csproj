@@ -18,7 +18,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Extensions\src\Generic.Abp.Extensions\Generic.Abp.Extensions.csproj" />
     <ProjectReference Include="..\Generic.Abp.OpenIddict.Application.Contracts\Generic.Abp.OpenIddict.Application.Contracts.csproj" />
   </ItemGroup>
 

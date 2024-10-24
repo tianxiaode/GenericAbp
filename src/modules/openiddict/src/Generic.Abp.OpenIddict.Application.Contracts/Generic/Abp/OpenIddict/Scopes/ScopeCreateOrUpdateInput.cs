@@ -1,10 +1,11 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using Volo.Abp.ObjectExtending;
 
 namespace Generic.Abp.OpenIddict.Scopes
 {
     [Serializable]
-    public class ScopeCreateOrUpdateInput
+    public class ScopeCreateOrUpdateInput : ExtensibleObject
     {
         [Required] [DisplayName("Scope:Name")] public string Name { get; set; } = default!;
 

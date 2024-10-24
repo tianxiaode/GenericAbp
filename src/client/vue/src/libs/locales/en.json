@@ -39,7 +39,14 @@
         "No": "No",
         "Save": "Save",
         "Submit": "Submit",
-        "Details":"Details"
+        "Details":"Details",
+        "PropertyInput":{
+            "Label":"Properties",
+            "Name": "Name",
+            "Value": "Value",
+            "AlreadyExists": "The name already exists."
+        },
+        "ValueAlreadyExist": "The value already exist."
     },
     "Http":{
         "Retrying": "Retrying, you have {retryCount} attempts left, retrying every {retryInterval} seconds. If you don't want to retry, you can cancel the request.",

@@ -37,7 +37,6 @@ const api = useRepository('scope');
 const {t} = useI18n();
 
 const onOpen = () => {
-    console.log('onOpen', props.entityId);
     if(isEmpty(props.entityId)) return;
     api.getEntity(props.entityId).then((res:any) => {
         drawerTitle.value = t.value('Components.Details') + ' - ' + res.name;

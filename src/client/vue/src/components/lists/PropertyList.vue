@@ -1,13 +1,13 @@
 <template>
-  <ul :style="listStyle" :class="listClass">
-    <li v-for="item in processedData" :key="getKey(item)" :class="itemClass" :style="itemStyle" class="list-item">
-      <span class="key">{{ getKey(item) }}</span>
-      <span class="colon">:</span>
-      <span class="value">{{ getValue(item) }}</span>
-    </li>
-    <li v-if="!processedData.length" class="empty-list-item">{{ emptyString }}</li>
-  </ul>
-
+        <el-descriptions :column="1" size="small" border v-if="processedData.length > 0">
+            <el-descriptions-item 
+                v-for="item in processedData"
+                :label="getKey(item)">
+                {{getValue(item) }}
+            </el-descriptions-item>
+        </el-descriptions>
+    <div v-if="!processedData.length">{{ emptyString }}</div>
+  
 </template>
 
 <script setup lang="ts">
@@ -49,10 +49,6 @@ const props = defineProps({
     itemStyle: {
         type: Object,
         default: () => ({
-            padding: '8px',
-            border: '1px solid #ccc',
-            marginBottom: '5px',
-            borderRadius: '4px',
         })
     }
 });
@@ -70,7 +66,6 @@ const processedData = computed(() => {
         }));
     }
 
-    console.warn('传入的数据格式不正确，预期为数组或对象');
     return []; // 数据格式不正确或为null时返回空数组
 });
 
@@ -82,23 +77,3 @@ const getValue = (item: any) => item[props.valueField] ?? props.emptyString;
 
 </script>
 
-<style scoped>
-.list-item {
-    display: flex;
-    align-items: center;
-}
-
-.item-key {
-    flex: 1;
-    text-align: left;
-}
-
-.item-colon {
-    margin: 0 8px; /* 添加一些左右间隔 */
-}
-
-.item-value {
-    flex: 1;
-    text-align: left;
-}
-</style>

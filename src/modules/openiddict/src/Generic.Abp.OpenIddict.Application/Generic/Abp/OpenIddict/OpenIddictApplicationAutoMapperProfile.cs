@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Generic.Abp.OpenIddict.Applications;
 using Generic.Abp.OpenIddict.Scopes;
+using Volo.Abp.AutoMapper;
 using Volo.Abp.OpenIddict.Applications;
 using Volo.Abp.OpenIddict.Scopes;
 
@@ -23,6 +24,7 @@ namespace Generic.Abp.OpenIddict
                     opts => opts.MapFrom(m =>
                         System.Text.Json.JsonSerializer.Deserialize<HashSet<string>>(m.Resources,
                             new System.Text.Json.JsonSerializerOptions())));
+
 
             CreateMap<OpenIddictApplication, ApplicationDto>()
                 .ForMember(m => m.Properties,

@@ -9,6 +9,7 @@ export function useForm(onSubmit: Function) {
         if (!form) return;
         
         form.validate((valid:boolean)=>{
+            console.log('valid', valid)
             if(!valid) return;
             return onSubmit();
         })

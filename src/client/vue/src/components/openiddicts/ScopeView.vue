@@ -47,8 +47,6 @@ const toolbarButtons = {
 
 const { detailVisible, detailEntityId, detailButton  } = useDetail(api.idFieldName);
 
-console.log(detailButton)
-
 const tableButtons = {
     edit: { isDisabled: (row: RoleType) => row.isStatic, action: update, isVisible: api.canUpdate },
     delete: { isDisabled: (row: RoleType) => row.isStatic, action: remove, isVisible: api.canDelete },

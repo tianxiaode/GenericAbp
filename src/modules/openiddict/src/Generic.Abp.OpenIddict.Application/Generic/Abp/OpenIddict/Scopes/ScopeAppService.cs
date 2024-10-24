@@ -1,8 +1,15 @@
-﻿using Generic.Abp.Extensions.Exceptions;
+﻿using System.Text.Json;
+using System.Text.Json.Nodes;
+using Generic.Abp.Extensions.Exceptions;
 using Generic.Abp.OpenIddict.Permissions;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Logging;
+using OpenIddict.Abstractions;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Domain.Entities;
+using Volo.Abp.ObjectExtending;
+using Volo.Abp.ObjectMapping;
 using Volo.Abp.OpenIddict.Scopes;
 using Volo.Abp.Uow;
 
@@ -12,10 +19,12 @@ namespace Generic.Abp.OpenIddict.Scopes
     public class ScopeAppService : OpenIddictAppService, IScopeAppService
     {
         protected IOpenIddictScopeRepository Repository { get; }
+        protected IOpenIddictScopeManager Manager { get; }
 
-        public ScopeAppService(IOpenIddictScopeRepository repository)
+        public ScopeAppService(IOpenIddictScopeRepository repository, IOpenIddictScopeManager manager)
         {
             Repository = repository;
+            Manager = manager;
         }
 
         [UnitOfWork]
@@ -56,54 +65,91 @@ namespace Generic.Abp.OpenIddict.Scopes
         [Authorize(OpenIddictPermissions.Scopes.Create)]
         public virtual async Task<ScopeDto> CreateAsync(ScopeCreateInput input)
         {
-            var entity = new OpenIddictScope(GuidGenerator.Create());
-            await UpdateByInputAsync(entity, input);
+            await CheckDuplicateNameAsync(input.Name);
+            var descriptor = new OpenIddictScopeDescriptor
+            {
+                Name = input.Name,
+            };
 
-            await Repository.InsertAsync(entity);
+            await UpdateByInputAsync(descriptor, input);
 
-            return ObjectMapper.Map<OpenIddictScope, ScopeDto>(entity);
+            var scope = await Manager.CreateAsync(descriptor);
+            input.MapExtraPropertiesTo(scope.As<OpenIddictScopeModel>());
+            await Manager.UpdateAsync(scope);
+
+            return await GetAsync(scope.As<OpenIddictScopeModel>().Id);
         }
 
         [UnitOfWork]
         [Authorize(OpenIddictPermissions.Scopes.Update)]
         public virtual async Task<ScopeDto> UpdateAsync(Guid id, ScopeUpdateInput input)
         {
-            var entity = await Repository.GetAsync(id);
-            entity.ConcurrencyStamp = input.ConcurrencyStamp;
-            await UpdateByInputAsync(entity, input);
-            await Repository.UpdateAsync(entity);
-            return ObjectMapper.Map<OpenIddictScope, ScopeDto>(entity);
+            var scope = await Manager.FindByIdAsync(id.ToString("D"));
+            if (scope == null)
+            {
+                throw new EntityNotFoundException(typeof(OpenIddictScope), id);
+            }
+
+            var model = scope.As<OpenIddictScopeModel>();
+
+            Logger.LogDebug($"Chcek duplicate name for {input.Name}, {model.Name}");
+            if (!string.Equals(model.Name, input.Name, StringComparison.OrdinalIgnoreCase))
+            {
+                await CheckDuplicateNameAsync(input.Name);
+            }
+
+            var descriptor = new OpenIddictScopeDescriptor
+            {
+                Name = input.Name,
+            };
+            await Manager.PopulateAsync(descriptor, scope);
+            await UpdateByInputAsync(descriptor, input);
+
+            input.MapExtraPropertiesTo(scope.As<OpenIddictScopeModel>());
+            await Manager.UpdateAsync(scope, descriptor);
+            return await GetAsync(id);
         }
 
         [UnitOfWork]
-        protected virtual async Task UpdateByInputAsync(OpenIddictScope entity, ScopeCreateOrUpdateInput input)
+        protected virtual Task UpdateByInputAsync(OpenIddictScopeDescriptor scope, ScopeCreateOrUpdateInput input)
         {
-            var exits = await Repository.FindByNameAsync(input.Name);
-            if (exits != null && (entity.Id != exits.Id))
+            scope.DisplayName = input.DisplayName;
+            scope.Description = input.Description;
+            scope.Properties.Clear();
+            foreach (var property in input.Properties)
             {
-                throw new DuplicateWarningBusinessException(nameof(OpenIddictScope.Name), input.Name);
+                scope.Properties.Add(property.Key, JsonSerializer.SerializeToElement(property.Value));
             }
 
-            entity.DisplayName = input.DisplayName;
-            entity.Description = input.Description;
-            entity.Name = input.Name;
-            if (!input.Properties.IsNullOrEmpty())
+            scope.Resources.Clear();
+            foreach (var resource in input.Resources)
             {
-                entity.Properties = System.Text.Json.JsonSerializer.Serialize(input.Properties);
+                scope.Resources.Add(resource);
             }
 
-            if (!input.Resources.IsNullOrEmpty())
-            {
-                entity.Resources = System.Text.Json.JsonSerializer.Serialize(input.Resources);
-            }
+            return Task.CompletedTask;
         }
 
         [UnitOfWork]
         [Authorize(OpenIddictPermissions.Scopes.Delete)]
         public virtual async Task DeleteAsync(Guid id)
         {
-            var entity = await Repository.GetAsync(id);
-            await Repository.DeleteAsync(entity);
+            var scope = await Manager.FindByIdAsync(id.ToString("D"));
+            if (scope == null)
+            {
+                throw new EntityNotFoundException(typeof(OpenIddictScope), id);
+            }
+
+            await Manager.DeleteAsync(scope);
+        }
+
+        protected virtual async Task CheckDuplicateNameAsync(string name)
+        {
+            var exits = await Repository.FindByNameAsync(name);
+            if (exits != null)
+            {
+                throw new DuplicateWarningBusinessException(nameof(OpenIddictScope.Name), name);
+            }
         }
     }
 }

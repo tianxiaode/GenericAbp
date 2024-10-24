@@ -1,38 +1,63 @@
 import { reactive } from "vue";
-import {
-    i18n,
-    Validator,
-    isEmpty,
-    isFunction
-} from "~/libs";
+import { i18n, Validator, isEmpty, isFunction } from "~/libs";
 
 export function useFormRules(initialRules: any, formRef: any) {
     // 初始化 rules 为一个响应式对象
     const rules = reactive<any>({});
 
     // 定义验证函数
-    const validateField = (fieldName: string, rule: any, value: any, callback: any) => {
-        if(isEmpty(formRef.value)) return;
+    const validateField = (
+        fieldName: string,
+        rule: any,
+        value: any,
+        callback: any
+    ) => {
+        if (isEmpty(formRef.value)) return;
+
         const errors = [];
         const fieldRules = rules[fieldName];
 
         for (const name in fieldRules) {
             let isValid = true;
-            const otherField = name === "equalTo" ?  fieldRules['equalTo'] : "";
-            if(name === "required" && fieldRules[name] === false && isEmpty(value)){
+            const otherField = name === "equalTo" ? fieldRules["equalTo"] : "";
+            if (
+                name === "required" &&
+                fieldRules[name] === false &&
+                isEmpty(value)
+            ) {
                 break;
-            }else if(name === 'custom'){
-                isValid = fieldRules[name](fieldName, rule, value, callback, formRef.value);
-            }else if (name === "equalTo") {
-                isValid = value === getFieldValue(otherField);            
-            }else if (Validator.validates.hasOwnProperty(name)) {
-                isValid = Validator.validate(name, value, fieldRules[name], getFields() as any);                
+            } else if (name === "custom") {
+                isValid = fieldRules[name](
+                    fieldName,
+                    rule,
+                    value,
+                    formRef.value
+                );
+                if (isValid !== true) {
+                    errors.push(isValid);
+                    continue;
+                }
+            } else if (name === "equalTo") {
+                isValid = value === getFieldValue(otherField);
+            } else if (Validator.validates.hasOwnProperty(name)) {
+                isValid = Validator.validate(
+                    name,
+                    value,
+                    fieldRules[name],
+                    getFields() as any
+                );
             }
             if (!isValid) {
                 errors.push(
                     i18n.get(`Validation.${name}`, {
-                        "0": name === "equalTo" ? getFieldLabel(fieldName) : fieldRules[name],
-                        "1": name === "equalTo" ? getFieldLabel(otherField) : fieldRules[name],
+                        "0":
+                            name === "equalTo"
+                                ? getFieldLabel(fieldName)
+                                : fieldRules[name],
+                        "1":
+                            name === "equalTo"
+                                ? getFieldLabel(otherField)
+                                : fieldRules[name],
                     })
                 );
             }
@@ -48,7 +73,11 @@ export function useFormRules(initialRules: any, formRef: any) {
     const setupInitialRules = () => {
         for (const fieldName in initialRules) {
             rules[fieldName] = { ...initialRules[fieldName] }; // 初始化规则
-            rules[fieldName].validator = (rule: any, value: any, callback: any) => {
+            rules[fieldName].validator = (
+                rule: any,
+                value: any,
+                callback: any
+            ) => {
                 if (rules[fieldName].validator.timer) {
                     clearTimeout(rules[fieldName].validator.timer);
                 }
@@ -63,24 +92,23 @@ export function useFormRules(initialRules: any, formRef: any) {
     // 允许外部更新动态规则
     const updateRules = (...args: any[]) => {
         let newRules = args[0];
-        if(typeof newRules === 'string'){
-            newRules = {[args[0]]: args[1]}
+        if (typeof newRules === "string") {
+            newRules = { [args[0]]: args[1] };
         }
         for (const fieldName in newRules) {
-            rules[fieldName] = { ...rules[fieldName],...newRules[fieldName] };
+            rules[fieldName] = { ...rules[fieldName], ...newRules[fieldName] };
         }
-                
     };
 
     // 执行初始规则设置
     setupInitialRules();
 
-    const getFields = () => {   
-        let fields = formRef.value.fields;        
-        if(isFunction(fields)){
+    const getFields = () => {
+        let fields = formRef.value.fields;
+        if (isFunction(fields)) {
             fields = fields(fields);
         }
-    }
+    };
 
     const getField = (field: string) => {
         const fields = getFields() as any;

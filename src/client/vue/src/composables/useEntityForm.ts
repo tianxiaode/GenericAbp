@@ -13,6 +13,7 @@ export function useEntityForm(api: any, props: any) {
     const submitForm = async () => {
         formRef.value?.validate(async (valid: boolean) => {
             if (!valid) return;
+            console.log("formData", formData.value);
             try {
                 const result = props.entityId
                     ? await api.update(formData.value)

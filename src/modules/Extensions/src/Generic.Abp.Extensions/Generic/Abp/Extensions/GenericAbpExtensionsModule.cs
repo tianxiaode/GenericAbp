@@ -28,6 +28,7 @@ public class GenericAbpExtensionsModule : AbpModule
         Configure<AbpExceptionLocalizationOptions>(options =>
         {
             options.MapCodeNamespace("Generic.Abp.Extensions", typeof(ExtensionsResource));
+            options.MapCodeNamespace("Generic.Abp.BusinessException", typeof(ExtensionsResource));
         });
     }
 }
