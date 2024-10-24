@@ -1,13 +1,11 @@
 <template>
-        <el-descriptions :column="1" size="small" border v-if="processedData.length > 0">
-            <el-descriptions-item 
-                v-for="item in processedData"
-                :label="getKey(item)">
-                {{getValue(item) }}
-            </el-descriptions-item>
-        </el-descriptions>
+    <el-descriptions :column="1" size="small" border v-if="processedData.length > 0">
+        <el-descriptions-item v-for="item in processedData" class-name="w-1/2" :label="getKey(item)">
+            {{ getValue(item) }}
+        </el-descriptions-item>
+    </el-descriptions>
     <div v-if="!processedData.length">{{ emptyString }}</div>
-  
+
 </template>
 
 <script setup lang="ts">
@@ -57,7 +55,7 @@ const props = defineProps({
 const processedData = computed(() => {
     if (Array.isArray(props.data)) {
         return props.data;
-    } 
+    }
 
     if (props.data && typeof props.data === 'object') {
         return Object.entries(props.data).map(([key, value]) => ({
@@ -76,4 +74,3 @@ const getKey = (item: any) => item[props.keyField] ?? props.emptyString;
 const getValue = (item: any) => item[props.valueField] ?? props.emptyString;
 
 </script>
-

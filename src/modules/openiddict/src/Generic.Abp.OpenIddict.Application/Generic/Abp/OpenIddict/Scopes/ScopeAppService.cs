@@ -92,7 +92,6 @@ namespace Generic.Abp.OpenIddict.Scopes
 
             var model = scope.As<OpenIddictScopeModel>();
 
-            Logger.LogDebug($"Chcek duplicate name for {input.Name}, {model.Name}");
             if (!string.Equals(model.Name, input.Name, StringComparison.OrdinalIgnoreCase))
             {
                 await CheckDuplicateNameAsync(input.Name);
@@ -107,7 +106,10 @@ namespace Generic.Abp.OpenIddict.Scopes
 
             input.MapExtraPropertiesTo(scope.As<OpenIddictScopeModel>());
             await Manager.UpdateAsync(scope, descriptor);
-            return await GetAsync(id);
+            var entity = await Repository.GetAsync(id);
+            entity.ConcurrencyStamp = input.ConcurrencyStamp;
+            await Repository.UpdateAsync(entity);
+            return ObjectMapper.Map<OpenIddictScope, ScopeDto>(entity);
         }
 
         [UnitOfWork]

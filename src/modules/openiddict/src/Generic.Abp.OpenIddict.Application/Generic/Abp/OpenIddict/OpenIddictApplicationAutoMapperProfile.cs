@@ -29,27 +29,27 @@ namespace Generic.Abp.OpenIddict
             CreateMap<OpenIddictApplication, ApplicationDto>()
                 .ForMember(m => m.Properties,
                     opts => opts.MapFrom(m =>
-                        System.Text.Json.JsonSerializer.Deserialize<List<string>>(m.Properties,
+                        System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, object>>(m.Properties,
                             new System.Text.Json.JsonSerializerOptions())))
                 .ForMember(m => m.PostLogoutRedirectUris,
                     opts => opts.MapFrom(m =>
-                        System.Text.Json.JsonSerializer.Deserialize<List<string>>(m.PostLogoutRedirectUris,
+                        System.Text.Json.JsonSerializer.Deserialize<HashSet<Uri>>(m.PostLogoutRedirectUris,
                             new System.Text.Json.JsonSerializerOptions())))
                 .ForMember(m => m.RedirectUris,
                     opts => opts.MapFrom(m =>
-                        System.Text.Json.JsonSerializer.Deserialize<List<string>>(m.RedirectUris,
+                        System.Text.Json.JsonSerializer.Deserialize<HashSet<Uri>>(m.RedirectUris,
                             new System.Text.Json.JsonSerializerOptions())))
                 .ForMember(m => m.Requirements,
                     opts => opts.MapFrom(m =>
-                        System.Text.Json.JsonSerializer.Deserialize<List<string>>(m.Requirements,
+                        System.Text.Json.JsonSerializer.Deserialize<HashSet<string>>(m.Requirements,
                             new System.Text.Json.JsonSerializerOptions())))
                 .ForMember(m => m.Settings,
                     opts => opts.MapFrom(m =>
-                        System.Text.Json.JsonSerializer.Deserialize<List<string>>(m.Settings,
+                        System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, string>>(m.Settings,
                             new System.Text.Json.JsonSerializerOptions())))
                 .ForMember(m => m.Permissions,
                     opts => opts.MapFrom(m =>
-                        System.Text.Json.JsonSerializer.Deserialize<List<string>>(m.Permissions,
+                        System.Text.Json.JsonSerializer.Deserialize<HashSet<string>>(m.Permissions,
                             new System.Text.Json.JsonSerializerOptions())));
         }
     }

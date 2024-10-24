@@ -1,30 +1,32 @@
 <template>
-    <FormDialog ref="formRef" width="800px" :form-data="formData" :rules="rules" :on-ok="submitForm"
+    <FormDialog ref="formRef" width="900px" :form-data="formData" :rules="rules" :on-ok="submitForm"
         :title="dialogTitle" v-bind="$attrs" :reset="resetForm" :before-close="checkChange" :label-width="160">
         <template #form-items>
             <div class="form-container">
                 <el-form-item :label="t('OpenIddict.Application:ClientId')" prop="clientId">
                     <el-input v-model="formData.clientId"></el-input>
                 </el-form-item>
-                <el-form-item :label="t('OpenIddict.Application:ClientSecret')" prop="clientSecret">
-                    <el-input v-model="formData.clientSecret"></el-input>
+                <el-form-item :label="t('OpenIddict.Application:ApplicationType')" prop="applicationType">
+                    <el-select v-model="formData.applicationType" >
+                        <el-option v-for="type in ApplicationTypes" :value="type.value" >
+                            {{ t(type.display) }}
+                        </el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item :label="t('OpenIddict.Application:DisplayName')" prop="displayName">
                     <el-input v-model="formData.displayName"></el-input>
                 </el-form-item>
-                <el-form-item :label="t('OpenIddict.Application:ApplicationType')" prop="applicationType">
-                    <el-select v-model="formData.applicationType">
-                        <el-option v-for="type in ApplicationTypes" :value="type.value">
-                            {{ t(type.display) }}
-                        </el-option>
-                    </el-select>
-                </el-form-item>
                 <el-form-item :label="t('OpenIddict.Application:ClientType')" prop="clientType">
-                    <el-select v-model="formData.clientType">
+                    <el-select v-model="formData.clientType" @change="onClientTypeChange">
                         <el-option v-for="type in ApplicationClientTypes" :value="type.value">
                             {{ t(type.display) }}
                         </el-option>
                     </el-select>
+                </el-form-item>
+                <el-form-item :label="t('OpenIddict.Application:ClientSecret')" prop="clientSecret">
+                    <el-input v-model="formData.clientSecret" 
+                        :disabled="formData.clientType === ApplicationClientTypes[1].value" >
+                    </el-input>
                 </el-form-item>
                 <el-form-item :label="t('OpenIddict.Application:ConsentType')" prop="consentType">
                     <el-select v-model="formData.consentType">
@@ -78,25 +80,23 @@
                         </el-checkbox-group>
                     </el-tab-pane>
                     <el-tab-pane :label="t('OpenIddict.Application:RedirectUris')" name="redirectUris" class="h-full">
-                        <ValueListInput :label="''" :rules="{ url: true }" v-model="formData.redirectUris"
+                        <ValueListInput  :rules="{ url: true }" v-model="formData.redirectUris"
                             class="flex-1">
                         </ValueListInput>
                     </el-tab-pane>
                     <el-tab-pane :label="t('OpenIddict.Application:PostLogoutRedirectUris')" class="h-full"
                         name="postLogoutRedirectUris">
-                        <ValueListInput :label="''" :rules="{ url: true }" v-model="formData.postLogoutRedirectUris"
+                        <ValueListInput :rules="{ url: true }" v-model="formData.postLogoutRedirectUris"
                             class="flex-1"></ValueListInput>
                     </el-tab-pane>
                     <el-tab-pane :label="t('OpenIddict.Application:Settings')" name="settings" class="h-full">
-                        <div class="grid grid-cols-2 gap-1 overflow-auto h-full flex-1">
-                            <el-form-item v-for="setting in ApplicationSettings" :label="t(setting.display)"
-                                prop="settings">
-                                <el-input v-model="setting.value"></el-input>
-                            </el-form-item>
-                        </div>
+                        <ApplicationSettingsInput v-model="formData.settings" class="h-full"></ApplicationSettingsInput>
                     </el-tab-pane>
                     <el-tab-pane :label="t('OpenIddict.Application:Properties')" name="properties" class="h-full">
-                        <PropertyInput :label="''" v-model="formData.properties" class="h-full"></PropertyInput>
+                        <PropertyInput v-model="formData.properties" class="h-full"></PropertyInput>
+                    </el-tab-pane>
+                    <el-tab-pane :label="t('OpenIddict.Application:Requirements')" name="requirements" class="h-full">
+                        <ValueListInput v-model="formData.requirements" class="h-full"></ValueListInput>
                     </el-tab-pane>
                 </el-tabs>
             </div>
@@ -109,10 +109,11 @@ import FormDialog from '../dialogs/FormDialog.vue';
 
 import { useEntityForm, useRepository, useFormRules, useI18n } from '~/composables'
 import { onMounted, ref } from 'vue';
-import { ApplicationClientTypes, ApplicationConsentTypes, ApplicationDefaultScopes, ApplicationPermissions, ApplicationSettings, ApplicationTypes } from '~/repositories';
+import { ApplicationClientTypes, ApplicationConsentTypes, ApplicationDefaultScopes, ApplicationPermissions, ApplicationTypes } from '~/repositories';
 import { capitalize } from '~/libs';
 import ValueListInput from '../forms/ValueListInput.vue';
 import PropertyInput from '../forms/PropertyInput.vue';
+import ApplicationSettingsInput from './ApplicationSettingsInput.vue'
 
 const activeTab = ref('permissions');
 const allScopes = ref([] as string[]);
@@ -131,14 +132,20 @@ const props = defineProps({
 });
 
 const formRules = {
-    clientId: { required: true }
+    clientId: { required: true },
 };
 
 
 const { formRef, formData, dialogTitle, initValues, resetForm, submitForm, checkChange } = useEntityForm(api, props);
-const { rules } = useFormRules(formRules, formRef);
+const { rules, updateRules } = useFormRules(formRules, formRef);
 
-
+const onClientTypeChange = (value: string) => {
+    if (value === ApplicationClientTypes[1].value) {
+        console.log('client secret disabled', value);
+        formData.value.clientSecret = '';
+    }
+    updateRules('clientSecret', { required: value === ApplicationClientTypes[0].value })
+}
 
 onMounted(() => {
     scopeApi.getAll().then((res: any) => {
@@ -148,7 +155,13 @@ onMounted(() => {
         const defaultValue = {
             applicationType: ApplicationTypes[1].value,
             clientType: ApplicationClientTypes[1].value,
-            consentType: ApplicationConsentTypes[2].value
+            consentType: ApplicationConsentTypes[2].value,
+            redirectUris: [],
+            postLogoutRedirectUris: [],
+            settings: {},
+            properties: {},
+            requirements: [],
+            permissions: []
         }
         formData.value = { ...defaultValue };
         initValues.value = { ...defaultValue };

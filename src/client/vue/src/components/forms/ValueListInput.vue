@@ -1,37 +1,37 @@
 <template>
-    <div v-bind="$attrs" class="h-full flex flex-col gap-2 box-border">
-        <div class="flex-1 overflow-auto">
-            <div class="flex flex-row w-full gap-2 py-1" v-for="(item, index) in properties" :key="index">
-                <div class="flex-1">{{ item }}</div>
-                <div class="w-10 text-center">
-                    <IconButton @click="removeProperty(item)" icon="fa fa-trash danger" size="small" circle>
-                    </IconButton>
+    <el-descriptions v-bind="$attrs" :column="1" border class="h-full overflow-auto value-list-input" size="small">
+        <el-descriptions-item class-name="w-1/2">
+            <template #label>
+                <div class="w-full">
+                    <el-input v-model="value" size="small" ref="valueInput" @blur="handleValueChange" clearable
+                        :placeholder="t('Components.PropertyInput.Name')">
+                        <template #append  v-if="errorMessage">
+                            <el-tooltip placement="bottom" effect="light">
+                                <template #content>
+                                    <span class="danger">{{ errorMessage }}</span>
+                                </template>
+                                <i class="fa fa-circle-exclamation danger"></i>
+                            </el-tooltip>
+                        </template>
+                    </el-input>
                 </div>
-            </div>
-            <div v-if="properties.length === 0" class="text-center text-lg font-bold">{{ t('Components.NoData') }}</div>
-        </div>
-        <el-form ref="formRef" :model="formData" :rules="rules" :validate-on-rule-change="false"
-            style="border-top: 1px;"
-        >
-            <div class="flex flex-row w-full gap-2" style="border-top: 1px solid #ccc; padding-top: 0.5rem;">
-                <el-form-item prop="value" class="flex-1">
-                    <el-input v-model="formData.value" size="small" 
-                        :placeholder="t('Components.PropertyInput.Value')" />
-                </el-form-item>
-                <el-form-item >
-                    <div class="w-10 text-center">
-                        <IconButton @click="handleSubmit" icon="fa fa-check primary" circle size="small"></IconButton>
-                    </div>
-                </el-form-item>
-            </div>
-        </el-form>
-    </div>
+            </template>
+            <i class="fa fa-plus success cursor-pointer" @click="addProperty"></i>
+        </el-descriptions-item>
+
+        <el-descriptions-item v-for="value in properties.sort( (a:any, b:any) => a.localeCompare(b) )" size="small" :label="value">
+                <i class="fa fa-trash danger cursor-pointer" @click="removeProperty(value)"></i>
+        </el-descriptions-item>
+        <el-descriptions-item v-if="noData" size="small" :label="t('Components.NoData')">
+        </el-descriptions-item>
+    </el-descriptions>
+
 </template>
 
 <script setup lang="ts">
 import { ref, watch, defineProps, defineEmits } from 'vue';
-import IconButton from '../buttons/IconButton.vue';
-import { useForm, useFormRules, useI18n } from '~/composables';
+import {useI18n } from '~/composables';
+import { capitalize, isEmpty, Validator } from '~/libs';
 
 const props = defineProps({
     modelValue: {
@@ -47,8 +47,12 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue']);
 const { t } = useI18n();
 const properties = ref(props.modelValue);
-
+const value = ref('');
+const valueInput = ref<any>();
+const noData = ref(properties.value.length === 0);
+const errorMessage = ref('');
 watch(properties, (value) => {
+    noData.value = properties.value.length === 0;
     emit('update:modelValue', value);
 });
 
@@ -56,32 +60,52 @@ watch(() => props.modelValue, (newValue) => {
     properties.value = newValue;
 });
 
-const formRules = {
-    value: {
-        required: true,
-        custom: (value: any) => {
-            const exists = properties.value.includes(value);
-            if (exists) {
-                return (t.value('Components.ValueAlreadyExist'));
-            }
-            return true;
-        },
-        ...props.rules
+const handleValueChange = () => {
+    if (isEmpty(value.value)) {
+        errorMessage.value = t.value('Validation.Required');
+        return;
     }
+    if (properties.value.includes(value.value)) {
+        errorMessage.value = t.value('Components.ValueAlreadyExist');
+        return;
+    }
+    if(props.rules){
+        for (const key in props.rules) {  
+            console.log('handleValueChange', key, props.rules[key], value.value)          
+            const isValid = Validator.validate(key, value.value, props.rules[key], null);
+            if(!isValid){
+                errorMessage.value = t.value('Validation.' + capitalize(key));
+                return;
+            }
+        }
+    }
+    errorMessage.value = '';
 }
 
-console.log(formRules);
 
-const { formData, formRef, handleSubmit } = useForm(addProperty)
-const { rules } = useFormRules(formRules, formRef)
 function addProperty() {
-    properties.value.push(formData.value.value);
-    formData.value.value = '';
-    formRef.value.clearValidate();
+    handleValueChange();
+    if (!isEmpty(errorMessage.value)) {
+        valueInput.value.focus();
+        return;
+    }
+
+    properties.value = [...properties.value, value.value];
+    value.value = '';
 }
 
 function removeProperty(value: any) {
-    properties.value = properties.value.filter(item => item !== value);
+    properties.value = [...properties.value.filter(item => item !== value)];
 }
 </script>
 
+<style lang="scss">
+.value-list-input {
+    .el-descriptions__content{
+        width: 20px;
+    }
+    .el-input-group__append {
+        padding: 0 10px;
+    }
+}
+</style>

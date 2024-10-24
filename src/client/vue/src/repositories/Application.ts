@@ -23,6 +23,7 @@ export interface SelectionOption {
     display: string;
     value: string;
     type?: string;
+    field?: string;
 }
 
 export const ApplicationTypes: SelectionOption[] = [
@@ -66,12 +67,12 @@ export const ApplicationDefaultScopes: SelectionOption[] = [
 ]
 
 export const ApplicationSettings: SelectionOption[] = [
-    { display: "OpenIddict.Settings:TokenLifetimes.AccessToken", value: 'tkn_lft:access_token' },
-    { display: "OpenIddict.Settings:TokenLifetimes.AuthorizationCode", value: 'tkn_lft:auc' }, 
-    { display: "OpenIddict.Settings:TokenLifetimes.DeviceCode", value: 'tkn_lft:dvc' },
-    { display: "OpenIddict.Settings:TokenLifetimes.IdentityToken", value: 'tkn_lft:idt' },
-    { display: "OpenIddict.Settings:TokenLifetimes.RefreshToken", value: 'tkn_lft:reft' },
-    { display: "OpenIddict.Settings:TokenLifetimes.UserCode", value: 'tkn_lft:usrc' },
+    { display: "OpenIddict.Settings:TokenLifetimes.AccessToken", value: 'tkn_lft:access_token',field:"accessToken" },
+    { display: "OpenIddict.Settings:TokenLifetimes.AuthorizationCode", value: 'tkn_lft:auc', field:"authorizationCode" }, 
+    { display: "OpenIddict.Settings:TokenLifetimes.DeviceCode", value: 'tkn_lft:dvc' , field:"deviceCode" },
+    { display: "OpenIddict.Settings:TokenLifetimes.IdentityToken", value: 'tkn_lft:idt', field:"identityToken" },
+    { display: "OpenIddict.Settings:TokenLifetimes.RefreshToken", value: 'tkn_lft:reft' , field:"refreshToken" },
+    { display: "OpenIddict.Settings:TokenLifetimes.UserCode", value: 'tkn_lft:usrc', field:"userCode" },
 ]
 
 export class ApplicationRepository extends Repository<ApplicationType> {

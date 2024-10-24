@@ -9,9 +9,9 @@ namespace Generic.Abp.OpenIddict.Scopes
     {
         [Required] [DisplayName("Scope:Name")] public string Name { get; set; } = default!;
 
-        [DisplayName("Scope:Description")] public string Description { get; set; } = default!;
+        [DisplayName("Scope:Description")] public string? Description { get; set; } = default!;
 
-        [DisplayName("Scope:DisplayName")] public string DisplayName { get; set; } = default!;
+        [DisplayName("Scope:DisplayName")] public string? DisplayName { get; set; } = default!;
 
         [DisplayName("Scope:Properties")] public Dictionary<string, object> Properties { get; set; } = default!;
 

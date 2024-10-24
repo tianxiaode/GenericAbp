@@ -1,12 +1,13 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using Volo.Abp.ObjectExtending;
 using Volo.Abp.OpenIddict.Applications;
 using Volo.Abp.Validation;
 
 namespace Generic.Abp.OpenIddict.Applications
 {
     [Serializable]
-    public class ApplicationCreateOrUpdateInput
+    public class ApplicationCreateOrUpdateInput : ExtensibleObject
     {
         [Required]
         [DynamicStringLength(typeof(OpenIddictApplicationConsts),
@@ -15,25 +16,25 @@ namespace Generic.Abp.OpenIddict.Applications
         public string ClientId { get; set; } = default!;
 
         [DisplayName("Application:ClientSecret")]
-        public string ClientSecret { get; set; } = default!;
+        public string? ClientSecret { get; set; } = default!;
 
         [DisplayName("Application:ConsentType")]
         public string ConsentType { get; set; } = default!;
 
         [DisplayName("Application:DisplayName")]
-        public string DisplayName { get; set; } = default!;
+        public string? DisplayName { get; set; } = default!;
 
         [DisplayName("Application:Permissions")]
         public HashSet<string> Permissions { get; set; } = default!;
 
         [DisplayName("Application:PostLogoutRedirectUris")]
-        public HashSet<string> PostLogoutRedirectUris { get; set; } = default!;
+        public HashSet<Uri> PostLogoutRedirectUris { get; set; } = default!;
 
         [DisplayName("Application:Properties")]
         public Dictionary<string, object> Properties { get; set; } = default!;
 
         [DisplayName("Application:RedirectUris")]
-        public HashSet<string> RedirectUris { get; set; } = default!;
+        public HashSet<Uri> RedirectUris { get; set; } = default!;
 
         [DisplayName("Application:Requirements")]
         public HashSet<string> Requirements { get; set; } = default!;
@@ -44,8 +45,9 @@ namespace Generic.Abp.OpenIddict.Applications
         [DisplayName("Application:ClientType")]
         public string ClientType { get; set; } = default!;
 
-        [DisplayName("Application:ClientUri")] public string ClientUri { get; set; } = default!;
+        [DisplayName("Application:Settings")] public Dictionary<string, string> Settings { get; set; } = default!;
+        [DisplayName("Application:ClientUri")] public string? ClientUri { get; set; } = default!;
 
-        [DisplayName("Application:LogoUri")] public string LogoUri { get; set; } = default!;
+        [DisplayName("Application:LogoUri")] public string? LogoUri { get; set; } = default!;
     }
 }

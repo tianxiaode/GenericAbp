@@ -121,6 +121,7 @@
     "Permissions:Scopes.Email": "Email",
     "Permissions:Scopes.Phone": "Phone",
     "Permissions:Scopes.Profile": "Profile",
-    "Permissions:Scopes.Roles": "Roles"
+    "Permissions:Scopes.Roles": "Roles",
+    "Settings:TokenLifetime.Description": "The unit of token lifetime is seconds, and use the default value if not set or set to 0."
   }
 }

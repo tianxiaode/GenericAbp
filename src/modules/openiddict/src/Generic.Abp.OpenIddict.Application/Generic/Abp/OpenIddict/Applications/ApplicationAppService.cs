@@ -1,15 +1,20 @@
-﻿using Generic.Abp.Extensions.Exceptions;
+﻿using System.Text.Json;
+using Generic.Abp.Extensions.Exceptions;
 using Generic.Abp.OpenIddict.Exceptions;
 using Generic.Abp.OpenIddict.Permissions;
+using Generic.Abp.OpenIddict.Scopes;
 using Microsoft.AspNetCore.Authorization;
 using OpenIddict.Abstractions;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Domain.ChangeTracking;
 using Volo.Abp.Domain.Entities;
+using Volo.Abp.ObjectExtending;
+using Volo.Abp.ObjectMapping;
 using Volo.Abp.OpenIddict.Applications;
 using Volo.Abp.OpenIddict.Scopes;
 using Volo.Abp.Uow;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace Generic.Abp.OpenIddict.Applications
 {
@@ -59,35 +64,112 @@ namespace Generic.Abp.OpenIddict.Applications
         [Authorize(OpenIddictPermissions.Applications.Create)]
         public virtual async Task<ApplicationDto> CreateAsync(ApplicationCreateInput input)
         {
-            var entity = new OpenIddictApplication(GuidGenerator.Create());
-            await UpdateByInputAsync(entity, input);
+            await CheckInputAsync(input);
+            await CheckDuplicateClientIdAsync(input.ClientId);
+            var descriptor = new AbpApplicationDescriptor
+            {
+                ClientId = input.ClientId
+            };
 
-            await Repository.InsertAsync(entity);
+            await UpdateByInputAsync(descriptor, input);
 
-            return ObjectMapper.Map<OpenIddictApplication, ApplicationDto>(entity);
+            var scope = await ApplicationManager.CreateAsync(descriptor);
+            input.MapExtraPropertiesTo(scope.As<OpenIddictApplicationModel>());
+            await ApplicationManager.UpdateAsync(scope);
+
+            return await GetAsync(scope.As<OpenIddictApplicationModel>().Id);
         }
 
         [UnitOfWork]
         [Authorize(OpenIddictPermissions.Applications.Update)]
         public virtual async Task<ApplicationDto> UpdateAsync(Guid id, ApplicationUpdateInput input)
         {
+            await CheckInputAsync(input);
+            var application = await ApplicationManager.FindByIdAsync(id.ToString("D"));
+            if (application == null)
+            {
+                throw new EntityNotFoundException(typeof(OpenIddictApplication), id);
+            }
+
+            var model = application.As<OpenIddictApplicationModel>();
+            if (!string.Equals(model.ClientId, input.ClientId, StringComparison.OrdinalIgnoreCase))
+            {
+                await CheckDuplicateClientIdAsync(input.ClientId);
+            }
+
+            var descriptor = new AbpApplicationDescriptor
+            {
+                ClientId = input.ClientId,
+            };
+
+            await ApplicationManager.PopulateAsync(descriptor, application);
+            await UpdateByInputAsync(descriptor, input);
+
+            input.MapExtraPropertiesTo(ApplicationManager.As<OpenIddictApplicationModel>());
+            await ApplicationManager.UpdateAsync(application, descriptor);
             var entity = await Repository.GetAsync(id);
             entity.ConcurrencyStamp = input.ConcurrencyStamp;
-            await UpdateByInputAsync(entity, input);
             await Repository.UpdateAsync(entity);
             return ObjectMapper.Map<OpenIddictApplication, ApplicationDto>(entity);
         }
 
         [UnitOfWork]
-        protected virtual async Task UpdateByInputAsync(OpenIddictApplication entity,
+        protected virtual Task UpdateByInputAsync(AbpApplicationDescriptor descriptor,
             ApplicationCreateOrUpdateInput input)
         {
-            var exits = await Repository.FindByClientIdAsync(input.ClientId);
-            if (exits != null && (entity.Id != exits.Id))
+            descriptor.ApplicationType = input.ApplicationType;
+            descriptor.DisplayName = input.DisplayName;
+            descriptor.ClientSecret = input.ClientSecret;
+            descriptor.ConsentType = input.ConsentType;
+            descriptor.ClientUri = input.ClientUri;
+            descriptor.LogoUri = input.LogoUri;
+            descriptor.ClientType = input.ClientType;
+
+            foreach (var permission in input.Permissions)
             {
-                throw new DuplicateWarningBusinessException(nameof(OpenIddictScope.Name), input.ClientId);
+                descriptor.Permissions.Add(permission);
             }
 
+            foreach (var postLogoutRedirectUri in input.PostLogoutRedirectUris)
+            {
+                descriptor.PostLogoutRedirectUris.Add(postLogoutRedirectUri);
+            }
+
+            foreach (var redirectUri in input.RedirectUris)
+            {
+                descriptor.RedirectUris.Add(redirectUri);
+            }
+
+            descriptor.Properties.Clear();
+            foreach (var property in input.Properties)
+            {
+                descriptor.Properties.Add(property.Key, JsonSerializer.SerializeToElement(property.Value));
+            }
+
+            foreach (var requirement in input.Requirements)
+            {
+                descriptor.Requirements.Add(requirement);
+            }
+
+            foreach (var setting in input.Settings)
+            {
+                descriptor.Settings.Add(setting.Key, setting.Value);
+            }
+
+            return Task.CompletedTask;
+        }
+
+        [UnitOfWork]
+        [Authorize(OpenIddictPermissions.Applications.Delete)]
+        public virtual async Task DeleteAsync(Guid id)
+        {
+            var entity = await Repository.GetAsync(id);
+            await Repository.DeleteAsync(entity);
+        }
+
+        [UnitOfWork]
+        protected virtual Task CheckInputAsync(ApplicationCreateOrUpdateInput input)
+        {
             if (!OpenIddictConstants.ApplicationTypes.Native.Equals(input.ApplicationType) &&
                 !OpenIddictConstants.ApplicationTypes.Web.Equals(input.ApplicationType))
             {
@@ -108,22 +190,17 @@ namespace Generic.Abp.OpenIddict.Applications
                 throw new ConsentTypeErrorBusinessException();
             }
 
-            entity.ClientId = input.ClientId;
-            entity.DisplayName = input.DisplayName;
-            entity.ClientSecret = input.ClientSecret;
-            entity.ConsentType = input.ConsentType;
-            entity.ClientUri = input.ClientUri;
-            entity.LogoUri = input.LogoUri;
-            entity.ClientType = input.ClientType;
-            entity.ApplicationType = input.ApplicationType;
+            return Task.CompletedTask;
         }
 
         [UnitOfWork]
-        [Authorize(OpenIddictPermissions.Applications.Delete)]
-        public virtual async Task DeleteAsync(Guid id)
+        protected virtual async Task CheckDuplicateClientIdAsync(string clientId)
         {
-            var entity = await Repository.GetAsync(id);
-            await Repository.DeleteAsync(entity);
+            var exits = await Repository.FindByClientIdAsync(clientId);
+            if (exits != null)
+            {
+                throw new DuplicateWarningBusinessException(nameof(OpenIddictScope.Name), clientId);
+            }
         }
     }
 }

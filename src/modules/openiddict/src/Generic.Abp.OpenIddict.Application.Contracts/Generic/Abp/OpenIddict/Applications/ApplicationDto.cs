@@ -6,21 +6,21 @@ namespace Generic.Abp.OpenIddict.Applications
     [Serializable]
     public class ApplicationDto : ExtensibleAuditedEntityDto<Guid>, IHasConcurrencyStamp
     {
-        public string ApplicationType { get; set; } = string.Empty;
-        public string ClientId { get; set; } = string.Empty;
-        public string ClientSecret { get; set; } = string.Empty;
-        public string DisplayName { get; set; } = string.Empty;
-        public string ClientType { get; set; } = string.Empty;
-        public string ConsentType { get; set; } = string.Empty;
-        public string DisplayNames { get; set; } = string.Empty;
-        public List<string> Permissions { get; set; } = [];
-        public List<string> PostLogoutRedirectUris { get; set; } = [];
-        public List<string> Properties { get; set; } = [];
-        public List<string> RedirectUris { get; set; } = [];
-        public List<string> Requirements { get; set; } = [];
-        public List<string> Settings { get; set; } = [];
-        public string ClientUri { get; set; } = string.Empty;
-        public string LogoUri { get; set; } = string.Empty;
-        public string ConcurrencyStamp { get; set; } = string.Empty;
+        public string ApplicationType { get; set; } = default!;
+        public string ClientId { get; set; } = default!;
+        public string ClientSecret { get; set; } = default!;
+        public string DisplayName { get; set; } = default!;
+        public string ClientType { get; set; } = default!;
+        public string ConsentType { get; set; } = default!;
+        public string DisplayNames { get; set; } = default!;
+        public HashSet<string> Permissions { get; set; } = [];
+        public HashSet<Uri> PostLogoutRedirectUris { get; set; } = [];
+        public Dictionary<string, object> Properties { get; set; } = [];
+        public HashSet<Uri> RedirectUris { get; set; } = [];
+        public HashSet<string> Requirements { get; set; } = [];
+        public Dictionary<string, string> Settings { get; set; } = [];
+        public string ClientUri { get; set; } = default!;
+        public string LogoUri { get; set; } = default!;
+        public string ConcurrencyStamp { get; set; } = default!;
     }
 }
