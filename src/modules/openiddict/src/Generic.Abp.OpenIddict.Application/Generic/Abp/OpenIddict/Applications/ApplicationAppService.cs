@@ -125,10 +125,6 @@ namespace Generic.Abp.OpenIddict.Applications
             //为应用添加权限
             await AssignPermissionsForFlowAsync(descriptor, input);
 
-            //为应用添加重定向地址
-            descriptor.RedirectUris.Clear();
-            descriptor.RedirectUris.UnionWith(input.RedirectUris);
-
             //为应用添加属性
             descriptor.Properties.Clear();
             foreach (var property in input.Properties)
@@ -227,7 +223,7 @@ namespace Generic.Abp.OpenIddict.Applications
                 descriptor.Permissions.Add(OpenIddictConstants.Permissions.Endpoints.Token);
                 descriptor.Permissions.Add(OpenIddictConstants.Permissions.Endpoints.Revocation);
 
-                await AddLogoutPermissionIfNeededAsync(descriptor, input);
+                await AddLogoutPermissionAndRedirectUrisAsync(descriptor, input);
             }
 
             // Client Credentials Flow
@@ -278,7 +274,7 @@ namespace Generic.Abp.OpenIddict.Applications
 
                 descriptor.Permissions.Add(OpenIddictConstants.Permissions.Endpoints.Authorization);
 
-                await AddLogoutPermissionIfNeededAsync(descriptor, input);
+                await AddLogoutPermissionAndRedirectUrisAsync(descriptor, input);
             }
         }
 
@@ -322,7 +318,7 @@ namespace Generic.Abp.OpenIddict.Applications
             return Task.CompletedTask;
         }
 
-        protected virtual Task AddLogoutPermissionIfNeededAsync(AbpApplicationDescriptor descriptor,
+        protected virtual Task AddLogoutPermissionAndRedirectUrisAsync(AbpApplicationDescriptor descriptor,
             ApplicationCreateOrUpdateInput input)
         {
             // 检查 PostLogoutRedirectUris 是否存在并且不为空
@@ -332,7 +328,10 @@ namespace Generic.Abp.OpenIddict.Applications
                 return Task.CompletedTask;
             }
 
+            descriptor.PostLogoutRedirectUris.Clear();
             descriptor.PostLogoutRedirectUris.UnionWith(input.PostLogoutRedirectUris);
+            descriptor.RedirectUris.Clear();
+            descriptor.RedirectUris.UnionWith(input.RedirectUris);
             return Task.CompletedTask;
         }
 
