@@ -49,5 +49,13 @@ namespace Generic.Abp.OpenIddict.Applications
         [DisplayName("Application:ClientUri")] public string? ClientUri { get; set; } = default!;
 
         [DisplayName("Application:LogoUri")] public string? LogoUri { get; set; } = default!;
+
+        public bool EnablePasswordFlow { get; set; } = false;
+        public bool EnableAuthorizationCodeFlow { get; set; } = false;
+        public bool EnableImplicitFlow { get; set; } = false;
+        public bool EnableHybridFlow { get; set; } = false;
+        public bool EnableClientCredentialsFlow { get; set; } = false;
+        public bool EnableDeviceFlow { get; set; } = false;
+        public bool EnableRefreshTokenFlow { get; set; } = false;
     }
 }

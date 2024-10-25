@@ -193,6 +193,117 @@ namespace Generic.Abp.OpenIddict.Applications
             return Task.CompletedTask;
         }
 
+
+        [UnitOfWork]
+        // 根据input中的授权流程和ClientType，给application分配权限
+        protected virtual async Task AssignPermissionsForFlowAsync(AbpApplicationDescriptor descriptor,
+            ApplicationCreateOrUpdateInput input)
+        {
+            // 如果 AllowHybridFlow 为 true，则将 AuthorizationCodeFlow 和 ImplicitFlow 都启用
+            if (input.EnableHybridFlow)
+            {
+                input.EnableAuthorizationCodeFlow = true;
+                input.EnableImplicitFlow = true;
+            }
+
+            switch (input.ClientType.ToLowerInvariant())
+            {
+                case OpenIddictConstants.ClientTypes.Public:
+                    await ConfigurePublicClientAsync(descriptor, input);
+                    break;
+                case OpenIddictConstants.ClientTypes.Confidential:
+                    await ConfigureConfidentialClientAsync(descriptor, input);
+                    break;
+            }
+
+            // 密码模式（Password Flow）
+            if (input.EnablePasswordFlow)
+            {
+                descriptor.Permissions.Add(OpenIddictConstants.Permissions.GrantTypes.Password);
+                descriptor.Permissions.Add(OpenIddictConstants.Permissions.Endpoints.Token); // 添加 Token 端点权限
+            }
+
+            // 刷新令牌模式（Refresh Token Flow）
+            if (input.EnableRefreshTokenFlow)
+            {
+                descriptor.Permissions.Add(OpenIddictConstants.Permissions.GrantTypes.RefreshToken);
+                descriptor.Permissions.Add(OpenIddictConstants.Permissions.Endpoints.Token); // 添加 Token 端点权限
+            }
+
+            // 设备代码模式（Device Code Flow）
+            if (input.EnableDeviceFlow)
+            {
+                descriptor.Permissions.Add(OpenIddictConstants.Permissions.GrantTypes.DeviceCode);
+                descriptor.Permissions.Add(OpenIddictConstants.Permissions.Endpoints.Device); // 添加 Device 端点权限
+                descriptor.Permissions.Add(OpenIddictConstants.Permissions.Endpoints.Token); // 添加 Token 端点权限
+            }
+        }
+
+        protected virtual async Task ConfigurePublicClientAsync(AbpApplicationDescriptor descriptor,
+            ApplicationCreateOrUpdateInput input)
+        {
+            // Public clients typically support only Authorization Code Flow (with PKCE) and Implicit Flow
+            if (input.EnableAuthorizationCodeFlow)
+            {
+                await AddAuthorizationCodePermissionsAsync(descriptor);
+                descriptor.Permissions.Add(OpenIddictConstants.Permissions.Endpoints
+                    .Authorization); // 添加 Authorization 端点权限
+                descriptor.Permissions.Add(OpenIddictConstants.Permissions.Endpoints.Token); // 添加 Token 端点权限
+            }
+
+            if (input.EnableImplicitFlow)
+            {
+                await AddImplicitPermissionsAsync(descriptor);
+                descriptor.Permissions.Add(OpenIddictConstants.Permissions.Endpoints
+                    .Authorization); // 添加 Authorization 端点权限
+            }
+
+            // Public clients typically cannot use Client Credentials or Password flows
+            input.EnableClientCredentialsFlow = false;
+            input.EnablePasswordFlow = false;
+        }
+
+        protected virtual async Task ConfigureConfidentialClientAsync(AbpApplicationDescriptor descriptor,
+            ApplicationCreateOrUpdateInput input)
+        {
+            // Confidential clients support Authorization Code Flow and Client Credentials Flow
+            if (input.EnableAuthorizationCodeFlow)
+            {
+                await AddAuthorizationCodePermissionsAsync(descriptor);
+                descriptor.Permissions.Add(OpenIddictConstants.Permissions.Endpoints
+                    .Authorization); // 添加 Authorization 端点权限
+                descriptor.Permissions.Add(OpenIddictConstants.Permissions.Endpoints.Token); // 添加 Token 端点权限
+            }
+
+            if (input.EnableClientCredentialsFlow)
+            {
+                descriptor.Permissions.Add(OpenIddictConstants.Permissions.GrantTypes.ClientCredentials);
+                descriptor.Permissions.Add(OpenIddictConstants.Permissions.Endpoints.Token); // 添加 Token 端点权限
+            }
+
+            // Confidential clients usually do not use Implicit Flow
+            input.EnableImplicitFlow = false;
+        }
+
+        protected virtual async Task AddAuthorizationCodePermissionsAsync(AbpApplicationDescriptor descriptor)
+        {
+            descriptor.Permissions.Add(OpenIddictConstants.Permissions.GrantTypes.AuthorizationCode);
+            descriptor.Permissions.Add(OpenIddictConstants.Permissions.ResponseTypes.Code);
+            descriptor.Permissions.Add(OpenIddictConstants.Permissions.ResponseTypes.CodeToken);
+            descriptor.Permissions.Add(OpenIddictConstants.Permissions.ResponseTypes.CodeIdTokenToken);
+
+            await Task.CompletedTask; // 确保方法返回 Task
+        }
+
+        protected virtual async Task AddImplicitPermissionsAsync(AbpApplicationDescriptor descriptor)
+        {
+            descriptor.Permissions.Add(OpenIddictConstants.Permissions.GrantTypes.Implicit);
+            descriptor.Permissions.Add(OpenIddictConstants.Permissions.ResponseTypes.Token);
+            descriptor.Permissions.Add(OpenIddictConstants.Permissions.ResponseTypes.IdTokenToken);
+
+            await Task.CompletedTask; // 确保方法返回 Task
+        }
+
         [UnitOfWork]
         protected virtual async Task CheckDuplicateClientIdAsync(string clientId)
         {
