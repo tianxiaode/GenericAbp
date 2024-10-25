@@ -65,6 +65,7 @@ namespace Generic.Abp.OpenIddict.Scopes
         [Authorize(OpenIddictPermissions.Scopes.Create)]
         public virtual async Task<ScopeDto> CreateAsync(ScopeCreateInput input)
         {
+            await ReplaceScopeNameAsync(input);
             await CheckDuplicateNameAsync(input.Name);
             var descriptor = new OpenIddictScopeDescriptor
             {
@@ -84,6 +85,7 @@ namespace Generic.Abp.OpenIddict.Scopes
         [Authorize(OpenIddictPermissions.Scopes.Update)]
         public virtual async Task<ScopeDto> UpdateAsync(Guid id, ScopeUpdateInput input)
         {
+            await ReplaceScopeNameAsync(input);
             var scope = await Manager.FindByIdAsync(id.ToString("D"));
             if (scope == null)
             {
@@ -152,6 +154,13 @@ namespace Generic.Abp.OpenIddict.Scopes
             {
                 throw new DuplicateWarningBusinessException(nameof(OpenIddictScope.Name), name);
             }
+        }
+
+        protected virtual Task ReplaceScopeNameAsync(ScopeCreateOrUpdateInput input)
+        {
+            //将name中的空格替换为下划线
+            input.Name = input.Name.Replace(" ", "_");
+            return Task.CompletedTask;
         }
     }
 }

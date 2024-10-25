@@ -154,16 +154,23 @@ namespace Generic.Abp.OpenIddict.Applications
         [UnitOfWork]
         protected virtual Task CheckInputAsync(ApplicationCreateOrUpdateInput input)
         {
+            //如果ClientType不为Native，则必须指定ClientSecret
+            if (string.Equals(input.ClientType, OpenIddictConstants.ClientTypes.Confidential,
+                    StringComparison.InvariantCultureIgnoreCase) && string.IsNullOrWhiteSpace(input.ClientSecret))
+            {
+                throw new ClientClientSecretNotSetErrorBusinessException();
+            }
+
             if (!OpenIddictConstants.ApplicationTypes.Native.Equals(input.ApplicationType) &&
                 !OpenIddictConstants.ApplicationTypes.Web.Equals(input.ApplicationType))
             {
-                throw new ClientTypeErrorBusinessException();
+                throw new ClientTypeErrorBusinessException(input.ApplicationType);
             }
 
             if (!OpenIddictConstants.ClientTypes.Confidential.Equals(input.ClientType) &&
                 !OpenIddictConstants.ClientTypes.Public.Equals(input.ClientType))
             {
-                throw new ClientTypeErrorBusinessException();
+                throw new ClientTypeErrorBusinessException(input.ClientType);
             }
 
             if (!OpenIddictConstants.ConsentTypes.Implicit.Equals(input.ConsentType) &&
@@ -171,7 +178,7 @@ namespace Generic.Abp.OpenIddict.Applications
                 && !OpenIddictConstants.ConsentTypes.External.Equals(input.ConsentType) &&
                 !OpenIddictConstants.ConsentTypes.Explicit.Equals(input.ConsentType))
             {
-                throw new ConsentTypeErrorBusinessException();
+                throw new ConsentTypeErrorBusinessException(input.ConsentType);
             }
 
             return Task.CompletedTask;

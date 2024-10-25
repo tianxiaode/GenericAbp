@@ -33,6 +33,7 @@ import { ref, watch, defineProps, defineEmits } from 'vue';
 import {useI18n } from '~/composables';
 import { capitalize, isEmpty, Validator } from '~/libs';
 
+//这里需要传入两个转换函数，一个是将输入值转换为模型值，一个是将模型值转换为输入值
 const props = defineProps({
     modelValue: {
         type: Array,
@@ -42,6 +43,14 @@ const props = defineProps({
         type: Object,
         default: () => ({})
     },
+    convertValue: {
+        type: Function,
+        default: (value: any) => value
+    },
+    convertModel: {
+        type: Function,
+        default: (value: any) => value
+    }
 });
 
 const emit = defineEmits(['update:modelValue']);
@@ -57,7 +66,8 @@ watch(properties, (value) => {
 });
 
 watch(() => props.modelValue, (newValue) => {
-    properties.value = newValue;
+    properties.value = newValue.map(m=>props.convertModel(m));
+    console.log('modelValue', newValue, properties.value)
 });
 
 const handleValueChange = () => {
@@ -90,7 +100,9 @@ function addProperty() {
         return;
     }
 
-    properties.value = [...properties.value, value.value];
+    const newValue = props.convertValue(value.value);
+    console.log('addProperty', newValue)
+    properties.value = [...properties.value, newValue];
     value.value = '';
 }
 

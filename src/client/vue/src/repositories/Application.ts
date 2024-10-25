@@ -20,60 +20,76 @@ export interface ApplicationType extends EntityInterface {
 }
 
 export interface SelectionOption {
-    display: string;
+    displayName: string;
     value: string;
     type?: string;
     field?: string;
 }
 
-export const ApplicationTypes: SelectionOption[] = [
-    { display: "OpenIddict.ApplicationType:Native", value: "native" },
-    { display: "OpenIddict.ApplicationType:Web", value: "web" },
-];
+export const ApplicationTypes: Record<string, Record<string, string>> = {
+    Web: { displayName:'OpenIddict.ApplicationType:Web', value: 'web' },
+    Native: { displayName:'OpenIddict.ApplicationType:Native', value: 'native' },
+};
 
-export const ApplicationClientTypes: SelectionOption[] = [
-{ display: "OpenIddict.ClientTypes:Confidential", value: "confidential" },
-{ display: "OpenIddict.ClientTypes:Public", value: "public" },
-];
+export const ApplicationClientTypes: Record<string, Record<string, string>> = {
+    Confidential: { displayName:'OpenIddict.ClientTypes:Confidential', value: 'confidential' },
+    Public: { displayName:'OpenIddict.ClientTypes:Public', value: 'public' },
+}
 
-export const ApplicationConsentTypes: SelectionOption[] = [
-    { display: "OpenIddict.ConsentTypes:Explicit", value: "explicit" },
-    { display: "OpenIddict.ConsentTypes:External", value: "external" },
-    { display: "OpenIddict.ConsentTypes:Implicit", value: "implicit" },
-    { display: "OpenIddict.ConsentTypes:Systematic", value: "systematic" },
-];
+export const ApplicationConsentTypes: Record<string, Record<string, string>> = {
+    Explicit: { displayName:'OpenIddict.ConsentTypes:Explicit', value: 'explicit' },
+    External: { displayName:'OpenIddict.ConsentTypes:External', value: 'external' },
+    Implicit: { displayName:'OpenIddict.ConsentTypes:Implicit', value: 'implicit' },
+    Systematic: { displayName:'OpenIddict.ConsentTypes:Systematic', value:'systematic' },
+}
 
-export const ApplicationPermissions: SelectionOption[] = [
-    { display: "OpenIddict.Permissions:Endpoints.Authorization", type:'endpoint', value: "ept:authorization" },
-    { display: "OpenIddict.Permissions:Endpoints.DeviceAuthorization", type:'endpoint', value: "ept:device_authorization" },
-    { display: "OpenIddict.Permissions:Endpoints.EndSession", type:'endpoint', value: "ept:end_session" },
-    { display: "OpenIddict.Permissions:Endpoints.Introspection", type:'endpoint', value: "ept:introspection" },
-    { display: "OpenIddict.Permissions:Endpoints.Revocation", type:'endpoint', value: "ept:revocation" },
-    { display: "OpenIddict.Permissions:Endpoints.Token", type:'endpoint', value: "ept:token" },
-    { display: "OpenIddict.Permissions:GrantTypes.AuthorizationCode", type:'grant_type', value: "gt:authorization_code" },
-    { display: "OpenIddict.Permissions:GrantTypes.ClientCredentials", type:'grant_type', value: "gt:client_credentials" },
-    { display: "OpenIddict.Permissions:GrantTypes.DeviceCode", type:'grant_type', value: "gt:urn:ietf:params:oauth:grant-type:device_code" },
-    { display: "OpenIddict.Permissions:GrantTypes.Implicit", type:'grant_type', value: "gt:implicit" },
-    { display: "OpenIddict.Permissions:GrantTypes.Password", type:'grant_type', value: "gt:password" },
-    { display: "OpenIddict.Permissions:GrantTypes.RefreshToken", type:'grant_type', value: "gt:refresh_token" },
-];
+export const ApplicationConsentTypesList = Object.values(ApplicationConsentTypes);
 
-export const ApplicationDefaultScopes: SelectionOption[] = [
-    { display: "OpenIddict.Permissions:Scopes.Address", value: "scp:address" },
-    { display: "OpenIddict.Permissions:Scopes.Email", value: "scp:email" },
-    { display: "OpenIddict.Permissions:Scopes.Phone", value: "scp:phone" },
-    { display: "OpenIddict.Permissions:Scopes.Profile", value: "scp:profile" },
-    { display: "OpenIddict.Permissions:Scopes.Roles", value: "scp:roles" },
-]
 
-export const ApplicationSettings: SelectionOption[] = [
-    { display: "OpenIddict.Settings:TokenLifetimes.AccessToken", value: 'tkn_lft:access_token',field:"accessToken" },
-    { display: "OpenIddict.Settings:TokenLifetimes.AuthorizationCode", value: 'tkn_lft:auc', field:"authorizationCode" }, 
-    { display: "OpenIddict.Settings:TokenLifetimes.DeviceCode", value: 'tkn_lft:dvc' , field:"deviceCode" },
-    { display: "OpenIddict.Settings:TokenLifetimes.IdentityToken", value: 'tkn_lft:idt', field:"identityToken" },
-    { display: "OpenIddict.Settings:TokenLifetimes.RefreshToken", value: 'tkn_lft:reft' , field:"refreshToken" },
-    { display: "OpenIddict.Settings:TokenLifetimes.UserCode", value: 'tkn_lft:usrc', field:"userCode" },
-]
+export const ApplicationPermissions: Record<string, Record<string, Record<string, string>>> = {
+    GrantTypes:{
+        AuthorizationCode: { displayName:'OpenIddict.Permissions:GrantTypes.AuthorizationCode', value: 'gt:authorization_code' },
+        ClientCredentials: { displayName:'OpenIddict.Permissions:GrantTypes.ClientCredentials', value: 'gt:client_credentials' },
+        DeviceCode: { displayName:'OpenIddict.Permissions:GrantTypes.DeviceCode', value: 'gt:urn:ietf:params:oauth:grant-type:device_code' },
+        Implicit: { displayName:'OpenIddict.Permissions:GrantTypes.Implicit', value: 'gt:implicit' },
+        Password: { displayName:'OpenIddict.Permissions:GrantTypes.Password', value: 'gt:password' },
+        RefreshToken: { displayName:'OpenIddict.Permissions:GrantTypes.RefreshToken', value: 'gt:refresh_token' },
+    },
+    Endpoints: {
+        Authorization: { displayName:'OpenIddict.Permissions:Endpoints.Authorization', value: 'ept:authorization' },
+        DeviceAuthorization: { displayName:'OpenIddict.Permissions:Endpoints.DeviceAuthorization', value: 'ept:device_authorization' },
+        EndSession: { displayName:'OpenIddict.Permissions:Endpoints.EndSession', value: 'ept:end_session' },
+        Introspection: { displayName:'OpenIddict.Permissions:Endpoints.Introspection', value: 'ept:introspection' },
+        Revocation: { displayName:'OpenIddict.Permissions:Endpoints.Revocation', value: 'ept:revocation' },
+        Token: { displayName:'OpenIddict.Permissions:Endpoints.Token', value: 'ept:token' },
+    },
+    Scopes: {
+        Address: { displayName:'OpenIddict.Permissions:Scopes.Address', value:'scp:address' },
+        Email: { displayName:'OpenIddict.Permissions:Scopes.Email', value:'scp:email' },
+        Phone: { displayName:'OpenIddict.Permissions:Scopes.Phone', value:'scp:phone' },
+        Profile: { displayName:'OpenIddict.Permissions:Scopes.Profile', value:'scp:profile' },
+        Roles: { displayName:'OpenIddict.Permissions:Scopes.Roles', value:'scp:roles' },
+    },
+}
+
+//这里需要两个转换函数，一个是将输入的权限添加前缀，另一个是将权限值去掉前缀
+export const customPermissionConvert = (value: string) => {
+    return value.replace('gt:', '');    
+}
+
+export const customPermissionValueConvert = (value: string) => {
+    return `gt:${value}`;
+}
+
+
+export const ApplicationSettings: Record<string, Record<string, string>> = {
+    AccessToken: { displayName:'OpenIddict.Settings:TokenLifetimes.AccessToken', value: 'tkn_lft:act' },
+    AuthorizationCode: { displayName:'OpenIddict.Settings:TokenLifetimes.AuthorizationCode', value: 'tkn_lft:auc' },
+    DeviceCode: { displayName:'OpenIddict.Settings:TokenLifetimes.DeviceCode', value: 'tkn_lft:dvc' },
+    IdentityToken: { displayName:'OpenIddict.Settings:TokenLifetimes.IdentityToken', value: 'tkn_lft:idt' },
+    RefreshToken: { displayName:'OpenIddict.Settings:TokenLifetimes.RefreshToken', value: 'tkn_lft:reft' },
+    UserCode: { displayName:'OpenIddict.Settings:TokenLifetimes.UserCode', value: 'tkn_lft:usrc' },
+}
 
 export class ApplicationRepository extends Repository<ApplicationType> {
     $className = 'ApplicationRepository';

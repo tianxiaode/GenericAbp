@@ -54,7 +54,7 @@
                 <el-tab-pane v-if="allowedManageRoles" :label="t('AbpIdentity.Roles')" name="roles">
                     <el-checkbox-group v-model="formData.roleNames">
                         <div class="grid cols-2 gap-2">
-                            <el-checkbox v-for="role in allRoles" :value="role" :key="role" :label="role">
+                            <el-checkbox v-for="role in allRoles" :value="role" :key="role">
                                 {{ role }}
                             </el-checkbox>
                         </div>

@@ -21,8 +21,9 @@ namespace Generic.Abp.OpenIddict.Applications
         [DisplayName("Application:ConsentType")]
         public string ConsentType { get; set; } = default!;
 
+        [Required]
         [DisplayName("Application:DisplayName")]
-        public string? DisplayName { get; set; } = default!;
+        public string DisplayName { get; set; } = default!;
 
         [DisplayName("Application:Permissions")]
         public HashSet<string> Permissions { get; set; } = default!;

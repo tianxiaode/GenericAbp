@@ -6,8 +6,9 @@ namespace Generic.Abp.OpenIddict.Exceptions;
 
 public class ApplicationTypeErrorBusinessException : Volo.Abp.BusinessException
 {
-    public ApplicationTypeErrorBusinessException()
+    public ApplicationTypeErrorBusinessException(string value)
     {
         Code = OpenIddictErrorCodes.ApplicationTypeError;
+        WithData(OpenIddictErrorCodes.ParamValueName, value);
     }
 }

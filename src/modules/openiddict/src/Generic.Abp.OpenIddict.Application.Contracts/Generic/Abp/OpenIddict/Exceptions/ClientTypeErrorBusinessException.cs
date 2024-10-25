@@ -2,9 +2,10 @@
 {
     public class ClientTypeErrorBusinessException : Volo.Abp.BusinessException
     {
-        public ClientTypeErrorBusinessException()
+        public ClientTypeErrorBusinessException(string value)
         {
             Code = OpenIddictErrorCodes.ClientTypeError;
+            WithData(OpenIddictErrorCodes.ParamValueName, value);
         }
     }
 }

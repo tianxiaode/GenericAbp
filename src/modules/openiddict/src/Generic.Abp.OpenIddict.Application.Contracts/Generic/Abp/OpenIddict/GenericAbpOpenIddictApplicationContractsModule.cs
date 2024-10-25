@@ -38,6 +38,7 @@ namespace Generic.Abp.OpenIddict
             Configure<AbpExceptionLocalizationOptions>(options =>
             {
                 options.MapCodeNamespace("Generic.Abp.OpenIddict", typeof(OpenIddictResource));
+                options.MapCodeNamespace("Generic.Abp.OpenIddict.BusinessException", typeof(OpenIddictResource));
             });
         }
     }
