@@ -45,7 +45,7 @@
     "Permissions:Scopes.Phone": "電話",
     "Permissions:Scopes.Profile": "個人資料",
     "Permissions:Scopes.Roles": "角色",
-    "Settings:TokenLifetime.Description": "令牌的有效時間，以秒為單位，如果不設定或設為0，則使用預設值。",
+    "Settings:TokenLifetime.Description": "注意：令牌的有效時間，以秒為單位，如果不設定或設為0，則使用預設值。",
     "Tabs:Basic": "基本设置",
     "Tabs:Permissions": "权限设置",
     "Tabs:Scopes": "范围设置",

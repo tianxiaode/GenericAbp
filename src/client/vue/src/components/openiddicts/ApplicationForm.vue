@@ -126,17 +126,7 @@
                         </div>
                 </el-tab-pane>
                 <el-tab-pane :label="t('OpenIddict.Tabs:Advanced')" name="advanced" class="h-full flex flex-col gap-2">
-                    <ApplicationSettingFieldset v-model="formData.settings" ></ApplicationSettingFieldset>
-                    <div class="grid grid-cols-2 gap-2 flex-1">
-                        <fieldset>
-                            <legend>{{ t('OpenIddict.Application:Properties') }}</legend>
-                            <PropertyInput v-model="formData.properties" class="w-full h-full"></PropertyInput>
-                        </fieldset>
-                        <fieldset>  
-                            <legend>{{ t('OpenIddict.Application:Requirements') }}</legend>
-                            <ValueListInput v-model="formData.requirements" class="w-full h-full"></ValueListInput>
-                        </fieldset>
-                    </div>
+                    <ApplicationSettingForm v-model="formData.settings" ></ApplicationSettingForm>
                 </el-tab-pane>
             </el-tabs>
         </template>
@@ -151,9 +141,8 @@ import { onMounted,  ref, watch } from 'vue';
 import { AllApplicationPermissionsGrantTypesValue, ApplicationClientTypes, ApplicationConsentTypes, ApplicationPermissions, ApplicationSettings, ApplicationTypes, customPermissionConvert, customPermissionValueConvert } from '~/repositories';
 import { capitalize } from '~/libs';
 import ValueListInput from '../forms/ValueListInput.vue';
-import PropertyInput from '../forms/PropertyInput.vue';
 import GrantTypeSelect from './GrantTypeSelect.vue';
-import ApplicationSettingFieldset from './ApplicationSettingFieldSet.vue';
+import ApplicationSettingForm from './ApplicationSettingForm.vue';
 const activeTab = ref('basic');
 const allScopes = ref([] as string[]);
 const { t } = useI18n();

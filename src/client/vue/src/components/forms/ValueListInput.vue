@@ -3,7 +3,7 @@
         <el-descriptions-item class-name="w-1/2">
             <template #label>
                 <div class="w-full">
-                    <el-input v-model="value" size="small" ref="valueInput" @blur="handleValueChange" clearable
+                    <el-input v-model="inputValue" size="small" ref="valueInput" @blur="handleValueChange" clearable
                         :placeholder="t('Components.PropertyInput.Name')">
                         <template #append  v-if="errorMessage">
                             <el-tooltip placement="bottom" effect="light">
@@ -19,7 +19,8 @@
             <i class="fa fa-plus success cursor-pointer" @click="addProperty"></i>
         </el-descriptions-item>
 
-        <el-descriptions-item v-for="value in properties.sort( (a:any, b:any) => a.localeCompare(b) )" size="small" :label="value">
+        <el-descriptions-item v-for="value in properties.sort( (a:any, b:any) => a.localeCompare(b) )" size="small">
+            <template #label><span class="cursor-pointer" @click="handleEdit(value)">{{ value }}</span></template>
                 <i class="fa fa-trash danger cursor-pointer" @click="removeProperty(value)"></i>
         </el-descriptions-item>
         <el-descriptions-item v-if="noData" size="small" :label="t('Components.NoData')">
@@ -56,39 +57,39 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue']);
 const { t } = useI18n();
 const properties = ref(props.modelValue);
-const value = ref('');
+const inputValue = ref('');
 const valueInput = ref<any>();
 const noData = ref(properties.value.length === 0);
 const errorMessage = ref('');
 
 watch(properties, (value) => {
-    console.log('properties', value, props.modelValue)
-    if (JSON.stringify(value) !== JSON.stringify(props.modelValue)) {
         noData.value = value.length === 0;
-        emit('update:modelValue', value);
-    }    
 }, { deep: true });
 
 watch(() => props.modelValue, (newValue) => {
-    console.log('modelValue', newValue, properties.value)
     if (JSON.stringify(newValue) !== JSON.stringify(properties.value)) {
         properties.value = newValue.map(m => props.convertModel(m));
     }
 }, { deep: true });
 
+const handleEdit = (value: any) => {
+    inputValue.value = props.convertModel(value);
+    valueInput.value.focus();
+}
+
 const handleValueChange = () => {
-    if (isEmpty(value.value)) {
+    if (isEmpty(inputValue.value)) {
         errorMessage.value = t.value('Validation.Required');
         return;
     }
-    if (properties.value.includes(value.value)) {
+    if (properties.value.includes(inputValue.value)) {
         errorMessage.value = t.value('Components.ValueAlreadyExist');
         return;
     }
     if(props.rules){
         for (const key in props.rules) {  
-            console.log('handleValueChange', key, props.rules[key], value.value)          
-            const isValid = Validator.validate(key, value.value, props.rules[key], null);
+            console.log('handleValueChange', key, props.rules[key], inputValue.value)          
+            const isValid = Validator.validate(key, inputValue.value, props.rules[key], null);
             if(!isValid){
                 errorMessage.value = t.value('Validation.' + capitalize(key));
                 return;
@@ -106,14 +107,14 @@ function addProperty() {
         return;
     }
 
-    const newValue = props.convertValue(value.value);
-    console.log('addProperty', newValue)
-    properties.value = [...properties.value, newValue];
-    value.value = '';
+    properties.value = [...properties.value, inputValue.value];
+    inputValue.value = '';
+    emit('update:modelValue', [...properties.value.map(m => props.convertValue(m))]);
 }
 
 function removeProperty(value: any) {
     properties.value = [...properties.value.filter(item => item !== value)];
+    emit('update:modelValue', [...properties.value.map(m => props.convertValue(m))]);
 }
 </script>
 

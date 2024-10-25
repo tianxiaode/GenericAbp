@@ -8,7 +8,7 @@
                         <template #append  v-if="errorMessage">
                             <el-tooltip placement="bottom" effect="light">
                                 <template #content>
-                                    <span class="danger">{{ errorMessage }}</span>
+                                    <span class="danger" >{{ errorMessage }}</span>
                                 </template>
                                 <i class="fa fa-circle-exclamation danger"></i>
                             </el-tooltip>
@@ -26,9 +26,9 @@
         </el-descriptions-item>
 
         <el-descriptions-item v-for="key in Object.keys(properties).sort((a:any, b:any) => a.localeCompare(b))" class-name="w-1/2" size="small">
-            <template #label><span>{{ key }}</span></template>
+            <template #label><span class="cursor-pointer" @click="handleEdit(key)" >{{ key }}</span></template>
             <div class="w-full flex justify-between items-center">
-                <span class="flex-1">{{ properties[key] }}</span>
+                <span class="flex-1 cursor-pointer" @click="handleEdit(key)" >{{ properties[key] }}</span>
                 <i class="fa fa-trash danger cursor-pointer" @click="removeProperty(key)"></i>
             </div>
         </el-descriptions-item>
@@ -77,6 +77,12 @@ const handleNameChange = () => {
         return;
     }
     errorMessage.value = '';
+}
+
+const handleEdit = (key: any) => {
+    name.value = key;
+    value.value = properties.value[key];
+    nameInput.value.focus();
 }
 
 function addProperty() {

@@ -1,5 +1,5 @@
 <template>
-    <FormDialog ref="formRef" width="800px" :form-data="formData" :rules="rules" :on-ok="submitForm"
+    <FormDialog ref="formRef" width="600px" :form-data="formData" :rules="rules" :on-ok="submitForm"
         :title="dialogTitle" v-bind="$attrs" :reset="resetForm" :before-close="checkChange" :label-width="160">
         <template #form-items>
             <el-form-item :label="t('OpenIddict.Scope:Name')" prop="name">
@@ -12,10 +12,6 @@
                 <el-input type="textarea" v-model="formData.description" :row="3"></el-input>
             </el-form-item>
             <div class="flex flex-row gap-4 " style="height: 300px; ">
-                <fieldset class="flex-1 stretch ">
-                    <legend class="text-lg font-bold">{{ t('OpenIddict.Scope:Properties') }}</legend>
-                    <PropertyInput v-model="formData.properties" class="h-full"></PropertyInput>
-                </fieldset>
                 <fieldset class="flex-1 stretch ">
                     <legend class="text-lg font-bold">{{ t('OpenIddict.Scope:Resources') }}</legend>
                     <ValueListInput v-model="formData.resources" class="h-full">

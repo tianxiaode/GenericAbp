@@ -5,9 +5,6 @@
             <el-descriptions-item :label="t('OpenIddict.Scope:Name')" > {{ data?.name || '-' }} </el-descriptions-item>
             <el-descriptions-item :label="t('OpenIddict.Scope:DisplayName')" > {{ data?.displayName || '-' }} </el-descriptions-item>
             <el-descriptions-item :label="t('OpenIddict.Scope:Description')" > {{ data?.description || '-' }} </el-descriptions-item>
-            <el-descriptions-item :label="t('OpenIddict.Scope:Properties')" > 
-                <PropertyList :data="data?.properties"></PropertyList>
-            </el-descriptions-item>
             <el-descriptions-item :label="t('OpenIddict.Scope:Resources')" > 
                 <List :data="data?.resources"></List>
             </el-descriptions-item>
@@ -22,7 +19,6 @@ import { isEmpty } from '~/libs';
 import { useI18n, useRepository } from '~/composables';
 import { ScopeType } from '~/repositories';
 import List from '../lists/List.vue';
-import PropertyList from '../lists/PropertyList.vue';
 
 const props = defineProps({
     entityId: {
