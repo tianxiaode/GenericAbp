@@ -8,8 +8,10 @@ namespace Generic.Abp.OpenIddict.Scopes
     {
         public string Name { get; set; } = default!;
         public string Description { get; set; } = default!;
+
         public string DisplayName { get; set; } = default!;
-        public Dictionary<string, object> Properties { get; set; } = default!;
+
+        // public Dictionary<string, object> Properties { get; set; } = default!;
         public HashSet<string> Resources { get; set; } = [];
         public string ConcurrencyStamp { get; set; } = default!;
     }

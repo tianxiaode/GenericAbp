@@ -72,6 +72,8 @@ export const ApplicationPermissions: Record<string, Record<string, Record<string
     },
 }
 
+export const AllApplicationPermissionsGrantTypesValue = Object.values(ApplicationPermissions.GrantTypes).map(item => item.value);
+
 //这里需要两个转换函数，一个是将输入的权限添加前缀，另一个是将权限值去掉前缀
 export const customPermissionConvert = (value: string) => {
     return value.replace('gt:', '');    

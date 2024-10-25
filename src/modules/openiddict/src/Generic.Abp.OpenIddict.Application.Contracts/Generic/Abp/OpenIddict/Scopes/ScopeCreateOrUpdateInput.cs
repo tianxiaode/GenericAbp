@@ -13,7 +13,7 @@ namespace Generic.Abp.OpenIddict.Scopes
 
         [DisplayName("Scope:DisplayName")] public string? DisplayName { get; set; } = default!;
 
-        [DisplayName("Scope:Properties")] public Dictionary<string, object> Properties { get; set; } = default!;
+        // [DisplayName("Scope:Properties")] public Dictionary<string, object> Properties { get; set; } = default!;
 
         [DisplayName("Scope:Resources")] public HashSet<string> Resources { get; set; } = default!;
     }

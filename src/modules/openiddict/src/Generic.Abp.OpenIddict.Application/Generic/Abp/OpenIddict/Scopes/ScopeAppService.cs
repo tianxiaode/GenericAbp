@@ -119,13 +119,14 @@ namespace Generic.Abp.OpenIddict.Scopes
         {
             scope.DisplayName = input.DisplayName;
             scope.Description = input.Description;
-            scope.Properties.Clear();
-            foreach (var property in input.Properties)
-            {
-                scope.Properties.Add(property.Key, JsonSerializer.SerializeToElement(property.Value));
-            }
+            // scope.Properties.Clear();
+            // foreach (var property in input.Properties)
+            // {
+            //     scope.Properties.Add(property.Key, JsonSerializer.SerializeToElement(property.Value));
+            // }
 
             scope.Resources.Clear();
+            scope.Resources.UnionWith(input.Resources);
             foreach (var resource in input.Resources)
             {
                 scope.Resources.Add(resource);

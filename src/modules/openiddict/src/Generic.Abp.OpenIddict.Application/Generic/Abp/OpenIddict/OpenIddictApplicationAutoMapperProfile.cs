@@ -16,10 +16,10 @@ namespace Generic.Abp.OpenIddict
              * into multiple profile classes for a better organization. */
 
             CreateMap<OpenIddictScope, ScopeDto>()
-                .ForMember(m => m.Properties,
-                    opts => opts.MapFrom(m =>
-                        System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, object>>(m.Properties,
-                            new System.Text.Json.JsonSerializerOptions())))
+                // .ForMember(m => m.Properties,
+                //     opts => opts.MapFrom(m =>
+                //         System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, object>>(m.Properties,
+                //             new System.Text.Json.JsonSerializerOptions())))
                 .ForMember(m => m.Resources,
                     opts => opts.MapFrom(m =>
                         System.Text.Json.JsonSerializer.Deserialize<HashSet<string>>(m.Resources,
@@ -27,10 +27,10 @@ namespace Generic.Abp.OpenIddict
 
 
             CreateMap<OpenIddictApplication, ApplicationDto>()
-                .ForMember(m => m.Properties,
-                    opts => opts.MapFrom(m =>
-                        System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, object>>(m.Properties,
-                            new System.Text.Json.JsonSerializerOptions())))
+                // .ForMember(m => m.Properties,
+                //     opts => opts.MapFrom(m =>
+                //         System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, object>>(m.Properties,
+                //             new System.Text.Json.JsonSerializerOptions())))
                 .ForMember(m => m.PostLogoutRedirectUris,
                     opts => opts.MapFrom(m =>
                         System.Text.Json.JsonSerializer.Deserialize<HashSet<Uri>>(m.PostLogoutRedirectUris,
@@ -39,10 +39,10 @@ namespace Generic.Abp.OpenIddict
                     opts => opts.MapFrom(m =>
                         System.Text.Json.JsonSerializer.Deserialize<HashSet<Uri>>(m.RedirectUris,
                             new System.Text.Json.JsonSerializerOptions())))
-                .ForMember(m => m.Requirements,
-                    opts => opts.MapFrom(m =>
-                        System.Text.Json.JsonSerializer.Deserialize<HashSet<string>>(m.Requirements,
-                            new System.Text.Json.JsonSerializerOptions())))
+                // .ForMember(m => m.Requirements,
+                //     opts => opts.MapFrom(m =>
+                //         System.Text.Json.JsonSerializer.Deserialize<HashSet<string>>(m.Requirements,
+                //             new System.Text.Json.JsonSerializerOptions())))
                 .ForMember(m => m.Settings,
                     opts => opts.MapFrom(m =>
                         System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, string>>(m.Settings,

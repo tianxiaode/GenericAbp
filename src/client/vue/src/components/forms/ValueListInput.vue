@@ -60,15 +60,21 @@ const value = ref('');
 const valueInput = ref<any>();
 const noData = ref(properties.value.length === 0);
 const errorMessage = ref('');
+
 watch(properties, (value) => {
-    noData.value = properties.value.length === 0;
-    emit('update:modelValue', value);
-});
+    console.log('properties', value, props.modelValue)
+    if (JSON.stringify(value) !== JSON.stringify(props.modelValue)) {
+        noData.value = value.length === 0;
+        emit('update:modelValue', value);
+    }    
+}, { deep: true });
 
 watch(() => props.modelValue, (newValue) => {
-    properties.value = newValue.map(m=>props.convertModel(m));
     console.log('modelValue', newValue, properties.value)
-});
+    if (JSON.stringify(newValue) !== JSON.stringify(properties.value)) {
+        properties.value = newValue.map(m => props.convertModel(m));
+    }
+}, { deep: true });
 
 const handleValueChange = () => {
     if (isEmpty(value.value)) {

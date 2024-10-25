@@ -126,15 +126,15 @@ namespace Generic.Abp.OpenIddict.Applications
             await AssignPermissionsForFlowAsync(descriptor, input);
 
             //为应用添加属性
-            descriptor.Properties.Clear();
-            foreach (var property in input.Properties)
-            {
-                descriptor.Properties.Add(property.Key, JsonSerializer.SerializeToElement(property.Value));
-            }
-
-            //为应用添加需求
-            descriptor.Requirements.Clear();
-            descriptor.Requirements.UnionWith(input.Requirements);
+            // descriptor.Properties.Clear();
+            // foreach (var property in input.Properties)
+            // {
+            //     descriptor.Properties.Add(property.Key, JsonSerializer.SerializeToElement(property.Value));
+            // }
+            //
+            // //为应用添加需求
+            // descriptor.Requirements.Clear();
+            // descriptor.Requirements.UnionWith(input.Requirements);
 
             //为应用添加设置
             foreach (var setting in input.Settings)

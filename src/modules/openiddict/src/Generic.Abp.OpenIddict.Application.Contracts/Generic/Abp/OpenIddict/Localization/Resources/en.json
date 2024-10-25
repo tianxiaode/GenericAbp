@@ -119,7 +119,7 @@
     "Permissions:GrantTypes.Implicit": "Grant Implicit Flow",
     "Permissions:GrantTypes.Password": "Grant Password Flow",
     "Permissions:GrantTypes.RefreshToken": "Grant Refresh Token Flow",
-    "Permissions:GrantTypes.Hybrid ": "Grant Hybrid Flow",
+    "Permissions:GrantTypes.Hybrid": "Grant Hybrid Flow",
     "Permissions:Scopes.Address": "Address",
     "Permissions:Scopes.Email": "Email",
     "Permissions:Scopes.Phone": "Phone",

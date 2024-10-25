@@ -14,10 +14,13 @@ namespace Generic.Abp.OpenIddict.Applications
         public string ConsentType { get; set; } = default!;
         public string DisplayNames { get; set; } = default!;
         public HashSet<string> Permissions { get; set; } = [];
+
         public HashSet<Uri> PostLogoutRedirectUris { get; set; } = [];
-        public Dictionary<string, object> Properties { get; set; } = [];
+
+        // public Dictionary<string, object> Properties { get; set; } = [];
         public HashSet<Uri> RedirectUris { get; set; } = [];
-        public HashSet<string> Requirements { get; set; } = [];
+
+        // public HashSet<string> Requirements { get; set; } = [];
         public Dictionary<string, string> Settings { get; set; } = [];
         public string ClientUri { get; set; } = default!;
         public string LogoUri { get; set; } = default!;

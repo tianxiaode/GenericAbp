@@ -31,14 +31,14 @@ namespace Generic.Abp.OpenIddict.Applications
         [DisplayName("Application:PostLogoutRedirectUris")]
         public HashSet<Uri> PostLogoutRedirectUris { get; set; } = default!;
 
-        [DisplayName("Application:Properties")]
-        public Dictionary<string, object> Properties { get; set; } = default!;
+        // [DisplayName("Application:Properties")]
+        // public Dictionary<string, object> Properties { get; set; } = default!;
 
         [DisplayName("Application:RedirectUris")]
         public HashSet<Uri> RedirectUris { get; set; } = default!;
 
-        [DisplayName("Application:Requirements")]
-        public HashSet<string> Requirements { get; set; } = default!;
+        // [DisplayName("Application:Requirements")]
+        // public HashSet<string> Requirements { get; set; } = default!;
 
         [DisplayName("Application:ApplicationType")]
         public string ApplicationType { get; set; } = default!;
