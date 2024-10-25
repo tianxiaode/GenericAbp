@@ -1,20 +1,17 @@
-﻿using System.Text.Json;
-using Generic.Abp.Extensions.Exceptions;
+﻿using Generic.Abp.Extensions.Exceptions;
 using Generic.Abp.OpenIddict.Exceptions;
 using Generic.Abp.OpenIddict.Permissions;
-using Generic.Abp.OpenIddict.Scopes;
 using Microsoft.AspNetCore.Authorization;
 using OpenIddict.Abstractions;
+using System.Text.Json;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Domain.ChangeTracking;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.ObjectExtending;
-using Volo.Abp.ObjectMapping;
 using Volo.Abp.OpenIddict.Applications;
 using Volo.Abp.OpenIddict.Scopes;
 using Volo.Abp.Uow;
-using static System.Formats.Asn1.AsnWriter;
 
 namespace Generic.Abp.OpenIddict.Applications
 {
@@ -114,7 +111,7 @@ namespace Generic.Abp.OpenIddict.Applications
         }
 
         [UnitOfWork]
-        protected virtual Task UpdateByInputAsync(AbpApplicationDescriptor descriptor,
+        protected virtual async Task UpdateByInputAsync(AbpApplicationDescriptor descriptor,
             ApplicationCreateOrUpdateInput input)
         {
             descriptor.ApplicationType = input.ApplicationType;
@@ -125,38 +122,29 @@ namespace Generic.Abp.OpenIddict.Applications
             descriptor.LogoUri = input.LogoUri;
             descriptor.ClientType = input.ClientType;
 
-            foreach (var permission in input.Permissions)
-            {
-                descriptor.Permissions.Add(permission);
-            }
+            //为应用添加权限
+            await AssignPermissionsForFlowAsync(descriptor, input);
 
-            foreach (var postLogoutRedirectUri in input.PostLogoutRedirectUris)
-            {
-                descriptor.PostLogoutRedirectUris.Add(postLogoutRedirectUri);
-            }
+            //为应用添加重定向地址
+            descriptor.RedirectUris.Clear();
+            descriptor.RedirectUris.UnionWith(input.RedirectUris);
 
-            foreach (var redirectUri in input.RedirectUris)
-            {
-                descriptor.RedirectUris.Add(redirectUri);
-            }
-
+            //为应用添加属性
             descriptor.Properties.Clear();
             foreach (var property in input.Properties)
             {
                 descriptor.Properties.Add(property.Key, JsonSerializer.SerializeToElement(property.Value));
             }
 
-            foreach (var requirement in input.Requirements)
-            {
-                descriptor.Requirements.Add(requirement);
-            }
+            //为应用添加需求
+            descriptor.Requirements.Clear();
+            descriptor.Requirements.UnionWith(input.Requirements);
 
+            //为应用添加设置
             foreach (var setting in input.Settings)
             {
                 descriptor.Settings.Add(setting.Key, setting.Value);
             }
-
-            return Task.CompletedTask;
         }
 
         [UnitOfWork]
@@ -199,109 +187,179 @@ namespace Generic.Abp.OpenIddict.Applications
         protected virtual async Task AssignPermissionsForFlowAsync(AbpApplicationDescriptor descriptor,
             ApplicationCreateOrUpdateInput input)
         {
-            // 如果 AllowHybridFlow 为 true，则将 AuthorizationCodeFlow 和 ImplicitFlow 都启用
-            if (input.EnableHybridFlow)
-            {
-                input.EnableAuthorizationCodeFlow = true;
-                input.EnableImplicitFlow = true;
-            }
+            descriptor.Permissions.Clear(); // 清除现有权限
 
-            switch (input.ClientType.ToLowerInvariant())
-            {
-                case OpenIddictConstants.ClientTypes.Public:
-                    await ConfigurePublicClientAsync(descriptor, input);
-                    break;
-                case OpenIddictConstants.ClientTypes.Confidential:
-                    await ConfigureConfidentialClientAsync(descriptor, input);
-                    break;
-            }
+            // 根据输入的 Permissions 添加相应的权限
+            await AddFlowPermissionsAsync(descriptor, input);
 
-            // 密码模式（Password Flow）
-            if (input.EnablePasswordFlow)
-            {
-                descriptor.Permissions.Add(OpenIddictConstants.Permissions.GrantTypes.Password);
-                descriptor.Permissions.Add(OpenIddictConstants.Permissions.Endpoints.Token); // 添加 Token 端点权限
-            }
+            // 转移自定义的权限
+            await AddCustomPermissionsAsync(descriptor, input);
 
-            // 刷新令牌模式（Refresh Token Flow）
-            if (input.EnableRefreshTokenFlow)
-            {
-                descriptor.Permissions.Add(OpenIddictConstants.Permissions.GrantTypes.RefreshToken);
-                descriptor.Permissions.Add(OpenIddictConstants.Permissions.Endpoints.Token); // 添加 Token 端点权限
-            }
-
-            // 设备代码模式（Device Code Flow）
-            if (input.EnableDeviceFlow)
-            {
-                descriptor.Permissions.Add(OpenIddictConstants.Permissions.GrantTypes.DeviceCode);
-                descriptor.Permissions.Add(OpenIddictConstants.Permissions.Endpoints.Device); // 添加 Device 端点权限
-                descriptor.Permissions.Add(OpenIddictConstants.Permissions.Endpoints.Token); // 添加 Token 端点权限
-            }
+            // 根据 ClientType 过滤不适用的 Flow
+            await FilterPermissionsByClientTypeAsync(descriptor, input.ClientType);
         }
 
-        protected virtual async Task ConfigurePublicClientAsync(AbpApplicationDescriptor descriptor,
+        protected virtual async Task AddFlowPermissionsAsync(AbpApplicationDescriptor descriptor,
             ApplicationCreateOrUpdateInput input)
         {
-            // Public clients typically support only Authorization Code Flow (with PKCE) and Implicit Flow
-            if (input.EnableAuthorizationCodeFlow)
+            // 通过检查 input.Permissions 来判断每个授权类型是否被允许
+            var hasAuthorizationCode =
+                input.Permissions.Contains(OpenIddictConstants.Permissions.GrantTypes.AuthorizationCode);
+            var hasClientCredentials =
+                input.Permissions.Contains(OpenIddictConstants.Permissions.GrantTypes.ClientCredentials);
+            var hasPassword = input.Permissions.Contains(OpenIddictConstants.Permissions.GrantTypes.Password);
+            var hasRefreshToken = input.Permissions.Contains(OpenIddictConstants.Permissions.GrantTypes.RefreshToken);
+            var hasDeviceCode = input.Permissions.Contains(OpenIddictConstants.Permissions.GrantTypes.DeviceCode);
+            var hasImplicit = input.Permissions.Contains(OpenIddictConstants.Permissions.GrantTypes.Implicit);
+
+            // Authorization Code Flow
+            if (hasAuthorizationCode)
             {
-                await AddAuthorizationCodePermissionsAsync(descriptor);
-                descriptor.Permissions.Add(OpenIddictConstants.Permissions.Endpoints
-                    .Authorization); // 添加 Authorization 端点权限
-                descriptor.Permissions.Add(OpenIddictConstants.Permissions.Endpoints.Token); // 添加 Token 端点权限
+                descriptor.Permissions.Add(OpenIddictConstants.Permissions.GrantTypes.AuthorizationCode);
+                descriptor.Permissions.Add(OpenIddictConstants.Permissions.ResponseTypes.Code);
+                if (input.ClientType == OpenIddictConstants.ClientTypes.Public)
+                {
+                    descriptor.Permissions.Add(OpenIddictConstants.Permissions.ResponseTypes.CodeIdTokenToken);
+                    descriptor.Permissions.Add(OpenIddictConstants.Permissions.ResponseTypes.CodeToken);
+                }
+
+                descriptor.Permissions.Add(OpenIddictConstants.Permissions.Endpoints.Authorization);
+                descriptor.Permissions.Add(OpenIddictConstants.Permissions.Endpoints.Token);
+                descriptor.Permissions.Add(OpenIddictConstants.Permissions.Endpoints.Revocation);
+
+                await AddLogoutPermissionIfNeededAsync(descriptor, input);
             }
 
-            if (input.EnableImplicitFlow)
-            {
-                await AddImplicitPermissionsAsync(descriptor);
-                descriptor.Permissions.Add(OpenIddictConstants.Permissions.Endpoints
-                    .Authorization); // 添加 Authorization 端点权限
-            }
-
-            // Public clients typically cannot use Client Credentials or Password flows
-            input.EnableClientCredentialsFlow = false;
-            input.EnablePasswordFlow = false;
-        }
-
-        protected virtual async Task ConfigureConfidentialClientAsync(AbpApplicationDescriptor descriptor,
-            ApplicationCreateOrUpdateInput input)
-        {
-            // Confidential clients support Authorization Code Flow and Client Credentials Flow
-            if (input.EnableAuthorizationCodeFlow)
-            {
-                await AddAuthorizationCodePermissionsAsync(descriptor);
-                descriptor.Permissions.Add(OpenIddictConstants.Permissions.Endpoints
-                    .Authorization); // 添加 Authorization 端点权限
-                descriptor.Permissions.Add(OpenIddictConstants.Permissions.Endpoints.Token); // 添加 Token 端点权限
-            }
-
-            if (input.EnableClientCredentialsFlow)
+            // Client Credentials Flow
+            if (hasClientCredentials)
             {
                 descriptor.Permissions.Add(OpenIddictConstants.Permissions.GrantTypes.ClientCredentials);
-                descriptor.Permissions.Add(OpenIddictConstants.Permissions.Endpoints.Token); // 添加 Token 端点权限
+                descriptor.Permissions.Add(OpenIddictConstants.Permissions.Endpoints.Token);
+                descriptor.Permissions.Add(OpenIddictConstants.Permissions.Endpoints.Revocation);
+                descriptor.Permissions.Add(OpenIddictConstants.Permissions.Endpoints.Introspection);
             }
 
-            // Confidential clients usually do not use Implicit Flow
-            input.EnableImplicitFlow = false;
+            // Password Flow
+            if (hasPassword)
+            {
+                descriptor.Permissions.Add(OpenIddictConstants.Permissions.GrantTypes.Password);
+                descriptor.Permissions.Add(OpenIddictConstants.Permissions.Endpoints.Token);
+                descriptor.Permissions.Add(OpenIddictConstants.Permissions.Endpoints.Revocation);
+            }
+
+            // Refresh Token Flow
+            if (hasRefreshToken)
+            {
+                descriptor.Permissions.Add(OpenIddictConstants.Permissions.GrantTypes.RefreshToken);
+                descriptor.Permissions.Add(OpenIddictConstants.Permissions.Endpoints.Token);
+                descriptor.Permissions.Add(OpenIddictConstants.Permissions.Endpoints.Revocation);
+            }
+
+            // Device Flow
+            if (hasDeviceCode)
+            {
+                descriptor.Permissions.Add(OpenIddictConstants.Permissions.GrantTypes.DeviceCode);
+                descriptor.Permissions.Add(OpenIddictConstants.Permissions.Endpoints.Device);
+                descriptor.Permissions.Add(OpenIddictConstants.Permissions.Endpoints.Token);
+            }
+
+            // Implicit Flow
+            if (hasImplicit)
+            {
+                descriptor.Permissions.Add(OpenIddictConstants.Permissions.GrantTypes.Implicit);
+                descriptor.Permissions.Add(OpenIddictConstants.Permissions.ResponseTypes.IdToken);
+                descriptor.Permissions.Add(OpenIddictConstants.Permissions.ResponseTypes.CodeIdToken);
+                if (input.ClientType == OpenIddictConstants.ClientTypes.Public)
+                {
+                    descriptor.Permissions.Add(OpenIddictConstants.Permissions.ResponseTypes.Token);
+                    descriptor.Permissions.Add(OpenIddictConstants.Permissions.ResponseTypes.CodeIdTokenToken);
+                    descriptor.Permissions.Add(OpenIddictConstants.Permissions.ResponseTypes.CodeToken);
+                }
+
+                descriptor.Permissions.Add(OpenIddictConstants.Permissions.Endpoints.Authorization);
+
+                await AddLogoutPermissionIfNeededAsync(descriptor, input);
+            }
         }
 
-        protected virtual async Task AddAuthorizationCodePermissionsAsync(AbpApplicationDescriptor descriptor)
+        protected virtual Task FilterPermissionsByClientTypeAsync(AbpApplicationDescriptor descriptor,
+            string clientType)
         {
-            descriptor.Permissions.Add(OpenIddictConstants.Permissions.GrantTypes.AuthorizationCode);
-            descriptor.Permissions.Add(OpenIddictConstants.Permissions.ResponseTypes.Code);
-            descriptor.Permissions.Add(OpenIddictConstants.Permissions.ResponseTypes.CodeToken);
-            descriptor.Permissions.Add(OpenIddictConstants.Permissions.ResponseTypes.CodeIdTokenToken);
+            switch (clientType.ToLowerInvariant())
+            {
+                case OpenIddictConstants.ClientTypes.Public:
+                    descriptor.Permissions.Remove(OpenIddictConstants.Permissions.GrantTypes.ClientCredentials);
+                    descriptor.Permissions.Remove(OpenIddictConstants.Permissions.GrantTypes.Password);
+                    descriptor.Permissions.Remove(OpenIddictConstants.Permissions.GrantTypes.DeviceCode);
 
-            await Task.CompletedTask; // 确保方法返回 Task
+                    // 移除与 Device Code 相关的特有权限
+                    descriptor.Permissions.Remove(OpenIddictConstants.Permissions.Endpoints.Device);
+
+                    // 公共客户端通常不使用 Introspection 或 Revocation（如果没有 Refresh Token 或 Authorization Code）
+                    descriptor.Permissions.Remove(OpenIddictConstants.Permissions.Endpoints.Introspection);
+                    if (!descriptor.Permissions.Contains(OpenIddictConstants.Permissions.GrantTypes.RefreshToken) &&
+                        !descriptor.Permissions.Contains(OpenIddictConstants.Permissions.GrantTypes.AuthorizationCode))
+                    {
+                        descriptor.Permissions.Remove(OpenIddictConstants.Permissions.Endpoints.Revocation);
+                    }
+
+                    break;
+
+                case OpenIddictConstants.ClientTypes.Confidential:
+                    descriptor.Permissions.Remove(OpenIddictConstants.Permissions.GrantTypes.Implicit);
+
+                    // 移除与 Implicit Flow 相关的特有权限
+                    descriptor.Permissions.Remove(OpenIddictConstants.Permissions.ResponseTypes.Token);
+                    descriptor.Permissions.Remove(OpenIddictConstants.Permissions.ResponseTypes.CodeToken);
+                    descriptor.Permissions.Remove(OpenIddictConstants.Permissions.ResponseTypes.CodeIdTokenToken);
+
+                    // 机密客户端不使用 Device Flow
+                    descriptor.Permissions.Remove(OpenIddictConstants.Permissions.GrantTypes.DeviceCode);
+                    descriptor.Permissions.Remove(OpenIddictConstants.Permissions.Endpoints.Device);
+                    break;
+            }
+
+            return Task.CompletedTask;
         }
 
-        protected virtual async Task AddImplicitPermissionsAsync(AbpApplicationDescriptor descriptor)
+        protected virtual Task AddLogoutPermissionIfNeededAsync(AbpApplicationDescriptor descriptor,
+            ApplicationCreateOrUpdateInput input)
         {
-            descriptor.Permissions.Add(OpenIddictConstants.Permissions.GrantTypes.Implicit);
-            descriptor.Permissions.Add(OpenIddictConstants.Permissions.ResponseTypes.Token);
-            descriptor.Permissions.Add(OpenIddictConstants.Permissions.ResponseTypes.IdTokenToken);
+            // 检查 PostLogoutRedirectUris 是否存在并且不为空
+            if (!input.PostLogoutRedirectUris.Any() ||
+                !descriptor.Permissions.Add(OpenIddictConstants.Permissions.Endpoints.Logout))
+            {
+                return Task.CompletedTask;
+            }
 
-            await Task.CompletedTask; // 确保方法返回 Task
+            descriptor.PostLogoutRedirectUris.UnionWith(input.PostLogoutRedirectUris);
+            return Task.CompletedTask;
+        }
+
+        protected virtual Task AddCustomPermissionsAsync(AbpApplicationDescriptor descriptor,
+            ApplicationCreateOrUpdateInput input)
+        {
+            // 查找自定义权限，以 "gt:" 开头但不在标准 GrantTypes 中定义
+            var defaultGrantTypes = new List<string>
+            {
+                OpenIddictConstants.Permissions.GrantTypes.AuthorizationCode,
+                OpenIddictConstants.Permissions.GrantTypes.ClientCredentials,
+                OpenIddictConstants.Permissions.GrantTypes.Password,
+                OpenIddictConstants.Permissions.GrantTypes.RefreshToken,
+                OpenIddictConstants.Permissions.GrantTypes.DeviceCode,
+                OpenIddictConstants.Permissions.GrantTypes.Implicit
+            };
+            var customPermissions = input.Permissions
+                .Where(permission => permission.StartsWith(OpenIddictConstants.Permissions.Prefixes.GrantType) &&
+                                     !defaultGrantTypes.Contains(permission));
+
+            descriptor.Permissions.UnionWith(customPermissions);
+
+            var scopePermissions = input.Permissions
+                .Where(permission => permission.StartsWith(OpenIddictConstants.Permissions.Prefixes.Scope));
+
+            descriptor.Permissions.UnionWith(scopePermissions);
+            return Task.CompletedTask;
         }
 
         [UnitOfWork]
