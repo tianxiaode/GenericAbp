@@ -29,31 +29,34 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { reactive, ref, watch } from 'vue';
 import { useI18n } from '~/composables';
 import { capitalize } from '~/libs';
 import { ApplicationSettings } from '~/repositories';
-const props = defineProps({
-    modelValue: {
-        type: Object,
-        required: true,
-    },
-});
+const model = defineModel<any>({});
 
 const { t } = useI18n();
 const emit = defineEmits(['update:modelValue']);
-const tokenLifetimesSettings = ref({
+const tokenLifetimesSettings = reactive({
     accessToken: 0,
     authorizationCode: 0,
     deviceCode: 0,
     identityToken: 0,
     refreshToken: 0,
     userCode: 0,
-    ...props.modelValue,
 } as any);
 
-watch(tokenLifetimesSettings.value, (newValue: any) => {
-    const newSettings = { ...props.modelValue };
+watch(() => model.value, (newValue: any) => {
+    tokenLifetimesSettings.accessToken = newValue[ApplicationSettings.AccessToken.value] || 0;
+    tokenLifetimesSettings.authorizationCode = newValue[ApplicationSettings.AuthorizationCode.value] || 0;
+    tokenLifetimesSettings.deviceCode = newValue[ApplicationSettings.DeviceCode.value] || 0;
+    tokenLifetimesSettings.identityToken = newValue[ApplicationSettings.IdentityToken.value] || 0;
+    tokenLifetimesSettings.refreshToken = newValue[ApplicationSettings.RefreshToken.value] || 0;
+    tokenLifetimesSettings.userCode = newValue[ApplicationSettings.UserCode.value] || 0;
+}, { deep: true });
+
+watch(tokenLifetimesSettings, (newValue: any) => {
+    const newSettings = { } as any;
     //通过循环遍历newValue，如果值为0，则删除对应的key，否则更新对应的key
     for (const key in newValue) {
         const settingKey = ApplicationSettings[capitalize(key)].value
@@ -63,8 +66,8 @@ watch(tokenLifetimesSettings.value, (newValue: any) => {
             newSettings[settingKey] = newValue[key];
         }
     }
-    emit('update:modelValue', { ...newSettings });
-});
+    model.value = { ...newSettings };
+}, { deep: true });
 
 
 </script>

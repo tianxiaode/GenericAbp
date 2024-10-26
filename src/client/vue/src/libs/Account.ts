@@ -53,7 +53,7 @@ class Account {
 
     logout = async () => {
         try {
-            await this.userManager!.signoutSilent();
+            await this.userManager!.signoutPopup();
             LocalStorage.removeToken();
             appConfig.loadConfig();
             i18n.loadLanguage();

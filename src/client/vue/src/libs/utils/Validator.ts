@@ -148,6 +148,7 @@ export class Validator {
         },
 
         url(value: string | number): boolean {
+            if(isEmpty(value)) return true;
             return /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/.test(
                 value.toString()
             );

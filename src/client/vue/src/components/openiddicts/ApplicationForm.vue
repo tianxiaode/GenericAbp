@@ -68,25 +68,21 @@
                             <div class="grid grid-cols-4 gap-1 w-full">
                                 <el-radio 
                                     :value="ApplicationConsentTypes.Explicit.value"
-                                    :disabled="!grantTypes.authorizationCode && !grantTypes.password && !grantTypes.deviceCode"
                                 >
                                     {{ t(ApplicationConsentTypes.Explicit.displayName) }}
                                 </el-radio>
                                 <el-radio 
                                     :value="ApplicationConsentTypes.External.value"
-                                    :disabled="!grantTypes.clientCredentials"
                                 >
                                     {{ t(ApplicationConsentTypes.External.displayName) }}
                                 </el-radio>
                                 <el-radio 
-                                    :disabled="!grantTypes.authorizationCode && !grantTypes.implicit"
                                     :value="ApplicationConsentTypes.Implicit.value"
                                 >
                                     {{ t(ApplicationConsentTypes.Implicit.displayName) }}
                                 </el-radio>
                                 <el-radio 
                                     :value="ApplicationConsentTypes.Systematic.value"
-                                    :disabled="!grantTypes.implicit && !grantTypes.clientCredentials && !grantTypes.password && !grantTypes.deviceCode && !grantTypes.refreshToken"
                                 >
                                     {{ t(ApplicationConsentTypes.Systematic.displayName) }}
                                 </el-radio>
@@ -95,7 +91,7 @@
                     </el-form-item>
                 </el-tab-pane>
                 <el-tab-pane :label="t('OpenIddict.Tabs:Scopes')" name="scopes">
-                    <el-checkbox-group v-model="formData.permission">
+                    <el-checkbox-group v-model="formData.permissions">
                             <div class="grid grid-cols-2 gap-2">
                                 <el-checkbox v-for="scope in Object.values(ApplicationPermissions.Scopes)" 
                                     :value="scope.value">
@@ -109,7 +105,7 @@
                     </el-checkbox-group>
                 </el-tab-pane>
                 <el-tab-pane :label="t('OpenIddict.Tabs:RedirectUris')" name="redirectUris"
-                    :disabled="!grantTypes.authorizationCode && !grantTypes.implicit">
+                    :disabled="disabledRedirectUris">
                         <div class="grid grid-cols-2 gap-2">
                             <fieldset>
                                 <legend>{{ t('OpenIddict.Application:RedirectUris') }}</legend>
@@ -137,20 +133,21 @@
 import FormDialog from '../dialogs/FormDialog.vue';
 
 import { useEntityForm, useRepository, useFormRules, useI18n } from '~/composables'
-import { onMounted,  ref, watch } from 'vue';
-import { AllApplicationPermissionsGrantTypesValue, ApplicationClientTypes, ApplicationConsentTypes, ApplicationPermissions, ApplicationSettings, ApplicationTypes, customPermissionConvert, customPermissionValueConvert } from '~/repositories';
-import { capitalize } from '~/libs';
+import { onMounted,  reactive,  ref, watch } from 'vue';
+import {  ApplicationClientTypes, ApplicationConsentTypes, ApplicationPermissions,  ApplicationTypes, customPermissionConvert, customPermissionValueConvert } from '~/repositories';
 import ValueListInput from '../forms/ValueListInput.vue';
 import GrantTypeSelect from './GrantTypeSelect.vue';
 import ApplicationSettingForm from './ApplicationSettingForm.vue';
+
 const activeTab = ref('basic');
 const allScopes = ref([] as string[]);
 const { t } = useI18n();
 const api = useRepository('application');
 const scopeApi = useRepository('scope');
+const isInitialValue = ref(true);
+const disabledRedirectUris = ref(true);
 
-
-const grantTypes = ref({
+const grantTypes = reactive({
     authorizationCode: false,
     implicit: false,
     password: false,
@@ -174,38 +171,35 @@ const props = defineProps({
 const formRules = {
     clientId: { required: true },
     displayName: { required: true },
-    clientSecret: { required: true },
-    consentType: { required: true },
-    logoUri: { url: true },
     ClientUri: { url: true },
 };
 
+const afterGetData = (data: any) => {
+    console.log('afterGetData', data);
+    grantTypes.authorizationCode = data.permissions?.includes(ApplicationPermissions.GrantTypes.AuthorizationCode.value) || false,
+    grantTypes.implicit = data.permissions?.includes(ApplicationPermissions.GrantTypes.Implicit.value) || false,
+    grantTypes.password = data.permissions?.includes(ApplicationPermissions.GrantTypes.Password.value) || false,
+    grantTypes.refreshToken = data.permissions?.includes(ApplicationPermissions.GrantTypes.RefreshToken.value) || false,
+    grantTypes.clientCredentials = data.permissions?.includes(ApplicationPermissions.GrantTypes.ClientCredentials.value) || false,
+    grantTypes.deviceCode = data.permissions?.includes(ApplicationPermissions.GrantTypes.DeviceCode.value) || false,
+    console.log('grantTypes', grantTypes);
+    updateRules('clientSecret', { required: data.clientType === ApplicationClientTypes.Confidential.value });
+}
 
-const { formRef, formData, dialogTitle, initValues, resetForm, submitForm, checkChange } = useEntityForm(api, props);
+const { formRef, formData, dialogTitle, initValues, resetForm, submitForm, checkChange } = useEntityForm(api, props,afterGetData);
 const { rules, updateRules } = useFormRules(formRules, formRef);
 
-
-watch(grantTypes, (newValue: any) => {
-    //通过循环根据grantTypes中各个值，如果为true，则为formData.permissions添加相应的权限值，否则移除
-    const oldPermissions = formData.value.permissions.filter((m:string)=> AllApplicationPermissionsGrantTypesValue.includes(m));
-    const permissions = [];
-    for (const key in newValue) {
-        oldPermissions.pop(key)
-        if (newValue[key]) {
-            permissions.push(ApplicationPermissions.GrantTypes[capitalize(key)].value);
-        }
-    }
-    formData.value.permissions = [...oldPermissions,...permissions];
-    formData.value.consentType = null;
-    console.log('grantTypes', formData.value.permissions);
-});
-
+watch(grantTypes, (newValue) => {
+    console.log('grantTypes', newValue);
+    disabledRedirectUris.value = !newValue.authorizationCode && !newValue.implicit;
+},{ deep: true } )
 
 const onClientTypeChange = (value: string) => {
+    console.log('onClientTypeChange', value);
     //如果值为Public，则clientSecret不可编辑，且将ClientCredentials和DeviceCode的value移出permissions
     if (value === ApplicationClientTypes.Public.value) {
-        grantTypes.value.clientCredentials = false;
-        grantTypes.value.deviceCode = false;
+        grantTypes.clientCredentials = false;
+        grantTypes.deviceCode = false;
         formData.value.clientSecret = '';
     }
     updateRules('clientSecret', { required: value === ApplicationClientTypes.Confidential.value });
@@ -228,6 +222,10 @@ onMounted(() => {
         }
         formData.value = { ...defaultValue };
         initValues.value = { ...defaultValue };
+        updateRules('clientSecret', { required: true });
+        isInitialValue.value = true;
+    } else {
+
     }
 });
 
