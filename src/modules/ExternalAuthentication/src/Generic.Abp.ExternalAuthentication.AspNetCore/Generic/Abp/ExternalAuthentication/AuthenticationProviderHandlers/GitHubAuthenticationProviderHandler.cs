@@ -6,28 +6,26 @@ namespace Generic.Abp.ExternalAuthentication.AuthenticationProviderHandlers;
 
 public class GitHubAuthenticationProviderHandler : IExternalAuthenticationProviderHandler
 {
-    public GitHubAuthenticationProviderHandler(IOptionsMonitorCache<GitHubAuthenticationOptions> optionsCache)
+    public GitHubAuthenticationProviderHandler(IOptionsMonitor<GitHubAuthenticationOptions> options)
     {
-        OptionsCache = optionsCache;
+        Options = options;
     }
 
     public string Scheme => GitHubAuthenticationDefaults.AuthenticationScheme;
 
-    protected IOptionsMonitorCache<GitHubAuthenticationOptions> OptionsCache { get; }
+    protected IOptionsMonitor<GitHubAuthenticationOptions> Options { get; }
 
     public Task UpdateOptionsAsync(ExternalProviderDto? provider)
     {
-        if (provider == null || string.IsNullOrEmpty(provider.ClientId) || string.IsNullOrEmpty(provider.ClientSecret))
+        if (provider is { Enabled: false } || string.IsNullOrEmpty(provider?.ClientId) ||
+            string.IsNullOrEmpty(provider.ClientSecret))
         {
             return Task.CompletedTask;
         }
 
-        OptionsCache.TryRemove(GitHubAuthenticationDefaults.AuthenticationScheme);
-        OptionsCache.TryAdd(GitHubAuthenticationDefaults.AuthenticationScheme, new GitHubAuthenticationOptions()
-        {
-            ClientId = provider.ClientId,
-            ClientSecret = provider.ClientSecret
-        });
+        var options = Options.Get(GitHubAuthenticationDefaults.AuthenticationScheme);
+        options.ClientId = provider.ClientId;
+        options.ClientSecret = provider.ClientSecret;
         return Task.CompletedTask;
     }
 }

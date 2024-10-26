@@ -24,7 +24,6 @@ public class ExternalProviderChangedHandler : IDistributedEventHandler<ExternalP
     {
         Logger.LogInformation("Handling external provider changed event, updating options cache.");
         var providers = await ExternalAuthenticationSettingManager.GetProvidersAsync();
-        Logger.LogInformation($"Providers: {System.Text.Json.JsonSerializer.Serialize(providers)}");
         foreach (var handler in ProviderHandlers)
         {
             Logger.LogInformation($"Handling provider {handler.Scheme}.");

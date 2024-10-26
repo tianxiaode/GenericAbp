@@ -1,4 +1,5 @@
-﻿using Generic.Abp.ExternalAuthentication.dtos;
+﻿using AspNet.Security.OAuth.GitHub;
+using Generic.Abp.ExternalAuthentication.dtos;
 using Microsoft.AspNetCore.Authentication.MicrosoftAccount;
 using Microsoft.Extensions.Options;
 
@@ -6,28 +7,26 @@ namespace Generic.Abp.ExternalAuthentication.AuthenticationProviderHandlers;
 
 public class MicrosoftAccountAuthenticationProviderHandler : IExternalAuthenticationProviderHandler
 {
-    public MicrosoftAccountAuthenticationProviderHandler(IOptionsMonitorCache<MicrosoftAccountOptions> optionsCache)
+    public MicrosoftAccountAuthenticationProviderHandler(IOptionsMonitor<MicrosoftAccountOptions> options)
     {
-        OptionsCache = optionsCache;
+        Options = options;
     }
 
     public string Scheme => MicrosoftAccountDefaults.AuthenticationScheme;
 
-    protected IOptionsMonitorCache<MicrosoftAccountOptions> OptionsCache { get; }
+    protected IOptionsMonitor<MicrosoftAccountOptions> Options { get; }
 
     public Task UpdateOptionsAsync(ExternalProviderDto? provider)
     {
-        if (provider == null || string.IsNullOrEmpty(provider.ClientId) || string.IsNullOrEmpty(provider.ClientSecret))
+        if (provider is { Enabled: false } || string.IsNullOrEmpty(provider?.ClientId) ||
+            string.IsNullOrEmpty(provider.ClientSecret))
         {
             return Task.CompletedTask;
         }
 
-        OptionsCache.TryRemove(MicrosoftAccountDefaults.AuthenticationScheme);
-        OptionsCache.TryAdd(MicrosoftAccountDefaults.AuthenticationScheme, new MicrosoftAccountOptions()
-        {
-            ClientId = provider.ClientId,
-            ClientSecret = provider.ClientSecret
-        });
+        var options = Options.Get(GitHubAuthenticationDefaults.AuthenticationScheme);
+        options.ClientId = provider.ClientId;
+        options.ClientSecret = provider.ClientSecret;
         return Task.CompletedTask;
     }
 }

@@ -146,7 +146,10 @@ namespace Generic.Abp.ExternalAuthentication.Controllers
             user = await UserManager.FindByEmailAsync(email);
             if (user == null)
             {
-                user = new IdentityUser(GuidGenerator.Create(), email, email, CurrentTenant?.Id);
+                user = new IdentityUser(GuidGenerator.Create(), email, email, CurrentTenant?.Id)
+                {
+                    IsExternal = true
+                };
                 var createResult = await UserManager.CreateAsync(user);
                 if (!createResult.Succeeded)
                 {
@@ -184,30 +187,6 @@ namespace Generic.Abp.ExternalAuthentication.Controllers
             return Redirect(await GetRedirectUrlAsync(returnUrl));
         }
 
-        [HttpGet]
-        [Route("/need-set-password")]
-        public virtual async Task<Dictionary<string, bool>> NeedRegisterAsync()
-        {
-            var currentUser = CurrentUser;
-            if (string.IsNullOrEmpty(currentUser?.Email))
-            {
-                return new Dictionary<string, bool>() { { "need", false } };
-            }
-
-            Logger.LogDebug("User is already registered with email: " + currentUser.Email);
-            var user = await UserManager.FindByEmailAsync(currentUser.Email);
-            if (user != null && string.IsNullOrEmpty(user.PasswordHash))
-            {
-                Logger.LogDebug($"User found: {user.Email}, {user.PasswordHash}");
-                return new Dictionary<string, bool>()
-                {
-                    { "need", true }
-                };
-            }
-
-            return new Dictionary<string, bool>() { { "need", false } };
-        }
-
 
         protected virtual async Task<IActionResult> OnPostExternalLogin(string provider, string returnUrl)
         {
@@ -218,10 +197,11 @@ namespace Generic.Abp.ExternalAuthentication.Controllers
             }
 
             // 手动构建指向 /external-login-callback 的回调 URL
-            var redirectUrl = Url.Action("ExternalLoginCallback", "AuthenticationController",
-                new { returnUrl }, Request.Scheme, Request.Host.ToString());
+            // var redirectUrl = Url.Action(nameof(this.ExternalLoginCallbackAsync), "ExternalAuthenticationController",
+            //     new { returnUrl }, Request.Scheme, Request.Host.ToString());
             // Url.RouteUrl("/external-login-callback", new { returnUrl, returnUrlHash }, Request.Scheme,
             // Request.Host.ToString());
+            var redirectUrl = await GetCallBackUrlAsync(returnUrl);
 
             Logger.LogDebug($"Redirecting to external login provider: {provider}, RedirectUrl={redirectUrl}");
             // 配置 AuthenticationProperties，包含回调 URL
@@ -231,6 +211,7 @@ namespace Generic.Abp.ExternalAuthentication.Controllers
             properties.Items["scheme"] = provider;
             //
             // // 发起外部登录请求并传递指定的回调 URL
+            Logger.LogDebug($"properties: {System.Text.Json.JsonSerializer.Serialize(properties)}");
             return Challenge(properties, provider);
         }
 
@@ -244,8 +225,7 @@ namespace Generic.Abp.ExternalAuthentication.Controllers
 
             var props = new AuthenticationProperties()
             {
-                RedirectUri = Url.Action("ExternalLoginCallback", "AuthenticationController",
-                    new { returnUrl }, Request.Scheme, Request.Host.ToString()),
+                RedirectUri = await GetCallBackUrlAsync(returnUrl),
                 Items =
                 {
                     {
@@ -284,6 +264,19 @@ namespace Generic.Abp.ExternalAuthentication.Controllers
         protected virtual async Task<string> NormalizeReturnUrlAsync(string returnUrl)
         {
             return returnUrl.IsNullOrEmpty() ? await Task.FromResult("~/") : returnUrl;
+        }
+
+        protected virtual Task<string> GetCallBackUrlAsync(string returnUrl)
+        {
+            var redirectUrlBuilder = new UriBuilder
+            {
+                Scheme = Request.Scheme,
+                Host = Request.Host.Host,
+                Port = Request.Host.Port ?? -1,
+                Path = "/external-login-callback",
+                Query = $"returnUrl={Uri.EscapeDataString(returnUrl)}"
+            };
+            return Task.FromResult(redirectUrlBuilder.Uri.ToString());
         }
     }
 }

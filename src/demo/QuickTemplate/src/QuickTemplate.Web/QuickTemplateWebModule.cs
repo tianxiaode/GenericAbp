@@ -15,13 +15,16 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
+using Serilog.Core;
 using Volo.Abp;
 using Volo.Abp.Account;
 using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
+using Volo.Abp.AspNetCore.Security;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
@@ -139,8 +142,10 @@ public class QuickTemplateWebModule : AbpModule
         context.Services.AddAuthentication()
             .AddGitHub(options =>
             {
-                options.ClientId = configuration["Authentication:GitHub:ClientId"] ?? "";
-                options.ClientSecret = configuration["Authentication:GitHub:ClientSecret"] ?? "";
+                options.ClientId = "ddd";
+                options.ClientSecret = "ddd";
+                // options.ClientId = configuration["Authentication:GitHub:ClientId"] ?? "";
+                // options.ClientSecret = configuration["Authentication:GitHub:ClientSecret"] ?? "";
             })
             .AddGitee(options =>
             {
@@ -239,15 +244,17 @@ public class QuickTemplateWebModule : AbpModule
 
     private void ConfigureCors(ServiceConfigurationContext context, IConfiguration configuration)
     {
+        var corsOrigins = configuration["App:CorsOrigins"]
+            ?.Split(",", StringSplitOptions.RemoveEmptyEntries)
+            .Select(o => o.TrimEnd('/'))
+            .ToArray() ?? [];
+
         context.Services.AddCors(options =>
         {
             options.AddDefaultPolicy(builder =>
             {
                 builder
-                    .WithOrigins(configuration["App:CorsOrigins"]?
-                        .Split(",", StringSplitOptions.RemoveEmptyEntries)
-                        .Select(o => o.RemovePostFix("/"))
-                        .ToArray() ?? Array.Empty<string>())
+                    .WithOrigins(corsOrigins)
                     .WithAbpExposedHeaders()
                     .SetIsOriginAllowedToAllowWildcardSubdomains()
                     .AllowAnyHeader()
@@ -255,6 +262,16 @@ public class QuickTemplateWebModule : AbpModule
                     .AllowCredentials();
             });
         });
+
+
+        // ≈‰÷√ AbpSecurityHeadersOptions
+        // Configure<AbpSecurityHeadersOptions>(options =>
+        // {
+        //     if (corsOrigins.Length > 0)
+        //     {
+        //         options.Headers["X-Frame-Options"] = "frame-ancestors 'self' " + string.Join(" ", corsOrigins);
+        //     }
+        // });
     }
 
 
@@ -262,6 +279,7 @@ public class QuickTemplateWebModule : AbpModule
     {
         var app = context.GetApplicationBuilder();
         var env = context.GetEnvironment();
+        var configuration = context.GetConfiguration();
 
         if (env.IsDevelopment())
         {
@@ -278,7 +296,7 @@ public class QuickTemplateWebModule : AbpModule
         //app.UseCorrelationId();
         app.UseStaticFiles();
         app.UseRouting();
-        app.UseAbpSecurityHeaders();
+        //app.UseAbpSecurityHeaders();
         app.UseCors();
 
         app.UseAuthentication();
@@ -289,7 +307,6 @@ public class QuickTemplateWebModule : AbpModule
         {
             app.UseMultiTenancy();
         }
-
 
         app.UseForwardedHeaders(new ForwardedHeadersOptions
         {

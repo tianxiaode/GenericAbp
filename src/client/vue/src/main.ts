@@ -62,7 +62,7 @@ localizationStore.setLocale(defaultLanguage);
 account.init({
     authority: envConfig.oidcAuthority,
     client_id: envConfig.oidcClientId,
-    redirect_uri:envConfig.baseUrl + "/oidc-callback",
+    redirect_uri:envConfig.baseUrl + "signin-oidc",
     response_type: envConfig.oidcResponseType,
     scope: envConfig.oidcScope,
     automaticSilentRenew: true,

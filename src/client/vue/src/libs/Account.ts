@@ -10,6 +10,7 @@ import { appConfig } from "./AppConfig";
 import { i18n } from "./locales";
 import { http } from "./http";
 import { envConfig } from "./EnvConfig";
+import router from "~/router";
 
 class Account {
     $className = "Account";
@@ -26,7 +27,7 @@ class Account {
     }
 
     login = async (username: string, password: string) => {
-        try {
+        try {            
             const user = await this.userManager!.signinResourceOwnerCredentials(
                 {
                     username: username,
@@ -34,21 +35,29 @@ class Account {
                 }
             );
             if (!user) {
-                throw new Error("Invalid username or password!");
+                throw new Error("Account.InvalidUserNameOrPassword");
             }
         } catch (error: any) {
-            throw new Error(
-                "Account." + error.error_description || error.message
-            );
+            let message = error.error_description || error.message;
+            if(message.includes("locked out")){
+                message = 'Account.LockedOut'
+            }else if(message.includes("not allowed")){
+                message = 'Account.NotAllowed'
+            }else{
+                message = 'Account.InvalidUserNameOrPassword'
+            }
+            throw new Error(message);
+            
         }
     };
 
     logout = async () => {
         try {
-            await this.userManager!.signoutPopup();
+            await this.userManager!.signoutSilent();
             LocalStorage.removeToken();
             appConfig.loadConfig();
             i18n.loadLanguage();
+            router.push("/");
         } catch (error: any) {
             logger.error(this, ["logout"], error);
             // throw new Error(

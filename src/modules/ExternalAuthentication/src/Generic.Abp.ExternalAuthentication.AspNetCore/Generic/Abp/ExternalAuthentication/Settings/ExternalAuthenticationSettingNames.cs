@@ -3,6 +3,7 @@
 public static class ExternalAuthenticationSettingNames
 {
     private const string Prefix = "Generic.Abp.ExternalAuthentication";
+    public const string EnableLocalLogin = "Abp.Account.EnableLocalLogin";
 
     public static class Provider
     {

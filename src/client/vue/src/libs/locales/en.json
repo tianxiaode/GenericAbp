@@ -1,6 +1,9 @@
 {
     "Account":{
-        "Invalid username or password!":"Invalid username or password",
+        "InvalidUserNameOrPassword":"Invalid username or password",
+        "NotAllowed": "Not allowed to access this resource.",
+        "LockedOut": "Account locked out, please try again later.",
+        "RequiresTwoFactor": "This account requires two-factor authentication.",
         "LoginSuccess":"Login Success, redirecting..."
     },
     "AbpIdentity":{

@@ -1,6 +1,9 @@
 {
     "Account":{
-        "Invalid username or password!":"用户名或密码错误",
+        "InvalidUserNameOrPassword":"用户名或密码错误",
+        "NotAllowed": "不允许访问",
+        "LockedOut": "账户已锁定",
+        "RequiresTwoFactor": "需要两步验证",
         "LoginSuccess":"登录成功，正在跳转..."
     },
     "AbpIdentity":{

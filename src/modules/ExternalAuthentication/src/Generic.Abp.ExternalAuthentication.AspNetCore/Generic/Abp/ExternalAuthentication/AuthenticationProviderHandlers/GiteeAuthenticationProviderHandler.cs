@@ -7,28 +7,26 @@ namespace Generic.Abp.ExternalAuthentication.AuthenticationProviderHandlers;
 
 public class GiteeAuthenticationProviderHandler : IExternalAuthenticationProviderHandler
 {
-    public GiteeAuthenticationProviderHandler(IOptionsMonitorCache<GiteeAuthenticationOptions> optionsCache)
+    public GiteeAuthenticationProviderHandler(IOptionsMonitor<GiteeAuthenticationOptions> options)
     {
-        OptionsCache = optionsCache;
+        Options = options;
     }
 
     public string Scheme => GiteeAuthenticationDefaults.AuthenticationScheme;
 
-    protected IOptionsMonitorCache<GiteeAuthenticationOptions> OptionsCache { get; }
+    protected IOptionsMonitor<GiteeAuthenticationOptions> Options { get; }
 
     public Task UpdateOptionsAsync(ExternalProviderDto? provider)
     {
-        if (provider == null || string.IsNullOrEmpty(provider.ClientId) || string.IsNullOrEmpty(provider.ClientSecret))
+        if (provider is { Enabled: false } || string.IsNullOrEmpty(provider?.ClientId) ||
+            string.IsNullOrEmpty(provider.ClientSecret))
         {
             return Task.CompletedTask;
         }
 
-        OptionsCache.TryRemove(GitHubAuthenticationDefaults.AuthenticationScheme);
-        OptionsCache.TryAdd(GitHubAuthenticationDefaults.AuthenticationScheme, new GiteeAuthenticationOptions()
-        {
-            ClientId = provider.ClientId,
-            ClientSecret = provider.ClientSecret
-        });
+        var options = Options.Get(GitHubAuthenticationDefaults.AuthenticationScheme);
+        options.ClientId = provider.ClientId;
+        options.ClientSecret = provider.ClientSecret;
         return Task.CompletedTask;
     }
 }
