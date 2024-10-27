@@ -1,5 +1,5 @@
 <template>
-    <AccountForm ref="formRef" :rules="rules" title="Pages.ResetPassword.ResetPassword" :form-data="formData">
+    <AccountForm ref="formRef" :rules="rules" title="Pages.ResetPassword.ResetPassword" v-model="formData">
         <div class="text-sm text-gray-500 mb-4">
             {{ t('Pages.ResetPassword.ResetPasswordInformation') }}
         </div>
@@ -27,7 +27,7 @@
         >
             {{ t('Components.Save')}} 
         </el-button>
-        <div class="w-full pt-2">
+        <div class="w-full leading-loose">
             <el-link type="primary" @click="$router.push('/login')">{{ t("Pages.ForgotPassword.BackToLogin") }}</el-link>
         </div>
 

@@ -14,19 +14,10 @@ export type FormExposeType = {
     isValid: () => Promise<boolean>;
 };
 
-export function useFormExpose(props: any, emit: any) {
+export function useFormExpose() {
     const formRef = ref<FormInstance>();
-    const formData = computed({
-        get() {
-            return props.formData;
-        },
-        set(value) {
-            emit("update:formData", value);
-        },
-    });
 
 
-    // 暴露给父组件的功能
     const formExpose = () => {
         return {
             form: formRef,
@@ -46,7 +37,6 @@ export function useFormExpose(props: any, emit: any) {
 
     return {
         formRef,
-        formData,
         formExpose,
     };
 }

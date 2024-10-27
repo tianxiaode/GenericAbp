@@ -20,13 +20,8 @@ export function useFormRules(initialRules: any, formRef: any) {
         for (const name in fieldRules) {
             let isValid = true;
             const otherField = name === "equalTo" ? fieldRules["equalTo"] : "";
-            if (
-                name === "required" &&
-                fieldRules[name] === false &&
-                isEmpty(value)
-            ) {
-                break;
-            } else if (name === "custom") {
+            if (fieldRules[name] === false) continue;
+            if (name === "custom") {
                 isValid = fieldRules[name](
                     value,
                     fieldName,
@@ -108,6 +103,7 @@ export function useFormRules(initialRules: any, formRef: any) {
         if (isFunction(fields)) {
             fields = fields(fields);
         }
+        return fields;
     };
 
     const getField = (field: string) => {

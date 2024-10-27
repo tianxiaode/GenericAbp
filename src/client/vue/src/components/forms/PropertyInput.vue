@@ -8,7 +8,7 @@
                         <template #append  v-if="errorMessage">
                             <el-tooltip placement="bottom" effect="light">
                                 <template #content>
-                                    <span class="danger" >{{ errorMessage }}</span>
+                                    <span class="danger" >{{ t(errorMessage) }}</span>
                                 </template>
                                 <i class="fa fa-circle-exclamation danger"></i>
                             </el-tooltip>
@@ -17,7 +17,7 @@
                 </div>
             </template>
             <div>
-                <el-input v-model="value" size="small" clearable :placeholder="t('Components.PropertyInput.Value')">
+                <el-input v-model="value" size="small" clearable :placeholder="t('Components.PropertyInput.Value')" @keyup.enter.native="addProperty">
                     <template #append>
                         <i class="fa fa-plus success cursor-pointer" @click="addProperty"></i>
                     </template>
@@ -25,55 +25,40 @@
             </div>
         </el-descriptions-item>
 
-        <el-descriptions-item v-for="key in Object.keys(properties).sort((a:any, b:any) => a.localeCompare(b))" class-name="w-1/2" size="small">
+        <el-descriptions-item v-for="key in Object.keys(model).sort((a:any, b:any) => a.localeCompare(b))" class-name="w-1/2" size="small">
             <template #label><span class="cursor-pointer" @click="handleEdit(key)" >{{ key }}</span></template>
             <div class="w-full flex justify-between items-center">
-                <span class="flex-1 cursor-pointer" @click="handleEdit(key)" >{{ properties[key] }}</span>
+                <span class="flex-1 cursor-pointer" @click="handleEdit(key)" >{{ model[key] }}</span>
                 <i class="fa fa-trash danger cursor-pointer" @click="removeProperty(key)"></i>
             </div>
         </el-descriptions-item>
-        <el-descriptions-item v-if="noData" size="small" :label="t('Components.NoData')">
+        <el-descriptions-item v-if="Object.keys(model).length === 0" size="small" :label="t('Components.NoData')">
         </el-descriptions-item>
     </el-descriptions>
 </template>
 
 <script setup lang="ts">
-import { ref, watch, defineProps, defineEmits } from 'vue';
+import { ref } from 'vue';
 import { useI18n } from '~/composables';
 import { isEmpty } from '~/libs';
 
-const props = defineProps({
-    modelValue: {
-        type: Object,
-        default: () => ({})
-    }
-});
+const model = defineModel<any>();
 
-const emit = defineEmits(['update:modelValue']);
+
 const { t } = useI18n();
 const name = ref('');
 const nameInput = ref<any>();
 const value = ref('');
 const errorMessage = ref('');
-const properties = ref<Record<string, any>>(props.modelValue);
-const noData = ref(Object.keys(properties.value).length === 0);
-// 监听 properties 的变化，及时更新 modelValue
-watch(properties, (newValue) => {
-    noData.value = Object.keys(newValue).length === 0;
-    emit('update:modelValue', newValue);
-});
 
-watch(() => props.modelValue, (newValue) => {
-    properties.value = newValue;
-});
 
 const handleNameChange = () => {
     if (isEmpty(name.value)) {
-        errorMessage.value = t.value('Validation.Required');
+        errorMessage.value = 'Validation.Required';
         return;
     }
-    if (properties.value.hasOwnProperty(name.value)) {
-        errorMessage.value = t.value('Components.PropertyInput.AlreadyExists');
+    if (model.value.hasOwnProperty(name.value)) {
+        errorMessage.value = 'Components.PropertyInput.AlreadyExists';
         return;
     }
     errorMessage.value = '';
@@ -81,7 +66,7 @@ const handleNameChange = () => {
 
 const handleEdit = (key: any) => {
     name.value = key;
-    value.value = properties.value[key];
+    value.value = model.value[key];
     nameInput.value.focus();
 }
 
@@ -91,15 +76,13 @@ function addProperty() {
         nameInput.value.focus();
         return;
     }
-    properties.value = {...properties.value, [name.value]: value.value };
+    model.value[name.value] = value.value;
     name.value = '';
     value.value = '';
 }
 
 function removeProperty(key: any) {
-    const value = properties.value;
-    delete value[key];
-    properties.value = {...value };
+    delete model.value[key];
 }
 </script>
 

@@ -64,6 +64,7 @@ export class Locale {
         let remainingParams: string[] = [];
         let replacements: any = {};
 
+        if(params.length === 0 || isEmpty(params[0])) return "";
 
         // 如果参数多于2个，且最后一个参数是对象，则将其视为替换值
         if (

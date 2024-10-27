@@ -6,14 +6,7 @@
             </template>
             <el-form ref="formRef" v-bind="$attrs" :model="formData" size="large" :inline-message="true" :validate-on-rule-change="false" :scroll-to-error="true">
                 <slot></slot>
-                <div class="w-full pt-2" v-if="formMessage">
-                    <el-alert :type="formMessageType" show-icon closable style="margin-top: 10px;"
-                        @close="clearFormMessage">
-                        <template #title>
-                            <span v-html="t(formMessage)">    </span>
-                        </template>
-                    </el-alert>
-                </div>
+                <FormMessage v-model="formMessage" v-model:form-message-type="formMessageType"></FormMessage>
             </el-form>
             <template #footer v-if="$slots.footer">
                 <slot name="footer"></slot>
@@ -23,23 +16,19 @@
 </template>
 
 <script setup lang="ts">
-import {  useFormExpose,useFormMessage,useI18n } from '~/composables';
+import {  useFormExpose,useFormMessageExpose,useI18n } from '~/composables';
+import FormMessage from './FormMessage.vue';
 
 const { t } = useI18n();
-const props = defineProps({
+const formData = defineModel();
+defineProps({
     title: String,
-    formData: {
-        type: Object,
-        required: true,
-    },
 })
-const emit = defineEmits(['update:formData']);
-const { formRef, formData, formExpose } = useFormExpose(props, emit);
-const { formMessage, formMessageType, clearFormMessage,formMessageExposed } = useFormMessage();
-
+const { formRef, formExpose } = useFormExpose();
+const { formMessage, formMessageType, formMessageExpose} = useFormMessageExpose();
 defineExpose({
     ...formExpose(),
-    ...formMessageExposed()
+    ...formMessageExpose()
 });
 </script>
 

@@ -33,7 +33,8 @@
     "include": [
         "src/**/*.ts",
         "src/**/*.tsx",
-        "src/**/*.vue"
+        "src/**/*.vue",
+        "src/__tests__/components/forms/ValueListInpput.spec.cjs"
     ],
     "types": [
         "vite/client"

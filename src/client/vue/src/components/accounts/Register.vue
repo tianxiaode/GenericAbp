@@ -1,5 +1,5 @@
 <template>
-    <AccountForm ref="formRef" :rules="rules" title="Pages.Register.Register"  :form-data="formData">
+    <AccountForm ref="formRef" :rules="rules" title="Pages.Register.Register"  v-model="formData">
         <el-form-item prop="username" clearable>
             <el-input v-model="formData.username"             
             :placeholder="t('Pages.Register.Username')">
@@ -38,7 +38,7 @@
         <el-button type="primary" @click="handleSubmit" class="w-full">
             {{ t("Pages.Register.Register") }}
         </el-button>
-        <div class="w-full pt-2">
+        <div class="w-full leading-loose">
             <el-link type="primary" @click="$router.push('/login')">{{ t("Pages.Register.AlreadyRegistered") }}</el-link>
         </div>
         <template #footer>

@@ -10,13 +10,14 @@
 </template>
 
 <script setup lang="ts">
-import { useFormMessage, useI18n } from '~/composables';
+import { useI18n } from '~/composables';
 const { t } = useI18n();
-const { formMessage, formMessageType, clearFormMessage, formMessageExposed } = useFormMessage();
 
-
-defineExpose({
-    ...formMessageExposed()
-});
+const formMessage = defineModel();
+const formMessageType = defineModel('formMessageType');
+const clearFormMessage = () => {
+    formMessage.value = '';
+    formMessageType.value = '';
+};
 
 </script>

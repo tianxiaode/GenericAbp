@@ -1,5 +1,5 @@
 <template>
-    <AccountForm ref="formRef" :rules="rules" title="Pages.Login.Login"  :form-data="formData">
+    <AccountForm ref="formRef" :rules="rules" title="Pages.Login.Login"  v-model="formData">
         <el-form-item prop="username" clearable>
             <el-input v-model="formData.username" :placeholder="t('Pages.Login.UserNameAndEmail')">
                 <template #prefix>
@@ -15,14 +15,14 @@
                 </template>
             </el-input>
         </el-form-item>
-        <div class="w-full text-right pb-2">
+        <div class="w-full text-right leading-loose">
             <el-link type="primary" @click="$router.push('/forgot-password')">{{ t("Pages.Login.ForgotPassword")
                 }}</el-link>
         </div>
         <el-button type="primary" @click="handleSubmit" class="w-full">
             {{ t("Pages.Login.Login") }}
         </el-button>
-        <div class="w-full pt-2">
+        <div class="w-full leading-loose">
             <el-link type="primary" @click="$router.push('/register')">{{ t("Pages.Login.NewUser") }}</el-link>
         </div>
         <template #footer>

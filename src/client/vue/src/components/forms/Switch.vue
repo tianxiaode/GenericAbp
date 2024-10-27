@@ -1,5 +1,5 @@
 <template>
-<el-switch v-bind="$attrs" :active-text="t(activeText)" :inactive-text="t(inactiveText)"></el-switch>
+    <el-switch v-bind="$attrs" :active-text="t(activeText)" :inactive-text="t(inactiveText)"></el-switch>
 </template>
 
 <script setup lang="ts">

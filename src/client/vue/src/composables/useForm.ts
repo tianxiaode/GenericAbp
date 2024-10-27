@@ -1,4 +1,3 @@
-// useForm.ts
 import {  ref } from "vue";
 
 export function useForm(onSubmit: Function) {
@@ -7,9 +6,7 @@ export function useForm(onSubmit: Function) {
     const handleSubmit = async () => {
         const form = formRef.value;
         if (!form) return;
-        
         form.validate((valid:boolean)=>{
-            console.log('valid', valid)
             if(!valid) return;
             return onSubmit();
         })

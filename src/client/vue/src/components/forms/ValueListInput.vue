@@ -4,11 +4,11 @@
             <template #label>
                 <div class="w-full">
                     <el-input v-model="inputValue" size="small" ref="valueInput" @blur="handleValueChange" clearable
-                        :placeholder="t('Components.PropertyInput.Name')">
+                        :placeholder="t('Components.PropertyInput.Name')" @keyup.enter.native="addProperty">
                         <template #append  v-if="errorMessage">
                             <el-tooltip placement="bottom" effect="light">
                                 <template #content>
-                                    <span class="danger">{{ errorMessage }}</span>
+                                    <span class="danger">{{ t(errorMessage) }}</span>
                                 </template>
                                 <i class="fa fa-circle-exclamation danger"></i>
                             </el-tooltip>
@@ -19,27 +19,25 @@
             <i class="fa fa-plus success cursor-pointer" @click="addProperty"></i>
         </el-descriptions-item>
 
-        <el-descriptions-item v-for="value in properties.sort( (a:any, b:any) => a.localeCompare(b) )" size="small">
+        <el-descriptions-item v-for="value in (model as any[]).map((m:any) => props.convertModel(m)).sort( (a:any, b:any) => a.localeCompare(b) )" size="small">
             <template #label><span class="cursor-pointer" @click="handleEdit(value)">{{ value }}</span></template>
                 <i class="fa fa-trash danger cursor-pointer" @click="removeProperty(value)"></i>
         </el-descriptions-item>
-        <el-descriptions-item v-if="noData" size="small" :label="t('Components.NoData')">
+        <el-descriptions-item v-if="model.length === 0" size="small" :label="t('Components.NoData')">
         </el-descriptions-item>
     </el-descriptions>
 
 </template>
 
 <script setup lang="ts">
-import { ref, watch, defineProps, defineEmits } from 'vue';
+import { ref,  defineProps  } from 'vue';
 import {useI18n } from '~/composables';
 import { capitalize, isEmpty, Validator } from '~/libs';
 
+const model = defineModel<any>();
+
 //这里需要传入两个转换函数，一个是将输入值转换为模型值，一个是将模型值转换为输入值
 const props = defineProps({
-    modelValue: {
-        type: Array,
-        default: () => ([])
-    },
     rules: {
         type: Object,
         default: () => ({})
@@ -54,36 +52,25 @@ const props = defineProps({
     }
 });
 
-const emit = defineEmits(['update:modelValue']);
 const { t } = useI18n();
-const properties = ref(props.modelValue);
 const inputValue = ref('');
 const valueInput = ref<any>();
-const noData = ref(properties.value.length === 0);
 const errorMessage = ref('');
 
-watch(properties, (value) => {
-        noData.value = value.length === 0;
-}, { deep: true });
 
-watch(() => props.modelValue, (newValue) => {
-    if (JSON.stringify(newValue) !== JSON.stringify(properties.value)) {
-        properties.value = newValue.map(m => props.convertModel(m));
-    }
-}, { deep: true });
 
 const handleEdit = (value: any) => {
-    inputValue.value = props.convertModel(value);
+    inputValue.value =value;
     valueInput.value.focus();
 }
 
 const handleValueChange = () => {
     if (isEmpty(inputValue.value)) {
-        errorMessage.value = t.value('Validation.Required');
+        errorMessage.value ='Validation.Required';
         return;
     }
-    if (properties.value.includes(inputValue.value)) {
-        errorMessage.value = t.value('Components.ValueAlreadyExist');
+    if (model.value.includes(props.convertValue(inputValue.value))) {
+        errorMessage.value = 'Components.ValueAlreadyExist';
         return;
     }
     if(props.rules){
@@ -107,14 +94,12 @@ function addProperty() {
         return;
     }
 
-    properties.value = [...properties.value, inputValue.value];
+    model.value.push(props.convertValue(inputValue.value));
     inputValue.value = '';
-    emit('update:modelValue', [...properties.value.map(m => props.convertValue(m))]);
 }
 
 function removeProperty(value: any) {
-    properties.value = [...properties.value.filter(item => item !== value)];
-    emit('update:modelValue', [...properties.value.map(m => props.convertValue(m))]);
+    model.value = model.value.filter((m: any) => m !== props.convertValue(value));
 }
 </script>
 

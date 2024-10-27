@@ -33,24 +33,19 @@
         <el-button type="primary" @click="handleSubmit" class="w-full">
             {{ t('Components.Save') }}
         </el-button>
-        <div class="w-full pt-2" v-if="formMessage">
-            <el-alert :type="formMessageType" show-icon closable style="margin-top: 10px;" @close="clearFormMessage">
-                <template #title>
-                    <span v-html="t(formMessage)"> </span>
-                </template>
-            </el-alert>
-        </div>
+        <FormMessage ref="formMessageRef" />
     </el-form>
 </template>
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import { useConfig, useForm, useFormMessage, useFormRules, useI18n } from '~/composables'
+import { useConfig, useForm, useFormRules, useI18n } from '~/composables'
 import { account, appConfig} from '~/libs';
+import FormMessage from '../forms/FormMessage.vue';
 
 const { t } = useI18n();
 const formData = ref<any>({});
-
+const formMessageRef = ref<any>();
 const formRules = {
     userName: {required:true},
     email: { required: true, email: true }
@@ -69,24 +64,20 @@ const { } = useConfig(refreshRules);
 const onSubmit = async () => {
     try {
         await account.updateProfile(formData.value);
-        formMessage.value ='Pages.Profile.UpdateProfileSuccess';
-        formMessageType.value = 'success';
+        formMessageRef.value.success('Pages.Profile.UpdateProfileSuccess');
     } catch (error: any) {
-        formMessage.value = error.message;
-        formMessageType.value = 'error';
+        formMessageRef.value.error(error.message);
     }
 }
 
 const { formRef, handleSubmit } = useForm(onSubmit);
 const { rules, updateRules } = useFormRules(formRules, formRef);
-const { formMessage, formMessageType, clearFormMessage } = useFormMessage();
 
 onMounted(() => {
     account.getProfile().then(data => {
         formData.value = data;
     }).catch(error => {
-        formMessage.value = error.message;
-        formMessageType.value = 'error';
+        formMessageRef.value.error(error.message);
     });
 });
 
