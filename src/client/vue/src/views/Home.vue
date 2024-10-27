@@ -1,7 +1,10 @@
 <template>
     {{ t('Home') }}
-    <AccountForm tile="Account Form"  ref="accountForm" />
-    <button @click="accountForm.success('Success Message')">Change ValueList</button>
+    <el-alert type="success" >success</el-alert>
+    <el-alert type="warning" >warning</el-alert>
+    <el-alert type="error" >error</el-alert>
+    <el-alert type="info" >info</el-alert>
+    <el-button class="w-full" type="primary mb-4" @click="accountForm.success('Success Message')">Change ValueList</el-button>
 </template>
 
 <script setup lang="ts">
