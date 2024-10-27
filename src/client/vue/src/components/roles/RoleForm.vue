@@ -33,8 +33,4 @@ const rules = {
     name: { required: true }
 };
 
-
-
-
-
 </script>

@@ -35,6 +35,7 @@ export function useFormRules(initialRules: any, formRef: any) {
             } else if (name === "equalTo") {
                 isValid = value === getFieldValue(otherField);
             } else if (Validator.validates.hasOwnProperty(name)) {
+                if(isEmpty(value) && fieldRules['required'] === false) continue;
                 isValid = Validator.validate(
                     name,
                     value,

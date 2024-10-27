@@ -4,6 +4,7 @@ import { useConfirm } from "./useConfirm";
 
 declare type EntityFormConfigType = {
     props?: {
+        dialogProps?: any;
         labelWidth?: string;
         cancelText?: string;
         okText?: string;
@@ -38,18 +39,15 @@ export function useEntityForm(
             formRef: formRef,
             messageRef: messageRef,
             beforeClose: async ()=>{
-                console.log('beforeCLose');
                 await beforeCLose();
             },
             resetClick: ()=>{
                 resetForm();
             },
             cancelClick: ()=>{
-                console.log('cancelClick');
                 beforeCLose();
             },
             okClick: ()=>{
-                console.log('formDialogProps.onclick');
                 submitForm();
             },
 
@@ -101,8 +99,8 @@ export function useEntityForm(
 
     const setInitValues = (data: any) => {
         logger.debug('[useEntityForm][setInitValues]', data)
-        initValues.value = {...data};
-        formData.value = {...data};
+        initValues.value = {...initValues.value, ...data};
+        formData.value = { ...initValues.value, ...data};
     };
 
     const checkChange = async () => {

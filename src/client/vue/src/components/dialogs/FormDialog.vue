@@ -1,17 +1,9 @@
 <template>
-    <el-dialog :ref="dialogRef" 
-        v-bind="dialogProps"
-        :title="t(title)"
-        :label-width="labelWidth"
-        v-model="dialogVisible"
-        :beforeClose="beforeClose"
-        destroy-on-close align-center>
-        <el-form :ref="formRef" 
-                v-bind="formProps"
-             :model="formData" 
-             size="large" :inline-message="true"            
-            :rules="rules"
-            :validate-on-rule-change="false" :scroll-to-error="true" require-asterisk-position="right" label-suffix=":">
+    <el-dialog :ref="dialogRef" v-bind="dialogProps" :title="t(title)" v-model="dialogVisible"
+        :beforeClose="beforeClose" destroy-on-close align-center>
+        <el-form :ref="formRef" v-bind="formProps" :model="formData" size="large" :inline-message="true"
+            :label-width="labelWidth" :rules="rules" :validate-on-rule-change="false" :scroll-to-error="true"
+            require-asterisk-position="right" label-suffix=":">
             <el-input type="hidden" v-model="formData.id" />
             <el-input type="hidden" v-model="formData.concurrencyStamp" />
             <slot name="form-items"></slot>
@@ -22,8 +14,7 @@
                 <div class="flex-1 flex items-center gap-2">
                     <MessageButton :ref="messageRef" style="order: 100;" circle class="none-border"></MessageButton>
                     <IconButton icon="fa fa-undo" @click="resetClick" style="order: 200;" circle class="none-border"
-                        title="Components.Reset"
-                    >
+                        title="Components.Reset">
                     </IconButton>
                     <span class="flex-grow" style="order: 300;"></span>
                     <el-button style="order: 400;" @click="cancelClick">{{ t(cancelText) }}</el-button>
@@ -35,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import { useI18n} from '~/composables';
+import { useI18n } from '~/composables';
 import MessageButton from '../buttons/MessageButton.vue';
 import IconButton from '../buttons/IconButton.vue';
 import { PropType } from 'vue';
@@ -46,7 +37,7 @@ defineProps({
         type: Object,
         required: true
     },
-    dialogProps:{
+    dialogProps: {
         type: Object,
         default: () => ({})
     },
@@ -58,7 +49,7 @@ defineProps({
         type: Object,
         required: true
     },
-    formProps:{
+    formProps: {
         type: Object,
         default: () => ({})
     },
@@ -70,29 +61,29 @@ defineProps({
         type: Object as PropType<any>,
         required: true
     },
-    beforeClose: {  
+    beforeClose: {
         type: Function,
-        default: ()=> true
+        default: () => true
     },
     resetClick: {
-        type: Function as PropType<()=>void>,
-        default: ()=> {}
+        type: Function as PropType<() => void>,
+        default: () => { }
     },
     cancelText: {
         type: String,
         default: 'Components.Cancel'
     },
     cancelClick: {
-        type: Function as PropType<()=>void>,
-        default: ()=> {}
+        type: Function as PropType<() => void>,
+        default: () => { }
     },
     okText: {
         type: String,
         default: 'Components.Ok'
     },
     okClick: {
-        type: Function as PropType<()=>void>,
-        default: ()=> {}
+        type: Function as PropType<() => void>,
+        default: () => { }
     }
 
 })

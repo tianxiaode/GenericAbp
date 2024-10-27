@@ -1,12 +1,12 @@
 <template>
-    <FormDialog ref="formRef" width="800px" :form-data="formData" :rules="rules" :on-ok="submitForm"
-        :title="dialogTitle" v-bind="$attrs" :reset="resetForm" :before-close="checkChange" :label-width="160">
+    <FormDialog v-bind="formDialogProps" v-model="formData" v-model:rules="rules" :title="dialogTitle"
+        v-model:visible="dialogVisible">
         <template #form-items>
             <el-tabs v-model="activeTab" style="height: 540px;">
                 <el-tab-pane :label="t('AbpIdentity.UserInformations')" name="basic">
                     <el-form-item :label="t('AbpIdentity.DisplayName:UserName')" prop="userName">
                         <el-input v-model="formData.userName" :placeholder="t('AbpIdentity.DisplayName:UserName')"
-                            clearable :readonly="!!props.entityId" :class="{ 'is-readonly': !!props.entityId }">
+                            clearable :readonly="!!entityId" :class="{ 'is-readonly': !!entityId }">
                         </el-input>
                     </el-form-item>
                     <el-form-item :label="t('AbpIdentity.DisplayName:Email')" prop="email">
@@ -78,39 +78,34 @@ import Switch from '../forms/Switch.vue';
 const activeTab = ref('basic');
 const allRoles = ref([] as string[]);
 const { t } = useI18n();
+const entityId = defineModel('entityId');
 const userApi = useRepository('user');
 const roleApi = useRepository('role');
+const dialogVisible = defineModel<boolean>();
 const allowedManageRoles = userApi.canManageRoles;
-const props = defineProps({
-    visible: {
-        type: Boolean,
-        default: false
-    },
-    entityId: {
-        type: String,
-        default: ''
-    }
-});
-
 const formRules = {
     userName: { required: true },
     email: { required: true, email: true },
-    password: { required: !props.entityId },
+    password: { required: !entityId.value },
     confirmPassword: { equalTo: 'password' }
 };
 
 
-const { formRef, formData, dialogTitle, initValues, resetForm, submitForm, checkChange } = useEntityForm(userApi, props);
+const { formRef,formData, dialogTitle, formDialogProps,setInitValues } = useEntityForm(userApi, entityId,dialogVisible,{
+    props:{
+        dialogProps:{ width: '800px'},
+    }
+});
 const { rules, updateRules } = useFormRules(formRules, formRef);
 
 
 const refreshRules = () => {
     updateRules({
         password: {
-            required: !props.entityId,
+            required: !entityId.value,
             ...appConfig.passwordComplexitySetting
         },
-        confirmPassword: { required: !props.entityId }
+        confirmPassword: { required: !entityId.value }
     })
 };
 
@@ -120,12 +115,11 @@ onMounted(() => {
     roleApi.getAll().then((res: any) => {
         allRoles.value = res.items.map((role: any) => role.name);
     });
-    if (props.entityId) {
+    if (entityId.value) {
         if (allowedManageRoles) {
-            userApi.getRoles(props.entityId).then((res: any) => {
+            userApi.getRoles(entityId.value).then((res: any) => {
                 let roles = res.items.map((role: any) => role.name);
-                formData.value.roleNames = [...roles];
-                initValues.value.roleNames = roles;
+                setInitValues({roleNames:[...roles]});
             });
         }
     }
@@ -133,21 +127,3 @@ onMounted(() => {
 
 </script>
 
-<style lang="css" scoped>
-.form-container {
-    display: flex;
-    flex-wrap: wrap;
-}
-
-.form-container .el-form-item {
-    flex: 1 1 45%;
-    /* 每个表单项占45%的宽度 */
-    margin-right: 20px;
-    /* 右侧间距 */
-}
-
-/* 如果需要将最后一列的右侧空白去掉 */
-.form-container .el-form-item:nth-child(odd) {
-    margin-right: 0;
-}
-</style>

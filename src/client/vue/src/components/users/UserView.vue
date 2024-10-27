@@ -26,7 +26,7 @@
         <Pagination style="margin-top: 10px;" :api="userApi" />
     </div>
 
-    <UserForm v-if="dialogVisible" v-model="dialogVisible" :entity-id="currentEntityId" @close="formClose" />
+    <UserForm v-if="dialogVisible" v-model="dialogVisible" v-model:entity-id="currentEntityId" />
 
     <UserDetail :entity-id="currentEntityId" v-model="detailVisible" />
 
@@ -64,7 +64,7 @@ const {
     data, dialogVisible, currentEntityId,
     filterText,
     create, update, remove, filter, checkChange,
-    sortChange, formClose } = useTable<UserType>(userApi);
+    sortChange } = useTable<UserType>(userApi);
 
 const toolbarButtons = {
     create: { action: create, isVisible: userApi.canCreate },

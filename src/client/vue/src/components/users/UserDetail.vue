@@ -17,7 +17,9 @@
                 {{ formatLockoutDate(data?.lockoutEnd as string) }}
             </el-descriptions-item>
             <el-descriptions-item :label="t('AbpIdentity.CreationTime')" > {{ formatDate(data?.creationTime as string, 'yyyy-MM-dd HH:mm:ss') }} </el-descriptions-item>
-            <el-descriptions-item :label="t('AbpIdentity.Roles')" > {{ roles.join(', ') }} </el-descriptions-item>
+            <el-descriptions-item :label="t('AbpIdentity.Roles')" > 
+                <List :data="roles"></List>
+            </el-descriptions-item>
         </el-descriptions>
     </el-drawer>
 
@@ -29,6 +31,7 @@ import { ref } from 'vue';
 import { formatDate, i18n, isEmpty } from '~/libs';
 import { useI18n, useRepository } from '~/composables';
 import CheckStatus from '../icons/CheckStatus.vue';
+import List from '../lists/List.vue';
 
 const props = defineProps({
     entityId: {
