@@ -1,8 +1,17 @@
 
-// :root {
-//   --ep-color-primary: red;
-// }
-
+:root {
+    --el-color-primary-rgb: 60,118,153;
+    --el-color-primary: #3c7699;
+}
+.bg-primary{
+    background-color: #3c7699;
+}
+.pin-yue{
+    color: #3c7699
+}
+.bg-pin-yue{
+    background-color: #3c7699;
+}
 body {
   font-family: Inter, system-ui, Avenir, "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB",
     "Microsoft YaHei", "微软雅黑", Arial, sans-serif;

@@ -5,4 +5,9 @@ export default defineConfig({
     presetUno(),
     presetAttributify(),
   ],
+  theme: {
+    colors: {
+      primary: '#3c7699', // 设置主色为蓝色
+    },
+  },
 })

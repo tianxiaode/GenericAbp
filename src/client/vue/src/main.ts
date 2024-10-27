@@ -1,7 +1,9 @@
 import { createApp } from "vue";
 import { createPinia } from 'pinia';
+//import './styles/element/index.scss'
 import ElementPlus, { ElMessage } from "element-plus";
 import '@fortawesome/fontawesome-free/css/all.css'; 
+import 'element-plus/theme-chalk/dark/css-vars.css'
 import "element-plus/dist/index.css";
 import "~/styles/index.scss";
 import "uno.css";

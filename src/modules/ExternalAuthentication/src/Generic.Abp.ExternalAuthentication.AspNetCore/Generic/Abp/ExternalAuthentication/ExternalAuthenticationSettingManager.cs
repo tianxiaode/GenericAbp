@@ -21,15 +21,7 @@ public class ExternalAuthenticationSettingManager : IExternalAuthenticationSetti
 
     protected IStringLocalizer L
     {
-        get
-        {
-            if (_localizer == null)
-            {
-                _localizer = CreateLocalizer();
-            }
-
-            return _localizer;
-        }
+        get { return _localizer ??= CreateLocalizer(); }
     }
 
     private IStringLocalizer? _localizer;
@@ -62,13 +54,14 @@ public class ExternalAuthenticationSettingManager : IExternalAuthenticationSetti
 
     public virtual async Task<ExternalSettingDto> GetSettingAsync()
     {
-        var dto = new ExternalSettingDto();
-        dto.NewUserPrefix =
-            await SettingManager.GetOrNullForCurrentTenantAsync(
-                ExternalAuthenticationSettingNames.NewUser.NewUserPrefix) ?? "";
-        dto.NewUserEmailSuffix = await SettingManager.GetOrNullForCurrentTenantAsync(
-            ExternalAuthenticationSettingNames.NewUser.NewUserEmailSuffix) ?? "";
-        dto.Providers = await GetProvidersAsync();
+        var dto = new ExternalSettingDto
+        {
+            NewUserPrefix = await SettingManager.GetOrNullForCurrentTenantAsync(
+                ExternalAuthenticationSettingNames.NewUser.NewUserPrefix) ?? "",
+            NewUserEmailSuffix = await SettingManager.GetOrNullForCurrentTenantAsync(
+                ExternalAuthenticationSettingNames.NewUser.NewUserEmailSuffix) ?? "",
+            Providers = await GetProvidersAsync()
+        };
         return dto;
     }
 
