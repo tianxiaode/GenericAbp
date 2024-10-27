@@ -43,7 +43,7 @@ import IconButton from '../buttons/IconButton.vue';
 import { useActionButtons, useI18n } from '~/composables';
 // 定义 props 接收父组件传递的标题、是否显示新建按钮、是否显示 ellipsis 图标
 const props = defineProps({
-    title: { type: String, required: true },
+    title: { type: String, default: '' },
     showEllipsisIcon: { type: Boolean, default: false },
     buttons: {
         type: Object,  // 改为对象

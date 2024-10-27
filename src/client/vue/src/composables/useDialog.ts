@@ -1,37 +1,11 @@
-
-export const dialogProps = () => {
-    return {
-        dialog: Object,
-        cancelButtonText: {
-            type: String,
-            default: "Components.Cancel",
-        },
-        okButtonText: {
-            type: String,
-            default: "Components.Save",
-        },
-        onCancel: Function,
-        onOk: Function,
-        beforeClose: Function,
-        close: Function,
-        reset: Function,
-    };
-};
-
-export function useDialog(
-    props: any,
-    emit: any,
-    afterClose?: any,
-) {
-
-
+export function useDialog(props: any, dialogVisible: any, messageRef?: any) {
     const dialogBeforeClose = () => {
-        if(props.beforeClose){
+        if (props.beforeClose) {
             props.beforeClose().then(async (allowClose: boolean) => {
-                if(!allowClose) return;
+                if (!allowClose) return;
                 close();
             });
-        }else{
+        } else {
             close();
         }
     };
@@ -40,20 +14,14 @@ export function useDialog(
         if (props.close) {
             props.close();
         }
-        emit("close", true);
-        afterClose && afterClose();
-    };
-
-    const handleReset = () => {
-        if (props.reset) {
-            props.reset();
-        }
+        dialogVisible.value = false;
+        messageRef.value.clear();
+        props.afterClose && props.afterClose();
     };
 
 
     return {
         dialogBeforeClose,
-        handleReset,
-        close
+        close,
     };
 }

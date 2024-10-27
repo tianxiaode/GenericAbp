@@ -1,5 +1,5 @@
 import { EntityInterface } from "../libs";
-import { onMounted, onUnmounted, ref } from "vue";
+import { onMounted, onUnmounted, ref,watch } from "vue";
 
 export function useTable<T extends EntityInterface>(api: any) {
 
@@ -49,9 +49,14 @@ export function useTable<T extends EntityInterface>(api: any) {
     };
 
     const formClose = () => {
-        dialogVisible.value = false;
+        //dialogVisible.value = false;
         api.load(true);
     };
+
+    watch(dialogVisible, (isVisible) => {
+        if(isVisible) return;
+        formClose();
+    })
 
     onMounted(() => {
         api.on('load', loadData);

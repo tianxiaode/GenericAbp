@@ -1,36 +1,108 @@
 import { onMounted, ref } from "vue";
-import { i18n } from "~/libs";
+import { i18n, logger } from "~/libs";
 import { useConfirm } from "./useConfirm";
 
-export function useEntityForm(api: any, props: any,afterGetData?:any) {
+declare type EntityFormConfigType = {
+    props?: {
+        labelWidth?: string;
+        cancelText?: string;
+        okText?: string;
+    },
+    beforeGetData?: (id: any) => boolean;
+    afterGetData?: (data: any, response: any) => Promise<void>;
+    beforeSubmit?: (data: any) => Promise<boolean>;
+    afterSubmit?: (data: any, response: any) => Promise<void>;
+    beforeClose?: () => Promise<boolean>;
+    afterClose?: () => Promise<void>;
+};
+
+export function useEntityForm(
+    api: any, 
+    entityId: any ,
+    dialogVisible: any,
+    config?: EntityFormConfigType) {
     const dialogTitle = ref<string>("");
+    const dialogRef = ref<any>(null);
     const formRef = ref<any>(null as any);
     const formData = ref<any>({});
-    const dialogVisible = ref(props.visible);
+    const messageRef = ref<any>(null);
     const initValues = ref<any>({});
     const { confirm } = useConfirm();
 
+    config = config || {} as EntityFormConfigType;
+
+    const formDialogProps = ()=>{   
+        return {
+            dialogRef: dialogRef,
+            title: dialogTitle,
+            formRef: formRef,
+            messageRef: messageRef,
+            beforeClose: async ()=>{
+                console.log('beforeCLose');
+                await beforeCLose();
+            },
+            resetClick: ()=>{
+                resetForm();
+            },
+            cancelClick: ()=>{
+                console.log('cancelClick');
+                beforeCLose();
+            },
+            okClick: ()=>{
+                console.log('formDialogProps.onclick');
+                submitForm();
+            },
+
+            ...config.props
+        }
+    }
+
+    const beforeCLose = async () => {
+        if(config.beforeClose && await config.beforeClose() === false){
+            return ;
+        }
+        const allowClose = await checkChange();
+        if(!allowClose) return ;
+        close();
+    }
+
+    const close = () => {
+        messageRef.value.clear();
+        dialogVisible.value = false;
+        config.afterClose && config.afterClose();
+    }
+
     const submitForm = async () => {
+        if(config.beforeSubmit && await config.beforeSubmit(formData.value) === false){
+            return;
+        }
         formRef.value?.validate(async (valid: boolean) => {
             if (!valid) return;
-            console.log("formData", formData.value);
+            logger.debug('[useEntityForm][submitForm]','formData:', formData.value)
             try {
-                const result = props.entityId
+                const result = entityId.value
                     ? await api.update(formData.value)
                     : await api.create(formData.value);
-                formRef.value?.success("Message.SaveSuccessAndClose");
+                messageRef.value?.success("Message.SaveSuccessAndClose");
+                config.afterSubmit && config.afterSubmit(formData.value, result);
                 setTimeout(() => {
-                    formRef.value?.close();
+                    close();
                 }, 3000);
                 return result;
             } catch (err: any) {
-                formRef.value?.error(err.message);
+                messageRef.value?.error(err.message);
             }
         });
     };
 
     const resetForm = () => {
         formData.value = initValues.value;
+    };
+
+    const setInitValues = (data: any) => {
+        logger.debug('[useEntityForm][setInitValues]', data)
+        initValues.value = {...data};
+        formData.value = {...data};
     };
 
     const checkChange = async () => {
@@ -57,29 +129,34 @@ export function useEntityForm(api: any, props: any,afterGetData?:any) {
 
     
 
-    onMounted(() => {
-        if (props.entityId) {
-            api.getEntity(props.entityId).then((res: any) => {
-                formData.value = { ...res };
-                initValues.value = { ...res };
+    onMounted(() => {     
+        console.log('onMounted', entityId.value);     
+        if (entityId.value) {
+            api.getEntity(entityId.value).then((res: any) => {
+                if(config.beforeGetData && config.beforeGetData(entityId.value) === false) return ;
+                setInitValues(res)
                 dialogTitle.value = api.updateTitle;
-                afterGetData(res);
+                if(config.afterGetData){
+                    config.afterGetData(formData.value, res);
+                }
             });
         } else {
-            formData.value = {};
-            initValues.value = {};
+            setInitValues({});
             dialogTitle.value = api.createTitle;
         }
     });
 
     return {
+        dialogTitle,
+        dialogRef,        
         formRef,
         formData,
+        messageRef,        
         initValues,
-        dialogVisible,
-        dialogTitle,
+        formDialogProps: formDialogProps(),
         checkChange,
         resetForm,
         submitForm,
+        setInitValues
     };
 }

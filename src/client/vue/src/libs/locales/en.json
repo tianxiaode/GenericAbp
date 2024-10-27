@@ -43,6 +43,7 @@
         "Save": "Save",
         "Submit": "Submit",
         "Details":"Details",
+        "Reset": "Reset",
         "PropertyInput":{
             "Label":"Properties",
             "Name": "Name",

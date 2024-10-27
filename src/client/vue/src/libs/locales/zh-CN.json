@@ -43,6 +43,7 @@
         "Save": "保存",
         "Submit": "提交",
         "Details":"详情",
+        "Reset": "重置",
         "PropertyInput":{
             "Name": "名称",
             "Value": "值",

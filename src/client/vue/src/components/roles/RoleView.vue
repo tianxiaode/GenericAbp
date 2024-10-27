@@ -19,7 +19,7 @@
         <Pagination style="margin-top: 10px;" :api="roleApi" />
     </div>
 
-    <RoleForm v-if="dialogVisible" v-model="dialogVisible" :entity-id="currentEntityId" @close="formClose" />
+    <RoleForm v-if="dialogVisible" v-model="dialogVisible" v-model:entity-id="currentEntityId" />
 
     <PermissionView v-if="permissionVisible" v-model:isVisible="permissionVisible" provider-name="R"
         :provider-key="providerKey" :title="providerKey"></PermissionView>
@@ -54,7 +54,7 @@ const {
     data, dialogVisible, currentEntityId,
     filterText,
     create, update, remove, filter, checkChange,
-    sortChange, formClose,  } = useTable<RoleType>(roleApi);
+    sortChange,  } = useTable<RoleType>(roleApi);
 
 const toolbarButtons = {
     create: { action: create, isVisible: roleApi.canCreate },

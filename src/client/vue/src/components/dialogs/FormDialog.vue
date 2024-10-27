@@ -1,10 +1,17 @@
 <template>
-    <el-dialog :title="t(title)" v-bind="$attrs" :before-close="dialogBeforeClose" destroy-on-close align-center>
-        <el-form ref="formRef" :rules="rules" :model="formData" size="large" :inline-message="true"
-            :validate-on-rule-change="false" :scroll-to-error="true" require-asterisk-position="right"
-            :label-width="labelWidth"
-            label-suffix=":"
-        >
+    <el-dialog :ref="dialogRef" 
+        v-bind="dialogProps"
+        :title="t(title)"
+        :label-width="labelWidth"
+        v-model="dialogVisible"
+        :beforeClose="beforeClose"
+        destroy-on-close align-center>
+        <el-form :ref="formRef" 
+                v-bind="formProps"
+             :model="formData" 
+             size="large" :inline-message="true"            
+            :rules="rules"
+            :validate-on-rule-change="false" :scroll-to-error="true" require-asterisk-position="right" label-suffix=":">
             <el-input type="hidden" v-model="formData.id" />
             <el-input type="hidden" v-model="formData.concurrencyStamp" />
             <slot name="form-items"></slot>
@@ -13,13 +20,14 @@
         <template #footer>
             <slot name="dialog-footer">
                 <div class="flex-1 flex items-center gap-2">
-                    <MessageButton v-if="formMessage" :message="formMessage" :type="formMessageType" style="order: 100;"
-                        circle class="none-border"></MessageButton>
-                    <IconButton icon="fa fa-undo" @click="handleReset" style="order: 200;" circle class="none-border">
+                    <MessageButton :ref="messageRef" style="order: 100;" circle class="none-border"></MessageButton>
+                    <IconButton icon="fa fa-undo" @click="resetClick" style="order: 200;" circle class="none-border"
+                        title="Components.Reset"
+                    >
                     </IconButton>
                     <span class="flex-grow" style="order: 300;"></span>
-                    <el-button style="order: 400;" @click="dialogBeforeClose">{{ t(cancelButtonText) }}</el-button>
-                    <el-button type="primary" @click="onOk" style="order: 500;">{{ t(okButtonText) }}</el-button>
+                    <el-button style="order: 400;" @click="cancelClick">{{ t(cancelText) }}</el-button>
+                    <el-button type="primary" style="order: 500;" @click="okClick">{{ t(okText) }}</el-button>
                 </div>
             </slot>
         </template>
@@ -27,37 +35,70 @@
 </template>
 
 <script setup lang="ts">
-import { useFormMessage, useFormExpose, useI18n, dialogProps, useDialog } from '~/composables';
+import { useI18n} from '~/composables';
 import MessageButton from '../buttons/MessageButton.vue';
 import IconButton from '../buttons/IconButton.vue';
+import { PropType } from 'vue';
 
 
-const props = defineProps({
-    title: String,
-    labelWidth: {
-        type: Number,
-        default: 140,
-    },
-    rules: Object,
-    formData: {
+defineProps({
+    dialogRef: {
         type: Object,
-        required: true,
+        required: true
     },
-    ...dialogProps()
+    dialogProps:{
+        type: Object,
+        default: () => ({})
+    },
+    title: {
+        type: String,
+        default: ''
+    },
+    formRef: {
+        type: Object,
+        required: true
+    },
+    formProps:{
+        type: Object,
+        default: () => ({})
+    },
+    labelWidth: {
+        type: String,
+        default: '180px'
+    },
+    messageRef: {
+        type: Object as PropType<any>,
+        required: true
+    },
+    beforeClose: {  
+        type: Function,
+        default: ()=> true
+    },
+    resetClick: {
+        type: Function as PropType<()=>void>,
+        default: ()=> {}
+    },
+    cancelText: {
+        type: String,
+        default: 'Components.Cancel'
+    },
+    cancelClick: {
+        type: Function as PropType<()=>void>,
+        default: ()=> {}
+    },
+    okText: {
+        type: String,
+        default: 'Components.Ok'
+    },
+    okClick: {
+        type: Function as PropType<()=>void>,
+        default: ()=> {}
+    }
+
 })
 
 const { t } = useI18n();
-const emit = defineEmits(['update:formData', 'close']);
-
-
-
-const { formRef, formData, formExpose } = useFormExpose(props, emit);
-const { formMessage, formMessageType, clearFormMessage, formMessageExposed } = useFormMessage();
-const { dialogBeforeClose, close, handleReset } = useDialog(props, emit, clearFormMessage);
-
-defineExpose({
-    ...formExpose(),
-    ...formMessageExposed(),
-    close: ()=>close()
-});
+const formData = defineModel<any>();
+const rules = defineModel<any>('rules');
+const dialogVisible = defineModel<boolean>('visible')
 </script>

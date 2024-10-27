@@ -26,10 +26,7 @@ export function useI18n() {
             // 判断 i18n 是否准备好
             if (isReady.value) {
                 return i18n.get(...args);
-            } else {
-                // 如果尚未准备好，可以返回 key 或者其他占位符
-                return args.join(".");
-            }
+            } 
         };
     });
 
