@@ -29,7 +29,6 @@ defineExpose({
     error:(msg: string) => {
         type.value = 'error';
         message.value = msg;
-        visible.value = true;
     },
     clear: () => {
         message.value = '';

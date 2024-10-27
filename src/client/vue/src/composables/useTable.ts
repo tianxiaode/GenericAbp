@@ -1,5 +1,6 @@
 import { EntityInterface } from "../libs";
 import { onMounted, onUnmounted, ref,watch } from "vue";
+import { useDelay } from "./useDelay";
 
 export function useTable<T extends EntityInterface>(api: any) {
 
@@ -9,7 +10,7 @@ export function useTable<T extends EntityInterface>(api: any) {
     const filterText = ref('');
     const dialogVisible = ref(false);
     const currentEntityId = ref('');
-
+    const {delay} = useDelay();
     // Load data for the table
     const loadData = (records: T[]) => {
         data.value = records;
@@ -35,8 +36,10 @@ export function useTable<T extends EntityInterface>(api: any) {
 
     // Filter data based on the filterText
     const filter = (filter: string) => {
-        filterText.value = filter;
-        api.filter = filter;
+        delay(()=>{
+            filterText.value = filter;
+            api.filter = filter;    
+        })
     };
 
     const checkChange = (entity:T)=>{
@@ -44,12 +47,10 @@ export function useTable<T extends EntityInterface>(api: any) {
     }
 
     const sortChange = (sort: any) => {
-        console.log(sort);
         api.sort(sort.prop, sort.order === 'ascending' ? 'asc' : 'desc');
     };
 
     const formClose = () => {
-        //dialogVisible.value = false;
         api.load(true);
     };
 
