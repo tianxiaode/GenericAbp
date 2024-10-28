@@ -1,4 +1,5 @@
 import { defineConfig, presetUno, presetAttributify } from 'unocss'
+import { inflateSync } from 'zlib'
 
 export default defineConfig({
   presets: [
@@ -7,7 +8,12 @@ export default defineConfig({
   ],
   theme: {
     colors: {
-      primary: '#3c7699', // 设置主色为蓝色
+      primary: 'var(--el-color-primary)', 
+      success: 'var(--el-color-success)', 
+      warning: 'var(--el-color-warning)', 
+      danger: 'var(--el-color-danger)', 
+      error: 'var(--el-color-error)', 
+      info: 'var(--el-color-info)', 
     },
   },
 })

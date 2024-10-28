@@ -15,7 +15,7 @@
                 </template>
             </el-input>
         </el-form-item>
-        <div class="w-full text-right leading-loose">
+        <div class="w-full text-right mb-2 leading-loose">
             <el-link type="primary" @click="$router.push('/forgot-password')">{{ t("Pages.Login.ForgotPassword")
                 }}</el-link>
         </div>

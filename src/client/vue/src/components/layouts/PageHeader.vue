@@ -18,6 +18,7 @@
                     </i>
                 </a>
                 <MobileNavButton />
+                <ThemeSwitch />
             </div>
         </div>
     </div>
@@ -28,6 +29,7 @@ import logo from "~/assets/logo.png";
 import LanguageButton from '../buttons/LanguageButton.vue';
 import UserButton from '../buttons/UserButton.vue';
 import MobileNavButton from '../buttons/MobileNavButton.vue';
+import ThemeSwitch from '../buttons/ThemeSwitch.vue';
 
 const { t } = useI18n();
 const { hasHover} = useBrowseEnv();
