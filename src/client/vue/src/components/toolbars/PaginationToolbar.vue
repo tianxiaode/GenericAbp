@@ -3,7 +3,7 @@
         layout="prev, pager, next, slot, jumper, ->, sizes, total, " :total="totalRecords" @size-change="pageSizeChange"
         @current-change="pageChange">
         <el-button key="1" type="primary" @click="refresh" style="margin-left: 10px;">
-            <i class="fa fa-refresh primary"></i>
+            <i class="fa fa-refresh text-primary"></i>
         </el-button>
     </el-pagination>
 </template>

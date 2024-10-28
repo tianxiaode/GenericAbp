@@ -8,6 +8,7 @@
     桔黄：244，207，57，#F4CF39
     欧碧：216，230，153，#D8E699
     四绿：107，179，146，#6BB392
+    //#6bb392 的 HSL 值约为：hsl(140, 35%, 50%)
     绿茶：145，184，33 ，#91B821
     品月：60，118，153，#3C7699
     松石：117，193，196，#75C1C4
@@ -23,6 +24,10 @@
     丹罽： 223， 1，52，#DF0134
     朱砂：216，8，53，#D80835
     蕉红：200，25，29，#C8191D
+    祖母绿: 0,149,62, #00953E
+    梅子青：169，189，162，#A9BDA2
+    笋绿：132，167，64，#84A740
+
 */
 
 :root {
@@ -41,18 +46,19 @@
     --el-color-primary-dark-2: hsl(207, 30%, 30%);
 
     --el-color-success-rgb: 107, 179, 146;
-    //#6bb392 的 HSL 值约为：hsl(140, 35%, 50%)
-    --el-color-success: #6bb392;
-    --el-color-success-light-1: hsl(140, 35%, 55%);
-    --el-color-success-light-2: hsl(140, 35%, 60%);
-    --el-color-success-light-3: hsl(140, 35%, 65%);
-    --el-color-success-light-4: hsl(140, 35%, 70%);
-    --el-color-success-light-5: hsl(140, 35%, 75%);
-    --el-color-success-light-6: hsl(140, 35%, 80%);
-    --el-color-success-light-7: hsl(140, 35%, 85%);
-    --el-color-success-light-8: hsl(140, 35%, 90%);
-    --el-color-success-light-9: hsl(140, 35%, 95%);
-    --el-color-success-dark-2: hsl(140, 30%, 40%);
+    
+    --el-color-success: #00953E;
+    //#00953E 的 HSL 值约为：hsl(140, 99.33%, 29.41%)
+    --el-color-success-light-1: hsl(140, 99%, 36%);
+    --el-color-success-light-2: hsl(140, 99%, 42%);
+    --el-color-success-light-3: hsl(140, 99%, 48%);
+    --el-color-success-light-4: hsl(140, 99%, 56%);
+    --el-color-success-light-5: hsl(140, 99%, 62%);
+    --el-color-success-light-6: hsl(140, 99%, 68%);
+    --el-color-success-light-7: hsl(140, 99%, 74%);
+    --el-color-success-light-8: hsl(140, 99%, 80%);
+    --el-color-success-light-9: hsl(140, 99%, 86%);
+    --el-color-success-dark-2: hsl(140, 94%, 20%);
 
     --el-color-warning-rgb: 233, 187, 65;
     //#e9bb41 的 HSL 值约为：hsl(40, 75%, 50%)
@@ -130,18 +136,18 @@ html.dark {
     --el-color-primary-dark-2: hsl(207, 40%, 50%);
 
     --el-color-success-rgb: 107, 179, 146;
-    //#6bb392 的 HSL 值约为：hsl(140, 35%, 50%)
-    --el-color-success: #6bb392;
-    --el-color-success-light-1: hsl(140, 35%, 46%);
-    --el-color-success-light-2: hsl(140, 35%, 42%);
-    --el-color-success-light-3: hsl(140, 35%, 38%);
-    --el-color-success-light-4: hsl(140, 35%, 34%);
-    --el-color-success-light-5: hsl(140, 35%, 30%);
-    --el-color-success-light-6: hsl(140, 35%, 26%);
-    --el-color-success-light-7: hsl(140, 35%, 22%);
-    --el-color-success-light-8: hsl(140, 35%, 18%);
-    --el-color-success-light-9: hsl(140, 35%, 14%);
-    --el-color-success-dark-2: hsl(140, 40%, 60%);
+    //#00953E 的 HSL 值约为：hsl(140, 99.33%, 29.41%)
+    --el-color-success: #00953E;
+    --el-color-success-light-1: hsl(140, 99%, 28%);
+    --el-color-success-light-2: hsl(140, 99%, 26%);
+    --el-color-success-light-3: hsl(140, 99%, 24%);
+    --el-color-success-light-4: hsl(140, 99%, 22%);
+    --el-color-success-light-5: hsl(140, 99%, 20%);
+    --el-color-success-light-6: hsl(140, 99%, 18%);
+    --el-color-success-light-7: hsl(140, 99%, 16%);
+    --el-color-success-light-8: hsl(140, 99%, 14%);
+    --el-color-success-light-9: hsl(140, 99%, 12%);
+    --el-color-success-dark-2: hsl(140, 99%, 40%);
 
     --el-color-warning-rgb: 233, 187, 65;
     //#e9bb41 的 HSL 值约为：hsl(40, 75%, 50%)

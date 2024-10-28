@@ -14,7 +14,6 @@
 
 <script setup lang="ts">
 import { ref,watch } from 'vue';
-import { Moon, Sunny } from '@element-plus/icons-vue';
 const value = ref(false);
 
 //这里要根据value修改html的class，所以需要监听value的变化

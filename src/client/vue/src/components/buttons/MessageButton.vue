@@ -4,8 +4,8 @@
             <span :class="type === 'error'? 'danger' :'success'" v-html="t(message)" ></span>
         </template>
         <template #reference>
-            <i v-if="type !== 'error'" class="fa fa-check success" @mouseenter="visible = true"></i>
-            <i v-if ="type === 'error'" class="fa fa-x danger" @mouseenter="visible = true"></i>
+            <i v-if="type !== 'error'" class="fa fa-check text-success" @mouseenter="visible = true"></i>
+            <i v-if ="type === 'error'" class="fa fa-x text-danger" @mouseenter="visible = true"></i>
         </template>
     </el-popover>
 </template>

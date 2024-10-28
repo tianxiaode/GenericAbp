@@ -17,6 +17,7 @@
         <div class="spacer"></div>
         <LanguageButton />
         <UserButton />
+        <ThemeSwitch />
     </div>
 </template>
 
@@ -28,6 +29,7 @@ import { useI18n } from '~/composables';
 import { useAsideStore } from '~/store';
 import router from '~/router';
 import LanguageButton from '../buttons/LanguageButton.vue';
+import ThemeSwitch from '../buttons/ThemeSwitch.vue';
 const collapse = ref(false);
 
 const { t } = useI18n();

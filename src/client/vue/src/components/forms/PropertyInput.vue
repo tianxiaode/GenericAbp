@@ -10,7 +10,7 @@
                                 <template #content>
                                     <span class="danger" >{{ t(errorMessage) }}</span>
                                 </template>
-                                <i class="fa fa-circle-exclamation danger"></i>
+                                <i class="fa fa-circle-exclamation text-danger"></i>
                             </el-tooltip>
                         </template>
                     </el-input>
@@ -19,7 +19,7 @@
             <div>
                 <el-input v-model="value" size="small" clearable :placeholder="t('Components.PropertyInput.Value')" @keyup.enter.native="addProperty">
                     <template #append>
-                        <i class="fa fa-plus success cursor-pointer" @click="addProperty"></i>
+                        <i class="fa fa-plus text-success cursor-pointer" @click="addProperty"></i>
                     </template>
                 </el-input>
             </div>
@@ -29,7 +29,7 @@
             <template #label><span class="cursor-pointer" @click="handleEdit(key)" >{{ key }}</span></template>
             <div class="w-full flex justify-between items-center">
                 <span class="flex-1 cursor-pointer" @click="handleEdit(key)" >{{ model[key] }}</span>
-                <i class="fa fa-trash danger cursor-pointer" @click="removeProperty(key)"></i>
+                <i class="fa fa-trash text-danger cursor-pointer" @click="removeProperty(key)"></i>
             </div>
         </el-descriptions-item>
         <el-descriptions-item v-if="Object.keys(model).length === 0" size="small" :label="t('Components.NoData')">

@@ -1,5 +1,5 @@
 <template>
-    <i v-bind="$attrs" class="text-lg"  :class="value ? 'fa fa-check-square primary' : 'fa fa-square'"></i>
+    <i v-bind="$attrs" class="text-lg"  :class="value ? 'fa fa-check-square text-primary' : 'fa fa-square'"></i>
 </template>
 
 <script setup lang="ts">

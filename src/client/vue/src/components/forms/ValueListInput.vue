@@ -10,18 +10,18 @@
                                 <template #content>
                                     <span class="danger">{{ t(errorMessage) }}</span>
                                 </template>
-                                <i class="fa fa-circle-exclamation danger"></i>
+                                <i class="fa fa-circle-exclamation text-danger"></i>
                             </el-tooltip>
                         </template>
                     </el-input>
                 </div>
             </template>
-            <i class="fa fa-plus success cursor-pointer" @click="addProperty"></i>
+            <i class="fa fa-plus text-success cursor-pointer" @click="addProperty"></i>
         </el-descriptions-item>
 
         <el-descriptions-item v-for="value in (model as any[]).map((m:any) => props.convertModel(m)).sort( (a:any, b:any) => a.localeCompare(b) )" size="small">
             <template #label><span class="cursor-pointer" @click="handleEdit(value)">{{ value }}</span></template>
-                <i class="fa fa-trash danger cursor-pointer" @click="removeProperty(value)"></i>
+                <i class="fa fa-trash text-danger cursor-pointer" @click="removeProperty(value)"></i>
         </el-descriptions-item>
         <el-descriptions-item v-if="model.length === 0" size="small" :label="t('Components.NoData')">
         </el-descriptions-item>
@@ -75,10 +75,9 @@ const handleValueChange = () => {
     }
     if(props.rules){
         for (const key in props.rules) {  
-            console.log('handleValueChange', key, props.rules[key], inputValue.value)          
             const isValid = Validator.validate(key, inputValue.value, props.rules[key], null);
             if(!isValid){
-                errorMessage.value = t.value('Validation.' + capitalize(key));
+                errorMessage.value = 'Validation.' + capitalize(key);
                 return;
             }
         }
