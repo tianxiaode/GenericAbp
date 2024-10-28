@@ -4,6 +4,7 @@ using Generic.Abp.OpenIddict.Permissions;
 using Microsoft.AspNetCore.Authorization;
 using OpenIddict.Abstractions;
 using System.Text.Json;
+using Microsoft.Extensions.Logging;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Domain.ChangeTracking;
@@ -102,12 +103,9 @@ namespace Generic.Abp.OpenIddict.Applications
             await ApplicationManager.PopulateAsync(descriptor, application);
             await UpdateByInputAsync(descriptor, input);
 
-            input.MapExtraPropertiesTo(ApplicationManager.As<OpenIddictApplicationModel>());
+            input.MapExtraPropertiesTo(application.As<OpenIddictApplicationModel>());
             await ApplicationManager.UpdateAsync(application, descriptor);
-            var entity = await Repository.GetAsync(id);
-            entity.ConcurrencyStamp = input.ConcurrencyStamp;
-            await Repository.UpdateAsync(entity);
-            return ObjectMapper.Map<OpenIddictApplication, ApplicationDto>(entity);
+            return await GetAsync(id);
         }
 
         [UnitOfWork]
@@ -137,6 +135,7 @@ namespace Generic.Abp.OpenIddict.Applications
             // descriptor.Requirements.UnionWith(input.Requirements);
 
             //为应用添加设置
+            descriptor.Settings.Clear();
             foreach (var setting in input.Settings)
             {
                 descriptor.Settings.Add(setting.Key, setting.Value);
@@ -171,6 +170,11 @@ namespace Generic.Abp.OpenIddict.Applications
                 !OpenIddictConstants.ClientTypes.Public.Equals(input.ClientType))
             {
                 throw new ClientTypeErrorBusinessException(input.ClientType);
+            }
+
+            if (string.IsNullOrEmpty(input.ConsentType))
+            {
+                return Task.CompletedTask;
             }
 
             if (!OpenIddictConstants.ConsentTypes.Implicit.Equals(input.ConsentType) &&
@@ -292,7 +296,7 @@ namespace Generic.Abp.OpenIddict.Applications
             {
                 case OpenIddictConstants.ClientTypes.Public:
                     descriptor.Permissions.Remove(OpenIddictConstants.Permissions.GrantTypes.ClientCredentials);
-                    descriptor.Permissions.Remove(OpenIddictConstants.Permissions.GrantTypes.Password);
+                    //descriptor.Permissions.Remove(OpenIddictConstants.Permissions.GrantTypes.Password);
                     descriptor.Permissions.Remove(OpenIddictConstants.Permissions.GrantTypes.DeviceCode);
 
                     // 移除与 Device Code 相关的特有权限
@@ -328,6 +332,9 @@ namespace Generic.Abp.OpenIddict.Applications
         protected virtual Task AddLogoutPermissionAndRedirectUrisAsync(AbpApplicationDescriptor descriptor,
             ApplicationCreateOrUpdateInput input)
         {
+            descriptor.RedirectUris.Clear();
+            descriptor.RedirectUris.UnionWith(input.RedirectUris);
+
             // 检查 PostLogoutRedirectUris 是否存在并且不为空
             if (!input.PostLogoutRedirectUris.Any() ||
                 !descriptor.Permissions.Add(OpenIddictConstants.Permissions.Endpoints.Logout))
@@ -337,8 +344,6 @@ namespace Generic.Abp.OpenIddict.Applications
 
             descriptor.PostLogoutRedirectUris.Clear();
             descriptor.PostLogoutRedirectUris.UnionWith(input.PostLogoutRedirectUris);
-            descriptor.RedirectUris.Clear();
-            descriptor.RedirectUris.UnionWith(input.RedirectUris);
             return Task.CompletedTask;
         }
 

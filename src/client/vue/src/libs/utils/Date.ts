@@ -246,3 +246,34 @@ export const calculateAge = (dateOfBirth: string | Date) => {
     const ageDate = new Date(ageDifMs);
     return Math.abs(ageDate.getUTCFullYear() - 1970);
 }
+
+export function parseTimeSpanToSeconds(timeSpan: string): number {
+    if(isEmpty(timeSpan)) return 0;
+    // 匹配 d.hh:mm:ss 或 hh:mm:ss 格式
+    const timeSpanPattern = /^(?:(\d+)\.)?(\d{1,2}):(\d{2}):(\d{2})$/;
+    const match = timeSpan.match(timeSpanPattern);
+
+    if (!match) {
+        throw new Error("Invalid TimeSpan format");
+    }
+
+    // 提取天、小时、分钟和秒的值
+    const days = parseInt(match[1] || "0", 10);
+    const hours = parseInt(match[2], 10);
+    const minutes = parseInt(match[3], 10);
+    const seconds = parseInt(match[4], 10);
+
+    // 计算总秒数
+    return days * 86400 + hours * 3600 + minutes * 60 + seconds;
+}
+
+export function convertSecondsToTimeSpan(seconds: number) {
+    const days = Math.floor(seconds / (24 * 60 * 60));
+    seconds %= (24 * 60 * 60);
+    const hours = Math.floor(seconds / (60 * 60));
+    seconds %= (60 * 60);
+    const minutes = Math.floor(seconds / 60);
+    seconds %= 60;
+
+    return `${days}.${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+}

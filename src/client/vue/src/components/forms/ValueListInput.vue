@@ -19,11 +19,11 @@
             <i class="fa fa-plus text-success cursor-pointer" @click="addProperty"></i>
         </el-descriptions-item>
 
-        <el-descriptions-item v-for="value in (model as any[]).map((m:any) => props.convertModel(m)).sort( (a:any, b:any) => a.localeCompare(b) )" size="small">
+        <el-descriptions-item v-for="value in (model as any[])?.map((m:any) => props.convertModel(m)).sort( (a:any, b:any) => a.localeCompare(b) )" size="small">
             <template #label><span class="cursor-pointer" @click="handleEdit(value)">{{ value }}</span></template>
                 <i class="fa fa-trash text-danger cursor-pointer" @click="removeProperty(value)"></i>
         </el-descriptions-item>
-        <el-descriptions-item v-if="model.length === 0" size="small" :label="t('Components.NoData')">
+        <el-descriptions-item v-if="model?.length === 0" size="small" :label="t('Components.NoData')">
         </el-descriptions-item>
     </el-descriptions>
 

@@ -108,10 +108,7 @@ namespace Generic.Abp.OpenIddict.Scopes
 
             input.MapExtraPropertiesTo(scope.As<OpenIddictScopeModel>());
             await Manager.UpdateAsync(scope, descriptor);
-            var entity = await Repository.GetAsync(id);
-            entity.ConcurrencyStamp = input.ConcurrencyStamp;
-            await Repository.UpdateAsync(entity);
-            return ObjectMapper.Map<OpenIddictScope, ScopeDto>(entity);
+            return await GetAsync(id);
         }
 
         [UnitOfWork]

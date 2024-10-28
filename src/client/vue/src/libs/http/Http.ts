@@ -236,7 +236,11 @@ export class Http extends BaseHttp {
                     response = null;
                     break;
                 }
-                response = JSON.parse(xhr.responseText) || xhr.responseText;
+                try {
+                    response = JSON.parse(xhr.responseText) || xhr.responseText;                    
+                } catch (error) {
+                    response = xhr.responseText;
+                }
                 break;
             case "text":
                 response = xhr.responseText;

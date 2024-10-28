@@ -10,7 +10,7 @@ declare type EntityFormConfigType = {
         okText?: string;
     },
     beforeGetData?: (id: any) => boolean;
-    afterGetData?: (data: any, response: any) => Promise<void>;
+    afterGetData?: (data: any) => void;
     beforeSubmit?: (data: any) => Promise<boolean>;
     afterSubmit?: (data: any, response: any) => Promise<void>;
     beforeClose?: () => Promise<boolean>;
@@ -130,12 +130,12 @@ export function useEntityForm(
     onMounted(() => {     
         console.log('onMounted', entityId.value);     
         if (entityId.value) {
+            if(config.beforeGetData && config.beforeGetData(entityId.value) === false) return ;
             api.getEntity(entityId.value).then((res: any) => {
-                if(config.beforeGetData && config.beforeGetData(entityId.value) === false) return ;
                 setInitValues(res)
                 dialogTitle.value = api.updateTitle;
                 if(config.afterGetData){
-                    config.afterGetData(formData.value, res);
+                    config.afterGetData(res);
                 }
             });
         } else {

@@ -29,9 +29,9 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, watch } from 'vue';
+import { reactive,  watch } from 'vue';
 import { useI18n } from '~/composables';
-import { capitalize } from '~/libs';
+import { capitalize, convertSecondsToTimeSpan, parseTimeSpanToSeconds } from '~/libs';
 import { ApplicationSettings } from '~/repositories';
 const model = defineModel<any>({});
 
@@ -47,12 +47,12 @@ const tokenLifetimesSettings = reactive({
 } as any);
 
 watch(() => model.value, (newValue: any) => {
-    tokenLifetimesSettings.accessToken = newValue[ApplicationSettings.AccessToken.value] || 0;
-    tokenLifetimesSettings.authorizationCode = newValue[ApplicationSettings.AuthorizationCode.value] || 0;
-    tokenLifetimesSettings.deviceCode = newValue[ApplicationSettings.DeviceCode.value] || 0;
-    tokenLifetimesSettings.identityToken = newValue[ApplicationSettings.IdentityToken.value] || 0;
-    tokenLifetimesSettings.refreshToken = newValue[ApplicationSettings.RefreshToken.value] || 0;
-    tokenLifetimesSettings.userCode = newValue[ApplicationSettings.UserCode.value] || 0;
+    tokenLifetimesSettings.accessToken = parseTimeSpanToSeconds(newValue[ApplicationSettings.AccessToken.value] || '00:00:00');
+    tokenLifetimesSettings.authorizationCode = parseTimeSpanToSeconds(newValue[ApplicationSettings.AuthorizationCode.value] || '00:00:00');
+    tokenLifetimesSettings.deviceCode = parseTimeSpanToSeconds(newValue[ApplicationSettings.DeviceCode.value] || '00:00:00');
+    tokenLifetimesSettings.identityToken = parseTimeSpanToSeconds(newValue[ApplicationSettings.IdentityToken.value] || '00:00:00');
+    tokenLifetimesSettings.refreshToken = parseTimeSpanToSeconds(newValue[ApplicationSettings.RefreshToken.value] || '00:00:00');
+    tokenLifetimesSettings.userCode = parseTimeSpanToSeconds(newValue[ApplicationSettings.UserCode.value] || '00:00:00');
 }, { deep: true });
 
 watch(tokenLifetimesSettings, (newValue: any) => {
@@ -63,7 +63,7 @@ watch(tokenLifetimesSettings, (newValue: any) => {
         if (newValue[key] === 0) {
             delete newSettings[settingKey];
         } else {
-            newSettings[settingKey] = newValue[key];
+            newSettings[settingKey] = convertSecondsToTimeSpan(newValue[key].toString());
         }
     }
     model.value = { ...newSettings };

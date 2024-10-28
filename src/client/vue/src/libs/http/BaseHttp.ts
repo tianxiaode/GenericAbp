@@ -75,7 +75,9 @@ export class BaseHttp {
             ...options.headers,
             'Accept-Language': LocalStorage.getLanguage(),
             'Content-Type': options.data instanceof FormData ? 'multipart/form-data' : 'application/json',
+            ...options.headers
         };
+
 
         if (token) {
             headers[me.authHeaderName || 'Authorization'] = me.authHeaderGenerator ? me.authHeaderGenerator(token) : `Bearer ${token}`;

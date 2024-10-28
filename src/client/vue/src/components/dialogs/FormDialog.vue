@@ -79,7 +79,7 @@ defineProps({
     },
     okText: {
         type: String,
-        default: 'Components.Ok'
+        default: 'Components.Save'
     },
     okClick: {
         type: Function as PropType<() => void>,

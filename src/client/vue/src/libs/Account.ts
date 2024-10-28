@@ -10,7 +10,6 @@ import { appConfig } from "./AppConfig";
 import { i18n } from "./locales";
 import { http } from "./http";
 import { envConfig } from "./EnvConfig";
-import router from "~/router";
 
 class Account {
     $className = "Account";
@@ -53,16 +52,12 @@ class Account {
 
     logout = async () => {
         try {
-            await this.userManager!.signoutPopup();
+            await this.revocationToken();
+            LocalStorage.removeRefreshToken();
             LocalStorage.removeToken();
-            appConfig.loadConfig();
-            i18n.loadLanguage();
-            router.push("/");
+            window.location.href = "/";
         } catch (error: any) {
             logger.error(this, ["logout"], error);
-            // throw new Error(
-            //     error.error_description || error.message
-            // );
         }
     };
 
@@ -157,6 +152,26 @@ class Account {
         }
     };
 
+    private revocationToken = async () => { 
+        const revocationEndpoint = await this.userManager!.metadataService.getRevocationEndpoint();
+        if(!revocationEndpoint) return;
+        const refreshToken = LocalStorage.getRefreshToken();
+        const clientId = this.userManager!.settings.client_id;
+        if(refreshToken){
+            await http.post(revocationEndpoint, 
+                `token=${refreshToken}&token_type_hint=refresh_token&client_id=${clientId}`, 
+                { headers: { "Content-Type": "application/x-www-form-urlencoded" } })    
+
+        }
+        const token = LocalStorage.getToken();
+        if(token){
+            await http.post(revocationEndpoint, 
+                `token=${token}&token_type_hint=access_token&client_id=${clientId}`, 
+                { headers: { "Content-Type": "application/x-www-form-urlencoded" } })    
+
+        }
+}
+
     private initEvents = () => {
         const events = this.userManager!.events as UserManagerEvents;
         events.addAccessTokenExpiring(() => {
@@ -195,6 +210,7 @@ class Account {
         const newToken = user.access_token;
         if (oldToke !== newToken) {
             LocalStorage.setToken(user.access_token);
+            LocalStorage.setRefreshToken(user.refresh_token);
             appConfig.loadConfig();
             i18n.loadLanguage();
         }
@@ -202,6 +218,7 @@ class Account {
 
     private onUserUnloaded = () => {
         LocalStorage.removeToken();
+        LocalStorage.removeRefreshToken();
         appConfig.loadConfig();
         i18n.loadLanguage();
     };

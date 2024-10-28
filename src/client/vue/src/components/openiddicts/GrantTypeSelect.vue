@@ -29,11 +29,13 @@
 <script setup lang="ts">
 import { ref,watch } from 'vue';
 import { useI18n } from '~/composables';
-import { ApplicationPermissions } from '~/repositories';
+import {  ApplicationPermissions } from '~/repositories';
 
 const emit = defineEmits(['update:modelValue']);
 const { t} = useI18n();
 const model = defineModel<any>();
+const isRefreshTokenDisabled = ref(true);
+
 defineProps({
     isPublic:{
         type: Boolean,
@@ -41,18 +43,17 @@ defineProps({
     },    
 });
 
-watch(model, (value: any) => {
-    console.log('model',value)
-    if(value.authorizationCode || value.password){
-        isRefreshTokenDisabled.value = false;
-    }else{
-        isRefreshTokenDisabled.value = true;
-        value.refreshToken = false;        
+watch(()=>({
+    authorizationCode: model.value.authorizationCode,
+    password: model.value.password,
+    refreshToken: model.value.refreshToken,
+}), (value: any) => {
+    console.log('watch model', value);
+    isRefreshTokenDisabled.value = !value.authorizationCode && !value.password;
+    if(isRefreshTokenDisabled.value && value.refreshToken){
+        model.value.refreshToken = false;
     }
 }, {deep: true});
-
-
-const isRefreshTokenDisabled = ref(true);
 
 
 

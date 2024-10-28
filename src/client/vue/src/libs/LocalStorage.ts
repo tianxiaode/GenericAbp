@@ -98,6 +98,18 @@ export class LocalStorage {
         this.removeItem(envConfig.tokenStorageName);
     }
 
+    static setRefreshToken(refreshToken: string | undefined) {
+        this.setItem('refreshToken', refreshToken);
+    }
+
+    static getRefreshToken(): string | null {
+        return this.getItem('refreshToken');    
+    }
+
+    static removeRefreshToken() {
+        this.removeItem('refreshToken');
+    }
+
     static setRedirectPath(path: string) {
         this.setItem('redirectPath', path);
     }

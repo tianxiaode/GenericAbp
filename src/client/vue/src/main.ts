@@ -68,6 +68,8 @@ account.init({
     response_type: envConfig.oidcResponseType,
     scope: envConfig.oidcScope,
     automaticSilentRenew: true,
+    revokeTokensOnSignout: true,
+    post_logout_redirect_uri: envConfig.baseUrl + "signout-callback-oidc",
     loadUserInfo: false
 });
 

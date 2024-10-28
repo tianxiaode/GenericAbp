@@ -1,7 +1,7 @@
 <template>
     <el-popover v-if="message" placement="top" :visible="visible" width="240">
         <template #default>
-            <span :class="type === 'error'? 'danger' :'success'" v-html="t(message)" ></span>
+            <span :class="type === 'error'? 'text-danger' :'text-success'" v-html="t(message)" ></span>
         </template>
         <template #reference>
             <i v-if="type !== 'error'" class="fa fa-check text-success" @mouseenter="visible = true"></i>
@@ -31,7 +31,9 @@ defineExpose({
         message.value = msg;
     },
     clear: () => {
-        message.value = '';
+        if(message){
+            message.value = '';
+        }
         visible.value = false;
     }
 });
