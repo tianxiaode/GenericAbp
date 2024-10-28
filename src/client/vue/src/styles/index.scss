@@ -25,187 +25,138 @@
     朱砂：216，8，53，#D80835
     蕉红：200，25，29，#C8191D
     祖母绿: 0,149,62, #00953E
+    //#00953E 的 HSL 值约为：hsl(140, 99.33%, 29.41%)
     梅子青：169，189，162，#A9BDA2
     笋绿：132，167，64，#84A740
+    //#84A740 的 HSL 值约为：hsl(60, 74.1%, 45.1%) 
+    碧山闲：119，150，73， #779649
 
 */
 
 :root {
     --el-color-primary-rgb: 60, 118, 153;
-    //hsl(210,35%,40%)
+    //hsl(203,43.7%,41.8%)
     --el-color-primary: #3c7699;
-    --el-color-primary-light-1: hsl(210, 35%, 46%);
-    --el-color-primary-light-2: hsl(210, 35%, 52%);
-    --el-color-primary-light-3: hsl(210, 35%, 58%);
-    --el-color-primary-light-4: hsl(210, 35%, 64%);
-    --el-color-primary-light-5: hsl(210, 35%, 70%);
-    --el-color-primary-light-6: hsl(210, 35%, 76%);
-    --el-color-primary-light-7: hsl(210, 35%, 82%);
-    --el-color-primary-light-8: hsl(210, 35%, 88%);
-    --el-color-primary-light-9: hsl(210, 35%, 94%);
-    --el-color-primary-dark-2: hsl(207, 30%, 30%);
+    --el-color-primary-light-3: hsl(203, 43.7%, 56.8%); //+15
+    --el-color-primary-light-5: hsl(203, 43.7%, 66.8%); //+10
+    --el-color-primary-light-7: hsl(203, 43.7%, 76.8%); //+10
+    --el-color-primary-light-8: hsl(203, 43.7%, 81.8%); //+5
+    --el-color-primary-light-9: hsl(203, 43.7%, 86.8%); //+5
+    --el-color-primary-dark-2: hsl(203, 43.7%, 51.8%);
 
-    --el-color-success-rgb: 107, 179, 146;
-    
-    --el-color-success: #00953E;
-    //#00953E 的 HSL 值约为：hsl(140, 99.33%, 29.41%)
-    --el-color-success-light-1: hsl(140, 99%, 36%);
-    --el-color-success-light-2: hsl(140, 99%, 42%);
-    --el-color-success-light-3: hsl(140, 99%, 48%);
-    --el-color-success-light-4: hsl(140, 99%, 56%);
-    --el-color-success-light-5: hsl(140, 99%, 62%);
-    --el-color-success-light-6: hsl(140, 99%, 68%);
-    --el-color-success-light-7: hsl(140, 99%, 74%);
-    --el-color-success-light-8: hsl(140, 99%, 80%);
-    --el-color-success-light-9: hsl(140, 99%, 86%);
-    --el-color-success-dark-2: hsl(140, 94%, 20%);
+    --el-color-success-rgb: 0, 149, 62;
+    --el-color-success: #00953e;
+    //#00953e 的 HSL 值约为：hsl(145, 100%, 29.2%)
+    --el-color-success-light-3: hsl(145, 100%, 44.2%);
+    --el-color-success-light-5: hsl(145, 100%, 59.2%);
+    --el-color-success-light-7: hsl(145, 100%, 69.2%);
+    --el-color-success-light-8: hsl(145, 100%, 79.2%);
+    --el-color-success-light-9: hsl(145, 100%, 89.2%);
+    --el-color-success-dark-2: hsl(145, 100%, 39.2%);
 
     --el-color-warning-rgb: 233, 187, 65;
-    //#e9bb41 的 HSL 值约为：hsl(40, 75%, 50%)
+    //#e9bb41 的 HSL 值约为：hsl(44, 79.2%, 58.4%)
     --el-color-warning: #e9bb41;
-    --el-color-warning-light-1: hsl(40, 75%, 55%);
-    --el-color-warning-light-2: hsl(40, 75%, 60%);
-    --el-color-warning-light-3: hsl(40, 75%, 65%);
-    --el-color-warning-light-4: hsl(40, 75%, 70%);
-    --el-color-warning-light-5: hsl(40, 75%, 75%);
-    --el-color-warning-light-6: hsl(40, 75%, 80%);
-    --el-color-warning-light-7: hsl(40, 75%, 85%);
-    --el-color-warning-light-8: hsl(40, 75%, 90%);
-    --el-color-warning-light-9: hsl(40, 75%, 95%);
-    --el-color-warning-dark-2: hsl(40, 70%, 40%);
+    --el-color-warning-light-3: hsl(44, 79.2%, 68.4%);
+    --el-color-warning-light-5: hsl(44, 79.2%, 78.4%);
+    --el-color-warning-light-7: hsl(44, 79.2%, 83.4%);
+    --el-color-warning-light-8: hsl(44, 79.2%, 88.4%);
+    --el-color-warning-light-9: hsl(44, 79.2%, 93.4%);
+    --el-color-warning-dark-2: hsl(40, 79.2%, 68.4%);
 
     --el-color-danger-rgb: 216, 8, 53;
-    //#D80835 的 HSL 值约为：hsl(0, 88%, 45%)
+    //#D80835 的 HSL 值约为：hsl(347, 92.9%, 43.9%)
     --el-color-danger: #d80835;
-    --el-color-danger-light-1: hsl(0, 88%, 50%);
-    --el-color-danger-light-2: hsl(0, 88%, 55%);
-    --el-color-danger-light-3: hsl(0, 88%, 60%);
-    --el-color-danger-light-4: hsl(0, 88%, 65%);
-    --el-color-danger-light-5: hsl(0, 88%, 70%);
-    --el-color-danger-light-6: hsl(0, 88%, 75%);
-    --el-color-danger-light-7: hsl(0, 88%, 80%);
-    --el-color-danger-light-8: hsl(0, 88%, 85%);
-    --el-color-danger-light-9: hsl(0, 88%, 90%);
-    --el-color-danger-dark-2: hsl(0, 83%, 35%);
-
+    --el-color-danger-light-3: hsl(347, 92.9%, 58.9%);
+    --el-color-danger-light-5: hsl(347, 92.9%, 68.9%);
+    --el-color-danger-light-7: hsl(347, 92.9%, 78.9%);
+    --el-color-danger-light-8: hsl(347, 92.9%, 83.9%);
+    --el-color-danger-light-9: hsl(347, 92.9%, 88.9%);
+    --el-color-danger-dark-2: hsl(347, 92.9%, 53.9%);
 
     --el-color-error-rgb: 216, 8, 53;
-    //#D80835 的 HSL 值约为：hsl(0, 88%, 45%)
+    //#D80835 的 HSL 值约为：hsl(347, 92.9%, 43.9%)
     --el-color-error: #d80835;
-    --el-color-error-light-1: hsl(0, 88%, 50%);
-    --el-color-error-light-2: hsl(0, 88%, 55%);
-    --el-color-error-light-3: hsl(0, 88%, 60%);
-    --el-color-error-light-4: hsl(0, 88%, 65%);
-    --el-color-error-light-5: hsl(0, 88%, 70%);
-    --el-color-error-light-6: hsl(0, 88%, 75%);
-    --el-color-error-light-7: hsl(0, 88%, 80%);
-    --el-color-error-light-8: hsl(0, 88%, 85%);
-    --el-color-error-light-9: hsl(0, 88%, 90%);
-    --el-color-error-dark-2: hsl(0, 83%, 35%);
+    --el-color-error-light-3: hsl(347, 92.9%, 58.9%);
+    --el-color-error-light-5: hsl(347, 92.9%, 68.9%);
+    --el-color-error-light-7: hsl(347, 92.9%, 78.9%);
+    --el-color-error-light-8: hsl(347, 92.9%, 83.9%);
+    --el-color-error-light-9: hsl(347, 92.9%, 88.9%);
+    --el-color-error-dark-2: hsl(347, 92.9%, 53.9%);
 
     --el-color-info-rgb: 159, 163, 154;
-    //#9fa39a 的 HSL 值约为：hsl(120, 5%, 50%)
+    //#9fa39a 的 HSL 值约为：hsl(87, 4.7%, 62.2%)
     --el-color-info: #9fa39a;
-    --el-color-info-light-1: hsl(120, 5%, 55%);
-    --el-color-info-light-2: hsl(120, 5%, 60%);
-    --el-color-info-light-3: hsl(120, 5%, 65%);
-    --el-color-info-light-4: hsl(120, 5%, 70%);
-    --el-color-info-light-5: hsl(120, 5%, 75%);
-    --el-color-info-light-6: hsl(120, 5%, 80%);
-    --el-color-info-light-7: hsl(120, 5%, 85%);
-    --el-color-info-light-8: hsl(120, 5%, 90%);
-    --el-color-info-light-9: hsl(120, 5%, 95%);
-    --el-color-info-dark-2: hsl(120, 5%, 50%);
+    --el-color-info-light-3: hsl(87, 4.7%, 72.2%);
+    --el-color-info-light-5: hsl(87, 4.7%, 77.2%);
+    --el-color-info-light-7: hsl(87, 4.7%, 82.2%);
+    --el-color-info-light-8: hsl(87, 4.7%, 87.2%);
+    --el-color-info-light-9: hsl(87, 4.7%, 92.2%);
+    --el-color-info-dark-2: hsl(87, 4.7%, 72.2%);
 
     --el-color-white: #f5fbfe;
 }
 
 html.dark {
     --el-color-primary-rgb: 60, 118, 153;
-    //hsl(210,35%,40%)
+    //hsl(203,43.7%,41.8%)
     --el-color-primary: #3c7699;
-    --el-color-primary-light-1: hsl(210, 35%, 36%);
-    --el-color-primary-light-2: hsl(210, 35%, 32%);
-    --el-color-primary-light-3: hsl(210, 35%, 28%);
-    --el-color-primary-light-4: hsl(210, 35%, 24%);
-    --el-color-primary-light-5: hsl(210, 35%, 20%);
-    --el-color-primary-light-6: hsl(210, 35%, 16%);
-    --el-color-primary-light-7: hsl(210, 35%, 12%);
-    --el-color-primary-light-8: hsl(210, 35%, 8%);
-    --el-color-primary-light-9: hsl(210, 35%, 4%);
-    --el-color-primary-dark-2: hsl(207, 40%, 50%);
+    --el-color-primary-light-3: hsl(203, 43.7%, 31.8%); //-10
+    --el-color-primary-light-5: hsl(203, 43.7%, 21.8%); //-10
+    --el-color-primary-light-7: hsl(203, 43.7%, 16.8%); //-5
+    --el-color-primary-light-8: hsl(203, 43.7%, 14.3%); //-2.5
+    --el-color-primary-light-9: hsl(203, 43.7%, 11.8%); //-2.5
+    --el-color-primary-dark-2: hsl(203, 43.7%, 31.8%);
 
-    --el-color-success-rgb: 107, 179, 146;
-    //#00953E 的 HSL 值约为：hsl(140, 99.33%, 29.41%)
-    --el-color-success: #00953E;
-    --el-color-success-light-1: hsl(140, 99%, 28%);
-    --el-color-success-light-2: hsl(140, 99%, 26%);
-    --el-color-success-light-3: hsl(140, 99%, 24%);
-    --el-color-success-light-4: hsl(140, 99%, 22%);
-    --el-color-success-light-5: hsl(140, 99%, 20%);
-    --el-color-success-light-6: hsl(140, 99%, 18%);
-    --el-color-success-light-7: hsl(140, 99%, 16%);
-    --el-color-success-light-8: hsl(140, 99%, 14%);
-    --el-color-success-light-9: hsl(140, 99%, 12%);
-    --el-color-success-dark-2: hsl(140, 99%, 40%);
+    --el-color-success-rgb: 0, 149, 62;
+    --el-color-success: #00953e;
+    //#00953e 的 HSL 值约为：hsl(145, 100%, 29.2%)
+    --el-color-success-light-3: hsl(145, 100%, 24.2%);
+    --el-color-success-light-5: hsl(145, 100%, 19.7%);
+    --el-color-success-light-7: hsl(145, 100%, 16.7%);
+    --el-color-success-light-8: hsl(145, 100%, 14.2);
+    --el-color-success-light-9: hsl(145, 74%, 11.7%);
+    --el-color-success-dark-2: hsl(145, 74%, 19.2%);
 
     --el-color-warning-rgb: 233, 187, 65;
-    //#e9bb41 的 HSL 值约为：hsl(40, 75%, 50%)
+    //#e9bb41 的 HSL 值约为：hsl(44, 79.2%, 58.4%)
     --el-color-warning: #e9bb41;
-    --el-color-warning-light-1: hsl(40, 75%, 46%);
-    --el-color-warning-light-2: hsl(40, 75%, 42%);
-    --el-color-warning-light-3: hsl(40, 75%, 38%);
-    --el-color-warning-light-4: hsl(40, 75%, 34%);
-    --el-color-warning-light-5: hsl(40, 75%, 30%);
-    --el-color-warning-light-6: hsl(40, 75%, 26%);
-    --el-color-warning-light-7: hsl(40, 75%, 22%);
-    --el-color-warning-light-8: hsl(40, 75%, 18%);
-    --el-color-warning-light-9: hsl(40, 75%, 14%);
-    --el-color-warning-dark-2: hsl(40, 80%, 60%);
+    --el-color-warning-light-3: hsl(44, 79.2%, 43.4%);
+    --el-color-warning-light-5: hsl(44, 79.2%, 33.4%);
+    --el-color-warning-light-7: hsl(44, 79.2%, 23.4%);
+    --el-color-warning-light-8: hsl(44, 79.2%, 18.4%);
+    --el-color-warning-light-9: hsl(44, 79.2%, 13.4%);
+    --el-color-warning-dark-2: hsl(44, 80%, 48.4%);
 
     --el-color-danger-rgb: 216, 8, 53;
-    //#D80835 的 HSL 值约为：hsl(0, 88%, 45%)
+    //#D80835 的 HSL 值约为：hsl(347, 92.9%, 43.9%)
     --el-color-danger: #d80835;
-    --el-color-danger-light-1: hsl(0, 88%, 41%);
-    --el-color-danger-light-2: hsl(0, 88%, 37%);
-    --el-color-danger-light-3: hsl(0, 88%, 33%);
-    --el-color-danger-light-4: hsl(0, 88%, 29%);
-    --el-color-danger-light-5: hsl(0, 88%, 25%);
-    --el-color-danger-light-6: hsl(0, 88%, 21%);
-    --el-color-danger-light-7: hsl(0, 88%, 17%);
-    --el-color-danger-light-8: hsl(0, 88%, 13%);
-    --el-color-danger-light-9: hsl(0, 88%, 9%);
-    --el-color-danger-dark-2: hsl(0, 93%, 55%);
-
+    --el-color-danger-light-3: hsl(347, 92.9%, 33.9%);
+    --el-color-danger-light-5: hsl(347, 92.9%, 23.9%);
+    --el-color-danger-light-7: hsl(347, 92.9%, 16.4%);
+    --el-color-danger-light-8: hsl(347, 92.9%, 13.9%);
+    --el-color-danger-light-9: hsl(347, 92.9%, 11.4%);
+    --el-color-danger-dark-2: hsl(347, 92.9%, 33.9%);
 
     --el-color-error-rgb: 216, 8, 53;
-    //#D80835 的 HSL 值约为：hsl(0, 88%, 45%)
+    //#D80835 的 HSL 值约为：hsl(347, 92.9%, 43.9%)
     --el-color-error: #d80835;
-    --el-color-error-light-1: hsl(0, 88%, 50%);
-    --el-color-error-light-2: hsl(0, 88%, 55%);
-    --el-color-error-light-3: hsl(0, 88%, 60%);
-    --el-color-error-light-4: hsl(0, 88%, 65%);
-    --el-color-error-light-5: hsl(0, 88%, 70%);
-    --el-color-error-light-6: hsl(0, 88%, 75%);
-    --el-color-error-light-7: hsl(0, 88%, 80%);
-    --el-color-error-light-8: hsl(0, 88%, 85%);
-    --el-color-error-light-9: hsl(0, 88%, 90%);
-    --el-color-error-dark-2: hsl(0, 93%, 55%);
+    --el-color-error-light-3: hsl(347, 92.9%, 33.9%);
+    --el-color-error-light-5: hsl(347, 92.9%, 23.9%);
+    --el-color-error-light-7: hsl(347, 92.9%, 16.4%);
+    --el-color-error-light-8: hsl(347, 92.9%, 13.9%);
+    --el-color-error-light-9: hsl(347, 92.9%, 11.4%);
+    --el-color-error-dark-2: hsl(347, 92.9%, 33.9%);
 
     --el-color-info-rgb: 159, 163, 154;
-    //#9fa39a 的 HSL 值约为：hsl(120, 5%, 50%)
+    //#9fa39a 的 HSL 值约为：hsl(87, 4.7%, 62.2%)
     --el-color-info: #9fa39a;
-    --el-color-info-light-1: hsl(120, 5%, 46%);
-    --el-color-info-light-2: hsl(120, 5%, 42%);
-    --el-color-info-light-3: hsl(120, 5%, 38%);
-    --el-color-info-light-4: hsl(120, 5%, 34%);
-    --el-color-info-light-5: hsl(120, 5%, 30%);
-    --el-color-info-light-6: hsl(120, 5%, 26%);
-    --el-color-info-light-7: hsl(120, 5%, 22%);
-    --el-color-info-light-8: hsl(120, 5%, 18%);
-    --el-color-info-light-9: hsl(120, 5%, 14%);
-    --el-color-info-dark-2: hsl(120, 10%, 60%);
-    
+    --el-color-info-light-3: hsl(87, 4.7%, 47.2%);
+    --el-color-info-light-5: hsl(87, 4.7%, 37.2%);
+    --el-color-info-light-7: hsl(87, 4.7%, 27.2%);
+    --el-color-info-light-8: hsl(87, 4.7%, 22.2%);
+    --el-color-info-light-9: hsl(87, 4.7%, 17.2%);
+    --el-color-info-dark-2: hsl(87, 4.7%, 52.2%);
 }
 
 body {

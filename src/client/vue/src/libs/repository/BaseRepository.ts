@@ -386,8 +386,9 @@ export class BaseRepository<T extends EntityInterface> extends BaseClass {
     };
 
     message = (message: string, type: string = "info") => {
-        if (!this.config.messageHandler) return message;
-        this.config.messageHandler.call(this, message, type);
+        const handler = this.config.messageHandler || RepositoryGlobalConfig.messageHandler;
+        if (!handler) return message;
+        handler.call(this, message, type);
     };
 
     success = (message: string) => {

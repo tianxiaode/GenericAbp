@@ -1,6 +1,6 @@
 <template>
-    <FormDialog ref="formRef" width="600px" :form-data="formData" :rules="rules" :on-ok="submitForm"
-        :title="dialogTitle" v-bind="$attrs" :reset="resetForm" :before-close="checkChange" :label-width="160">
+    <FormDialog v-bind="formDialogProps" v-model="formData" v-model:rules="rules" :title="dialogTitle"
+        v-model:visible="dialogVisible">
         <template #form-items>
             <el-form-item :label="t('OpenIddict.Scope:Name')" prop="name">
                 <el-input v-model="formData.name"></el-input>
@@ -28,46 +28,35 @@ import FormDialog from '../dialogs/FormDialog.vue';
 
 import { useEntityForm, useRepository, useFormRules, useI18n } from '~/composables'
 import { onMounted } from 'vue';
-import PropertyInput from '../forms/PropertyInput.vue';
 import ValueListInput from '../forms/ValueListInput.vue';
 import { isEmpty } from '~/libs';
 
 const { t } = useI18n();
 const api = useRepository('scope');
-const props = defineProps({
-    visible: {
-        type: Boolean,
-        default: false
-    },
-    entityId: {
-        type: String,
-        default: ''
-    }
-});
+const entityId = defineModel('entityId');
+const dialogVisible = defineModel<boolean>();
+
 
 const formRules = {
     name: { required: true }
 };
 
 
-const { formRef, formData, dialogTitle, resetForm, submitForm, checkChange } = useEntityForm(api, props);
+const { formRef, formData, dialogTitle, formDialogProps, setInitValues } = useEntityForm(api, entityId,dialogVisible);
 const { rules } = useFormRules(formRules, formRef);
 
 
 
 onMounted(() => {
-    if (props.entityId) {
-        api.getEntity(props.entityId).then((res: any) => {
-            console.log(res);
-            if (isEmpty(res.properties)) res.properties = {};
+    if (entityId.value) {
+        api.getEntity(entityId.value).then((res: any) => {
             if (isEmpty(res.resources)) res.resources = [];
-            formData.value = res;
+            setInitValues(res);
         })
     } else {
-        formData.value = {
-            properties: {},
+        setInitValues({
             resources: []
-        }
+        })
     }
 });
 

@@ -16,7 +16,7 @@
                 </template>
             </el-input>
             <div class="spacer" style="order: 400;"></div>
-            <div v-for="(button, icon) in buttonsList" :key="icon" :style="{ order: button.order }"
+            <div v-for="(button) in buttonsList" :style="{ order: button.order }"
                 :title="t(button.title)">
                 <IconButton v-if="handleButtonVisibility(button)" :type="button.type" :icon="button.icon" circle
                     :disabled="handleButtonDisabled(button)" @click="handleButtonClick(button)">

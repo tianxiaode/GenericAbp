@@ -1,10 +1,11 @@
 <template>
     {{ t('Home') }}
-    <el-alert type="success" >success</el-alert>
-    <el-alert type="warning" >warning</el-alert>
-    <el-alert type="error" >error</el-alert>
-    <el-alert type="info" >info</el-alert>
-    <el-button class="w-full" type="primary mb-4" @click="accountForm.success('Success Message')">Change ValueList</el-button>
+    <el-text>Primary - {{ hexToHsl('#3c7699') }}</el-text>
+    <el-alert type="success" >success - {{ hexToHsl('#00953E') }}</el-alert>
+    <el-alert type="warning" >warning - {{ hexToHsl('#e9bb41') }}</el-alert>
+    <el-alert type="error" >error - {{ hexToHsl('#d80835') }}</el-alert>
+    <el-alert type="info" >info - {{ hexToHsl('#9fa39a') }}</el-alert>
+    <el-button class="w-full" type="primary" @click="accountForm.success('Success Message')">Change ValueList</el-button>
 </template>
 
 <script setup lang="ts">
@@ -13,6 +14,7 @@ import {  useI18n } from '../composables'
 import { onMounted, ref,watch } from 'vue';
 import PropertyInput from '~/components/forms/PropertyInput.vue';
 import AccountForm from '~/components/forms/AccountForm.vue';
+import { hexToHsl } from '~/libs';
 const { t } = useI18n();
 
 

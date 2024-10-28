@@ -10,4 +10,5 @@ export * from './Util';
 export * from './Validator';
 export * from './AccessControl';
 export * from './Plural';
+export * from './Color';
 
