@@ -27,12 +27,13 @@ export function normalizeCssUnit(value: CssUnitType): string {
     return value as string;
 }
 
-
 // String.ts
 export function cssUnitTypeToNumber(value: CssUnitType): number {
     if (typeof value === "number") return value;
     if (isEmpty(value)) return 0;
-    const match = value!.match(/^(\d+(\.\d+)?)(px|em|rem|%|pt|pc|ex|ch|vw|vh|vmin|vmax)?$/);
+    const match = value!.match(
+        /^(\d+(\.\d+)?)(px|em|rem|%|pt|pc|ex|ch|vw|vh|vmin|vmax)?$/
+    );
     if (match) {
         const num = parseFloat(match[1]);
         return num;
@@ -40,26 +41,37 @@ export function cssUnitTypeToNumber(value: CssUnitType): number {
     return 0;
 }
 
-
-export function replace(str: string, options: { [key: string]: string }): string {
+export function replace(
+    str: string,
+    options: { [key: string]: string }
+): string {
     if (isEmpty(str)) return "";
     for (const key in options) {
         if (options.hasOwnProperty(key)) {
             const value = options[key];
-            str = replaceAll(str,`{${key}}`, value);
+            str = replaceAll(str, `{${key}}`, value);
         }
     }
     return str;
 }
 
-export function replaceAll(str: string, search: string, replace: string): string {
-    return str.replace(new RegExp(search, "g"), replace);
+export function replaceAll(
+    str: string,
+    search: string,
+    replace: string
+): string {
+    return str.replace(new RegExp(search, "gi"), replace);
 }
 
 export function highlightText(text: string, search: string): string {
     if (isEmpty(text) || isEmpty(search)) return text;
-    return replaceAll(text,search, `<span class="highlight">${search}</span>`);
-}
+    if (!text || !search) return text;
+
+    // 创建正则表达式，忽略大小写
+    const regex = new RegExp(`(${search})`, "gi");
+
+    // 替换匹配的文本，并添加高亮 HTML
+    return text.replace(regex, (match) => `<span class="text-danger font-bold">${match}</span>`);}
 
 let idSeed = 0;
 
@@ -74,10 +86,11 @@ export const emptyString = "\u00A0";
 
 export function camelCase(str: string): string {
     // 将字符串转换为小写并按空格、连字符、下划线分割
-    if(isEmpty(str)) return "";
-    if(!str.includes('-') && !str.includes('_') && !str.includes(' ')) return uncapitalize(str);
+    if (isEmpty(str)) return "";
+    if (!str.includes("-") && !str.includes("_") && !str.includes(" "))
+        return uncapitalize(str);
     const words = str.toLowerCase().split(/[-_\s]+/);
-    let result = '';
+    let result = "";
 
     for (let i = 0; i < words.length; i++) {
         let word = words[i].toLocaleLowerCase();
@@ -93,9 +106,9 @@ export function camelCase(str: string): string {
 
 //将驼峰式命名的字符串转换为连接符命名的全小写字符串
 export function camelCaseToDash(str: string): string {
-    if(isEmpty(str)) return "";
-    let result = str.replace(/([A-Z])/g, '-$1').toLowerCase();
-    if(result.startsWith('-')) result = result.slice(1);
+    if (isEmpty(str)) return "";
+    let result = str.replace(/([A-Z])/g, "-$1").toLowerCase();
+    if (result.startsWith("-")) result = result.slice(1);
     return result;
 }
 
@@ -104,16 +117,19 @@ export function camelCaseToDash(str: string): string {
 export function splitWithEscaping(str: string, separator: string): string[] {
     // 此函数用于将字符串按指定分隔符分割，并支持分隔符的转义
     if (isEmpty(str)) return [];
-    if (separator === '') return [str];
+    if (separator === "") return [str];
     const result = [];
     let start = 0;
     let index = 0;
     const escapedSeparator = separator + separator;
- 
+
     while (index < str.length) {
         if (str.startsWith(escapedSeparator, index)) {
             // 将两个重复的分隔符替换为一个分隔符
-            str = str.slice(0, index) + separator + str.slice(index + escapedSeparator.length);
+            str =
+                str.slice(0, index) +
+                separator +
+                str.slice(index + escapedSeparator.length);
             index += separator.length;
         } else if (str.startsWith(separator, index)) {
             result.push(str.slice(start, index));
@@ -123,18 +139,25 @@ export function splitWithEscaping(str: string, separator: string): string[] {
             index++;
         }
     }
- 
+
     result.push(str.slice(start));
     return result;
 }
 
 // 将文本转换为html格式，每个换行使用P标签包裹
-export function textToHtml(text: string | string[], className: string = ""): string {
+export function textToHtml(
+    text: string | string[],
+    className: string = ""
+): string {
     if (isEmpty(text)) return "";
     if (Array.isArray(text)) {
-        return text.map(t => textToHtml(t, className)).join("");
+        return text.map((t) => textToHtml(t, className)).join("");
     }
-    return `<p class="${className}">` + text.replace(/\n/g, `</p><p class="${className}">`) + "</p>";
+    return (
+        `<p class="${className}">` +
+        text.replace(/\n/g, `</p><p class="${className}">`) +
+        "</p>"
+    );
 }
 
 export function normalizedLanguage(language: string) {

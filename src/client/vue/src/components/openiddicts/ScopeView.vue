@@ -8,8 +8,10 @@
             :default-sort="{ prop: 'name', order: 'ascending' }">
             <HighlightColumn :label="t('OpenIddict.Scope:Name')" prop="name" width="200'" sortable
                 :filterText="filterText" />
-                <el-table-column :label="t('OpenIddict.Scope:DisplayName')" prop="displayName" width="200"></el-table-column>
-                <el-table-column :label="t('OpenIddict.Scope:Description')" prop="description" width="full"></el-table-column>
+            <HighlightColumn :label="t('OpenIddict.Scope:DisplayName')" prop="displayName" width="200'" sortable
+                :filterText="filterText" />
+            <HighlightColumn :label="t('OpenIddict.Scope:Description')" prop="description" width="full'" sortable
+                :filterText="filterText" />
             <ActionColumn width="120" align="center" :buttons="tableButtons"></ActionColumn>
         </el-table>
 
@@ -39,18 +41,18 @@ const {
     data, dialogVisible, currentEntityId,
     filterText,
     create, update, remove, filter,
-    sortChange, formClose,  } = useTable<RoleType>(api);
+    sortChange, formClose, } = useTable<RoleType>(api);
 
 const toolbarButtons = {
     create: { action: create, isVisible: api.canCreate },
 }
 
-const { detailVisible, detailEntityId, detailButton  } = useDetail(api.idFieldName);
+const { detailVisible, detailEntityId, detailButton } = useDetail(api.idFieldName);
 
 const tableButtons = {
     edit: { isDisabled: (row: RoleType) => row.isStatic, action: update, isVisible: api.canUpdate },
     delete: { isDisabled: (row: RoleType) => row.isStatic, action: remove, isVisible: api.canDelete },
-    detail: {...detailButton}
+    detail: { ...detailButton }
 }
 
 </script>

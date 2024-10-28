@@ -129,6 +129,8 @@
     "Tabs:Permissions": "权限设置",
     "Tabs:Scopes": "范围设置",
     "Tabs:RedirectUris": "重定向设置",
-    "Tabs:Advanced": "高级设置"
+    "Tabs:Advanced": "高级设置",
+    "EditApplication": "编辑应用程序",
+    "EditScope": "编辑范围"
   }
 }

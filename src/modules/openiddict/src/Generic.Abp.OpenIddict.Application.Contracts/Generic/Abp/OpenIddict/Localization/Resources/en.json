@@ -129,6 +129,8 @@
     "Tabs:Permissions": "Permissions",
     "Tabs:Scopes": "Scopes",
     "Tabs:RedirectUris": "Redirect URIs",
-    "Tabs:Advanced": "Advanced"
+    "Tabs:Advanced": "Advanced",
+    "EditApplication": "Edit Application",
+    "EditScope": "New Scope"
   }
 }
