@@ -3,8 +3,6 @@ using Generic.Abp.OpenIddict.Exceptions;
 using Generic.Abp.OpenIddict.Permissions;
 using Microsoft.AspNetCore.Authorization;
 using OpenIddict.Abstractions;
-using System.Text.Json;
-using Microsoft.Extensions.Logging;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Domain.ChangeTracking;

@@ -20,6 +20,9 @@
         "BasicSettings": "Basic Settings",
         "MailingTest": "Mailing Test"
     },
+    "AbpTenantManagement":{
+        "EditTenant": "Edit Tenant"
+    },
     "Components": {
         "Lockout": "Lockout",
         "RowNumber": "Row Number",

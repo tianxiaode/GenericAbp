@@ -3,10 +3,10 @@
     style="--el-color-primary: --el-color-primary-dark-2;"
     v-model="value"
     >
-    <template #active-action>
+    <template #inactive-action>
       <i class="fa fa-sun text-warning"></i>
     </template>
-    <template #inactive-action>
+    <template #active-action>
       <i class="fa fa-moon text-info"></i>
     </template>
 </el-switch>

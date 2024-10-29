@@ -3,6 +3,7 @@ import { RoleRepository } from "./Role";
 import { UserRepository } from "./User";
 import { ApplicationRepository } from "./Application";
 import { ScopRepository } from "./Scope";
+import { TenantRepository } from "./Tenant";
 
 export const repositoryRegisters: Record<string, RepositoryRegistryType> = {
     'Role': {
@@ -16,5 +17,8 @@ export const repositoryRegisters: Record<string, RepositoryRegistryType> = {
     },
     'scope':{
         type: ScopRepository
+    },
+    tenant:{
+        type: TenantRepository
     }
 }

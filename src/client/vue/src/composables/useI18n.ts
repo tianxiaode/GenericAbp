@@ -26,6 +26,8 @@ export function useI18n() {
             // 判断 i18n 是否准备好
             if (isReady.value) {
                 return i18n.get(...args);
+            }else{
+                return i18n.get(...args);
             } 
         };
     });

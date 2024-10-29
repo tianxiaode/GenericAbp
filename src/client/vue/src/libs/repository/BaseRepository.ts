@@ -410,7 +410,7 @@ export class BaseRepository<T extends EntityInterface> extends BaseClass {
     getUrl = (): string => {
         let url = this.apiPrefix || "";
         if (this.entityGroup) {
-            url += `/${this.entityGroup}`;
+            url += `/${camelCaseToDash(this.entityGroup)}`;
         }
         url += `/${camelCaseToDash(this.entityPlural)}`;
         return url;

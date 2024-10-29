@@ -20,6 +20,9 @@
         "BasicSettings": "基础设置",
         "MailingTest": "邮件测试"
     },
+    "AbpTenantManagement":{
+        "EditTenant": "编辑租户"
+    },
     "Components": {
         "Lockout": "锁定",
         "RowNumber": "行号",

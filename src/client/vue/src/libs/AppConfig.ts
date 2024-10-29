@@ -79,6 +79,10 @@ export class AppConfig {
         return this.config?.setting?.values?.["Abp.Identity.User.IsUserNameUpdateEnabled"] === "True";
     }
 
+    get enableMultiTenancy(){
+        return this.config?.multiTenancy?.isEnabled;
+    }
+
 
     // private async checkNeedSetPassword(): Promise<void> {
     //     const result = await http.get("/need-set-password") as any;

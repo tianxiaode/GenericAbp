@@ -5,7 +5,7 @@
 
         <!-- 数据展示区域 -->
         <el-table :data="data" stripe border style="width: 100%" @sort-change="sortChange"
-            :default-sort="{ prop: 'name', order: 'ascending' }">
+            :default-sort="{ prop: 'clientId', order: 'ascending' }">
             <HighlightColumn :label="t('OpenIddict.Application:ClientId')" prop="clientId" width="full" sortable
                 :filterText="filterText" />
             <el-table-column :label="t('OpenIddict.Application:DisplayName')" prop="displayName" width="full" sortable> </el-table-column>

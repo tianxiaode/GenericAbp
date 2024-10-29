@@ -20,6 +20,10 @@
                     <el-icon><i class="fa fa-lock"></i></el-icon>
                     <span>角色管理</span>                    
                 </el-menu-item>
+                <el-menu-item index="/tenants" v-if="isGranted('AbpTenantManagement.Tenants')">
+                    <el-icon><i class="fa fa-building-user"></i></el-icon>
+                    <span>租户管理</span>
+                </el-menu-item>
                 <el-sub-menu index="4-1">
                     <template #title>
                         <el-icon><i class="fa fa-user-shield"></i></el-icon>
