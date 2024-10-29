@@ -37,7 +37,7 @@ const path = ref(router.currentRoute.value.path);
 const { isAuthenticated,currentUser } = useAuthentication();
 const { t } = useI18n();
 const { isMobile, hasHover } = useBrowseEnv()
-
+console.log(isAuthenticated.value,currentUser.value)
 const logout = () => {
     account.logout();
 };

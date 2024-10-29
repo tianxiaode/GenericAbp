@@ -56,7 +56,8 @@ const onSubmit = async () => {
                 redirectPath = '/';
             }
             router.push(redirectPath);
-        }, 3000);
+            localStorage.removeItem('redirectPath');
+        }, 2000);
 
     } catch (error: any) {
         formRef.value.error(error.message);

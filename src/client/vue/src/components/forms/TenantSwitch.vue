@@ -8,8 +8,8 @@
                 </template>
             </el-input>
         </el-tooltip>
+        <el-divider />
     </div>
-    <el-divider />
 </template>
 
 <script setup lang="ts">
