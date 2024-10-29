@@ -4,9 +4,10 @@
             <template #header>
                 <div class="text-center text-2xl font-bold">{{ t(title) }}</div>
             </template>
+            <TenantSwitch :error="error" :success="success" ></TenantSwitch>
             <el-form ref="formRef" v-bind="$attrs" :model="formData" size="large" :inline-message="true" :validate-on-rule-change="false" :scroll-to-error="true">
                 <slot></slot>
-                <FormMessage v-model="formMessage" v-model:form-message-type="formMessageType"></FormMessage>
+                <FormMessage v-model="formMessage" v-model:form-message-type="formMessageType" :message-params="formMessageParams"></FormMessage>
             </el-form>
             <template #footer v-if="$slots.footer">
                 <slot name="footer"></slot>
@@ -18,6 +19,7 @@
 <script setup lang="ts">
 import {  useFormExpose,useFormMessageExpose,useI18n } from '~/composables';
 import FormMessage from './FormMessage.vue';
+import TenantSwitch from './TenantSwitch.vue';
 
 const { t } = useI18n();
 const formData = defineModel();
@@ -25,7 +27,7 @@ defineProps({
     title: String,
 })
 const { formRef, formExpose } = useFormExpose();
-const { formMessage, formMessageType, formMessageExpose} = useFormMessageExpose();
+const { formMessage, formMessageType,formMessageParams, formMessageExpose, error,success} = useFormMessageExpose();
 defineExpose({
     ...formExpose(),
     ...formMessageExpose()

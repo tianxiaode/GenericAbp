@@ -16,8 +16,8 @@ export class TenantRepository extends Repository<TenantType> {
     };
 
 
-    getAll(){
-        return http.get(this.readUrl + '/all');
+    getByName(name:string){
+        return http.get(this.readUrl + '/by-name/' + decodeURIComponent(name));
     }
 
 

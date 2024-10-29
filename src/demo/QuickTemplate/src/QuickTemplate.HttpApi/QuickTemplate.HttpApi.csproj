@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\modules\Extensions\src\Generic.Abp.Extensions.HttpApi\Generic.Abp.Extensions.HttpApi.csproj" />
     <ProjectReference Include="..\..\..\..\modules\identity\src\Generic.Abp.Identity.HttpApi\Generic.Abp.Identity.HttpApi.csproj" />
     <ProjectReference Include="..\..\..\..\modules\openiddict\src\Generic.Abp.OpenIddict.HttpApi\Generic.Abp.OpenIddict.HttpApi.csproj" />
     <ProjectReference Include="..\QuickTemplate.Application.Contracts\QuickTemplate.Application.Contracts.csproj" />

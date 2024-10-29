@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="..\..\..\..\common.props" />
 
@@ -15,8 +15,9 @@
 		<PackageReference Include="Volo.Abp.AspNetCore.Mvc" Version="$(AbpVersion)" />
 	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Generic.Abp.OpenIddict.Application.Contracts\Generic.Abp.OpenIddict.Application.Contracts.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\Generic.Abp.OpenIddict.Application.Contracts\Generic.Abp.OpenIddict.Application.Contracts.csproj" />
+	</ItemGroup>
+
 
 </Project>

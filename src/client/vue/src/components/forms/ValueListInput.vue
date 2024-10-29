@@ -3,7 +3,7 @@
         <el-descriptions-item class-name="w-1/2">
             <template #label>
                 <div class="w-full">
-                    <el-input v-model="inputValue" size="small" ref="valueInput" @blur="handleValueChange" clearable
+                    <el-input v-model="inputValue"  ref="valueInput" @blur="handleValueChange" clearable
                         :placeholder="t('Components.PropertyInput.Name')" @keyup.enter.native="addProperty">
                         <template #append  v-if="errorMessage">
                             <el-tooltip placement="bottom" effect="light">
@@ -19,11 +19,11 @@
             <i class="fa fa-plus text-success cursor-pointer" @click="addProperty"></i>
         </el-descriptions-item>
 
-        <el-descriptions-item v-for="value in (model as any[])?.map((m:any) => props.convertModel(m)).sort( (a:any, b:any) => a.localeCompare(b) )" size="small">
+        <el-descriptions-item v-for="value in (model as any[])?.map((m:any) => props.convertModel(m)).sort( (a:any, b:any) => a.localeCompare(b) )">
             <template #label><span class="cursor-pointer" @click="handleEdit(value)">{{ value }}</span></template>
                 <i class="fa fa-trash text-danger cursor-pointer" @click="removeProperty(value)"></i>
         </el-descriptions-item>
-        <el-descriptions-item v-if="model?.length === 0" size="small" :label="t('Components.NoData')">
+        <el-descriptions-item v-if="model?.length === 0"  :label="t('Components.NoData')">
         </el-descriptions-item>
     </el-descriptions>
 

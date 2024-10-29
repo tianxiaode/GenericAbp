@@ -4,7 +4,8 @@
         "NotAllowed": "不允许访问",
         "LockedOut": "账户已锁定",
         "RequiresTwoFactor": "需要两步验证",
-        "LoginSuccess":"登录成功，正在跳转..."
+        "LoginSuccess":"登录成功，正在跳转...",
+        "InvalidResetPasswordData": "无效的重置密码数据"
     },
     "AbpIdentity":{
         "EditRole": "编辑角色",
@@ -21,7 +22,14 @@
         "MailingTest": "邮件测试"
     },
     "AbpTenantManagement":{
-        "EditTenant": "编辑租户"
+        "EditTenant": "编辑租户",
+        "Switch": "切换租户",
+        "TenantNameNotNull": "请输入租户名称！",
+        "TenantSwitchSuccess":"租户已切换为{name}",
+        "TenantNotFoundMessage": "租户 {name} 未找到！",
+        "TenantNotActiveMessage": "租户 {name} 未启用！",
+        "Host": "主机端",
+        "SwitchToHostMessage": "要切换到主机端请清空租户名称并点击切换按钮。"
     },
     "Components": {
         "Lockout": "锁定",

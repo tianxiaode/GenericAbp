@@ -4,7 +4,7 @@
         <i class="fa fa-circle-user text-white font-size-6"></i>
     </a>
     <el-dropdown v-if="isAuthenticated" :trigger="hasHover ? 'hover' : 'click'" role="navigation" size="large" >
-        <el-avatar :src="avatar" :size="isMobile ? 24: 32" />
+        <el-avatar :src="avatar" :size="isMobile ? 24: 28" />
         <template #dropdown>
             <div class="text-center pt-3 pb-2 font-weight-bold text-gray-500">{{ currentUser?.userName }}</div>
         <el-dropdown-menu style="width: 200px;">            

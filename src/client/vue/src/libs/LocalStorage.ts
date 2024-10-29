@@ -118,5 +118,17 @@ export class LocalStorage {
         return this.getItem('redirectPath');
     }
 
+    static setTenant(tenant: string){
+        this.setItem('tenant', tenant);
+    }
+
+    static getTenant(): string | null { 
+        return this.getItem('tenant');
+    }
+
+    static removeTenant() {
+        this.removeItem('tenant');  
+    }
+
 
 }

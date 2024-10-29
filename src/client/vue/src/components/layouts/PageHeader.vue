@@ -10,7 +10,7 @@
             <div class="flex-1"></div>
             <UserButton />
             <a href="https://github.com/tianxiaode/GenericAbp" target="_blank">
-                <i class="fab fa-github text-white " :class="hasHover ? 'font-size-6' : 'font-size-6'">
+                <i class="fab fa-github text-white font-size-7">
                 </i>
             </a>
             <LanguageButton />

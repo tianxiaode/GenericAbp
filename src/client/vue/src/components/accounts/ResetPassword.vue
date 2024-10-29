@@ -1,5 +1,6 @@
 <template>
     <AccountForm ref="formRef" :rules="rules" title="Pages.ResetPassword.ResetPassword" v-model="formData">
+        <div v-if="canResetPassword">
         <div class="text-sm text-gray-500 mb-4">
             {{ t('Pages.ResetPassword.ResetPasswordInformation') }}
         </div>
@@ -23,13 +24,14 @@
                 </template>
             </el-input>
         </el-form-item>
-        <el-button  type="primary" @click="handleSubmit" class="w-full"
+        <el-button  type="primary" @click="handleSubmit" class="w-full" 
         >
             {{ t('Components.Save')}} 
         </el-button>
         <div class="w-full leading-loose">
             <el-link type="primary" @click="$router.push('/login')">{{ t("Pages.ForgotPassword.BackToLogin") }}</el-link>
         </div>
+    </div>
 
     </AccountForm>
 </template>
@@ -37,16 +39,18 @@
 <script setup lang="ts">
 import AccountForm from '../forms/AccountForm.vue';
 import { useConfig, useForm, useFormRules, useI18n } from '~/composables'
-import { account,  appConfig } from '~/libs';
+import { account,  appConfig, isEmpty } from '~/libs';
 import PasswordStrength from './PasswordStrength.vue';
 import router from '~/router';
+import { onMounted, ref } from 'vue';
 
 const { t } = useI18n();
 const queryString = window.location.search;
 const params = new URLSearchParams(queryString);
 const userId = params.get('userId') || params.get('userid') || '';
 const resetToken = params.get('resetToken') || '';
-
+const tenant = params.get('__tenant') || '';
+const canResetPassword = ref<boolean>(false);
 const formRules = {
     password: { required: true },
     confirmPassword: { required: true, equalTo: 'password' }
@@ -75,5 +79,22 @@ const onSubmit = async () => {
 const { formRef, formData,  handleSubmit } = useForm( onSubmit);
 const { rules, updateRules} = useFormRules(formRules, formRef);
 
+onMounted(async ()=>{
+    try{
+        if(isEmpty(userId) || isEmpty(resetToken)){
+            formRef.value.error('Account.InvalidResetPasswordData');
+            return;
+        }
+        const res = await account.verifyPasswordResetToken(userId, resetToken, tenant)
+        if(res === 'false'){
+            formRef.value.error('Account.InvalidResetPasswordData');
+            return;
+        }
+        canResetPassword.value = true;
+    }catch(e:any){
+        formRef.value.error(e.message);
+    }
+        
+})
 
 </script>

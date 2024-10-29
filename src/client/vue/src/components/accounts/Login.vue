@@ -1,5 +1,5 @@
 <template>
-    <AccountForm ref="formRef" :rules="rules" title="Pages.Login.Login"  v-model="formData">
+    <AccountForm ref="formRef" :rules="rules" title="Pages.Login.Login" v-model="formData">
         <el-form-item prop="username" clearable>
             <el-input v-model="formData.username" :placeholder="t('Pages.Login.UserNameAndEmail')">
                 <template #prefix>
@@ -42,27 +42,29 @@ import ExternalProviders from './ExternalProviders.vue';
 const { t } = useI18n();
 
 const formRules = {
-    username: { required: true},
-    password: { required: true},
+    username: { required: true },
+    password: { required: true },
 };
 
 const onSubmit = async () => {
     try {
         await account.login(formData.value.username, formData.value.password);
         formRef.value.success('Pages.login.LoginSuccess');
-        let redirectPath = LocalStorage.getRedirectPath() || '/';
-        if (redirectPath === '/login') {
-            redirectPath = '/';
-        }
-        router.push(redirectPath);
+        setTimeout(() => {
+            let redirectPath = LocalStorage.getRedirectPath() || '/';
+            if (redirectPath === '/login') {
+                redirectPath = '/';
+            }
+            router.push(redirectPath);
+        }, 3000);
 
     } catch (error: any) {
         formRef.value.error(error.message);
     }
 }
 
-const { formRef, formData,  handleSubmit } = useForm(onSubmit);
-const { rules} = useFormRules(formRules, formRef);
+const { formRef, formData, handleSubmit } = useForm(onSubmit);
+const { rules } = useFormRules(formRules, formRef);
 
 
 </script>

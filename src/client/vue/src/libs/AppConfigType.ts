@@ -110,7 +110,11 @@ export type AppConfigType = {
     features: FeatureType;
     globalFeatures: GlobalFeaturesType;
     multiTenancy: MultiTenancyType;
-    currentTenant:Record<string, any>;
+    currentTenant:{
+        id: string;
+        isAvailable: string,
+        name: string
+    };
     timing: TimingType;
     clock: ClockType;
     objectExtensions: ObjectExtensionsType;

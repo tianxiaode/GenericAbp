@@ -4,7 +4,8 @@
         "NotAllowed": "Not allowed to access this resource.",
         "LockedOut": "Account locked out, please try again later.",
         "RequiresTwoFactor": "This account requires two-factor authentication.",
-        "LoginSuccess":"Login Success, redirecting..."
+        "LoginSuccess":"Login Success, redirecting...",
+        "InvalidResetPasswordData": "Invalid reset password data"
     },
     "AbpIdentity":{
         "EditRole": "Edit Role",
@@ -21,7 +22,14 @@
         "MailingTest": "Mailing Test"
     },
     "AbpTenantManagement":{
-        "EditTenant": "Edit Tenant"
+        "EditTenant": "Edit Tenant",
+        "Switch": "Switch Tenant",
+        "TenantNameNotNull": "Please enter the tenant name.",
+        "TenantSwitchSuccess":"Tenant switched to {name}",
+        "TenantNotFoundMessage": "Tenant {name} not found!",
+        "TenantNotActiveMessage": "Tenant {name} is not active!",
+        "Host": "Host",
+        "SwitchToHostMessage": "To switch to the host side, clear the tenant name and click the toggle button."
     },
     "Components": {
         "Lockout": "Lockout",

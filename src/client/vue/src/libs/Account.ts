@@ -1,8 +1,8 @@
 import {
-    UserManager,
     UserManagerSettings,
     User,
     UserManagerEvents,
+    UserManager,
 } from "oidc-client-ts";
 import { logger } from "./utils";
 import { LocalStorage } from "./LocalStorage";
@@ -16,7 +16,14 @@ class Account {
     userManager: UserManager | undefined;
 
     init = async (oidcSettings: UserManagerSettings) => {
-        this.userManager = new UserManager(oidcSettings);
+        this.userManager = new UserManager({
+            ...oidcSettings,
+            extraHeaders:{
+                "__tenant": ()=>{
+                    return LocalStorage.getTenant() || "";
+                }
+            }
+        });
 
         this.initEvents();
     };
@@ -26,7 +33,7 @@ class Account {
     }
 
     login = async (username: string, password: string) => {
-        try {            
+        try {    
             const user = await this.userManager!.signinResourceOwnerCredentials(
                 {
                     username: username,
@@ -36,8 +43,8 @@ class Account {
             if (!user) {
                 throw new Error("Account.InvalidUserNameOrPassword");
             }
-        } catch (error: any) {
-            let message = error.error_description || error.message;
+        } catch (e: any) {
+            let message = e.error_description || e.message;
             if(message.includes("locked out")){
                 message = 'Account.LockedOut'
             }else if(message.includes("not allowed")){
@@ -56,8 +63,8 @@ class Account {
             LocalStorage.removeRefreshToken();
             LocalStorage.removeToken();
             window.location.href = "/";
-        } catch (error: any) {
-            logger.error(this, ["logout"], error);
+        } catch (e: any) {
+            logger.error(this, ["logout"], e);
         }
     };
 
@@ -68,9 +75,9 @@ class Account {
                     provider: provider,
                 },
             });
-        } catch (error: any) {
+        } catch (e: any) {
             throw new Error(
-                "Account." + error.error_description || error.message
+                "Account." + e.error_description || e.message
             );
         }
     };
@@ -83,8 +90,8 @@ class Account {
                 password: password,
                 appName: envConfig.appName,
             });
-        } catch (error) {
-            throw error;
+        } catch (e) {
+            throw e;
         }
     };
 
@@ -96,10 +103,23 @@ class Account {
                 returnUrl: `${window.location.origin}/reset-password`,
                 returnUrlHash: "",
             });
-        } catch (error) {
-            throw error;
+        } catch (e) {
+            throw e;
         }
     };
+
+    verifyPasswordResetToken = async(userId: string, resetToken: string, tenant: string| null) => {
+        try {
+            return await http.post("/api/account/verify-password-reset-token", {
+                "userId": userId,
+                "resetToken": resetToken
+            }, {
+                headers:{ '__tenant': tenant}
+            });
+        }catch(e){
+            throw e;
+        }
+    }
 
     resetPassword = async (
         userId: string,
@@ -112,32 +132,32 @@ class Account {
                 resetToken: resetToken,
                 password: password,
             });
-        } catch (error) {
-            throw error;
+        } catch (e) {
+            throw e;
         }
     };
 
     getExternalProviders = async () => {
         try {
             return await http.get("/api/external-providers");
-        } catch (error) {
-            throw error;
+        } catch (e) {
+            throw e;
         }
     };
 
     getProfile = async () => {
         try {
             return await http.get("/api/account/my-profile");
-        } catch (error) {
-            throw error;
+        } catch (e) {
+            throw e;
         }
     };
 
     updateProfile = async (profile: any) => {
         try {
             return await http.put("/api/account/my-profile", profile);
-        } catch (error) {
-            throw error;
+        } catch (e) {
+            throw e;
         }
     };
 
@@ -147,8 +167,8 @@ class Account {
                 currentPassword,
                 newPassword,
             });
-        } catch (error) {
-            throw error;
+        } catch (e) {
+            throw e;
         }
     };
 
@@ -182,8 +202,8 @@ class Account {
             logger.debug(this, ["initEvents"], "Access token expired");
         });
 
-        events.addSilentRenewError(() => {
-            logger.debug(this, ["initEvents"], "Silent renew error");
+        events.addSilentRenewError((e:any) => {
+            logger.debug(this, ["initEvents"], "Silent renew error", e);
         });
 
         events.addUserLoaded((user) => {

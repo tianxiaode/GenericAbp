@@ -1,4 +1,5 @@
-﻿using Generic.Abp.Identity;
+﻿using Generic.Abp.Extensions;
+using Generic.Abp.Identity;
 using Generic.Abp.OpenIddict;
 using Localization.Resources.AbpUi;
 using QuickTemplate.Localization;
@@ -19,6 +20,7 @@ namespace QuickTemplate;
     typeof(AbpIdentityHttpApiModule),
     typeof(GenericAbpIdentityHttpApiModule),
     typeof(GenericAbpOpenIddictHttpApiModule),
+    typeof(GenericAbpExtensionsHttpApiModule),
     typeof(AbpPermissionManagementHttpApiModule),
     typeof(AbpTenantManagementHttpApiModule),
     typeof(AbpFeatureManagementHttpApiModule),

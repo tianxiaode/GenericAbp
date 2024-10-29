@@ -63,6 +63,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Generic.Abp.Extensions", ".
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Generic.Abp.Extensions.Domain", "..\..\modules\Extensions\src\Generic.Abp.Extensions.Domain\Generic.Abp.Extensions.Domain.csproj", "{BB92EACD-24A2-4843-927D-038585A8F552}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Generic.Abp.Extensions.HttpApi", "..\..\modules\Extensions\src\Generic.Abp.Extensions.HttpApi\Generic.Abp.Extensions.HttpApi.csproj", "{9EAAC8BE-9D45-4196-9D03-E5E2A50B377E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -161,6 +163,10 @@ Global
 		{BB92EACD-24A2-4843-927D-038585A8F552}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BB92EACD-24A2-4843-927D-038585A8F552}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BB92EACD-24A2-4843-927D-038585A8F552}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9EAAC8BE-9D45-4196-9D03-E5E2A50B377E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9EAAC8BE-9D45-4196-9D03-E5E2A50B377E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9EAAC8BE-9D45-4196-9D03-E5E2A50B377E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9EAAC8BE-9D45-4196-9D03-E5E2A50B377E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -193,6 +199,7 @@ Global
 		{073F7B7B-481E-4EAA-A07F-0D72882BA7AF} = {A1791027-70D6-47D0-9285-52C6D205B744}
 		{A2A60CDA-BA08-4135-B4E2-5680E8E32535} = {073F7B7B-481E-4EAA-A07F-0D72882BA7AF}
 		{BB92EACD-24A2-4843-927D-038585A8F552} = {073F7B7B-481E-4EAA-A07F-0D72882BA7AF}
+		{9EAAC8BE-9D45-4196-9D03-E5E2A50B377E} = {073F7B7B-481E-4EAA-A07F-0D72882BA7AF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {28315BFD-90E7-4E14-A2EA-F3D23AF4126F}

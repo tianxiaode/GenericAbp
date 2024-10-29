@@ -6,29 +6,34 @@ export function useFormMessageExpose() {
 
     const formMessage = ref("");
     const formMessageType = ref<FormMessageTypeType>("");
+    const formMessageParams = ref<any>();
 
     const setFormMessage = (
         message: string,
-        messageType: FormMessageTypeType
+        messageType: FormMessageTypeType,
+        params?: any,
     ) => {
         formMessage.value = message;
         formMessageType.value = messageType;
+        if(params){
+            formMessageParams.value = params;
+        }        
     };
 
-    const success = (message: string) => {
-        setFormMessage(message, "success");
+    const success = (message: string, params?:any) => {
+        setFormMessage(message, "success", params);
     };
 
-    const error = (message: string) => {
-        setFormMessage(message, "error");
+    const error = (message: string, params?:any) => {
+        setFormMessage(message, "error", params);
     };
 
-    const info = (message: string) => {
-        setFormMessage(message, "info");
+    const info = (message: string, params?:any) => {
+        setFormMessage(message, "info", params);
     };
 
-    const warning = (message: string) => {
-        setFormMessage(message, "warning");
+    const warning = (message: string, params?:any) => {
+        setFormMessage(message, "warning", params);
     };
 
     const formMessageExpose = ()=> {
@@ -44,6 +49,7 @@ export function useFormMessageExpose() {
     return {
         formMessage,
         formMessageType,
+        formMessageParams,
         formMessageExpose,
         setFormMessage,
         success,

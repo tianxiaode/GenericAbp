@@ -72,9 +72,9 @@ export class BaseHttp {
         const token = LocalStorage.getToken();
 
         const headers: { [key: string]: string } = {
-            ...options.headers,
             'Accept-Language': LocalStorage.getLanguage(),
             'Content-Type': options.data instanceof FormData ? 'multipart/form-data' : 'application/json',
+            '__tenant': LocalStorage.getTenant(),
             ...options.headers
         };
 
