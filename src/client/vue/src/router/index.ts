@@ -21,6 +21,7 @@ const routes = [
             { path: 'tenants', component: ()=>import("~/components/tenants/TenantView.vue") },
             { path: "applications", component: ()=>import("~/components/openiddicts/ApplicationView.vue") },
             { path: "scopes", component: ()=>import("~/components/openiddicts/ScopeView.vue") },
+            { path: "security-logs", component: ()=>import("~/components/securitylogs/SecurityLogView.vue") },            
             { path: "settings", component: ()=>import("~/components/settings/SettingManagement.vue") }
 
         ]        

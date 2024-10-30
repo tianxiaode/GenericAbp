@@ -4,21 +4,25 @@ import { UserRepository } from "./User";
 import { ApplicationRepository } from "./Application";
 import { ScopRepository } from "./Scope";
 import { TenantRepository } from "./Tenant";
+import { SecurityLogRepository } from "./SecurityLog";
 
 export const repositoryRegisters: Record<string, RepositoryRegistryType> = {
-    'Role': {
+    Role: {
         type: RoleRepository
     },
-    'user': {
+    user: {
         type: UserRepository
     },
-    'application': {
+    application: {
         type: ApplicationRepository
     },
-    'scope':{
+    scope:{
         type: ScopRepository
     },
     tenant:{
         type: TenantRepository
+    },
+    securityLog:{
+        type: SecurityLogRepository
     }
 }

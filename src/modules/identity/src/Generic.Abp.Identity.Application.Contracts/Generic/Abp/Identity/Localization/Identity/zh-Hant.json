@@ -14,6 +14,7 @@
     "SecurityLog:UserId": "用戶 Id",
     "SecurityLog:UserName": "用戶名稱",
     "SecurityLog:TenantName": "租戶名稱",
+    "SecurityLog:TenantId": "租戶 Id",
     "SecurityLog:ClientId": "Cleint Id",
     "SecurityLog:CorrelationId": "Correlation Id",
     "SecurityLog:ClientIpAddress": "客戶端IP",

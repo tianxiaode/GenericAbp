@@ -36,6 +36,10 @@
                     <el-icon><i class="fa fa-cog"></i></el-icon>
                     <span>设置</span>                    
                 </el-menu-item>
+                <el-menu-item index="/security-logs" v-if="isGranted('AbpIdentity.SecurityLogs')">
+                    <el-icon><i class="fa fa-cog"></i></el-icon>
+                    <span>安全日志</span>                    
+                </el-menu-item>
             </el-sub-menu>
         </el-menu>
     </el-aside>

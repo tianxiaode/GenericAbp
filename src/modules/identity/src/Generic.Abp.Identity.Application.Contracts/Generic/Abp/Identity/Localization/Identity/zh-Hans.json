@@ -13,6 +13,7 @@
     "SecurityLog:Action": "操作",
     "SecurityLog:UserId": "用户 Id",
     "SecurityLog:UserName": "用户名",
+    "SecurityLog:TenantId": "租户 Id",
     "SecurityLog:TenantName": "租户名称",
     "SecurityLog:ClientId": "Cleint Id",
     "SecurityLog:CorrelationId": "Correlation Id",

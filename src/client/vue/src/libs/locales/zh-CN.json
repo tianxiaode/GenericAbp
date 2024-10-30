@@ -56,6 +56,7 @@
         "Details":"详情",
         "Reset": "重置",
         "Languages":"语言",
+        "SelectPlaceholder": "请选择{name}",
         "PropertyInput":{
             "Name": "名称",
             "Value": "值",

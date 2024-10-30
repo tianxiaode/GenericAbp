@@ -43,37 +43,37 @@ public class SecurityLogController : IdentityController, ISecurityLogAppService
 
     [HttpGet]
     [Route("identities")]
-    public Task<ListResultDto<string>> GetAllIdentitiesAsync()
+    public Task<ListResultDto<string>> GetAllIdentitiesAsync(string? filter)
     {
-        return Service.GetAllIdentitiesAsync();
+        return Service.GetAllIdentitiesAsync(filter);
     }
 
 
     [HttpGet]
     [Route("actions")]
-    public Task<ListResultDto<string>> GetAllActionsAsync()
+    public Task<ListResultDto<string>> GetAllActionsAsync(string? filter)
     {
-        return Service.GetAllActionsAsync();
+        return Service.GetAllActionsAsync(filter);
     }
 
     [HttpGet]
     [Route("user-names")]
-    public Task<ListResultDto<string>> GetAllUserNamesAsync()
+    public Task<ListResultDto<string>> GetAllUserNamesAsync(string? filter)
     {
-        return Service.GetAllUserNamesAsync();
+        return Service.GetAllUserNamesAsync(filter);
     }
 
     [HttpGet]
     [Route("client-ids")]
-    public Task<ListResultDto<string>> GetAllClientIdsAsync()
+    public Task<ListResultDto<string>> GetAllClientIdsAsync(string? filter)
     {
-        return Service.GetAllClientIdsAsync();
+        return Service.GetAllClientIdsAsync(filter);
     }
 
     [HttpGet]
     [Route("correlation-ids")]
-    public Task<ListResultDto<string>> GetAllCorrelationIdsAsync()
+    public Task<ListResultDto<string>> GetAllCorrelationIdsAsync(string? filter)
     {
-        return Service.GetAllCorrelationIdsAsync();
+        return Service.GetAllCorrelationIdsAsync(filter);
     }
 }

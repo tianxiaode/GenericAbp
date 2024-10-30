@@ -11,9 +11,9 @@ public interface ISecurityLogAppService : IApplicationService
     Task<SecurityLogDto> GetAsync(Guid id);
     Task<PagedResultDto<SecurityLogDto>> GetListAsync(SecurityLogGetListInput input);
     Task<ListResultDto<string>> GetAllApplicationNamesAsync(string? filter);
-    Task<ListResultDto<string>> GetAllIdentitiesAsync();
-    Task<ListResultDto<string>> GetAllActionsAsync();
-    Task<ListResultDto<string>> GetAllUserNamesAsync();
-    Task<ListResultDto<string>> GetAllClientIdsAsync();
-    Task<ListResultDto<string>> GetAllCorrelationIdsAsync();
+    Task<ListResultDto<string>> GetAllIdentitiesAsync(string? filter);
+    Task<ListResultDto<string>> GetAllActionsAsync(string? filter);
+    Task<ListResultDto<string>> GetAllUserNamesAsync(string? filter);
+    Task<ListResultDto<string>> GetAllClientIdsAsync(string? filter);
+    Task<ListResultDto<string>> GetAllCorrelationIdsAsync(string? filter);
 }

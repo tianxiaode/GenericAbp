@@ -14,6 +14,7 @@
     "SecurityLog:UserId": "User Id",
     "SecurityLog:UserName": "User Name",
     "SecurityLog:TenantName": "Tenant Name",
+    "SecurityLog:TenantId": "Tenant Id",
     "SecurityLog:ClientId": "Client Id",
     "SecurityLog:CorrelationId": "Correlation Id",
     "SecurityLog:ClientIpAddress": "Client Ip Address",

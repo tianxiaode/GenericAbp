@@ -3,4 +3,5 @@ export * from './User';
 export * from './Application';
 export * from './Scope';
 export * from './Tenant';
+export * from './SecurityLog';
 export * from './RepositoryRegisters';

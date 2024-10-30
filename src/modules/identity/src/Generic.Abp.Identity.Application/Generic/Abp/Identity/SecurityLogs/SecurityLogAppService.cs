@@ -40,32 +40,48 @@ public class SecurityLogAppService : IdentityAppService, ISecurityLogAppService
     public virtual async Task<ListResultDto<string>> GetAllApplicationNamesAsync(string? filter)
     {
         return new ListResultDto<string>((await SecurityLogRepository.GetAllApplicationNamesAsync())
+            .Where(m => !string.IsNullOrEmpty(m))
             .WhereIf(!string.IsNullOrEmpty(filter), m => m.Contains(filter!, StringComparison.OrdinalIgnoreCase))
             .ToList());
     }
 
-    public virtual async Task<ListResultDto<string>> GetAllIdentitiesAsync()
+    public virtual async Task<ListResultDto<string>> GetAllIdentitiesAsync(string? filter)
     {
-        return new ListResultDto<string>(await SecurityLogRepository.GetAllIdentitiesAsync());
+        return new ListResultDto<string>((await SecurityLogRepository.GetAllIdentitiesAsync())
+            .Where(m => !string.IsNullOrEmpty(m))
+            .WhereIf(!string.IsNullOrEmpty(filter), m => m.Contains(filter!, StringComparison.OrdinalIgnoreCase))
+            .ToList());
     }
 
-    public virtual async Task<ListResultDto<string>> GetAllActionsAsync()
+    public virtual async Task<ListResultDto<string>> GetAllActionsAsync(string? filter)
     {
-        return new ListResultDto<string>(await SecurityLogRepository.GetAllActionsAsync());
+        return new ListResultDto<string>((await SecurityLogRepository.GetAllActionsAsync())
+            .Where(m => !string.IsNullOrEmpty(m))
+            .WhereIf(!string.IsNullOrEmpty(filter), m => m.Contains(filter!, StringComparison.OrdinalIgnoreCase))
+            .ToList());
     }
 
-    public virtual async Task<ListResultDto<string>> GetAllUserNamesAsync()
+    public virtual async Task<ListResultDto<string>> GetAllUserNamesAsync(string? filter)
     {
-        return new ListResultDto<string>(await SecurityLogRepository.GetAllUserNamesAsync());
+        return new ListResultDto<string>((await SecurityLogRepository.GetAllUserNamesAsync())
+            .Where(m => !string.IsNullOrEmpty(m))
+            .WhereIf(!string.IsNullOrEmpty(filter), m => m.Contains(filter!, StringComparison.OrdinalIgnoreCase))
+            .ToList());
     }
 
-    public virtual async Task<ListResultDto<string>> GetAllClientIdsAsync()
+    public virtual async Task<ListResultDto<string>> GetAllClientIdsAsync(string? filter)
     {
-        return new ListResultDto<string>(await SecurityLogRepository.GetAllClientIdsAsync());
+        return new ListResultDto<string>((await SecurityLogRepository.GetAllClientIdsAsync())
+            .Where(m => !string.IsNullOrEmpty(m))
+            .WhereIf(!string.IsNullOrEmpty(filter), m => m.Contains(filter!, StringComparison.OrdinalIgnoreCase))
+            .ToList());
     }
 
-    public virtual async Task<ListResultDto<string>> GetAllCorrelationIdsAsync()
+    public virtual async Task<ListResultDto<string>> GetAllCorrelationIdsAsync(string? filter)
     {
-        return new ListResultDto<string>(await SecurityLogRepository.GetAllCorrelationIdsAsync());
+        return new ListResultDto<string>((await SecurityLogRepository.GetAllCorrelationIdsAsync())
+            .Where(m => !string.IsNullOrEmpty(m))
+            .WhereIf(!string.IsNullOrEmpty(filter), m => m.Contains(filter!, StringComparison.OrdinalIgnoreCase))
+            .ToList());
     }
 }
