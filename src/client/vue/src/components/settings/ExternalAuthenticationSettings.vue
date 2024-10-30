@@ -65,7 +65,6 @@ onMounted(() => {
         settingManagement.getExternalAuthenticationSettings().then((res: any) => {
             formData.value = { ...res };
             activeNames.value = res.providers.map((provider: any) => provider.provider);
-            console.log(activeNames.value);
         });
     }
 });

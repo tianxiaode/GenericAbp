@@ -27,7 +27,7 @@ onMounted(() => {
 <style lang="scss">
 .loading-progress {
     height: 3px;
-    background-color: red;
+    background-color: var(--el-color-success);
     position: absolute;
     top: 0;
     left: 0;

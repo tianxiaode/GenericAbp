@@ -41,14 +41,10 @@
         <div class="w-full leading-loose">
             <el-link type="primary" @click="$router.push('/login')">{{ t("Pages.Register.AlreadyRegistered") }}</el-link>
         </div>
-        <template #footer>
-            <ExternalProviders />
-        </template>
     </AccountForm>
 </template>
 
 <script setup lang="ts">
-import ExternalProviders from './ExternalProviders.vue';
 import AccountForm from "../forms/AccountForm.vue";
 import { appConfig, account } from '~/libs';
 import { useConfig, useForm, useFormRules, useI18n } from '~/composables';

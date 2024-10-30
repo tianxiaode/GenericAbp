@@ -25,8 +25,8 @@ export function useAuthentication(isAuthenticatedPage?: boolean) {
     };
 
     onMounted(() => {
+        currentUser.value = appConfig.currentUser;
         if(isReady.value && !isAuthenticated.value && isAuthenticatedPage){
-            currentUser.value = appConfig.currentUser;
             logger.debug('[useAuthentication][onMounted]', 'isAuthenticated.value', isAuthenticated.value, 'isAuthenticatedPage', isAuthenticatedPage, 'isReady.value', isReady.value)
             redirectToLogin();
         }        

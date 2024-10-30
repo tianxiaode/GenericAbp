@@ -1,5 +1,5 @@
 <template>
-    <div class="w-full bg-primary h-15 page-header box-border">
+    <div class="w-full bg-primary h-15 page-header box-border" v-if="!isMobile">
         <div class="container mx-auto flex justify-between items-center h-full gap-4 px-2 box-border">
             <a href="/"><img :src="logo" alt="logo" class="h-12.5"></a>
             <div class="flex-1"></div>
@@ -14,9 +14,15 @@
                 </i>
             </a>
             <LanguageButton />
-            <MobileNavButton />
             <ThemeSwitch />
         </div>
+    </div>
+    <div v-else class="w-full bg-primary h-15 box-border px-2 gap-4 flex justify-between items-center">
+        <a href="/"><img :src="logo" alt="logo" class="h-12.5"></a>
+        <div class=flex-1></div>
+        <UserButton />
+        <ThemeSwitch />
+        <MobileNavButton />
     </div>
 </template>
 <script setup lang="ts">
@@ -28,10 +34,7 @@ import MobileNavButton from '../buttons/MobileNavButton.vue';
 import ThemeSwitch from '../buttons/ThemeSwitch.vue';
 
 const { t } = useI18n();
-const { hasHover } = useBrowseEnv();
-
-
-
+const { isMobile } = useBrowseEnv();
 </script>
 
 
@@ -41,7 +44,6 @@ const { hasHover } = useBrowseEnv();
     .el-link {
         color: var(--el-color-white);
         font-size: 18px;
-        min-width: 70px;
     }
 
     .el-link:hover {

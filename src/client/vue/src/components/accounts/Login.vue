@@ -24,11 +24,7 @@
         </el-button>
         <div class="w-full leading-loose">
             <el-link type="primary" @click="$router.push('/register')">{{ t("Pages.Login.NewUser") }}</el-link>
-        </div>
-        <template #footer>
-            <ExternalProviders />
-        </template>
-
+        </div>            
     </AccountForm>
 </template>
 
@@ -37,10 +33,9 @@ import AccountForm from '../forms/AccountForm.vue';
 import { useForm, useFormRules, useI18n } from '~/composables'
 import { account, LocalStorage } from '~/libs';
 import router from '~/router';
-import ExternalProviders from './ExternalProviders.vue';
+
 
 const { t } = useI18n();
-
 const formRules = {
     username: { required: true },
     password: { required: true },
