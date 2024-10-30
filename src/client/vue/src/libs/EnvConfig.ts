@@ -8,7 +8,6 @@ class EnvConfig {
     xsrfHeaderName: string | undefined;
     baseUrl: string | undefined;
     publishPath: string | undefined;
-    tokenStorageName: string;
     languageStorageName: string;
     authHeaderName: string | undefined;
     defaultDateFormat: string | undefined;
@@ -31,9 +30,8 @@ class EnvConfig {
         this.xsrfHeaderName = env.VITE_XSRF_HEADER_NAME;
         this.baseUrl = env.VITE_BASE_URL;
         this.publishPath = env.VITE_PUBLISH_PATH;
-        this.tokenStorageName = env.VITE_TOKEN_STORAGE_NAME || 'token';
         this.languageStorageName = env.VITE_LANGUAGE_STORAGE_NAME || 'language';
-        this.authHeaderName = env.VITE_AUTH_HEADER_NAME ;
+        this.authHeaderName = env.VITE_AUTH_HEADER_NAME  || 'Authorization';
         this.defaultDateFormat = env.VITE_DEFAULT_DATE_FORMAT;
         this.defaultDateTimeFormat = env.VITE_DEFAULT_DATETIME_FORMAT;
         this.defaultTimeFormat = env.VITE_DEFAULT_TIME_FORMAT;
@@ -48,7 +46,6 @@ class EnvConfig {
         return {
             baseUrl: this.apiUrl,
             tokenStorage: localStorage,
-            tokenStorageKey: this.tokenStorageName,
             languageKey: this.languageStorageName,
             authHeaderName: this.authHeaderName,
             xsrfCookieName: this.xsrfCookieName,

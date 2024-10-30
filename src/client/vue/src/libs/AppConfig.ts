@@ -23,7 +23,7 @@ export class AppConfig {
 
     async loadConfig() {
         try {
-            
+            console.log('[AppConfig][loadconfig]')
             const configStore = useConfigStore();
             configStore.refreshState(false, false)
             const response = await http.get<AppConfigType>(this.configUrl, this.configParams);
@@ -84,12 +84,6 @@ export class AppConfig {
     }
 
 
-    // private async checkNeedSetPassword(): Promise<void> {
-    //     const result = await http.get("/need-set-password") as any;
-    //     if(result.need){
-    //         ElMessage.error(i18n.get('Message.ResetPasswordTip'));
-    //     }
-    // }
 }
 
 export const appConfig = new AppConfig();

@@ -86,30 +86,6 @@ export class LocalStorage {
         this.setItem(envConfig.languageStorageName, language);
     }
 
-    static getToken(): string | null {
-        return this.getItem(envConfig.tokenStorageName);
-    }
-
-    static setToken(token: string) {
-        this.setItem(envConfig.tokenStorageName, token);
-    }
-
-    static removeToken() {
-        this.removeItem(envConfig.tokenStorageName);
-    }
-
-    static setRefreshToken(refreshToken: string | undefined) {
-        this.setItem('refreshToken', refreshToken);
-    }
-
-    static getRefreshToken(): string | null {
-        return this.getItem('refreshToken');    
-    }
-
-    static removeRefreshToken() {
-        this.removeItem('refreshToken');
-    }
-
     static setRedirectPath(path: string) {
         this.setItem('redirectPath', path);
     }

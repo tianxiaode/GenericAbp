@@ -14,7 +14,7 @@ import { envConfig } from "./EnvConfig";
 class Account {
     $className = "Account";
     userManager: UserManager | undefined;
-
+    user: User | undefined;
     init = async (oidcSettings: UserManagerSettings) => {
         this.userManager = new UserManager({
             ...oidcSettings,
@@ -24,7 +24,8 @@ class Account {
                 }
             }
         });
-
+        //从localStorage中获取用户
+        this.user = await this.userManager.getUser() || undefined;
         this.initEvents();
     };
 
@@ -63,9 +64,6 @@ class Account {
             await this.revocationToken();
             //移除用户
             this.userManager?.removeUser();
-            //移除令牌
-            LocalStorage.removeRefreshToken();
-            LocalStorage.removeToken();
             window.location.href = "/";
         } catch (e: any) {
             logger.error(this, ["logout"], e);
@@ -176,10 +174,20 @@ class Account {
         }
     };
 
+    getAccessToken = () => {
+        return this.user?.access_token;
+    }
+
+    getTokenType = () => {  
+        return this.user?.token_type;
+    }
+
+
     private revocationToken = async () => { 
+        logger.debug(this, ["revocationToken"], "Starting token revocation");
         const revocationEndpoint = await this.userManager!.metadataService.getRevocationEndpoint();
         if(!revocationEndpoint) return;
-        const refreshToken = LocalStorage.getRefreshToken();
+        const refreshToken = this.user?.refresh_token;
         const clientId = this.userManager!.settings.client_id;
         if(refreshToken){
             await http.post(revocationEndpoint, 
@@ -187,7 +195,7 @@ class Account {
                 { headers: { "Content-Type": "application/x-www-form-urlencoded" } })    
 
         }
-        const token = LocalStorage.getToken();
+        const token = this.user?.access_token;
         if(token){
             await http.post(revocationEndpoint, 
                 `token=${token}&token_type_hint=access_token&client_id=${clientId}`, 
@@ -232,21 +240,15 @@ class Account {
     };
 
     private onUserLoaded = (user: User) => {
-        const oldToke = LocalStorage.getToken();
-        const newToken = user.access_token;
-        if (oldToke !== newToken) {
-            LocalStorage.setToken(user.access_token);
-            LocalStorage.setRefreshToken(user.refresh_token);
-            appConfig.loadConfig();
-            i18n.loadLanguage();
-        }
-    };
-
-    private onUserUnloaded = () => {
-        LocalStorage.removeToken();
-        LocalStorage.removeRefreshToken();
+        //用户加载后，刷新用户，重新加载配置文件和语言文件
+        this.user = user;
         appConfig.loadConfig();
         i18n.loadLanguage();
+    };
+
+
+    private onUserUnloaded = () => {
+        logger.debug(this, ["onUserUnloaded"], "User unloaded");
     };
 }
 

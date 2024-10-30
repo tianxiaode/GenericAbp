@@ -12,7 +12,7 @@ import App from "./App.vue";
 import { logger, envConfig,  LocalStorage, i18n, BaseHttp, normalizedLanguage, account, RepositoryGlobalConfig, RepositoryFactory,textToHtml } from "./libs";
 import router from "./router"; // 引入 router.ts
 import { useLocalizationStore } from "./store";
-import { Logger } from "oidc-client-ts";
+import { Logger, WebStorageStateStore } from "oidc-client-ts";
 import {repositoryRegisters} from "./repositories"
 import { useConfirm } from "./composables";
 
@@ -55,22 +55,6 @@ i18n.init({
     remoteLanguageParam: 'CultureName',
 });
 
-// 初始化本地化
-const localizationStore = useLocalizationStore();
-localizationStore.setLocale(defaultLanguage);
-
-/// 初始化账户
-account.init({
-    authority: envConfig.oidcAuthority,
-    client_id: envConfig.oidcClientId,
-    redirect_uri:envConfig.baseUrl + "signin-oidc",
-    response_type: envConfig.oidcResponseType,
-    scope: envConfig.oidcScope,
-    automaticSilentRenew: true,
-    revokeTokensOnSignout: true,
-    post_logout_redirect_uri: envConfig.baseUrl + "signout-callback-oidc",
-    loadUserInfo: false
-});
 
 Logger.debug('[main.ts]',"app started");
 // 初始化仓库
@@ -118,6 +102,26 @@ RepositoryGlobalConfig.init({
 });
 
 RepositoryFactory.register(repositoryRegisters);
+
+/// 初始化账户
+account.init({
+    authority: envConfig.oidcAuthority,
+    client_id: envConfig.oidcClientId,
+    redirect_uri:envConfig.baseUrl + "signin-oidc",
+    response_type: envConfig.oidcResponseType,
+    scope: envConfig.oidcScope,
+    automaticSilentRenew: true,
+    revokeTokensOnSignout: true,
+    post_logout_redirect_uri: envConfig.baseUrl + "signout-callback-oidc",
+    loadUserInfo: false,
+    userStore: new WebStorageStateStore({ store: localStorage }),
+
+}).then(()=>{
+    // 初始化本地化
+    const localizationStore = useLocalizationStore();
+    localizationStore.setLocale(defaultLanguage);
+});
+
 
 // 使用路由
 app.use(router);

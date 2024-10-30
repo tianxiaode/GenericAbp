@@ -1,3 +1,4 @@
+import { account } from "../Account";
 import { LocalStorage } from "../LocalStorage";
 import { HttpDeferred } from "./HttpDeferred";
 import { HttpError } from "./HttpError";
@@ -69,8 +70,7 @@ export class BaseHttp {
     public defaultCreateHeaders(options?: HttpRequestOptions): { [key: string]: string } {
         options = options || {};
         const me = BaseHttp;        
-        const token = LocalStorage.getToken();
-
+        const token = account.getAccessToken();
         const headers: { [key: string]: string } = {
             'Accept-Language': LocalStorage.getLanguage(),
             'Content-Type': options.data instanceof FormData ? 'multipart/form-data' : 'application/json',
@@ -80,7 +80,7 @@ export class BaseHttp {
 
 
         if (token) {
-            headers[me.authHeaderName || 'Authorization'] = me.authHeaderGenerator ? me.authHeaderGenerator(token) : `Bearer ${token}`;
+            headers[me.authHeaderName || 'Authorization'] = me.authHeaderGenerator ? me.authHeaderGenerator(token) : `${account.getTokenType()} ${token}`;
         }
 
         if (me.xsrfValue) {
