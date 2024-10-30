@@ -9,6 +9,7 @@ namespace Generic.Abp.Identity.Permissions
 
         public const string IdentityManagement = GroupName + ".IdentityManagement";
 
+        public const string SecurityLogs = Volo.Abp.Identity.IdentityPermissions.GroupName + ".SecurityLogs";
 
         public static string[] GetAll()
         {

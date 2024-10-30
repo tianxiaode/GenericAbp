@@ -10,6 +10,7 @@ namespace Generic.Abp.Identity
         typeof(AbpSettingManagementDomainModule),
         typeof(AbpIdentityApplicationModule),
         typeof(GenericAbpIdentityApplicationContractsModule),
+        typeof(GenericAbpIdentityDomainModule),
         typeof(AbpAutoMapperModule)
     )]
     public class GenericAbpIdentityApplicationModule : AbpModule

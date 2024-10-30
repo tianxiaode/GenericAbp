@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\modules\identity\src\Generic.Abp.Identity.EntityFrameworkCore\Generic.Abp.Identity.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\QuickTemplate.Domain\QuickTemplate.Domain.csproj" />
     <PackageReference Include="Volo.Abp.EntityFrameworkCore.MySQL" Version="$(AbpVersion)" />
     <PackageReference Include="Volo.Abp.PermissionManagement.EntityFrameworkCore" Version="$(AbpVersion)" />

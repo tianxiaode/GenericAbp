@@ -28,7 +28,6 @@ app.use(pinia);
 BaseHttp.init({
     ...envConfig.defaultHttpConfig,
     errorMessageHandler(error: any) {
-        logger.debug("http error", error.status, error.message);
         const t = i18n.get.bind(i18n);
         switch (error.status) {
             case 200:

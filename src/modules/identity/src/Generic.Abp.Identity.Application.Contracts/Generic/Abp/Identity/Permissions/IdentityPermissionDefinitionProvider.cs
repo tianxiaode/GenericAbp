@@ -11,6 +11,9 @@ namespace Generic.Abp.Identity.Permissions
         {
             var myGroup = context.GetGroup(SettingManagementPermissions.GroupName);
             myGroup.AddPermission(IdentityPermissions.IdentityManagement, L("Permission:IdentityManagement"));
+
+            var identityGroup = context.GetGroup(Volo.Abp.Identity.IdentityPermissions.GroupName);
+            identityGroup.AddPermission(IdentityPermissions.SecurityLogs, L("Permission:SecurityLogs"));
         }
 
         private static LocalizableString L(string name)

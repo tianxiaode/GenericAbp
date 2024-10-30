@@ -11,11 +11,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Volo.Abp.AspNetCore.MultiTenancy" Version="$(AbpVersion)" />
-    <PackageReference Include="Volo.Abp.AspNetCore.Mvc" Version="$(AbpVersion)" />
-    
+    <PackageReference Include="Volo.Abp.Identity.EntityFrameworkCore" Version="$(AbpVersion)" />
   </ItemGroup>
 
-
+  <ItemGroup>
+    <ProjectReference Include="..\Generic.Abp.Extensions\Generic.Abp.Extensions.csproj" />
+  </ItemGroup>
 
 </Project>

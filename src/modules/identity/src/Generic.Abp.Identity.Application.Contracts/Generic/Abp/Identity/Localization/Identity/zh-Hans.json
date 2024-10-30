@@ -2,10 +2,24 @@
   "culture": "zh-Hans",
   "texts": {
     "Permission:IdentityManagement": "身份管理",
+    "Permission:SecurityLogs": "安全日志",
     "PasswordSettings": "密码设置",
     "PasswordRenewingSettings": "密码更新设置",
     "LockoutSettings": "锁定设置",
     "SigninSettings": "登录设置",
-    "UserSettings": "用户设置"
+    "UserSettings": "用户设置",
+    "SecurityLog:ApplicationName": "应用程序",
+    "SecurityLog:Identity": "身份",
+    "SecurityLog:Action": "操作",
+    "SecurityLog:UserId": "用户 Id",
+    "SecurityLog:UserName": "用户名",
+    "SecurityLog:TenantName": "租户名称",
+    "SecurityLog:ClientId": "Cleint Id",
+    "SecurityLog:CorrelationId": "Correlation Id",
+    "SecurityLog:ClientIpAddress": "客户端IP",
+    "SecurityLog:BrowserInfo": "浏览器信息",
+    "SecurityLog:CreationTime": "创建时间",
+    "SecurityLogs": "安全日志",
+    "SecurityLog": "安全日志"
   }
 }

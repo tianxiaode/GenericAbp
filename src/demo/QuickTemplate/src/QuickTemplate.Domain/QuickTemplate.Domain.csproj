@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\modules\identity\src\Generic.Abp.Identity.Domain\Generic.Abp.Identity.Domain.csproj" />
     <ProjectReference Include="..\QuickTemplate.Domain.Shared\QuickTemplate.Domain.Shared.csproj" />
   </ItemGroup>
 

@@ -59,7 +59,11 @@ class Account {
 
     logout = async () => {
         try {
+            //销毁令牌
             await this.revocationToken();
+            //移除用户
+            this.userManager?.removeUser();
+            //移除令牌
             LocalStorage.removeRefreshToken();
             LocalStorage.removeToken();
             window.location.href = "/";
@@ -200,6 +204,8 @@ class Account {
 
         events.addAccessTokenExpired(() => {
             logger.debug(this, ["initEvents"], "Access token expired");
+            this.userManager!.signinSilent();
+            logger.debug(this, ["initEvents"], "startSilentRenew");
         });
 
         events.addSilentRenewError((e:any) => {

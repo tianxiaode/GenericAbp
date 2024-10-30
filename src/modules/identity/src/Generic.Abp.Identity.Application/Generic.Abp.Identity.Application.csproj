@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Generic.Abp.Identity.Application.Contracts\Generic.Abp.Identity.Application.Contracts.csproj" />
+    <ProjectReference Include="..\Generic.Abp.Identity.Domain\Generic.Abp.Identity.Domain.csproj" />
   </ItemGroup>
 
 </Project>
