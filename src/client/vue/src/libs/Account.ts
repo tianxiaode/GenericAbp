@@ -3,6 +3,7 @@ import {
     User,
     UserManagerEvents,
     UserManager,
+    WebStorageStateStore,
 } from "oidc-client-ts";
 import { logger } from "./utils";
 import { LocalStorage } from "./LocalStorage";
@@ -15,6 +16,7 @@ class Account {
     $className = "Account";
     userManager: UserManager | undefined;
     user: User | undefined;
+    userManagerSettings: any;
     init = async (oidcSettings: UserManagerSettings) => {
         this.userManager = new UserManager({
             ...oidcSettings,
@@ -25,6 +27,7 @@ class Account {
             }
         });
         //从localStorage中获取用户
+        this.userManagerSettings = this.userManager.settings;
         this.user = await this.userManager.getUser() || undefined;
         this.initEvents();
     };
@@ -33,8 +36,11 @@ class Account {
         return appConfig.currentUser;
     }
 
-    login = async (username: string, password: string) => {
+    login = async (username: string, password: string, rememberMe: boolean) => {
         try {    
+            this.userManagerSettings.userStore = new WebStorageStateStore({
+                store: rememberMe ? localStorage : sessionStorage
+            });
             const user = await this.userManager!.signinResourceOwnerCredentials(
                 {
                     username: username,

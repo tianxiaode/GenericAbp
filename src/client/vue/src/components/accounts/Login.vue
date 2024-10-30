@@ -15,7 +15,8 @@
                 </template>
             </el-input>
         </el-form-item>
-        <div class="w-full text-right mb-2 leading-loose">
+        <div class="w-full flex flex-row items-center mb-2 leading-loose justify-between">
+            <el-checkbox v-model="formData.rememberMe">{{ t("Pages.Login.RememberMe") }}</el-checkbox>
             <el-link type="primary" @click="$router.push('/forgot-password')">{{ t("Pages.Login.ForgotPassword")
                 }}</el-link>
         </div>
@@ -43,7 +44,7 @@ const formRules = {
 
 const onSubmit = async () => {
     try {
-        await account.login(formData.value.username, formData.value.password);
+        await account.login(formData.value.username, formData.value.password, formData.value.rememberMe);
         formRef.value.success('Pages.login.LoginSuccess');
         setTimeout(() => {
             let redirectPath = LocalStorage.getRedirectPath() || '/';
