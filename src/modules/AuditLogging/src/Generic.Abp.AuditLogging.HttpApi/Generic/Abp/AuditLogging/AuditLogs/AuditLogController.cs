@@ -61,14 +61,14 @@ public class AuditLogController : AuditLoggingController, IAuditLogAppService
     [Route(("urls"))]
     public Task<ListResultDto<string>> GetAllUrlsAsync(string? filter)
     {
-        return AppService.GetAllUserNamesAsync(filter);
+        return AppService.GetAllUrlsAsync(filter);
     }
 
     [HttpGet]
     [Route(("user-names"))]
     public Task<ListResultDto<string>> GetAllUserNamesAsync(string? filter)
     {
-        return AppService.GetAllClientIdsAsync(filter);
+        return AppService.GetAllUserNamesAsync(filter);
     }
 
     [HttpGet]

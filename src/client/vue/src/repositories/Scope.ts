@@ -12,7 +12,7 @@ export class ScopRepository extends Repository<ScopeType> {
     $className = 'ScopRepository';
 
     initialize() {
-        logger.debug(this,'[initialize]', 'RoleRepository initialized')
+        logger.debug(this,'[initialize]', 'ScopRepository initialized')
         this.entity = 'scope';
         this.resourceName = "OpenIddict";
         this.entityGroup = "";  

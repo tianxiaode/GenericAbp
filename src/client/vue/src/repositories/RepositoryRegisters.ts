@@ -5,6 +5,7 @@ import { ApplicationRepository } from "./Application";
 import { ScopRepository } from "./Scope";
 import { TenantRepository } from "./Tenant";
 import { SecurityLogRepository } from "./SecurityLog";
+import { AuditLogRepository } from "./AuditLog";
 
 export const repositoryRegisters: Record<string, RepositoryRegistryType> = {
     Role: {
@@ -24,5 +25,8 @@ export const repositoryRegisters: Record<string, RepositoryRegistryType> = {
     },
     securityLog:{
         type: SecurityLogRepository
+    },
+    auditLog:{
+        type: AuditLogRepository
     }
 }

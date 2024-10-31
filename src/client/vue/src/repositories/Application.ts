@@ -97,7 +97,7 @@ export class ApplicationRepository extends Repository<ApplicationType> {
     $className = 'ApplicationRepository';
 
     initialize() {
-        logger.debug(this,'[initialize]', 'RoleRepository initialized')
+        logger.debug(this,'[initialize]', 'ApplicationRepository initialized')
         this.entity = 'application';
         this.resourceName = "OpenIddict";
         this.entityGroup = "";  

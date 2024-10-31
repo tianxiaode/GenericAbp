@@ -26,7 +26,7 @@ namespace Generic.Abp.AuditLogging
             Configure<AbpLocalizationOptions>(options =>
             {
                 options.Resources
-                    .Get<AuditLoggingResource>();
+                    .Get<AuditLoggingResource>().AddVirtualJson("/Generic/Abp/AuditLogging/Localization/Resources");
             });
 
             Configure<AbpExceptionLocalizationOptions>(options =>

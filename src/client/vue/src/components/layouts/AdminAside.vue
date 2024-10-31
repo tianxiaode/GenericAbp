@@ -40,6 +40,10 @@
                     <el-icon><i class="fa fa-cog"></i></el-icon>
                     <span>安全日志</span>                    
                 </el-menu-item>
+                <el-menu-item index="/audit-logs" v-if="isGranted('AuditLogging.AuditLogs')">
+                    <el-icon><i class="fa fa-cog"></i></el-icon>
+                    <span>审计日志</span>                    
+                </el-menu-item>
             </el-sub-menu>
         </el-menu>
     </el-aside>

@@ -23,7 +23,7 @@ export class UserRepository extends Repository<UserType> {
     $className = 'UserRepository';
 
     initialize() {
-        logger.debug(this,'[initialize]', 'RoleRepository initialized')
+        logger.debug(this,'[initialize]', 'UserRepository initialized')
         this.entity = 'user';
         this.resourceName = "AbpIdentity";
         this.entityGroup = "identity";  

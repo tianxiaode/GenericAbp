@@ -1,27 +1,40 @@
 import { EntityInterface, http, isGranted, logger, Repository } from "../libs";
 
-export interface SecurityLogType extends EntityInterface {
+export interface AuditLogType extends EntityInterface {
     applicationName: String,
-    identity: string,
-    action: string,
     userId: string,
     userName: string,
     tenantName: string,
     clientId: string,
     correlationId: string,
     clientIpAddress: string,
-    browserInfo: String,
+    browserInfo: string,
+    impersonatorUserName: string,
+    impersonatorUserId: string,
+    impersonatorTenantId: string,
+    impersonatorTenantName: string,
+    executionTime: string,
+    executionDuration: number,
+    clientName: string,
+    httpMethod: string,
+    url: string,
+    exceptions: string,
+    comments: string,
+    httpStatusCode: number,
+    actions: string,
 }
-export class SecurityLogRepository extends Repository<SecurityLogType> {
 
-    $className = 'SecurityLogRepository';
+
+export class AuditLogRepository extends Repository<AuditLogType> {
+
+    $className = 'AuditLogRepository';
 
     initialize() {
-        logger.debug(this,'[initialize]', 'SecurityLogRepository initialized')
-        this.entity = 'SecurityLog';
-        this.resourceName = "AbpIdentity";
+        logger.debug(this,'[initialize]', 'AuditLogRepository initialized')
+        this.entity = 'AuditLog';
+        this.resourceName = "AbpAuditLogging";
         this.entityGroup = "";  
-        this.messageField = "action";
+        this.messageField = "url";
     };
 
     get canManagePermissions(): boolean {
@@ -32,8 +45,8 @@ export class SecurityLogRepository extends Repository<SecurityLogType> {
         return http.get(this.getUrl() + `/application-names/?filter=${filter}`);
     }
 
-    getAllIdentities = (filter?: string) =>{
-        return http.get(this.getUrl() + `/identities/?filter=${filter}`);
+    getAllUrls = (filter?: string) =>{
+        return http.get(this.getUrl() + `/urls/?filter=${filter}`);
     }
 
     getAllActions = (filter?: string) =>{
