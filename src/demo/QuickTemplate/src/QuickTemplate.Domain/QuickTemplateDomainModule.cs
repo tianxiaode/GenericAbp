@@ -1,4 +1,5 @@
-﻿using Generic.Abp.Identity;
+﻿using Generic.Abp.AuditLogging;
+using Generic.Abp.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using QuickTemplate.MultiTenancy;
@@ -20,17 +21,18 @@ namespace QuickTemplate;
 
 [DependsOn(
     typeof(QuickTemplateDomainSharedModule),
-    typeof(AbpAuditLoggingDomainModule),
+    //typeof(AbpAuditLoggingDomainModule),
     typeof(AbpBackgroundJobsDomainModule),
     typeof(AbpFeatureManagementDomainModule),
-    typeof(AbpIdentityDomainModule),
+    //typeof(AbpIdentityDomainModule),
     typeof(AbpOpenIddictDomainModule),
     typeof(AbpPermissionManagementDomainOpenIddictModule),
     typeof(AbpPermissionManagementDomainIdentityModule),
     typeof(AbpSettingManagementDomainModule),
     typeof(AbpTenantManagementDomainModule),
     typeof(AbpEmailingModule),
-    typeof(GenericAbpIdentityDomainModule)
+    typeof(GenericAbpIdentityDomainModule),
+    typeof(GenericAbpAuditLoggingDomainModule)
 )]
 public class QuickTemplateDomainModule : AbpModule
 {

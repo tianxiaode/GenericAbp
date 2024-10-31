@@ -1,4 +1,5 @@
-﻿using Generic.Abp.Identity;
+﻿using Generic.Abp.AuditLogging;
+using Generic.Abp.Identity;
 using Generic.Abp.OpenIddict;
 using Volo.Abp.Account;
 using Volo.Abp.AutoMapper;
@@ -18,6 +19,7 @@ namespace QuickTemplate;
     typeof(AbpIdentityApplicationModule),
     typeof(GenericAbpIdentityApplicationModule),
     typeof(GenericAbpOpenIddictApplicationModule),
+    typeof(GenericAbpAuditLoggingApplicationModule),
     typeof(AbpPermissionManagementApplicationModule),
     typeof(AbpTenantManagementApplicationModule),
     typeof(AbpFeatureManagementApplicationModule),

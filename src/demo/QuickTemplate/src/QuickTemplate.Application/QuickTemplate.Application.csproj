@@ -9,6 +9,7 @@
 
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\modules\AuditLogging\src\Generic.Abp.AuditLogging.Application\Generic.Abp.AuditLogging.Application.csproj" />
     <ProjectReference Include="..\..\..\..\modules\identity\src\Generic.Abp.Identity.Application\Generic.Abp.Identity.Application.csproj" />
     <ProjectReference Include="..\..\..\..\modules\openiddict\src\Generic.Abp.OpenIddict.Application\Generic.Abp.OpenIddict.Application.csproj" />
     <ProjectReference Include="..\QuickTemplate.Domain\QuickTemplate.Domain.csproj" />

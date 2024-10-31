@@ -1,4 +1,5 @@
-﻿using Generic.Abp.Extensions;
+﻿using Generic.Abp.AuditLogging;
+using Generic.Abp.Extensions;
 using Generic.Abp.Identity;
 using Generic.Abp.OpenIddict;
 using Localization.Resources.AbpUi;
@@ -18,6 +19,7 @@ namespace QuickTemplate;
     typeof(QuickTemplateApplicationContractsModule),
     typeof(AbpAccountHttpApiModule),
     typeof(AbpIdentityHttpApiModule),
+    typeof(GenericAbpAuditLoggingHttpApiModule),
     typeof(GenericAbpIdentityHttpApiModule),
     typeof(GenericAbpOpenIddictHttpApiModule),
     typeof(GenericAbpExtensionsHttpApiModule),

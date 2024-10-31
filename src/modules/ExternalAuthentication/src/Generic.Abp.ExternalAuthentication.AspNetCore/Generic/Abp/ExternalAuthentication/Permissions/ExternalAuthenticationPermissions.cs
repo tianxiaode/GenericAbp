@@ -11,6 +11,6 @@ public class ExternalAuthenticationPermissions
     public static string[] GetAll()
     {
         return ReflectionHelper.GetPublicConstantsRecursively(
-            typeof(ExternalAuthenticationPermissionDefinitionProvider));
+            typeof(ExternalAuthenticationPermissions));
     }
 }

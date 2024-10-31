@@ -1,11 +1,14 @@
 ﻿using Generic.Abp.Identity.SecurityLogs.Dtos;
+using Microsoft.AspNetCore.Authorization;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Identity;
+using Volo.Abp.Users;
 
 namespace Generic.Abp.Identity.SecurityLogs;
 
 [RemoteService(false)]
+[Authorize]
 public class SecurityLogAppService : IdentityAppService, ISecurityLogAppService
 {
     protected ISecurityLogRepository SecurityLogRepository { get; }
@@ -22,8 +25,15 @@ public class SecurityLogAppService : IdentityAppService, ISecurityLogAppService
 
     public virtual async Task<PagedResultDto<SecurityLogDto>> GetListAsync(SecurityLogGetListInput input)
     {
+        //没有权限，则只返回当前用户的日志
+        Guid? userId = null;
+        if (!await AuthorizationService.IsGrantedAsync(Permissions.IdentityPermissions.SecurityLogs))
+        {
+            userId = CurrentUser.GetId();
+        }
+
         var predicate = await SecurityLogRepository.BuildPredicateAsync(input.Filter, input.StartTime, input.EndTime,
-            input.ApplicationName, input.Identity, input.ActionName, null, input.UserName, input.ClientId,
+            input.ApplicationName, input.Identity, input.ActionName, userId, input.UserName, input.ClientId,
             input.CorrelationId);
         var totalCount = await SecurityLogRepository.GetCountAsync(predicate);
         if (totalCount == 0)

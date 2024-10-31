@@ -26,7 +26,7 @@ public class SecurityLogRepository : EfCoreRepository<IdentityDbContext, Identit
     public virtual async Task<long> GetCountAsync(Expression<Func<IdentitySecurityLog, bool>> predicate,
         CancellationToken cancellationToken = default)
     {
-        return await (await GetDbSetAsync()).Where(predicate).CountAsync(cancellationToken);
+        return await (await GetDbSetAsync()).Where(predicate).LongCountAsync(cancellationToken);
     }
 
     public virtual async Task<List<IdentitySecurityLog>> GetListAsync(
@@ -35,6 +35,7 @@ public class SecurityLogRepository : EfCoreRepository<IdentityDbContext, Identit
         CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())
+            .AsNoTracking()
             .Where(predicate)
             .OrderBy(sorting.IsNullOrWhiteSpace() ? $"{nameof(IdentitySecurityLog.CreationTime)} desc" : sorting)
             .PageBy(skipCount, maxResultCount)
@@ -44,48 +45,60 @@ public class SecurityLogRepository : EfCoreRepository<IdentityDbContext, Identit
     public virtual async Task<List<string>> GetAllApplicationNamesAsync(CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())
+            .AsNoTracking()
             .Select(m => m.ApplicationName)
             .Distinct()
+            .PageBy(0, 100)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
     public virtual async Task<List<string>> GetAllIdentitiesAsync(CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())
+            .AsNoTracking()
             .Select(m => m.Identity)
             .Distinct()
+            .PageBy(0, 100)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
     public virtual async Task<List<string>> GetAllActionsAsync(CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())
+            .AsNoTracking()
             .Select(m => m.Action)
             .Distinct()
+            .PageBy(0, 100)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
     public virtual async Task<List<string>> GetAllUserNamesAsync(CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())
+            .AsNoTracking()
             .Select(m => m.UserName)
             .Distinct()
+            .PageBy(0, 100)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
     public virtual async Task<List<string>> GetAllClientIdsAsync(CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())
+            .AsNoTracking()
             .Select(m => m.ClientId)
             .Distinct()
+            .PageBy(0, 100)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
     public virtual async Task<List<string>> GetAllCorrelationIdsAsync(CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())
+            .AsNoTracking()
             .Select(m => m.CorrelationId)
             .Distinct()
+            .PageBy(0, 100)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
@@ -123,6 +136,11 @@ public class SecurityLogRepository : EfCoreRepository<IdentityDbContext, Identit
         if (endTime.HasValue)
         {
             predicate = predicate.AndIfNotTrue(m => m.CreationTime <= endTime);
+        }
+
+        if (userId.HasValue)
+        {
+            predicate = predicate.AndIfNotTrue(m => m.UserId == userId);
         }
 
         if (!string.IsNullOrEmpty(applicationName))
