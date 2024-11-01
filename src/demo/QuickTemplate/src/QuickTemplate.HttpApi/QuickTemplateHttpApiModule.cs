@@ -1,6 +1,7 @@
 ﻿using Generic.Abp.AuditLogging;
 using Generic.Abp.Extensions;
 using Generic.Abp.Identity;
+using Generic.Abp.MenuManagement;
 using Generic.Abp.OpenIddict;
 using Localization.Resources.AbpUi;
 using QuickTemplate.Localization;
@@ -26,7 +27,8 @@ namespace QuickTemplate;
     typeof(AbpPermissionManagementHttpApiModule),
     typeof(AbpTenantManagementHttpApiModule),
     typeof(AbpFeatureManagementHttpApiModule),
-    typeof(AbpSettingManagementHttpApiModule)
+    typeof(AbpSettingManagementHttpApiModule),
+    typeof(GenericAbpMenuManagementHttpApiModule)
 )]
 public class QuickTemplateHttpApiModule : AbpModule
 {

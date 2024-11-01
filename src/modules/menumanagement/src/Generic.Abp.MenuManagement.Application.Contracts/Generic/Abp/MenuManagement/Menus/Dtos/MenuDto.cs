@@ -1,25 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Data;
 
 namespace Generic.Abp.MenuManagement.Menus.Dtos;
 
 [Serializable]
 public class MenuDto : ExtensibleAuditedEntityDto<Guid>
 {
-    public string Code { get; set; }
-    public string DisplayName { get; set; }
-    public Guid? ParentId { get; set; }
-    public bool Leaf { get; set; }
-    public MenuDto Parent { get; set; }
-    public ICollection<MenuDto> Children { get; set; }
-    public string Icon { get; set; }
-    public bool IsSelectable { get; set; }
-    public bool IsDisabled { get; set; }
-    public int Order { get; set; }
-    public string Router { get; set; }
-    public string GroupName { get; set; }
-    public string ConcurrencyStamp { get; set; }
-    public List<MenuTranslationDto> Translations { get; set; }
-    public List<string> Permissions { get; set; }
+    public string Code { get; set; } = default!;
+    public string Name { get; set; } = default!;
+    public Guid? ParentId { get; set; } = default!;
+    public bool Leaf { get; set; } = default!;
+    public string? Icon { get; set; } = default!;
+    public bool IsEnabled { get; set; } = default!;
+    public bool IsStatic { get; set; } = default!;
+    public int Order { get; set; } = default!;
+    public string? Router { get; set; } = default!;
+    public string GroupName { get; set; } = default!;
+    public string ConcurrencyStamp { get; set; } = default!;
+    public MenuDto? Parent { get; set; } = default!;
 }

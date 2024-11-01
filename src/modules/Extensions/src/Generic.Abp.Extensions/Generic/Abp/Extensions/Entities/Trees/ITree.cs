@@ -4,7 +4,9 @@ namespace Generic.Abp.Extensions.Entities.Trees;
 
 public interface ITree
 {
-    public string Code { get; set; }
-    public Guid? ParentId { get; set; }
-    public string DisplayName { get; set; }
+    public string Code { get; }
+    public Guid? ParentId { get; }
+    public string Name { get; }
+    public void MoveTo(Guid? parentId);
+    public void SetCode(string code);
 }

@@ -1,15 +1,13 @@
-﻿using Generic.Abp.Domain;
-using Volo.Abp.Domain;
+﻿using Generic.Abp.Extensions;
 using Volo.Abp.Modularity;
 
 namespace Generic.Abp.MenuManagement
 {
     [DependsOn(
-        typeof(GenericAbpDddDomainModule),
+        typeof(GenericAbpExtensionsDomainModule),
         typeof(GenericAbpMenuManagementDomainSharedModule)
     )]
     public class GenericAbpMenuManagementDomainModule : AbpModule
     {
-
     }
 }

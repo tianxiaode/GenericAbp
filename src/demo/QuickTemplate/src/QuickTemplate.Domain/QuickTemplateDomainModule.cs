@@ -1,13 +1,12 @@
 ﻿using Generic.Abp.AuditLogging;
 using Generic.Abp.Identity;
+using Generic.Abp.MenuManagement;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using QuickTemplate.MultiTenancy;
-using Volo.Abp.AuditLogging;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.Emailing;
 using Volo.Abp.FeatureManagement;
-using Volo.Abp.Identity;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
@@ -32,7 +31,8 @@ namespace QuickTemplate;
     typeof(AbpTenantManagementDomainModule),
     typeof(AbpEmailingModule),
     typeof(GenericAbpIdentityDomainModule),
-    typeof(GenericAbpAuditLoggingDomainModule)
+    typeof(GenericAbpAuditLoggingDomainModule),
+    typeof(GenericAbpMenuManagementDomainModule)
 )]
 public class QuickTemplateDomainModule : AbpModule
 {

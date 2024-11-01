@@ -30,15 +30,15 @@ namespace Generic.Abp.Extensions.Trees
         }
 
         [UnitOfWork]
-        public virtual async Task CreateAsync(TEntity entity, bool autoSave = true)
+        public virtual async Task CreateAsync(TEntity entity, bool autoSave = true, bool updatePermissions = true)
         {
-            entity.Code = await GetNextChildCodeAsync(entity.ParentId);
+            entity.SetCode(await GetNextChildCodeAsync(entity.ParentId));
             await ValidateAsync(entity);
             await Repository.InsertAsync(entity, autoSave, cancellationToken: CancellationToken);
         }
 
         [UnitOfWork]
-        public virtual async Task UpdateAsync(TEntity entity, bool autoSave = true)
+        public virtual async Task UpdateAsync(TEntity entity, bool autoSave = true, bool updatePermissions = true)
         {
             await ValidateAsync(entity);
             await Repository.UpdateAsync(entity, autoSave, cancellationToken: CancellationToken);
@@ -62,19 +62,20 @@ namespace Generic.Abp.Extensions.Trees
             //Should find children before Code change
             var children = await FindChildrenAsync(id, true);
 
-            //Store old code of OU
+            //Store old code of entity
             var oldCode = entity.Code;
 
-            //Move OU
-            entity.Code = await GetNextChildCodeAsync(parentId);
-            entity.ParentId = parentId;
+            //Move
+            entity.SetCode(await GetNextChildCodeAsync(parentId));
+            entity.MoveTo(parentId);
 
             await ValidateAsync(entity);
 
             //Update Children Codes
             foreach (var child in children)
             {
-                child.Code = TreeCodeGenerator.Append(entity.Code, TreeCodeGenerator.GetRelative(child.Code, oldCode));
+                child.SetCode(TreeCodeGenerator.Append(entity.Code,
+                    TreeCodeGenerator.GetRelative(child.Code, oldCode)));
             }
         }
 
@@ -101,15 +102,23 @@ namespace Generic.Abp.Extensions.Trees
         [UnitOfWork]
         public virtual async Task<TEntity?> GetLastChildOrNullAsync(Guid? parentId)
         {
-            if (!parentId.HasValue) return default;
+            if (!parentId.HasValue)
+            {
+                return default;
+            }
+
             var children =
                 await Repository.GetListAsync(m => m.ParentId == parentId, cancellationToken: CancellationToken);
-            return children?.OrderBy(c => c.Code).LastOrDefault();
+            return children.MaxBy(c => c.Code);
         }
 
-        public virtual Task ValidateAsync(TEntity entity)
+        public virtual async Task ValidateAsync(TEntity entity)
         {
-            return Task.CompletedTask;
+            //判断是否存在父节点
+            if (entity.ParentId.HasValue)
+            {
+                await Repository.GetAsync(entity.ParentId.Value, false, CancellationToken);
+            }
         }
 
         [UnitOfWork]

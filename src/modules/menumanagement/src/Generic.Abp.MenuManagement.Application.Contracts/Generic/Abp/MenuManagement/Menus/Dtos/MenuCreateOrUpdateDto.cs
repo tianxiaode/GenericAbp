@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Generic.Abp.Extensions.Entities.Trees;
+using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using Generic.Abp.Domain.Entities;
 using Volo.Abp.Validation;
 
 namespace Generic.Abp.MenuManagement.Menus.Dtos;
@@ -10,23 +10,26 @@ namespace Generic.Abp.MenuManagement.Menus.Dtos;
 public class MenuCreateOrUpdateDto
 {
     [Required]
-    [DynamicMaxLength(typeof(TreeConsts), nameof(TreeConsts.DisplayNameMaxLength))]
-    [DisplayName("Menus:DisplayName")]
-    public string DisplayName { get; set; }
+    [DynamicMaxLength(typeof(TreeConsts), nameof(TreeConsts.NameMaxLength))]
+    [DisplayName("Menu:Name")]
+    public string Name { get; set; } = default!;
 
     [DynamicMaxLength(typeof(MenuConsts), nameof(MenuConsts.IconMaxLength))]
-    [DisplayName("Menus:Icon")]
-    public string Icon { get; set; }
+    [DisplayName("Menu:Icon")]
+    public string? Icon { get; set; } = default!;
 
     [DynamicMaxLength(typeof(MenuConsts), nameof(MenuConsts.RouterMaxLength))]
-    [DisplayName("Menus:Router")]
-    public string Router { get; set; }
+    [DisplayName("Menu:Router")]
+    public string? Router { get; set; } = default!;
 
+    [DisplayName("Menu:Enabled")] public bool Enabled { get; set; } = true;
+
+    [Required]
     [DynamicMaxLength(typeof(MenuConsts), nameof(MenuConsts.GroupNameMaxLength))]
-    [DisplayName("Menus:GroupName")]
-    public string GroupName { get; set; }
+    [DisplayName("Menu:GroupName")]
+    public string GroupName { get; set; } = default!;
 
-    [DisplayName("Menus:Order")] public int Order { get; set; }
+    [DisplayName("Menu:Order")] public int Order { get; set; } = 1;
 
-    [DisplayName("Menus:ParentName")] public Guid? ParentId { get; set; }
+    [DisplayName("Menu:ParentName")] public Guid? ParentId { get; set; } = default!;
 }

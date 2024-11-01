@@ -11,6 +11,7 @@
     <ProjectReference Include="..\..\..\..\modules\AuditLogging\src\Generic.Abp.AuditLogging.HttpApi\Generic.Abp.AuditLogging.HttpApi.csproj" />
     <ProjectReference Include="..\..\..\..\modules\Extensions\src\Generic.Abp.Extensions.HttpApi\Generic.Abp.Extensions.HttpApi.csproj" />
     <ProjectReference Include="..\..\..\..\modules\identity\src\Generic.Abp.Identity.HttpApi\Generic.Abp.Identity.HttpApi.csproj" />
+    <ProjectReference Include="..\..\..\..\modules\menumanagement\src\Generic.Abp.MenuManagement.HttpApi\Generic.Abp.MenuManagement.HttpApi.csproj" />
     <ProjectReference Include="..\..\..\..\modules\openiddict\src\Generic.Abp.OpenIddict.HttpApi\Generic.Abp.OpenIddict.HttpApi.csproj" />
     <ProjectReference Include="..\QuickTemplate.Application.Contracts\QuickTemplate.Application.Contracts.csproj" />
   </ItemGroup>

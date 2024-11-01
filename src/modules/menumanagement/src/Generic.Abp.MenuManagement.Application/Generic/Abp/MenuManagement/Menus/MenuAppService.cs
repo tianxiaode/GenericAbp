@@ -1,7 +1,9 @@
-﻿using Generic.Abp.BusinessException;
-using Generic.Abp.BusinessException.Exceptions;
-using Generic.Abp.Domain.Entities;
-using Generic.Abp.Domain.Extensions;
+﻿using Generic.Abp.Extensions.Entities.MultiLingual;
+using Generic.Abp.Extensions.Entities.Permissions;
+using Generic.Abp.Extensions.Entities.Trees;
+using Generic.Abp.Extensions.Exceptions;
+using Generic.Abp.Extensions.Extensions;
+using Generic.Abp.Extensions.Validates;
 using Generic.Abp.MenuManagement.Menus.Dtos;
 using Generic.Abp.MenuManagement.Permissions;
 using Microsoft.AspNetCore.Authorization;
@@ -9,11 +11,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Volo.Abp;
+using Microsoft.Extensions.Options;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Authorization;
 using Volo.Abp.Domain.ChangeTracking;
-using Volo.Abp.Domain.Repositories;
+using Volo.Abp.Localization;
+using Volo.Abp.ObjectExtending;
 using Volo.Abp.Uow;
 
 namespace Generic.Abp.MenuManagement.Menus;
@@ -21,63 +24,39 @@ namespace Generic.Abp.MenuManagement.Menus;
 public class MenuAppService : MenuManagementAppService, IMenuAppService
 {
     public MenuAppService(IMenuRepository repository, MenuManager menuManager,
-        IAbpAuthorizationPolicyProvider abpAuthorizationPolicyProvider)
+        IAbpAuthorizationPolicyProvider abpAuthorizationPolicyProvider, IOptions<AbpLocalizationOptions> options)
     {
         Repository = repository;
         MenuManager = menuManager;
         AbpAuthorizationPolicyProvider = abpAuthorizationPolicyProvider;
+        AbpLocalizationOptions = options.Value;
     }
 
     protected IMenuRepository Repository { get; }
     protected MenuManager MenuManager { get; }
-    private IAbpAuthorizationPolicyProvider AbpAuthorizationPolicyProvider { get; }
+    protected IAbpAuthorizationPolicyProvider AbpAuthorizationPolicyProvider { get; }
+    protected AbpLocalizationOptions AbpLocalizationOptions { get; }
 
     [UnitOfWork]
-    [DisableEntityChangeTracking]
-    [Authorize(MenuManagementPermissions.Menus.ManagePermissions)]
-    public virtual async Task<MenuDto> GetRootAsync()
+    [Authorize(MenuManagementPermissions.Menus.Default)]
+    public virtual async Task<MenuDto> GetAsync(Guid id)
     {
-        var root = await Repository.FirstOrDefaultAsync(m => !m.ParentId.HasValue);
-        return ObjectMapper.Map<Menu, MenuDto>(root);
+        var entity = await Repository.GetAsync(id);
+        return ObjectMapper.Map<Menu, MenuDto>(entity);
     }
 
-
     [UnitOfWork]
-    [DisableEntityChangeTracking]
     [Authorize(MenuManagementPermissions.Menus.Default)]
     public virtual async Task<ListResultDto<MenuDto>> GetListAsync(MenuGetListInput input)
     {
-        if (!string.IsNullOrWhiteSpace(input.GroupName))
+        var predicate = await Repository.BuildPredicateAsync(input.Filter, input.GroupName, input.PrentId);
+        if (!input.PrentId.HasValue)
         {
-            var groupList = await Repository.GetListByGroupAsync(input.GroupName);
-            var result = new List<MenuDto>();
-            foreach (var group in groupList)
-            {
-                var permissions = group.GetPermissions();
-                if (permissions is { Count: > 0 } &&
-                    !await AuthorizationService.IsGrantedAnyAsync(permissions.ToArray())) continue;
-                var dto = ObjectMapper.Map<Menu, MenuDto>(group);
-                dto.Permissions = null;
-                result.Add(dto);
-            }
-
-            return new ListResultDto<MenuDto>(result);
+            predicate = predicate.AndIfNotTrue(m => m.ParentId == null);
         }
 
-        //没有管理权限抛出错误
-        if (!await AuthorizationService.IsGrantedAsync(MenuManagementPermissions.Menus.ManagePermissions))
-            throw new AbpAuthorizationException();
-
-        if (!string.IsNullOrEmpty(input.Filter))
-        {
-            return new ListResultDto<MenuDto>(await GetFilterListAsync(input.Filter));
-        }
-
-        if (!input.Node.HasValue) return new ListResultDto<MenuDto>();
-
-        var list = await Repository.GetListAsync(m => m.ParentId == input.Node.Value, true);
-
-        var dtos = MapList(list);
+        var list = await Repository.GetListAsync(predicate, input.Sorting);
+        var dtos = ObjectMapper.Map<List<Menu>, List<MenuDto>>(list);
         foreach (var dto in dtos)
         {
             dto.Leaf = await Repository.HasChildAsync(dto.Id);
@@ -87,19 +66,44 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
     }
 
     [UnitOfWork]
-    [DisableEntityChangeTracking]
-    [Authorize(MenuManagementPermissions.Menus.ManagePermissions)]
-    public virtual async Task<MenuDto> GetAsync(Guid id)
+    [AllowAnonymous]
+    public virtual async Task<ListResultDto<MenuDto>> GetListByGroupAsync(string group)
     {
-        var entity = await Repository.GetAsync(id);
-        return ObjectMapper.Map<Menu, MenuDto>(entity);
+        var predicate = await Repository.BuildPredicateAsync(groupName: group);
+        var list = await Repository.GetListAsync(predicate, "Order");
+        var dtos = new List<MenuDto>();
+        foreach (var menu in list)
+        {
+            var policyNames = menu.GetPermissions().ToArray();
+            if (policyNames.Length == 0)
+            {
+                var dto = ObjectMapper.Map<Menu, MenuDto>(menu);
+                menu.MapExtraPropertiesTo(dto);
+                dtos.Add(dto);
+                continue;
+            }
+
+            if (!await AuthorizationService.IsGrantedAnyAsync(policyNames))
+            {
+                continue;
+            }
+
+            {
+                var dto = ObjectMapper.Map<Menu, MenuDto>(menu);
+                menu.MapExtraPropertiesTo(dto);
+                dtos.Add(dto);
+            }
+        }
+
+        return new ListResultDto<MenuDto>(dtos);
     }
+
 
     [UnitOfWork(true)]
     [Authorize(MenuManagementPermissions.Menus.Create)]
     public virtual async Task<MenuDto> CreateAsync(MenuCreateDto input)
     {
-        var entity = new Menu(GuidGenerator.Create());
+        var entity = new Menu(GuidGenerator.Create(), input.ParentId, input.Name, CurrentTenant.Id);
         await UpdateMenuByInputAsync(entity, input);
         await MenuManager.CreateAsync(entity);
         return ObjectMapper.Map<Menu, MenuDto>(entity);
@@ -111,6 +115,11 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
     {
         var entity = await Repository.GetAsync(id);
         entity.ConcurrencyStamp = input.ConcurrencyStamp;
+        if (!string.Equals(input.Name, entity.Name, StringComparison.OrdinalIgnoreCase))
+        {
+            entity.Rename(input.Name);
+        }
+
         await UpdateMenuByInputAsync(entity, input);
         await MenuManager.UpdateAsync(entity);
         return ObjectMapper.Map<Menu, MenuDto>(entity);
@@ -118,14 +127,13 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
 
     [Authorize(MenuManagementPermissions.Menus.Delete)]
     [UnitOfWork]
-    public virtual async Task<ListResultDto<MenuDto>> DeleteAsync(List<Guid> ids)
+    public virtual async Task<ListResultDto<MenuDto>> DeleteAsync(Guid id)
     {
-        var first = ids.FirstOrDefault();
-        var entity = await Repository.GetAsync(first);
+        var entity = await Repository.GetAsync(id);
 
-        if (await Repository.HasChildAsync(first))
+        if (await Repository.HasChildAsync(id))
         {
-            throw new HasChildrenCanNotDeletedBusinessException(nameof(Menu), entity.DisplayName);
+            throw new HasChildrenCanNotDeletedBusinessException(nameof(Menu), entity.Name);
         }
 
         await Repository.DeleteAsync(entity, true);
@@ -136,41 +144,29 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
 
     [UnitOfWork]
     [DisableEntityChangeTracking]
-    [Authorize(MenuManagementPermissions.Menus.ManagePermissions)]
-    public virtual async Task<ListResultDto<MenuTranslationDto>> GetTranslationListAsync(Guid id)
+    [Authorize(MenuManagementPermissions.Menus.Default)]
+    public virtual async Task<Dictionary<string, object>> GetMultiLingualAsync(Guid id)
     {
         var entity = await Repository.GetAsync(id);
-        var translations = entity.GetTranslations<Menu, MenuTranslation>();
-        var list = ObjectMapper.Map<List<MenuTranslation>, List<MenuTranslationDto>>(translations);
-        return new ListResultDto<MenuTranslationDto>(list);
+        return entity.GetMultiLingual();
     }
 
     [Authorize(MenuManagementPermissions.Menus.Update)]
     [UnitOfWork]
-    public virtual async Task UpdateTranslationAsync(Guid id, List<MenuTranslationUpdateDto> input)
+    public virtual async Task UpdateMultiLingualAsync(Guid id, Dictionary<string, object> input)
     {
-        var list = input.Where(m => !string.IsNullOrEmpty(m.DisplayName)).ToList();
-        CheckTranslationInput(list);
+        var validateResult = await input.MaxLengthAsync(TreeConsts.NameMaxLength);
+        if (!validateResult.Success)
+        {
+            throw new ValueExceedsFieldLengthBusinessException(TreeConsts.NameMaxLength,
+                validateResult.Value ?? string.Empty);
+        }
 
+        var languages = input.Keys.Intersect(AbpLocalizationOptions.Languages.Select(m => m.CultureName));
+        var adds = new Dictionary<string, object>(input.Where(m => languages.Contains(m.Key)));
         var entity = await Repository.GetAsync(id);
-        var translations = list.Select(m => new MenuTranslation(m.Language, m.DisplayName));
-        entity.SetTranslations<Menu, MenuTranslation>(translations);
-        await Repository.UpdateAsync(entity);
-        //await CurrentUnitOfWork.SaveChangesAsync();
-    }
-
-    [UnitOfWork]
-    protected virtual void CheckTranslationInput(List<MenuTranslationUpdateDto> input)
-    {
-        var errors = input
-            .Where(m => m.DisplayName.Length > DistrictConsts.DisplayNameMaxLength).Select(m =>
-                L[BusinessExceptionErrorCodes.ValueExceedsFieldLength].Value
-                    .Replace(BusinessExceptionErrorCodes.ValueExceedsFieldLengthParamValue, m.DisplayName).Replace(
-                        BusinessExceptionErrorCodes.ValueExceedsFieldLengthParamLength,
-                        DistrictConsts.DisplayNameMaxLength.ToString())).ToList();
-
-
-        if (errors is { Count: > 0 }) throw new UserFriendlyException(string.Join("<br>", errors));
+        entity.SetMultiLingual(adds);
+        await Repository.UpdateAsync(entity, true);
     }
 
     #endregion
@@ -178,7 +174,7 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
     #region 菜单组
 
     [DisableEntityChangeTracking]
-    [Authorize(MenuManagementPermissions.Menus.ManagePermissions)]
+    [Authorize(MenuManagementPermissions.Menus.Default)]
     public virtual async Task<ListResultDto<string>> GetAllGroupNamesAsync()
     {
         var list = await Repository.GetAllGroupNamesAsync();
@@ -191,12 +187,11 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
 
     [UnitOfWork]
     [DisableEntityChangeTracking]
-    [Authorize(MenuManagementPermissions.Menus.ManagePermissions)]
-    public virtual async Task<ListResultDto<string>> GetPermissionsListAsync(Guid id)
+    [Authorize(MenuManagementPermissions.Menus.Default)]
+    public virtual async Task<List<string>> GetPermissionsListAsync(Guid id)
     {
         var entity = await Repository.GetAsync(id);
-        var permissions = entity.GetPermissions();
-        return new ListResultDto<string>(permissions);
+        return entity.GetPermissions().ToList();
     }
 
     [Authorize(MenuManagementPermissions.Menus.Update)]
@@ -204,63 +199,27 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
     public virtual async Task UpdatePermissionsAsync(Guid id, List<string> input)
     {
         var list = input.Where(m => !string.IsNullOrEmpty(m)).ToList();
-        if (list is { Count: <= 0 }) return;
-        var policyNames = await AbpAuthorizationPolicyProvider.GetPoliciesNamesAsync();
-        list = list.Intersect(policyNames).ToList();
+        if (list is { Count: > 0 })
+        {
+            var policyNames = await AbpAuthorizationPolicyProvider.GetPoliciesNamesAsync();
+            list = list.Intersect(policyNames).ToList();
+        }
+
         var entity = await Repository.GetAsync(id);
         entity.SetPermissions(list);
         await Repository.UpdateAsync(entity);
-        //await CurrentUnitOfWork.SaveChangesAsync();
     }
 
     #endregion
 
-    [UnitOfWork]
-    protected virtual async Task<List<MenuDto>> GetFilterListAsync(string filter)
+
+    protected virtual Task UpdateMenuByInputAsync(Menu entity, MenuCreateOrUpdateDto input)
     {
-        var codes = await Repository.GetCodeListAsync(filter);
-        if (codes is { Count: <= 0 }) return new List<MenuDto>();
-        var query = new List<string>();
-        foreach (var code in codes)
-        {
-            var splits = code.Split(".");
-            var temp = splits[0];
-            for (var i = 1; i < splits.Length; i++)
-            {
-                temp = $"{temp}.{splits[i]}";
-                query.Add(temp);
-            }
-        }
-
-        var list = await Repository.GetListAsync(m => query.Distinct().Contains(m.Code));
-        var dtos = ObjectMapper.Map<List<Menu>, List<MenuDto>>(list);
-        //await GetChildrenAsync(codes, dtos, ln);
-        return dtos;
-    }
-
-    protected virtual async Task UpdateMenuByInputAsync(Menu entity, MenuCreateOrUpdateDto input)
-    {
-        if (!entity.DisplayName.Equals(input.DisplayName, StringComparison.CurrentCultureIgnoreCase))
-        {
-            entity.DisplayName = input.DisplayName;
-        }
-
-        if (input.ParentId.HasValue)
-        {
-            var parent = await Repository.FirstOrDefaultAsync(m => m.Id == input.ParentId.Value) ??
-                         throw new UnknownParentBusinessException();
-            entity.ParentId = parent.Id;
-        }
-
         entity.SetGroupName(input.GroupName);
         entity.SetIcon(input.Icon);
         entity.SetOrder(input.Order);
         entity.SetRouter(input.Router);
-    }
 
-
-    protected List<MenuDto> MapList(List<Menu> list)
-    {
-        return ObjectMapper.Map<List<Menu>, List<MenuDto>>(list);
+        return Task.CompletedTask;
     }
 }

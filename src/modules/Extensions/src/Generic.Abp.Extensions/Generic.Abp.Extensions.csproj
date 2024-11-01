@@ -21,4 +21,8 @@
     <Content Remove="Generic\Abp\Extensions\Localization\Resources\*.json" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Generic\Abp\Extensions\Entities\Permissions\" />
+  </ItemGroup>
+
 </Project>

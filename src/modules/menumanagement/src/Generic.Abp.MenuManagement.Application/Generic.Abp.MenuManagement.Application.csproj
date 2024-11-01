@@ -3,12 +3,18 @@
   <Import Project="..\..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <TargetFrameworks>net8.0</TargetFrameworks>
+    <OutputType>Library</OutputType>
+    <IsPackable>true</IsPackable>
+    <RootNamespace />
+    <Nullable>enable</Nullable>
      <RootNamespace />
   </PropertyGroup>
 
   <ItemGroup>
   	<PackageReference Include="Volo.Abp.AutoMapper" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.Localization" Version="$(AbpVersion)" />
   	<PackageReference Include="Volo.Abp.Ddd.Application" Version="$(AbpVersion)" />
   </ItemGroup>
 
@@ -17,8 +23,5 @@
     <ProjectReference Include="..\Generic.Abp.MenuManagement.Domain\Generic.Abp.MenuManagement.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Generic\Abp\MenuManagement\Menus\" />
-  </ItemGroup>
 
 </Project>

@@ -9,15 +9,15 @@ namespace Generic.Abp.MenuManagement.Menus;
 
 public interface IMenuAppService : IApplicationService
 {
-    Task<MenuDto> GetRootAsync();
-    Task<ListResultDto<MenuDto>> GetListAsync(MenuGetListInput input);
     Task<MenuDto> GetAsync(Guid id);
+    Task<ListResultDto<MenuDto>> GetListAsync(MenuGetListInput input);
+    Task<ListResultDto<MenuDto>> GetListByGroupAsync(string group);
     Task<MenuDto> CreateAsync(MenuCreateDto input);
     Task<MenuDto> UpdateAsync(Guid id, MenuUpdateDto input);
-    Task<ListResultDto<MenuDto>> DeleteAsync(List<Guid> ids);
-    Task<ListResultDto<MenuTranslationDto>> GetTranslationListAsync(Guid id);
-    Task UpdateTranslationAsync(Guid id, List<MenuTranslationUpdateDto> input);
+    Task<ListResultDto<MenuDto>> DeleteAsync(Guid id);
+    Task<Dictionary<string, object>> GetMultiLingualAsync(Guid id);
+    Task UpdateMultiLingualAsync(Guid id, Dictionary<string, object> input);
     Task<ListResultDto<string>> GetAllGroupNamesAsync();
-    Task<ListResultDto<string>> GetPermissionsListAsync(Guid id);
+    Task<List<string>> GetPermissionsListAsync(Guid id);
     Task UpdatePermissionsAsync(Guid id, List<string> input);
 }

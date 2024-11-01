@@ -11,7 +11,7 @@ namespace Generic.Abp.MenuManagement.EntityFrameworkCore
         /* Add DbSet for each Aggregate Root here. Example:
          * public DbSet<Question> Questions { get; set; }
          */
-        public DbSet<Menu> Menus { get; set; }
+        public DbSet<Menu> Menus { get; set; } = default!;
 
         public MenuManagementDbContext(DbContextOptions<MenuManagementDbContext> options)
             : base(options)

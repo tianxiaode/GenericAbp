@@ -1,9 +1,16 @@
 ﻿namespace Generic.Abp.MenuManagement.Menus;
 
-public class MenuConsts
+public static class MenuConsts
 {
-    public static string Permissions = "Permissions";
+    public const string Permissions = "Permissions";
     public static int IconMaxLength { get; set; } = 128;
     public static int RouterMaxLength { get; set; } = 128;
     public static int GroupNameMaxLength { get; set; } = 128;
+
+    private const string DefaultSorting = "{0}Name asc";
+
+    public static string GetDefaultSorting(bool withEntityName = false)
+    {
+        return string.Format(DefaultSorting, withEntityName ? $"MenuManagementMenus." : string.Empty);
+    }
 }

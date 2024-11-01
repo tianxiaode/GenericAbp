@@ -18,8 +18,16 @@ namespace Generic.Abp.Extensions.Trees
 
         public override Expression<Func<TEntity, bool>> ToExpression()
         {
-            if (ParentId.HasValue) return m => m.ParentId == ParentId;
-            if (string.IsNullOrEmpty(Code)) return m => m.Code.StartsWith(Code) && m.Code != Code;
+            if (ParentId.HasValue)
+            {
+                return m => m.ParentId == ParentId;
+            }
+
+            if (string.IsNullOrEmpty(Code))
+            {
+                return m => m.Code.StartsWith(Code) && m.Code != Code;
+            }
+
             return m => false;
         }
     }

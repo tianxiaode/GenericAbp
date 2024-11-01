@@ -1,0 +1,4 @@
+# pnpm-workspace.yaml
+packages:
+  - "packages/*"  # 设置工作空间下的文件夹路径
+  - "apps/*"      # 可以设置多个文件夹位置

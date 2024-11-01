@@ -5,16 +5,18 @@
     "Menus": "Menus",
     "NewMenu": "New menu",
     "EditMenu": "Edit menu",
+    "Permission:MenuManagement": "Menu Management",
     "Permission:Create": "Create",
     "Permission:Edit": "Edit",
     "Permission:Delete": "Delete",
-    "Permission:ChangePermissions": "Change permissions",
-    "Menu:DisplayName": "Display name",
+    "Menu:Name": "Name",
     "Menu:Icon": "Icon",
-    "Menu:IsSelectable": "Selectable",
-    "Menu:IsDisabled": "Disabled",
+    "Menu:IsEnabled": "Enabled",
+    "Menu:IsStatic": "Static",
     "Menu:Order": "Order",
     "Menu:Router": "Router",
-    "Menu:GroupName": "Group Name"
+    "Menu:GroupName": "Group Name",
+    "Menu:ParentName": "Parent Name",
+    "MenuEntityVersion": "Entity Version"
   }
 }

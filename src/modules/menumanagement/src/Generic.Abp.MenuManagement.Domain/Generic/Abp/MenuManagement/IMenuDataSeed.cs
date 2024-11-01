@@ -1,8 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace Generic.Abp.MenuManagement;
 
 public interface IMenuDataSeed
 {
-    Task SeedAsync();
+    Task SeedAsync(Guid? tenantId = null);
 }

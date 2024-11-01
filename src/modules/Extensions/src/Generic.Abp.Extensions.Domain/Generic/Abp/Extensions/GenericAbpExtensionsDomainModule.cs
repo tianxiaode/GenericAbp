@@ -1,4 +1,6 @@
-﻿using Volo.Abp.Domain;
+﻿using Generic.Abp.Extensions.Trees;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Volo.Abp.Domain;
 using Volo.Abp.Modularity;
 
 namespace Generic.Abp.Extensions;
@@ -9,4 +11,8 @@ namespace Generic.Abp.Extensions;
 )]
 public class GenericAbpExtensionsDomainModule : AbpModule
 {
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        context.Services.TryAddTransient(typeof(ITreeCodeGenerator<>), typeof(TreeCodeGenerator<>));
+    }
 }

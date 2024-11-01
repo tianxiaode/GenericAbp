@@ -1,5 +1,6 @@
 ﻿using Generic.Abp.AuditLogging;
 using Generic.Abp.Identity;
+using Generic.Abp.MenuManagement;
 using Generic.Abp.OpenIddict;
 using Volo.Abp.Account;
 using Volo.Abp.FeatureManagement;
@@ -23,7 +24,8 @@ namespace QuickTemplate;
     typeof(AbpPermissionManagementApplicationContractsModule),
     typeof(AbpSettingManagementApplicationContractsModule),
     typeof(AbpTenantManagementApplicationContractsModule),
-    typeof(AbpObjectExtendingModule)
+    typeof(AbpObjectExtendingModule),
+    typeof(GenericAbpMenuManagementApplicationContractsModule)
 )]
 public class QuickTemplateApplicationContractsModule : AbpModule
 {
