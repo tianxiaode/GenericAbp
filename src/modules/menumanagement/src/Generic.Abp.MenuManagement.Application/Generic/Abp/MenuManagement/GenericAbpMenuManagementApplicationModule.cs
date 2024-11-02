@@ -2,6 +2,7 @@
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Modularity;
 using Volo.Abp.Application;
+using Volo.Abp.Localization;
 
 namespace Generic.Abp.MenuManagement
 {
@@ -9,8 +10,9 @@ namespace Generic.Abp.MenuManagement
         typeof(GenericAbpMenuManagementDomainModule),
         typeof(GenericAbpMenuManagementApplicationContractsModule),
         typeof(AbpDddApplicationModule),
-        typeof(AbpAutoMapperModule)
-        )]
+        typeof(AbpAutoMapperModule),
+        typeof(AbpLocalizationModule)
+    )]
     public class GenericAbpMenuManagementApplicationModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)

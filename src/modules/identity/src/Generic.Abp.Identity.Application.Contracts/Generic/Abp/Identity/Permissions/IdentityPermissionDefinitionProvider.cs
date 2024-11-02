@@ -9,10 +9,11 @@ namespace Generic.Abp.Identity.Permissions
     {
         public override void Define(IPermissionDefinitionContext context)
         {
-
             var myGroup = context.GetGroup(SettingManagementPermissions.GroupName);
-            myGroup.AddPermission(IdentityPermissions.PasswordPolicy, L("Permission:PasswordPolicy"));
-            myGroup.AddPermission(IdentityPermissions.LookupPolicy, L("Permission:LookupPolicy"));
+            myGroup.AddPermission(IdentityPermissions.IdentityManagement, L("Permission:IdentityManagement"));
+
+            var identityGroup = context.GetGroup(Volo.Abp.Identity.IdentityPermissions.GroupName);
+            identityGroup.AddPermission(IdentityPermissions.SecurityLogs, L("Permission:SecurityLogs"));
         }
 
         private static LocalizableString L(string name)

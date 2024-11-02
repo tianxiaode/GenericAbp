@@ -1,11 +1,14 @@
-﻿using Generic.Abp.ExternalAuthentication.Localization;
-using Volo.Abp.AspNetCore.Mvc;
+﻿using Generic.Abp.ExternalAuthentication.AuthenticationProviderHandlers;
+using Generic.Abp.ExternalAuthentication.Localization;
+using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AutoMapper;
+using Volo.Abp.Caching;
 using Volo.Abp.Identity.AspNetCore;
 using Volo.Abp.Identity.Localization;
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.ExceptionHandling;
 using Volo.Abp.Modularity;
+using Volo.Abp.OpenIddict;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.Validation;
 using Volo.Abp.Validation.Localization;
@@ -15,15 +18,23 @@ namespace Generic.Abp.ExternalAuthentication;
 
 [DependsOn(
     typeof(AbpSettingManagementDomainModule),
+    typeof(AbpSettingManagementApplicationContractsModule),
     typeof(AbpIdentityAspNetCoreModule),
-    typeof(AbpAspNetCoreMvcModule),
+    typeof(AbpOpenIddictAspNetCoreModule),
     typeof(AbpValidationModule),
+    typeof(AbpCachingModule),
     typeof(AbpAutoMapperModule)
 )]
 public class GenericAbpExternalAuthenticationAspNetCoreModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
+        context.Services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
+        {
+            options.AddAssemblyResource(typeof(ExternalAuthenticationResource),
+                typeof(GenericAbpExternalAuthenticationAspNetCoreModule).Assembly);
+        });
+
         PreConfigure<IMvcBuilder>(mvcBuilder =>
         {
             mvcBuilder.AddApplicationPartIfNotExists(typeof(GenericAbpExternalAuthenticationAspNetCoreModule)
@@ -51,5 +62,11 @@ public class GenericAbpExternalAuthenticationAspNetCoreModule : AbpModule
         {
             options.MapCodeNamespace("Generic.Abp.ExternalAuthentication", typeof(ExternalAuthenticationResource));
         });
+
+        context.Services.AddTransient<IExternalAuthenticationProviderHandler, GitHubAuthenticationProviderHandler>();
+        context.Services.AddTransient<IExternalAuthenticationProviderHandler, GiteeAuthenticationProviderHandler>();
+        context.Services
+            .AddTransient<IExternalAuthenticationProviderHandler, MicrosoftAccountAuthenticationProviderHandler>();
+        context.Services.AddHostedService<ExternalProviderUpdaterService>();
     }
 }

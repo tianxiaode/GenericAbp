@@ -1,25 +1,20 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using Volo.Abp.OpenIddict.Scopes;
-using Volo.Abp.Validation;
+using Volo.Abp.ObjectExtending;
 
 namespace Generic.Abp.OpenIddict.Scopes
 {
-    public class ScopeCreateOrUpdateInput
+    [Serializable]
+    public class ScopeCreateOrUpdateInput : ExtensibleObject
     {
-        [Required]
-        [DynamicStringLength(typeof(OpenIddictScopeConsts), nameof(OpenIddictScopeConsts.NameMaxLength))]
-        [DisplayName("Scope:Name")]
-        public string Name { get; set; }
+        [Required] [DisplayName("Scope:Name")] public string Name { get; set; } = default!;
 
-        [DisplayName("Scope:Description")]
-        public string Description { get; set; }
+        [DisplayName("Scope:Description")] public string? Description { get; set; } = default!;
 
-        [DisplayName("Scope:DisplayName")]
-        public string DisplayName { get; set; }
-        public List<string> Properties { get; set; }
-        public List<string> Resources { get; set; }
+        [DisplayName("Scope:DisplayName")] public string? DisplayName { get; set; } = default!;
 
+        // [DisplayName("Scope:Properties")] public Dictionary<string, object> Properties { get; set; } = default!;
+
+        [DisplayName("Scope:Resources")] public HashSet<string> Resources { get; set; } = default!;
     }
 }

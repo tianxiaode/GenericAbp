@@ -5,6 +5,7 @@ using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
+using Generic.Abp.Extensions.Extensions;
 using Generic.Abp.MenuManagement.Menus;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
@@ -20,48 +21,62 @@ public class MenuRepository : EfCoreRepository<IMenuManagementDbContext, Menu, G
     }
 
     [UnitOfWork]
-    public async Task<bool> HasChildAsync(Guid id, CancellationToken cancellation = default)
+    public virtual async Task<bool> HasChildAsync(Guid id, CancellationToken cancellation = default)
     {
         return await (await GetQueryableAsync()).AnyAsync(m => m.ParentId == id, GetCancellationToken(cancellation));
     }
 
     [UnitOfWork]
-    public async Task<List<Menu>> GetFilterListAsync(string filter, CancellationToken cancellation = default)
+    public virtual async Task<List<Menu>> GetListAsync(
+        Expression<Func<Menu, bool>> predicate,
+        string? sorting,
+        CancellationToken cancellation = default)
     {
-        if (string.IsNullOrEmpty(filter)) return new List<Menu>();
-        var predicate = await BuildFilterPredicateAsync(filter);
-        return await GetListAsync(predicate, true, GetCancellationToken(cancellation));
+        return await (await GetDbSetAsync())
+            .AsNoTracking()
+            .Where(predicate)
+            .OrderBy(string.IsNullOrEmpty(sorting) ? MenuConsts.GetDefaultSorting() : sorting)
+            .ToListAsync(GetCancellationToken(cancellation));
     }
 
     [UnitOfWork]
-    public async Task<List<string>> GetCodeListAsync(string filter, CancellationToken cancellation = default)
-    {
-        if (string.IsNullOrEmpty(filter)) return new List<string>();
-        var predicate = await BuildFilterPredicateAsync(filter);
-        var dbSet = await GetDbSetAsync();
-        return await dbSet.Where(predicate).Select(m => m.Code).ToListAsync(GetCancellationToken(cancellation));
-    }
-
-    [UnitOfWork]
-    public async Task<List<Menu>> GetListByGroupAsync(string group, CancellationToken cancellation = default)
+    public virtual async Task<List<string>> GetAllGroupNamesAsync(CancellationToken cancellation = default)
     {
         var dbSet = await GetDbSetAsync();
-        return await dbSet.Where(m => EF.Functions.Like(m.GroupName, $"{group}") && m.ParentId != null)
-            .ToListAsync(cancellation);
+        return await dbSet.AsNoTracking().Select(m => m.GroupName).Distinct().ToListAsync(cancellation);
     }
 
     [UnitOfWork]
-    public async Task<List<string>> GetAllGroupNamesAsync(CancellationToken cancellation = default)
+    public virtual async Task<List<string>> GetAllCodesByFilterAsync(string filter, string? groupName,
+        CancellationToken cancellationToken = default)
     {
-        var dbSet = await GetDbSetAsync();
-        return await dbSet.Select(m => m.GroupName).Distinct().ToListAsync(cancellation);
+        return await (await GetDbSetAsync())
+            .AsNoTracking()
+            .WhereIf(!string.IsNullOrEmpty(groupName), m => m.GroupName == groupName)
+            .Where(m => EF.Functions.Like(m.Name, $"%{filter}%"))
+            .Select(m => m.Code)
+            .ToListAsync(cancellationToken);
     }
 
     [UnitOfWork]
-    protected virtual Task<Expression<Func<Menu, bool>>> BuildFilterPredicateAsync(string filter)
+    public virtual Task<Expression<Func<Menu, bool>>> BuildPredicateAsync(
+        string? filter = null,
+        string? groupName = null,
+        Guid? parentId = null
+    )
     {
         Expression<Func<Menu, bool>> predicate = m =>
-            EF.Functions.Like(m.DisplayName, $"%{filter}%") && m.ParentId != null;
+            EF.Functions.Like(m.Name, $"%{filter}%") && m.ParentId != null;
+
+        if (!string.IsNullOrEmpty(groupName))
+        {
+            predicate = predicate.AndIfNotTrue(m => m.GroupName.ToLower() == groupName.ToLowerInvariant());
+        }
+
+        if (parentId != null)
+        {
+            predicate = predicate.AndIfNotTrue(m => m.ParentId == parentId);
+        }
 
         return Task.FromResult(predicate);
     }

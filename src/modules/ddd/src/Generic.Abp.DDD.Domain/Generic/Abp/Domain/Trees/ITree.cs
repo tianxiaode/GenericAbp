@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Generic.Abp.Domain.Entities;
+﻿using Generic.Abp.Domain.Entities;
 using Volo.Abp.Domain.Entities;
 
 namespace Generic.Abp.Domain.Trees

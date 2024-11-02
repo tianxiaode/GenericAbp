@@ -5,5 +5,5 @@ namespace Generic.Abp.MenuManagement.Menus.Dtos;
 [Serializable]
 public class MenuUpdateDto : MenuCreateOrUpdateDto
 {
-    public string ConcurrencyStamp { get; set; }
+    public string ConcurrencyStamp { get; set; } = default!;
 }

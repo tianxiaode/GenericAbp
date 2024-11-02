@@ -15,6 +15,6 @@ public class MenuDataSeedContributor : IDataSeedContributor, ITransientDependenc
 
     public virtual async Task SeedAsync(DataSeedContext context)
     {
-        await MenuDataSeed.SeedAsync();
+        await MenuDataSeed.SeedAsync(context?.TenantId);
     }
 }

@@ -1,17 +1,17 @@
-﻿using System;
+﻿using Generic.Abp.MenuManagement.Menus.Dtos;
+using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Generic.Abp.MenuManagement.Menus.Dtos;
-using Microsoft.AspNetCore.Mvc;
+using Asp.Versioning;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
-using Volo.Abp.AspNetCore.Mvc.AntiForgery;
 
 namespace Generic.Abp.MenuManagement.Menus;
 
-[IgnoreAntiforgeryToken]
 [RemoteService(Name = MenuManagementRemoteServiceConsts.RemoteServiceName)]
-[Area("menus")]
+[Area(MenuManagementRemoteServiceConsts.RemoteServiceName)]
+[ControllerName("Menus")]
 [Route("api/menus")]
 public class MenuController : MenuManagementController, IMenuAppService
 {
@@ -28,18 +28,19 @@ public class MenuController : MenuManagementController, IMenuAppService
         return AppService.GetListAsync(input);
     }
 
-    [HttpGet]
-    [Route("root")]
-    public async Task<MenuDto> GetRootAsync()
-    {
-        return await AppService.GetRootAsync();
-    }
 
     [HttpGet]
     [Route("{id:guid}")]
     public async Task<MenuDto> GetAsync(Guid id)
     {
         return await AppService.GetAsync(id);
+    }
+
+    [HttpGet]
+    [Route(("by-group/{groupName}"))]
+    public async Task<ListResultDto<MenuDto>> GetListByGroupAsync(string groupName)
+    {
+        return await AppService.GetListByGroupAsync(groupName);
     }
 
     [HttpPost]
@@ -56,23 +57,24 @@ public class MenuController : MenuManagementController, IMenuAppService
     }
 
     [HttpDelete]
-    public async Task<ListResultDto<MenuDto>> DeleteAsync([FromBody] List<Guid> ids)
+    [Route("{id:guid}")]
+    public async Task<ListResultDto<MenuDto>> DeleteAsync(Guid id)
     {
-        return await AppService.DeleteAsync(ids);
+        return await AppService.DeleteAsync(id);
     }
 
     [HttpGet]
-    [Route("{id:guid}/translations")]
-    public async Task<ListResultDto<MenuTranslationDto>> GetTranslationListAsync(Guid id)
+    [Route("{id:guid}/multi-lingual")]
+    public async Task<Dictionary<string, object>> GetMultiLingualAsync(Guid id)
     {
-        return await AppService.GetTranslationListAsync(id);
+        return await AppService.GetMultiLingualAsync(id);
     }
 
     [HttpPut]
-    [Route("{id:guid}/translations")]
-    public async Task UpdateTranslationAsync(Guid id, [FromBody] List<MenuTranslationUpdateDto> input)
+    [Route("{id:guid}/multi-lingual")]
+    public async Task UpdateMultiLingualAsync(Guid id, Dictionary<string, object> input)
     {
-        await AppService.UpdateTranslationAsync(id, input);
+        await AppService.UpdateMultiLingualAsync(id, input);
     }
 
     [HttpGet]
@@ -84,7 +86,7 @@ public class MenuController : MenuManagementController, IMenuAppService
 
     [HttpGet]
     [Route("{id:guid}/permissions")]
-    public async Task<ListResultDto<string>> GetPermissionsListAsync(Guid id)
+    public async Task<List<string>> GetPermissionsListAsync(Guid id)
     {
         return await AppService.GetPermissionsListAsync(id);
     }

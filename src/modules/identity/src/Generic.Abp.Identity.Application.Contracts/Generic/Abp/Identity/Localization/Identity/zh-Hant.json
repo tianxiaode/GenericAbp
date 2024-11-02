@@ -1,0 +1,26 @@
+{
+  "culture": "zh-Hant",
+  "texts": {
+    "Permission:IdentityManagement": "身份管理",
+    "Permission:SecurityLogs": "安全日誌",
+    "PasswordSettings": "密碼設置",
+    "PasswordRenewingSettings": "密碼更新設置",
+    "LockoutSettings": "鎖定設置",
+    "SigninSettings": "登入設置",
+    "UserSettings": "用戶設置",
+    "SecurityLog:ApplicationName": "應用程式",
+    "SecurityLog:Identity": "身份",
+    "SecurityLog:Action": "操作",
+    "SecurityLog:UserId": "用戶 Id",
+    "SecurityLog:UserName": "用戶名稱",
+    "SecurityLog:TenantName": "租戶名稱",
+    "SecurityLog:TenantId": "租戶 Id",
+    "SecurityLog:ClientId": "Cleint Id",
+    "SecurityLog:CorrelationId": "Correlation Id",
+    "SecurityLog:ClientIpAddress": "客戶端IP",
+    "SecurityLog:BrowserInfo": "瀏覽器信息",
+    "SecurityLog:CreationTime": "創建時間",
+    "SecurityLogs": "安全日誌",
+    "SecurityLog": "安全日誌"
+  }
+}

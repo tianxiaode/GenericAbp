@@ -13,15 +13,20 @@
 
   <ItemGroup>
     <PackageReference Include="Volo.Abp.AutoMapper" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.SettingManagement.Application.Contracts" Version="$(AbpVersion)" />
     <PackageReference Include="Volo.Abp.SettingManagement.Domain" Version="$(AbpVersion)" />
     <PackageReference Include="Volo.Abp.Identity.AspNetCore" Version="$(AbpVersion)" />
-    <PackageReference Include="Volo.Abp.AspNetCore.Mvc" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.OpenIddict.AspNetCore" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.Caching" Version="$(AbpVersion)" />
     <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="$(MicrosoftExtensionsFileProvidersEmbeddedVersion)" />
+    <PackageReference Include="AspNet.Security.OAuth.GitHub" Version="$(OAuthGitHubVersion)" />
+    <PackageReference Include="AspNet.Security.OAuth.Gitee" Version="$(OAuthGitHubVersion)" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="$(MicrosoftAccount)" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Generic\Abp\ExternalAuthentication\Localization\*.json" />
-    <Content Remove="Generic\Abp\ExternalAuthentication\Localization\*.json" />
+    <EmbeddedResource Include="Generic\Abp\ExternalAuthentication\Localization\Resources\*.json" />
+    <Content Remove="Generic\Abp\ExternalAuthentication\Localization\Resources\*.json" />
   </ItemGroup>
 
 

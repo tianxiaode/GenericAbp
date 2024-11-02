@@ -1,16 +1,17 @@
-﻿using Generic.Abp.BusinessException.Exceptions;
+﻿using System.Text.Json;
+using System.Text.Json.Nodes;
+using Generic.Abp.Extensions.Exceptions;
+using Generic.Abp.OpenIddict.Permissions;
 using Microsoft.AspNetCore.Authorization;
-using System.Collections.Generic;
-using System;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using OpenIddict.Abstractions;
+using Volo.Abp;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Domain.Entities;
+using Volo.Abp.ObjectExtending;
+using Volo.Abp.ObjectMapping;
 using Volo.Abp.OpenIddict.Scopes;
 using Volo.Abp.Uow;
-using Generic.Abp.OpenIddict.Permissions;
-using Volo.Abp;
-using Generic.Abp.OpenIddict.Applications;
-using System.Linq;
-using Volo.Abp.Domain.ChangeTracking;
 
 namespace Generic.Abp.OpenIddict.Scopes
 {
@@ -18,14 +19,15 @@ namespace Generic.Abp.OpenIddict.Scopes
     public class ScopeAppService : OpenIddictAppService, IScopeAppService
     {
         protected IOpenIddictScopeRepository Repository { get; }
+        protected IOpenIddictScopeManager Manager { get; }
 
-        public ScopeAppService(IOpenIddictScopeRepository repository)
+        public ScopeAppService(IOpenIddictScopeRepository repository, IOpenIddictScopeManager manager)
         {
             Repository = repository;
+            Manager = manager;
         }
 
         [UnitOfWork]
-        [DisableEntityChangeTracking]
         [Authorize(OpenIddictPermissions.Scopes.Default)]
         public virtual async Task<ScopeDto> GetAsync(Guid id)
         {
@@ -34,179 +36,129 @@ namespace Generic.Abp.OpenIddict.Scopes
         }
 
         [UnitOfWork]
-        [DisableEntityChangeTracking]
         [Authorize(OpenIddictPermissions.Scopes.Default)]
         public virtual async Task<PagedResultDto<ScopeDto>> GetListAsync(ScopeGetListInput input)
         {
             var sorting = input.Sorting;
-            if (string.IsNullOrEmpty(sorting)) sorting = $"{nameof(OpenIddictScope.Name)}";
-            var list = await Repository.GetPagedListAsync(input.SkipCount, input.MaxResultCount, sorting);
-            var count = await Repository.GetCountAsync();
+            if (string.IsNullOrEmpty(sorting))
+            {
+                sorting = $"{nameof(OpenIddictScope.Name)}";
+            }
+
+            var count = await Repository.GetCountAsync(input.Filter);
+            var list = await Repository.GetListAsync(sorting, input.SkipCount, input.MaxResultCount, input.Filter);
             return new PagedResultDto<ScopeDto>(count,
                 ObjectMapper.Map<List<OpenIddictScope>, List<ScopeDto>>(list));
         }
 
         [UnitOfWork]
+        [Authorize(OpenIddictPermissions.Scopes.Default)]
+        public virtual async Task<ListResultDto<ScopeDto>> GetAllAsync()
+        {
+            var list = await Repository.GetListAsync();
+            return new ListResultDto<ScopeDto>(
+                ObjectMapper.Map<List<OpenIddictScope>, List<ScopeDto>>(list));
+        }
+
+
+        [UnitOfWork]
         [Authorize(OpenIddictPermissions.Scopes.Create)]
         public virtual async Task<ScopeDto> CreateAsync(ScopeCreateInput input)
         {
-            var entity = new OpenIddictScope(GuidGenerator.Create());
-            await UpdateByInputAsync(entity, input);
+            await ReplaceScopeNameAsync(input);
+            await CheckDuplicateNameAsync(input.Name);
+            var descriptor = new OpenIddictScopeDescriptor
+            {
+                Name = input.Name,
+            };
 
-            await Repository.InsertAsync(entity);
+            await UpdateByInputAsync(descriptor, input);
 
-            return ObjectMapper.Map<OpenIddictScope, ScopeDto>(entity);
+            var scope = await Manager.CreateAsync(descriptor);
+            input.MapExtraPropertiesTo(scope.As<OpenIddictScopeModel>());
+            await Manager.UpdateAsync(scope);
+
+            return await GetAsync(scope.As<OpenIddictScopeModel>().Id);
         }
 
         [UnitOfWork]
         [Authorize(OpenIddictPermissions.Scopes.Update)]
         public virtual async Task<ScopeDto> UpdateAsync(Guid id, ScopeUpdateInput input)
         {
-            var entity = await Repository.GetAsync(id);
-            entity.ConcurrencyStamp = input.ConcurrencyStamp;
-            await UpdateByInputAsync(entity, input);
-            await Repository.UpdateAsync(entity);
-            return ObjectMapper.Map<OpenIddictScope, ScopeDto>(entity);
+            await ReplaceScopeNameAsync(input);
+            var scope = await Manager.FindByIdAsync(id.ToString("D"));
+            if (scope == null)
+            {
+                throw new EntityNotFoundException(typeof(OpenIddictScope), id);
+            }
+
+            var model = scope.As<OpenIddictScopeModel>();
+
+            if (!string.Equals(model.Name, input.Name, StringComparison.OrdinalIgnoreCase))
+            {
+                await CheckDuplicateNameAsync(input.Name);
+            }
+
+            var descriptor = new OpenIddictScopeDescriptor
+            {
+                Name = input.Name,
+            };
+            await Manager.PopulateAsync(descriptor, scope);
+            await UpdateByInputAsync(descriptor, input);
+
+            input.MapExtraPropertiesTo(scope.As<OpenIddictScopeModel>());
+            await Manager.UpdateAsync(scope, descriptor);
+            return await GetAsync(id);
         }
 
         [UnitOfWork]
-        protected virtual async Task UpdateByInputAsync(OpenIddictScope entity, ScopeCreateOrUpdateInput input)
+        protected virtual Task UpdateByInputAsync(OpenIddictScopeDescriptor scope, ScopeCreateOrUpdateInput input)
         {
-            var exits = await Repository.FindByNameAsync(input.Name);
-            if (exits != null && (entity.Id != exits.Id))
+            scope.DisplayName = input.DisplayName;
+            scope.Description = input.Description;
+            // scope.Properties.Clear();
+            // foreach (var property in input.Properties)
+            // {
+            //     scope.Properties.Add(property.Key, JsonSerializer.SerializeToElement(property.Value));
+            // }
+
+            scope.Resources.Clear();
+            scope.Resources.UnionWith(input.Resources);
+            foreach (var resource in input.Resources)
             {
-                throw new DuplicateWarningBusinessException(nameof(OpenIddictScope.Name), input.Name);
+                scope.Resources.Add(resource);
             }
 
-            entity.DisplayName = input.DisplayName;
-            entity.Description = input.Description;
-            entity.Name = input.Name;
-            if (!input.Properties.IsNullOrEmpty())
-            {
-                entity.Properties = System.Text.Json.JsonSerializer.Serialize(input.Properties);
-            }
-
-            if (!input.Resources.IsNullOrEmpty())
-            {
-                entity.Resources = System.Text.Json.JsonSerializer.Serialize(input.Resources);
-            }
+            return Task.CompletedTask;
         }
 
         [UnitOfWork]
         [Authorize(OpenIddictPermissions.Scopes.Delete)]
-        public virtual async Task<ListResultDto<ScopeDto>> DeleteAsync(List<Guid> ids)
+        public virtual async Task DeleteAsync(Guid id)
         {
-            var result = new List<ScopeDto>();
-            foreach (var guid in ids)
+            var scope = await Manager.FindByIdAsync(id.ToString("D"));
+            if (scope == null)
             {
-                var entity = await Repository.FindAsync(guid);
-                if (entity == null) continue;
-                await Repository.DeleteAsync(entity);
-                result.Add(ObjectMapper.Map<OpenIddictScope, ScopeDto>(entity));
+                throw new EntityNotFoundException(typeof(OpenIddictScope), id);
             }
 
-
-            return new ListResultDto<ScopeDto>(result);
+            await Manager.DeleteAsync(scope);
         }
 
-        #region Properties
-
-        [UnitOfWork]
-        [DisableEntityChangeTracking]
-        [Authorize(OpenIddictPermissions.Scopes.Default)]
-        public virtual async Task<List<string>> GetPropertiesAsync(Guid id)
+        protected virtual async Task CheckDuplicateNameAsync(string name)
         {
-            var entity = await Repository.GetAsync(id);
-            var list = entity.Properties.IsNullOrEmpty()
-                ? new List<string>()
-                : System.Text.Json.JsonSerializer.Deserialize<List<string>>(entity.Properties,
-                    new System.Text.Json.JsonSerializerOptions());
-            return list;
-        }
-
-        [UnitOfWork]
-        [Authorize(OpenIddictPermissions.Scopes.Update)]
-        public virtual async Task AddPropertyAsync(Guid id, ScopePropertyCreateInput input)
-        {
-            var entity = await Repository.GetAsync(id);
-            var list = entity.Properties.IsNullOrEmpty()
-                ? new List<string>()
-                : System.Text.Json.JsonSerializer.Deserialize<List<string>>(entity.Properties,
-                    new System.Text.Json.JsonSerializerOptions());
-            if (list.Any(m => m.Equals(input.Value))) return;
-            list.Add(input.Value);
-            entity.Properties = System.Text.Json.JsonSerializer.Serialize(list);
-            await Repository.UpdateAsync(entity);
-        }
-
-        [UnitOfWork]
-        [Authorize(OpenIddictPermissions.Scopes.Update)]
-        public virtual async Task RemovePropertyAsync(Guid id, ScopePropertyDeleteInput input)
-        {
-            var entity = await Repository.GetAsync(id);
-            var list = entity.Properties.IsNullOrEmpty()
-                ? new List<string>()
-                : System.Text.Json.JsonSerializer.Deserialize<List<string>>(entity.Properties,
-                    new System.Text.Json.JsonSerializerOptions());
-            foreach (var item in input.Items)
+            var exits = await Repository.FindByNameAsync(name);
+            if (exits != null)
             {
-                list.Remove(item);
+                throw new DuplicateWarningBusinessException(nameof(OpenIddictScope.Name), name);
             }
-
-            entity.Properties = System.Text.Json.JsonSerializer.Serialize(list);
-            await Repository.UpdateAsync(entity);
         }
 
-        #endregion
-
-        #region Resources
-
-        [UnitOfWork]
-        [DisableEntityChangeTracking]
-        [Authorize(OpenIddictPermissions.Scopes.Default)]
-        public virtual async Task<List<string>> GetResourcesAsync(Guid id)
+        protected virtual Task ReplaceScopeNameAsync(ScopeCreateOrUpdateInput input)
         {
-            var entity = await Repository.GetAsync(id);
-            var list = entity.Resources.IsNullOrEmpty()
-                ? new List<string>()
-                : System.Text.Json.JsonSerializer.Deserialize<List<string>>(entity.Resources,
-                    new System.Text.Json.JsonSerializerOptions());
-            return list;
+            //将name中的空格替换为下划线
+            input.Name = input.Name.Replace(" ", "_");
+            return Task.CompletedTask;
         }
-
-        [UnitOfWork]
-        [Authorize(OpenIddictPermissions.Scopes.Update)]
-        public virtual async Task AddResourceAsync(Guid id, ScopeResourceCreateInput input)
-        {
-            var entity = await Repository.GetAsync(id);
-            var list = entity.Resources.IsNullOrEmpty()
-                ? new List<string>()
-                : System.Text.Json.JsonSerializer.Deserialize<List<string>>(entity.Resources,
-                    new System.Text.Json.JsonSerializerOptions());
-            if (list.Any(m => m.Equals(input.Value))) return;
-            list.Add(input.Value);
-            entity.Resources = System.Text.Json.JsonSerializer.Serialize(list);
-            await Repository.UpdateAsync(entity);
-        }
-
-        [UnitOfWork]
-        [Authorize(OpenIddictPermissions.Scopes.Update)]
-        public virtual async Task RemoveResourceAsync(Guid id, ScopeResourceDeleteInput input)
-        {
-            var entity = await Repository.GetAsync(id);
-            var list = entity.Resources.IsNullOrEmpty()
-                ? new List<string>()
-                : System.Text.Json.JsonSerializer.Deserialize<List<string>>(entity.Resources,
-                    new System.Text.Json.JsonSerializerOptions());
-            foreach (var item in input.Items)
-            {
-                list.Remove(item);
-            }
-
-            entity.Resources = System.Text.Json.JsonSerializer.Serialize(list);
-            await Repository.UpdateAsync(entity);
-        }
-
-        #endregion
     }
 }

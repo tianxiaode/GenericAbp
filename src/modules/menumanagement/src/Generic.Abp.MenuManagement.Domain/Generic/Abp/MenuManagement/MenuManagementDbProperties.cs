@@ -3,8 +3,7 @@
     public static class MenuManagementDbProperties
     {
         public static string DbTablePrefix { get; set; } = "MenuManagement";
-
-        public static string DbSchema { get; set; } = null;
+        public static string DbSchema { get; set; } = default!;
 
         public const string ConnectionStringName = "MenuManagement";
     }

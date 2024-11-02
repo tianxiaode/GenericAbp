@@ -1,6 +1,7 @@
 ﻿using Generic.Abp.OpenIddict.Localization;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Localization;
+using Volo.Abp.MultiTenancy;
 
 namespace Generic.Abp.OpenIddict.Permissions
 {
@@ -10,18 +11,26 @@ namespace Generic.Abp.OpenIddict.Permissions
         {
             var openIddictGroup = context.AddGroup(OpenIddictPermissions.GroupName, L("Permission:OpenIddict"));
 
-            var applicationsPermission = openIddictGroup.AddPermission(OpenIddictPermissions.Applications.Default, L("Permission:Applications"));
-            applicationsPermission.AddChild(OpenIddictPermissions.Applications.Create, L("Permission:Create"));
-            applicationsPermission.AddChild(OpenIddictPermissions.Applications.Update, L("Permission:Edit"));
-            applicationsPermission.AddChild(OpenIddictPermissions.Applications.Delete, L("Permission:Delete"));
-            applicationsPermission.AddChild(OpenIddictPermissions.Applications.ManagePermissions, L("Permission:ManagePermissions"));
+            var applicationsPermission = openIddictGroup.AddPermission(OpenIddictPermissions.Applications.Default,
+                L("Permission:Applications"), MultiTenancySides.Host);
+            applicationsPermission.AddChild(OpenIddictPermissions.Applications.Create, L("Permission:Create"),
+                MultiTenancySides.Host);
+            applicationsPermission.AddChild(OpenIddictPermissions.Applications.Update, L("Permission:Edit"),
+                MultiTenancySides.Host);
+            applicationsPermission.AddChild(OpenIddictPermissions.Applications.Delete, L("Permission:Delete"),
+                MultiTenancySides.Host);
+            applicationsPermission.AddChild(OpenIddictPermissions.Applications.ManagePermissions,
+                L("Permission:ManagePermissions"), MultiTenancySides.Host);
 
-            var scopesPermission = openIddictGroup.AddPermission(OpenIddictPermissions.Scopes.Default, L("Permission:Scopes"));
-            scopesPermission.AddChild(OpenIddictPermissions.Scopes.Create, L("Permission:Create"));
-            scopesPermission.AddChild(OpenIddictPermissions.Scopes.Update, L("Permission:Edit"));
-            scopesPermission.AddChild(OpenIddictPermissions.Scopes.Delete, L("Permission:Delete"));
-            scopesPermission.AddChild(OpenIddictPermissions.Scopes.ManagePermissions, L("Permission:ManagePermissions"));
-
+            var scopesPermission =
+                openIddictGroup.AddPermission(OpenIddictPermissions.Scopes.Default, L("Permission:Scopes"),
+                    MultiTenancySides.Host);
+            scopesPermission.AddChild(OpenIddictPermissions.Scopes.Create, L("Permission:Create"),
+                MultiTenancySides.Host);
+            scopesPermission.AddChild(OpenIddictPermissions.Scopes.Update, L("Permission:Edit"),
+                MultiTenancySides.Host);
+            scopesPermission.AddChild(OpenIddictPermissions.Scopes.Delete, L("Permission:Delete"),
+                MultiTenancySides.Host);
         }
 
         private static LocalizableString L(string name)

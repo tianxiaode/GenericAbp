@@ -1,36 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using Volo.Abp.Application.Dtos;
+﻿using Volo.Abp.Application.Dtos;
 using Volo.Abp.Domain.Entities;
 
 namespace Generic.Abp.OpenIddict.Applications
 {
+    [Serializable]
     public class ApplicationDto : ExtensibleAuditedEntityDto<Guid>, IHasConcurrencyStamp
     {
-        public string ClientId { get; set; }
+        public string ApplicationType { get; set; } = default!;
+        public string ClientId { get; set; } = default!;
+        public string ClientSecret { get; set; } = default!;
+        public string DisplayName { get; set; } = default!;
+        public string ClientType { get; set; } = default!;
+        public string ConsentType { get; set; } = default!;
+        public string DisplayNames { get; set; } = default!;
+        public HashSet<string> Permissions { get; set; } = [];
 
-        public string ClientSecret { get; set; }
+        public HashSet<Uri> PostLogoutRedirectUris { get; set; } = [];
 
-        public string ConsentType { get; set; }
+        // public Dictionary<string, object> Properties { get; set; } = [];
+        public HashSet<Uri> RedirectUris { get; set; } = [];
 
-        public string DisplayName { get; set; }
-
-        //public List<string> Permissions { get; set; }
-
-        //public List<string> PostLogoutRedirectUris { get; set; }
-
-        //public List<string> Properties { get; set; }
-
-        //public List<string> RedirectUris { get; set; }
-
-        //public List<string> Requirements { get; set; }
-
-        public string ApplicationType { get; set; }
-        public string ClientType { get; set; }
-
-        public string ClientUri { get; set; }
-
-        public string LogoUri { get; set; }
-        public string ConcurrencyStamp { get; set; }
+        // public HashSet<string> Requirements { get; set; } = [];
+        public Dictionary<string, string> Settings { get; set; } = [];
+        public string ClientUri { get; set; } = default!;
+        public string LogoUri { get; set; } = default!;
+        public string ConcurrencyStamp { get; set; } = default!;
     }
 }

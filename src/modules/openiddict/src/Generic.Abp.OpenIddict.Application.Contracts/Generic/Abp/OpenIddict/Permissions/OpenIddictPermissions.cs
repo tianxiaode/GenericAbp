@@ -26,8 +26,6 @@ namespace Generic.Abp.OpenIddict.Permissions
             public const string Create = Default + ".Create";
             public const string Update = Default + ".Update";
             public const string Delete = Default + ".Delete";
-            public const string ManagePermissions = Default + ".ManagePermissions";
         }
-
     }
 }

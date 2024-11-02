@@ -1,0 +1,22 @@
+{
+  "culture": "en",
+  "texts": {
+    "Menu": "Menu",
+    "Menus": "Menus",
+    "NewMenu": "New menu",
+    "EditMenu": "Edit menu",
+    "Permission:MenuManagement": "Menu Management",
+    "Permission:Create": "Create",
+    "Permission:Edit": "Edit",
+    "Permission:Delete": "Delete",
+    "Menu:Name": "Name",
+    "Menu:Icon": "Icon",
+    "Menu:IsEnabled": "Enabled",
+    "Menu:IsStatic": "Static",
+    "Menu:Order": "Order",
+    "Menu:Router": "Router",
+    "Menu:GroupName": "Group Name",
+    "Menu:ParentName": "Parent Name",
+    "MenuEntityVersion": "Entity Version"
+  }
+}

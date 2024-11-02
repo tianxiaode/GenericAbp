@@ -1,6 +1,7 @@
 ﻿using Generic.Abp.ExternalAuthentication.Localization;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Localization;
+using Volo.Abp.SettingManagement;
 
 namespace Generic.Abp.ExternalAuthentication.Permissions;
 
@@ -8,14 +9,9 @@ public class ExternalAuthenticationPermissionDefinitionProvider : PermissionDefi
 {
     public override void Define(IPermissionDefinitionContext context)
     {
-        var myGroup = context.AddGroup(ExternalAuthenticationPermissions.GroupName,
-            L("Permission:ExternalAuthenticationProvider"));
-
-        var districtPermission = myGroup.AddPermission(
-            ExternalAuthenticationPermissions.ExternalAuthenticationProviders.Default,
-            L($"ExternalAuthentication.Provider.ManagePermissions"));
-        districtPermission.AddChild(ExternalAuthenticationPermissions.ExternalAuthenticationProviders.ManagePermissions,
-            L("Permission:ChangePermissions"));
+        var myGroup = context.GetGroup(SettingManagementPermissions.GroupName);
+        myGroup.AddPermission(ExternalAuthenticationPermissions.ExternalAuthenticationManagement,
+            L("Permission:ExternalAuthenticationManagement"));
     }
 
     private static LocalizableString L(string name)

@@ -1,0 +1,47 @@
+{
+    "Company": "快速模板",
+    "AppName": "快速模板",
+    "AppShortName": "快速模板",
+    "DatetimeFormat": "yyyy-MM-dd HH:mm:ss",
+    "DateFormat": "yyyy-MM-dd",
+    "TimeFormat": "HH:mm:ss",
+    "Tenant": {
+        "GivenTenantIsNotExist": "给定租户不存在：{0}",
+        "GivenTenantIsNotAvailable": "给定租户不可用：{0}",
+        "Tenant": "租户",
+        "Switch": "切换",
+        "Name": "名称",
+        "SwitchTenantHint": "将名称字段留空以切换到主机端。",
+        "SwitchTenant": "切换租户",
+        "NotSelected": "未选择"
+    },
+    "Nav": {
+        "Home": "首页",
+        "Demos": "演示",
+        "Github": "GitHub",
+        "Docs": "文档",
+        "Login": "登录",
+        "Desktop": "桌面示例",
+        "Mobile": "移动示例",
+        "Swagger": "Swagger",
+        "About": "关于我们",
+        "OpenSourceLicenseWith": "开源许可：",
+        "Logout": "退出",
+        "Admin": "管理",
+        "Profile": "个人中心"
+    },
+    "Pagination": {
+        "Previous": "上一页",
+        "First": "第一页",
+        "Next": "下一页",
+        "Last": "最后一页",
+        "Page": "页",
+        "Items": "条数据",
+        "Total": "共 {total} 条数据"
+    },
+    "AbpIdentity": {
+        "EditUser": "编辑用户",
+        "EditRole": "编辑角色",
+        "ConfirmPassword": "确认密码"
+    }
+}

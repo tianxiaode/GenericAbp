@@ -1,5 +1,5 @@
-﻿using Generic.Abp.BusinessException.Exceptions;
-using Generic.Abp.Domain.Trees;
+﻿using Generic.Abp.Extensions.Exceptions;
+using Generic.Abp.Extensions.Trees;
 using Generic.Abp.MenuManagement.Localization;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Localization;
@@ -23,13 +23,15 @@ public class MenuManager : TreeManager<Menu, IMenuRepository>
 
     public override async Task ValidateAsync(Menu entity)
     {
+        await base.ValidateAsync(entity);
+
         var siblings = (await FindChildrenAsync(entity.ParentId))
             .Where(m => m.Id != entity.Id)
             .ToList();
 
-        if (siblings.Any(m => m.DisplayName == entity.DisplayName))
+        if (siblings.Any(m => m.Name == entity.Name))
         {
-            throw new DuplicateWarningBusinessException(Localizer[nameof(Menu)], entity.DisplayName);
+            throw new DuplicateWarningBusinessException(Localizer[nameof(Menu)], entity.Name);
         }
     }
 }

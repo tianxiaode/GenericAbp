@@ -7,9 +7,9 @@ namespace Generic.Abp.Identity.Permissions
     {
         public const string GroupName = SettingManagementPermissions.GroupName;
 
-        public const string PasswordPolicy = GroupName + ".PasswordPolicy";
+        public const string IdentityManagement = GroupName + ".IdentityManagement";
 
-        public const string LookupPolicy = GroupName + ".LookupPolicy";
+        public const string SecurityLogs = Volo.Abp.Identity.IdentityPermissions.GroupName + ".SecurityLogs";
 
         public static string[] GetAll()
         {

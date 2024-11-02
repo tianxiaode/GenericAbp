@@ -11,7 +11,7 @@ namespace Generic.Abp.OpenIddict
         typeof(AbpOpenIddictDomainModule),
         typeof(AbpDddApplicationModule),
         typeof(AbpAutoMapperModule)
-        )]
+    )]
     public class GenericAbpOpenIddictApplicationModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)

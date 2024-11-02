@@ -1,19 +1,15 @@
-﻿using Generic.Abp.BusinessException;
-using Generic.Abp.BusinessException.Localization;
-using Generic.Abp.Domain;
-using Volo.Abp.Modularity;
-using Volo.Abp.Localization;
+﻿using Generic.Abp.Extensions;
+using Generic.Abp.Extensions.Localization;
 using Generic.Abp.MenuManagement.Localization;
+using Volo.Abp.Localization;
 using Volo.Abp.Localization.ExceptionHandling;
-using Volo.Abp.Validation;
-using Volo.Abp.Validation.Localization;
+using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
 
 namespace Generic.Abp.MenuManagement
 {
     [DependsOn(
-        typeof(GenericAbpBusinessExceptionModule),
-        typeof(GenericAbpDddDomainSharedModule)
+        typeof(GenericAbpExtensionsModule)
     )]
     public class GenericAbpMenuManagementDomainSharedModule : AbpModule
     {
@@ -28,9 +24,8 @@ namespace Generic.Abp.MenuManagement
             {
                 options.Resources
                     .Add<MenuManagementResource>("en")
-                    .AddBaseTypes(typeof(BusinessExceptionResource))
-                    .AddBaseTypes(typeof(AbpValidationResource))
-                    .AddVirtualJson("/Generic/Abp/MenuManagement/Localization/MenuManagement");
+                    .AddBaseTypes(typeof(ExtensionsResource))
+                    .AddVirtualJson("/Generic/Abp/MenuManagement/Localization/Resources");
             });
 
             Configure<AbpExceptionLocalizationOptions>(options =>

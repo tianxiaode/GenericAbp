@@ -1,5 +1,7 @@
+using Generic.Abp.ExternalAuthentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,27 +11,28 @@ using OpenIddict.Validation.AspNetCore;
 using QuickTemplate.EntityFrameworkCore;
 using QuickTemplate.Localization;
 using QuickTemplate.MultiTenancy;
-using Serilog;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
-using Generic.Abp.ExternalAuthentication;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.HttpOverrides;
+using Serilog.Core;
 using Volo.Abp;
 using Volo.Abp.Account;
 using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
+using Volo.Abp.AspNetCore.Security;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
-using Volo.Abp.Identity.AspNetCore;
 using Volo.Abp.Modularity;
 using Volo.Abp.OpenIddict;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.Swashbuckle;
+using Volo.Abp.Threading;
 using Volo.Abp.Timing;
 using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.VirtualFileSystem;
@@ -38,21 +41,40 @@ namespace QuickTemplate.Web;
 
 [DependsOn(
     typeof(QuickTemplateHttpApiModule),
+    typeof(GenericAbpExternalAuthenticationAspNetCoreModule),
     typeof(AbpAutofacModule),
     typeof(AbpAspNetCoreMultiTenancyModule),
     typeof(QuickTemplateApplicationModule),
     typeof(QuickTemplateEntityFrameworkCoreModule),
-    typeof(AbpIdentityAspNetCoreModule),
-    typeof(AbpOpenIddictAspNetCoreModule),
-    //typeof(GenericAbpTailwindModule),
-    typeof(GenericAbpExternalAuthenticationAspNetCoreModule),
-    typeof(AbpAspNetCoreSerilogModule),
-    typeof(AbpSwashbuckleModule)
+    typeof(AbpSwashbuckleModule),
+    typeof(AbpAspNetCoreSerilogModule)
 )]
 public class QuickTemplateWebModule : AbpModule
 {
+    private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
+
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
+        var hostingEnvironment = context.Services.GetHostingEnvironment();
+        var configuration = context.Services.GetConfiguration();
+
+        PreConfigure<OpenIddictBuilder>(builder =>
+        {
+            // builder.AddServer(m =>
+            // {
+            //     m.SetAccessTokenLifetime(TimeSpan.FromDays(3));
+            //     m.SetRefreshTokenLifetime(TimeSpan.FromDays(4));
+            // });
+            builder.AddValidation(options =>
+            {
+                options.AddAudiences("QuickTemplate"); // Replace with your application Name
+                options.UseLocalServer();
+                options.EnableAuthorizationEntryValidation();
+                options.EnableTokenEntryValidation();
+                options.UseAspNetCore();
+            });
+        });
+
         context.Services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
         {
             options.AddAssemblyResource(
@@ -65,21 +87,21 @@ public class QuickTemplateWebModule : AbpModule
             );
         });
 
-        PreConfigure<OpenIddictBuilder>(builder =>
+        if (hostingEnvironment.IsDevelopment())
         {
-            //builder.AddServer(m =>
-            //{
-            //    m.SetAccessTokenLifetime(TimeSpan.FromDays(3));
-            //    m.SetRefreshTokenLifetime(TimeSpan.FromDays(4));
-            //});
-            builder.AddValidation(options =>
-            {
-                options.AddAudiences("QuickTemplate"); // Replace with your application Name
-                options.UseLocalServer();
-                //options.EnableAuthorizationEntryValidation();
-                //options.EnableTokenEntryValidation();
-                options.UseAspNetCore();
-            });
+            return;
+        }
+
+        PreConfigure<AbpOpenIddictAspNetCoreOptions>(options =>
+        {
+            options.AddDevelopmentEncryptionAndSigningCertificate = false;
+        });
+
+        PreConfigure<OpenIddictServerBuilder>(serverBuilder =>
+        {
+            serverBuilder.AddProductionEncryptionAndSigningCertificate("openiddict.pfx",
+                "dd0c34ad-293e-4c9c-865e-3334a4b16b0c");
+            serverBuilder.SetIssuer(new Uri(configuration["AuthServer:Authority"]!));
         });
     }
 
@@ -87,6 +109,7 @@ public class QuickTemplateWebModule : AbpModule
     {
         var hostingEnvironment = context.Services.GetHostingEnvironment();
         var configuration = context.Services.GetConfiguration();
+
 
         ConfigureAuthentication(context);
         ConfigureExternalProviders(context, configuration);
@@ -119,13 +142,22 @@ public class QuickTemplateWebModule : AbpModule
         context.Services.AddAuthentication()
             .AddGitHub(options =>
             {
-                options.ClientId = configuration["Authentication:GitHub:ClientId"] ?? "";
-                options.ClientSecret = configuration["Authentication:GitHub:ClientSecret"] ?? "";
+                options.ClientId = "ddd";
+                options.ClientSecret = "ddd";
+                // options.ClientId = configuration["Authentication:GitHub:ClientId"] ?? "";
+                // options.ClientSecret = configuration["Authentication:GitHub:ClientSecret"] ?? "";
+            })
+            .AddGitee(options =>
+            {
+                options.ClientId = configuration["Authentication:Gitee:ClientId"] ?? "";
+                options.ClientSecret = configuration["Authentication:Gitee:ClientSecret"] ?? "";
             })
             .AddMicrosoftAccount(options =>
             {
-                options.ClientId = configuration["Authentication:Microsoft:ClientId"] ?? "";
-                options.ClientSecret = configuration["Authentication:Microsoft:ClientSecret"] ?? "";
+                options.ClientId =
+                    configuration["Authentication:Microsoft:ClientId"] ?? "";
+                options.ClientSecret =
+                    configuration["Authentication:Microsoft:ClientSecret"] ?? "";
             });
     }
 
@@ -137,8 +169,10 @@ public class QuickTemplateWebModule : AbpModule
             options.RedirectAllowedUrls.AddRange(configuration["App:RedirectAllowedUrls"]?.Split(',') ??
                                                  new string[] { });
 
-            options.Applications["Angular"].RootUrl = configuration["App:ClientUrl"];
-            options.Applications["Angular"].Urls[AccountUrlNames.PasswordReset] = "account/reset-password";
+            options.Applications["Angular"].RootUrl = configuration["App:CorsOrigins"];
+            //options.Applications["Angular"].Urls[AccountUrlNames.PasswordReset] = "reset-password";
+            options.Applications["QuickTemplate"].RootUrl = configuration["App:CorsOrigins"];
+            options.Applications["QuickTemplate"].Urls.Add(AccountUrlNames.PasswordReset, "reset-password");
         });
     }
 
@@ -210,15 +244,17 @@ public class QuickTemplateWebModule : AbpModule
 
     private void ConfigureCors(ServiceConfigurationContext context, IConfiguration configuration)
     {
+        var corsOrigins = configuration["App:CorsOrigins"]
+            ?.Split(",", StringSplitOptions.RemoveEmptyEntries)
+            .Select(o => o.TrimEnd('/'))
+            .ToArray() ?? [];
+
         context.Services.AddCors(options =>
         {
             options.AddDefaultPolicy(builder =>
             {
                 builder
-                    .WithOrigins(configuration["App:CorsOrigins"]?
-                        .Split(",", StringSplitOptions.RemoveEmptyEntries)
-                        .Select(o => o.RemovePostFix("/"))
-                        .ToArray() ?? Array.Empty<string>())
+                    .WithOrigins(corsOrigins)
                     .WithAbpExposedHeaders()
                     .SetIsOriginAllowedToAllowWildcardSubdomains()
                     .AllowAnyHeader()
@@ -226,6 +262,16 @@ public class QuickTemplateWebModule : AbpModule
                     .AllowCredentials();
             });
         });
+
+
+        // ≈‰÷√ AbpSecurityHeadersOptions
+        // Configure<AbpSecurityHeadersOptions>(options =>
+        // {
+        //     if (corsOrigins.Length > 0)
+        //     {
+        //         options.Headers["X-Frame-Options"] = "frame-ancestors 'self' " + string.Join(" ", corsOrigins);
+        //     }
+        // });
     }
 
 
@@ -233,6 +279,7 @@ public class QuickTemplateWebModule : AbpModule
     {
         var app = context.GetApplicationBuilder();
         var env = context.GetEnvironment();
+        var configuration = context.GetConfiguration();
 
         if (env.IsDevelopment())
         {
@@ -246,9 +293,10 @@ public class QuickTemplateWebModule : AbpModule
             app.UseErrorPage();
         }
 
-        app.UseCorrelationId();
+        //app.UseCorrelationId();
         app.UseStaticFiles();
         app.UseRouting();
+        //app.UseAbpSecurityHeaders();
         app.UseCors();
 
         app.UseAuthentication();
@@ -260,11 +308,10 @@ public class QuickTemplateWebModule : AbpModule
             app.UseMultiTenancy();
         }
 
-
-        //app.UseForwardedHeaders(new ForwardedHeadersOptions
-        //{
-        //    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-        //});
+        app.UseForwardedHeaders(new ForwardedHeadersOptions
+        {
+            ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+        });
 
 
         app.UseUnitOfWork();
@@ -282,5 +329,11 @@ public class QuickTemplateWebModule : AbpModule
         app.UseAuditing();
         app.UseAbpSerilogEnrichers();
         app.UseConfiguredEndpoints();
+
+        OneTimeRunner.Run(() =>
+        {
+            var hostedService = context.ServiceProvider.GetService<ExternalProviderUpdaterService>();
+            hostedService?.StartAsync(default).GetAwaiter().GetResult();
+        });
     }
 }

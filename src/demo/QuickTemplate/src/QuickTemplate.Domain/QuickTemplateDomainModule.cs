@@ -1,11 +1,12 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Generic.Abp.AuditLogging;
+using Generic.Abp.Identity;
+using Generic.Abp.MenuManagement;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using QuickTemplate.MultiTenancy;
-using Volo.Abp.AuditLogging;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.Emailing;
 using Volo.Abp.FeatureManagement;
-using Volo.Abp.Identity;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
@@ -19,16 +20,19 @@ namespace QuickTemplate;
 
 [DependsOn(
     typeof(QuickTemplateDomainSharedModule),
-    typeof(AbpAuditLoggingDomainModule),
+    //typeof(AbpAuditLoggingDomainModule),
     typeof(AbpBackgroundJobsDomainModule),
     typeof(AbpFeatureManagementDomainModule),
-    typeof(AbpIdentityDomainModule),
+    //typeof(AbpIdentityDomainModule),
     typeof(AbpOpenIddictDomainModule),
     typeof(AbpPermissionManagementDomainOpenIddictModule),
     typeof(AbpPermissionManagementDomainIdentityModule),
     typeof(AbpSettingManagementDomainModule),
     typeof(AbpTenantManagementDomainModule),
-    typeof(AbpEmailingModule)
+    typeof(AbpEmailingModule),
+    typeof(GenericAbpIdentityDomainModule),
+    typeof(GenericAbpAuditLoggingDomainModule),
+    typeof(GenericAbpMenuManagementDomainModule)
 )]
 public class QuickTemplateDomainModule : AbpModule
 {
@@ -38,7 +42,7 @@ public class QuickTemplateDomainModule : AbpModule
         {
             //options.Languages.Add(new LanguageInfo("ar", "ar", "العربية", "ae"));
             //options.Languages.Add(new LanguageInfo("cs", "cs", "Čeština"));
-            options.Languages.Add(new LanguageInfo("en", "en", "English", "gb"));
+            options.Languages.Add(new LanguageInfo("en", "en", "English"));
             //options.Languages.Add(new LanguageInfo("en-GB", "en-GB", "English (UK)"));
             //options.Languages.Add(new LanguageInfo("hu", "hu", "Magyar"));
             //options.Languages.Add(new LanguageInfo("fi", "fi", "Finnish", "fi"));

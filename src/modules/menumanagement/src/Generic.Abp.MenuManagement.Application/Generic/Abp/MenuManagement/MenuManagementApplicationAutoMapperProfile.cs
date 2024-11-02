@@ -1,10 +1,8 @@
 ﻿using AutoMapper;
-using Generic.Abp.Domain.Extensions;
+using Generic.Abp.Extensions.Entities.MultiLingual;
 using Generic.Abp.MenuManagement.Menus;
 using Generic.Abp.MenuManagement.Menus.Dtos;
-using System;
 using Volo.Abp.AutoMapper;
-using Volo.Abp.Data;
 
 namespace Generic.Abp.MenuManagement
 {
@@ -18,15 +16,10 @@ namespace Generic.Abp.MenuManagement
 
             CreateMap<Menu, MenuDto>()
                 .ForMember(m => m.Leaf, opts => opts.MapFrom(m => true))
-                .ForMember(m => m.Translations, opts => opts.MapFrom(m => m.GetTranslations<Menu, MenuTranslation>()))
-                .ForMember(m => m.Permissions, opts => opts.MapFrom(m => m.GetPermissions()))
+                .ForMember(m => m.Parent, opts => opts.MapFrom(m => m.Parent))
+                .ForMember(m => m.MultiLingual, opts => opts.MapFrom(m => m.GetMultiLingual()))
                 .Ignore(m => m.Children)
-                .Ignore(m => m.Parent)
-                .IgnoreExtraProperties();
-
-
-            CreateMap<MenuTranslation, MenuTranslationDto>();
-            CreateMap<MenuTranslationDto, MenuTranslation>();
+                .MapExtraProperties();
         }
     }
 }

@@ -1,0 +1,38 @@
+{
+    "Company": "Quick Template",
+    "AppName": "Quick Template",
+    "AppShortName": "Q-Template",
+    "DatetimeFormat": "MM/dd/yyyy HH:mm:ss",
+    "DateFormat": "MM/dd/yyyy",
+    "TimeFormat": "HH:mm:ss",
+    "Tenant": {
+        "GivenTenantIsNotExist": "Given tenant doesn't exist: {0}",
+        "GivenTenantIsNotAvailable": "Given tenant isn't available: {0}",
+        "Tenant": "Tenant",
+        "Switch": "switch",
+        "Name": "Name",
+        "SwitchTenantHint": "Leave the name field blank to switch to the host side.",
+        "SwitchTenant": "Switch tenant",
+        "NotSelected": "Not selected"
+    },
+    "Nav": {
+        "Home": "Home",
+        "Demos": "Demos",
+        "Github": "GitHub",
+        "Docs": "Docs",
+        "Login": "Login",
+        "Desktop": "Desktop App Demo",
+        "Mobile": "Mobile App Demo",
+        "Swagger": "Swagger UI",
+        "About": "About Us",
+        "OpenSourceLicenseWith": "Open Source Licenses With",
+        "Logout": "Logout",
+        "Admin": "Admin",
+        "Profile": "Profile"
+    },
+    "AbpIdentity": {
+        "EditUser": "Edit User",
+        "EditRole": "Edit Role",
+        "ConfirmPassword": "Confirm Password"
+    }
+}

@@ -23,12 +23,14 @@ export default class Form {
         event.preventDefault();
         event.stopPropagation();
         const inputs = this.inputs;
-        let isValid = true;
-        inputs.forEach(i => {
-            let reuslt = i.isValid();
-            isValid = isValid && reuslt; 
-        })
-        if(!isValid) return;
+        let allValid = true;
+        for (let input of inputs){
+            let isValid = input.isValid();
+            if(isValid)continue;
+            allValid = false;
+            break;
+        }
+        if(!allValid) return;
         if (this.submit) {
             this.submit(event);
             return;

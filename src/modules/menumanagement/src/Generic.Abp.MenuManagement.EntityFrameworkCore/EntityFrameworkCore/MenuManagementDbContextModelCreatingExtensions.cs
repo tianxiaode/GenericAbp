@@ -1,33 +1,27 @@
 ﻿using System;
-using Generic.Abp.Domain.Entities;
+using Generic.Abp.Extensions.Entities.Trees;
+using Generic.Abp.MenuManagement.Extensions;
 using Generic.Abp.MenuManagement.Menus;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Volo.Abp;
+using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.Modeling;
 
 namespace Generic.Abp.MenuManagement.EntityFrameworkCore
 {
     public static class MenuManagementDbContextModelCreatingExtensions
     {
-        public static void ConfigureMenuManagement(
-            this ModelBuilder builder,
-            Action<MenuManagementModelBuilderConfigurationOptions> optionsAction = null)
+        public static void ConfigureMenuManagement(this ModelBuilder builder)
         {
             Check.NotNull(builder, nameof(builder));
-
-            var options = new MenuManagementModelBuilderConfigurationOptions(
-                MenuManagementDbProperties.DbTablePrefix,
-                MenuManagementDbProperties.DbSchema
-            );
-
-            optionsAction?.Invoke(options);
 
             /* Configure all entities here. Example:
 
             builder.Entity<Question>(b =>
             {
                 //Configure table & schema name
-                b.ToTable(options.TablePrefix + "Questions", options.Schema);
+                b.ToTable(MenuManagementDbProperties.DbTablePrefix + "Questions", MenuManagementDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
@@ -42,21 +36,34 @@ namespace Generic.Abp.MenuManagement.EntityFrameworkCore
             });
             */
 
+            var dbType = builder.GetDatabaseProvider();
+
             builder.Entity<Menu>(b =>
             {
-                b.ToTable(options.TablePrefix + "Menus", options.Schema);
+                b.ToTable(MenuManagementDbProperties.DbTablePrefix + "Menus", MenuManagementDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
                 //Properties
-                b.Property(q => q.DisplayName).IsRequired().HasMaxLength(TreeConsts.DisplayNameMaxLength)
-                    .UseCollation("gbk_chinese_ci");
-                b.Property(m => m.Code).IsRequired().HasMaxLength(TreeConsts.CodeMaxLength)
-                    .UseCollation("ascii_general_ci");
-                b.Property(q => q.Icon).HasMaxLength(MenuConsts.IconMaxLength).UseCollation("gbk_chinese_ci");
-                b.Property(q => q.Router).HasMaxLength(MenuConsts.RouterMaxLength).UseCollation("gbk_chinese_ci");
-                b.Property(q => q.GroupName).HasMaxLength(MenuConsts.GroupNameMaxLength).UseCollation("gbk_chinese_ci");
+                b.Property(m => m.Name).IsRequired().HasMaxLength(TreeConsts.NameMaxLength);
+                b.Property(m => m.Code).IsRequired().HasMaxLength(TreeConsts.GetCodeLength(TreeConsts.MaxDepth));
+                b.Property(m => m.Icon).HasMaxLength(MenuConsts.IconMaxLength);
+                b.Property(m => m.Router).HasMaxLength(MenuConsts.RouterMaxLength);
+                b.Property(m => m.GroupName).IsRequired().HasMaxLength(MenuConsts.GroupNameMaxLength);
+                b.Property(m => m.IsEnabled).IsRequired().HasDefaultValue(true);
+                b.Property(m => m.Order).IsRequired().HasDefaultValue(1);
+                b.Property(m => m.IsStatic).IsRequired().HasDefaultValue(false);
+                b.Property(m => m.EntityVersion).IsRequired().HasDefaultValue(0);
 
+
+                if (dbType == EfCoreDatabaseProvider.MySql)
+                {
+                    b.Property(m => m.Name).UseCollation("gbk_chinese_ci");
+                    b.Property(m => m.Code).UseCollation("ascii_general_ci");
+                    b.Property(m => m.Icon).UseCollation("ascii_general_ci");
+                    b.Property(m => m.Router).UseCollation("ascii_general_ci");
+                    b.Property(m => m.GroupName).UseCollation("ascii_general_ci");
+                }
 
                 //Relations
                 b.HasOne<Menu>(m => m.Parent).WithMany(m => m.Children).HasForeignKey(m => m.ParentId)
@@ -64,10 +71,11 @@ namespace Generic.Abp.MenuManagement.EntityFrameworkCore
 
                 //Indexes
                 b.HasIndex(m => m.Code);
-                b.HasIndex(m => m.DisplayName);
+                b.HasIndex(m => m.Name);
                 b.HasIndex(m => m.ParentId);
-                b.HasIndex(m => m.GroupName);
-                b.HasIndex(m => m.Order);
+                b.HasIndex(m => new { m.GroupName, m.Order });
+
+                b.ApplyObjectExtensionMappings();
             });
         }
     }

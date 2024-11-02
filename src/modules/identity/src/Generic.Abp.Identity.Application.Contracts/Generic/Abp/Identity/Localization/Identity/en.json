@@ -1,0 +1,26 @@
+{
+  "culture": "en",
+  "texts": {
+    "Permission:IdentityManagement": "Identity management",
+    "Permission:SecurityLogs": "Security Logs",
+    "PasswordSettings": "Password settings",
+    "PasswordRenewingSettings": "Password Renewing settings",
+    "LockoutSettings": "Lockout settings",
+    "SigninSettings": "Signin settings",
+    "UserSettings": "User settings",
+    "SecurityLog:ApplicationName": "Application Name",
+    "SecurityLog:Identity": "Identity",
+    "SecurityLog:Action": "Action",
+    "SecurityLog:UserId": "User Id",
+    "SecurityLog:UserName": "User Name",
+    "SecurityLog:TenantName": "Tenant Name",
+    "SecurityLog:TenantId": "Tenant Id",
+    "SecurityLog:ClientId": "Client Id",
+    "SecurityLog:CorrelationId": "Correlation Id",
+    "SecurityLog:ClientIpAddress": "Client Ip Address",
+    "SecurityLog:BrowserInfo": "Browser Info",
+    "SecurityLog:CreationTime": "Creation Time",
+    "SecurityLogs": "Security Logs",
+    "SecurityLog": "Security Log"
+  }
+}

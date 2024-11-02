@@ -8,6 +8,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\modules\AuditLogging\src\Generic.Abp.AuditLogging.Domain\Generic.Abp.AuditLogging.Domain.csproj" />
+    <ProjectReference Include="..\..\..\..\modules\identity\src\Generic.Abp.Identity.Domain\Generic.Abp.Identity.Domain.csproj" />
+    <ProjectReference Include="..\..\..\..\modules\menumanagement\src\Generic.Abp.MenuManagement.Domain\Generic.Abp.MenuManagement.Domain.csproj" />
     <ProjectReference Include="..\QuickTemplate.Domain.Shared\QuickTemplate.Domain.Shared.csproj" />
   </ItemGroup>
 
@@ -16,7 +19,6 @@
     <PackageReference Include="Volo.Abp.Identity.Domain" Version="$(AbpVersion)" />
     <PackageReference Include="Volo.Abp.PermissionManagement.Domain.Identity" Version="$(AbpVersion)" />
     <PackageReference Include="Volo.Abp.BackgroundJobs.Domain" Version="$(AbpVersion)" />
-    <PackageReference Include="Volo.Abp.AuditLogging.Domain" Version="$(AbpVersion)" />
     <PackageReference Include="Volo.Abp.TenantManagement.Domain" Version="$(AbpVersion)" />
     <PackageReference Include="Volo.Abp.FeatureManagement.Domain" Version="$(AbpVersion)" />
     <PackageReference Include="Volo.Abp.SettingManagement.Domain" Version="$(AbpVersion)" />

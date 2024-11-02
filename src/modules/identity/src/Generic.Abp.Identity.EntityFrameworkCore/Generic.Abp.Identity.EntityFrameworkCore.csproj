@@ -3,7 +3,11 @@
   <Import Project="..\..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <TargetFrameworks>net8.0</TargetFrameworks>
+    <OutputType>Library</OutputType>
+    <IsPackable>true</IsPackable>
+    <Nullable>enable</Nullable>
     <RootNamespace>Generic.Abp.Identity</RootNamespace>
   </PropertyGroup>
 
@@ -11,8 +15,9 @@
 		<PackageReference Include="Volo.Abp.Identity.EntityFrameworkCore" Version="$(AbpVersion)" />
 	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Generic.Abp.Identity.Domain\Generic.Abp.Identity.Domain.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\Generic.Abp.Identity.Domain\Generic.Abp.Identity.Domain.csproj" />
+	</ItemGroup>
+
 
 </Project>

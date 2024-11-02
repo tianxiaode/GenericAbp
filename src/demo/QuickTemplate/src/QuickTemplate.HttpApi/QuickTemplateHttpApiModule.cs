@@ -1,4 +1,9 @@
-﻿using Localization.Resources.AbpUi;
+﻿using Generic.Abp.AuditLogging;
+using Generic.Abp.Extensions;
+using Generic.Abp.Identity;
+using Generic.Abp.MenuManagement;
+using Generic.Abp.OpenIddict;
+using Localization.Resources.AbpUi;
 using QuickTemplate.Localization;
 using Volo.Abp.Account;
 using Volo.Abp.FeatureManagement;
@@ -15,10 +20,15 @@ namespace QuickTemplate;
     typeof(QuickTemplateApplicationContractsModule),
     typeof(AbpAccountHttpApiModule),
     typeof(AbpIdentityHttpApiModule),
+    typeof(GenericAbpAuditLoggingHttpApiModule),
+    typeof(GenericAbpIdentityHttpApiModule),
+    typeof(GenericAbpOpenIddictHttpApiModule),
+    typeof(GenericAbpExtensionsHttpApiModule),
     typeof(AbpPermissionManagementHttpApiModule),
     typeof(AbpTenantManagementHttpApiModule),
     typeof(AbpFeatureManagementHttpApiModule),
-    typeof(AbpSettingManagementHttpApiModule)
+    typeof(AbpSettingManagementHttpApiModule),
+    typeof(GenericAbpMenuManagementHttpApiModule)
 )]
 public class QuickTemplateHttpApiModule : AbpModule
 {

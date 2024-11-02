@@ -28,6 +28,12 @@
   
 
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\modules\menumanagement\src\Generic.Abp.MenuManagement.Domain.Shared\Generic.Abp.MenuManagement.Domain.Shared.csproj" />
+  </ItemGroup>
+  
+
+
 
 
 </Project>

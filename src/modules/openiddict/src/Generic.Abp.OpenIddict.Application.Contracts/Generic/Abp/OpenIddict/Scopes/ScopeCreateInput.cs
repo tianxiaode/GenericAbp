@@ -1,6 +1,6 @@
-﻿
-namespace Generic.Abp.OpenIddict.Scopes
+﻿namespace Generic.Abp.OpenIddict.Scopes
 {
+    [Serializable]
     public class ScopeCreateInput : ScopeCreateOrUpdateInput
     {
     }
