@@ -210,7 +210,8 @@ export class BaseRepository<T extends EntityInterface> extends BaseClass {
     }
 
     get useCache(): boolean {
-        return this.config.useCache || RepositoryGlobalConfig.useCache || true;
+        if(this.config.useCache === false || RepositoryGlobalConfig.useCache === false) return false;
+        return true;
     }
 
     get filterParamName(): string {
@@ -472,5 +473,6 @@ export class BaseRepository<T extends EntityInterface> extends BaseClass {
         this.originalRecords = [];
         this._search = {};
         this.config = {} as RepositoryConfig<T>;
+        super.destroy();
     }
 }

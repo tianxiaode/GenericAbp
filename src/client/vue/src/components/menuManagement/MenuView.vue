@@ -49,9 +49,9 @@ const tableRef = ref<any>();
 const permissionVisible = ref(false);
 const providerKey = ref('');
 const isLazy = ref(true);
-const api = useRepository('menu', true, {
-    useCache: false,
+const api = useRepository('menu', {
     afterLoad(data: MenuType[]) {
+        console.log('afterLoad', data, filterText.value)
         if (!isEmpty(filterText.value)) {
             data = getChildren(data, null);
         } else {
@@ -105,17 +105,13 @@ const getChildren = (data: any, id: any) => {
     children.forEach((item: any) => {
         console.log('getChildren', item.id, item.name)
         item.children = getChildren(data, item.id);
-        tableRef.value.updateKeyChildren(item.id, item.children);
+        tableRef.value?.updateKeyChildren(item.id, item.children);
+        //item.hasChildren = item.children.length > 0;
+        //item.children = getChildren(data, item.id);
     })
     return children;
 }
 
-const updateKeyChildren = (data:any) => {
-    if(!data || data.length === 0) return;
-    data.forEach((item: any) => {
-        tableRef.value.updateKeyChildren(item.id, []);   
-    });
-}
 
 const tableButtons = {
     edit: { action: update, isVisible: api.canUpdate },

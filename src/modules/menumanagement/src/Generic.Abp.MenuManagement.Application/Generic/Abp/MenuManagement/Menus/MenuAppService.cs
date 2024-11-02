@@ -7,18 +7,17 @@ using Generic.Abp.Extensions.Validates;
 using Generic.Abp.MenuManagement.Menus.Dtos;
 using Generic.Abp.MenuManagement.Permissions;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Authorization;
 using Volo.Abp.Domain.ChangeTracking;
 using Volo.Abp.Localization;
-using Volo.Abp.ObjectExtending;
 using Volo.Abp.Uow;
 
 namespace Generic.Abp.MenuManagement.Menus;
@@ -101,12 +100,12 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
     public virtual async Task<MenuDto> UpdateAsync(Guid id, MenuUpdateDto input)
     {
         var entity = await Repository.GetAsync(id);
-        //entity.ConcurrencyStamp = input.ConcurrencyStamp;
         if (!string.Equals(input.Name, entity.Name, StringComparison.OrdinalIgnoreCase))
         {
             entity.Rename(input.Name);
         }
 
+        entity.ConcurrencyStamp = input.ConcurrencyStamp;
         await UpdateMenuByInputAsync(entity, input);
         await MenuManager.UpdateAsync(entity);
         return ObjectMapper.Map<Menu, MenuDto>(entity);

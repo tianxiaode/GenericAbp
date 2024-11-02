@@ -60,6 +60,7 @@ export function useTable<T extends EntityInterface>(api: any) {
     })
 
     onMounted(() => {
+        console.log('useTable mounted', filterText.value);
         api.on('load', loadData);
         api.load();
     });

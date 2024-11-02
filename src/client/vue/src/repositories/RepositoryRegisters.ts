@@ -31,6 +31,7 @@ export const repositoryRegisters: Record<string, RepositoryRegistryType> = {
         type: AuditLogRepository
     },
     menu:{
-        type: MenuRepository
+        type: MenuRepository,
+        defaultConfig: {useCache: false}
     }
 }
