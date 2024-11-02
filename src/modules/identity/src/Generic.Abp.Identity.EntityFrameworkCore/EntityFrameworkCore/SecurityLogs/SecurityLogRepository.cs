@@ -145,27 +145,27 @@ public class SecurityLogRepository : EfCoreRepository<IdentityDbContext, Identit
 
         if (!string.IsNullOrEmpty(applicationName))
         {
-            predicate = predicate.AndIfNotTrue(m => m.ApplicationName == applicationName);
+            predicate = predicate.AndIfNotTrue(m => m.ApplicationName.ToLower() == applicationName.ToLowerInvariant());
         }
 
         if (!string.IsNullOrEmpty(identity))
         {
-            predicate = predicate.AndIfNotTrue(m => m.Identity == identity);
+            predicate = predicate.AndIfNotTrue(m => m.Identity.ToLower() == identity.ToLowerInvariant());
         }
 
         if (!string.IsNullOrEmpty(action))
         {
-            predicate = predicate.AndIfNotTrue(m => m.Action == action);
+            predicate = predicate.AndIfNotTrue(m => m.Action.ToLower() == action.ToLowerInvariant());
         }
 
         if (!string.IsNullOrEmpty(userName))
         {
-            predicate = predicate.AndIfNotTrue(m => m.UserName == userName);
+            predicate = predicate.AndIfNotTrue(m => m.UserName.ToLower() == userName.ToLowerInvariant());
         }
 
         if (!string.IsNullOrEmpty(clientId))
         {
-            predicate = predicate.AndIfNotTrue(m => m.ClientId == clientId);
+            predicate = predicate.AndIfNotTrue(m => m.ClientId.ToLower() == clientId.ToLowerInvariant());
         }
 
         if (!string.IsNullOrEmpty(correlationId))

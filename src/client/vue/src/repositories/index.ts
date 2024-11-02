@@ -5,4 +5,5 @@ export * from './Scope';
 export * from './Tenant';
 export * from './SecurityLog';
 export * from './AuditLog';
+export * from './Menu';
 export * from './RepositoryRegisters';

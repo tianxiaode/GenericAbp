@@ -99,7 +99,7 @@ public class MenuDataSeed : ITransientDependency, IMenuDataSeed
         var roles = new Menu(GuidGenerator.Create(), identityManagement.Id, "Roles", tenantId, true);
         roles.SetGroupName(defaultMenuGroup);
         roles.SetOrder(104);
-        roles.SetIcon("fa fa-user-tag");
+        roles.SetIcon("fa fa-user-shield");
         roles.SetRouter("roles");
         roles.SetMultiLingual(new Dictionary<string, object>()
         {
@@ -123,6 +123,7 @@ public class MenuDataSeed : ITransientDependency, IMenuDataSeed
             { "zh-Hant", "安全日誌" }
         });
         securityLogManagement.SetPermissions(["AbpIdentity.SecurityLog"]);
+        await MenuManager.CreateAsync(securityLogManagement);
 
         if (!tenantId.HasValue)
         {

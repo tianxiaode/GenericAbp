@@ -98,7 +98,6 @@ const handleChildPermissionChange = (permission: PermissionGroupItemInterface) =
     // 找到当前子权限的父权限
     const parentPermission = currentGroup.value.permissions.find(m => m.parentName === null && permission.name.startsWith(m.name as string));
 
-    console.log(parentPermission);
     if (parentPermission) {
         // 更新父权限下的直接子权限以及进一步的子权限
         const allChildPermissions = currentGroup.value.permissions

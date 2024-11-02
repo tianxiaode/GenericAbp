@@ -22,7 +22,7 @@ public class MenuCreateOrUpdateDto
     [DisplayName("Menu:Router")]
     public string? Router { get; set; } = default!;
 
-    [DisplayName("Menu:Enabled")] public bool Enabled { get; set; } = true;
+    [DisplayName("Menu:ISEnabled")] public bool IsEnabled { get; set; } = true;
 
     [Required]
     [DynamicMaxLength(typeof(MenuConsts), nameof(MenuConsts.GroupNameMaxLength))]

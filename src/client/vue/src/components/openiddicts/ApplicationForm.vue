@@ -267,7 +267,7 @@ onMounted(() => {
 <style lang="css">
 .openiddict-application-form-tabs {
     .el-tabs__content{
-        height: 430px;
+        min-height: 430px;
     }
 }
 </style>

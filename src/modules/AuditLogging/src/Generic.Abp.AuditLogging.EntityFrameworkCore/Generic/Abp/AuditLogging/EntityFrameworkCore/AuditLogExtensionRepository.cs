@@ -223,28 +223,28 @@ public class AuditLogExtensionRepository : EfCoreRepository<AbpAuditLoggingDbCon
 
         if (!string.IsNullOrEmpty(applicationName))
         {
-            predicate = predicate.AndIfNotTrue(m => m.ApplicationName == applicationName);
+            predicate = predicate.AndIfNotTrue(m => m.ApplicationName.ToLower() == applicationName.ToLowerInvariant());
         }
 
 
         if (!string.IsNullOrEmpty(userName))
         {
-            predicate = predicate.AndIfNotTrue(m => m.UserName == userName);
+            predicate = predicate.AndIfNotTrue(m => m.UserName.ToLower() == userName.ToLowerInvariant());
         }
 
         if (!string.IsNullOrEmpty(clientId))
         {
-            predicate = predicate.AndIfNotTrue(m => m.ClientId == clientId);
+            predicate = predicate.AndIfNotTrue(m => m.ClientId.ToLower() == clientId.ToLowerInvariant());
         }
 
         if (!string.IsNullOrEmpty(correlationId))
         {
-            predicate = predicate.AndIfNotTrue(m => m.CorrelationId == correlationId);
+            predicate = predicate.AndIfNotTrue(m => m.CorrelationId.ToLower() == correlationId.ToLowerInvariant());
         }
 
         if (!string.IsNullOrEmpty(url))
         {
-            predicate = predicate.AndIfNotTrue(m => m.Url == url);
+            predicate = predicate.AndIfNotTrue(m => m.Url.ToLower() == url.ToLowerInvariant());
         }
 
         if (minExecutionDuration.HasValue)

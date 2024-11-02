@@ -43,6 +43,8 @@
             </DateColumn>
             <HighlightColumn :label="t('AbpIdentity.SecurityLog:ApplicationName')" prop="applicationName" width="full"
                 sortable :filterText="filterText" />
+                <HighlightColumn :label="t('AbpIdentity.SecurityLog:Action')" prop="action" width="full"
+                sortable :filterText="filterText" />
             <HighlightColumn :label="t('AbpIdentity.SecurityLog:Identity')" prop="identity" width="full" sortable
                 :filterText="filterText" />
             <HighlightColumn :label="t('AbpIdentity.SecurityLog:UserName')" prop="userName" width="full" sortable

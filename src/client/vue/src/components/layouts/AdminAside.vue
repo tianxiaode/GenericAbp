@@ -2,12 +2,10 @@
     <el-aside :class="asideStore.isExpanded ? 'collapsed' : ''" class="aside">
         <el-menu router :collapse="asideStore.isExpanded" :default-active="$route.path" size="large"
             style="--el-menu-text-color:var(--el-color-info);"
+            class="aside-menu"
         >
-            <el-menu-item index="/dashboard" >
-                <el-icon><i class="fa fa-home"></i></el-icon>
-                <span>首页</span>
-            </el-menu-item>
-            <el-sub-menu index="4">
+            <MenuItem v-for="item in menus" :menu="item" :key="item.name" />
+            <!-- <el-sub-menu index="4">
                 <template #title>
                     <el-icon><i class="fa fa-cogs"></i></el-icon>
                     <span>系统管理</span>                    
@@ -44,21 +42,34 @@
                     <el-icon><i class="fa fa-cog"></i></el-icon>
                     <span>审计日志</span>                    
                 </el-menu-item>
-            </el-sub-menu>
+            </el-sub-menu> -->
         </el-menu>
     </el-aside>
 
 </template>
 
 <script setup lang="ts">
-import { isGranted } from '~/libs';
+import { ref } from 'vue';
+import { onMounted } from 'vue';
+import {  useRepository } from '~/composables';
+import { MenuType } from '~/repositories';
 import { useAsideStore } from '~/store';
+import MenuItem from '../menus/MenuItem.vue';
 const asideStore = useAsideStore();
+const api = useRepository('menu');
+const menus = ref<MenuType[]>([]);
+
+
+onMounted(()=>{
+    api.getByGroup('default').then((res:any) => {
+        menus.value = res.items;
+    })
+})
 </script>
 
 <style lang="scss" scoped>
 .aside {
-    width: 220px;
+    width: 250px;
     transition: width 0.3s;
     /* 添加平滑过渡效果 */
 }
@@ -67,7 +78,7 @@ const asideStore = useAsideStore();
     width: 60px;
 }
 
-.aside .el-menu {
+.aside .aside-menu {
     min-height: calc(100vh - 60px);
 }
 </style>

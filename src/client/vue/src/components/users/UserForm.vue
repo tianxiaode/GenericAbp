@@ -2,7 +2,7 @@
     <FormDialog v-bind="formDialogProps" v-model="formData" v-model:rules="rules" :title="dialogTitle"
         v-model:visible="dialogVisible">
         <template #form-items>
-            <el-tabs v-model="activeTab" style="height: 540px;">
+            <el-tabs v-model="activeTab" style="min-height: 540px;">
                 <el-tab-pane :label="t('AbpIdentity.UserInformations')" name="basic">
                     <el-form-item :label="t('AbpIdentity.DisplayName:UserName')" prop="userName">
                         <el-input v-model="formData.userName" :placeholder="t('AbpIdentity.DisplayName:UserName')"

@@ -46,7 +46,7 @@ const toggleCollapse = () => {
     /* 垂直居中对齐 */
     font-size: 24px;
     font-weight: bold;
-    width: 220px;
+    width: 250px;
     color: #fff;
     transition: width 0.3s;
     /* 添加平滑过渡效果 */

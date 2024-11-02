@@ -19,6 +19,7 @@ const routes = [
             { path: "roles", component: ()=>import("~/components/roles/RoleView.vue") },
             { path: "users", component: ()=>import("~/components/users/UserView.vue") },
             { path: 'tenants', component: ()=>import("~/components/tenants/TenantView.vue") },
+            { path: 'menus', component: ()=>import("~/components/menuManagement/MenuView.vue") },
             { path: "applications", component: ()=>import("~/components/openiddicts/ApplicationView.vue") },
             { path: "scopes", component: ()=>import("~/components/openiddicts/ScopeView.vue") },
             { path: "security-logs", component: ()=>import("~/components/securitylogs/SecurityLogView.vue") },            

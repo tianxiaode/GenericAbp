@@ -2,6 +2,7 @@
 using Generic.Abp.Extensions.Entities.MultiLingual;
 using Generic.Abp.MenuManagement.Menus;
 using Generic.Abp.MenuManagement.Menus.Dtos;
+using Volo.Abp.AutoMapper;
 
 namespace Generic.Abp.MenuManagement
 {
@@ -17,6 +18,7 @@ namespace Generic.Abp.MenuManagement
                 .ForMember(m => m.Leaf, opts => opts.MapFrom(m => true))
                 .ForMember(m => m.Parent, opts => opts.MapFrom(m => m.Parent))
                 .ForMember(m => m.MultiLingual, opts => opts.MapFrom(m => m.GetMultiLingual()))
+                .Ignore(m => m.Children)
                 .MapExtraProperties();
         }
     }

@@ -6,6 +6,7 @@ import { ScopRepository } from "./Scope";
 import { TenantRepository } from "./Tenant";
 import { SecurityLogRepository } from "./SecurityLog";
 import { AuditLogRepository } from "./AuditLog";
+import { MenuRepository } from "./Menu";
 
 export const repositoryRegisters: Record<string, RepositoryRegistryType> = {
     Role: {
@@ -28,5 +29,8 @@ export const repositoryRegisters: Record<string, RepositoryRegistryType> = {
     },
     auditLog:{
         type: AuditLogRepository
+    },
+    menu:{
+        type: MenuRepository
     }
 }

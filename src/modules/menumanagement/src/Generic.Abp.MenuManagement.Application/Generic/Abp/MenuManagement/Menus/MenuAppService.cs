@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -51,9 +52,13 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
     public virtual async Task<ListResultDto<MenuDto>> GetListAsync(MenuGetListInput input)
     {
         List<Menu> list;
-        if (string.IsNullOrEmpty(input.Filter) && string.IsNullOrEmpty(input.GroupName))
+        if (string.IsNullOrEmpty(input.Filter))
         {
-            list = await Repository.GetListAsync(m => m.ParentId == input.PrentId, input.Sorting);
+            Expression<Func<Menu, bool>> predicate = string.IsNullOrEmpty(input.GroupName)
+                ? m => true
+                : m => m.GroupName.ToLower() == input.GroupName.ToLowerInvariant();
+            list = await Repository.GetListAsync(predicate.AndIfNotTrue(m => m.ParentId == input.ParentId),
+                input.Sorting);
         }
         else
         {
@@ -63,7 +68,7 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
         var dtos = ObjectMapper.Map<List<Menu>, List<MenuDto>>(list);
         foreach (var dto in dtos)
         {
-            dto.Leaf = await Repository.HasChildAsync(dto.Id);
+            dto.Leaf = !await Repository.HasChildAsync(dto.Id);
         }
 
         return new ListResultDto<MenuDto>(dtos);
@@ -73,31 +78,9 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
     [AllowAnonymous]
     public virtual async Task<ListResultDto<MenuDto>> GetListByGroupAsync(string group)
     {
-        var predicate = await Repository.BuildPredicateAsync(groupName: group);
-        var list = await Repository.GetListAsync(predicate, "Order");
-        var dtos = new List<MenuDto>();
-        foreach (var menu in list)
-        {
-            var policyNames = menu.GetPermissions().ToArray();
-            if (policyNames.Length == 0)
-            {
-                var dto = ObjectMapper.Map<Menu, MenuDto>(menu);
-                menu.MapExtraPropertiesTo(dto);
-                dtos.Add(dto);
-                continue;
-            }
-
-            if (!await AuthorizationService.IsGrantedAnyAsync(policyNames))
-            {
-                continue;
-            }
-
-            {
-                var dto = ObjectMapper.Map<Menu, MenuDto>(menu);
-                menu.MapExtraPropertiesTo(dto);
-                dtos.Add(dto);
-            }
-        }
+        var list = await Repository.GetListAsync(m => m.GroupName.ToLower() == group.ToLowerInvariant() && m.IsEnabled,
+            "Order");
+        var dtos = await GetChildrenAsync(null, list);
 
         return new ListResultDto<MenuDto>(dtos);
     }
@@ -118,7 +101,7 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
     public virtual async Task<MenuDto> UpdateAsync(Guid id, MenuUpdateDto input)
     {
         var entity = await Repository.GetAsync(id);
-        entity.ConcurrencyStamp = input.ConcurrencyStamp;
+        //entity.ConcurrencyStamp = input.ConcurrencyStamp;
         if (!string.Equals(input.Name, entity.Name, StringComparison.OrdinalIgnoreCase))
         {
             entity.Rename(input.Name);
@@ -217,16 +200,64 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
     #endregion
 
 
-    protected virtual async Task<List<Menu>> GetSearchMenuList(MenuGetListInput input)
+    protected virtual async Task<List<MenuDto>> GetChildrenAsync(Guid? id, List<Menu> menus)
     {
-        if (string.IsNullOrEmpty(input.Filter))
+        var children = menus.Where(m => m.ParentId == id);
+        var chilrenDtos = new List<MenuDto>();
+        foreach (var menu in children)
         {
-            return await Repository.GetListAsync(
-                m => m.GroupName.ToLower() == input.GroupName!.ToLowerInvariant(), input.Sorting);
+            var permissions = menu.GetPermissions().ToArray();
+            MenuDto? dto = null;
+            if (permissions.Length > 0)
+            {
+                //有权限，说明没有子节点，直接显示
+                try
+                {
+                    var isGranted = await AuthorizationService.IsGrantedAnyAsync(permissions);
+                    if (isGranted)
+                    {
+                        dto = ObjectMapper.Map<Menu, MenuDto>(menu);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Logger.LogWarning(e, "权限验证失败，菜单：{Name}，权限：{Permissions}", menu.Name, permissions);
+                }
+            }
+            else
+            {
+                //没有权限，先判断是否有子节点
+                if (menus.Any(m => m.ParentId == menu.Id))
+                {
+                    //如果有子节点，则递归
+                    var childDtos = await GetChildrenAsync(menu.Id, menus);
+                    //如果有符合要求的子节点，则需要显示本节点
+                    if (childDtos.Any())
+                    {
+                        dto = ObjectMapper.Map<Menu, MenuDto>(menu);
+                        dto.Children = childDtos;
+                    }
+                }
+                else
+                {
+                    //没有子节点，直接显示
+                    dto = ObjectMapper.Map<Menu, MenuDto>(menu);
+                }
+            }
+
+            if (dto is not null)
+            {
+                chilrenDtos.Add(dto);
+            }
         }
 
+        return chilrenDtos;
+    }
+
+    protected virtual async Task<List<Menu>> GetSearchMenuList(MenuGetListInput input)
+    {
         //先找出所有符合条件的code
-        var codes = await Repository.GetAllCodesByFilterAsync(input.Filter, input.GroupName);
+        var codes = await Repository.GetAllCodesByFilterAsync(input.Filter!, input.GroupName);
         if (!codes.Any())
         {
             return [];
@@ -261,6 +292,15 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
         entity.SetIcon(input.Icon);
         entity.SetOrder(input.Order);
         entity.SetRouter(input.Router);
+
+        if (input.IsEnabled)
+        {
+            entity.Enable();
+        }
+        else
+        {
+            entity.Disable();
+        }
 
         return Task.CompletedTask;
     }

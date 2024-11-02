@@ -70,7 +70,7 @@ public class MenuRepository : EfCoreRepository<IMenuManagementDbContext, Menu, G
 
         if (!string.IsNullOrEmpty(groupName))
         {
-            predicate = predicate.AndIfNotTrue(m => m.GroupName == groupName);
+            predicate = predicate.AndIfNotTrue(m => m.GroupName.ToLower() == groupName.ToLowerInvariant());
         }
 
         if (parentId != null)
