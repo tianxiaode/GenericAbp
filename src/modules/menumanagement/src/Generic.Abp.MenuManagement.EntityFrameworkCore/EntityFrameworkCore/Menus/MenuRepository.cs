@@ -47,6 +47,18 @@ public class MenuRepository : EfCoreRepository<IMenuManagementDbContext, Menu, G
     }
 
     [UnitOfWork]
+    public virtual async Task<List<string>> GetAllCodesByFilterAsync(string filter, string? groupName,
+        CancellationToken cancellationToken = default)
+    {
+        return await (await GetDbSetAsync())
+            .AsNoTracking()
+            .WhereIf(!string.IsNullOrEmpty(groupName), m => m.GroupName == groupName)
+            .Where(m => EF.Functions.Like(m.Name, $"%{filter}%"))
+            .Select(m => m.Code)
+            .ToListAsync(cancellationToken);
+    }
+
+    [UnitOfWork]
     public virtual Task<Expression<Func<Menu, bool>>> BuildPredicateAsync(
         string? filter = null,
         string? groupName = null,

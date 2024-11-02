@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Authorization;
@@ -46,16 +47,19 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
     }
 
     [UnitOfWork]
-    [Authorize(MenuManagementPermissions.Menus.Default)]
+    //[Authorize(MenuManagementPermissions.Menus.Default)]
     public virtual async Task<ListResultDto<MenuDto>> GetListAsync(MenuGetListInput input)
     {
-        var predicate = await Repository.BuildPredicateAsync(input.Filter, input.GroupName, input.PrentId);
-        if (!input.PrentId.HasValue)
+        List<Menu> list;
+        if (string.IsNullOrEmpty(input.Filter) && string.IsNullOrEmpty(input.GroupName))
         {
-            predicate = predicate.AndIfNotTrue(m => m.ParentId == null);
+            list = await Repository.GetListAsync(m => m.ParentId == input.PrentId, input.Sorting);
+        }
+        else
+        {
+            list = await GetSearchMenuList(input);
         }
 
-        var list = await Repository.GetListAsync(predicate, input.Sorting);
         var dtos = ObjectMapper.Map<List<Menu>, List<MenuDto>>(list);
         foreach (var dto in dtos)
         {
@@ -211,6 +215,44 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
     }
 
     #endregion
+
+
+    protected virtual async Task<List<Menu>> GetSearchMenuList(MenuGetListInput input)
+    {
+        if (string.IsNullOrEmpty(input.Filter))
+        {
+            return await Repository.GetListAsync(
+                m => m.GroupName.ToLower() == input.GroupName!.ToLowerInvariant(), input.Sorting);
+        }
+
+        //先找出所有符合条件的code
+        var codes = await Repository.GetAllCodesByFilterAsync(input.Filter, input.GroupName);
+        if (!codes.Any())
+        {
+            return [];
+        }
+
+
+        var allParents = await GetAllParents(codes);
+
+        return await Repository.GetListAsync(m => allParents.Contains(m.Code), input.Sorting);
+    }
+
+
+    protected virtual Task<HashSet<string>> GetAllParents(List<string> codes)
+    {
+        var parents = new HashSet<string>();
+        foreach (var parts in codes.Select(code => code.Split('.')))
+        {
+            for (var i = 1; i <= parts.Length; i++)
+            {
+                var parent = string.Join(".", parts.Take(i));
+                parents.Add(parent);
+            }
+        }
+
+        return Task.FromResult(parents);
+    }
 
 
     protected virtual Task UpdateMenuByInputAsync(Menu entity, MenuCreateOrUpdateDto input)

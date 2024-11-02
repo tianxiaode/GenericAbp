@@ -30,7 +30,7 @@ namespace Generic.Abp.Extensions.Trees
         }
 
         [UnitOfWork]
-        public virtual async Task CreateAsync(TEntity entity, bool autoSave = true, bool updatePermissions = true)
+        public virtual async Task CreateAsync(TEntity entity, bool autoSave = true)
         {
             entity.SetCode(await GetNextChildCodeAsync(entity.ParentId));
             await ValidateAsync(entity);
@@ -38,7 +38,7 @@ namespace Generic.Abp.Extensions.Trees
         }
 
         [UnitOfWork]
-        public virtual async Task UpdateAsync(TEntity entity, bool autoSave = true, bool updatePermissions = true)
+        public virtual async Task UpdateAsync(TEntity entity, bool autoSave = true)
         {
             await ValidateAsync(entity);
             await Repository.UpdateAsync(entity, autoSave, cancellationToken: CancellationToken);
@@ -102,10 +102,10 @@ namespace Generic.Abp.Extensions.Trees
         [UnitOfWork]
         public virtual async Task<TEntity?> GetLastChildOrNullAsync(Guid? parentId)
         {
-            if (!parentId.HasValue)
-            {
-                return default;
-            }
+            // if (!parentId.HasValue)
+            // {
+            //     return default;
+            // }
 
             var children =
                 await Repository.GetListAsync(m => m.ParentId == parentId, cancellationToken: CancellationToken);

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Data;
 
@@ -19,4 +20,5 @@ public class MenuDto : ExtensibleAuditedEntityDto<Guid>
     public string GroupName { get; set; } = default!;
     public string ConcurrencyStamp { get; set; } = default!;
     public MenuDto? Parent { get; set; } = default!;
+    public Dictionary<string, object>? MultiLingual { get; set; } = new();
 }

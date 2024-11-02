@@ -7,7 +7,7 @@ public static class MenuConsts
     public static int RouterMaxLength { get; set; } = 128;
     public static int GroupNameMaxLength { get; set; } = 128;
 
-    private const string DefaultSorting = "{0}Name asc";
+    private const string DefaultSorting = "{0}Order asc";
 
     public static string GetDefaultSorting(bool withEntityName = false)
     {

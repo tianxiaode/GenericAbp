@@ -14,24 +14,25 @@ namespace Generic.Abp.MenuManagement;
 public class MenuDataSeed : ITransientDependency, IMenuDataSeed
 {
     public MenuDataSeed(IGuidGenerator guidGenerator, IUnitOfWork currentUnitOfWork, ILogger<IMenuDataSeed> logger,
-        MenuManager menuManager)
+        MenuManager menuManager, IUnitOfWorkManager unitOfWorkManager)
     {
         GuidGenerator = guidGenerator;
         CurrentUnitOfWork = currentUnitOfWork;
         Logger = logger;
         MenuManager = menuManager;
+        UnitOfWorkManager = unitOfWorkManager;
     }
 
     protected IGuidGenerator GuidGenerator { get; }
     protected MenuManager MenuManager { get; }
     protected IUnitOfWork CurrentUnitOfWork { get; }
     protected ILogger<IMenuDataSeed> Logger { get; }
+    protected IUnitOfWorkManager UnitOfWorkManager { get; }
 
-    [UnitOfWork(true)]
+    [UnitOfWork]
     public async Task SeedAsync(Guid? tenantId = null)
     {
         const string defaultMenuGroup = "default";
-
 
         var dashboard = new Menu(GuidGenerator.Create(), null, "Dashboard", tenantId, true);
         dashboard.SetOrder(1);
@@ -47,6 +48,7 @@ public class MenuDataSeed : ITransientDependency, IMenuDataSeed
         });
 
         await MenuManager.CreateAsync(dashboard);
+
 
         var systemsMaintenance =
             new Menu(GuidGenerator.Create(), null, "Systems Maintenance", tenantId, true);

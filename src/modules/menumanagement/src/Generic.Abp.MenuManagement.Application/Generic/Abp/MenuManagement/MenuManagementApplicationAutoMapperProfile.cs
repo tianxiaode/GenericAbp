@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Generic.Abp.Extensions.Entities.MultiLingual;
 using Generic.Abp.MenuManagement.Menus;
 using Generic.Abp.MenuManagement.Menus.Dtos;
 
@@ -15,6 +16,7 @@ namespace Generic.Abp.MenuManagement
             CreateMap<Menu, MenuDto>()
                 .ForMember(m => m.Leaf, opts => opts.MapFrom(m => true))
                 .ForMember(m => m.Parent, opts => opts.MapFrom(m => m.Parent))
+                .ForMember(m => m.MultiLingual, opts => opts.MapFrom(m => m.GetMultiLingual()))
                 .MapExtraProperties();
         }
     }
