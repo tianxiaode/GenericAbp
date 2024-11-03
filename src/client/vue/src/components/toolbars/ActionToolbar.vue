@@ -16,10 +16,11 @@
                 </template>
             </el-input>
             <div class="spacer" style="order: 400;"></div>
-            <div v-for="(button) in buttonsList" :style="{ order: button.order }"
-                :title="t(button.title)">
-                <IconButton v-if="handleButtonVisibility(button)" :type="button.type" :icon="button.icon" circle
-                    :disabled="handleButtonDisabled(button)" @click="handleButtonClick(button)">
+            <div v-for="(button) in buttonsList" :style="{ order: button.order }">
+                <IconButton v-if="handleButtonVisibility(button)" 
+                v-bind="button"
+                circle
+                :disabled="handleButtonDisabled(button)" @click="handleButtonClick(button)">
                 </IconButton>
 
             </div>
@@ -62,8 +63,8 @@ const defaultButtons = {
         icon: 'fa fa-plus',
         order: 500,
         title: 'Components.New',
-        isVisible: () => true,  // 默认显示
-        isDisabled: () => false  // 默认禁用条件
+        visible: true,  // 默认显示
+        disable: false  // 默认禁用条件
     }
 };
 

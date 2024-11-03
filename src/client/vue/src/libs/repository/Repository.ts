@@ -126,7 +126,7 @@ export class Repository<T extends EntityInterface> extends BaseRepository<T> {
             const data = await this.send(url, this.createMethod, entity);
             this.fireEvent("create");
             this.afterCreate(data);
-            this.load();
+            this.load(true);
             return data;
         } catch (error) {
             logger.error(this, "[create]", "Error creating entity:", error);
@@ -142,7 +142,7 @@ export class Repository<T extends EntityInterface> extends BaseRepository<T> {
             const data = await this.send(url, this.updateMethod, entity);
             this.fireEvent("update");
             this.afterUpdate(data);
-            this.load();
+            this.load(true);
             return data;
         } catch (error) {
             logger.error(this, "[update]", "Error updating entity:", error);
@@ -288,6 +288,8 @@ export class Repository<T extends EntityInterface> extends BaseRepository<T> {
 
     destroy(): void {
         this.cache.clear();
+        this.cache = new Map();
         super.destroy();
+        logger.debug(this,"[destroy]", "Repository destroyed");
     }
 }

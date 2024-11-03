@@ -1,6 +1,5 @@
 import { http } from "./http";
 import {  logger } from "./utils";
-import { useConfigStore } from "~/store";
 import { AppConfigType } from "./AppConfigType";
 
 export interface AppConfigOptions {
@@ -23,15 +22,8 @@ export class AppConfig {
 
     async loadConfig() {
         try {
-            console.log('[AppConfig][loadconfig]')
-            const configStore = useConfigStore();
-            configStore.refreshState(false, false)
             const response = await http.get<AppConfigType>(this.configUrl, this.configParams);
             this.config = response;
-            // if(this.currentUser.isAuthenticated){
-            //     this.checkNeedSetPassword();
-            // }
-            configStore.refreshState(!!response, response?.currentUser.isAuthenticated || false)
         } catch (error) {
             logger.error(this, `Error loading config: `, error);
         }

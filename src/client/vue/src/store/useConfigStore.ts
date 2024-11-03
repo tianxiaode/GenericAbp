@@ -1,24 +1,44 @@
 // src/store/config.ts
 import { defineStore } from 'pinia';
+import { appConfig, i18n, LocalStorage } from '~/libs';
+
+interface ConfigState {
+    locale: string;
+    isLocaleReady: boolean;
+    isConfigReady: boolean;
+    isAuthenticated: boolean;
+    isFist: boolean;
+}
 
 export const useConfigStore = defineStore('config', {
-    state: () => ({
-        isReady: false, // 配置是否已就绪
-        isAuthenticated: false, // 用户的认证状态
+    state: (): ConfigState => ({
+        locale: LocalStorage.getLanguage(),
+        isLocaleReady: false,
+        isConfigReady: false,
+        isAuthenticated: false,
+        isFist: true,
     }),
     actions: {
-        setReadyState(status: boolean) {
-            this.isReady = status; // 更新配置就绪状态
+        async setLocale(locale: string) {
+            if (!this.isFist && this.locale === locale) return;
+
+            this.isFist = false;
+            this.locale = locale;
+            LocalStorage.setLanguage(locale);
+
+            await this.updateI18n();
+            await this.loadAppConfig();
         },
-        setAuthentication(status: boolean) {
-            this.isAuthenticated = status; // 更新用户的认证状态
+
+        async updateI18n() {
+            await i18n.loadLanguage();
+            this.isLocaleReady = true;
         },
-        refreshState(isReady: boolean, isAuthenticated: boolean) {
-            // 配置已就绪，只需检查 response 是否存在
-            this.setReadyState(isReady);
-            
-            // 根据 response 来更新认证状态
-            this.setAuthentication(isAuthenticated);
-        }
+
+        async loadAppConfig() {
+            await appConfig.loadConfig();
+            this.isConfigReady = true;
+            this.isAuthenticated = appConfig.currentUser?.isAuthenticated || false;
+        },
     },
 });

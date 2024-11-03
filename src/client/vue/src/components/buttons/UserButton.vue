@@ -1,5 +1,5 @@
 <template>
-    <el-link v-if="!isAuthenticated" @click="router.push('/login')" class="text-white font-size-4.5" >{{  t("Pages.Login.Login")  }}</el-link>
+    <i v-if="!isAuthenticated" @click="router.push('/login')" class="fa fa-user cursor-pointer text-white font-size-6" :title="t('Pages.Login.Login')"></i>
     <el-dropdown v-if="isAuthenticated" :trigger="hasHover ? 'hover' : 'click'" role="navigation" size="large" >
         <el-avatar :src="avatar" :size="isMobile ? 24: 28" />
         <template #dropdown>

@@ -6,9 +6,9 @@ export type ActionButtonType = {
     icon: string;
     order: number;
     action?: Function;
-    title?: string;
-    isVisible?: Function | boolean;
-    isDisabled?: Function | boolean;
+    tooltip?: string;
+    visible?: Function | boolean;
+    disabled?: Function | boolean;
 };
 
 export function useActionButtons(
@@ -24,17 +24,19 @@ export function useActionButtons(
     };
 
     const handleButtonVisibility = (button: ActionButtonType, row?: any) => {
-        if (typeof button.isVisible === "function") {
-            return button.isVisible(row);
+        if (typeof button.visible === "function") {
+            return button.visible(row);
         }
-        return button.isVisible || true;
+        if(button.visible === false) return false;
+        return true;
     };
 
     const handleButtonDisabled = (button: ActionButtonType, row?: any) => {
-        if (typeof button.isDisabled === "function") {
-            return button.isDisabled(row);
+        if (typeof button.disabled === "function") {
+            return button.disabled(row);
         }
-        return button.isDisabled || false;
+        if(button.disabled === true) return true;
+        return false;
     };
 
     return {

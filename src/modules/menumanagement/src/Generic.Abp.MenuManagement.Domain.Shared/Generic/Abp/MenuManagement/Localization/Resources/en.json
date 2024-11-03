@@ -16,7 +16,7 @@
     "Menu:Order": "Order",
     "Menu:Router": "Router",
     "Menu:GroupName": "Group Name",
-    "Menu:ParentName": "Parent Name",
+    "Menu:Parent": "Parent",
     "MenuEntityVersion": "Entity Version"
   }
 }

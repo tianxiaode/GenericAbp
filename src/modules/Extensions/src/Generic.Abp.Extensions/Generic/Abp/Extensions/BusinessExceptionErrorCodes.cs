@@ -54,5 +54,11 @@
         public const string EntityNotBeDeletedParamValue = "Value";
 
         public const string UnknownParent = "Generic.Abp.BusinessException:000012";
+
+        public const string StaticEntityCanNotBeUpdatedOrDeleted = "Generic.Abp.BusinessException:000013";
+
+        public const string StaticEntityCanNotBeUpdatedOrDeletedParamName = "Name";
+
+        public const string StaticEntityCanNotBeUpdatedOrDeletedParamValue = "Value";
     }
 }

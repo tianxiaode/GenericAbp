@@ -1,4 +1,18 @@
 {
+    "Format":{
+        "Date": "yyyy-MM-dd",
+        "Time": "HH:mm:ss",
+        "DateTime": "yyyy-MM-dd HH:mm:ss",
+        "ShortDate": "yyyy-MM-dd",
+        "ShortTime": "HH:mm",
+        "ShortDateTime": "yyyy-MM-dd HH:mm",
+        "Year": "yyyy",
+        "Month": "MM",
+        "Day": "dd",
+        "Hour": "HH",
+        "Minute": "mm",
+        "Second": "ss"
+    },
     "Account":{
         "InvalidUserNameOrPassword":"用户名或密码错误",
         "NotAllowed": "不允许访问",
@@ -53,6 +67,7 @@
         "No": "否",
         "Save": "保存",
         "Submit": "提交",
+        "Detail": "详情",
         "Details":"详情",
         "Reset": "重置",
         "Languages":"语言",

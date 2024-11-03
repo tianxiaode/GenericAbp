@@ -57,12 +57,12 @@ const {
     sortChange,  } = useTable<RoleType>(roleApi);
 
 const toolbarButtons = {
-    create: { action: create, isVisible: roleApi.canCreate },
+    create: { action: create, visible: roleApi.canCreate },
 }
 const tableButtons = {
-    edit: { isDisabled: (row: RoleType) => row.isStatic, action: update, isVisible: roleApi.canUpdate },
-    delete: { isDisabled: (row: RoleType) => row.isStatic, action: remove, isVisible: roleApi.canDelete },
-    permission: { action: openPermissionWindow, icon: 'fa fa-lock', title: 'AbpIdentity.Permissions', order: 300, type: 'primary', isVisible: roleApi.canManagePermissions },
+    edit: { disabled: (row: RoleType) => row.isStatic, action: update, visible: roleApi.canUpdate },
+    delete: { disabled: (row: RoleType) => row.isStatic, action: remove, visible: roleApi.canDelete },
+    permission: { action: openPermissionWindow, icon: 'fa fa-lock', title: 'AbpIdentity.Permissions', order: 300, type: 'primary', visible: roleApi.canManagePermissions },
 }
 
 </script>

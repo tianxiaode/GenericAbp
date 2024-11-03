@@ -7,18 +7,19 @@ using Generic.Abp.Extensions.Validates;
 using Generic.Abp.MenuManagement.Menus.Dtos;
 using Generic.Abp.MenuManagement.Permissions;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Authorization;
 using Volo.Abp.Domain.ChangeTracking;
 using Volo.Abp.Localization;
-using Volo.Abp.ObjectExtending;
 using Volo.Abp.Uow;
 
 namespace Generic.Abp.MenuManagement.Menus;
@@ -87,7 +88,7 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
 
 
     [UnitOfWork(true)]
-    [Authorize(MenuManagementPermissions.Menus.Create)]
+    //[Authorize(MenuManagementPermissions.Menus.Create)]
     public virtual async Task<MenuDto> CreateAsync(MenuCreateDto input)
     {
         var entity = new Menu(GuidGenerator.Create(), input.ParentId, input.Name, CurrentTenant.Id);
@@ -101,12 +102,13 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
     public virtual async Task<MenuDto> UpdateAsync(Guid id, MenuUpdateDto input)
     {
         var entity = await Repository.GetAsync(id);
-        //entity.ConcurrencyStamp = input.ConcurrencyStamp;
+        CheckIsStaticMenu(entity);
         if (!string.Equals(input.Name, entity.Name, StringComparison.OrdinalIgnoreCase))
         {
             entity.Rename(input.Name);
         }
 
+        entity.ConcurrencyStamp = input.ConcurrencyStamp;
         await UpdateMenuByInputAsync(entity, input);
         await MenuManager.UpdateAsync(entity);
         return ObjectMapper.Map<Menu, MenuDto>(entity);
@@ -117,7 +119,7 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
     public virtual async Task<ListResultDto<MenuDto>> DeleteAsync(Guid id)
     {
         var entity = await Repository.GetAsync(id);
-
+        CheckIsStaticMenu(entity);
         if (await Repository.HasChildAsync(id))
         {
             throw new HasChildrenCanNotDeletedBusinessException(nameof(Menu), entity.Name);
@@ -286,9 +288,20 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
     }
 
 
-    protected virtual Task UpdateMenuByInputAsync(Menu entity, MenuCreateOrUpdateDto input)
+    protected virtual async Task UpdateMenuByInputAsync(Menu entity, MenuCreateOrUpdateDto input)
     {
-        entity.SetGroupName(input.GroupName);
+        if (!entity.ParentId.HasValue && string.IsNullOrEmpty(input.GroupName))
+        {
+            throw new UserFriendlyException(string.Format(L["The {0} field is required."], L["Menu:GroupName"]));
+        }
+
+        if (entity.ParentId.HasValue)
+        {
+            var parent = await Repository.GetAsync(entity.ParentId.Value);
+            entity.SetGroupName(parent.GroupName);
+        }
+
+
         entity.SetIcon(input.Icon);
         entity.SetOrder(input.Order);
         entity.SetRouter(input.Router);
@@ -301,7 +314,13 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
         {
             entity.Disable();
         }
+    }
 
-        return Task.CompletedTask;
+    protected virtual void CheckIsStaticMenu(Menu menu)
+    {
+        if (menu.IsStatic)
+        {
+            throw new StaticEntityCanNotBeUpdatedOrDeletedBusinessException(L["Menu"], menu.Name);
+        }
     }
 }

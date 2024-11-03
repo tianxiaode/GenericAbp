@@ -1,3 +1,4 @@
+import { logger } from "./utils";
 
 export interface BaseClassInterface {
     $className: string;
@@ -47,6 +48,7 @@ export class BaseClass extends EventTarget implements BaseClassInterface {
 
     removeAllListeners(): void {
         for (const [eventName, callbacks] of this.callbacks.entries()) {
+            logger.debug(this, "[removeAllListeners]", "eventName:", eventName, "callbacks:", callbacks.length);
             for (const callback of callbacks) {
                 const wrappedCallback = this.callbackToWrappedCallback.get(callback);
                 if (wrappedCallback) {
@@ -59,6 +61,7 @@ export class BaseClass extends EventTarget implements BaseClassInterface {
     }   
 
     destroy(): void {
+        logger.debug(this, "[destroy]", "BaseClass destroy");
         this.removeAllListeners();
     }
 }

@@ -1,6 +1,6 @@
 <template>
     <el-dropdown :trigger="hasHover ? 'hover' : 'click'" role="navigation" size="large" v-if="!isMobile">
-        <i class="fa fa-globe text-white font-size-6"></i>
+        <span class="text-white font-size-4.5">{{ currentLanguage?.displayName }}</span>
         <template #dropdown>
             <el-dropdown-menu>
                 <el-dropdown-item v-for="item in languages" :key="item.cultureName"
@@ -22,7 +22,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useLocalizationStore } from '~/store';
+import { useConfigStore } from '~/store';
 import { useBrowseEnv, useConfig, useI18n } from '~/composables';
 import { appConfig, LanguageType } from '~/libs';
 
@@ -37,10 +37,10 @@ const refresh = () => {
 
 const { } = useConfig(refresh);
 
-const localizationStore = useLocalizationStore();
+const configStore = useConfigStore();
 
 const changeLanguage = (cultureName: string) => {
-    localizationStore.setLocale(cultureName);
+    configStore.setLocale(cultureName);
 }
 
 
