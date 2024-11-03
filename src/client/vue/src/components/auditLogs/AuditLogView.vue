@@ -76,7 +76,7 @@ watch(searchValue.value, (newValue:any) => {
 const { data, filterText, filter, sortChange } = useTable<AuditLogType>(api);
 
 const toolbarButtons = {
-    create: { isVisible: ()=>false },
+    create: { visible: false },
 }
 
 const { detailVisible, detailEntityId, detailButton  } = useDetail(api.idFieldName);
@@ -84,8 +84,8 @@ const { detailVisible, detailEntityId, detailButton  } = useDetail(api.idFieldNa
 const tableButtons = {
     // detail: { 
     //     action: showDetail, icon: 'fa fa-ellipsis', title: t.value('Components.Details'), order: 1 },
-    edit: { isVisible: ()=>false },
-    delete: {  isVisible: ()=>false },
+    edit: { visible: false },
+    delete: {  visible: false },
     detail: detailButton,
 }
 

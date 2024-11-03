@@ -3,13 +3,12 @@
         <template #default="scope">
             <div class="flex justify-center items-center gap-2">
                 <!-- 按钮循环渲染 -->
-                <div v-for="(button, icon) in buttonsList" :key="icon" :style="{ order: button.order }" :title="t(button.title)">
+                <div v-for="(button, icon) in buttonsList" :key="icon" :style="{ order: button.order }">
                     <IconButton
                         v-if="handleButtonVisibility(button,scope.row)"
-                        :type="button.type"
-                        :icon="button.icon"
-                        circle
+                        v-bind="button"
                         size="small"
+                        circle
                         :disabled="handleButtonDisabled(button,scope.row)" 
                         @click="handleButtonClick(button, scope.row)"
                         :id="`button-${scope.row.id}-${button.icon}`"
@@ -44,19 +43,19 @@ const defaultButtons = {
         type: 'primary',
         icon: 'fa fa-edit',
         order: 100,
-        title: 'AbpUi.Edit',
-        isVisible: true,  // 默认显示
-        isDisabled: false
+        title: 'Components.Edit',
+        visible: true,  // 默认显示
+        disable: false,  // 默认不禁用
     },
     delete: {
         type: 'danger',
         icon: 'fa fa-trash',
         order: 200,
-        title: 'AbpUi.Delete',
-        isVisible: true,
-        isDisabled: false
+        title: 'Components.Delete',
+        visible: true,
+        disable: false,
     }
-};
+}
 
 const {t} = useI18n();
 const { buttonsList, handleButtonClick, handleButtonDisabled, handleButtonVisibility } = useActionButtons(defaultButtons,props.buttons);
