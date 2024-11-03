@@ -6,12 +6,12 @@ import router from "~/router";
 
 export function useAuthentication(isAuthenticatedPage?: boolean) {
     const configStore = useConfigStore();
-    const { isAuthenticated, isReady } = storeToRefs(configStore);
+    const { isAuthenticated, isConfigReady } = storeToRefs(configStore);
 
     const currentUser = ref<any>(null);
 
-    watch(isReady, (newValue) => {
-        logger.debug('[useAuthentication][watch]', 'isAuthenticated.value', isAuthenticated.value, 'isAuthenticatedPage', isAuthenticatedPage, 'isReady.value', isReady.value)        
+    watch(isConfigReady, (newValue) => {
+        logger.debug('[useAuthentication][watch]', 'isAuthenticated.value', isAuthenticated.value, 'isAuthenticatedPage', isAuthenticatedPage, 'isReady.value', isConfigReady.value)        
         currentUser.value = appConfig.currentUser;
         if(newValue && !isAuthenticated && isAuthenticatedPage)
         {
@@ -26,8 +26,8 @@ export function useAuthentication(isAuthenticatedPage?: boolean) {
 
     onMounted(() => {
         currentUser.value = appConfig.currentUser;
-        if(isReady.value && !isAuthenticated.value && isAuthenticatedPage){
-            logger.debug('[useAuthentication][onMounted]', 'isAuthenticated.value', isAuthenticated.value, 'isAuthenticatedPage', isAuthenticatedPage, 'isReady.value', isReady.value)
+        if(isConfigReady.value && !isAuthenticated.value && isAuthenticatedPage){
+            logger.debug('[useAuthentication][onMounted]', 'isAuthenticated.value', isAuthenticated.value, 'isAuthenticatedPage', isAuthenticatedPage, 'isReady.value', isConfigReady.value)
             redirectToLogin();
         }        
     });

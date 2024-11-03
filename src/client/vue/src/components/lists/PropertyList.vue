@@ -1,6 +1,6 @@
 <template>
     <el-descriptions :column="1" size="small" border v-if="processedData.length > 0">
-        <el-descriptions-item v-for="item in processedData" class-name="w-1/2" :label="getKey(item)">
+        <el-descriptions-item v-for="item in data" class-name="w-1/2" :label="getKey(item)">
             {{ getValue(item) }}
         </el-descriptions-item>
     </el-descriptions>
@@ -28,27 +28,6 @@ const props = defineProps({
         type: String,
         default: '-'
     },
-    listClass: {
-        type: String,
-        default: ''
-    },
-    listStyle: {
-        type: Object,
-        default: () => ({
-            listStyleType: 'none',
-            margin: '0',
-            padding: '0',
-        })
-    },
-    itemClass: {
-        type: String,
-        default: ''
-    },
-    itemStyle: {
-        type: Object,
-        default: () => ({
-        })
-    }
 });
 
 // 处理数据

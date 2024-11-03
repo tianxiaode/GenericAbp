@@ -11,7 +11,7 @@ import "uno.css";
 import App from "./App.vue";
 import { logger, envConfig,  LocalStorage, i18n, BaseHttp, normalizedLanguage, account, RepositoryGlobalConfig, RepositoryFactory,textToHtml } from "./libs";
 import router from "./router"; // 引入 router.ts
-import { useLocalizationStore } from "./store";
+import { useConfigStore } from "./store";
 import { Logger, WebStorageStateStore } from "oidc-client-ts";
 import {repositoryRegisters} from "./repositories"
 import { useConfirm } from "./composables";
@@ -118,8 +118,8 @@ account.init({
 
 }).then(()=>{
     // 初始化本地化
-    const localizationStore = useLocalizationStore();
-    localizationStore.setLocale(defaultLanguage);
+    const configStore = useConfigStore();
+    configStore.setLocale(defaultLanguage);
 });
 
 

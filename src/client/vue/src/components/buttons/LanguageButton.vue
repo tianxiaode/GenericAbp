@@ -22,7 +22,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useLocalizationStore } from '~/store';
+import { useConfigStore } from '~/store';
 import { useBrowseEnv, useConfig, useI18n } from '~/composables';
 import { appConfig, LanguageType } from '~/libs';
 
@@ -37,10 +37,10 @@ const refresh = () => {
 
 const { } = useConfig(refresh);
 
-const localizationStore = useLocalizationStore();
+const configStore = useConfigStore();
 
 const changeLanguage = (cultureName: string) => {
-    localizationStore.setLocale(cultureName);
+    configStore.setLocale(cultureName);
 }
 
 

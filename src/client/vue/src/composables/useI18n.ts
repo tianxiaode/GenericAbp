@@ -1,13 +1,13 @@
 import { storeToRefs } from "pinia";
 import { computed } from "vue";
-import { useLocalizationStore } from "~/store";
+import { useConfigStore } from "~/store";
 import { i18n } from "~/libs";
 import zhCn from "element-plus/es/locale/lang/zh-cn";
 import en from "element-plus/es/locale/lang/en";
 import zhTw from "element-plus/es/locale/lang/zh-tw";
 export function useI18n() {
-    const localeStore = useLocalizationStore();
-    const { isReady, locale } = storeToRefs(localeStore);
+    const localeStore = useConfigStore();
+    const { isLocaleReady, locale } = storeToRefs(localeStore);
 
     const elementPlusLocale = computed(() => {
         switch (locale.value) {
@@ -24,7 +24,7 @@ export function useI18n() {
     const t = computed(() => {
         return (...args: any[]) => {
             // 判断 i18n 是否准备好
-            if (isReady.value) {
+            if (isLocaleReady.value) {
                 return i18n.get(...args);
             }else{
                 return i18n.get(...args);
@@ -32,10 +32,22 @@ export function useI18n() {
         };
     });
 
+    const format = computed(() => {
+        if (isLocaleReady.value) {
+            console.log('format',i18n.format)
+            return i18n.format;
+        }else{
+            console.log('default format', i18n.defaultFormat)
+            return i18n.defaultFormat;
+        } 
+    });
+
+
     return {
-        isReady,
+        isLocaleReady,
         locale,
         t,
+        format,
         elementPlusLocale,
     };
 }

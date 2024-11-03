@@ -1,4 +1,18 @@
 {
+    "Format":{
+        "Date": "MM/dd/yyyy",
+        "Time": "HH:mm:ss",
+        "DateTime": "MM/dd/yyyy HH:mm:ss",
+        "ShortDate": "MM/dd/yyyy",
+        "ShortTime": "HH:mm",
+        "ShortDateTime": "MM/dd/yyyy HH:mm",
+        "Year": "yyyy",
+        "Month": "MM",
+        "Day": "dd",
+        "Hour": "HH",
+        "Minute": "mm",
+        "Second": "ss"
+    },
     "Account":{
         "InvalidUserNameOrPassword":"Invalid username or password",
         "NotAllowed": "Not allowed to access this resource.",
@@ -53,6 +67,7 @@
         "No": "No",
         "Save": "Save",
         "Submit": "Submit",
+        "Detail": "Detail",
         "Details":"Details",
         "Reset": "Reset",
         "Languages":"Languages",

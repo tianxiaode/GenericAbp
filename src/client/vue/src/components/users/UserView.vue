@@ -28,7 +28,7 @@
 
     <UserForm v-if="dialogVisible" v-model="dialogVisible" v-model:entity-id="currentEntityId" />
 
-    <UserDetail :entity-id="currentEntityId" v-model="detailVisible" />
+    <Detail :title="detailTitle" :data="detailData" :row-items="rowItems" v-model="detailVisible"></Detail>
 
     <PermissionView v-if="permissionVisible" v-model:isVisible="permissionVisible" provider-name="U"
         :provider-key="providerKey" :title="permissionViewTitle"></PermissionView>
@@ -46,8 +46,8 @@ import UserForm from './UserForm.vue';
 import { formatDate } from '~/libs';
 import DateColumn from '../table/DateColumn.vue';
 import { ref } from 'vue';
-import UserDetail from './UserDetail.vue';
-import { useI18n, useRepository,useTable } from '~/composables';
+import Detail from '../Detail.vue';
+import { useDetail, useI18n, useRepository,useTable } from '~/composables';
 import PermissionView from '../permissions/PermissionView.vue';
 
 const {t} = useI18n();
@@ -70,14 +70,18 @@ const toolbarButtons = {
     create: { action: create, isVisible: userApi.canCreate },
 }
 
-const detailVisible = ref(false);
 const permissionVisible = ref(false);
 const providerKey = ref('');
 const permissionViewTitle = ref('');
-const showDetail = (row: UserType) => {
-    currentEntityId.value = row.id as any;
-    detailVisible.value = true;
-}
+const { detailVisible, detailData, detailTitle, showDetails, rowItems } = useDetail(userApi,[
+    { field: 'userName'},
+    { field: 'name'},
+    { field: 'surname'},
+    { field: 'email'},
+    { field: 'phoneNumber'},
+    { field: 'isActive', type: 'boolean'},
+
+] )
 
 const openPermissionWindow = (row: any) => {
     // TODO: 打开权限定义窗口
@@ -87,8 +91,7 @@ const openPermissionWindow = (row: any) => {
 }
 
 const tableButtons = {
-    detail: { 
-        action: showDetail, icon: 'fa fa-ellipsis', title: t.value(''), order: 1 },
+    detail: { action: showDetails },
     edit: { action: update, isVisible: userApi.canUpdate },
     delete: { action: remove, isVisible: userApi.canDelete },
     permission: { action: openPermissionWindow, icon: 'fa fa-lock', title: 'AbpIdentity.Permissions', order: 300, type: 'primary', isVisible: userApi.canManagePermissions }

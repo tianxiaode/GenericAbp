@@ -7,7 +7,6 @@ import {
     normalizedLanguage,
 } from "../utils";
 import { http } from "../http"; // 确保引入 http 工具
-import { useLocalizationStore } from "../../store/useLocalizationStore";
 import { LocalStorage } from "../LocalStorage";
 
 export interface LocaleConfig extends Record<string, any> {
@@ -18,6 +17,22 @@ export interface LocaleConfig extends Record<string, any> {
     remoteTextUrl?: string; // 新增字段用于远程加载文本
     remoteLanguageParam?: string; // 新增字段指定语言参数
 }
+
+export interface LocalFormat {
+    Date: string;
+    Time: string; 
+    DateTime: string;
+    SortDate: string;
+    ShortTime:string,
+    ShortDateTime:string,
+    Year:string,
+    Month:string,
+    Day:string,
+    Hour:string,
+    Minute:string,
+    Second:string
+}
+
 
 export class Locale {
     $className: string = "Locale";
@@ -42,8 +57,6 @@ export class Locale {
 
     async loadLanguage(): Promise<void> {
         // 加载语言包和远程文本
-        const localeStore = useLocalizationStore();
-        localeStore.setReadyState(false);
         Promise.all([
             this.loadLanguagePacks(), 
             this.loadRemoteText()
@@ -51,8 +64,6 @@ export class Locale {
             .then(() => {
                 Promise.resolve();
                 this.isLoaded = true;
-                localeStore.setReadyState(true);
-                console.log(this.translation)
             })
             .catch((error: any) => {
                 logger.error(this, "Failed to load language", error);
@@ -102,6 +113,27 @@ export class Locale {
 
     merge(translation: Record<string, any>): void {
         this.translation = deepMerge(this.translation, translation || {});
+    }
+
+    get format(): LocalFormat{
+        return this.translation.Format;
+    }
+
+    get defaultFormat(): LocalFormat{
+        return {
+            Date: "yyyy-MM-dd",
+            Time: "HH:mm:ss",
+            DateTime: "yyyy-MM-dd HH:mm:ss",
+            SortDate: "yyyy-MM-dd HH:mm:ss",
+            ShortTime: "HH:mm",
+            ShortDateTime: "yyyy-MM-dd HH:mm",
+            Year: "yyyy",
+            Month: "MM",
+            Day: "dd",
+            Hour: "HH",
+            Minute: "mm",
+            Second: "ss"
+        };
     }
 
     private async loadLanguagePacks(): Promise<void> {

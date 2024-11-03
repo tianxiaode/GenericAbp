@@ -4,21 +4,21 @@ import { storeToRefs } from "pinia";
 
 export function useConfig(callback: Function) {
     const configStore = useConfigStore();
-    const { isReady } = storeToRefs(configStore);
+    const { isConfigReady } = storeToRefs(configStore);
 
-    watch(isReady, (newValue) => {
+    watch(isConfigReady, (newValue) => {
         if (newValue) {
             callback();
         }
     });
 
     onMounted(() => {
-        if (isReady.value) {
+        if (isConfigReady.value) {
             callback();
         }
     });
 
     return {
-        isReady,
+        isConfigReady,
     };
 }

@@ -21,6 +21,7 @@ export class BaseRepository<T extends EntityInterface> extends BaseClass {
     _entityGroup: string = "";
     _resourceName: string = "";
     _messageField: string = "";
+    _labelPrefix: string = "DisplayName";
 
     constructor(config: RepositoryConfig<T>) {
         super();
@@ -38,7 +39,6 @@ export class BaseRepository<T extends EntityInterface> extends BaseClass {
     initialize(){
         logger.debug(this, "[initialize]", "BaseRepository initialize");
     }
-
 
     set total(value: number) {
         this._total = value;
@@ -124,6 +124,15 @@ export class BaseRepository<T extends EntityInterface> extends BaseClass {
     get messageField(): string {
         return this._messageField;
     }
+
+    set LabelPrefix(value: string) {
+        this._labelPrefix = value;
+    }
+
+    get LabelPrefix(): string {
+        return this._labelPrefix;
+    }
+
 
     get apiPrefix(): string | undefined {
         return this.config.api?.prefix || RepositoryGlobalConfig.apiPrefix;
@@ -277,6 +286,7 @@ export class BaseRepository<T extends EntityInterface> extends BaseClass {
     get searchValue(): any {
         return this._search;
     }
+
 
     get createTitle(): string {
         if(!isEmpty(this.config.createTitle)) return this.config.createTitle!;
