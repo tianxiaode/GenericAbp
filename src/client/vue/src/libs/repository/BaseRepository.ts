@@ -474,5 +474,6 @@ export class BaseRepository<T extends EntityInterface> extends BaseClass {
         this._search = {};
         this.config = {} as RepositoryConfig<T>;
         super.destroy();
+        logger.debug(this, "[destroy]", "BaseRepository destroy");
     }
 }

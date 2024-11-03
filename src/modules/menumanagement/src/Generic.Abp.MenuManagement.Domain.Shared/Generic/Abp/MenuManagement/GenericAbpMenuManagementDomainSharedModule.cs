@@ -4,12 +4,15 @@ using Generic.Abp.MenuManagement.Localization;
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.ExceptionHandling;
 using Volo.Abp.Modularity;
+using Volo.Abp.Validation;
+using Volo.Abp.Validation.Localization;
 using Volo.Abp.VirtualFileSystem;
 
 namespace Generic.Abp.MenuManagement
 {
     [DependsOn(
-        typeof(GenericAbpExtensionsModule)
+        typeof(GenericAbpExtensionsModule),
+        typeof(AbpValidationModule)
     )]
     public class GenericAbpMenuManagementDomainSharedModule : AbpModule
     {
@@ -25,6 +28,7 @@ namespace Generic.Abp.MenuManagement
                 options.Resources
                     .Add<MenuManagementResource>("en")
                     .AddBaseTypes(typeof(ExtensionsResource))
+                    .AddBaseTypes(typeof(AbpValidationResource))
                     .AddVirtualJson("/Generic/Abp/MenuManagement/Localization/Resources");
             });
 

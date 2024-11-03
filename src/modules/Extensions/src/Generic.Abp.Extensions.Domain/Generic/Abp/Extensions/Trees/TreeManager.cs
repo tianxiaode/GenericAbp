@@ -102,23 +102,14 @@ namespace Generic.Abp.Extensions.Trees
         [UnitOfWork]
         public virtual async Task<TEntity?> GetLastChildOrNullAsync(Guid? parentId)
         {
-            // if (!parentId.HasValue)
-            // {
-            //     return default;
-            // }
-
             var children =
                 await Repository.GetListAsync(m => m.ParentId == parentId, cancellationToken: CancellationToken);
             return children.MaxBy(c => c.Code);
         }
 
-        public virtual async Task ValidateAsync(TEntity entity)
+        public virtual Task ValidateAsync(TEntity entity)
         {
-            //判断是否存在父节点
-            if (entity.ParentId.HasValue)
-            {
-                await Repository.GetAsync(entity.ParentId.Value, false, CancellationToken);
-            }
+            return Task.CompletedTask;
         }
 
         [UnitOfWork]
@@ -131,7 +122,7 @@ namespace Generic.Abp.Extensions.Trees
         [UnitOfWork]
         public virtual async Task<List<TEntity>> FindChildrenAsync(Guid? parentId, bool recursive = false)
         {
-            var query = await Repository.GetQueryableAsync();
+            var query = await GetQueryableAsync();
             if (!recursive)
             {
                 return await AsyncExecuter.ToListAsync(
@@ -155,6 +146,11 @@ namespace Generic.Abp.Extensions.Trees
             var query = await Repository.GetQueryableAsync();
             return await AsyncExecuter.ToListAsync(query.Where(new ParentSpecification<TEntity>(code, level)),
                 CancellationToken);
+        }
+
+        public virtual async Task<IQueryable<TEntity>> GetQueryableAsync()
+        {
+            return await Repository.GetQueryableAsync();
         }
     }
 }

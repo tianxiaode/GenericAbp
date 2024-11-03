@@ -3,6 +3,7 @@ import { i18n, logger } from "~/libs";
 import { useConfirm } from "./useConfirm";
 
 declare type EntityFormConfigType = {
+    initData?: any;
     props?: {
         dialogProps?: any;
         labelWidth?: string;
@@ -50,7 +51,6 @@ export function useEntityForm(
             okClick: ()=>{
                 submitForm();
             },
-
             ...config.props
         }
     }
@@ -139,7 +139,7 @@ export function useEntityForm(
                 }
             });
         } else {
-            setInitValues({});
+            setInitValues(config.initData || {});
             dialogTitle.value = api.createTitle;
         }
     });

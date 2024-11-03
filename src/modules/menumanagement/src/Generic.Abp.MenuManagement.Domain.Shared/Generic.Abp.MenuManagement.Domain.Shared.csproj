@@ -13,6 +13,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Volo.Abp.Validation" Version="$(AbpVersion)" />
       <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="$(MicrosoftExtensionsFileProvidersEmbeddedVersion)" />
       <ProjectReference Include="..\..\..\Extensions\src\Generic.Abp.Extensions\Generic.Abp.Extensions.csproj" />
   </ItemGroup>

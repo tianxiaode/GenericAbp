@@ -290,5 +290,6 @@ export class Repository<T extends EntityInterface> extends BaseRepository<T> {
         this.cache.clear();
         this.cache = new Map();
         super.destroy();
+        logger.debug(this,"[destroy]", "Repository destroyed");
     }
 }

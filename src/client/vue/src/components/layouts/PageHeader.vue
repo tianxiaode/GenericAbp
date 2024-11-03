@@ -8,20 +8,20 @@
             <el-link href="/docs">{{ t('nav.docs') }}</el-link>
             <el-link href="/about">{{ t('nav.about') }}</el-link>
             <div class="flex-1"></div>
-            <UserButton />
+            <LanguageButton />
             <a href="https://github.com/tianxiaode/GenericAbp" target="_blank">
                 <i class="fab fa-github text-white font-size-7">
                 </i>
             </a>
-            <LanguageButton />
             <ThemeSwitch />
+            <UserButton />
         </div>
     </div>
     <div v-else class="w-full bg-primary h-15 box-border px-2 gap-4 flex justify-between items-center">
         <a href="/"><img :src="logo" alt="logo" class="h-12.5"></a>
         <div class=flex-1></div>
-        <UserButton />
         <ThemeSwitch />
+        <UserButton />
         <MobileNavButton />
     </div>
 </template>

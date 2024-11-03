@@ -56,7 +56,7 @@
         "Details":"Details",
         "Reset": "Reset",
         "Languages":"Languages",
-        "SelectPlaceholder": "Please select {name}",
+        "SelectPlaceholder": "Please Select {name}",
         "PropertyInput":{
             "Label":"Properties",
             "Name": "Name",

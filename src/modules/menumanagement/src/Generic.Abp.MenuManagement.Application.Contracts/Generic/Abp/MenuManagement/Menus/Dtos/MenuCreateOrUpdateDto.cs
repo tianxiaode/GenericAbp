@@ -24,7 +24,6 @@ public class MenuCreateOrUpdateDto
 
     [DisplayName("Menu:ISEnabled")] public bool IsEnabled { get; set; } = true;
 
-    [Required]
     [DynamicMaxLength(typeof(MenuConsts), nameof(MenuConsts.GroupNameMaxLength))]
     [DisplayName("Menu:GroupName")]
     public string GroupName { get; set; } = default!;

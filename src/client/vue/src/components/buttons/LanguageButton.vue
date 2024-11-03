@@ -1,6 +1,6 @@
 <template>
     <el-dropdown :trigger="hasHover ? 'hover' : 'click'" role="navigation" size="large" v-if="!isMobile">
-        <i class="fa fa-globe text-white font-size-6"></i>
+        <span class="text-white font-size-4.5">{{ currentLanguage?.displayName }}</span>
         <template #dropdown>
             <el-dropdown-menu>
                 <el-dropdown-item v-for="item in languages" :key="item.cultureName"

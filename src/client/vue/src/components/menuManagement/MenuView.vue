@@ -1,7 +1,13 @@
 <template>
     <div class="flex flex-col gap-2">
         <!-- 顶部工具栏 -->
-        <ActionToolbar :title="t('MenuManagement.Menus')" @filter="filter" :buttons="toolbarButtons" />
+        <ActionToolbar :title="t('MenuManagement.Menus')" @filter="filter" :buttons="toolbarButtons" >
+            <template #action-items>
+                <Select v-model="groupName" :method="api.getAllGroups" placeholder="MenuManagement.Menu:GroupName" 
+                style="order:350;width: 200px;"
+                ></Select>
+            </template>
+        </ActionToolbar>
         <el-table ref="tableRef" :data="data" stripe border style="width: 100%" @sort-change="sortChange"
             :default-sort="{ prop: 'order', order: 'ascending' }" row-key="id"            
             lazy
@@ -29,6 +35,8 @@
         </el-table>
     </div>
 
+    <MenuForm v-if="dialogVisible" v-model="dialogVisible" v-model:entity-id="currentEntityId" />
+
 </template>
 
 
@@ -43,15 +51,16 @@ import ActionColumn from '../table/ActionColumn.vue';
 import PermissionView from '../permissions/PermissionView.vue';
 import { isEmpty } from '~/libs';
 import { TreeNode } from 'element-plus';
+import Select from '../forms/Select.vue';
+import MenuForm from './MenuForm.vue';
 
 const tableRef = ref<any>();
-
+const groupName = ref('');
 const permissionVisible = ref(false);
 const providerKey = ref('');
 const isLazy = ref(true);
 const api = useRepository('menu', {
     afterLoad(data: MenuType[]) {
-        console.log('afterLoad', data, filterText.value)
         if (!isEmpty(filterText.value)) {
             data = getChildren(data, null);
         } else {
@@ -84,6 +93,10 @@ const toolbarButtons = {
 
 watch(filterText, () => {
     isLazy.value = isEmpty(filterText.value);
+})
+
+watch(groupName, () => {
+    api.search('groupName', groupName.value, true);
 })
 
 const loadNode = (row: MenuType, _: TreeNode, resolve: any) => {
@@ -120,5 +133,6 @@ const tableButtons = {
     global: { action: openPermissionWindow, icon: 'fa fa-globe', title: 'AbpIdentity.Permissions', order: 400, type: 'primary', isVisible: () => api.canUpdate },
 }
 
+//arrows-up-down-left-right
 
 </script>
