@@ -72,6 +72,10 @@
         "Reset": "Reset",
         "Languages":"Languages",
         "SelectPlaceholder": "Please Select {name}",
+        "CreationTime": "Creation time",
+        "CreatorId": "Created by",
+        "LastModificationTime": "Last modification time",
+        "LastModifierId": "Last modified by",
         "PropertyInput":{
             "Label":"Properties",
             "Name": "Name",

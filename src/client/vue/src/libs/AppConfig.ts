@@ -24,6 +24,7 @@ export class AppConfig {
         try {
             const response = await http.get<AppConfigType>(this.configUrl, this.configParams);
             this.config = response;
+            logger.debug(this, '[loadConfig]', `Config loaded: `, this.config);
         } catch (error) {
             logger.error(this, `Error loading config: `, error);
         }

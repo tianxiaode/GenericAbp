@@ -62,7 +62,7 @@ const {t, format } = useI18n();
 <style lang="scss">
 .detail-drawer {
     .el-descriptions__label{
-        width: var(--el-descriptions-label-width, 100px);
+        width: var(--el-descriptions-label-width, 200px);
     }    
 }
 </style>

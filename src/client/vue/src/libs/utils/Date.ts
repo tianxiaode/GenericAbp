@@ -1,7 +1,6 @@
 import { isEmpty } from "./String";
 
 export function formatDate(date: Date | string, format: string): string {
-    console.log(date, format);
     if (isEmpty(date)) return "";
     const d = new Date(date);
     if (isNaN(d.getTime())) throw new Error("Invalid date");

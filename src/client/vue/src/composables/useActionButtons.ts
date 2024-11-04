@@ -15,7 +15,9 @@ export function useActionButtons(
     defaultButtons: Record<string, ActionButtonType>,
     buttons: Record<string, ActionButtonType>
 ) {
-    const buttonsList = ref<Record<string, ActionButtonType>>(deepMerge(defaultButtons, buttons));
+    const buttonsList = ref<Record<string, ActionButtonType>>(
+        deepMerge(defaultButtons, buttons)
+    );
 
     const handleButtonClick = (button: ActionButtonType, row?: any) => {
         if (button.action) {
@@ -27,16 +29,14 @@ export function useActionButtons(
         if (typeof button.visible === "function") {
             return button.visible(row);
         }
-        if(button.visible === false) return false;
-        return true;
+        return button.visible === false ? false : true;
     };
 
     const handleButtonDisabled = (button: ActionButtonType, row?: any) => {
         if (typeof button.disabled === "function") {
             return button.disabled(row);
         }
-        if(button.disabled === true) return true;
-        return false;
+        return button.disabled === true ? true : false;
     };
 
     return {

@@ -2,6 +2,7 @@ import { onMounted, ref } from "vue";
 import { i18n, logger } from "~/libs";
 import { useConfirm } from "./useConfirm";
 
+
 declare type EntityFormConfigType = {
     initData?: any;
     props?: {

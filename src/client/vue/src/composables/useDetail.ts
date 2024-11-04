@@ -1,42 +1,50 @@
 import { ref } from "vue";
 import { RowItemType } from "~/components/Detail.vue";
-import { capitalize, Repository } from "~/libs";
+import { capitalize, logger, Repository } from "~/libs";
 
-// interface DetailButton {
-//     action: (row: any) => void;
-//     icon: string;
-//     title: string;
-//     order: number;
-// }
 type OptionalLabelRowItemType = Omit<RowItemType, 'label'> & Partial<Pick<RowItemType, 'label'>>;
 
-export function useDetail(api:Repository<any>, rows: OptionalLabelRowItemType[], useIdRow?: boolean, useDefaultRows?: boolean ) {
+export type useDetailOptions = {
+    loadAdditionalData?: (data: any) => Promise<void>,
+    useIdRow?: boolean, 
+    useDefaultRows?: boolean
+}
+
+export function useDetail(api:Repository<any>, rows: OptionalLabelRowItemType[],  options: useDetailOptions = {}) {
     const detailVisible = ref(false);
     const detailData = ref<any>({});
     const detailTitle = ref("");
     const defaultRowItems = () : RowItemType[]=> {
         return [
-            { field: 'creationTime', label: 'CreationTime', type: 'datetime' },
-            { field: 'creatorId', label: 'CreatorId' },
-            { field: 'lastModificationTime', label: 'LastModificationTime', type: 'datetime' },
-            { field: 'lastModifierId', label: 'LastModifierId' },        
+            { field: 'creationTime', label: 'Components.CreationTime', type: 'datetime' },
+            { field: 'creatorId', label: 'Components.CreatorId' },
+            { field: 'lastModificationTime', label: 'Components.LastModificationTime', type: 'datetime' },
+            { field: 'lastModifierId', label: 'Components.LastModifierId' },        
         ];
     }
     const showDetails = (row: any) => {
-        const id = row[api.idFieldName];
-        api.getEntity(id).then((data) => {
+        loadData(row[api.idFieldName]);
+    };
+
+    const loadData = async (id:string | number) => {
+        try {
+            const data = await api.getEntity(id);        
+            if(options.loadAdditionalData){
+                await options.loadAdditionalData(data);
+            }
             detailData.value = data;
             detailVisible.value = true;
             detailTitle.value = data[api.messageField];
-        }).catch((e:any) => {
-            //ElMessage.error(e.message);
-        })
-    };
+                
+        } catch (e) {
+            logger.debug('[useDetail][loadData]', e);
+        }
+    }
 
 
     const rowItems = ():RowItemType[] =>{
         const items: RowItemType[] = [];
-        if(useIdRow !== false){
+        if(options.useIdRow !== false){
             items.push({ label: 'ID', field: api.idFieldName });
         }
         rows.forEach(row => {
@@ -45,7 +53,7 @@ export function useDetail(api:Repository<any>, rows: OptionalLabelRowItemType[],
                 ...row
             });
         });
-        return useDefaultRows !== false ? [...items,...defaultRowItems()] : items;
+        return options.useDefaultRows !== false ? [...items,...defaultRowItems()] : items;
     }
 
 

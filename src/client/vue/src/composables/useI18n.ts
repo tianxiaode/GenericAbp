@@ -34,10 +34,8 @@ export function useI18n() {
 
     const format = computed(() => {
         if (isLocaleReady.value) {
-            console.log('format',i18n.format)
             return i18n.format;
         }else{
-            console.log('default format', i18n.defaultFormat)
             return i18n.defaultFormat;
         } 
     });

@@ -11,7 +11,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -102,6 +101,8 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
     public virtual async Task<MenuDto> UpdateAsync(Guid id, MenuUpdateDto input)
     {
         var entity = await Repository.GetAsync(id);
+        var isUpdateGroup =
+            !string.Equals(entity.GroupName, input.GroupName, StringComparison.InvariantCultureIgnoreCase);
         CheckIsStaticMenu(entity);
         if (!string.Equals(input.Name, entity.Name, StringComparison.OrdinalIgnoreCase))
         {
@@ -111,6 +112,19 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
         entity.ConcurrencyStamp = input.ConcurrencyStamp;
         await UpdateMenuByInputAsync(entity, input);
         await MenuManager.UpdateAsync(entity);
+        //如果组名发生变化，则需要更新所有子菜单的组名
+        if (!isUpdateGroup)
+        {
+            return ObjectMapper.Map<Menu, MenuDto>(entity);
+        }
+
+        var allChildren = await Repository.GetListAsync(m => m.Code.StartsWith(entity.Code));
+        foreach (var child in allChildren)
+        {
+            child.SetGroupName(input.GroupName);
+        }
+
+        await Repository.UpdateManyAsync(allChildren);
         return ObjectMapper.Map<Menu, MenuDto>(entity);
     }
 

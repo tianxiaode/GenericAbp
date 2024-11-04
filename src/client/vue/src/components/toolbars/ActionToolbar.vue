@@ -19,7 +19,6 @@
             <div v-for="(button) in buttonsList" :style="{ order: button.order }">
                 <IconButton v-if="handleButtonVisibility(button)" 
                 v-bind="button"
-                circle
                 :disabled="handleButtonDisabled(button)" @click="handleButtonClick(button)">
                 </IconButton>
 
