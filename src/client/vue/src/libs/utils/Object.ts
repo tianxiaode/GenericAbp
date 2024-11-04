@@ -8,7 +8,6 @@ export function copyIfDefined(source: any, target: any): any {
     }
 
     for (const key in source) {
-        console.log(key);
         if (source.hasOwnProperty(key)) {
             if (isObject(source[key])) {
                 if (!target.hasOwnProperty(key)) {

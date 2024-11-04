@@ -8,7 +8,6 @@
                         v-if="handleButtonVisibility(button,scope.row)"
                         v-bind="button"
                         size="small"
-                        circle
                         :disabled="handleButtonDisabled(button,scope.row)" 
                         @click="handleButtonClick(button, scope.row)"
                         :id="`button-${scope.row.id}-${button.icon}`"

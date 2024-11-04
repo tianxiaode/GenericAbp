@@ -4,19 +4,13 @@
         <template #form-items>
             <el-tabs v-model="activeTab" style="min-height: 540px;">
                 <el-tab-pane :label="t('AbpIdentity.UserInformations')" name="basic">
-                    <el-form-item :label="t('AbpIdentity.DisplayName:UserName')" prop="userName">
-                        <el-input v-model="formData.userName" :placeholder="t('AbpIdentity.DisplayName:UserName')"
-                            clearable :readonly="!!entityId" :class="{ 'is-readonly': !!entityId }">
-                        </el-input>
-                    </el-form-item>
-                    <el-form-item :label="t('AbpIdentity.DisplayName:Email')" prop="email">
-                        <el-input v-model="formData.email" :placeholder="t('AbpIdentity.DisplayName:Email')"
-                            clearable></el-input>
-                    </el-form-item>
-                    <el-form-item :label="t('AbpIdentity.DisplayName:Password')" prop="password">
-                        <el-input type="password" v-model="formData.password"
-                            :placeholder="t('AbpIdentity.DisplayName:Password')" clearable show-password
-                            autocomplete="off"></el-input>
+                    <Input :label="t(getLabel('userName'))" v-model="formData.userName" clearable
+                        :disabled="!!entityId && !appConfig.isUserNameUpdateEnabled" />
+                    <Input :label="t(getLabel('email'))" v-model="formData.email" clearable
+                        :disabled="!!entityId && !appConfig.isEmailUpdateEnabled" />
+                    <el-form-item :label="t(getLabel('password'))" prop="password">
+                        <el-input type="password" v-model="formData.password" :placeholder="t(getLabel('password'))"
+                            clearable show-password autocomplete="off"></el-input>
                         <PasswordStrength :value="formData.password" />
                     </el-form-item>
                     <el-form-item :label="t('Pages.Register.ConfirmPassword')" prop="confirmPassword">
@@ -24,30 +18,29 @@
                             :placeholder="t('Pages.Register.ConfirmPassword')" clearable show-password
                             autocomplete="off"></el-input>
                     </el-form-item>
-                    <el-form-item prop="name" :label="t('AbpIdentity.DisplayName:Name')">
+                    <el-form-item prop="name" :label="t(getLabel('name'))">
                         <el-input v-model="formData.name" clearable autocomplete="off"
-                            :placeholder="t('AbpIdentity.DisplayName:Name')">
+                            :placeholder="t(getLabel('name'))">
                         </el-input>
                     </el-form-item>
-                    <el-form-item prop="surname" :label="t('AbpIdentity.DisplayName:Surname')">
+                    <el-form-item prop="surname" :label="t(getLabel('surname'))">
                         <el-input v-model="formData.surname" clearable autocomplete="off"
-                            :placeholder="t('AbpIdentity.DisplayName:Surname')">
+                            :placeholder="t(getLabel('surname'))">
                         </el-input>
                     </el-form-item>
-                    <el-form-item prop="phoneNumber" :label="t('AbpIdentity.DisplayName:PhoneNumber')">
+                    <el-form-item prop="phoneNumber" :label="t(getLabel('phoneNumber'))">
                         <el-input v-model="formData.phoneNumber" clearable autocomplete="off"
-                            :placeholder="t('AbpIdentity.DisplayName:PhoneNumber')">
+                            :placeholder="t(getLabel('phoneNumber'))">
                         </el-input>
                     </el-form-item>
                     <!-- <el-form-item></el-form-item> -->
                     <div class="grid cols-2 gap-2">
-                        <el-form-item :label="t('AbpIdentity.DisplayName:IsActive')">
+                        <el-form-item :label="t(getLabel('isActive'))">
                             <Switch v-model="formData.isActive" />
                         </el-form-item>
-                        <el-form-item :label="t('AbpIdentity.DisplayName:LockoutEnabled')">
+                        <el-form-item :label="t(getLabel('lockoutEnabled'))">
                             <Switch v-model="formData.lockoutEnabled" />
                         </el-form-item>
-
                     </div>
 
                 </el-tab-pane>
@@ -74,15 +67,19 @@ import { useConfig, useEntityForm, useRepository, useFormRules, useI18n } from '
 import { appConfig } from '~/libs';
 import { onMounted, ref } from 'vue';
 import Switch from '../forms/Switch.vue';
+import Input from '../forms/Input.vue';
+
+const props = defineProps({
+    api: Object as () => any,
+})
 
 const activeTab = ref('basic');
 const allRoles = ref([] as string[]);
 const { t } = useI18n();
 const entityId = defineModel('entityId');
-const userApi = useRepository('user');
 const roleApi = useRepository('role');
 const dialogVisible = defineModel<boolean>();
-const allowedManageRoles = userApi.canManageRoles;
+const allowedManageRoles = props.api.canManageRoles;
 const formRules = {
     userName: { required: true },
     email: { required: true, email: true },
@@ -91,10 +88,12 @@ const formRules = {
 };
 
 
-const { formRef,formData, dialogTitle, formDialogProps,setInitValues } = useEntityForm(userApi, entityId,dialogVisible,{
-    props:{
-        dialogProps:{ width: '800px'},
-    }
+const { formRef, formData, dialogTitle, formDialogProps, getLabel } = useEntityForm(props.api, entityId, dialogVisible, {
+    initData: { isActive: true, lockoutEnabled: true },
+    props: {
+        dialogProps: { width: '800px' },
+    },
+    loadAdditionalData: allowedManageRoles
 });
 const { rules, updateRules } = useFormRules(formRules, formRef);
 
@@ -115,15 +114,6 @@ onMounted(() => {
     roleApi.getAll().then((res: any) => {
         allRoles.value = res.items.map((role: any) => role.name);
     });
-    if (entityId.value) {
-        if (allowedManageRoles) {
-            userApi.getRoles(entityId.value).then((res: any) => {
-                let roles = res.items.map((role: any) => role.name);
-                setInitValues({roleNames:[...roles]});
-            });
-        }
-    }
 });
 
 </script>
-

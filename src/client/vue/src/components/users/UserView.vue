@@ -26,9 +26,9 @@
         <Pagination style="margin-top: 10px;" :api="userApi" />
     </div>
 
-    <UserForm v-if="dialogVisible" v-model="dialogVisible" v-model:entity-id="currentEntityId" />
+    <UserForm v-if="dialogVisible" :api="userApi" v-model="dialogVisible" v-model:entity-id="currentEntityId" />
 
-    <Detail :title="detailTitle" :data="detailData" :row-items="rowItems" v-model="detailVisible"></Detail>
+    <Detail v-if="detailVisible" :title="detailTitle" :data="detailData" :row-items="rowItems" v-model="detailVisible"></Detail>
 
     <PermissionView v-if="permissionVisible" v-model:isVisible="permissionVisible" provider-name="U"
         :provider-key="providerKey" :title="permissionViewTitle"></PermissionView>
@@ -50,14 +50,14 @@ import Detail from '../Detail.vue';
 import { useDetail, useI18n, useRepository,useTable } from '~/composables';
 import PermissionView from '../permissions/PermissionView.vue';
 
-const {t} = useI18n();
+const {t, format} = useI18n();
 const userApi = useRepository('user');
 
 const formatLockoutDate = (date: string | null) => {
     if (!date) {
         return t.value('AbpIdentity.NotLocked');
     }
-    return formatDate(date, 'yyyy-MM-dd HH:mm:ss')
+    return formatDate(date, format.value.DateTime)
 };
 
 const {
@@ -80,8 +80,10 @@ const { detailVisible, detailData, detailTitle, showDetails, rowItems } = useDet
     { field: 'email'},
     { field: 'phoneNumber'},
     { field: 'isActive', type: 'boolean'},
-
-] )
+    { field: 'lockoutEnabled', type: 'boolean'},
+    { field: 'lockoutEnd', label: 'AbpIdentity.Locked', render:formatLockoutDate},
+    { field: 'roleNames', type: 'list', label: 'AbpIdentity.Roles'}
+])
 
 const openPermissionWindow = (row: any) => {
     // TODO: 打开权限定义窗口

@@ -64,6 +64,7 @@ export class Locale {
             .then(() => {
                 Promise.resolve();
                 this.isLoaded = true;
+                logger.debug(this, '[loadLanguage]', "Language loaded", this.translation);
             })
             .catch((error: any) => {
                 logger.error(this, "Failed to load language", error);

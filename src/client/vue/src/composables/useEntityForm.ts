@@ -1,5 +1,5 @@
 import { onMounted, ref } from "vue";
-import { i18n, logger } from "~/libs";
+import { capitalize, deepMerge, i18n, logger } from "~/libs";
 import { useConfirm } from "./useConfirm";
 
 declare type EntityFormConfigType = {
@@ -9,7 +9,8 @@ declare type EntityFormConfigType = {
         labelWidth?: string;
         cancelText?: string;
         okText?: string;
-    },
+    };
+    loadAdditionalData?: boolean;
     beforeGetData?: (id: any) => boolean;
     afterGetData?: (data: any) => void;
     beforeSubmit?: (data: any) => Promise<boolean>;
@@ -19,10 +20,11 @@ declare type EntityFormConfigType = {
 };
 
 export function useEntityForm(
-    api: any, 
-    entityId: any ,
+    api: any,
+    entityId: any,
     dialogVisible: any,
-    config?: EntityFormConfigType) {
+    config?: EntityFormConfigType
+) {
     const dialogTitle = ref<string>("");
     const dialogRef = ref<any>(null);
     const formRef = ref<any>(null as any);
@@ -31,58 +33,66 @@ export function useEntityForm(
     const initValues = ref<any>({});
     const { confirm } = useConfirm();
 
-    config = config || {} as EntityFormConfigType;
+    config = config || ({} as EntityFormConfigType);
 
-    const formDialogProps = ()=>{   
+    const formDialogProps = () => {
         return {
             dialogRef: dialogRef,
             title: dialogTitle,
             formRef: formRef,
             messageRef: messageRef,
-            beforeClose: async ()=>{
+            beforeClose: async () => {
                 await beforeCLose();
             },
-            resetClick: ()=>{
+            resetClick: () => {
                 resetForm();
             },
-            cancelClick: ()=>{
+            cancelClick: () => {
                 beforeCLose();
             },
-            okClick: ()=>{
+            okClick: () => {
                 submitForm();
             },
-            ...config.props
-        }
-    }
+            ...config.props,
+        };
+    };
 
     const beforeCLose = async () => {
-        if(config.beforeClose && await config.beforeClose() === false){
-            return ;
+        if (config.beforeClose && (await config.beforeClose()) === false) {
+            return;
         }
         const allowClose = await checkChange();
-        if(!allowClose) return ;
+        if (!allowClose) return;
         close();
-    }
+    };
 
     const close = () => {
         messageRef.value.clear();
         dialogVisible.value = false;
         config.afterClose && config.afterClose();
-    }
+    };
 
     const submitForm = async () => {
-        if(config.beforeSubmit && await config.beforeSubmit(formData.value) === false){
+        if (
+            config.beforeSubmit &&
+            (await config.beforeSubmit(formData.value)) === false
+        ) {
             return;
         }
         formRef.value?.validate(async (valid: boolean) => {
             if (!valid) return;
-            logger.debug('[useEntityForm][submitForm]','formData:', formData.value)
+            logger.debug(
+                "[useEntityForm][submitForm]",
+                "formData:",
+                formData.value
+            );
             try {
                 const result = entityId.value
                     ? await api.update(formData.value)
                     : await api.create(formData.value);
                 messageRef.value?.success("Message.SaveSuccessAndClose");
-                config.afterSubmit && config.afterSubmit(formData.value, result);
+                config.afterSubmit &&
+                    config.afterSubmit(formData.value, result);
                 setTimeout(() => {
                     close();
                 }, 3000);
@@ -98,9 +108,13 @@ export function useEntityForm(
     };
 
     const setInitValues = (data: any) => {
-        logger.debug('[useEntityForm][setInitValues]', data)
-        initValues.value = {...initValues.value, ...data};
-        formData.value = { ...initValues.value, ...data};
+        logger.debug("[useEntityForm][setInitValues]", data);
+        initValues.value = deepMerge(initValues.value, data);
+        formData.value = deepMerge(formData.value, initValues.value);
+    };
+
+    const getLabel = (label: string) => {
+        return `${api.resourceName}.${api.labelPrefix}:${capitalize(label)}`;
     };
 
     const checkChange = async () => {
@@ -125,19 +139,28 @@ export function useEntityForm(
         });
     };
 
-    
-
-    onMounted(() => {     
-        console.log('onMounted', entityId.value);     
+    onMounted(async () => {
         if (entityId.value) {
-            if(config.beforeGetData && config.beforeGetData(entityId.value) === false) return ;
-            api.getEntity(entityId.value).then((res: any) => {
-                setInitValues(res)
+            try {
+                if (
+                    config.beforeGetData &&
+                    config.beforeGetData(entityId.value) === false
+                )
+                    return;
+                const loadAdditionalData =
+                    config.loadAdditionalData === true ? true : false;
+                let data = await api.getEntity(
+                    entityId.value,
+                    loadAdditionalData
+                );
                 dialogTitle.value = api.updateTitle;
-                if(config.afterGetData){
-                    config.afterGetData(res);
+                setInitValues(data);
+                if (config.afterGetData) {
+                    config.afterGetData(data);
                 }
-            });
+            } catch (e) {
+                logger.debug("[useEntityForm][onMounted]", e);
+            }
         } else {
             setInitValues(config.initData || {});
             dialogTitle.value = api.createTitle;
@@ -146,15 +169,16 @@ export function useEntityForm(
 
     return {
         dialogTitle,
-        dialogRef,        
+        dialogRef,
         formRef,
         formData,
-        messageRef,        
+        messageRef,
         initValues,
         formDialogProps: formDialogProps(),
+        getLabel,
         checkChange,
         resetForm,
         submitForm,
-        setInitValues
+        setInitValues,
     };
 }

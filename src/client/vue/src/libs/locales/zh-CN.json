@@ -72,6 +72,10 @@
         "Reset": "重置",
         "Languages":"语言",
         "SelectPlaceholder": "请选择{name}",
+        "CreationTime": "创建时间",
+        "CreatorId": "创建者",
+        "LastModificationTime": "最后修改时间",
+        "LastModifierId": "最后修改者",
         "PropertyInput":{
             "Name": "名称",
             "Value": "值",
