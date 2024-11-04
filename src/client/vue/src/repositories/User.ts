@@ -38,7 +38,13 @@ export class UserRepository extends Repository<UserType> {
         return isGranted(`${this.resourceName}.${this.entityPlural}.update.ManageRoles`);
     }
 
-    getRoles(id: string,){
+    loadAdditionalData = async (id: string | number): Promise<any> =>{
+        logger.debug(this, '[loadAdditionalData]', 'Loading additional data for user', id);
+        const roles = await this.getRoles(id);
+        return { roleNames: roles.items.map( (r:any) => r.name) };
+    }
+
+    getRoles(id: string | number){
         return http.get(this.getUrl() + `/${id}/roles`);
     }
 

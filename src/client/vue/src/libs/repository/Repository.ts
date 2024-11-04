@@ -1,4 +1,4 @@
-import { clone, isEmpty, logger } from "../utils";
+import { clone, deepMerge, isEmpty, logger } from "../utils";
 import { BaseRepository } from "./BaseRepository";
 import { EntityInterface } from "./RepositoryType";
 
@@ -89,15 +89,26 @@ export class Repository<T extends EntityInterface> extends BaseRepository<T> {
         if (load) this.load(true);
     };
 
-    getEntity = async (id: string | number): Promise<T | undefined> => {
+    getEntity = async (id: string | number, loadAdditionalData?: boolean): Promise<T | undefined> => {
         const url = this.handleUrlId(this.readUrl, id);
         try {
-            return await this.send(url, this.readMethod);
+            let data = await this.send(url, this.readMethod);
+            if(loadAdditionalData === true){
+                const additionalData = await this.loadAdditionalData(id);
+                if (additionalData) {
+                    data = deepMerge(data, additionalData);
+                }    
+            }
+            return data as T;
         } catch (error) {
             logger.error(this, "[getEntity]", "Error getting entity:", error);
             throw error;
         }
     };
+
+    loadAdditionalData = async (_: string | number): Promise<any> =>{
+        return undefined;
+    }
 
     getList = async (filter: any): Promise<T[]> => {
         const url = this.readUrl;

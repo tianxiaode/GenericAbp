@@ -5,7 +5,7 @@ import { capitalize, logger, Repository } from "~/libs";
 type OptionalLabelRowItemType = Omit<RowItemType, 'label'> & Partial<Pick<RowItemType, 'label'>>;
 
 export type useDetailOptions = {
-    loadAdditionalData?: (data: any) => Promise<void>,
+    loadAdditionalData?: boolean,
     useIdRow?: boolean, 
     useDefaultRows?: boolean
 }
@@ -28,10 +28,8 @@ export function useDetail(api:Repository<any>, rows: OptionalLabelRowItemType[],
 
     const loadData = async (id:string | number) => {
         try {
-            const data = await api.getEntity(id);        
-            if(options.loadAdditionalData){
-                await options.loadAdditionalData(data);
-            }
+            const loadAdditionalData = options.loadAdditionalData ===false ? false : true;
+            let data = await api.getEntity(id, loadAdditionalData);
             detailData.value = data;
             detailVisible.value = true;
             detailTitle.value = data[api.messageField];
@@ -49,7 +47,7 @@ export function useDetail(api:Repository<any>, rows: OptionalLabelRowItemType[],
         }
         rows.forEach(row => {
             items.push({
-                label:`${api.resourceName}.${capitalize(api.LabelPrefix)}:${capitalize(row.field)}`,
+                label:`${api.resourceName}.${capitalize(api.labelPrefix)}:${capitalize(row.field)}`,
                 ...row
             });
         });

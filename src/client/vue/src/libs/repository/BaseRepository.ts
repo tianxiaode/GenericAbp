@@ -125,12 +125,12 @@ export class BaseRepository<T extends EntityInterface> extends BaseClass {
         return this._messageField;
     }
 
-    set LabelPrefix(value: string) {
+    set labelPrefix(value: string) {
         this._labelPrefix = value;
     }
 
-    get LabelPrefix(): string {
-        return this._labelPrefix;
+    get labelPrefix(): string {
+        return capitalize(this._labelPrefix);
     }
 
 
