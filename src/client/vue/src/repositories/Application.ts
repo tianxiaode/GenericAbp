@@ -73,7 +73,19 @@ export const ApplicationPermissions: Record<string, Record<string, Record<string
 }
 
 export const AllApplicationPermissionsGrantTypesValue = Object.values(ApplicationPermissions.GrantTypes).map(item => item.value);
+//遍历ApplicationPermissions，将item中的value作为key，item.displayName作为value，组成一个map
+function flattenPermissions(permissions:any) {
+    let result = {} as any;
+    for (let category in permissions) {
+        for (let key in permissions[category]) {
+            const item = permissions[category][key];
+            result[item.value] = item.displayName;
+        }
+    }
+    return result;
+}
 
+export const ApplicationPermissionsMapToDisplayName = flattenPermissions(ApplicationPermissions);
 //这里需要两个转换函数，一个是将输入的权限添加前缀，另一个是将权限值去掉前缀
 export const customPermissionConvert = (value: string) => {
     return value.replace('gt:', '');    
@@ -102,6 +114,7 @@ export class ApplicationRepository extends Repository<ApplicationType> {
         this.resourceName = "OpenIddict";
         this.entityGroup = "";  
         this.messageField = "name";
+        this.labelPrefix = 'Application';
     };
 
     get canManagePermissions(): boolean {

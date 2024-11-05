@@ -114,6 +114,7 @@ namespace Generic.Abp.OpenIddict.Scopes
         [UnitOfWork]
         protected virtual Task UpdateByInputAsync(OpenIddictScopeDescriptor scope, ScopeCreateOrUpdateInput input)
         {
+            scope.Name = input.Name;
             scope.DisplayName = input.DisplayName;
             scope.Description = input.Description;
             // scope.Properties.Clear();

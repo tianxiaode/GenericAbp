@@ -17,6 +17,7 @@ export class ScopRepository extends Repository<ScopeType> {
         this.resourceName = "OpenIddict";
         this.entityGroup = "";  
         this.messageField = "name";
+        this.labelPrefix = 'Scope';
     };
 
     getAll(){

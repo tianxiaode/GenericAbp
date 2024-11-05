@@ -51,6 +51,10 @@
     "Tabs:RedirectUris": "重定向设置",
     "Tabs:Advanced": "高级设置",
     "EditApplication": "编辑应用程序",
-    "EditScope": "编辑范围"
+    "EditScope": "编辑范围",
+    "Endpoint": "Endpoint",
+    "GrantType": "Grant type",
+    "ScopeName": "Scope",
+    "ResponseType": "Response type"
   }
 }

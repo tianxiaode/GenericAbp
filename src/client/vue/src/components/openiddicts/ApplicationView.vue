@@ -19,7 +19,7 @@
     </div>
 
     <ApplicationForm v-if="dialogVisible" v-model="dialogVisible" :entity-id="currentEntityId" @close="formClose" />
-    <ApplicationDetail v-model="detailVisible" :entity-id="detailEntityId" />
+    <Detail v-if="detailVisible" :title="detailTitle" :data="detailData" :row-items="rowItems" v-model="detailVisible"></Detail>
     <PermissionView v-if="permissionVisible" v-model:isVisible="permissionVisible" provider-name="R"
         :provider-key="providerKey" :title="providerKey"></PermissionView>
 </template>
@@ -28,13 +28,14 @@
 import ActionToolbar from '../toolbars/ActionToolbar.vue';
 import Pagination from '../toolbars/PaginationToolbar.vue'
 import ApplicationForm from './ApplicationForm.vue';
-import { RoleType } from '~/repositories';
+import { ApplicationPermissionsMapToDisplayName, RoleType } from '~/repositories';
 import HighlightColumn from '../table/HighlightColumn.vue';
 import { useTable, useRepository, useI18n, useDetail } from '~/composables';
 import ActionColumn from '../table/ActionColumn.vue';
 import PermissionView from '../permissions/PermissionView.vue';
 import { ref } from 'vue';
-import ApplicationDetail from './ApplicationDetail.vue';
+import Detail from '../Detail.vue';
+import { capitalize, parseTimeSpanToSeconds } from '~/libs';
 
 const permissionVisible = ref(false);
 const providerKey = ref('');
@@ -59,15 +60,75 @@ const toolbarButtons = {
     create: { action: create, isVisible: api.canCreate },
 }
 
-const { detailVisible, detailEntityId, detailButton  } = useDetail(api.idFieldName);
+const { detailVisible, detailData, detailTitle, showDetails, rowItems } = useDetail(api,[
+    { field: 'clientId'},
+    { field: 'displayName'},
+    { field: 'applicationType'},
+    { field: 'clientType'},
+    { field: 'consentType'},
+    { field: 'clientSecret'},
+    { field: 'logoUri'},
+    { field: 'permissions', type: 'object', 
+        convert(permissions:string[]){
+            const result  = { grantTypes: [] , endpoints: [], scopes: [], responseTypes: [] } as any;
+            permissions.forEach(permission => {
+                let displayName = ApplicationPermissionsMapToDisplayName[permission];
+                if(displayName) {
+                    displayName = t.value(displayName);
+                }else{
+                    displayName = capitalize(permission.substring(permission.lastIndexOf(':')+1));
+                }
+                if(permission.startsWith('gt:')){
+                    result.grantTypes.push(displayName);
+                }else if(permission.startsWith('ept:')){
+                    result.endpoints.push(displayName);
+                }else if(permission.startsWith('scp:')){
+                    result.scopes.push(displayName);
+                }else if(permission.startsWith('rst:')){
+                    result.responseTypes.push(displayName);
+                }
+            })
+            return result;
+        },
+        rowItems: [
+            { field: 'grantTypes', label: t.value('OpenIddict.GrantTypes'), type: 'list'},
+            { field: 'endpoints', label: t.value('OpenIddict.Endpoints'), type: 'list'},
+            { field: 'scopes', label: t.value('OpenIddict.Scopes'), type: 'list'},
+            { field: 'responseTypes', label: t.value('OpenIddict.ResponseTypes'), type: 'list'}
+        ]
+
+    },
+    { field: 'redirectUris', type: 'list'},
+    { field: 'postLogoutRedirectUris', type: 'list'},
+    { field: 'settings', type: 'object',
+        rowItems:[
+            { field: 'tkn_lft:act', label: t.value('OpenIddict.Settings:TokenLifetimes.AccessToken'),convert(value:string){
+                return parseTimeSpanToSeconds(value)
+            }},
+            { field: 'tkn_lft:auc', label: t.value('OpenIddict.Settings:TokenLifetimes.AuthorizationCode'),convert(value:string){
+                return parseTimeSpanToSeconds(value)
+            }},
+            { field: 'tkn_lft:dvc', label: t.value('OpenIddict.Settings:TokenLifetimes.DeviceCode'),convert(value:string){
+                return parseTimeSpanToSeconds(value)
+            }},
+            { field: 'tkn_lft:idt', label: t.value('OpenIddict.Settings:TokenLifetimes.IdentityToken'),convert(value:string){
+                return parseTimeSpanToSeconds(value)
+            }},
+            { field: 'tkn_lft:reft', label: t.value('OpenIddict.Settings:TokenLifetimes.RefreshToken'),convert(value:string){
+                return parseTimeSpanToSeconds(value)
+            }},
+            { field: 'tkn_lft:usrc', label: t.value('OpenIddict.Settings:TokenLifetimes.UserCode'),convert(value:string){
+                return parseTimeSpanToSeconds(value)
+            }},
+        ]
+    }
+])
 
 const tableButtons = {
-    // detail: { 
-    //     action: showDetail, icon: 'fa fa-ellipsis', title: t.value('Components.Details'), order: 1 },
+    detail: { action: showDetails },
     edit: { isDisabled: (row: RoleType) => row.isStatic, action: update, isVisible: api.canUpdate },
     delete: { isDisabled: (row: RoleType) => row.isStatic, action: remove, isVisible: api.canDelete },
     permission: { action: openPermissionWindow, icon: 'fa fa-lock', title: 'AbpIdentity.Permissions', order: 300, type: 'primary', isVisible: api.canManagePermissions },
-    detail:detailButton,
 }
 
 </script>

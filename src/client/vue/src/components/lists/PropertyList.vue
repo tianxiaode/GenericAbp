@@ -1,55 +1,57 @@
 <template>
-    <el-descriptions :column="1" size="small" border v-if="processedData.length > 0">
-        <el-descriptions-item v-for="item in data" class-name="w-1/2" :label="getKey(item)">
-            {{ getValue(item) }}
-        </el-descriptions-item>
-    </el-descriptions>
-    <div v-if="!processedData.length">{{ emptyString }}</div>
-
+        <el-descriptions :column="1" size="large" border>
+            <el-descriptions-item v-for="item in rowItems" :label="t(item.label)">
+                <div v-if="item.render">{{  item.render(data[item.field], data, item) }}</div>
+                <div v-else-if="isEmpty(item.type)"> {{ getValue(item, data) }}</div>
+                <CheckStatus v-if="item.type === 'boolean'" :value="getValue(item, data)" />
+                <List v-else-if="item.type === 'list'" :data="getValue(item, data)"></List>
+                <div v-else-if="item.type === 'json'">
+                    <span v-if="isEmpty(getValue(item, data))">-</span>
+                    <JsonPretty v-if="!isEmpty(getValue(item, data))" :data="JSON.parse(getValue(item, data))"></JsonPretty> 
+                </div>
+                <div v-else-if="item.type === 'date'">{{  formatDate(getValue(item, data), item.format || format.Date) }}</div>
+                <div v-else-if="item.type === 'datetime'">{{  formatDate(getValue(item, data), item.format || format.DateTime) }}</div>
+                <div v-else-if="item.type === 'object'">
+                    <PropertyList :data="getValue(item, data)" :row-items="item.rowItems" ></PropertyList>
+                </div>
+            </el-descriptions-item>
+        </el-descriptions>
 </template>
 
 <script setup lang="ts">
-import { defineProps, computed } from 'vue';
+import { PropType } from 'vue';
+import { formatDate, isEmpty } from '~/libs';
+import { useI18n } from '~/composables';
+import CheckStatus from '../icons/CheckStatus.vue';
+import List from './List.vue';
+import JsonPretty from 'vue-json-pretty';
+import 'vue-json-pretty/lib/styles.css';
 
-const props = defineProps({
-    data: {
-        type: [Array, Object, null], // 允许数据为数组或对象，或者为null
-        default: () => [] // 默认返回空数组
-    },
-    keyField: {
-        type: String,
-        default: 'key' // 设置默认键名
-    },
-    valueField: {
-        type: String,
-        default: 'value' // 设置默认值名
-    },
-    emptyString: {
-        type: String,
-        default: '-'
-    },
-});
+export interface RowItemType {
+    type?: '' | 'boolean' | 'json' | 'date' | 'datetime' | 'list' | 'object',
+    label: string,
+    field: string,
+    format?: string,
+    convert?: (value: any) => any,
+    render?: (value: any, data: any, item:RowItemType) => any,
+    rowItems?: RowItemType[]
+}
 
-// 处理数据
-const processedData = computed(() => {
-    if (Array.isArray(props.data)) {
-        return props.data;
+defineProps({
+    data:{
+        type: Object,
+        default: {}
+    },
+    rowItems:{
+        type: Array as PropType<RowItemType[]>,
+        default: () => []
     }
+})
 
-    if (props.data && typeof props.data === 'object') {
-        return Object.entries(props.data).map(([key, value]) => ({
-            [props.keyField]: key,
-            [props.valueField]: value,
-        }));
-    }
+const {t, format } = useI18n();
 
-    return []; // 数据格式不正确或为null时返回空数组
-});
-
-// 获取键值
-const getKey = (item: any) => item[props.keyField] ?? props.emptyString;
-
-// 获取值
-const getValue = (item: any) => item[props.valueField] ?? props.emptyString;
-
+const getValue = (item: RowItemType, data: any) => {
+    if(item.convert) return item.convert(data[item.field]);
+    return data[item.field];
+}
 </script>

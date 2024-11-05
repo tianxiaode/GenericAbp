@@ -20,7 +20,7 @@
     </div>
 
     <ScopeForm v-if="dialogVisible" v-model="dialogVisible" :entity-id="currentEntityId" @close="formClose" />
-    <Detail  />
+    <Detail v-if="detailVisible" :title="detailTitle" :data="detailData" :row-items="rowItems" v-model="detailVisible"></Detail>
 </template>
 
 <script setup lang="ts">
@@ -31,7 +31,6 @@ import { RoleType } from '~/repositories';
 import HighlightColumn from '../table/HighlightColumn.vue';
 import { useTable, useRepository, useI18n, useDetail } from '~/composables';
 import ActionColumn from '../table/ActionColumn.vue';
-import ScopeDetail from './ScopeDetail.vue';
 import Detail from '../Detail.vue';
 
 const api = useRepository('Scope');
@@ -48,12 +47,17 @@ const toolbarButtons = {
     create: { action: create, isVisible: api.canCreate },
 }
 
-const { detailVisible, detailEntityId, detailButton } = useDetail(api.idFieldName);
+const { detailVisible, detailData, detailTitle, showDetails, rowItems } = useDetail(api,[
+    { field: 'name'},
+    { field: 'displayName'},
+    { field: 'description'},
+    { field: 'resources', type: 'list'},
+])
 
 const tableButtons = {
+    detail: { action: showDetails },
     edit: { isDisabled: (row: RoleType) => row.isStatic, action: update, isVisible: api.canUpdate },
     delete: { isDisabled: (row: RoleType) => row.isStatic, action: remove, isVisible: api.canDelete },
-    detail: { ...detailButton }
 }
 
 </script>
