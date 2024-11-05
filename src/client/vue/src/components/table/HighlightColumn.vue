@@ -1,7 +1,7 @@
 <template>
     <el-table-column v-bind="$attrs" :prop="props.prop" >
         <template #default="scope">
-            <slot name="default">
+            <slot name="default" :row="scope.row" :filter="filterText" >
                 <span v-html="highlightText(scope.row[props.prop], filterText)"></span>
             </slot>
         </template>    

@@ -4,43 +4,23 @@
         <template #form-items>
             <el-tabs v-model="activeTab" style="min-height: 540px;">
                 <el-tab-pane :label="t('AbpIdentity.UserInformations')" name="basic">
-                    <Input :label="t(getLabel('userName'))" v-model="formData.userName" clearable
+                    <Input :label="t(getLabel('userName'))" v-model="formData.userName" form-item-prop="userName" 
                         :disabled="!!entityId && !appConfig.isUserNameUpdateEnabled" />
-                    <Input :label="t(getLabel('email'))" v-model="formData.email" clearable
+                    <Input :label="t(getLabel('email'))" v-model="formData.email" form-item-prop="email"
                         :disabled="!!entityId && !appConfig.isEmailUpdateEnabled" />
-                    <el-form-item :label="t(getLabel('password'))" prop="password">
-                        <el-input type="password" v-model="formData.password" :placeholder="t(getLabel('password'))"
-                            clearable show-password autocomplete="off"></el-input>
-                        <PasswordStrength :value="formData.password" />
-                    </el-form-item>
-                    <el-form-item :label="t('Pages.Register.ConfirmPassword')" prop="confirmPassword">
-                        <el-input type="password" v-model="formData.confirmPassword"
-                            :placeholder="t('Pages.Register.ConfirmPassword')" clearable show-password
-                            autocomplete="off"></el-input>
-                    </el-form-item>
-                    <el-form-item prop="name" :label="t(getLabel('name'))">
-                        <el-input v-model="formData.name" clearable autocomplete="off"
-                            :placeholder="t(getLabel('name'))">
-                        </el-input>
-                    </el-form-item>
-                    <el-form-item prop="surname" :label="t(getLabel('surname'))">
-                        <el-input v-model="formData.surname" clearable autocomplete="off"
-                            :placeholder="t(getLabel('surname'))">
-                        </el-input>
-                    </el-form-item>
-                    <el-form-item prop="phoneNumber" :label="t(getLabel('phoneNumber'))">
-                        <el-input v-model="formData.phoneNumber" clearable autocomplete="off"
-                            :placeholder="t(getLabel('phoneNumber'))">
-                        </el-input>
-                    </el-form-item>
+                    <Input type="password" :label="t(getLabel('password'))" v-model="formData.password" :show-password-strength="true" 
+                        form-item-prop="password"
+                    />
+                    <Input type="password" :label="t('Pages.Register.ConfirmPassword')" v-model="formData.confirmPassword" 
+                        form-item-prop="confirmPassword" 
+                    />
+                    <Input :label="t(getLabel('name'))" v-model="formData.name" form-item-prop="name" />
+                    <Input :label="t(getLabel('surname'))" v-model="formData.surname" form-item-prop="surname" />
+                    <Input :label="t(getLabel('phoneNumber'))" v-model="formData.phoneNumber" form-item-prop="phoneNumber" />
                     <!-- <el-form-item></el-form-item> -->
                     <div class="grid cols-2 gap-2">
-                        <el-form-item :label="t(getLabel('isActive'))">
-                            <Switch v-model="formData.isActive" />
-                        </el-form-item>
-                        <el-form-item :label="t(getLabel('lockoutEnabled'))">
-                            <Switch v-model="formData.lockoutEnabled" />
-                        </el-form-item>
+                        <Switch v-model="formData.isActive" :label="t(getLabel('isActive'))" />
+                        <Switch v-model="formData.lockoutEnabled" :label="t(getLabel('lockoutEnabled'))" />
                     </div>
 
                 </el-tab-pane>
@@ -61,7 +41,6 @@
 
 <script setup lang="ts">
 import FormDialog from '../dialogs/FormDialog.vue';
-import PasswordStrength from '../accounts/PasswordStrength.vue';
 
 import { useConfig, useEntityForm, useRepository, useFormRules, useI18n } from '~/composables'
 import { appConfig } from '~/libs';
@@ -104,7 +83,6 @@ const refreshRules = () => {
             required: !entityId.value,
             ...appConfig.passwordComplexitySetting
         },
-        confirmPassword: { required: !entityId.value }
     })
 };
 

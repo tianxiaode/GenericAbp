@@ -1,8 +1,5 @@
 import { onUnmounted } from "vue";
-import { isEmpty, RepositoryFactory } from "~/libs";
-
-// 用于存储 config 与实例的映射关系
-const repositoryInstances = new Map();
+import { isEmpty, logger, RepositoryFactory } from "~/libs";
 
 export function useRepository(type: string, config?: any) {
     if (isEmpty(type)) {
@@ -23,7 +20,7 @@ export function useRepository(type: string, config?: any) {
     const instance = new repositoryClass(finalConfig);
 
     onUnmounted(()=>{
-        console.log('destroy instance')
+        logger.debug('[useRepository][onUnmounted]', 'destroy repository');
         instance.destroy();
     })
 

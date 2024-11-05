@@ -1,0 +1,217 @@
+* [33mbd6eece[m[33m ([m[1;36mHEAD -> [m[1;32mdev[m[33m, [m[1;31morigin/dev[m[33m)[m 继续优化
+* [33m0e90c7e[m 还是比较复杂，暂时各自自动生成表单
+* [33m7bdf8af[m 重构详细输出方式
+* [33m1ed75b9[m 修正按钮问题
+* [33m5d5fc5e[m 修正导航
+* [33m1bce800[m 统一使用新建Repository策略，unMount后销毁,准备修改detail模板，传递api而不是useRepository获取
+* [33m928bd22[m 测试
+* [33mb6d8a6b[m 解决树显示问题
+* [33m5b4bf9c[m 修正种子数据生成问题，以及数据加载问题
+* [33m2e86254[m 初步完成菜单管理，还需要微调，如匿名获取时，权限验证的问题等等
+* [33mb299a1d[m 尝试monorepo
+* [33mfcfa122[m 完成审计日志
+* [33mad9c18c[m 完成审计日志后端代码
+* [33m502419c[m 完成安全日志
+* [33mac307b7[m 解决rememberMe问题
+* [33m1fddc32[m 重构token存储和移除流程
+* [33m8c0793d[m 完全安全日志后端并修改Account，添加token过期后执行静默更新
+* [33m5fc8379[m 做些界面调整
+* [33m3a2f6f3[m 修正当前用户问题
+* [33m61f8465[m 实现租户切换，修正opneiddict的权限授予了租户的问题，
+* [33m9c90d2e[m 完成租户管理界面
+* [33m1c1ebe4[m 完成openiddict功能，修正高亮文本问题
+* [33m2811471[m 解决注销问题
+* [33m28728d8[m 再次调整颜色
+* [33mdaf98ba[m 继续调整色彩
+* [33m2c815a4[m 添加主题切换按钮，修正颜色样式
+* [33m10291cc[m 完成颜色设置
+* [33m29ae580[m 修改主题颜色
+* [33mb96843f[m 做了些颜色上的调整
+* [33mcd4febe[m 完成用户管理调整
+* [33m9f144c1[m 实现延时composable
+* [33m341a968[m 完成FormDialog调整
+* [33mda43d4a[m 调整完accounts相关组件
+* [33m4b43350[m 又学到新东西
+* [33m1406e61[m 解决第三认证登录和更新第三方认证clientId问题
+* [33m42872c9[m 表单调整完成，明天进行测试
+* [33mb5fdb98[m 明确Scope的properties和Application的properties和Requirements都不需要
+* [33mc54c877[m 初步完成应用表单
+* [33m3ce7680[m 移动添加RedirectUris的位置，移除ApplicationCreateOrUpdateInput中不需要的字段
+* [33mfa560fc[m 完成添加权限的调整
+* [33m2f32836[m 继续调整openiddict的application权限生成
+* [33mf08e150[m 还需要深入了解基本流程
+* [33m532a96e[m 再做改造
+* [33m666af6b[m 完成Scope的功能
+* [33m4a80f4a[m 开始完成openid相关功能
+* [33m2a225ee[m 开始完成openid相关功能
+* [33m8944bf9[m 重构一些项目
+* [33mefcec4f[m 完成设置
+* [33mf0560dd[m 调整获取语言值get方法，开始设计设置页面
+* [33ma29a63d[m 调整权限获取方式，调整功能按钮
+* [33m5c624c6[m 开始完成设置相关页面
+* [33ma2a12e1[m 临时解决认证页面问题
+* [33m49f7d4a[m 要补充一些扩展库
+* [33m46f7874[m 完成用户管理
+* [33m493fd47[m 修正权限问题
+* [33macdb28d[m 调整完成
+* [33m210bb57[m 解决双向绑定问题
+* [33m3c5e5c1[m 重构Repository避免执行顺序问题
+* [33m0a1f905[m 重构中
+* [33m3ad20ab[m 调整用户按钮和语言按钮，修正用户中心在移动设备中的显示
+* [33m10524cf[m 完成Account相关功能
+* [33me6bdc22[m 完成表单相关重构
+* [33m0188035[m 有新思路，明天再说
+* [33m538f141[m 基本重构登录页
+* [33mb285a20[m 基本完成登录页
+* [33m0a4e77a[m 完成导航
+* [33m06f178e[m 解决element plus本地化问题
+* [33me3cfa89[m 完成类的重构，解决本地化问题，开始写界面
+* [33mf7803e1[m 完成第三方认证扩展，终于可以在前端完成全部认证，不需要在API服务器定义登录、注册等页面
+* [33m22cde4f[m 升级到8.3.1
+* [33md6dcfd1[m 解决第三认证登录的核心问题
+* [33m6fb9583[m 完成语言切换
+* [33m962acfb[m 添加Vue客户端
+* [33mf8bb93c[m 修正
+* [33m3f526f0[m 独立的认证页面方案比较复杂，还是使用自定义页面方案比较合适
+* [33m18f5459[m 调整外链注册流程
+*   [33mf277122[m[33m ([m[1;32mmaster[m[33m)[m Merge branch '尝试使用不适应ABP默认的登录页面'
+[32m|[m[33m\[m  
+[32m|[m * [33mf7fb649[m[33m ([m[1;31morigin/尝试使用不适应ABP默认的登录页面[m[33m, [m[1;32m尝试使用不适应ABP默认的登录页面[m[33m)[m 完成测试调整
+* [33m|[m [33m55e0a5d[m[33m ([m[1;31morigin/尝试不适应ABP的登录页面[m[33m, [m[1;32m尝试不适应ABP的登录页面[m[33m)[m 完成外部链接功能，明天可以做测试
+* [33m|[m [33m801b9f6[m 更新gitignore
+* [33m|[m [33m09c30f0[m 修改发布逻辑
+* [33m|[m   [33mb3c0f26[m 合并
+[33m|[m[35m\[m [33m\[m  
+[33m|[m [35m|[m[33m/[m  
+[33m|[m[33m/[m[35m|[m   
+[33m|[m * [33md16156f[m[33m ([m[1;31morigin/编写导出模块[m[33m, [m[1;32m编写导出模块[m[33m)[m 本来打算建一个模块来处理第三方认证，但发现只使用控制器，完全依赖前端不实际，还要很多问题很难解决，最佳解决方案就是重写Account的Web模块，以便实现前端页面的统一
+[33m|[m * [33m7874b2f[m 暂时放弃pdf的导出，没找到合适的库
+[33m|[m * [33m8729c36[m 初步完成导出接口数据结构
+[33m|[m * [33m02dba30[m 修正模板
+[33m|[m * [33ma6e83fb[m 重新生成导出模块
+[33m|[m * [33m65a0cd8[m 添加sln文件
+[33m|[m * [33me5dcc2b[m 为模块模板添加回测试模块
+* [35m|[m [33m501f3db[m[33m ([m[1;32m使用Tailwindcss重写Account的Web模块[m[33m)[m 更新文档
+* [35m|[m [33m096e1c8[m[33m ([m[1;31morigin/使用Tailwindcss重写Account的Web模块[m[33m)[m 解决调整登录问题
+* [35m|[m [33m3a7ebfe[m 修正问题
+* [35m|[m [33m4c0d811[m 解决第三方登录问题
+* [35m|[m [33mbe247c9[m 修正问题
+* [35m|[m [33mab3b5a5[m 修正问题
+* [35m|[m [33mcbfb322[m 完成登录等页面调整
+* [35m|[m [33m38bb26f[m 修正点问题
+* [35m|[m [33ma131279[m 使用HtmlHelperExtensions的方式完成Input输入
+* [35m|[m [33m62d46e8[m 重构
+* [35m|[m [33mb82a299[m 调整QuickTemplate可以运行，添加输出目录，调整gitignore
+* [35m|[m [33ma938171[m 调整QuickTemplate项目信息
+* [35m|[m [33m893e928[m 将QuickTemplate与Generic项目合并
+* [35m|[m [33meede8ce[m 解决切换租户问题，解决对话框遮罩问题，解决zindex问题
+* [35m|[m [33m670f17b[m 切换为更小的zxcvbt-lite库
+* [35m|[m [33m1d86274[m 调整Input问题
+* [35m|[m [33m573f619[m 完成登出
+* [35m|[m [33m5601152[m 完成忘记密码、重置密码、拒绝访问等页面
+* [35m|[m [33m23a701b[m 修正密码强度指示器问题和将错误信息字体变小
+* [35m|[m [33m56659ec[m 重构Input.ts，拆分代码
+* [35m|[m [33m0e85b3a[m 完成密码强度指示
+* [35m|[m [33m6bfbdee[m 完成注销页
+* [35m|[m [33mcaefb7b[m 调整授权页
+* [35m|[m [33m5343bc2[m 调整清理按钮显示
+* [35m|[m [33mfe87628[m 修正登录错误显示
+* [35m|[m [33m30bf2d2[m 添加主题切换
+* [35m|[m [33mf8edb59[m 完成alert定义
+* [35m|[m [33m78ff5c9[m 完成前端验证
+* [35m|[m [33mff4997d[m 将BeforeTargets修改为"PreBuildEvent"解决编译不会带上最新js包的问题
+* [35m|[m [33m4f02b28[m 完成脚本方式input替换
+* [35m|[m [33mfb3dfcc[m 调整错误页
+* [35m|[m [33m2e94362[m 更换Host
+* [35m|[m [33m2b78edc[m 解决分部页显示input的问题，但ValidateModel却不是预想中的行为
+* [35m|[m [33m5ff8f18[m 完成布局，开始跳转具体页面
+* [35m|[m [33m15ff99a[m 终于解决css文件打包问题，可以继续后续工作
+* [35m|[m [33mbfff8de[m 重构演示程序
+[35m|[m[35m/[m  
+* [33mcdca535[m 添加导出模块
+* [33m24c271f[m 修正没有currentCulture的问题
+* [33md387c24[m 根据官方最新api，只重写获取本地化资源接口
+* [33m7c17387[m 修正问题
+* [33m5b0706b[m 升级到abp8.0.4
+* [33m8bfc2fd[m 合并菜单管理权限修正
+* [33m93dbf87[m[33m ([m[1;31morigin/修正菜单管理权限问题[m[33m, [m[1;32m修正菜单管理权限问题[m[33m)[m 调整菜单管理权限和数据返回策略
+* [33ma6bbcc1[m 在Get方法禁用Entity Change Tracking
+* [33mdf85caf[m[33m ([m[1;31morigin/升级到abp8[m[33m, [m[1;32m升级到abp8[m[33m)[m 完成迁移
+* [33m90ae22d[m 更新包并顺利编译
+* [33m7e3d69c[m 修正菜单初始数据问题
+* [33m0db594e[m 添加菜单管理本地化文本和添加基本菜单
+* [33maeb1bf7[m 添加新文本
+* [33m5d1d211[m 为菜单添加根节点
+* [33mce604d9[m 移出旧的ext菜单管理，新增menuManagement包
+* [33m1210a69[m 更新ExtResource
+* [33mcdc7176[m 终于找到包缺失的原因
+* [33m3d03e25[m 修正本地化返回值问题
+* [33mfbbe43b[m 调整输出
+* [33mdc592e3[m 完成菜单编码待测试
+* [33m72f44d2[m 完成菜单实体
+* [33m86c64a1[m 新增菜单管理
+* [33m30e69cc[m 升级到ABP 7.3.2版本
+* [33m011d5ff[m 修正bug
+* [33m7464fec[m 修正bug
+* [33m3256dc8[m 修正
+* [33m91b9aa5[m 修正yml错误
+* [33m335578a[m 继续
+* [33mc1f4408[m 奇奇怪怪的问题，想不明白
+* [33m1eb9da4[m 修正
+* [33ma99e030[m 为Identity.Web添加手机验证
+* [33mfc7a1ff[m 继续修正
+* [33m6eb386b[m 测试ci
+*   [33m9814d9e[m Merge branch 'master' of github.com:tianxiaode/GenericAbp
+[36m|[m[1;31m\[m  
+[36m|[m * [33m41fec33[m Update push_packages.yml
+[36m|[m * [33mfa4b20e[m Update push_packages.yml
+[36m|[m * [33m3481f89[m Update push_packages.yml
+[36m|[m * [33m7dec303[m Update push_packages.yml
+[36m|[m * [33m19524ee[m Update push_packages.yml
+* [1;31m|[m [33m7921093[m 重写编写命令
+[1;31m|[m[1;31m/[m  
+* [33m06baa10[m 修正
+* [33mbdae74c[m 测试发布脚本
+* [33m4e42473[m 修正脚本问题
+* [33m966b1c5[m 编译和发布遗漏了Generic.Abp.PhoneLogin.Application项目
+* [33me019ca8[m 修正actions文件
+* [33m308e0d7[m modified:   .github/workflows/push_packages.yml
+* [33m5a31c18[m 尝试自动发布
+* [33me2d6464[m[33m ([m[1;31morigin/为新主题完成Account、Identity等功能页面[m[33m, [m[1;32m为新主题完成Account、Identity等功能页面[m[33m)[m 更新说明文档
+* [33m5c27b1e[m 完成OpenId的新UI功能
+* [33m60fb396[m 完成applications的各子项功能
+* [33m74a8f23[m 初步完成应用权限功能
+* [33m0396c86[m 解决面板切换问题
+* [33mb2b2f79[m 添加openiddice的web项目
+* [33m3f10d05[m 完成用户管理
+* [33m6985eac[m 修改用户管理
+* [33m4946045[m 完成角色功能
+* [33m9e67ac4[m 需要解决JSON转List问题
+* [33m0248cba[m 需解决权限保存问题
+* [33m37ab955[m 完成权限和多语言的基本操作
+* [33mc150afd[m 解决多语言Grid编辑问题
+* [33mbdb8769[m 完成权限显示，重构一下Grid
+* [33m659d96a[m 解决abp.ajax问题
+* [33mff89d22[m 正在解决abp.ajax提交问题
+* [33m6e56bf5[m 初步完成角色增删改
+* [33mdf584fa[m 添加Grid扩展
+* [33m24476ce[m 更新w2ui
+* [33m97bef89[m 开始修改identity.web模块
+* [33mf91f6ed[m 创建alert组件
+* [33mf3e5504[m 完成我的配置
+* [33ma367abb[m 继续调整Account.Web
+* [33m8f10434[m 修改登录页面
+* [33md0ebae1[m 调整input问题
+* [33m9059360[m 添加abp.metro.js
+* [33md738159[m 完成modal-manager
+* [33m6a5a0d7[m 修正问题
+* [33m1039f31[m[33m ([m[1;31morigin/自定义Metro-Ui主题[m[33m, [m[1;32m自定义Metro-Ui主题[m[33m)[m 完成标记辅助程序演示项目
+* [33md9dccbd[m 完成tagHelpers，迁移演示代码到演示项目
+* [33m8a61949[m 继续调整表单
+* [33mc45b1b6[m 基本完成表单
+* [33mfbfbcd9[m 完成模块对话框
+* [33m9cabf17[m 完成进度条和弹出框
+* [33md6e9000[m 完成分页
+* [33m30900b7[m 完成grid和dropdown
+* [33ma281b58[m 修正groupitem问题
+* [33m0268b9b[m 解决嵌套层问题

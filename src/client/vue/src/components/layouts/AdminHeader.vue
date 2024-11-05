@@ -16,8 +16,8 @@
         </el-icon>
         <div class="spacer"></div>
         <LanguageButton />
-        <UserButton />
         <ThemeSwitch />
+        <UserButton />
     </div>
 </template>
 
