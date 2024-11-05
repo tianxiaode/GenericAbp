@@ -60,6 +60,7 @@ const toolbarButtons = {
     create: { action: create, visible: roleApi.canCreate },
 }
 const tableButtons = {
+    detail:{visible: false},
     edit: { disabled: (row: RoleType) => row.isStatic, action: update, visible: roleApi.canUpdate },
     delete: { disabled: (row: RoleType) => row.isStatic, action: remove, visible: roleApi.canDelete },
     permission: { action: openPermissionWindow, icon: 'fa fa-lock', title: 'AbpIdentity.Permissions', order: 300, type: 'primary', visible: roleApi.canManagePermissions },
