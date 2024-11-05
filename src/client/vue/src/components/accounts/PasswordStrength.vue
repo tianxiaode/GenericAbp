@@ -21,7 +21,8 @@ type IndicatorType = {
 
 const props = defineProps({
     value: {
-        type: String
+        type: String,
+        default: ''
     }
 });
 const indicators = ref<IndicatorType[]>([]);

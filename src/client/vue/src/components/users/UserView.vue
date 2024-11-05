@@ -6,7 +6,15 @@
         <!-- 数据展示区域 -->
         <el-table :data="data" stripe border style="width: 100%" @sort-change="sortChange"
             :default-sort="{ prop: 'userName', order: 'ascending' }">
-            <HighlightColumn :label="t('AbpIdentity.DisplayName:UserName')" prop="userName" width="full" sortable :filterText="filterText" />
+            <HighlightColumn :label="t('AbpIdentity.DisplayName:UserName')" prop="userName" width="full" sortable :filterText="filterText" >
+                <template #default="{ row, filter }">
+                    <span class="font-bold" v-html="highlightText(row.userName, filter)"></span>
+                    <span class="mx-2">[</span>
+                    <span v-html="highlightText(row.name, filter) || '-'"></span>
+                    <span class="ml-2" v-html="highlightText(row.surname, filter) || '-'"></span>
+                    <span class="ml-2">]</span>
+                </template>
+            </HighlightColumn>
             <HighlightColumn :label="t('AbpIdentity.DisplayName:Email')" prop="email" width="full" sortable :filterText="filterText" />
             <el-table-column :label="t('AbpIdentity.DisplayName:PhoneNumber')" prop="phoneNumber" width="full" sortable></el-table-column>
             <CheckColumn :label="t('AbpIdentity.DisplayName:IsActive')" prop="isActive" width="80" :filterText="filterText" :checkChange="checkChange">
@@ -43,7 +51,7 @@ import HighlightColumn from '../table/HighlightColumn.vue';
 import CheckColumn from '../table/CheckColumn.vue';
 import ActionColumn from '../table/ActionColumn.vue';
 import UserForm from './UserForm.vue';
-import { formatDate } from '~/libs';
+import { formatDate, highlightText } from '~/libs';
 import DateColumn from '../table/DateColumn.vue';
 import { ref } from 'vue';
 import Detail from '../Detail.vue';
