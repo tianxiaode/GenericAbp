@@ -20,7 +20,7 @@
     </div>
 
     <ScopeForm v-if="dialogVisible" v-model="dialogVisible" :entity-id="currentEntityId" @close="formClose" />
-    <ScopeDetail v-model="detailVisible" :entity-id="detailEntityId" />
+    <Detail  />
 </template>
 
 <script setup lang="ts">
@@ -32,6 +32,7 @@ import HighlightColumn from '../table/HighlightColumn.vue';
 import { useTable, useRepository, useI18n, useDetail } from '~/composables';
 import ActionColumn from '../table/ActionColumn.vue';
 import ScopeDetail from './ScopeDetail.vue';
+import Detail from '../Detail.vue';
 
 const api = useRepository('Scope');
 const { t } = useI18n();

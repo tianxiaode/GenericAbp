@@ -11,7 +11,7 @@ export class TenantRepository extends Repository<TenantType> {
         logger.debug(this,'[initialize]', 'TenantRepository initialized')
         this.entity = 'tenant';
         this.resourceName = "AbpTenantManagement";
-        this.entityGroup = "MultiTenancy";  
+        this.entityGroup = "MultiTenancy";          
         this.messageField = "name";
     };
 

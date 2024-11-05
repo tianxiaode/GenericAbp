@@ -51,7 +51,7 @@ export function useTable<T extends EntityInterface>(api: any) {
     };
 
     const formClose = () => {
-        api.load(true);
+        api.load();
     };
 
     watch(dialogVisible, (isVisible) => {

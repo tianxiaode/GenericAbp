@@ -56,11 +56,7 @@ export class Logger {
     }
 
     raise(...args: any[]) {
-        const logger = this.logger;
-        if (logger && logger.trace) {
-            logger.trace(...args);
-        }
-        throw new Error('[RAISE]: ' + args.join(' '));
+        throw new Error( this.normalizeArgs('[RAISE]', args).join(' '));
     }
 
     trace(...args: any[]) {

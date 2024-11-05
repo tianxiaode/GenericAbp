@@ -34,7 +34,7 @@
         <Pagination style="margin-top: 10px;" :api="userApi" />
     </div>
 
-    <UserForm v-if="dialogVisible" :api="userApi" v-model="dialogVisible" v-model:entity-id="currentEntityId" />
+    <UserForm v-if="dialogVisible" v-model="dialogVisible" v-model:entity-id="currentEntityId" />
 
     <Detail v-if="detailVisible" :title="detailTitle" :data="detailData" :row-items="rowItems" v-model="detailVisible"></Detail>
 

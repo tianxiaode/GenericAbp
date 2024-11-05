@@ -16,7 +16,7 @@
         </el-table>
 
         <!-- 底部分页工具栏 -->
-        <Pagination style="margin-top: 10px;" :api="roleApi" />
+        <Pagination style="margin-top: 10px;" :api="api" />
     </div>
 
     <RoleForm v-if="dialogVisible" v-model="dialogVisible" v-model:entity-id="currentEntityId" />
@@ -40,7 +40,7 @@ import { ref } from 'vue';
 const permissionVisible = ref(false);
 const providerKey = ref('');
 
-const roleApi = useRepository('Role');
+const api = useRepository('Role');
 const { t } = useI18n();
 
 const openPermissionWindow = (row: RoleType) => {
@@ -54,16 +54,16 @@ const {
     data, dialogVisible, currentEntityId,
     filterText,
     create, update, remove, filter, checkChange,
-    sortChange,  } = useTable<RoleType>(roleApi);
+    sortChange,  } = useTable<RoleType>(api);
 
 const toolbarButtons = {
-    create: { action: create, visible: roleApi.canCreate },
+    create: { action: create, visible: api.canCreate },
 }
 const tableButtons = {
     detail:{visible: false},
-    edit: { disabled: (row: RoleType) => row.isStatic, action: update, visible: roleApi.canUpdate },
-    delete: { disabled: (row: RoleType) => row.isStatic, action: remove, visible: roleApi.canDelete },
-    permission: { action: openPermissionWindow, icon: 'fa fa-lock', title: 'AbpIdentity.Permissions', order: 300, type: 'primary', visible: roleApi.canManagePermissions },
+    edit: { disabled: (row: RoleType) => row.isStatic, action: update, visible: api.canUpdate },
+    delete: { disabled: (row: RoleType) => row.isStatic, action: remove, visible: api.canDelete },
+    permission: { action: openPermissionWindow, icon: 'fa fa-lock', title: 'AbpIdentity.Permissions', order: 300, type: 'primary', visible: api.canManagePermissions },
 }
 
 </script>
