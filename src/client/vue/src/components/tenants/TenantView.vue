@@ -43,6 +43,7 @@ const toolbarButtons = {
     create: { action: create, isVisible: api.canCreate },
 }
 const tableButtons = {
+    detail:{visible:false},
     edit: {  action: update, isVisible: api.canUpdate },
     delete: { action: remove, isVisible: api.canDelete }
 }
