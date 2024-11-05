@@ -48,17 +48,14 @@ import { onMounted, ref } from 'vue';
 import Switch from '../forms/Switch.vue';
 import Input from '../forms/Input.vue';
 
-const props = defineProps({
-    api: Object as () => any,
-})
-
 const activeTab = ref('basic');
 const allRoles = ref([] as string[]);
 const { t } = useI18n();
 const entityId = defineModel('entityId');
+const api = useRepository('user');
 const roleApi = useRepository('role');
 const dialogVisible = defineModel<boolean>();
-const allowedManageRoles = props.api.canManageRoles;
+const allowedManageRoles = api.canManageRoles;
 const formRules = {
     userName: { required: true },
     email: { required: true, email: true },
@@ -67,7 +64,7 @@ const formRules = {
 };
 
 
-const { formRef, formData, dialogTitle, formDialogProps, getLabel } = useEntityForm(props.api, entityId, dialogVisible, {
+const { formRef, formData, dialogTitle, formDialogProps, getLabel } = useEntityForm(api, entityId, dialogVisible, {
     initData: { isActive: true, lockoutEnabled: true },
     props: {
         dialogProps: { width: '800px' },
