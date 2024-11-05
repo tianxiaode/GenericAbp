@@ -2,44 +2,30 @@
     <FormDialog v-bind="formDialogProps" v-model="formData" v-model:rules="rules" :title="dialogTitle"
         v-model:visible="dialogVisible">
         <template #form-items>
-            <el-form-item :label="t('AbpTenantManagement.DisplayName:TenantName')" prop="name">
-                <el-input v-model="formData.name" :placeholder="t('AbpTenantManagement.DisplayName:TenantName')"
-                    clearable></el-input>
-            </el-form-item>
-            <el-form-item v-if="!isEdit" :label="t('AbpTenantManagement.DisplayName:AdminEmailAddress')"
-                prop="adminEmailAddress">
-                <el-input v-model="formData.adminEmailAddress"
-                    :placeholder="t('AbpTenantManagement.DisplayName:AdminEmailAddress')" clearable></el-input>
-            </el-form-item>
-            <el-form-item v-if="!isEdit" :label="t('AbpTenantManagement.DisplayName:AdminPassword')"
-                prop="adminPassword">
-                <el-input v-model="formData.adminPassword"
-                    :placeholder="t('AbpTenantManagement.DisplayName:AdminPassword')" clearable type="password"
-                    show-password></el-input>
-                <PasswordStrength :value="formData.adminPassword" />
-            </el-form-item>
-            <el-form-item v-if="!isEdit" prop="confirmPassword" :label="t('Pages.Profile.ConfirmNewPassword')">
-                <el-input v-model="formData.confirmPassword" clearable show-password autocomplete="off"
-                    :placeholder="t('Pages.Profile.ConfirmNewPassword')">
-                </el-input>
-            </el-form-item>
-
+            <Input :label="t(getLabel('TenantName'))" v-model="formData.name" form-item-prop="name" />
+            <Input v-if="!isEdit" :label="t(getLabel('AdminEmailAddress'))" v-model="formData.adminEmailAddress" form-item-prop="adminEmailAddress" />
+            <Input v-if="!isEdit" :label="t(getLabel('AdminPassword'))" v-model="formData.adminPassword" form-item-prop="adminPassword" 
+                type="password" :show-password-strength="true"
+            />
+            <Input v-if="!isEdit" :label="t('Pages.Profile.ConfirmNewPassword')" v-model="formData.confirmPassword" form-item-prop="confirmPassword" 
+                type="password"
+            />
         </template>
     </FormDialog>
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
 import FormDialog from '../dialogs/FormDialog.vue';
-import PasswordStrength from '../accounts/PasswordStrength.vue'
 import { useEntityForm, useFormRules, useI18n, useRepository } from '~/composables';
 import { isEmpty } from '~/libs';
+import Input from '../forms/Input.vue';
 
 const { t } = useI18n();
 const api = useRepository('tenant');
 const entityId = defineModel('entityId');
 const dialogVisible = defineModel<boolean>();
-const { formRef, formData, dialogTitle, formDialogProps } = useEntityForm(api, entityId, dialogVisible);
+const { formRef, formData, dialogTitle, formDialogProps,getLabel } = useEntityForm(api, entityId, dialogVisible);
 const isEdit = computed(() => {
     updateRules({
         name: { required: true },

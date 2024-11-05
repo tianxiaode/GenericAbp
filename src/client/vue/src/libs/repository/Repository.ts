@@ -4,11 +4,10 @@ import { EntityInterface } from "./RepositoryType";
 
 export class Repository<T extends EntityInterface> extends BaseRepository<T> {
     $className = "Repository";
-    cache: Map<string, T[]> = new Map();
 
     set page(value: number) {
         this._page = value;
-        this.load(true);
+        this.load();
     }
 
     get page(): number {
@@ -21,28 +20,22 @@ export class Repository<T extends EntityInterface> extends BaseRepository<T> {
 
     set pageSize(value: number) {
         this._pageSize = value;
-        this.load(true);
+        this.load();
     }
 
     set filter(value: string) {
         this._filter = value;
-        this.load(true);
+        this.load();
     }
 
     get filter(): string {
         return this._filter;
     }
 
-    load = async (force: boolean = false): Promise<void> => {
+    load = async (): Promise<void> => {
         const method = this.readMethod;
         const url = this.readUrl;
         const params = this.getParams();
-        const cacheKey = `${url}-${JSON.stringify(params)}`;
-
-        if (this.useCache && !force && this.cache.has(cacheKey)) {
-            this.records = this.cache.get(cacheKey) as T[];
-            return;
-        }
 
         // 提前终止加载过程
         if (!this.beforeLoad(url, method, params)) return;
@@ -56,9 +49,6 @@ export class Repository<T extends EntityInterface> extends BaseRepository<T> {
 
             this.fireEvent("load");
 
-            if (this.useCache) {
-                this.cache.set(cacheKey, this.records);
-            }
         } catch (error) {
             logger.error(this, "[load]", "Error loading data:", error);
             throw error;
@@ -86,7 +76,7 @@ export class Repository<T extends EntityInterface> extends BaseRepository<T> {
             }
         }
 
-        if (load) this.load(true);
+        if (load) this.load();
     };
 
     getEntity = async (id: string | number, loadAdditionalData?: boolean): Promise<T | undefined> => {
@@ -137,7 +127,7 @@ export class Repository<T extends EntityInterface> extends BaseRepository<T> {
             const data = await this.send(url, this.createMethod, entity);
             this.fireEvent("create");
             this.afterCreate(data);
-            this.load(true);
+            this.load();
             return data;
         } catch (error) {
             logger.error(this, "[create]", "Error creating entity:", error);
@@ -153,7 +143,7 @@ export class Repository<T extends EntityInterface> extends BaseRepository<T> {
             const data = await this.send(url, this.updateMethod, entity);
             this.fireEvent("update");
             this.afterUpdate(data);
-            this.load(true);
+            this.load();
             return data;
         } catch (error) {
             logger.error(this, "[update]", "Error updating entity:", error);
@@ -276,7 +266,7 @@ export class Repository<T extends EntityInterface> extends BaseRepository<T> {
                 this.afterDelete(ids as string | number);
             }
             this.success("Message.DeleteSuccess");
-            this.load(true);
+            this.load();
         } catch (error) {
             logger.error(
                 this,
@@ -298,8 +288,6 @@ export class Repository<T extends EntityInterface> extends BaseRepository<T> {
     }
 
     destroy(): void {
-        this.cache.clear();
-        this.cache = new Map();
         super.destroy();
         logger.debug(this,"[destroy]", "Repository destroyed");
     }
