@@ -207,7 +207,7 @@ class Account {
         return this.userManager?.signinRedirectCallback();
     }
 
-    private revocationToken = async () => { 
+    protected revocationToken = async () => { 
         logger.debug(this, ["revocationToken"], "Starting token revocation");
         const revocationEndpoint = await this.userManager!.metadataService.getRevocationEndpoint();
         if(!revocationEndpoint) return;
@@ -226,12 +226,12 @@ class Account {
                 { headers: { "Content-Type": "application/x-www-form-urlencoded" } })    
 
         }
-}
+    }
 
-    private initEvents = () => {
+    protected initEvents = () => {
         const events = this.userManager!.events as UserManagerEvents;
         events.addAccessTokenExpiring(() => {
-            logger.debug(this, ["initEvents"], "Access token expiring");
+            this.onAccessTokenExpiring();
         });
 
         events.addAccessTokenExpired(() => {
@@ -239,45 +239,46 @@ class Account {
         });
 
         events.addSilentRenewError((e:any) => {
-            logger.debug(this, ["initEvents"], "Silent renew error", e);
+            logger.debug(this, "[initEvents]", "Silent renew error", e);
         });
 
         events.addUserLoaded((user) => {
-            logger.debug(this, ["initEvents"], "User loaded");
+            logger.debug(this, "[initEvents]", "User loaded");
             this.onUserLoaded(user);
         });
 
         events.addUserUnloaded(() => {
-            logger.debug(this, ["initEvents"], "User unloaded");
+            logger.debug(this, "[initEvents]", "User unloaded");
             this.onUserUnloaded();
         });
 
         events.addUserSignedOut(() => {
-            logger.debug(this, ["initEvents"], "User signed out");
+            logger.debug(this, "[initEvents]", "User signed out");
         });
 
         events.addUserSessionChanged(() => {
-            logger.debug(this, ["initEvents"], "User session changed");
+            logger.debug(this, "[initEvents]", "User session changed");
         });
     };
 
-    private onUserLoaded = (user: User) => {
+    protected onUserLoaded = (user: User) => {
         //用户加载后，刷新用户，重新加载配置文件和语言文件
-        logger.debug(this, ["onUserLoaded"], "User loaded", user);
+        logger.debug(this, "[onUserLoaded]", "User loaded", user);
         this.user = user;
         this.reloadConfig();
-        // appConfig.loadConfig();
-        // i18n.loadLanguage();
     };
 
 
-    private onUserUnloaded = () => {
-        logger.debug(this, ["onUserUnloaded"], "User unloaded");
+    protected onUserUnloaded = () => {
+        logger.debug(this, "[onUserUnloaded]", "User unloaded");
     };
 
-    private onAccessTokenExpired = () => {
-        logger.debug(this, ["onAccessTokenExpired"], "Access token expired");
-        this.userManager!.signinSilent();
+    protected onAccessTokenExpiring = () =>{
+        logger.debug(this, "[onAccessTokenExpiring]", "Access token expiring");
+    }
+
+    protected onAccessTokenExpired = () => {
+        logger.debug(this, "[onAccessTokenExpired]", "Access token expired");
     }
 }
 

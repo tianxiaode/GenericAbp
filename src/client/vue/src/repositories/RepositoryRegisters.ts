@@ -9,7 +9,7 @@ import { AuditLogRepository } from "./AuditLog";
 import { MenuRepository } from "./Menu";
 
 export const repositoryRegisters: Record<string, RepositoryRegistryType> = {
-    Role: {
+    role: {
         type: RoleRepository
     },
     user: {
@@ -31,7 +31,6 @@ export const repositoryRegisters: Record<string, RepositoryRegistryType> = {
         type: AuditLogRepository
     },
     menu:{
-        type: MenuRepository,
-        defaultConfig: {useCache: false}
+        type: MenuRepository
     }
 }
