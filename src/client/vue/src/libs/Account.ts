@@ -29,9 +29,11 @@ class Account {
         //从localStorage中获取用户
         this.reloadConfig = reloadConfig;
         this.userManagerSettings = this.userManager.settings;
+        //根据rememberMe状态，设置userStore
+        this.resetUserStore(LocalStorage.getRememberMe() || false);
         this.user = await this.userManager.getUser();
         this.initEvents();
-        logger.debug(this, ["init"], "User:", this.user);
+        logger.debug(this, "[init]", "User:", this.user);
     };
 
     get currentUser() {
