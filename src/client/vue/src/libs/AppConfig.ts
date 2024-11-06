@@ -14,6 +14,7 @@ export class AppConfig {
         includeLocalizationResources: false,
     };
     private config: Record<string, any> = {};
+    private _currentUser : Record<string, any> = {};
 
     constructor(configUrl?: string, configParams?: Record<string, any>) {
         if (configUrl) this.configUrl = configUrl;
@@ -24,9 +25,10 @@ export class AppConfig {
         try {
             const response = await http.get<AppConfigType>(this.configUrl, this.configParams);
             this.config = response;
+            this.currentUser = response.currentUser;
             logger.debug(this, '[loadConfig]', `Config loaded: `, this.config);
         } catch (error) {
-            logger.error(this, `Error loading config: `, error);
+            logger.error(this, '[loadConfig]', `Error loading config: `, error);
         }
     }
 
@@ -39,7 +41,11 @@ export class AppConfig {
     }
 
     get currentUser() {
-        return this.config?.currentUser;
+        return this._currentUser;
+    }
+
+    set currentUser(user: Record<string, any>) {
+        this._currentUser = user;
     }
 
     get currentTenant() {

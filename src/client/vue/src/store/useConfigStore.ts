@@ -1,44 +1,59 @@
 // src/store/config.ts
 import { defineStore } from 'pinia';
-import { appConfig, i18n, LocalStorage } from '~/libs';
+import { appConfig, i18n, LocalStorage, logger } from '~/libs';
 
 interface ConfigState {
     locale: string;
     isLocaleReady: boolean;
     isConfigReady: boolean;
-    isAuthenticated: boolean;
-    isFist: boolean;
+    isFirstLoad: boolean;
 }
 
 export const useConfigStore = defineStore('config', {
     state: (): ConfigState => ({
-        locale: LocalStorage.getLanguage(),
+        locale: LocalStorage.getLanguage() || 'en', // 确保有默认值
         isLocaleReady: false,
         isConfigReady: false,
-        isAuthenticated: false,
-        isFist: true,
+        isFirstLoad: true,
     }),
     actions: {
         async setLocale(locale: string) {
-            if (!this.isFist && this.locale === locale) return;
+            if (!this.isFirstLoad && this.locale === locale) return;
 
-            this.isFist = false;
+            this.isFirstLoad = false;
             this.locale = locale;
             LocalStorage.setLanguage(locale);
-
-            await this.updateI18n();
-            await this.loadAppConfig();
+            await this.reload();
+        },
+        async reload(){
+            try {
+                await this.updateI18n();
+                await this.loadAppConfig();
+            } catch (e) {
+                logger.error('[useConfigStore][setLocale]', e)
+            }
         },
 
         async updateI18n() {
-            await i18n.loadLanguage();
-            this.isLocaleReady = true;
+            this.isLocaleReady = false;
+            try {
+                await i18n.loadLanguage();
+            } catch (e) {
+                logger.error('[useConfigStore][updateI18n]', e)
+            } finally {
+                this.isLocaleReady = true;
+            }
         },
 
         async loadAppConfig() {
-            await appConfig.loadConfig();
-            this.isConfigReady = true;
-            this.isAuthenticated = appConfig.currentUser?.isAuthenticated || false;
+            this.isConfigReady = false;
+            try {
+                await appConfig.loadConfig();
+            } catch (e) {
+                logger.error('[useConfigStore][loadAppConfig]', e)
+            } finally {
+                this.isConfigReady = true;
+            }
         },
     },
 });

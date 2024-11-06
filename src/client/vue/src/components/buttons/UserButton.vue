@@ -38,7 +38,7 @@ import { account, appConfig } from "~/libs";
 import router from "~/router";
 import { ref } from "vue";
 const path = ref(router.currentRoute.value.path);
-const { isAuthenticated,currentUser } = useAuthentication();
+const { isAuthenticated, currentUser } = useAuthentication();
 const { t } = useI18n();
 const { isMobile, hasHover } = useBrowseEnv()
 const currentTenant = appConfig.currentTenant;

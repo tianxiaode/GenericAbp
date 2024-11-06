@@ -8,16 +8,16 @@ import {
 import { logger } from "./utils";
 import { LocalStorage } from "./LocalStorage";
 import { appConfig } from "./AppConfig";
-import { i18n } from "./locales";
 import { http } from "./http";
 import { envConfig } from "./EnvConfig";
 
 class Account {
     $className = "Account";
     userManager: UserManager | undefined;
-    user: User | undefined;
+    user: User | null = null;
     userManagerSettings: any;
-    init = async (oidcSettings: UserManagerSettings) => {
+    reloadConfig = () => {};
+    init = async (oidcSettings: UserManagerSettings, reloadConfig: () => {}) => {
         this.userManager = new UserManager({
             ...oidcSettings,
             extraHeaders:{
@@ -27,9 +27,11 @@ class Account {
             }
         });
         //从localStorage中获取用户
+        this.reloadConfig = reloadConfig;
         this.userManagerSettings = this.userManager.settings;
-        this.user = await this.userManager.getUser() || undefined;
+        this.user = await this.userManager.getUser();
         this.initEvents();
+        logger.debug(this, ["init"], "User:", this.user);
     };
 
     get currentUser() {
@@ -38,9 +40,11 @@ class Account {
 
     login = async (username: string, password: string, rememberMe: boolean) => {
         try {    
-            this.userManagerSettings.userStore = new WebStorageStateStore({
-                store: rememberMe ? localStorage : sessionStorage
-            });
+            rememberMe = rememberMe === true ? true : false;
+            //设置rememberMe状态，以便重新进入应用后从何处获取用户信息
+            LocalStorage.setRememberMe(rememberMe);
+            //根据rememberMe状态，设置userStore
+            this.resetUserStore(rememberMe);
             const user = await this.userManager!.signinResourceOwnerCredentials(
                 {
                     username: username,
@@ -59,6 +63,7 @@ class Account {
             }else{
                 message = 'Account.InvalidUserNameOrPassword'
             }
+            logger.error(this, ["login"], e);
             throw new Error(message);
             
         }
@@ -66,10 +71,14 @@ class Account {
 
     logout = async () => {
         try {
+            //主动退出，清理rememberMe状态
+            LocalStorage.removeRememberMe();
             //销毁令牌
             await this.revocationToken();
             //移除用户
             this.userManager?.removeUser();
+            //重新加载配置
+            this.reloadConfig();
             window.location.href = "/";
         } catch (e: any) {
             logger.error(this, ["logout"], e);
@@ -188,6 +197,15 @@ class Account {
         return this.user?.token_type;
     }
 
+    resetUserStore = (rememberMe: boolean) =>{
+        this.userManagerSettings.userStore = new WebStorageStateStore({
+            store: rememberMe ? localStorage : sessionStorage
+        });    
+    }
+
+    signinRedirectCallback = async () => {
+        return this.userManager?.signinRedirectCallback();
+    }
 
     private revocationToken = async () => { 
         logger.debug(this, ["revocationToken"], "Starting token revocation");
@@ -217,9 +235,7 @@ class Account {
         });
 
         events.addAccessTokenExpired(() => {
-            logger.debug(this, ["initEvents"], "Access token expired");
-            this.userManager!.signinSilent();
-            logger.debug(this, ["initEvents"], "startSilentRenew");
+            this.onAccessTokenExpired();
         });
 
         events.addSilentRenewError((e:any) => {
@@ -247,15 +263,22 @@ class Account {
 
     private onUserLoaded = (user: User) => {
         //用户加载后，刷新用户，重新加载配置文件和语言文件
+        logger.debug(this, ["onUserLoaded"], "User loaded", user);
         this.user = user;
-        appConfig.loadConfig();
-        i18n.loadLanguage();
+        this.reloadConfig();
+        // appConfig.loadConfig();
+        // i18n.loadLanguage();
     };
 
 
     private onUserUnloaded = () => {
         logger.debug(this, ["onUserUnloaded"], "User unloaded");
     };
+
+    private onAccessTokenExpired = () => {
+        logger.debug(this, ["onAccessTokenExpired"], "Access token expired");
+        this.userManager!.signinSilent();
+    }
 }
 
 export const account = new Account();

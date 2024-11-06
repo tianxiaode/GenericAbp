@@ -106,5 +106,17 @@ export class LocalStorage {
         this.removeItem('tenant');  
     }
 
+    static setRememberMe(rememberMe: boolean) {
+        this.setItem('rememberMe', rememberMe.toString());
+    }
+
+    static getRememberMe(): boolean {
+        const value = this.getItem('rememberMe');
+        return value !== null ? JSON.parse(value) : false;
+    }
+
+    static removeRememberMe() {
+        this.removeItem('rememberMe');  
+    }
 
 }

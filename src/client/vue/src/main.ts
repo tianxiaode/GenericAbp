@@ -103,6 +103,7 @@ RepositoryGlobalConfig.init({
 
 RepositoryFactory.register(repositoryRegisters);
 
+const configStore = useConfigStore();
 /// 初始化账户
 account.init({
     authority: envConfig.oidcAuthority,
@@ -114,11 +115,10 @@ account.init({
     revokeTokensOnSignout: true,
     post_logout_redirect_uri: envConfig.baseUrl + "signout-callback-oidc",
     loadUserInfo: false,
-    userStore: new WebStorageStateStore({ store: localStorage }),
-
-}).then(()=>{
+    //根据rememberMe参数决定是否使用localStorage还是sessionStorage
+    userStore: new WebStorageStateStore({ store: LocalStorage.getRememberMe() ? localStorage : sessionStorage }),
+}, configStore.reload).then(()=>{
     // 初始化本地化
-    const configStore = useConfigStore();
     configStore.setLocale(defaultLanguage);
 });
 

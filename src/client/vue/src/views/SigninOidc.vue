@@ -4,17 +4,20 @@
 
 <script setup lang="ts">
 import router from '~/router';
-import { account, LocalStorage } from '../libs';
+import { account, LocalStorage, logger } from '../libs';
 import { onMounted } from 'vue';
 
 onMounted(async () => {
-    var user = await account.userManager?.signinRedirectCallback() as any;
-    console.log('signinRedirectCallback', user);
+    //第三方登录，先清理rememberMe状态，并将useStore设置为sessionStorage
+    LocalStorage.removeRememberMe();
+    account.resetUserStore(false);
+
+    var user = await account.signinRedirectCallback() as any;
+    logger.debug('[SigninOidc.vue][onMounted]', 'signinRedirectCallback', user)
     if(!user){
         router.push('/login');
         return;
     }
-    LocalStorage.setToken(user?.access_token);
     const redirectPath = LocalStorage.getRedirectPath() || '/';
     window.location.href = redirectPath;
 
