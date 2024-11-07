@@ -30,7 +30,7 @@ import { account, LocalStorage } from '~/libs';
 
 const { t } = useI18n();
 const disabled = ref(false);
-let resendCount: number = parseInt(LocalStorage.getItem('resendCount') || '0');
+let resendCount: number = LocalStorage.getResentCount();
 let resendInterval: any = undefined;
 const buttonText = ref('Pages.ForgotPassword.Send')
 
@@ -41,13 +41,13 @@ const formRules = {
 const handleResend = () => {
     disabled.value = true;
     resendCount--;
-    LocalStorage.setItem('resendCount', resendCount.toString());
+    LocalStorage.setResentCount(resendCount);
     resendInterval = setInterval(() => {
         resendCount--;
         buttonText.value = t.value('pages.forgotPassword.resend').replace('{0}', resendCount.toString());
-        LocalStorage.setItem('resendCount', resendCount.toString());
+        LocalStorage.setResentCount(resendCount);
         if (resendCount === 0) {
-            localStorage.removeItem('resendCount');
+            LocalStorage.removeResentCount();
             buttonText.value = t.value('pages.forgotPassword.send');
             disabled.value = false;
             clearInterval(resendInterval as number);

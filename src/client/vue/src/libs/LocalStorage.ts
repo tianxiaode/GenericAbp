@@ -119,4 +119,17 @@ export class LocalStorage {
         this.removeItem('rememberMe');  
     }
 
+    static setResentCount(count: number){
+        this.setItem('resentCount', count.toString());
+    }
+
+    static getResentCount(): number {
+        const value = this.getItem('resentCount');
+        return value !== null ? Number(value) : 0;
+    }
+
+    static removeResentCount() {
+        this.removeItem('resentCount');     
+    }
+
 }
