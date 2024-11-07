@@ -76,6 +76,7 @@
         "CreatorId": "Created by",
         "LastModificationTime": "Last modification time",
         "LastModifierId": "Last modified by",
+        "Refresh": "Refresh",
         "PropertyInput":{
             "Label":"Properties",
             "Name": "Name",

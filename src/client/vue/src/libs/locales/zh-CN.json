@@ -76,6 +76,7 @@
         "CreatorId": "创建者",
         "LastModificationTime": "最后修改时间",
         "LastModifierId": "最后修改者",
+        "Refresh": "刷新",
         "PropertyInput":{
             "Name": "名称",
             "Value": "值",

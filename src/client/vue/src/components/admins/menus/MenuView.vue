@@ -11,9 +11,9 @@
         <el-table ref="tableRef" :data="data" stripe border style="width: 100%" @sort-change="sortChange"
             :default-sort="{ prop: 'order', order: 'ascending' }" row-key="id"            
             lazy
-            :load="isLazy ? loadNode : null"
-            :default-expand-all="!isLazy"            
-            :tree-props="isLazy ? { children: 'children', hasChildren: 'hasChildren' } : { children: 'children' }"
+            :load="isFilter ? null : loadNode"
+            :default-expand-all="isFilter"
+            :tree-props="!isFilter ? { children: 'children', hasChildren: 'hasChildren' } : { children: 'children' }"
             >
             <HighlightColumn :label="t('MenuManagement.Menu:Name')" prop="name" width="full" sortable
                 :filterText="filterText" />
@@ -31,7 +31,7 @@
                 sortable></el-table-column>
             <CheckColumn :label="t('MenuManagement.Menu:IsEnabled')" prop="isEnabled" width="100"
                 :filterText="filterText" :checkChange="checkChange"></CheckColumn>
-            <ActionColumn width="120" align="center" :buttons="tableButtons"></ActionColumn>
+            <ActionColumn width="140" align="center" :buttons="tableButtons"></ActionColumn>
         </el-table>
     </div>
 
@@ -43,34 +43,18 @@
 <script setup lang="ts">
 import ActionToolbar from '../../toolbars/ActionToolbar.vue';
 import { ref, watch } from 'vue';
-import { useI18n, useRepository, useTable } from '~/composables';
+import { useI18n, useRepository, useTree } from '~/composables';
 import { MenuType } from '~/repositories';
 import HighlightColumn from '../../table/HighlightColumn.vue';
 import CheckColumn from '../../table/CheckColumn.vue';
 import ActionColumn from '../../table/ActionColumn.vue';
-import { isEmpty } from '~/libs';
-import { TreeNode } from 'element-plus';
 import Select from '../../forms/Select.vue';
 import MenuForm from './MenuForm.vue';
 
-const tableRef = ref<any>();
 const groupName = ref('');
 const permissionVisible = ref(false);
 const providerKey = ref('');
-const isLazy = ref(true);
-const api = useRepository('menu', {
-    afterLoad(data: MenuType[]) {
-        if (!isEmpty(filterText.value)) {
-            data = getChildren(data, null);
-        } else {
-            data.forEach((item: MenuType) => {
-                item.hasChildren = !item.leaf;
-            });
-        }
-        return data;
-
-    }
-});
+const api = useRepository('menu');
 const { t } = useI18n();
 
 const openPermissionWindow = (row: MenuType) => {
@@ -82,54 +66,31 @@ const openPermissionWindow = (row: MenuType) => {
 
 const {
     data, dialogVisible, currentEntityId,
-    filterText,
-    create, update, remove, filter, checkChange,
-    sortChange } = useTable<MenuType>(api);
+    filterText, tableRef, isFilter, refresh,
+    create, update, remove, checkChange, filter, loadNode,
+    sortChange } = useTree<MenuType>(api);
+
 
 const toolbarButtons = {
-    create: { action: create, isVisible: api.canCreate },
+    //refresh: { action: api.load, icon: 'fa fa-refresh text-primary', title: 'Components.Refresh', order: 450, visible: true },
+    create: { action: create, visible: api.canCreate },
 }
 
-watch(filterText, () => {
-    isLazy.value = isEmpty(filterText.value);
-})
 
 watch(groupName, () => {
     api.search('groupName', groupName.value, true);
 })
 
-const loadNode = (row: MenuType, _: TreeNode, resolve: any) => {
-    if (!isEmpty(filterText.value)) {
-        resolve([]);
-        return;
-    };
-    const parentId = row.id;
-    api.getList({ parentId }).then((res: any) => {
-        res.forEach((item: any) => {
-            item.hasChildren = !item.leaf;
-        })
-        resolve(res);
-    })
-}
 
-const getChildren = (data: any, id: any) => {
-    let children = [...data.filter((item: any) => item.parentId === id)];
-    children.forEach((item: any) => {
-        console.log('getChildren', item.id, item.name)
-        item.children = getChildren(data, item.id);
-        tableRef.value?.updateKeyChildren(item.id, item.children);
-        //item.hasChildren = item.children.length > 0;
-        //item.children = getChildren(data, item.id);
-    })
-    return children;
-}
 
 
 const tableButtons = {
-    edit: { action: update, isVisible: api.canUpdate },
-    delete: { action: remove, isVisible: api.canDelete },
-    permission: { action: openPermissionWindow, icon: 'fa fa-lock', title: 'AbpIdentity.Permissions', order: 300, type: 'primary', isVisible: () => api.canUpdate },
-    global: { action: openPermissionWindow, icon: 'fa fa-globe', title: 'AbpIdentity.Permissions', order: 400, type: 'primary', isVisible: () => api.canUpdate },
+    refresh: { action: refresh, icon: 'fa fa-refresh text-primary', title: 'Components.Refresh', order: 450, visible: true },
+    detail:{ visible: false},
+    edit: { action: update, disabled:(row: MenuType) => row.isStatic, visible: api.canUpdate },
+    delete: { action: remove, disabled:(row: MenuType) => row.isStatic, visible: api.canDelete },
+    permission: { action: openPermissionWindow, icon: 'fa fa-lock', title: 'AbpIdentity.Permissions', order: 300, type: 'primary', visible:api.canUpdate },
+    global: { action: openPermissionWindow, icon: 'fa fa-globe', title: 'AbpIdentity.Permissions', order: 400, type: 'primary', visible:api.canUpdate },
 }
 
 //arrows-up-down-left-right

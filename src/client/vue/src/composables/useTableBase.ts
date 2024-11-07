@@ -1,9 +1,8 @@
 import { EntityInterface,  LocalStorage } from "../libs";
 import { onMounted, onUnmounted, ref,watch } from "vue";
-import { useDelay } from "./useDelay";
 import router from "~/router";
 
-export function useTable<T extends EntityInterface>(api: any) {
+export function useTableBase<T extends EntityInterface>(api: any, loadData: any, filter: any) {
 
     const resourceName = api.resourceName;
     const entity = api.entity;
@@ -11,14 +10,8 @@ export function useTable<T extends EntityInterface>(api: any) {
     const filterText = ref('');
     const dialogVisible = ref(false);
     const currentEntityId = ref('');
-    const {delay} = useDelay();
-    // Load data for the table
-    const loadData = (records: T[]) => {
-        data.value = records;
-        return;
-    };
-
     
+   
     // Add a new entry
     const create = () => {
         dialogVisible.value = true;
@@ -37,13 +30,6 @@ export function useTable<T extends EntityInterface>(api: any) {
         await api.delete(entity.id);
     };
 
-    // Filter data based on the filterText
-    const filter = (filter: string) => {
-        delay(()=>{
-            filterText.value = filter;
-            api.filter = filter;
-        })
-    };
 
     const checkChange = (entity:T)=>{
         api.update(entity);
@@ -85,7 +71,6 @@ export function useTable<T extends EntityInterface>(api: any) {
         create,
         update,
         remove,
-        filter,
         checkChange,
         sortChange,
         formClose

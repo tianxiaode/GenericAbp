@@ -1,4 +1,4 @@
-import { EntityInterface, http, isGranted, logger, Repository } from "../libs";
+import { EntityInterface, http, isEmpty, isGranted, logger, Repository } from "../libs";
 
 export interface MenuType extends EntityInterface {
     code: String,
@@ -32,6 +32,7 @@ export class MenuRepository extends Repository<MenuType> {
     get canManagePermissions(): boolean {
         return isGranted(`${this.resourceName}.${this.entityPlural}`);
     }
+
 
     getByGroup = (group: string) =>{ 
         return http.get(this.getUrl() + `/by-group/${group}`);
