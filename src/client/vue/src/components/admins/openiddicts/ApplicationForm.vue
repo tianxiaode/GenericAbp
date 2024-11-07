@@ -133,12 +133,12 @@
 </template>
 
 <script setup lang="ts">
-import FormDialog from '../dialogs/FormDialog.vue';
+import FormDialog from '../../dialogs/FormDialog.vue';
 
 import { useEntityForm, useRepository, useFormRules, useI18n } from '~/composables'
 import { onMounted,   ref, watch } from 'vue';
 import {  AllApplicationPermissionsGrantTypesValue, ApplicationClientTypes, ApplicationConsentTypes, ApplicationPermissions,  ApplicationTypes, customPermissionConvert, customPermissionValueConvert } from '~/repositories';
-import ValueListInput from '../forms/ValueListInput.vue';
+import ValueListInput from '../../forms/ValueListInput.vue';
 import GrantTypeSelect from './GrantTypeSelect.vue';
 import ApplicationSettingForm from './ApplicationSettingForm.vue';
 

@@ -25,6 +25,7 @@
     "AuditLog:HttpMethod": "HTTP 方法",
     "AuditLog:Url": "URL",
     "AuditLog:Comments": "備註",
+    "AuditLog:Actions": "動作",
     "AuditLog:HttpStatusCode": "HTTP 狀態碼",
     "EntityChange:AuditLogId": "審計日誌 ID",
     "EntityChange:TenantId": "租戶 ID",

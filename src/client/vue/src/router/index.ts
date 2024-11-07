@@ -16,15 +16,15 @@ const routes = [
     { path: "/", meta: { requiresAuth: true }, component: ()=>import("~/components/layouts/AdminLayout.vue"),
         children: [
             { path: "dashboard", component: ()=>import("~/views/Dashboard.vue") },
-            { path: "roles", component: ()=>import("~/components/roles/RoleView.vue") },
-            { path: "users", component: ()=>import("~/components/users/UserView.vue") },
-            { path: 'tenants', component: ()=>import("~/components/tenants/TenantView.vue") },
-            { path: 'menus', component: ()=>import("~/components/menuManagement/MenuView.vue") },
-            { path: "applications", component: ()=>import("~/components/openiddicts/ApplicationView.vue") },
-            { path: "scopes", component: ()=>import("~/components/openiddicts/ScopeView.vue") },
-            { path: "security-logs", component: ()=>import("~/components/securitylogs/SecurityLogView.vue") },            
-            { path: "audit-logs", component: ()=>import("~/components/auditLogs/AuditLogView.vue") },            
-            { path: "settings", component: ()=>import("~/components/settings/SettingManagement.vue") }
+            { path: "roles", component: ()=>import("~/components/admins/roles/RoleView.vue") },
+            { path: "users", component: ()=>import("~/components/admins/users/UserView.vue") },
+            { path: 'tenants', component: ()=>import("~/components/admins/tenants/TenantView.vue") },
+            { path: 'menus', component: ()=>import("~/components/admins/menus/MenuView.vue") },
+            { path: "applications", component: ()=>import("~/components/admins/openiddicts/ApplicationView.vue") },
+            { path: "scopes", component: ()=>import("~/components/admins/openiddicts/ScopeView.vue") },
+            { path: "security-logs", component: ()=>import("~/components/admins/securitylogs/SecurityLogView.vue") },            
+            { path: "audit-logs", component: ()=>import("~/components/admins/auditLogs/AuditLogView.vue") },            
+            { path: "settings", component: ()=>import("~/components/admins/settings/SettingManagement.vue") }
 
         ]        
     },

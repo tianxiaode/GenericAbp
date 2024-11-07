@@ -20,13 +20,13 @@
 </template>
 
 <script setup lang="ts">
-import ActionToolbar from '../toolbars/ActionToolbar.vue';
-import Pagination from '../toolbars/PaginationToolbar.vue'
+import ActionToolbar from '../../toolbars/ActionToolbar.vue';
+import Pagination from '../../toolbars/PaginationToolbar.vue'
 import TenantForm from './TenantForm.vue';
 import { TenantType } from '~/repositories';
-import HighlightColumn from '../table/HighlightColumn.vue';
+import HighlightColumn from '../../table/HighlightColumn.vue';
 import { useTable, useRepository, useI18n } from '~/composables';
-import ActionColumn from '../table/ActionColumn.vue';
+import ActionColumn from '../../table/ActionColumn.vue';
 
 
 const api = useRepository('Tenant');

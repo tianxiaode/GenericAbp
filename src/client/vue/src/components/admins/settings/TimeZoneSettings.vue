@@ -19,7 +19,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { useI18n,  useForm } from '~/composables';
-import FormMessage from '../forms/FormMessage.vue';
+import FormMessage from '../../forms/FormMessage.vue';
 import { settingManagement } from '~/libs';
 const { t } = useI18n();
 

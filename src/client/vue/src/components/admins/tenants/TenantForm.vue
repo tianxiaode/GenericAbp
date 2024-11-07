@@ -16,10 +16,10 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import FormDialog from '../dialogs/FormDialog.vue';
+import FormDialog from '../../dialogs/FormDialog.vue';
 import { useEntityForm, useFormRules, useI18n, useRepository } from '~/composables';
 import { isEmpty } from '~/libs';
-import Input from '../forms/Input.vue';
+import Input from '../../forms/Input.vue';
 
 const { t } = useI18n();
 const api = useRepository('tenant');

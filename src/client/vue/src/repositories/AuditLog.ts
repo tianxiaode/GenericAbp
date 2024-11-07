@@ -35,6 +35,7 @@ export class AuditLogRepository extends Repository<AuditLogType> {
         this.resourceName = "AbpAuditLogging";
         this.entityGroup = "";  
         this.messageField = "url";
+        this.labelPrefix = "AuditLog"
     };
 
     get canManagePermissions(): boolean {

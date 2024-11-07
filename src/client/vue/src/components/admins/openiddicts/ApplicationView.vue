@@ -25,16 +25,16 @@
 </template>
 
 <script setup lang="ts">
-import ActionToolbar from '../toolbars/ActionToolbar.vue';
-import Pagination from '../toolbars/PaginationToolbar.vue'
+import ActionToolbar from '../../toolbars/ActionToolbar.vue';
+import Pagination from '../../toolbars/PaginationToolbar.vue'
 import ApplicationForm from './ApplicationForm.vue';
 import { ApplicationPermissionsMapToDisplayName, RoleType } from '~/repositories';
-import HighlightColumn from '../table/HighlightColumn.vue';
+import HighlightColumn from '../../table/HighlightColumn.vue';
 import { useTable, useRepository, useI18n, useDetail } from '~/composables';
-import ActionColumn from '../table/ActionColumn.vue';
+import ActionColumn from '../../table/ActionColumn.vue';
 import PermissionView from '../permissions/PermissionView.vue';
 import { ref } from 'vue';
-import Detail from '../Detail.vue';
+import Detail from '../../Detail.vue';
 import { capitalize, parseTimeSpanToSeconds } from '~/libs';
 
 const permissionVisible = ref(false);

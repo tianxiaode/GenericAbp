@@ -18,11 +18,11 @@
 </template>
 
 <script setup lang="ts">
-import FormDialog from '../dialogs/FormDialog.vue';
+import FormDialog from '../../dialogs/FormDialog.vue';
 
 import { useEntityForm, useRepository, useFormRules, useI18n } from '~/composables'
-import ValueListInput from '../forms/ValueListInput.vue';
-import Input from '../forms/Input.vue';
+import ValueListInput from '../../forms/ValueListInput.vue';
+import Input from '../../forms/Input.vue';
 
 const { t } = useI18n();
 const api = useRepository('scope');

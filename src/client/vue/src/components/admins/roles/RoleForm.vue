@@ -10,10 +10,10 @@
 </template>
 
 <script setup lang="ts">
-import FormDialog from '../dialogs/FormDialog.vue';
+import FormDialog from '../../dialogs/FormDialog.vue';
 import { useEntityForm, useI18n, useRepository } from '~/composables';
-import Switch from '../forms/Switch.vue';
-import Input from '../forms/Input.vue';
+import Switch from '../../forms/Switch.vue';
+import Input from '../../forms/Input.vue';
 
 const { t } = useI18n();
 const roleApi = useRepository('Role');

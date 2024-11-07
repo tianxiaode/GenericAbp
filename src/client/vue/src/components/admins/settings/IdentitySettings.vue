@@ -155,7 +155,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { useI18n, useFormRules, useForm } from '~/composables';
-import FormMessage from '../forms/FormMessage.vue';
+import FormMessage from '../../forms/FormMessage.vue';
 import { appConfig, LocalStorage, settingManagement } from '~/libs';
 const activeNames = ref(['1', '2', '3', '4', '5']);
 const { t } = useI18n();

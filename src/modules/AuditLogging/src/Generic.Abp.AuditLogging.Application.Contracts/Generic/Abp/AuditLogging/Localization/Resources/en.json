@@ -26,6 +26,7 @@
     "AuditLog:Url": "Url",
     "AuditLog:Comments": "Comments",
     "AuditLog:HttpStatusCode": "Http Status Code",
+    "AuditLog:Actions": "Actions",
     "EntityChange:AuditLogId": "Audit Log Id",
     "EntityChange:TenantId": "Tenant Id",
     "EntityChange:ChangeTime": "Change Time",

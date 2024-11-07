@@ -25,6 +25,7 @@
     "AuditLog:HttpMethod": "HTTP 方法",
     "AuditLog:Url": "URL",
     "AuditLog:Comments": "备注",
+    "AuditLog:Actions": "操作",
     "AuditLog:HttpStatusCode": "HTTP 状态码",
     "EntityChange:AuditLogId": "审计日志 ID",
     "EntityChange:TenantId": "租户 ID",

@@ -41,17 +41,16 @@
 
 
 <script setup lang="ts">
-import ActionToolbar from '../toolbars/ActionToolbar.vue';
+import ActionToolbar from '../../toolbars/ActionToolbar.vue';
 import { ref, watch } from 'vue';
 import { useI18n, useRepository, useTable } from '~/composables';
 import { MenuType } from '~/repositories';
-import HighlightColumn from '../table/HighlightColumn.vue';
-import CheckColumn from '../table/CheckColumn.vue';
-import ActionColumn from '../table/ActionColumn.vue';
-import PermissionView from '../permissions/PermissionView.vue';
+import HighlightColumn from '../../table/HighlightColumn.vue';
+import CheckColumn from '../../table/CheckColumn.vue';
+import ActionColumn from '../../table/ActionColumn.vue';
 import { isEmpty } from '~/libs';
 import { TreeNode } from 'element-plus';
-import Select from '../forms/Select.vue';
+import Select from '../../forms/Select.vue';
 import MenuForm from './MenuForm.vue';
 
 const tableRef = ref<any>();

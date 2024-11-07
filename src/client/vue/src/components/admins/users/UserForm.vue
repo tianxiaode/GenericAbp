@@ -40,13 +40,13 @@
 </template>
 
 <script setup lang="ts">
-import FormDialog from '../dialogs/FormDialog.vue';
+import FormDialog from '../../dialogs/FormDialog.vue';
 
 import { useConfig, useEntityForm, useRepository, useFormRules, useI18n } from '~/composables'
 import { appConfig } from '~/libs';
 import { onMounted, ref } from 'vue';
-import Switch from '../forms/Switch.vue';
-import Input from '../forms/Input.vue';
+import Switch from '../../forms/Switch.vue';
+import Input from '../../forms/Input.vue';
 
 const activeTab = ref('basic');
 const allRoles = ref([] as string[]);

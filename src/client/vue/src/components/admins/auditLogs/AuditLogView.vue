@@ -24,7 +24,13 @@
             <HighlightColumn :label="t('AbpAuditLogging.ApplicationName')" prop="applicationName" width="full"
                 sortable :filterText="filterText" />
             <HighlightColumn :label="t('AbpAuditLogging.url')" prop="url" width="full" sortable
-                :filterText="filterText" />
+                :filterText="filterText" >
+                <template #default="{ row,prop, filter }">
+                    <span v-html="highlightText(row[prop], filter)"></span>
+                    <HttpMethod :value="row.httpMethod"></HttpMethod>
+                    <HttpStatusCode :value="row.httpStatusCode"></HttpStatusCode>
+                </template>
+            </HighlightColumn>
             <HighlightColumn :label="t('AbpAuditLogging.UserName')" prop="userName" width="full" sortable
                 :filterText="filterText" />
             <el-table-column :label="t('AbpAuditLogging.ClientIpAddress')" prop="clientIpAddress" width="120" sortable>
@@ -32,30 +38,33 @@
             <ActionColumn width="120" align="center" :buttons="tableButtons"></ActionColumn>
         </el-table>
 
-        <AuditLogDetail v-model="detailVisible" :entity-id="detailEntityId" />
   
 
         <!-- 底部分页工具栏 -->
         <Pagination style="margin-top: 10px;" :api="api" />
     </div>
 
+    <Detail v-if="detailVisible" :title="detailTitle" :data="detailData" :row-items="rowItems" v-model="detailVisible"></Detail>
 
 
 
 </template>
 
 <script setup lang="ts">
-import ActionToolbar from '../toolbars/ActionToolbar.vue';
-import Pagination from '../toolbars/PaginationToolbar.vue'
+import ActionToolbar from '../../toolbars/ActionToolbar.vue';
+import Pagination from '../../toolbars/PaginationToolbar.vue'
 import { AuditLogType } from '~/repositories';
-import HighlightColumn from '../table/HighlightColumn.vue';
-import DateColumn from '../table/DateColumn.vue';
+import HighlightColumn from '../../table/HighlightColumn.vue';
+import DateColumn from '../../table/DateColumn.vue';
 import { useDetail, useI18n, useRepository, useTable } from '~/composables';
-import Select from '../forms/Select.vue';
+import Select from '../../forms/Select.vue';
 import { ref,watch } from 'vue';
-import DateRange from '../forms/DateRange.vue';
-import AuditLogDetail from './AuditLogDetail.vue';
-import ActionColumn from '../table/ActionColumn.vue';
+import DateRange from '../../forms/DateRange.vue';
+import Detail from '../../Detail.vue';
+import ActionColumn from '../../table/ActionColumn.vue';
+import { highlightText } from '~/libs';
+import HttpMethod from './HttpMethod.vue';
+import HttpStatusCode from './HttpStatusCode.vue';
 
 const { t } = useI18n();
 const api = useRepository('AuditLog');
@@ -79,14 +88,36 @@ const toolbarButtons = {
     create: { visible: false },
 }
 
-const { detailVisible, detailEntityId, detailButton  } = useDetail(api.idFieldName);
+const { detailVisible, detailData, detailTitle, showDetails, rowItems } = useDetail(api,[
+    { field: 'executionTime'},
+    { field: 'executionDuration'},
+    { field: 'applicationName'},
+    { field: 'url'},
+    { field: 'httpMethod'},
+    { field: 'httpStatusCode'},
+    { field: 'userId'},
+    { field: 'userName'},
+    { field: 'tenantId'},
+    { field: 'tenantName'},
+    { field: 'correlationId'},
+    { field: 'impersonatorUserId'},
+    { field: 'impersonatorUserName'},
+    { field: 'impersonatorTenantId'},
+    { field: 'impersonatorTenantName'},
+    { field: 'clientId'},
+    { field: 'clientName'},
+    { field: 'browserInfo'},
+    { field: 'exceptions', type: 'json' },
+    { field: 'comments'},
+    { field: 'actions', type: 'json' },
+])
 
 const tableButtons = {
     // detail: { 
     //     action: showDetail, icon: 'fa fa-ellipsis', title: t.value('Components.Details'), order: 1 },
     edit: { visible: false },
     delete: {  visible: false },
-    detail: detailButton,
+    detail: { action: showDetails },
 }
 
 

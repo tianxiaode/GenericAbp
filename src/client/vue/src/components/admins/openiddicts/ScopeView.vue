@@ -24,14 +24,14 @@
 </template>
 
 <script setup lang="ts">
-import ActionToolbar from '../toolbars/ActionToolbar.vue';
-import Pagination from '../toolbars/PaginationToolbar.vue'
+import ActionToolbar from '../../toolbars/ActionToolbar.vue';
+import Pagination from '../../toolbars/PaginationToolbar.vue'
 import ScopeForm from './ScopeForm.vue';
 import { RoleType } from '~/repositories';
-import HighlightColumn from '../table/HighlightColumn.vue';
+import HighlightColumn from '../../table/HighlightColumn.vue';
 import { useTable, useRepository, useI18n, useDetail } from '~/composables';
-import ActionColumn from '../table/ActionColumn.vue';
-import Detail from '../Detail.vue';
+import ActionColumn from '../../table/ActionColumn.vue';
+import Detail from '../../Detail.vue';
 
 const api = useRepository('Scope');
 const { t } = useI18n();

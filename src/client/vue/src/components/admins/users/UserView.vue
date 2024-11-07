@@ -44,17 +44,17 @@
 </template>
 
 <script setup lang="ts">
-import ActionToolbar from '../toolbars/ActionToolbar.vue';
-import Pagination from '../toolbars/PaginationToolbar.vue'
+import ActionToolbar from '../../toolbars/ActionToolbar.vue';
+import Pagination from '../../toolbars/PaginationToolbar.vue'
 import { UserType } from '~/repositories';
-import HighlightColumn from '../table/HighlightColumn.vue';
-import CheckColumn from '../table/CheckColumn.vue';
-import ActionColumn from '../table/ActionColumn.vue';
+import HighlightColumn from '../../table/HighlightColumn.vue';
+import CheckColumn from '../../table/CheckColumn.vue';
+import ActionColumn from '../../table/ActionColumn.vue';
 import UserForm from './UserForm.vue';
 import { formatDate, highlightText } from '~/libs';
-import DateColumn from '../table/DateColumn.vue';
+import DateColumn from '../../table/DateColumn.vue';
 import { ref } from 'vue';
-import Detail from '../Detail.vue';
+import Detail from '../../Detail.vue';
 import { useDetail, useI18n, useRepository,useTable } from '~/composables';
 import PermissionView from '../permissions/PermissionView.vue';
 

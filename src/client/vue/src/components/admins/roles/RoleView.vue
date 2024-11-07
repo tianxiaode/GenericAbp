@@ -26,14 +26,14 @@
 </template>
 
 <script setup lang="ts">
-import ActionToolbar from '../toolbars/ActionToolbar.vue';
-import Pagination from '../toolbars/PaginationToolbar.vue'
+import ActionToolbar from '../../toolbars/ActionToolbar.vue';
+import Pagination from '../../toolbars/PaginationToolbar.vue'
 import RoleForm from './RoleForm.vue';
 import { RoleType } from '~/repositories';
-import HighlightColumn from '../table/HighlightColumn.vue';
-import CheckColumn from '../table/CheckColumn.vue';
+import HighlightColumn from '../../table/HighlightColumn.vue';
+import CheckColumn from '../../table/CheckColumn.vue';
 import { useTable, useRepository, useI18n } from '~/composables';
-import ActionColumn from '../table/ActionColumn.vue';
+import ActionColumn from '../../table/ActionColumn.vue';
 import PermissionView from '../permissions/PermissionView.vue';
 import { ref } from 'vue';
 

@@ -35,12 +35,12 @@
 </template>
 
 <script setup lang="ts">
-import FormDialog from '../dialogs/FormDialog.vue';
+import FormDialog from '../../dialogs/FormDialog.vue';
 
 import { useEntityForm, useRepository, useI18n } from '~/composables'
-import Switch from '../forms/Switch.vue';
-import Select from '../forms/Select.vue';
-import IconSelect from '../forms/IconSelect.vue';
+import Switch from '../../forms/Switch.vue';
+import Select from '../../forms/Select.vue';
+import IconSelect from '../../forms/IconSelect.vue';
 
 const { t } = useI18n();
 const entityId = defineModel('entityId');

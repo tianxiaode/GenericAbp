@@ -22,6 +22,7 @@ export class SecurityLogRepository extends Repository<SecurityLogType> {
         this.resourceName = "AbpIdentity";
         this.entityGroup = "";  
         this.messageField = "action";
+        this.labelPrefix = "SecurityLog"
     };
 
     get canManagePermissions(): boolean {
