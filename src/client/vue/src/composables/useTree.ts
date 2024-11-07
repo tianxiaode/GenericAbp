@@ -6,15 +6,10 @@ import { ref } from "vue";
 export function useTree<T extends EntityInterface>(api: any) {
     const { delay} = useDelay();
     const isFilter = ref(false);
-    const tableRef = ref<any>(null);
     const loadData = (records: T[]) => {
         if (isFilter.value) {
             data.value = getChildren(records, null);
         } else {
-            records.forEach((item: any) => {
-                item.hasChildren = !item.leaf;
-                tableRef.value?.toggleRowExpansion(item, false);
-            });
             data.value = records;
         }
         return;
@@ -36,7 +31,6 @@ export function useTree<T extends EntityInterface>(api: any) {
         data.forEach((item: any) => {
             item.hasChildren = !item.leaf;
         });
-        tableRef.value?.updateKeyChildren(id, data);
     }
 
     const {
@@ -58,7 +52,6 @@ export function useTree<T extends EntityInterface>(api: any) {
         let children = [...data.filter((item: any) => item.parentId === id)];
         children.forEach((item: any) => {
             item.children = getChildren(data, item.id);
-            tableRef.value?.updateKeyChildren(item.id, item.children);
         })
         return children;
     };
@@ -68,7 +61,6 @@ export function useTree<T extends EntityInterface>(api: any) {
         api.getList({ parentId }).then((res: any) => {
             res.forEach((item: any) => {
                 item.hasChildren = !item.leaf;
-                tableRef.value?.toggleRowExpansion(item, false);
             })
             resolve(res);
         })
@@ -90,19 +82,15 @@ export function useTree<T extends EntityInterface>(api: any) {
         //根据id，获取子节点
         if(row.isLoaded){
             //如果item.expanded为true，说明改节点已展开，需要把子节点数据添加到显示列表中
-            const additionalData = [] as any;
-            row.children1?.forEach((item:any) => {
-                additionalData.push(item);
-                if(item.expanded === true){
-                    additionalData.push(item.children1);
-                }
+            row.children?.forEach((item:any) => {
+                item.expanded = false;
             });
-            data.value = [...firstData, ...additionalData, ...lastData];
+            data.value = [...firstData, ...row.children, ...lastData];
             return;
         }        
         const loadData = await api.getList({parentId: id});
-        row.children1 = loadData;
-        data.value = [...firstData, ...row.children1, ...lastData];
+        row.children = loadData;
+        data.value = [...firstData, ...row.children, ...lastData];
         row.isLoaded = true;
 
     }
@@ -117,7 +105,6 @@ export function useTree<T extends EntityInterface>(api: any) {
         dialogVisible,
         currentEntityId,
         isFilter,
-        tableRef,
         refresh,
         filter,
         create,

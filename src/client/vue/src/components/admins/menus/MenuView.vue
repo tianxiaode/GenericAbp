@@ -8,8 +8,9 @@
                 ></Select>
             </template>
         </ActionToolbar>
-        <el-table ref="tableRef" :data="data" stripe border style="width: 100%" @sort-change="sortChange"
+        <el-table :data="data" stripe border style="width: 100%" @sort-change="sortChange"
             :default-sort="{ prop: 'order', order: 'ascending' }" row-key="id"
+            :tree-props="{ children: 'items' }"
             >
             <TreeColumn prop="name" :label="t('MenuManagement.Menu:Name')" width="full" sortable :filterText="filterText" 
                 :expand="expandNode"
@@ -63,7 +64,7 @@ const openPermissionWindow = (row: MenuType) => {
 
 const {
     data, dialogVisible, currentEntityId,
-    filterText, tableRef, refresh,
+    filterText, refresh,
     create, update, remove, checkChange, filter, 
     sortChange, expandNode } = useTree<MenuType>(api);
 
