@@ -1,6 +1,7 @@
-import { EntityInterface } from "../libs";
+import { EntityInterface, LocalStorage } from "../libs";
 import { onMounted, onUnmounted, ref,watch } from "vue";
 import { useDelay } from "./useDelay";
+import router from "~/router";
 
 export function useTable<T extends EntityInterface>(api: any) {
 
@@ -60,6 +61,10 @@ export function useTable<T extends EntityInterface>(api: any) {
     })
 
     onMounted(() => {
+        if(!api.canRead){
+            LocalStorage.setRedirectPath(router.currentRoute.value.path);
+            router.push('/login');
+        }
         api.on('load', loadData);
         api.load();
     });
