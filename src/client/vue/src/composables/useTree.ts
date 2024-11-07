@@ -1,4 +1,4 @@
-import { EntityInterface, isEmpty } from "~/libs";
+import { EntityInterface, isEmpty, splitArray } from "~/libs";
 import { useTableBase } from "./useTableBase";
 import { useDelay } from "./useDelay";
 import { ref } from "vue";
@@ -74,6 +74,41 @@ export function useTree<T extends EntityInterface>(api: any) {
         })
     }
 
+    const expandNode = async (row: any, expanded: boolean) => {
+        const id = row.id;
+        const originalRecords = [...data.value];
+        if(!expanded){
+            //移除以row.code+'.'开始的数据
+            row.expanded = false;
+            data.value = originalRecords.filter((item: any) => !item.code.startsWith(row.code+'.'));
+            return;            
+        }
+        const index = data.value.findIndex((item: any) => item.id === id);
+        //根据index，将data.value分为两个数值
+        const [firstData, lastData] = splitArray(data.value, (_: any, i:number)=>{ return i<=index});
+        row.expanded = true;
+        //根据id，获取子节点
+        if(row.isLoaded){
+            //如果item.expanded为true，说明改节点已展开，需要把子节点数据添加到显示列表中
+            const additionalData = [] as any;
+            row.children1?.forEach((item:any) => {
+                additionalData.push(item);
+                if(item.expanded === true){
+                    additionalData.push(item.children1);
+                }
+            });
+            data.value = [...firstData, ...additionalData, ...lastData];
+            return;
+        }        
+        const loadData = await api.getList({parentId: id});
+        row.children1 = loadData;
+        data.value = [...firstData, ...row.children1, ...lastData];
+        row.isLoaded = true;
+
+    }
+
+    
+
     return {
         resourceName,
         entity,
@@ -91,6 +126,7 @@ export function useTree<T extends EntityInterface>(api: any) {
         checkChange,
         sortChange,
         formClose,
-        loadNode
+        loadNode,
+        expandNode
     }
 }

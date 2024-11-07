@@ -1,21 +1,17 @@
 <template>
-    <el-table-column v-bind="$attrs" :prop="props.prop" >
+    <el-table-column v-bind="$attrs">
         <template #default="scope">
-            <slot name="default" :row="scope.row" :filter="filterText" :prop="props.prop" >
-                <span v-html="highlightText(scope.row[props.prop], filterText)"></span>
+            <slot name="default" :row="scope.row" :column="scope.column" :index="scope.index" :filter="filterText"  >
+                <span v-html="highlightText(scope.row[scope.column.prop], filterText)"></span>
             </slot>
         </template>    
     </el-table-column>
 </template>
 
 <script setup lang="ts">
-import { highlightText } from '../../libs'
+import { highlightText } from '~/libs'
 
-const props = defineProps({
-    prop: {
-        type: String,
-        required: true
-    },
+defineProps({
     filterText: {
         type: String,
         default: ''

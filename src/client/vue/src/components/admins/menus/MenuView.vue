@@ -9,14 +9,11 @@
             </template>
         </ActionToolbar>
         <el-table ref="tableRef" :data="data" stripe border style="width: 100%" @sort-change="sortChange"
-            :default-sort="{ prop: 'order', order: 'ascending' }" row-key="id"            
-            lazy
-            :load="isFilter ? null : loadNode"
-            :default-expand-all="isFilter"
-            :tree-props="!isFilter ? { children: 'children', hasChildren: 'hasChildren' } : { children: 'children' }"
+            :default-sort="{ prop: 'order', order: 'ascending' }" row-key="id"
             >
-            <HighlightColumn :label="t('MenuManagement.Menu:Name')" prop="name" width="full" sortable
-                :filterText="filterText" />
+            <TreeColumn prop="name" :label="t('MenuManagement.Menu:Name')" width="full" sortable :filterText="filterText" 
+                :expand="expandNode"
+            />
             <el-table-column :label="t('MenuManagement.Menu:GroupName')" prop="groupName" width="full"
                 sortable></el-table-column>
             <el-table-column :label="t('MenuManagement.Menu:Icon')" prop="icon" width="100" sortable>
@@ -45,11 +42,11 @@ import ActionToolbar from '../../toolbars/ActionToolbar.vue';
 import { ref, watch } from 'vue';
 import { useI18n, useRepository, useTree } from '~/composables';
 import { MenuType } from '~/repositories';
-import HighlightColumn from '../../table/HighlightColumn.vue';
 import CheckColumn from '../../table/CheckColumn.vue';
 import ActionColumn from '../../table/ActionColumn.vue';
 import Select from '../../forms/Select.vue';
 import MenuForm from './MenuForm.vue';
+import TreeColumn from '~/components/table/TreeColumn.vue';
 
 const groupName = ref('');
 const permissionVisible = ref(false);
@@ -66,9 +63,9 @@ const openPermissionWindow = (row: MenuType) => {
 
 const {
     data, dialogVisible, currentEntityId,
-    filterText, tableRef, isFilter, refresh,
-    create, update, remove, checkChange, filter, loadNode,
-    sortChange } = useTree<MenuType>(api);
+    filterText, tableRef, refresh,
+    create, update, remove, checkChange, filter, 
+    sortChange, expandNode } = useTree<MenuType>(api);
 
 
 const toolbarButtons = {
