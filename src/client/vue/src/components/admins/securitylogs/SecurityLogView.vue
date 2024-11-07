@@ -24,9 +24,7 @@
         <!-- 数据展示区域 -->
         <el-table :data="data" stripe border style="width: 100%" @sort-change="sortChange"
             :default-sort="{ prop: 'creationTime', order: 'descending' }">
-            <DateColumn prop="creationTime" :label="t('AbpIdentity.CreationTime')" width="180"
-                format="yyyy-MM-dd HH:mm:ss" sortable>
-            </DateColumn>
+            <DateColumn prop="creationTime" :label="t('AbpIdentity.CreationTime')" width="180" sortable />
             <HighlightColumn :label="t('AbpIdentity.SecurityLog:ApplicationName')" prop="applicationName" width="full"
                 sortable :filterText="filterText" />
             <HighlightColumn :label="t('AbpIdentity.SecurityLog:Action')" prop="action" width="full" sortable

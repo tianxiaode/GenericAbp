@@ -16,9 +16,7 @@
         <!-- 数据展示区域 -->
         <el-table :data="data" stripe border style="width: 100%" @sort-change="sortChange"
             :default-sort="{ prop: 'executionTime', order: 'descending' }">
-            <DateColumn prop="executionTime" :label="t('AbpAuditLogging.ExecutionTime')" width="180"
-                format="yyyy-MM-dd HH:mm:ss" sortable>
-            </DateColumn>
+            <DateColumn prop="executionTime" :label="t('AbpAuditLogging.ExecutionTime')" width="180" sortable />
             <el-table-column :label="t('AbpAuditLogging.ExecutionDuration')" prop="executionDuration" width="120" sortable align="right">
             </el-table-column>
             <HighlightColumn :label="t('AbpAuditLogging.ApplicationName')" prop="applicationName" width="full"

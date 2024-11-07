@@ -8,11 +8,12 @@
 </template>
 
 <script setup lang="ts">
+import { useI18n } from '~/composables';
 import { formatDate } from '../../libs'
 const props = defineProps({
     format: {
         type: String,
-        default: 'yyyy-MM-dd'
+        default: 'datetime'
     },
     prop: {
         type: String,
@@ -20,7 +21,10 @@ const props = defineProps({
     }
 })
 
+const {format} = useI18n();
+
 const render = (date: string) => {
-    return formatDate(date, props.format);
+    let f = props.format === 'datetime' ? format.value.DateTime : props.format === 'date' ? format.value.Date : props.format;
+    return formatDate(date, f);
 }
 </script>

@@ -26,8 +26,8 @@
                     {{ formatLockoutDate(scope.row.lockoutEnd) }}
                 </template>
             </el-table-column>
-            <DateColumn prop="creationTime" :label="t('AbpIdentity.CreationTime')" width="180" format="yyyy-MM-dd HH:mm:ss"></DateColumn>
-            <ActionColumn width="120" align="center" :buttons="tableButtons"></ActionColumn>
+            <DateColumn prop="creationTime" :label="t('AbpIdentity.CreationTime')" width="180" />
+            <ActionColumn width="140" align="center" :buttons="tableButtons"></ActionColumn>
         </el-table>
 
         <!-- 底部分页工具栏 -->
