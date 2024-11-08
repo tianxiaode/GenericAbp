@@ -27,6 +27,8 @@ export class MenuRepository extends Repository<MenuType> {
         this.resourceName = "MenuManagement";
         this.entityGroup = "";  
         this.messageField = "name";
+        this.sortField = 'order'
+        this.sortOrder = 'asc'
     };
 
     get canManagePermissions(): boolean {

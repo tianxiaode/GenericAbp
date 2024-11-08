@@ -53,7 +53,7 @@ public class MenuRepository : EfCoreRepository<IMenuManagementDbContext, Menu, G
         return await (await GetDbSetAsync())
             .AsNoTracking()
             .WhereIf(!string.IsNullOrEmpty(groupName), m => m.GroupName == groupName)
-            .Where(m => EF.Functions.Like(m.Name, $"%{filter}%"))
+            .Where(m => EF.Functions.Like(m.Name, $"%{filter}%") || EF.Functions.Like(m.Router, $"%{filter}%"))
             .Select(m => m.Code)
             .ToListAsync(cancellationToken);
     }

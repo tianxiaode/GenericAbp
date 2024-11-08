@@ -53,3 +53,17 @@ export function splitArray(
     }
     return [arr1, arr2];
 }
+
+export function sortBy(data: any[], field: string, order: string) {
+    order = order.toLowerCase().startsWith("asc") ? "asc" : "desc";
+    data.sort((a: any, b: any) => {
+        let value1 = a[field];
+        let value2 = b[field];
+        if (typeof value1 === "number") {
+            return order === "asc" ? value1 - value2 : value2 - value1;
+        }
+        return order === "asc"
+            ? (value1 || "").localeCompare(value2 || "")
+            : (value2 || "").localeCompare(value1 || "");
+    });
+}
