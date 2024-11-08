@@ -30,9 +30,6 @@ const props = defineProps({
     valueField: {
         type: String
     },
-    relationalField: {
-        type: String
-    },
     label: {
         type: String,
         default: null
