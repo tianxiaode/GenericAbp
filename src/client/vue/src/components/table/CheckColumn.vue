@@ -1,7 +1,7 @@
 <template>
-    <el-table-column v-bind="$attrs"  align="center" :prop="props.prop">
-        <template #default="scope">
-            <el-checkbox v-model="scope.row[props.prop]" @change="checkChange(scope.row)"></el-checkbox>
+    <el-table-column v-bind="$attrs"  align="center">
+        <template #default="{row, column}">
+            <el-checkbox v-model="row[column.property]" @change="checkChange(row)"></el-checkbox>
         </template>
     </el-table-column>
 
@@ -9,11 +9,7 @@
 
 <script setup lang="ts">
 
-const props = defineProps({
-    prop: {
-        type: String,
-        required: true
-    },
+defineProps({
     checkChange: {
         type: Function,
         default: () => {}

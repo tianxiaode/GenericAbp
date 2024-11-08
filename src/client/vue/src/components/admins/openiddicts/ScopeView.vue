@@ -12,7 +12,7 @@
                 :filterText="filterText" />
             <HighlightColumn :label="t('OpenIddict.Scope:Description')" prop="description" width="full'" sortable
                 :filterText="filterText" />
-            <ActionColumn width="120" align="center" :buttons="tableButtons"></ActionColumn>
+            <ActionColumn width="90" align="center" :buttons="tableButtons"></ActionColumn>
         </el-table>
 
         <!-- 底部分页工具栏 -->

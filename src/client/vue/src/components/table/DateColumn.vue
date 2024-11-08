@@ -1,7 +1,7 @@
 <template>
-    <el-table-column v-bind="$attrs" :prop="props.prop">
-        <template #default="scope">
-            {{ render(scope.row[prop]) }}
+    <el-table-column v-bind="$attrs">
+        <template #default="{row, column}">
+            {{ render(row[column.property]) }}
         </template>
     </el-table-column>
 
@@ -14,10 +14,6 @@ const props = defineProps({
     format: {
         type: String,
         default: 'datetime'
-    },
-    prop: {
-        type: String,
-        default: 'lockoutEnd'
     }
 })
 

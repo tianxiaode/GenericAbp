@@ -29,12 +29,10 @@
                 sortable :filterText="filterText" />
             <HighlightColumn :label="t('AbpIdentity.SecurityLog:Action')" prop="action" width="full" sortable
                 :filterText="filterText">
-                <template #default="{ row, prop, filter }">
-                    <span v-if="row[prop] === 'LoginSucceeded'" class="text-success">{{ highlightText(row[prop], filter)
-                        }}</span>
-                    <span v-else-if="row[prop] === 'LoginFailed'" class="text-danger">{{ highlightText(row[prop], filter)
-                        }}</span>
-                    <span v-else>{{ highlightText(row[prop], filter) }}</span>
+                <template #default="{ row, column, filter }">
+                    <span 
+                        :class="row[column.property] === 'LoginSucceeded' ? 'text-success' : 'text-danger'"
+                        v-html="highlightText(row[column.property], filter)"></span>
                 </template>
             </HighlightColumn>
             <HighlightColumn :label="t('AbpIdentity.SecurityLog:Identity')" prop="identity" width="full" sortable
@@ -46,7 +44,7 @@
             <el-table-column :label="t('AbpIdentity.SecurityLog:ClientIpAddress')" prop="clientIpAddress" width="120"
                 sortable>
             </el-table-column>
-            <ActionColumn width="120" align="center" :buttons="tableButtons"></ActionColumn>
+            <ActionColumn width="90" align="center" :buttons="tableButtons"></ActionColumn>
         </el-table>
 
         <!-- 底部分页工具栏 -->

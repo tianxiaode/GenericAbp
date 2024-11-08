@@ -23,8 +23,8 @@
                 sortable :filterText="filterText" />
             <HighlightColumn :label="t('AbpAuditLogging.url')" prop="url" width="full" sortable
                 :filterText="filterText" >
-                <template #default="{ row,prop, filter }">
-                    <span v-html="highlightText(row[prop], filter)"></span>
+                <template #default="{ row,column, filter }">
+                    <span v-html="highlightText(row[column.property], filter)"></span>
                     <HttpMethod :value="row.httpMethod"></HttpMethod>
                     <HttpStatusCode :value="row.httpStatusCode"></HttpStatusCode>
                 </template>
@@ -33,7 +33,7 @@
                 :filterText="filterText" />
             <el-table-column :label="t('AbpAuditLogging.ClientIpAddress')" prop="clientIpAddress" width="120" sortable>
             </el-table-column>
-            <ActionColumn width="120" align="center" :buttons="tableButtons"></ActionColumn>
+            <ActionColumn width="80" align="center" :buttons="tableButtons"></ActionColumn>
         </el-table>
 
   

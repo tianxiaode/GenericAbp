@@ -16,7 +16,7 @@ declare type EntityFormConfigType = {
     beforeSubmit?: (data: any) => Promise<boolean>;
     afterSubmit?: (data: any, response: any) => Promise<void>;
     beforeClose?: () => Promise<boolean>;
-    afterClose?: () => Promise<void>;
+    afterClose?: (data:any) => Promise<void>;
 };
 
 export function useEntityForm(
@@ -66,10 +66,10 @@ export function useEntityForm(
         close();
     };
 
-    const close = () => {
+    const close = (data?: any) => {
         messageRef.value.clear();
         dialogVisible.value = false;
-        config.afterClose && config.afterClose();
+        config.afterClose && config.afterClose(data);
     };
 
     const submitForm = async () => {
@@ -94,7 +94,7 @@ export function useEntityForm(
                 config.afterSubmit &&
                     config.afterSubmit(formData.value, result);
                 setTimeout(() => {
-                    close();
+                    close(result);
                 }, 3000);
                 return result;
             } catch (err: any) {
@@ -159,7 +159,7 @@ export function useEntityForm(
                     config.afterGetData(data);
                 }
             } catch (e) {
-                logger.debug("[useEntityForm][onMounted]", e);
+                logger.error("[useEntityForm][onMounted]", e);
             }
         } else {
             setInitValues(config.initData || {});

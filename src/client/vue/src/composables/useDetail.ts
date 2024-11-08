@@ -1,5 +1,5 @@
 import { ref } from "vue";
-import { RowItemType } from "~/components/Detail.vue";
+import { RowItemType } from '~/components/lists/PropertyList.vue';
 import { capitalize, logger, Repository } from "~/libs";
 
 type OptionalLabelRowItemType = Omit<RowItemType, 'label'> & Partial<Pick<RowItemType, 'label'>>;

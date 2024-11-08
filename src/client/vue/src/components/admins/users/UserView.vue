@@ -27,7 +27,7 @@
                 </template>
             </el-table-column>
             <DateColumn prop="creationTime" :label="t('AbpIdentity.CreationTime')" width="180" />
-            <ActionColumn width="140" align="center" :buttons="tableButtons"></ActionColumn>
+            <ActionColumn width="100" align="center" :buttons="tableButtons"></ActionColumn>
         </el-table>
 
         <!-- 底部分页工具栏 -->

@@ -1,6 +1,6 @@
 <template>
     <div class="flex flex-col gap-2">
-        <div class="flex flex-row gap-2">
+        <div class="flex flex-row items-center gap-1">
             <slot name="action-items"></slot>
             <h3 class="title" style="order:100;">{{ title }}</h3> <!-- 显示父视图传递过来的 title -->
             <div class="spacer" style="order:200;"></div>
@@ -59,7 +59,7 @@ const {t} = useI18n();
 const defaultButtons = {
     create: {
         type: 'success',
-        icon: 'fa fa-plus',
+        icon: 'fa fa-plus font-size-6',
         order: 500,
         title: 'Components.New',
         visible: true,  // 默认显示

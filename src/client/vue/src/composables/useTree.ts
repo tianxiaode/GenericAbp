@@ -1,4 +1,4 @@
-import { EntityInterface, isEmpty, splitArray } from "~/libs";
+import { EntityInterface, isEmpty, logger, splitArray } from "~/libs";
 import { useTableBase } from "./useTableBase";
 import { useDelay } from "./useDelay";
 import { ref } from "vue";
@@ -6,7 +6,7 @@ import { ref } from "vue";
 export function useTree<T extends EntityInterface>(api: any) {
     const { delay} = useDelay();
     const isFilter = ref(false);
-    const loadData = (records: T[]) => {
+    const loaded = (records: T[]) => {
         if (isFilter.value) {
             data.value = getChildren(records, null);
         } else {
@@ -25,12 +25,17 @@ export function useTree<T extends EntityInterface>(api: any) {
         })
     }
 
-    const refresh = async (row: any) =>{
-        const id = row.id;
-        const data = await api.getList({parentId: id});
-        data.forEach((item: any) => {
-            item.hasChildren = !item.leaf;
-        });
+    const refresh = async (id: string | number) =>{
+        const row: any = data.value.find((item: any) => item.id === id);
+        if(row){
+            row.expanded = false;
+            row.isLoaded = false;
+            row.items = null;
+            data.value = data.value.filter((item: any) => !item.code.startsWith(row.code+'.'));
+            expandNode(row, true);
+        }else{
+            logger.error('[useTree][refresh]', 'row not found', id);
+        }
     }
 
     const {
@@ -46,7 +51,7 @@ export function useTree<T extends EntityInterface>(api: any) {
         checkChange,
         sortChange,
         formClose,
-    } = useTableBase(api, loadData, filter);
+    } = useTableBase(api, loaded, filter);
 
     const getChildren = (data: any, id: any) => {
         let children = [...data.filter((item: any) => item.parentId === id)];
@@ -82,19 +87,35 @@ export function useTree<T extends EntityInterface>(api: any) {
         //根据id，获取子节点
         if(row.isLoaded){
             //如果item.expanded为true，说明改节点已展开，需要把子节点数据添加到显示列表中
-            row.children?.forEach((item:any) => {
+            row.items?.forEach((item:any) => {
                 item.expanded = false;
             });
-            data.value = [...firstData, ...row.children, ...lastData];
+            data.value = [...firstData, ...row.items, ...lastData];
             return;
-        }        
+        }
+        //如果item.expanded为false，说明改节点未展开，需要异步加载子节点数据
         const loadData = await api.getList({parentId: id});
-        row.children = loadData;
-        data.value = [...firstData, ...row.children, ...lastData];
+        if(loadData.length === 0){
+            row.leaf = true;
+            row.expanded = false;
+            row.isLoaded = false
+            data.value = [...firstData, ...lastData];
+            return;
+        }
+        row.items = loadData;
+        data.value = [...firstData, ...row.items, ...lastData];
         row.isLoaded = true;
 
     }
 
+    const refreshButton = () => {
+        return {
+            action: (row:any)=> refresh(row.id) , 
+            icon: 'fa fa-refresh text-primary', 
+            title: 'Components.Refresh', order: 5, 
+            visible: true
+        }
+    }
     
 
     return {
@@ -105,6 +126,7 @@ export function useTree<T extends EntityInterface>(api: any) {
         dialogVisible,
         currentEntityId,
         isFilter,
+        refreshButton,
         refresh,
         filter,
         create,

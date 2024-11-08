@@ -11,7 +11,7 @@
             <el-table-column :label="t('OpenIddict.Application:DisplayName')" prop="displayName" width="full" sortable> </el-table-column>
             <el-table-column :label="t('OpenIddict.Application:ApplicationType')" prop="applicationType" width="180"  sortable> </el-table-column>
             <el-table-column :label="t('OpenIddict.Application:ClientType')" prop="clientType" width="180"  sortable> </el-table-column>
-            <ActionColumn width="120" align="center" :buttons="tableButtons"></ActionColumn>
+            <ActionColumn width="100" align="center" :buttons="tableButtons"></ActionColumn>
         </el-table>
 
         <!-- 底部分页工具栏 -->

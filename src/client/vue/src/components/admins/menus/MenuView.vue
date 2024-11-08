@@ -10,7 +10,6 @@
         </ActionToolbar>
         <el-table :data="data" stripe border style="width: 100%" @sort-change="sortChange"
             :default-sort="{ prop: 'order', order: 'ascending' }" row-key="id"
-            :tree-props="{ children: 'items' }"
             >
             <TreeColumn prop="name" :label="t('MenuManagement.Menu:Name')" width="full" sortable :filterText="filterText" 
                 :expand="expandNode"
@@ -29,7 +28,7 @@
                 sortable></el-table-column>
             <CheckColumn :label="t('MenuManagement.Menu:IsEnabled')" prop="isEnabled" width="100"
                 :filterText="filterText" :checkChange="checkChange"></CheckColumn>
-            <ActionColumn width="140" align="center" :buttons="tableButtons"></ActionColumn>
+            <ActionColumn width="160" align="center" :buttons="tableButtons"></ActionColumn>
         </el-table>
     </div>
 
@@ -64,7 +63,7 @@ const openPermissionWindow = (row: MenuType) => {
 
 const {
     data, dialogVisible, currentEntityId,
-    filterText, refresh,
+    filterText, refreshButton,
     create, update, remove, checkChange, filter, 
     sortChange, expandNode } = useTree<MenuType>(api);
 
@@ -83,7 +82,7 @@ watch(groupName, () => {
 
 
 const tableButtons = {
-    refresh: { action: refresh, icon: 'fa fa-refresh text-primary', title: 'Components.Refresh', order: 450, visible: true },
+    refresh: refreshButton(),
     detail:{ visible: false},
     edit: { action: update, disabled:(row: MenuType) => row.isStatic, visible: api.canUpdate },
     delete: { action: remove, disabled:(row: MenuType) => row.isStatic, visible: api.canDelete },

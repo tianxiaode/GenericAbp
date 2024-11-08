@@ -2,7 +2,7 @@ import { EntityInterface,  LocalStorage } from "../libs";
 import { onMounted, onUnmounted, ref,watch } from "vue";
 import router from "~/router";
 
-export function useTableBase<T extends EntityInterface>(api: any, loadData: any, filter: any) {
+export function useTableBase<T extends EntityInterface>(api: any, loaded: any,refresh: any) {
 
     const resourceName = api.resourceName;
     const entity = api.entity;
@@ -40,7 +40,8 @@ export function useTableBase<T extends EntityInterface>(api: any, loadData: any,
     };
 
     const formClose = () => {
-        api.load();
+        refresh(currentEntityId.value)
+        //api.load();
     };
 
     watch(dialogVisible, (isVisible) => {
@@ -53,12 +54,12 @@ export function useTableBase<T extends EntityInterface>(api: any, loadData: any,
             LocalStorage.setRedirectPath(router.currentRoute.value.path);
             router.push('/login');
         }
-        api.on('load', loadData);
+        api.on('load', loaded);
         api.load();
     });
 
     onUnmounted(() => {
-        api.un('load', loadData);
+        api.un('load', loaded);
     });
 
     return {

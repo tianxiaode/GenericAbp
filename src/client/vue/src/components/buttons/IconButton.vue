@@ -1,5 +1,5 @@
 <template>
-    <el-button v-bind="{circle: true, ...$attrs}" :title="t(title)">
+    <el-button v-bind="{link: true, ...$attrs}" :title="t(title)">
         <template #icon>
             <i :class="icon"></i>
         </template>

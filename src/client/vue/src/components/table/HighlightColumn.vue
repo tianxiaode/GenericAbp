@@ -1,8 +1,8 @@
 <template>
     <el-table-column v-bind="$attrs">
-        <template #default="scope">
-            <slot name="default" :row="scope.row" :column="scope.column" :index="scope.index" :filter="filterText"  >
-                <span v-html="highlightText(scope.row[scope.column.prop], filterText)"></span>
+        <template #default="{row, column, index}">
+            <slot name="default" :row="row" :column="column" :index="index" :filter="filterText"  >
+                <span v-html="highlightText(row[column.property], filterText)"></span>
             </slot>
         </template>    
     </el-table-column>

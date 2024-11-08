@@ -12,7 +12,7 @@
                 :check-change="checkChange" prop="isDefault"></CheckColumn>
             <CheckColumn :label="t('AbpIdentity.DisplayName:IsPublic')" width="120" sortable :check-change="checkChange"
                 prop="isPublic"></CheckColumn>
-            <ActionColumn width="120" align="center" :buttons="tableButtons"></ActionColumn>
+            <ActionColumn width="100" align="center" :buttons="tableButtons"></ActionColumn>
         </el-table>
 
         <!-- 底部分页工具栏 -->

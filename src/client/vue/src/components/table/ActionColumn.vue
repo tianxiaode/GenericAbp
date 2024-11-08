@@ -1,13 +1,14 @@
 <template>
     <el-table-column v-bind="$attrs" :label="t(label)" align="center">
         <template #default="scope">
-            <div class="flex justify-center items-center gap-2">
+            <div class="flex justify-center items-center gap-1">
                 <!-- 按钮循环渲染 -->
                 <div v-for="(button, icon) in buttonsList" :key="icon" :style="{ order: button.order }">
                     <IconButton
                         v-if="handleButtonVisibility(button,scope.row)"
                         v-bind="button"
                         size="small"
+                        link
                         :disabled="handleButtonDisabled(button,scope.row)" 
                         @click="handleButtonClick(button, scope.row)"
                         :id="`button-${scope.row.id}-${button.icon}`"
