@@ -8,24 +8,7 @@ export function useTree<T extends EntityInterface>(api: any, defaultSort:Record<
     const isFilter = ref(false);
     const sorts = ref<Record<string, 'ascending' | 'descending' | null>>({...defaultSort});
     const loaded = (records: T[]) => {
-        if (isFilter.value) {
-            const originalData = [...data.value];
-            //找出records存在于originalData中的数据并移除，然后将records余下的数据插入到originalData中
-            records.forEach((record: any) => {
-                const index = originalData.findIndex(
-                    (item: any) => item.id === record.id
-                );
-                if (index === -1) {
-                    originalData.push(record);
-                } else {
-                    record.expanded = true;
-                }
-            });
-            data.value = sort(originalData);
-        } else {
-            data.value = records;
-        }
-        return;
+        data.value = sort(records);
     };
 
     const filter = (filter: string) => {
@@ -63,11 +46,10 @@ export function useTree<T extends EntityInterface>(api: any, defaultSort:Record<
     };
 
     const sort = (data: any[]) => {
-        // 首先对整个数据进行排序
-        //sortBy(data, api.sortField, api.sortOrder || 'asc');
 
         // 找到所有根节点
         const roots = data.filter((item: any) => !item.parentId);
+        //先对根节点排序
         sortBy(roots, api.sortField, api.sortOrder || "asc");
         const result: any[] = [];
 
@@ -75,7 +57,7 @@ export function useTree<T extends EntityInterface>(api: any, defaultSort:Record<
         roots.forEach((item: any) => {
             result.push(item);
             // 递归获取并插入子节点
-            getSortChildren(data, item.id, result);
+            getSortChildren(data, item, result);
         });
         console.log(result);
         return result; // 返回最终的平面数据
@@ -84,12 +66,17 @@ export function useTree<T extends EntityInterface>(api: any, defaultSort:Record<
     // 对指定parentId的子节点进行排序并插入到结果中
     const getSortChildren = (
         data: any[],
-        parentId: string | null,
+        parent: any,
         result: any[]
     ) => {
         // 找到当前parentId的所有子节点
-        const children = data.filter((item: any) => item.parentId === parentId);
+        const children = data.filter((item: any) => item.parentId === parent.id);
 
+        if(children.length === 0){
+            return;
+        }
+
+        parent.expanded = true;
         // 对子节点进行排序
         sortBy(children, api.sortField, api.sortOrder || "asc");
 
@@ -97,7 +84,7 @@ export function useTree<T extends EntityInterface>(api: any, defaultSort:Record<
         children.forEach((child: any) => {
             result.push(child);
             // 递归调用以获取并插入子节点的子节点
-            getSortChildren(data, child.id, result);
+            getSortChildren(data, child, result);
         });
     };
 

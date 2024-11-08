@@ -79,6 +79,10 @@ export class Repository<T extends EntityInterface> extends BaseRepository<T> {
         if (load) this.load();
     };
 
+    getSearCh = () =>{
+        return this._search;
+    }
+
     getEntity = async (id: string | number, loadAdditionalData?: boolean): Promise<T | undefined> => {
         const url = this.handleUrlId(this.readUrl, id);
         try {
