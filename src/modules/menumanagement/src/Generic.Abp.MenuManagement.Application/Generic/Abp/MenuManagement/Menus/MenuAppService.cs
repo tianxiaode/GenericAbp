@@ -4,13 +4,11 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Generic.Abp.Extensions.Entities.MultiLingual;
 using Generic.Abp.Extensions.Entities.Permissions;
 using Generic.Abp.Extensions.Entities.Trees;
 using Generic.Abp.Extensions.Exceptions;
-using Generic.Abp.Extensions.Extensions;
 using Generic.Abp.Extensions.Validates;
 using Generic.Abp.MenuManagement.Menus.Dtos;
 using Generic.Abp.MenuManagement.Permissions;
@@ -18,6 +16,7 @@ using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Authorization;
 using Volo.Abp.Domain.ChangeTracking;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.Localization;
 using Volo.Abp.Uow;
 
@@ -48,24 +47,35 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
     }
 
     [UnitOfWork]
-    //[Authorize(MenuManagementPermissions.Menus.Default)]
+    [Authorize(MenuManagementPermissions.Menus.Default)]
     public virtual async Task<ListResultDto<MenuDto>> GetListAsync(MenuGetListInput input)
     {
         List<Menu> list;
-        if (string.IsNullOrEmpty(input.Filter))
-        {
-            Expression<Func<Menu, bool>> predicate = string.IsNullOrEmpty(input.GroupName)
-                ? m => true
-                : m => m.GroupName.ToLower() == input.GroupName.ToLowerInvariant();
-            list = await Repository.GetListAsync(predicate.AndIfNotTrue(m => m.ParentId == input.ParentId),
-                input.Sorting);
-        }
-        else
+        if (!string.IsNullOrEmpty(input.Filter))
         {
             list = await GetSearchMenuList(input);
         }
+        else
+        {
+            if (input.ParentId == null)
+            {
+                //如果没有指定父节点，则获取所有根节点
+                list = await Repository.GetListAsync(m => m.ParentId == null);
+            }
+            else
+            {
+                //如果指定了父节点，则获取所有子节点
+                var parent = await Repository.GetAsync(input.ParentId.Value);
+                list = await Repository.GetListAsync(m => m.Code.StartsWith(parent.Code + "."));
+            }
+        }
 
         var dtos = ObjectMapper.Map<List<Menu>, List<MenuDto>>(list);
+        if (input.ParentId.HasValue || !string.IsNullOrEmpty(input.Filter))
+        {
+            return new ListResultDto<MenuDto>(dtos);
+        }
+
         foreach (var dto in dtos)
         {
             dto.Leaf = !await Repository.HasChildAsync(dto.Id);
@@ -74,12 +84,18 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
         return new ListResultDto<MenuDto>(dtos);
     }
 
+    //获取用于显示的菜单列表
     [UnitOfWork]
     [AllowAnonymous]
-    public virtual async Task<ListResultDto<MenuDto>> GetListByGroupAsync(string group)
+    public virtual async Task<ListResultDto<MenuDto>> GetShowListAsync(string name)
     {
-        var list = await Repository.GetListAsync(m => m.GroupName.ToLower() == group.ToLowerInvariant() && m.IsEnabled,
-            "Order");
+        var parent = await Repository.FindAsync(m => m.Name.ToLower() == name.ToLowerInvariant() && m.ParentId == null);
+        if (parent is null)
+        {
+            throw new EntityNotFoundException(typeof(Menu), name);
+        }
+
+        var list = await Repository.GetListAsync(m => m.Code.StartsWith(parent.Code + ".") && m.IsEnabled);
         var dtos = await GetChildrenAsync(null, list);
 
         return new ListResultDto<MenuDto>(dtos);
@@ -101,8 +117,6 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
     public virtual async Task<MenuDto> UpdateAsync(Guid id, MenuUpdateDto input)
     {
         var entity = await Repository.GetAsync(id);
-        var isUpdateGroup =
-            !string.Equals(entity.GroupName, input.GroupName, StringComparison.InvariantCultureIgnoreCase);
         CheckIsStaticMenu(entity);
         if (!string.Equals(input.Name, entity.Name, StringComparison.OrdinalIgnoreCase))
         {
@@ -112,19 +126,6 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
         entity.ConcurrencyStamp = input.ConcurrencyStamp;
         await UpdateMenuByInputAsync(entity, input);
         await MenuManager.UpdateAsync(entity);
-        //如果组名发生变化，则需要更新所有子菜单的组名
-        if (!isUpdateGroup)
-        {
-            return ObjectMapper.Map<Menu, MenuDto>(entity);
-        }
-
-        var allChildren = await Repository.GetListAsync(m => m.Code.StartsWith(entity.Code));
-        foreach (var child in allChildren)
-        {
-            child.SetGroupName(input.GroupName);
-        }
-
-        await Repository.UpdateManyAsync(allChildren);
         return ObjectMapper.Map<Menu, MenuDto>(entity);
     }
 
@@ -174,17 +175,6 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
 
     #endregion
 
-    #region 菜单组
-
-    [DisableEntityChangeTracking]
-    [Authorize(MenuManagementPermissions.Menus.Default)]
-    public virtual async Task<ListResultDto<string>> GetAllGroupNamesAsync()
-    {
-        var list = await Repository.GetAllGroupNamesAsync();
-        return new ListResultDto<string>(list);
-    }
-
-    #endregion
 
     #region 权限
 
@@ -282,7 +272,7 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
 
         var allParents = await GetAllParents(codes);
 
-        return await Repository.GetListAsync(m => allParents.Contains(m.Code), input.Sorting);
+        return await Repository.GetListAsync(m => allParents.Contains(m.Code));
     }
 
 
@@ -302,20 +292,8 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
     }
 
 
-    protected virtual async Task UpdateMenuByInputAsync(Menu entity, MenuCreateOrUpdateDto input)
+    protected virtual Task UpdateMenuByInputAsync(Menu entity, MenuCreateOrUpdateDto input)
     {
-        if (!entity.ParentId.HasValue && string.IsNullOrEmpty(input.GroupName))
-        {
-            throw new UserFriendlyException(string.Format(L["The {0} field is required."], L["Menu:GroupName"]));
-        }
-
-        if (entity.ParentId.HasValue)
-        {
-            var parent = await Repository.GetAsync(entity.ParentId.Value);
-            entity.SetGroupName(parent.GroupName);
-        }
-
-
         entity.SetIcon(input.Icon);
         entity.SetOrder(input.Order);
         entity.SetRouter(input.Router);
@@ -328,6 +306,8 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
         {
             entity.Disable();
         }
+
+        return Task.CompletedTask;
     }
 
     protected virtual void CheckIsStaticMenu(Menu menu)

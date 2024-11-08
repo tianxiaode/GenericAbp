@@ -24,7 +24,6 @@ public class Menu : AuditedAggregateRoot<Guid>, ITree<Menu>, IMultiTenant, IHasE
     [Display(Name = "Menu:IsStatic")] public virtual bool IsStatic { get; protected set; }
     [Display(Name = "Menu:Order")] public virtual int Order { get; protected set; }
     [Display(Name = "Menu:Router")] public virtual string? Router { get; protected set; } = default!;
-    [Display(Name = "Menu:GroupName")] public virtual string GroupName { get; protected set; } = default!;
 
     public Menu(Guid id, Guid? parentId, string name, Guid? tenantId = null,
         bool isStatic = false) : base(id)
@@ -64,11 +63,6 @@ public class Menu : AuditedAggregateRoot<Guid>, ITree<Menu>, IMultiTenant, IHasE
         }
 
         Router = router;
-    }
-
-    public virtual void SetGroupName(string groupName)
-    {
-        GroupName = groupName;
     }
 
     public virtual void SetOrder(int order)

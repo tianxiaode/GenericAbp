@@ -11,13 +11,12 @@ public interface IMenuAppService : IApplicationService
 {
     Task<MenuDto> GetAsync(Guid id);
     Task<ListResultDto<MenuDto>> GetListAsync(MenuGetListInput input);
-    Task<ListResultDto<MenuDto>> GetListByGroupAsync(string group);
+    Task<ListResultDto<MenuDto>> GetShowListAsync(string name);
     Task<MenuDto> CreateAsync(MenuCreateDto input);
     Task<MenuDto> UpdateAsync(Guid id, MenuUpdateDto input);
     Task<ListResultDto<MenuDto>> DeleteAsync(Guid id);
     Task<Dictionary<string, object>> GetMultiLingualAsync(Guid id);
     Task UpdateMultiLingualAsync(Guid id, Dictionary<string, object> input);
-    Task<ListResultDto<string>> GetAllGroupNamesAsync();
     Task<List<string>> GetPermissionsListAsync(Guid id);
     Task UpdatePermissionsAsync(Guid id, List<string> input);
 }

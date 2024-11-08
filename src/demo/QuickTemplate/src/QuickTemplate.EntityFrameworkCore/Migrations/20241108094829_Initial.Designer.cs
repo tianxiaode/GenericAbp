@@ -13,8 +13,8 @@ using Volo.Abp.EntityFrameworkCore;
 namespace QuickTemplate.Migrations
 {
     [DbContext(typeof(QuickTemplateDbContext))]
-    [Migration("20241101074607_Add-Menus")]
-    partial class AddMenus
+    [Migration("20241108094829_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -63,12 +63,6 @@ namespace QuickTemplate.Migrations
                         .IsRequired()
                         .HasColumnType("longtext")
                         .HasColumnName("ExtraProperties");
-
-                    b.Property<string>("GroupName")
-                        .IsRequired()
-                        .HasMaxLength(128)
-                        .HasColumnType("varchar(128)")
-                        .UseCollation("ascii_general_ci");
 
                     b.Property<string>("Icon")
                         .HasMaxLength(128)
@@ -123,8 +117,6 @@ namespace QuickTemplate.Migrations
                     b.HasIndex("Name");
 
                     b.HasIndex("ParentId");
-
-                    b.HasIndex("GroupName", "Order");
 
                     b.ToTable("MenuManagementMenus", (string)null);
                 });

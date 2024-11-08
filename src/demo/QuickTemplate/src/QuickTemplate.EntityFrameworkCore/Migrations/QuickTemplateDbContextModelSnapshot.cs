@@ -61,12 +61,6 @@ namespace QuickTemplate.Migrations
                         .HasColumnType("longtext")
                         .HasColumnName("ExtraProperties");
 
-                    b.Property<string>("GroupName")
-                        .IsRequired()
-                        .HasMaxLength(128)
-                        .HasColumnType("varchar(128)")
-                        .UseCollation("ascii_general_ci");
-
                     b.Property<string>("Icon")
                         .HasMaxLength(128)
                         .HasColumnType("varchar(128)")
@@ -120,8 +114,6 @@ namespace QuickTemplate.Migrations
                     b.HasIndex("Name");
 
                     b.HasIndex("ParentId");
-
-                    b.HasIndex("GroupName", "Order");
 
                     b.ToTable("MenuManagementMenus", (string)null);
                 });

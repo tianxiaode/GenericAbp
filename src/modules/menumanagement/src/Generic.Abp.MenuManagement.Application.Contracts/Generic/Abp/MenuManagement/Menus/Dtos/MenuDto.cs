@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Volo.Abp.Application.Dtos;
-using Volo.Abp.Data;
 
 namespace Generic.Abp.MenuManagement.Menus.Dtos;
 
@@ -17,7 +16,6 @@ public class MenuDto : ExtensibleAuditedEntityDto<Guid>
     public bool IsStatic { get; set; } = default!;
     public int Order { get; set; } = default!;
     public string? Router { get; set; } = default!;
-    public string GroupName { get; set; } = default!;
     public string ConcurrencyStamp { get; set; } = default!;
     public MenuDto? Parent { get; set; } = default!;
     public List<MenuDto>? Children { get; set; } = default!;

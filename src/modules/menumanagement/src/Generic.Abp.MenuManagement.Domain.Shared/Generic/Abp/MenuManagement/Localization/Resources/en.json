@@ -15,7 +15,6 @@
     "Menu:IsStatic": "Static",
     "Menu:Order": "Order",
     "Menu:Router": "Router",
-    "Menu:GroupName": "Group Name",
     "Menu:Parent": "Parent",
     "MenuEntityVersion": "Entity Version"
   }

@@ -1,9 +1,9 @@
-﻿using Generic.Abp.MenuManagement.Menus.Dtos;
+﻿using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Asp.Versioning;
+using Generic.Abp.MenuManagement.Menus.Dtos;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 
@@ -37,10 +37,10 @@ public class MenuController : MenuManagementController, IMenuAppService
     }
 
     [HttpGet]
-    [Route(("by-group/{groupName}"))]
-    public async Task<ListResultDto<MenuDto>> GetListByGroupAsync(string groupName)
+    [Route(("show/{name}"))]
+    public async Task<ListResultDto<MenuDto>> GetShowListAsync(string name)
     {
-        return await AppService.GetListByGroupAsync(groupName);
+        return await AppService.GetShowListAsync(name);
     }
 
     [HttpPost]
@@ -77,12 +77,6 @@ public class MenuController : MenuManagementController, IMenuAppService
         await AppService.UpdateMultiLingualAsync(id, input);
     }
 
-    [HttpGet]
-    [Route("groups")]
-    public async Task<ListResultDto<string>> GetAllGroupNamesAsync()
-    {
-        return await AppService.GetAllGroupNamesAsync();
-    }
 
     [HttpGet]
     [Route("{id:guid}/permissions")]

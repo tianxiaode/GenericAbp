@@ -24,10 +24,6 @@ public class MenuCreateOrUpdateDto
 
     [DisplayName("Menu:ISEnabled")] public bool IsEnabled { get; set; } = true;
 
-    [DynamicMaxLength(typeof(MenuConsts), nameof(MenuConsts.GroupNameMaxLength))]
-    [DisplayName("Menu:GroupName")]
-    public string GroupName { get; set; } = default!;
-
     [DisplayName("Menu:Order")] public int Order { get; set; } = 1;
 
     [DisplayName("Menu:ParentName")] public Guid? ParentId { get; set; } = default!;

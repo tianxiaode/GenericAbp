@@ -32,11 +32,12 @@ public class MenuDataSeed : ITransientDependency, IMenuDataSeed
     [UnitOfWork]
     public async Task SeedAsync(Guid? tenantId = null)
     {
-        const string defaultMenuGroup = "default";
+        var defaultMenu = new Menu(GuidGenerator.Create(), null, "Default", tenantId, true);
+        defaultMenu.SetOrder(1);
+        await MenuManager.CreateAsync(defaultMenu);
 
-        var dashboard = new Menu(GuidGenerator.Create(), null, "Dashboard", tenantId, true);
+        var dashboard = new Menu(GuidGenerator.Create(), defaultMenu.Id, "Dashboard", tenantId, true);
         dashboard.SetOrder(1);
-        dashboard.SetGroupName(defaultMenuGroup);
         dashboard.SetIcon("fa fa-home");
         dashboard.SetRouter("dashboard");
         ;
@@ -51,8 +52,7 @@ public class MenuDataSeed : ITransientDependency, IMenuDataSeed
 
 
         var systemsMaintenance =
-            new Menu(GuidGenerator.Create(), null, "Systems Maintenance", tenantId, true);
-        systemsMaintenance.SetGroupName(defaultMenuGroup);
+            new Menu(GuidGenerator.Create(), defaultMenu.Id, "Systems Maintenance", tenantId, true);
         systemsMaintenance.SetOrder(100);
         systemsMaintenance.SetIcon("fa fa-cogs");
         systemsMaintenance.SetMultiLingual(new Dictionary<string, object>()
@@ -67,7 +67,6 @@ public class MenuDataSeed : ITransientDependency, IMenuDataSeed
 
         var identityManagement = new Menu(GuidGenerator.Create(), systemsMaintenance.Id, "Identity Management",
             tenantId, true);
-        identityManagement.SetGroupName(defaultMenuGroup);
         identityManagement.SetOrder(101);
         identityManagement.SetIcon("fa fa-id-card");
         identityManagement.SetMultiLingual(new Dictionary<string, object>()
@@ -80,7 +79,6 @@ public class MenuDataSeed : ITransientDependency, IMenuDataSeed
         await MenuManager.CreateAsync(identityManagement);
 
         var users = new Menu(GuidGenerator.Create(), identityManagement.Id, "Users", tenantId, true);
-        users.SetGroupName(defaultMenuGroup);
         users.SetOrder(102);
         users.SetIcon("fa fa-users");
         users.SetRouter("users");
@@ -97,7 +95,6 @@ public class MenuDataSeed : ITransientDependency, IMenuDataSeed
 
 
         var roles = new Menu(GuidGenerator.Create(), identityManagement.Id, "Roles", tenantId, true);
-        roles.SetGroupName(defaultMenuGroup);
         roles.SetOrder(104);
         roles.SetIcon("fa fa-user-shield");
         roles.SetRouter("roles");
@@ -112,7 +109,6 @@ public class MenuDataSeed : ITransientDependency, IMenuDataSeed
 
         var securityLogManagement = new Menu(GuidGenerator.Create(), identityManagement.Id, "Security Logs",
             tenantId, true);
-        securityLogManagement.SetGroupName(defaultMenuGroup);
         securityLogManagement.SetOrder(105);
         securityLogManagement.SetIcon("user-shield");
         securityLogManagement.SetRouter("security-logs");
@@ -129,7 +125,6 @@ public class MenuDataSeed : ITransientDependency, IMenuDataSeed
         {
             var openIdDictManagement = new Menu(GuidGenerator.Create(), systemsMaintenance.Id, "OpenId Dict",
                 isStatic: true);
-            openIdDictManagement.SetGroupName(defaultMenuGroup);
             openIdDictManagement.SetOrder(106);
             openIdDictManagement.SetIcon("fa fa-shield");
             openIdDictManagement.SetMultiLingual(new Dictionary<string, object>()
@@ -143,7 +138,6 @@ public class MenuDataSeed : ITransientDependency, IMenuDataSeed
 
             var applications = new Menu(GuidGenerator.Create(), openIdDictManagement.Id, "Applications",
                 isStatic: true);
-            applications.SetGroupName(defaultMenuGroup);
             applications.SetOrder(107);
             applications.SetIcon("fa fa-anchor-lock");
             applications.SetRouter("applications");
@@ -158,7 +152,6 @@ public class MenuDataSeed : ITransientDependency, IMenuDataSeed
             await MenuManager.CreateAsync(applications);
 
             var scopes = new Menu(GuidGenerator.Create(), openIdDictManagement.Id, "Scopes", isStatic: true);
-            scopes.SetGroupName(defaultMenuGroup);
             scopes.SetOrder(108);
             scopes.SetRouter("scopes");
             scopes.SetIcon("fa fa-anchor");
@@ -173,7 +166,6 @@ public class MenuDataSeed : ITransientDependency, IMenuDataSeed
             await MenuManager.CreateAsync(scopes);
 
             var tenants = new Menu(GuidGenerator.Create(), systemsMaintenance.Id, "Tenants", isStatic: true);
-            tenants.SetGroupName(defaultMenuGroup);
             tenants.SetOrder(109);
             tenants.SetIcon("fa fa-building-user");
             tenants.SetRouter("tenants");
@@ -190,7 +182,6 @@ public class MenuDataSeed : ITransientDependency, IMenuDataSeed
 
             var settings = new Menu(GuidGenerator.Create(), systemsMaintenance.Id, "Settings",
                 isStatic: true);
-            settings.SetGroupName(defaultMenuGroup);
             settings.SetOrder(110);
             settings.SetIcon("fa fa-cog");
             settings.SetRouter("settings");
@@ -205,7 +196,6 @@ public class MenuDataSeed : ITransientDependency, IMenuDataSeed
 
             var auditLogs = new Menu(GuidGenerator.Create(), systemsMaintenance.Id, "Audit Logs",
                 isStatic: true);
-            auditLogs.SetGroupName(defaultMenuGroup);
             auditLogs.SetOrder(111);
             auditLogs.SetIcon("fa fa-file-lines");
             auditLogs.SetRouter("audit-logs");
@@ -222,7 +212,6 @@ public class MenuDataSeed : ITransientDependency, IMenuDataSeed
         }
 
         var menus = new Menu(GuidGenerator.Create(), systemsMaintenance.Id, "Menus", tenantId, true);
-        menus.SetGroupName(defaultMenuGroup);
         menus.SetOrder(111);
         menus.SetIcon("fa fa-list");
         menus.SetRouter("menus");
