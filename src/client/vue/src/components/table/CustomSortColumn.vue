@@ -1,6 +1,6 @@
 <template>
     <el-table-column v-bind="$attrs">
-        <template #header="{ row, column }">
+        <template #header="{ column }">
             <div :class="`flex flex-row items-center w-full cursor-pointer ${order || ''}`" @click="sortChange(column.property)">
                 {{ column.label }}
                 <span class="caret-wrapper">

@@ -1,4 +1,4 @@
-import { EntityInterface, http, isEmpty, isGranted, logger, Repository } from "../libs";
+import { EntityInterface, http, isGranted, logger, Repository } from "../libs";
 
 export interface MenuType extends EntityInterface {
     code: String,

@@ -3,22 +3,15 @@ import { useTableBase } from "./useTableBase";
 import { useDelay } from "./useDelay";
 import { ref } from "vue";
 
-export function useTree<T extends EntityInterface>(api: any, defaultSort:Record<string,'ascending' | 'descending'> = {}) {
-    const { delay } = useDelay();
-    const isFilter = ref(false);
-    const sorts = ref<Record<string, 'ascending' | 'descending' | null>>({...defaultSort});
+export function useTree<T extends EntityInterface>(
+    api: any,
+    defaultSort: Record<string, "ascending" | "descending"> = {}
+) {
+    const sorts = ref<Record<string, "ascending" | "descending" | null>>({
+        ...defaultSort,
+    });
     const loaded = (records: T[]) => {
         data.value = sort(records);
-    };
-
-    const filter = (filter: string) => {
-        delay(() => {
-            isFilter.value = !isEmpty(filter);
-            filterText.value = filter;
-            setTimeout(() => {
-                api.filter = filter;
-            }, 50);
-        });
     };
 
     const refresh = async (id: string | number) => {
@@ -36,7 +29,10 @@ export function useTree<T extends EntityInterface>(api: any, defaultSort:Record<
         }
     };
 
-    const sortChange = (field:string, order: 'ascending' | 'descending' | null) => {
+    const sortChange = (
+        field: string,
+        order: "ascending" | "descending" | null
+    ) => {
         sorts.value[api.sortField] = null;
         sorts.value[field] = order;
         api.sortField = field;
@@ -46,7 +42,6 @@ export function useTree<T extends EntityInterface>(api: any, defaultSort:Record<
     };
 
     const sort = (data: any[]) => {
-
         // 找到所有根节点
         const roots = data.filter((item: any) => !item.parentId);
         //先对根节点排序
@@ -64,15 +59,13 @@ export function useTree<T extends EntityInterface>(api: any, defaultSort:Record<
     };
 
     // 对指定parentId的子节点进行排序并插入到结果中
-    const getSortChildren = (
-        data: any[],
-        parent: any,
-        result: any[]
-    ) => {
+    const getSortChildren = (data: any[], parent: any, result: any[]) => {
         // 找到当前parentId的所有子节点
-        const children = data.filter((item: any) => item.parentId === parent.id);
+        const children = data.filter(
+            (item: any) => item.parentId === parent.id
+        );
 
-        if(children.length === 0){
+        if (children.length === 0) {
             return;
         }
 
@@ -98,9 +91,10 @@ export function useTree<T extends EntityInterface>(api: any, defaultSort:Record<
         create,
         update,
         remove,
+        filter,
         checkChange,
         formClose,
-    } = useTableBase(api, loaded, filter);
+    } = useTableBase(api, loaded, refresh);
 
     const expandNode = async (row: any, expanded: boolean) => {
         const id = row.id;
@@ -163,7 +157,6 @@ export function useTree<T extends EntityInterface>(api: any, defaultSort:Record<
         filterText,
         dialogVisible,
         currentEntityId,
-        isFilter,
         sorts,
         refreshButton,
         refresh,
