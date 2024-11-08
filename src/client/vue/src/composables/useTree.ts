@@ -8,7 +8,29 @@ export function useTree<T extends EntityInterface>(api: any) {
     const isFilter = ref(false);
     const loaded = (records: T[]) => {
         if (isFilter.value) {
-            data.value = getChildren(records, null);
+            //如果是过滤状态,先判断data.value是否已存在，如果存在，则在records中将其去掉
+            const existRecords = data.value.filter((item: any) => records.some((r: any) => r.id === item.id));
+            records = records.filter((item: any) => !existRecords.some((r: any) => r.id === item.id));
+            //提取同一父id的节点
+            const parentIds = records.map((item: any) => item.parentId).filter((item: any, index: number, arr: any) => arr.indexOf(item) === index);
+            //获取父并按层次结构排序，以便于按层次插入data.value
+            const parents = existRecords.filter((item: any) => parentIds.includes(item.id)).concat(records.filter((item: any) => !parentIds.includes(item.id))).sort((a:any,b:any)=>{
+                return a.code.localeCompare(b.code);
+            });
+            console.log('exist', existRecords);
+            console.log('parents', parents);
+            parents.forEach((parent: any) => {
+                //提取子节点并根据api的排序规则排序
+                const sortField = api.sortField;
+                const sortOrder = api.sortOrder;
+                const children = records.filter((item: any) => item.parentId === parent.id).sort((a:any,b:any)=>{
+                    if(sortField){
+                        return sortOrder === 'asc'? a[sortField] - b[sortField] : b[sortField] - a[sortField];
+                    }
+                    return 0;
+                });
+                insetNodes(parents, children);
+            });            
         } else {
             data.value = records;
         }
@@ -53,22 +75,13 @@ export function useTree<T extends EntityInterface>(api: any) {
         formClose,
     } = useTableBase(api, loaded, filter);
 
-    const getChildren = (data: any, id: any) => {
-        let children = [...data.filter((item: any) => item.parentId === id)];
-        children.forEach((item: any) => {
-            item.children = getChildren(data, item.id);
-        })
-        return children;
-    };
-    
-    const loadNode = (row: any, _: any, resolve: any) => {
-        const parentId = row.id;
-        api.getList({ parentId }).then((res: any) => {
-            res.forEach((item: any) => {
-                item.hasChildren = !item.leaf;
-            })
-            resolve(res);
-        })
+    const insetNodes = (row: any, appends: any[]) => {
+        const id = row.id;
+        const index = data.value.findIndex((item: any) => item.id === id);
+        //根据index，将data.value分为两个数值
+        const [firstData, lastData] = splitArray(data.value, (_: any, i:number)=>{ return i<=index});
+        data.value = [...firstData, ...appends, ...lastData];
+        row.expanded = true;
     }
 
     const expandNode = async (row: any, expanded: boolean) => {
@@ -111,7 +124,8 @@ export function useTree<T extends EntityInterface>(api: any) {
     const refreshButton = () => {
         return {
             action: (row:any)=> refresh(row.id) , 
-            icon: 'fa fa-refresh text-primary', 
+            type: 'primary',
+            icon: 'fa fa-refresh', 
             title: 'Components.Refresh', order: 5, 
             visible: true
         }
@@ -135,7 +149,6 @@ export function useTree<T extends EntityInterface>(api: any) {
         checkChange,
         sortChange,
         formClose,
-        loadNode,
         expandNode
     }
 }
