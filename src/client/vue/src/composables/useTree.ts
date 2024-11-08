@@ -1,11 +1,16 @@
-import { EntityInterface,  logger, sortBy, splitArray } from "~/libs";
+import { EntityInterface,  isEmpty,  logger, sortBy, splitArray } from "~/libs";
 import { useTableBase } from "./useTableBase";
 import { ref } from "vue";
+import { useDelay } from "./useDelay";
 
 export function useTree<T extends EntityInterface>(
     api: any,
     defaultSort: Record<string, "ascending" | "descending"> = {}
 ) {
+
+    let originalRecords = null as any;
+    const {delay} = useDelay();
+
     const sorts = ref<Record<string, "ascending" | "descending" | null>>({
         ...defaultSort,
     });
@@ -36,7 +41,6 @@ export function useTree<T extends EntityInterface>(
         sorts.value[field] = order;
         api.sortField = field;
         api.sortOrder = order;
-        console.log(api.sortField, api.sortOrder);
         data.value = sort([...data.value]);
     };
 
@@ -53,7 +57,6 @@ export function useTree<T extends EntityInterface>(
             // 递归获取并插入子节点
             getSortChildren(data, item, result);
         });
-        console.log(result);
         return result; // 返回最终的平面数据
     };
 
@@ -80,6 +83,21 @@ export function useTree<T extends EntityInterface>(
         });
     };
 
+    const filter = (text: string) => {
+        delay(() => {
+            filterText.value = text;
+            if(isEmpty(text)){
+                data.value = [...originalRecords];
+                originalRecords = null;
+                return;
+            }else{
+                originalRecords = [...data.value];
+            }
+            api.filter = text;
+        });
+
+    };
+
     const {
         resourceName,
         entity,
@@ -90,7 +108,6 @@ export function useTree<T extends EntityInterface>(
         create,
         update,
         remove,
-        filter,
         checkChange,
         formClose,
         getLabel

@@ -22,7 +22,7 @@ const menus = ref<MenuType[]>([]);
 const menuRef = ref<any>();
 
 onMounted(()=>{
-    api.getByGroup('default').then((res:any) => {
+    api.getShowList('default').then((res:any) => {
         menus.value = res.items;
     })
 })

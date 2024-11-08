@@ -20,7 +20,9 @@ export function useAuthentication(isAuthenticatedPage?: boolean) {
         logger.debug('[useAuthentication][updateAuthentication]', 'currentUser.value', currentUser.value, 'isAuthenticatedPage', isAuthenticatedPage, 'isConfigReady.value', isConfigReady.value);
 
         if (!isAuthenticated.value && isAuthenticatedPage) {
-            redirectToLogin();
+            if(isConfigReady.value){
+                redirectToLogin();
+            }            
         }
     };
 

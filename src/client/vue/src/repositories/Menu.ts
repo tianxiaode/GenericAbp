@@ -35,8 +35,8 @@ export class MenuRepository extends Repository<MenuType> {
     }
 
 
-    getByGroup = (group: string) =>{ 
-        return http.get(this.getUrl() + `/by-group/${group}`);
+    getShowList = (name: string) =>{ 
+        return http.get(this.getUrl() + `/show/${name}`);
     }
 
     getAllGroups = () =>{

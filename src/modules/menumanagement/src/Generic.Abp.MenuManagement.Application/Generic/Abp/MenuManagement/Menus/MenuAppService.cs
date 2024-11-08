@@ -17,6 +17,7 @@ using Volo.Abp.Application.Dtos;
 using Volo.Abp.Authorization;
 using Volo.Abp.Domain.ChangeTracking;
 using Volo.Abp.Domain.Entities;
+using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Localization;
 using Volo.Abp.Uow;
 
@@ -57,24 +58,10 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
         }
         else
         {
-            if (input.ParentId == null)
-            {
-                //如果没有指定父节点，则获取所有根节点
-                list = await Repository.GetListAsync(m => m.ParentId == null);
-            }
-            else
-            {
-                //如果指定了父节点，则获取所有子节点
-                var parent = await Repository.GetAsync(input.ParentId.Value);
-                list = await Repository.GetListAsync(m => m.Code.StartsWith(parent.Code + "."));
-            }
+            list = await Repository.GetListAsync(m => m.ParentId == input.ParentId);
         }
 
         var dtos = ObjectMapper.Map<List<Menu>, List<MenuDto>>(list);
-        if (input.ParentId.HasValue || !string.IsNullOrEmpty(input.Filter))
-        {
-            return new ListResultDto<MenuDto>(dtos);
-        }
 
         foreach (var dto in dtos)
         {
@@ -89,14 +76,16 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
     [AllowAnonymous]
     public virtual async Task<ListResultDto<MenuDto>> GetShowListAsync(string name)
     {
-        var parent = await Repository.FindAsync(m => m.Name.ToLower() == name.ToLowerInvariant() && m.ParentId == null);
+        var parent =
+            await Repository.FirstOrDefaultAsync(m =>
+                m.Name.ToLower() == name.ToLowerInvariant() && m.ParentId == null);
         if (parent is null)
         {
             throw new EntityNotFoundException(typeof(Menu), name);
         }
 
         var list = await Repository.GetListAsync(m => m.Code.StartsWith(parent.Code + ".") && m.IsEnabled);
-        var dtos = await GetChildrenAsync(null, list);
+        var dtos = await GetChildrenAsync(parent.Id, list);
 
         return new ListResultDto<MenuDto>(dtos);
     }

@@ -2,10 +2,6 @@
     <div class="flex flex-col gap-2">
         <!-- 顶部工具栏 -->
         <ActionToolbar :title="t('MenuManagement.Menus')" @filter="filter" :buttons="toolbarButtons">
-            <template #action-items>
-                <Select v-model="groupName" :method="api.getAllGroups" placeholder="MenuManagement.Menu:GroupName"
-                    style="order:350;width: 200px;"></Select>
-            </template>
         </ActionToolbar>
         <el-table :data="data" stripe border style="width: 100%" row-key="id">
             <TreeColumn prop="name" :label="t('MenuManagement.Menu:Name')" width="full" :filterText="filterText"
@@ -13,10 +9,6 @@
                 :sort-change="sortChange"
                 :expand="expandNode">
             </TreeColumn>
-            <CustomSortColumn :label="t('MenuManagement.Menu:GroupName')" prop="groupName" width="full"
-                :order="sorts.groupName"
-                :sort-change="sortChange">
-            </CustomSortColumn>
             <CustomSortColumn :label="t('MenuManagement.Menu:Icon')" prop="icon" width="100" :sort-change="sortChange"
                 :order="sorts.icon"
             >
@@ -50,7 +42,6 @@ import { useI18n, useRepository, useTree } from '~/composables';
 import { MenuType } from '~/repositories';
 import CheckColumn from '../../table/CheckColumn.vue';
 import ActionColumn from '../../table/ActionColumn.vue';
-import Select from '../../forms/Select.vue';
 import MenuForm from './MenuForm.vue';
 import TreeColumn from '~/components/table/TreeColumn.vue';
 import CustomSortColumn from '~/components/table/CustomSortColumn.vue';
