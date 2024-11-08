@@ -4,7 +4,7 @@ import { EntityInterface } from "./RepositoryType";
 
 export class Repository<T extends EntityInterface> extends BaseRepository<T> {
     $className = "Repository";
-
+    
     set page(value: number) {
         this._page = value;
         this.load();
@@ -131,7 +131,7 @@ export class Repository<T extends EntityInterface> extends BaseRepository<T> {
             const data = await this.send(url, this.createMethod, entity);
             this.fireEvent("create");
             this.afterCreate(data);
-            this.load();
+            this.hasCreateOrUpdate = true;
             return data;
         } catch (error) {
             logger.error(this, "[create]", "Error creating entity:", error);
@@ -147,7 +147,7 @@ export class Repository<T extends EntityInterface> extends BaseRepository<T> {
             const data = await this.send(url, this.updateMethod, entity);
             this.fireEvent("update");
             this.afterUpdate(data);
-            this.load();
+            this.hasCreateOrUpdate = true;
             return data;
         } catch (error) {
             logger.error(this, "[update]", "Error updating entity:", error);

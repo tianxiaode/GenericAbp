@@ -1,6 +1,7 @@
 import { onMounted, ref } from "vue";
-import { capitalize, deepMerge, i18n, logger } from "~/libs";
+import {  deepMerge, i18n, logger } from "~/libs";
 import { useConfirm } from "./useConfirm";
+import { useLabel } from "./useLabel";
 
 declare type EntityFormConfigType = {
     initData?: any;
@@ -32,6 +33,8 @@ export function useEntityForm(
     const messageRef = ref<any>(null);
     const initValues = ref<any>({});
     const { confirm } = useConfirm();
+
+    const { getLabel } = useLabel(api);
 
     config = config || ({} as EntityFormConfigType);
 
@@ -111,10 +114,6 @@ export function useEntityForm(
         logger.debug("[useEntityForm][setInitValues]", data);
         initValues.value = deepMerge(initValues.value, data);
         formData.value = deepMerge(formData.value, initValues.value);
-    };
-
-    const getLabel = (label: string) => {
-        return `${api.resourceName}.${api.labelPrefix}:${capitalize(label)}`;
     };
 
     const checkChange = async () => {

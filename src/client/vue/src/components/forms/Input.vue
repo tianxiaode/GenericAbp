@@ -1,5 +1,6 @@
 <template>
-    <el-form-item :label="label" :prop="formItemProp">
+    <component :is="formItemProp ? 'el-form-item' : 'div'"
+        v-bind="formItemProp ? { label: label, prop: formItemProp } : null">
         <el-input v-bind="{
             placeholder: label,
             clearable: true,
@@ -9,7 +10,7 @@
         }" v-model="prop">
         </el-input>
         <PasswordStrength v-if="showPasswordStrength" />
-    </el-form-item>
+    </component>
 
 </template>
 
@@ -26,8 +27,9 @@ defineProps({
         type: Boolean,
         default: false
     },
-    formItemProp:{
+    formItemProp: {
         type: String,
-        default: ''    }
+        default: ''
+    }
 });
 </script>

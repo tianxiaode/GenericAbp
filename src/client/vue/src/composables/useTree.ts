@@ -1,6 +1,5 @@
-import { EntityInterface, isEmpty, logger, sortBy, splitArray } from "~/libs";
+import { EntityInterface,  logger, sortBy, splitArray } from "~/libs";
 import { useTableBase } from "./useTableBase";
-import { useDelay } from "./useDelay";
 import { ref } from "vue";
 
 export function useTree<T extends EntityInterface>(
@@ -94,6 +93,7 @@ export function useTree<T extends EntityInterface>(
         filter,
         checkChange,
         formClose,
+        getLabel
     } = useTableBase(api, loaded, refresh);
 
     const expandNode = async (row: any, expanded: boolean) => {
@@ -168,5 +168,6 @@ export function useTree<T extends EntityInterface>(
         sortChange,
         formClose,
         expandNode,
+        getLabel
     };
 }

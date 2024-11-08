@@ -42,6 +42,10 @@ export class AuditLogRepository extends Repository<AuditLogType> {
         return isGranted(`${this.resourceName}.${this.entityPlural}`);
     }
 
+    get canRead(){
+        return isGranted(`${'AuditLogging'}.${this.entityPlural}`);
+    }
+
     getAllApplicationNames = (filter?: string) =>{ 
         return http.get(this.getUrl() + `/application-names/?filter=${filter}`);
     }

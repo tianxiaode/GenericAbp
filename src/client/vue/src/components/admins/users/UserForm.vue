@@ -19,8 +19,8 @@
                     <Input :label="t(getLabel('phoneNumber'))" v-model="formData.phoneNumber" form-item-prop="phoneNumber" />
                     <!-- <el-form-item></el-form-item> -->
                     <div class="grid cols-2 gap-2">
-                        <Switch v-model="formData.isActive" :label="t(getLabel('isActive'))" />
-                        <Switch v-model="formData.lockoutEnabled" :label="t(getLabel('lockoutEnabled'))" />
+                        <Switch v-model="formData.isActive" :label="t(getLabel('isActive'))" form-item-prop="isActive" />
+                        <Switch v-model="formData.lockoutEnabled" :label="t(getLabel('lockoutEnabled'))" form-item-prop="lockoutEnabled" />
                     </div>
 
                 </el-tab-pane>

@@ -1,8 +1,8 @@
 <template>
-    <el-form-item v-if="label" :label="label">
-        <el-switch v-bind="$attrs" :active-text="t(activeText)" :inactive-text="t(inactiveText)"></el-switch>    
-    </el-form-item>
-    <el-switch v-else v-bind="$attrs" :active-text="t(activeText)" :inactive-text="t(inactiveText)"></el-switch>
+    <component :is="formItemProp ? 'el-form-item' : 'div'"
+        v-bind="formItemProp ? { label: label, prop: formItemProp } : null">
+        <el-switch v-bind="$attrs" :active-text="t(activeText)" :inactive-text="t(inactiveText)"></el-switch>
+    </component>
 </template>
 
 <script setup lang="ts">
@@ -17,7 +17,11 @@ defineProps({
         type: String,
         default: 'Components.No'
     },
-    label:{
+    label: {
+        type: String,
+        default: ''
+    },
+    formItemProp: {
         type: String,
         default: ''
     }

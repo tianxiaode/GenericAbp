@@ -2,6 +2,7 @@ import { EntityInterface, LocalStorage } from "../libs";
 import { onMounted, onUnmounted, ref, watch } from "vue";
 import router from "~/router";
 import { useDelay } from "./useDelay";
+import { useLabel } from "./useLabel";
 
 export function useTableBase<T extends EntityInterface>(
     api: any,
@@ -15,15 +16,18 @@ export function useTableBase<T extends EntityInterface>(
     const dialogVisible = ref(false);
     const currentEntityId = ref("");
     const { delay } = useDelay();
+    const { getLabel} = useLabel(api);
 
     // Add a new entry
     const create = () => {
+        api.hasCreateOrUpdate = false;
         dialogVisible.value = true;
-        currentEntityId.value = "";
+        currentEntityId.value = "";        
     };
 
     // Edit an existing entry
     const update = async (entity: T) => {
+        api.hasCreateOrUpdate = false;
         dialogVisible.value = true;
         currentEntityId.value = entity.id as string;
     };
@@ -50,8 +54,9 @@ export function useTableBase<T extends EntityInterface>(
     };
 
     const formClose = () => {
-        refresh(currentEntityId.value);
-        //api.load();
+        if(api.hasCreateOrUpdate){
+            refresh(currentEntityId.value);
+        }
     };
 
     watch(dialogVisible, (isVisible) => {
@@ -60,6 +65,7 @@ export function useTableBase<T extends EntityInterface>(
     });
 
     onMounted(() => {
+        console.log(api.$className, api.canRead)
         if (!api.canRead) {
             LocalStorage.setRedirectPath(router.currentRoute.value.path);
             router.push("/login");
@@ -86,5 +92,6 @@ export function useTableBase<T extends EntityInterface>(
         checkChange,
         sortChange,
         formClose,
+        getLabel
     };
 }

@@ -5,19 +5,19 @@
             :buttons="toolbarButtons">
             <template #advanced-search-items>
                 <Select :method="api.getAllApplicationNames" v-model="searchValue.applicationName"
-                    placeholder="AbpIdentity.SecurityLog:ApplicationName"></Select>
+                    :label="t(getLabel('ApplicationName'))"></Select>
                 <Select :method="api.getAllIdentities" v-model="searchValue.identity"
-                    placeholder="AbpIdentity.SecurityLog:Identity"></Select>
+                :label="t(getLabel('Identity'))"></Select>
                 <DateRange format="datetime" v-model:start-date="searchValue.startTime"
                     v-model:end-date="searchValue.endTime"></DateRange>
                 <Select :method="api.getAllActions" v-model="searchValue.actionName"
-                    placeholder="AbpIdentity.SecurityLog:Action"></Select>
+                :label="t(getLabel('actionName'))"></Select>
                 <Select :method="api.getAllUserNames" v-model="searchValue.userName"
-                    placeholder="AbpIdentity.SecurityLog:UserName"></Select>
+                :label="t(getLabel('userName'))"></Select>
                 <Select :method="api.getAllClientIds" v-model="searchValue.clientId"
-                    placeholder="AbpIdentity.SecurityLog:ClientId"></Select>
+                :label="t(getLabel('clientId'))"></Select>
                 <Select :method="api.getAllCorrelationIds" v-model="searchValue.correlationId"
-                    placeholder="AbpIdentity.SecurityLog:CorrelationId"></Select>
+                :label="t(getLabel('correlationId'))"></Select>
             </template>
         </ActionToolbar>
 
@@ -89,7 +89,7 @@ watch(searchValue.value, (newValue: any) => {
     api.search(newValue, true);
 }, { deep: true })
 
-const { data, filterText, filter, sortChange } = useTable<SecurityLogType>(api);
+const { data, filterText, filter, sortChange, getLabel } = useTable<SecurityLogType>(api);
 
 const { detailVisible, detailData, detailTitle, showDetails, rowItems } = useDetail(api, [
     { field: 'applicationName' },

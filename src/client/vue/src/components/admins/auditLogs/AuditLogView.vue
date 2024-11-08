@@ -4,12 +4,12 @@
         <ActionToolbar :title="t('AbpAuditLogging.AuditLogs')" @filter="filter" :show-ellipsis-icon="true"
             :buttons="toolbarButtons">
             <template #advanced-search-items>
-                <Select :method="api.getAllApplicationNames" v-model="searchValue.applicationName" placeholder="AbpAuditLogging.ApplicationName"></Select>
-                <Select :method="api.getAllUrls" v-model="searchValue.url" placeholder="AbpAuditLogging.url"></Select>
+                <Select :method="api.getAllApplicationNames" v-model="searchValue.applicationName" :label="t('AbpAuditLogging.ApplicationName')"></Select>
+                <Select :method="api.getAllUrls" v-model="searchValue.url" :label="t('AbpAuditLogging.url')"></Select>
                 <DateRange format="datetime" v-model:start-date="searchValue.startTime" v-model:end-date="searchValue.endTime"></DateRange>
-                <Select :method="api.getAllUserNames" v-model="searchValue.userName" placeholder="AbpAuditLogging.AuditLog:UserName"></Select>
-                <Select :method="api.getAllClientIds" v-model="searchValue.clientId" placeholder="AbpAuditLogging.AuditLog:ClientId"></Select>
-                <Select :method="api.getAllCorrelationIds" v-model="searchValue.correlationId" placeholder="AbpAuditLogging.AuditLog:CorrelationId"></Select>
+                <Select :method="api.getAllUserNames" v-model="searchValue.userName" :label="t(getLabel('UserName'))"></Select>
+                <Select :method="api.getAllClientIds" v-model="searchValue.clientId" :label="t(getLabel('ClientId'))"></Select>
+                <Select :method="api.getAllCorrelationIds" v-model="searchValue.correlationId" :label="t(getLabel('CorrelationId'))"></Select>
             </template>
         </ActionToolbar>
 
@@ -80,7 +80,7 @@ watch(searchValue.value, (newValue:any) => {
     api.search(newValue, true);
 }, { deep: true })
 
-const { data, filterText, filter, sortChange } = useTable<AuditLogType>(api);
+const { data, filterText, filter, sortChange, getLabel } = useTable<AuditLogType>(api);
 
 const toolbarButtons = {
     create: { visible: false },

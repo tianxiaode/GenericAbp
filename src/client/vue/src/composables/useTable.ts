@@ -25,6 +25,7 @@ export function useTable<T extends EntityInterface>(api: any) {
         checkChange,
         formClose,
         sortChange,
+        getLabel
     } = useTableBase(api, loaded, refresh);
     // Load data for the table
 
@@ -42,5 +43,6 @@ export function useTable<T extends EntityInterface>(api: any) {
         checkChange,
         sortChange,
         formClose,
+        getLabel
     };
 }

@@ -22,6 +22,7 @@ export class BaseRepository<T extends EntityInterface> extends BaseClass {
     _resourceName: string = "";
     _messageField: string = "";
     _labelPrefix: string = "DisplayName";
+    _hasCreateOrUpdate: boolean = false;
 
     constructor(config: RepositoryConfig<T>) {
         super();
@@ -133,6 +134,13 @@ export class BaseRepository<T extends EntityInterface> extends BaseClass {
         return capitalize(this._labelPrefix);
     }
 
+    set hasCreateOrUpdate(value: boolean) {
+        this._hasCreateOrUpdate = value;
+    }
+
+    get hasCreateOrUpdate(): boolean {
+        return this._hasCreateOrUpdate;
+    }
 
     get apiPrefix(): string | undefined {
         return this.config.api?.prefix || RepositoryGlobalConfig.apiPrefix;
