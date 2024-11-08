@@ -22,8 +22,6 @@ export function useTree<T extends EntityInterface>(
         const row: any = data.value.find((item: any) => item.id === id);
         if (row) {
             row.expanded = false;
-            row.isLoaded = false;
-            row.items = null;
             data.value = data.value.filter(
                 (item: any) => !item.code.startsWith(row.code + ".")
             );
@@ -92,8 +90,9 @@ export function useTree<T extends EntityInterface>(
                 return;
             }else{
                 originalRecords = [...data.value];
+                api.filter = text;
             }
-            api.filter = text;
+            
         });
 
     };
@@ -124,36 +123,9 @@ export function useTree<T extends EntityInterface>(
             );
             return;
         }
-        const index = data.value.findIndex((item: any) => item.id === id);
-        //根据index，将data.value分为两个数值
-        const [firstData, lastData] = splitArray(
-            data.value,
-            (_: any, i: number) => {
-                return i <= index;
-            }
-        );
-        row.expanded = true;
-        //根据id，获取子节点
-        if (row.isLoaded) {
-            //如果item.expanded为true，说明改节点已展开，需要把子节点数据添加到显示列表中
-            row.items?.forEach((item: any) => {
-                item.expanded = false;
-            });
-            data.value = [...firstData, ...row.items, ...lastData];
-            return;
-        }
-        //如果item.expanded为false，说明改节点未展开，需要异步加载子节点数据
         const loadData = await api.getList({ parentId: id });
-        if (loadData.length === 0) {
-            row.leaf = true;
-            row.expanded = false;
-            row.isLoaded = false;
-            data.value = [...firstData, ...lastData];
-            return;
-        }
-        row.items = loadData;
-        data.value = [...firstData, ...row.items, ...lastData];
-        row.isLoaded = true;
+        data.value = sort([...data.value, ...loadData]);
+        row.expanded = true;
     };
 
     const refreshButton = () => {

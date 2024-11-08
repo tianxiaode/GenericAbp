@@ -7,6 +7,7 @@
                     <i v-if="row.expanded === true" class="fa fa-caret-down w-4 h-4" @click="expand(row, false)"></i>
                     <i v-else class="fa fa-caret-right w-4 h-4" @click="expand(row, true)"></i>
                 </div>
+                <div v-else class="w-4 h-4"></div>
                 <HighlightText class="flex-1" :text="row[column.property]" :filter="filterText"></HighlightText>
             </div>
         </template>

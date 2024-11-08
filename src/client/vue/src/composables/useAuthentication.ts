@@ -2,7 +2,7 @@
 import { appConfig, LocalStorage, logger } from "~/libs";
 import { useConfigStore } from "~/store";
 import { storeToRefs } from "pinia";
-import { computed, ref, watch, onMounted } from "vue";
+import { ref, watch, onMounted } from "vue";
 import router from "~/router";
 
 export function useAuthentication(isAuthenticatedPage?: boolean) {
@@ -22,7 +22,7 @@ export function useAuthentication(isAuthenticatedPage?: boolean) {
         if (!isAuthenticated.value && isAuthenticatedPage) {
             if(isConfigReady.value){
                 redirectToLogin();
-            }            
+            }
         }
     };
 
