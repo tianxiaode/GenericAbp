@@ -30,10 +30,12 @@
             <slot name="advanced-search-items"></slot>
         </div>
 
-        <div v-if="selectedCount > 0" class="row">
-            <span>选择总数: {{ selectedCount }}</span>
-            <span>选择了: {{ selectedItems.join(', ') }}</span>
+        <transition name="fade" mode="out-in">
+        <div v-if="selected.length > 0" class="flex flex-row items-center gap-1 my-2">
+            <div class="flex-1">{{ t("Components.SelectedMessage", { count: selected.length }) }}</div>
+            <slot name="selected-actions"></slot>
         </div>
+        </transition>
     </div>
 </template>
 
@@ -48,9 +50,15 @@ const props = defineProps({
     buttons: {
         type: Object,  // 改为对象
         default: () => ({})
+    },
+    selected:{
+        type: Array,
+        default: () => []
     }
 
 });
+
+
 
 const emit = defineEmits(['filter']);
 const {t} = useI18n();
@@ -69,8 +77,6 @@ const defaultButtons = {
 
 const { buttonsList, handleButtonClick, handleButtonDisabled, handleButtonVisibility } = useActionButtons(defaultButtons,props.buttons);
 const isAdvancedSearchVisible = ref(false);
-const selectedCount = ref(0);
-const selectedItems = ref<string[]>([]);
 const filterQuery = ref(''); // 新增搜索查询变量
 
 function toggleAdvancedSearch() {

@@ -67,3 +67,14 @@ export function sortBy(data: any[], field: string, order: string) {
             : (value2 || "").localeCompare(value1 || "");
     });
 }
+
+
+//根据指定字段，计算两个数组的交集
+export function intersectionBy(arr1: any[], arr2: any[], field: string): any[] {
+    if (!Array.isArray(arr1) ||!Array.isArray(arr2)) {
+        throw new Error("Input must be an array");
+    }
+    //const set1 = new Set(arr1.map((item) => item[field]));
+    const set2 = new Set(arr2.map((item) => item[field]));
+    return [...arr1].filter((item) => set2.has(item[field]));
+}

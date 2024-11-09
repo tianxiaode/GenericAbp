@@ -1,7 +1,8 @@
-import { EntityInterface,  isEmpty,  logger, sortBy, splitArray } from "~/libs";
+import { EntityInterface,  intersectionBy,  isEmpty,  logger, sortBy } from "~/libs";
 import { useTableBase } from "./useTableBase";
 import { ref } from "vue";
 import { useDelay } from "./useDelay";
+import { useSelection } from "./useSelection";
 
 export function useTree<T extends EntityInterface>(
     api: any,
@@ -10,12 +11,13 @@ export function useTree<T extends EntityInterface>(
 
     let originalRecords = null as any;
     const {delay} = useDelay();
+    const { selected , handleSelectionChange} = useSelection();
 
     const sorts = ref<Record<string, "ascending" | "descending" | null>>({
         ...defaultSort,
     });
     const loaded = (records: T[]) => {
-        data.value = sort(records);
+        resetData(records);
     };
 
     const refresh = async (id: string | number) => {
@@ -39,8 +41,24 @@ export function useTree<T extends EntityInterface>(
         sorts.value[field] = order;
         api.sortField = field;
         api.sortOrder = order;
-        data.value = sort([...data.value]);
+        resetData([...data.value])
     };
+
+    const resetData = (records: any[]) => {
+        data.value = sort(records);
+        resetSelected([...selected.value]);
+    }
+
+    const resetSelected = (old: any[]) => {
+        setTimeout(() => {
+            const newSelected = intersectionBy(data.value, old, "id");
+            console.log("newSelected", newSelected);    
+            newSelected.forEach((item: any) => {
+                console.log("item", item);
+                tableRef.value.toggleRowSelection(item, true)
+            });                
+        }, 50);
+    }
 
     const sort = (data: any[]) => {
         // 找到所有根节点
@@ -104,6 +122,7 @@ export function useTree<T extends EntityInterface>(
         filterText,
         dialogVisible,
         currentEntityId,
+        tableRef,
         create,
         update,
         remove,
@@ -121,11 +140,12 @@ export function useTree<T extends EntityInterface>(
             data.value = originalRecords.filter(
                 (item: any) => !item.code.startsWith(row.code + ".")
             );
+            resetSelected([...selected.value]);
             return;
         }
         const loadData = await api.getList({ parentId: id });
-        data.value = sort([...data.value, ...loadData]);
         row.expanded = true;
+        resetData([...data.value, ...loadData]);
     };
 
     const refreshButton = () => {
@@ -147,6 +167,8 @@ export function useTree<T extends EntityInterface>(
         dialogVisible,
         currentEntityId,
         sorts,
+        selected,
+        tableRef,
         refreshButton,
         refresh,
         filter,
@@ -157,6 +179,7 @@ export function useTree<T extends EntityInterface>(
         sortChange,
         formClose,
         expandNode,
-        getLabel
+        getLabel,
+        handleSelectionChange
     };
 }

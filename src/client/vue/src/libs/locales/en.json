@@ -77,6 +77,8 @@
         "LastModificationTime": "Last modification time",
         "LastModifierId": "Last modified by",
         "Refresh": "Refresh",
+        "SelectedMessage": " {count} item(s) selected.",
+        "Selected": "Selected: ",
         "PropertyInput":{
             "Label":"Properties",
             "Name": "Name",

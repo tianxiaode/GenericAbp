@@ -77,6 +77,7 @@
         "LastModificationTime": "最后修改时间",
         "LastModifierId": "最后修改者",
         "Refresh": "刷新",
+        "Selected": "已选择 ({count}) : ",
         "PropertyInput":{
             "Name": "名称",
             "Value": "值",

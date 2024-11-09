@@ -17,6 +17,7 @@ export function useTableBase<T extends EntityInterface>(
     const currentEntityId = ref("");
     const { delay } = useDelay();
     const { getLabel} = useLabel(api);
+    const tableRef = ref<any>();
 
     // Add a new entry
     const create = () => {
@@ -85,6 +86,7 @@ export function useTableBase<T extends EntityInterface>(
         filterText,
         dialogVisible,
         currentEntityId,
+        tableRef,
         create,
         update,
         remove,

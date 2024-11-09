@@ -96,7 +96,7 @@ public class MenuDataSeed : ITransientDependency, IMenuDataSeed
 
         var roles = new Menu(GuidGenerator.Create(), identityManagement.Id, "Roles", tenantId, true);
         roles.SetOrder(104);
-        roles.SetIcon("fa fa-user-shield");
+        roles.SetIcon("fa fa-user-lock");
         roles.SetRouter("roles");
         roles.SetMultiLingual(new Dictionary<string, object>()
         {
@@ -110,7 +110,7 @@ public class MenuDataSeed : ITransientDependency, IMenuDataSeed
         var securityLogManagement = new Menu(GuidGenerator.Create(), identityManagement.Id, "Security Logs",
             tenantId, true);
         securityLogManagement.SetOrder(105);
-        securityLogManagement.SetIcon("user-shield");
+        securityLogManagement.SetIcon("fa fa-user-shield");
         securityLogManagement.SetRouter("security-logs");
         securityLogManagement.SetMultiLingual(new Dictionary<string, object>()
         {
@@ -118,7 +118,7 @@ public class MenuDataSeed : ITransientDependency, IMenuDataSeed
             { "zh-Hans", "安全日志" },
             { "zh-Hant", "安全日誌" }
         });
-        securityLogManagement.SetPermissions(["AbpIdentity.SecurityLog"]);
+        securityLogManagement.SetPermissions(["AbpIdentity.SecurityLogs"]);
         await MenuManager.CreateAsync(securityLogManagement);
 
         if (!tenantId.HasValue)

@@ -1,9 +1,14 @@
 <template>
     <div class="flex flex-col gap-2">
         <!-- 顶部工具栏 -->
-        <ActionToolbar :title="t('MenuManagement.Menus')" @filter="filter" :buttons="toolbarButtons">
+        <ActionToolbar :title="t('MenuManagement.Menus')" @filter="filter" :buttons="toolbarButtons" :selected="selected"
+            :select-message-field="api.messageField"
+        >
         </ActionToolbar>
-        <el-table :data="data" stripe border style="width: 100%" row-key="id">
+        <el-table ref="tableRef" :data="data" stripe border style="width: 100%" row-key="id"
+            @selection-change="handleSelectionChange"
+        >
+            <el-table-column type="selection" width="55" />
             <TreeColumn prop="name" :label="t('MenuManagement.Menu:Name')" width="full" :filterText="filterText"
                 :order="sorts.name"
                 :sort-change="sortChange"
@@ -60,9 +65,9 @@ const openPermissionWindow = (row: MenuType) => {
 
 
 const {
-    data, dialogVisible, currentEntityId,
+    data, dialogVisible, currentEntityId, selected, tableRef,
     filterText, sorts, refreshButton,
-    create, update, remove, checkChange, filter,
+    create, update, remove, checkChange, filter, handleSelectionChange,
     sortChange, expandNode } = useTree<MenuType>(api,{ order: 'ascending'});
 
 
