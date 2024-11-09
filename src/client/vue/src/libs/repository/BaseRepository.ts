@@ -22,7 +22,7 @@ export class BaseRepository<T extends EntityInterface> extends BaseClass {
     _resourceName: string = "";
     _messageField: string = "";
     _labelPrefix: string = "DisplayName";
-    _hasCreateOrUpdate: boolean = false;
+    _currentChanged: any = false;
 
     constructor(config: RepositoryConfig<T>) {
         super();
@@ -134,12 +134,12 @@ export class BaseRepository<T extends EntityInterface> extends BaseClass {
         return capitalize(this._labelPrefix);
     }
 
-    set hasCreateOrUpdate(value: boolean) {
-        this._hasCreateOrUpdate = value;
+    set currentChanged(value: boolean) {
+        this._currentChanged = value;
     }
 
-    get hasCreateOrUpdate(): boolean {
-        return this._hasCreateOrUpdate;
+    get currentChanged(): boolean {
+        return this._currentChanged;
     }
 
     get apiPrefix(): string | undefined {
@@ -244,6 +244,14 @@ export class BaseRepository<T extends EntityInterface> extends BaseClass {
             this.config.idFieldName ||
             RepositoryGlobalConfig.idFieldName ||
             "id"
+        );
+    }
+
+    get parentIdFieldName(): string {
+        return (
+            this.config.parentIdFieldName ||
+            RepositoryGlobalConfig.parentIdFieldName ||
+            "parentId"
         );
     }
 
@@ -490,6 +498,7 @@ export class BaseRepository<T extends EntityInterface> extends BaseClass {
         this.records = [];
         this.originalRecords = [];
         this._search = {};
+        this._currentChanged = false;
         this.config = {} as RepositoryConfig<T>;
         super.destroy();
         logger.debug(this, "[destroy]", "BaseRepository destroy");

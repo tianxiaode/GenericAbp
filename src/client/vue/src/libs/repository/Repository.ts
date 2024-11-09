@@ -131,7 +131,7 @@ export class Repository<T extends EntityInterface> extends BaseRepository<T> {
             const data = await this.send(url, this.createMethod, entity);
             this.fireEvent("create");
             this.afterCreate(data);
-            this.hasCreateOrUpdate = true;
+            this.currentChanged = data;
             return data;
         } catch (error) {
             logger.error(this, "[create]", "Error creating entity:", error);
@@ -147,7 +147,7 @@ export class Repository<T extends EntityInterface> extends BaseRepository<T> {
             const data = await this.send(url, this.updateMethod, entity);
             this.fireEvent("update");
             this.afterUpdate(data);
-            this.hasCreateOrUpdate = true;
+            this.currentChanged = data;
             return data;
         } catch (error) {
             logger.error(this, "[update]", "Error updating entity:", error);

@@ -1,8 +1,7 @@
-import { EntityInterface,  intersectionBy,  isEmpty,  logger, sortBy } from "~/libs";
+import {  EntityInterface,  isEmpty,  logger,  replaceMembers, sortBy } from "~/libs";
 import { useTableBase } from "./useTableBase";
 import { ref } from "vue";
 import { useDelay } from "./useDelay";
-import { useSelection } from "./useSelection";
 
 export function useTree<T extends EntityInterface>(
     api: any,
@@ -11,7 +10,8 @@ export function useTree<T extends EntityInterface>(
 
     let originalRecords = null as any;
     const {delay} = useDelay();
-    const { selected , handleSelectionChange} = useSelection();
+    const idFieldName = api.idFieldName;
+    const parentIdFieldName = api.parentIdFieldName;
 
     const sorts = ref<Record<string, "ascending" | "descending" | null>>({
         ...defaultSort,
@@ -20,16 +20,13 @@ export function useTree<T extends EntityInterface>(
         resetData(records);
     };
 
-    const refresh = async (id: string | number) => {
-        const row: any = data.value.find((item: any) => item.id === id);
+    const refresh = async () => {
+        const changed = api.currentChanged;
+        const row: any = data.value.find((item: any) => item[idFieldName] === changed[idFieldName]);
         if (row) {
-            row.expanded = false;
-            data.value = data.value.filter(
-                (item: any) => !item.code.startsWith(row.code + ".")
-            );
-            expandNode(row, true);
+            replaceMembers(row, changed);
         } else {
-            logger.error("[useTree][refresh]", "row not found", id);
+            resetData([...data.value, changed]);
         }
     };
 
@@ -46,23 +43,12 @@ export function useTree<T extends EntityInterface>(
 
     const resetData = (records: any[]) => {
         data.value = sort(records);
-        resetSelected([...selected.value]);
     }
 
-    const resetSelected = (old: any[]) => {
-        setTimeout(() => {
-            const newSelected = intersectionBy(data.value, old, "id");
-            console.log("newSelected", newSelected);    
-            newSelected.forEach((item: any) => {
-                console.log("item", item);
-                tableRef.value.toggleRowSelection(item, true)
-            });                
-        }, 50);
-    }
 
     const sort = (data: any[]) => {
         // 找到所有根节点
-        const roots = data.filter((item: any) => !item.parentId);
+        const roots = data.filter((item: any) => !item[parentIdFieldName]);
         //先对根节点排序
         sortBy(roots, api.sortField, api.sortOrder || "asc");
         const result: any[] = [];
@@ -80,7 +66,7 @@ export function useTree<T extends EntityInterface>(
     const getSortChildren = (data: any[], parent: any, result: any[]) => {
         // 找到当前parentId的所有子节点
         const children = data.filter(
-            (item: any) => item.parentId === parent.id
+            (item: any) => item[parentIdFieldName] === parent[idFieldName]
         );
 
         if (children.length === 0) {
@@ -132,7 +118,7 @@ export function useTree<T extends EntityInterface>(
     } = useTableBase(api, loaded, refresh);
 
     const expandNode = async (row: any, expanded: boolean) => {
-        const id = row.id;
+        const id = row[idFieldName];
         const originalRecords = [...data.value];
         if (!expanded) {
             //移除以row.code+'.'开始的数据
@@ -140,7 +126,6 @@ export function useTree<T extends EntityInterface>(
             data.value = originalRecords.filter(
                 (item: any) => !item.code.startsWith(row.code + ".")
             );
-            resetSelected([...selected.value]);
             return;
         }
         const loadData = await api.getList({ parentId: id });
@@ -148,9 +133,23 @@ export function useTree<T extends EntityInterface>(
         resetData([...data.value, ...loadData]);
     };
 
+    const refreshNode = (id: string | number) =>{
+        const row:any = data.value.find((item: any) => item[idFieldName] === id);
+        if (row) {
+            //移除row的子节点，然后调用expandNode展开
+            row.expanded = false;
+            data.value = data.value.filter(
+                (item: any) => !item[parentIdFieldName] || item[parentIdFieldName] !== id
+            );
+            expandNode(row, true);
+        }else{
+            logger.error(`Can not find row with id ${id}`);
+        }
+    }
+
     const refreshButton = () => {
         return {
-            action: (row: any) => refresh(row.id),
+            action: (row: any) => refreshNode(row[idFieldName]),
             type: "primary",
             icon: "fa fa-refresh",
             title: "Components.Refresh",
@@ -167,7 +166,6 @@ export function useTree<T extends EntityInterface>(
         dialogVisible,
         currentEntityId,
         sorts,
-        selected,
         tableRef,
         refreshButton,
         refresh,
@@ -180,6 +178,5 @@ export function useTree<T extends EntityInterface>(
         formClose,
         expandNode,
         getLabel,
-        handleSelectionChange
     };
 }

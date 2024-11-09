@@ -21,14 +21,14 @@ export function useTableBase<T extends EntityInterface>(
 
     // Add a new entry
     const create = () => {
-        api.hasCreateOrUpdate = false;
+        api.currentChanged = false;
         dialogVisible.value = true;
         currentEntityId.value = "";        
     };
 
     // Edit an existing entry
     const update = async (entity: T) => {
-        api.hasCreateOrUpdate = false;
+        api.currentChanged = false;
         dialogVisible.value = true;
         currentEntityId.value = entity.id as string;
     };
@@ -55,8 +55,8 @@ export function useTableBase<T extends EntityInterface>(
     };
 
     const formClose = () => {
-        if(api.hasCreateOrUpdate){
-            refresh(currentEntityId.value);
+        if(api.currentChanged){
+            refresh();
         }
     };
 
@@ -66,7 +66,6 @@ export function useTableBase<T extends EntityInterface>(
     });
 
     onMounted(() => {
-        console.log(api.$className, api.canRead)
         if (!api.canRead) {
             LocalStorage.setRedirectPath(router.currentRoute.value.path);
             router.push("/login");

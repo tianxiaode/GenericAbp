@@ -79,6 +79,23 @@ export function destroyMembers(obj: any, members: string[]): void {
     });
 }
 
+//用目标对象的成员值替换源对象的成员值
+export function replaceMembers(source:any, target:any):void{
+    if (!isObject(source) || !isObject(target)) {
+        throw new Error("Both source and target must be objects");
+    }
+
+    for (const key in source) {
+        if (source.hasOwnProperty(key)) {
+            if (isObject(source[key]) && isObject(target[key])) {
+                replaceMembers(source[key], target[key]);
+            } else {
+                target[key] = source[key];
+            }
+        }
+    }
+}
+
 export function getNestedValue(obj: any, path: string): any {
     if (!isObject(obj)) {
         throw new Error("The first argument must be an object");

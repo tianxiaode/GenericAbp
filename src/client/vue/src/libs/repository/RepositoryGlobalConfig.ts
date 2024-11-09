@@ -72,6 +72,10 @@ export class RepositoryGlobalConfig {
         return this.config.idFieldName || "id";
     }
 
+    static get parentIdFieldName(): string  {
+        return this.config.parentIdFieldName || 'parentId';
+    }
+
     static get idParamName(): string {
         return this.config.idParamName || "id";
     }

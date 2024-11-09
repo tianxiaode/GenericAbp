@@ -106,7 +106,7 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
     public virtual async Task<MenuDto> UpdateAsync(Guid id, MenuUpdateDto input)
     {
         var entity = await Repository.GetAsync(id);
-        CheckIsStaticMenu(entity);
+        //CheckIsStaticMenu(entity);
         if (!string.Equals(input.Name, entity.Name, StringComparison.OrdinalIgnoreCase))
         {
             entity.Rename(input.Name);
