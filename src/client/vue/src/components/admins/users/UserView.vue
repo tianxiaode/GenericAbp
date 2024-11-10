@@ -5,6 +5,7 @@
 
         <!-- 数据展示区域 -->
         <el-table :data="data" stripe border style="width: 100%" @sort-change="sortChange"
+            :highlight-current-row="true"
             :default-sort="{ prop: 'userName', order: 'ascending' }">
             <HighlightColumn :label="t('AbpIdentity.DisplayName:UserName')" prop="userName" width="full" sortable :filterText="filterText" >
                 <template #default="{ row, filter }">

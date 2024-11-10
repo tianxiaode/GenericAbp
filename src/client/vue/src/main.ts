@@ -71,11 +71,11 @@ RepositoryGlobalConfig.init({
         sortParamName: "Sorting",
     },
     filterParamName: "filter",
-    deleteConfirmHandler: async (message: (string | number)[]): Promise<boolean> => {
+    deleteConfirmHandler: async (message: (string | number)[], isTree: boolean): Promise<boolean> => {
         try {
             const t = i18n.get.bind(i18n);
             const messageStr = textToHtml(message as string[], 'dot-danger');
-            await confirm(t('Message.ConfirmDeleteMessage') + messageStr, t('Message.ConfirmDeleteTitle'));
+            await confirm(t(isTree ? 'Message.ConfirmDeleteTreeMessage' : 'Message.ConfirmDeleteMessage') + messageStr, t('Message.ConfirmDeleteTitle'));
             return true; // 用户点击"确定"
         } catch {
             return false; // 用户点击"取消"

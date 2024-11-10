@@ -1,95 +1,71 @@
 <template>
-    <el-descriptions v-bind="$attrs" :column="1" border class="h-full overflow-auto property-input" size="small">
-        <el-descriptions-item class-name="w-1/2">
-            <template #label>
-                <div class="w-full">
-                    <el-input v-model="name" size="small" ref="nameInput" @blur="handleNameChange" clearable
-                        :placeholder="t('Components.PropertyInput.Name')">
-                        <template #append  v-if="errorMessage">
-                            <el-tooltip placement="bottom" effect="light">
-                                <template #content>
-                                    <span class="danger" >{{ t(errorMessage) }}</span>
-                                </template>
-                                <i class="fa fa-circle-exclamation text-danger"></i>
-                            </el-tooltip>
-                        </template>
-                    </el-input>
-                </div>
+    <el-collapse class="w-full" v-model="activeNames">
+        <el-collapse-item v-for="(list, group) in groups" :name="group">
+            <template #title>
+                <el-text size="large" class="font-bold">{{ t(getGroupName(group)) }}</el-text>
             </template>
-            <div>
-                <el-input v-model="value" size="small" clearable :placeholder="t('Components.PropertyInput.Value')" @keyup.enter.native="addProperty">
-                    <template #append>
-                        <i class="fa fa-plus text-success cursor-pointer" @click="addProperty"></i>
-                    </template>
-                </el-input>
+            <div class="w-full">
+                <el-descriptions :column="1" border v-if="list.length > 0" class="w-full">
+                    <el-descriptions-item v-for="(property, index) in list" :key="index" class-name="w-1/2">
+                        <template #label>
+                            <div>{{ t(property.label) }}</div>
+                        </template>
+                        <component v-if="group === 'default-'" :is="comMap[property.type || 'input']"
+                            v-model="model[property.name]" clearable>
+                        </component>
+                        <component v-else :is="comMap[property.type || 'input']" v-model="model[getGroupName(group)][property.name]" clearable>
+                        </component>
+                    </el-descriptions-item>
+                </el-descriptions>
             </div>
-        </el-descriptions-item>
-
-        <el-descriptions-item v-for="key in Object.keys(model).sort((a:any, b:any) => a.localeCompare(b))" class-name="w-1/2" size="small">
-            <template #label><span class="cursor-pointer" @click="handleEdit(key)" >{{ key }}</span></template>
-            <div class="w-full flex justify-between items-center">
-                <span class="flex-1 cursor-pointer" @click="handleEdit(key)" >{{ model[key] }}</span>
-                <i class="fa fa-trash text-danger cursor-pointer" @click="removeProperty(key)"></i>
-            </div>
-        </el-descriptions-item>
-        <el-descriptions-item v-if="Object.keys(model).length === 0" size="small" :label="t('Components.NoData')">
-        </el-descriptions-item>
-    </el-descriptions>
+        </el-collapse-item>
+    </el-collapse>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, PropType, reactive, ref, markRaw } from 'vue';
 import { useI18n } from '~/composables';
-import { isEmpty } from '~/libs';
+import { groupBy } from '~/libs';
+import { ElInput, ElSelect } from 'element-plus';
 
-const model = defineModel<any>();
+const model = defineModel<any>({ default: {} });
+export interface PropertyInputType {
+    label: string,
+    name: string,
+    group?: string,
+    type?: string,
+    props?: Object,
+    value?: any,
+};
 
+interface GroupType {
+    [name: string]: PropertyInputType[]
+}
+
+const props = defineProps({
+    list: {
+        type: Array as PropType<PropertyInputType[]>,
+        required: true,
+    },
+});
 
 const { t } = useI18n();
-const name = ref('');
-const nameInput = ref<any>();
-const value = ref('');
-const errorMessage = ref('');
+const groups = ref<GroupType>({} as any);
+const activeNames = ref([] as any[]);
+const comMap = reactive<any>({
+    input: markRaw(ElInput),
+    select: markRaw(ElSelect)
+});
 
-
-const handleNameChange = () => {
-    if (isEmpty(name.value)) {
-        errorMessage.value = 'Validation.Required';
-        return;
-    }
-    if (model.value.hasOwnProperty(name.value)) {
-        errorMessage.value = 'Components.PropertyInput.AlreadyExists';
-        return;
-    }
-    errorMessage.value = '';
+const getGroupName = (name: string | number ) => {
+    return name.toString().replace('default-', '') || 'basic';
 }
 
-const handleEdit = (key: any) => {
-    name.value = key;
-    value.value = model.value[key];
-    nameInput.value.focus();
-}
-
-function addProperty() {
-    handleNameChange();
-    if (!isEmpty(errorMessage.value)) {
-        nameInput.value.focus();
-        return;
-    }
-    model.value[name.value] = value.value;
-    name.value = '';
-    value.value = '';
-}
-
-function removeProperty(key: any) {
-    delete model.value[key];
-}
+onMounted(() => {
+    //将list按组重组为{ name: value }的对象
+    groups.value = groupBy(props.list, 'group') as any;
+    activeNames.value = Object.keys(groups.value);
+});
 </script>
 
-<style lang="scss">
-.property-input {
-    .el-input-group__append {
-        padding: 0 10px;
-    }
-}
-</style>
+<style lang="scss" scoped></style>

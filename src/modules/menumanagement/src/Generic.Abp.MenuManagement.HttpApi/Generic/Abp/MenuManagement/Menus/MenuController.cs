@@ -56,11 +56,25 @@ public class MenuController : MenuManagementController, IMenuAppService
         return await AppService.UpdateAsync(id, input);
     }
 
+    [HttpPut]
+    [Route("{id:guid}/move/{parentId:guid}")]
+    public async Task MoveAsync(Guid id, Guid? parentId)
+    {
+        await AppService.MoveAsync(id, parentId);
+    }
+
+    [HttpPut]
+    [Route("{id:guid}/copy/{parentId:guid}")]
+    public async Task CopyAsync(Guid id, Guid? parentId)
+    {
+        await AppService.CopyAsync(id, parentId);
+    }
+
     [HttpDelete]
     [Route("{id:guid}")]
-    public async Task<ListResultDto<MenuDto>> DeleteAsync(Guid id)
+    public async Task DeleteAsync(Guid id)
     {
-        return await AppService.DeleteAsync(id);
+        await AppService.DeleteAsync(id);
     }
 
     [HttpGet]

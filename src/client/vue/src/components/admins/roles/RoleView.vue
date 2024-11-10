@@ -5,6 +5,7 @@
 
         <!-- 数据展示区域 -->
         <el-table :data="data" stripe border style="width: 100%" @sort-change="sortChange"
+            :highlight-current-row="true"
             :default-sort="{ prop: 'name', order: 'ascending' }">
             <HighlightColumn :label="t('AbpIdentity.DisplayName:RoleName')" prop="name" width="full" sortable
                 :filterText="filterText" />

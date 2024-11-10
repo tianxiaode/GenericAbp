@@ -78,3 +78,20 @@ export function intersectionBy(arr1: any[], arr2: any[], field: string): any[] {
     const set2 = new Set(arr2.map((item) => item[field]));
     return [...arr1].filter((item) => set2.has(item[field]));
 }
+
+//将数组如: [ {a:1}, {b:1, g: 'b'}, {c:1,g:"c"}] 重组为 { "default":[ {a:1} ], "b":[{b:1, g: 'b'}], "c":[{c:1,g:"c"}] },并保证遍历的时候default在第一位
+export function groupBy(arr: any[], field: string): any[] {
+    if (!Array.isArray(arr)) {
+        throw new Error("Input must be an array");
+    }
+    const groups = {} as any;
+    for (let i = 0; i < arr.length; i++) {
+        const item = arr[i];
+        const key = "default-" + (item[field] ?? '') ;
+        if (!groups[key]) {
+            groups[key] = [];
+        }
+        groups[key].push(item);
+    }
+    return groups;
+}

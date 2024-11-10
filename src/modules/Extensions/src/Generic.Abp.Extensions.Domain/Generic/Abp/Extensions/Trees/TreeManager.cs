@@ -45,22 +45,48 @@ namespace Generic.Abp.Extensions.Trees
         }
 
         [UnitOfWork]
-        public virtual async Task DeleteAsync(Guid id)
+        public virtual async Task DeleteAsync(Guid id, bool autoSave = true)
         {
-            await Repository.DeleteAsync(id, true, cancellationToken: CancellationToken);
+            var entity = await Repository.GetAsync(id, false, CancellationToken);
+            await DeleteAsync(entity, autoSave);
+        }
+
+        [UnitOfWork]
+        public virtual async Task DeleteAsync(TEntity entity, bool autoSave = true)
+        {
+            await DeleteChildrenAsync(entity, autoSave);
+            await Repository.DeleteAsync(entity, true, CancellationToken);
+        }
+
+        [UnitOfWork]
+        public virtual async Task DeleteChildrenAsync(TEntity entity, bool autoSave = true)
+        {
+            var children = await Repository.GetListAsync(m => m.ParentId == entity.Id, false, CancellationToken);
+            foreach (var child in children)
+            {
+                await DeleteChildrenAsync(child, autoSave);
+                await DeleteAsync(child, autoSave);
+            }
         }
 
         [UnitOfWork]
         public virtual async Task MoveAsync(Guid id, Guid? parentId)
         {
-            var entity = await Repository.GetAsync(id, cancellationToken: CancellationToken);
+            var entity = await Repository.GetAsync(id, false, CancellationToken);
             if (entity.ParentId == parentId)
             {
                 return;
             }
 
+            await MoveAsync(entity, parentId);
+        }
+
+
+        [UnitOfWork]
+        public virtual async Task MoveAsync(TEntity entity, Guid? parentId)
+        {
             //Should find children before Code change
-            var children = await FindChildrenAsync(id, true);
+            var children = await FindChildrenAsync(entity, true);
 
             //Store old code of entity
             var oldCode = entity.Code;
@@ -77,6 +103,49 @@ namespace Generic.Abp.Extensions.Trees
                 child.SetCode(TreeCodeGenerator.Append(entity.Code,
                     TreeCodeGenerator.GetRelative(child.Code, oldCode)));
             }
+        }
+
+        [UnitOfWork]
+        public virtual async Task CopyAsync(Guid id, Guid? parentId)
+        {
+            var entity = await Repository.GetAsync(id, false, CancellationToken);
+            if (entity.ParentId == parentId)
+            {
+                return;
+            }
+
+            await CopyAsync(entity, parentId);
+        }
+
+        [UnitOfWork]
+        public virtual async Task CopyAsync(TEntity entity, Guid? parentId)
+        {
+            var newEntity = await CloneAsync(entity);
+            newEntity.MoveTo(parentId);
+            await CreateAsync(newEntity);
+
+            //要递归复制子节点
+            await CopyChildesAsync(entity, newEntity);
+        }
+
+
+        [UnitOfWork]
+        public virtual async Task CopyChildesAsync(TEntity source, TEntity target)
+        {
+            var children = await FindChildrenAsync(source);
+            foreach (var child in children)
+            {
+                var newChild = await CloneAsync(child);
+                newChild.MoveTo(target.Id);
+                await CreateAsync(newChild);
+                await CopyChildesAsync(child, newChild);
+            }
+        }
+
+        [UnitOfWork]
+        public virtual Task<TEntity> CloneAsync(TEntity source)
+        {
+            throw new NotImplementedException();
         }
 
 
@@ -120,24 +189,15 @@ namespace Generic.Abp.Extensions.Trees
         }
 
         [UnitOfWork]
-        public virtual async Task<List<TEntity>> FindChildrenAsync(Guid? parentId, bool recursive = false)
+        public virtual async Task<List<TEntity>> FindChildrenAsync(TEntity entity, bool recursive = false)
         {
-            var query = await GetQueryableAsync();
             if (!recursive)
             {
-                return await AsyncExecuter.ToListAsync(
-                    query.Where(new ChildrenSpecification<TEntity>(parentId: parentId)), CancellationToken);
+                return await Repository.GetListAsync(m => m.ParentId == entity.Id, false, CancellationToken);
             }
 
-            if (!parentId.HasValue)
-            {
-                return await Repository.GetListAsync(includeDetails: false, cancellationToken: CancellationToken);
-            }
 
-            var code = await GetCodeOrDefaultAsync(parentId.Value);
-
-            return await AsyncExecuter.ToListAsync(query.Where(new ChildrenSpecification<TEntity>(code)),
-                CancellationToken);
+            return await Repository.GetListAsync(m => m.Code.StartsWith(entity.Code + "."), false, CancellationToken);
         }
 
         [UnitOfWork]
@@ -146,11 +206,6 @@ namespace Generic.Abp.Extensions.Trees
             var query = await Repository.GetQueryableAsync();
             return await AsyncExecuter.ToListAsync(query.Where(new ParentSpecification<TEntity>(code, level)),
                 CancellationToken);
-        }
-
-        public virtual async Task<IQueryable<TEntity>> GetQueryableAsync()
-        {
-            return await Repository.GetQueryableAsync();
         }
     }
 }

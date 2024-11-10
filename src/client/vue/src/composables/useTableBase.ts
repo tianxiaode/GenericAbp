@@ -27,15 +27,15 @@ export function useTableBase<T extends EntityInterface>(
     };
 
     // Edit an existing entry
-    const update = async (entity: T) => {
+    const update = async (entity: any) => {
         api.currentChanged = false;
         dialogVisible.value = true;
-        currentEntityId.value = entity.id as string;
+        currentEntityId.value = entity[api.idFieldName] as string;
     };
 
     // Delete an entry
-    const remove = async (entity: T) => {
-        await api.delete(entity.id);
+    const remove = async (entity: any) => {
+        await api.delete(entity[api.idFieldName]);
     };
 
     // Filter data based on the filterText

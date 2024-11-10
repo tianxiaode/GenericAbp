@@ -2,8 +2,8 @@
     <FormDialog v-bind="formDialogProps" v-model="formData" v-model:rules="rules" :title="dialogTitle"
         v-model:visible="dialogVisible">
         <template #form-items>
-            <el-input type="hidden" v-model="formData.parentId"  :value="parent?.id" />
-            <Input :disabled="true" v-model="formData.parentName" :label="t(getLabel('Parent'))" :value="parent?.name || ''" form-item-prop="parentName" />
+            <el-input type="hidden" v-model="formData.parentId"/>
+            <Input :disabled="true" v-model="formData.parentName" :label="t(getLabel('Parent'))" form-item-prop="parentName" />
             <Input v-model="formData.name" form-item-prop="name" :label="t(getLabel('name'))" />
             <IconSelect v-model="formData.icon" form-item-prop="icon" :label="t(getLabel('icon'))" />
             <Input v-model="formData.router" form-item-prop="router" :label="t(getLabel('router'))" />
@@ -20,6 +20,7 @@ import { useEntityForm, useRepository, useI18n } from '~/composables'
 import Switch from '../../forms/Switch.vue';
 import IconSelect from '../../forms/IconSelect.vue';
 import Input from '~/components/forms/Input.vue';
+import { onMounted } from 'vue';
 
 const { t } = useI18n();
 const entityId = defineModel('entityId');
@@ -27,24 +28,27 @@ const api = useRepository('menu');
 const dialogVisible = defineModel<boolean>();
 const rules = {
     name: { required: true },
-    groupName: { required: true },
 };
 
 
 
-defineProps({
-    parent:{ type: Object}
+const props = defineProps({
+    parent:{ type: Object, default: null }
 })
 
-const { formData, dialogTitle, formDialogProps, getLabel } = useEntityForm(api, entityId, dialogVisible, {
+const { formData, dialogTitle, formDialogProps, getLabel, setInitValues } = useEntityForm(api, entityId, dialogVisible, {
     initData:{
         isEnabled: true,
     },
-    afterGetData(data: any){
-        console.log(data);
-    }
 });
 
+onMounted(() => {
+    setInitValues({
+        parentId: props.parent?.id,
+        parentName: props.parent?.name,
+        order: (props.parent?.order || 0)  + 1
+    })
+})
 
 
 

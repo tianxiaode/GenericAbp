@@ -2,6 +2,7 @@
     <div class="flex flex-col gap-2">
         <!-- 顶部工具栏 -->
         <ActionToolbar :title="t('AbpAuditLogging.AuditLogs')" @filter="filter" :show-ellipsis-icon="true"
+            :highlight-current-row="true"
             :buttons="toolbarButtons">
             <template #advanced-search-items>
                 <Select :method="api.getAllApplicationNames" v-model="searchValue.applicationName" :label="t('AbpAuditLogging.ApplicationName')"></Select>

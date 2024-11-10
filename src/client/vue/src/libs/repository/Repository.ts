@@ -270,7 +270,7 @@ export class Repository<T extends EntityInterface> extends BaseRepository<T> {
                 this.afterDelete(ids as string | number);
             }
             this.success("Message.DeleteSuccess");
-            this.load();
+            !this.isTree && this.load();
         } catch (error) {
             logger.error(
                 this,

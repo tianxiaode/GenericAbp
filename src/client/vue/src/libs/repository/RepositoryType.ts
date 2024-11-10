@@ -33,7 +33,7 @@ export type BeforeDeleteType = (id: string | number) => boolean;
 export type AfterDeleteType = (id: string | number) => void;
 export type BeforeBatchDeleteType = (ids: (string | number)[]) => boolean;
 export type AfterBatchDeleteType = (ids: (string | number)[]) => void;
-export type DeleteConfirmHandlerType = (message: (string | number)[]) => Promise<boolean>;
+export type DeleteConfirmHandlerType = (message: (string | number)[], isTree: boolean) => Promise<boolean>;
 export type MessageHandlerType = (message: string, type: string) => void;
 
 export interface RepositoryGlobalConfigType extends Record<string, any> {

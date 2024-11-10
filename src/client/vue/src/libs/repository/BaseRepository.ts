@@ -23,6 +23,7 @@ export class BaseRepository<T extends EntityInterface> extends BaseClass {
     _messageField: string = "";
     _labelPrefix: string = "DisplayName";
     _currentChanged: any = false;
+    isTree: boolean = false;
 
     constructor(config: RepositoryConfig<T>) {
         super();
@@ -407,8 +408,8 @@ export class BaseRepository<T extends EntityInterface> extends BaseClass {
     };
 
     confirmDelete = async (message: (string | number)[]): Promise<boolean> => {
-        if(this.config.deleteConfirmHandler) return await this.config.deleteConfirmHandler.call(this, message);
-        if(RepositoryGlobalConfig.deleteConfirmHandler) return await RepositoryGlobalConfig.deleteConfirmHandler.call(this, message);
+        if(this.config.deleteConfirmHandler) return await this.config.deleteConfirmHandler.call(this, message, this.isTree);
+        if(RepositoryGlobalConfig.deleteConfirmHandler) return await RepositoryGlobalConfig.deleteConfirmHandler.call(this, message, this.isTree);
         return true;
     };
 

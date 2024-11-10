@@ -30,4 +30,22 @@ public class MenuManager : TreeManager<Menu, IMenuRepository>
             throw new DuplicateWarningBusinessException(Localizer[nameof(Menu)], entity.Name);
         }
     }
+
+    public override Task<Menu> CloneAsync(Menu source)
+    {
+        var newMenu = new Menu(GuidGenerator.Create(), source.ParentId, source.Name, source.TenantId);
+        newMenu.SetIcon(source.Icon);
+        newMenu.SetRouter(source.Router);
+        newMenu.SetOrder(source.Order);
+        if (source.IsEnabled)
+        {
+            newMenu.Enable();
+        }
+        else
+        {
+            newMenu.Disable();
+        }
+
+        return Task.FromResult(newMenu);
+    }
 }

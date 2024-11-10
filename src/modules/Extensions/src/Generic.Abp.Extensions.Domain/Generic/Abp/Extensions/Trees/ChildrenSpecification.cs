@@ -23,9 +23,9 @@ namespace Generic.Abp.Extensions.Trees
                 return m => m.ParentId == ParentId;
             }
 
-            if (string.IsNullOrEmpty(Code))
+            if (!string.IsNullOrEmpty(Code))
             {
-                return m => m.Code.StartsWith(Code) && m.Code != Code;
+                return m => m.Code.StartsWith(Code + ".");
             }
 
             return m => false;

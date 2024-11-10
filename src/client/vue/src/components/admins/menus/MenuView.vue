@@ -3,7 +3,9 @@
         <!-- 顶部工具栏 -->
         <ActionToolbar :title="t('MenuManagement.Menus')" @filter="filter" :buttons="toolbarButtons">
         </ActionToolbar>
-        <el-table ref="tableRef" :data="data" stripe border style="width: 100%" row-key="id">
+        <el-table ref="tableRef" :data="data" stripe border style="width: 100%" :row-key="api.idFieldName"
+            :highlight-current-row="true"
+        >
             <TreeColumn prop="name" :label="t('MenuManagement.Menu:Name')" width="full" :filterText="filterText"
                 :order="sorts.name"
                 :sort-change="sortChange"
@@ -26,11 +28,11 @@
             </CustomSortColumn>
             <CheckColumn :label="t('MenuManagement.Menu:IsEnabled')" prop="isEnabled" width="100"
                 :filterText="filterText" :checkChange="checkChange"></CheckColumn>
-            <ActionColumn width="160" align="center" :buttons="tableButtons"></ActionColumn>
+            <ActionColumn width="200" align="center" :buttons="tableButtons"></ActionColumn>
         </el-table>
     </div>
 
-    <MenuForm v-if="dialogVisible" v-model="dialogVisible" v-model:entity-id="currentEntityId" />
+    <MenuForm v-if="dialogVisible" v-model="dialogVisible" v-model:entity-id="currentEntityId" :parent="currentParent" />
 
 </template>
 
@@ -51,7 +53,6 @@ const permissionVisible = ref(false);
 const providerKey = ref('');
 const api = useRepository('menu');
 const { t } = useI18n();
-
 const openPermissionWindow = (row: MenuType) => {
     // TODO: 打开权限定义窗口
     providerKey.value = row.name;
@@ -61,7 +62,7 @@ const openPermissionWindow = (row: MenuType) => {
 
 const {
     data, dialogVisible, currentEntityId, tableRef,
-    filterText, sorts, refreshButton,
+    filterText, sorts, buttons, currentParent,
     create, update, remove, checkChange, filter,
     sortChange, expandNode } = useTree<MenuType>(api,{ order: 'ascending'});
 
@@ -80,7 +81,7 @@ watch(groupName, () => {
 
 
 const tableButtons = {
-    refresh: refreshButton(),
+    ...buttons,
     detail: { visible: false },
     edit: { action: update, disabled: (row: MenuType) => row.isStatic, visible: api.canUpdate },
     delete: { action: remove, disabled: (row: MenuType) => row.isStatic, visible: api.canDelete },

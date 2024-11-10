@@ -118,19 +118,29 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
         return ObjectMapper.Map<Menu, MenuDto>(entity);
     }
 
-    [Authorize(MenuManagementPermissions.Menus.Delete)]
-    [UnitOfWork]
-    public virtual async Task<ListResultDto<MenuDto>> DeleteAsync(Guid id)
+    [Authorize(MenuManagementPermissions.Menus.Update)]
+    [UnitOfWork(true)]
+    public virtual async Task MoveAsync(Guid id, Guid? parentId)
     {
         var entity = await Repository.GetAsync(id);
         CheckIsStaticMenu(entity);
-        if (await Repository.HasChildAsync(id))
-        {
-            throw new HasChildrenCanNotDeletedBusinessException(nameof(Menu), entity.Name);
-        }
+        await MenuManager.MoveAsync(entity, parentId);
+    }
 
-        await Repository.DeleteAsync(entity, true);
-        return new ListResultDto<MenuDto>();
+    [Authorize(MenuManagementPermissions.Menus.Update)]
+    [UnitOfWork(true)]
+    public virtual async Task CopyAsync(Guid id, Guid? parentId)
+    {
+        await MenuManager.CopyAsync(id, parentId);
+    }
+
+    [Authorize(MenuManagementPermissions.Menus.Delete)]
+    [UnitOfWork]
+    public virtual async Task DeleteAsync(Guid id)
+    {
+        var entity = await Repository.GetAsync(id);
+        CheckIsStaticMenu(entity);
+        await MenuManager.DeleteAsync(entity);
     }
 
     #region 多语言

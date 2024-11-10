@@ -32,8 +32,9 @@
 
         <transition name="fade" mode="out-in">
         <div v-if="selected.length > 0" class="flex flex-row items-center gap-1 my-2">
-            <div class="flex-1">{{ t("Components.SelectedMessage", { count: selected.length }) }}</div>
-            <slot name="selected-actions"></slot>
+            <slot name="selected-actions">
+                <div class="flex-1">{{ t("Components.SelectedMessage", { count: selected.length }) }}</div>
+            </slot>
         </div>
         </transition>
     </div>

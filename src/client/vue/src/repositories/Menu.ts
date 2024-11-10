@@ -27,7 +27,8 @@ export class MenuRepository extends Repository<MenuType> {
         this.resourceName = "MenuManagement";
         this.entityGroup = "";  
         this.messageField = "name";
-        this.labelPrefix = 'Menu'
+        this.labelPrefix = 'Menu';
+        this.isTree = true;
     };
 
     get canManagePermissions(): boolean {

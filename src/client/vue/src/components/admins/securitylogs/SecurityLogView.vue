@@ -23,6 +23,7 @@
 
         <!-- 数据展示区域 -->
         <el-table :data="data" stripe border style="width: 100%" @sort-change="sortChange"
+            :highlight-current-row="true"
             :default-sort="{ prop: 'creationTime', order: 'descending' }">
             <DateColumn prop="creationTime" :label="t('AbpIdentity.CreationTime')" width="180" sortable />
             <HighlightColumn :label="t('AbpIdentity.SecurityLog:ApplicationName')" prop="applicationName" width="full"

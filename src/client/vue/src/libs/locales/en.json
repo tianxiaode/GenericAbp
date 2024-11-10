@@ -79,6 +79,8 @@
         "Refresh": "Refresh",
         "SelectedMessage": " {count} item(s) selected.",
         "Selected": "Selected: ",
+        "MoveTo": "Move To ...",
+        "CopyTo": "Copy To ...",
         "PropertyInput":{
             "Label":"Properties",
             "Name": "Name",
@@ -120,7 +122,8 @@
         "OperationFailed": "Operation Failed!",
         "OperationSuccess": "Operation Success!",
         "ConfirmDeleteTitle": "Confirm Delete",
-        "ConfirmDeleteMessage": "<p class='p-2'>Are you sure you want to delete the following data?</p>",
+        "ConfirmDeleteMessage": "<p class='p-2 m-0'>Are you sure you want to delete the following data?</p>",
+        "ConfirmDeleteTreeMessage": "<p class='p-2 m-0'>Are you sure you want to delete the following data and its children?</p>",
         "HasDirtyData": "You have unsaved changes. Are you sure you want to leave this page?",
         "SaveSuccessAndClose": "Save Success, and close after 3 seconds...",
         "ConfirmNotSavedTitle": "Unsaved Changes"

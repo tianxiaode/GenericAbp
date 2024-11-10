@@ -14,7 +14,9 @@ public interface IMenuAppService : IApplicationService
     Task<ListResultDto<MenuDto>> GetShowListAsync(string name);
     Task<MenuDto> CreateAsync(MenuCreateDto input);
     Task<MenuDto> UpdateAsync(Guid id, MenuUpdateDto input);
-    Task<ListResultDto<MenuDto>> DeleteAsync(Guid id);
+    Task MoveAsync(Guid id, Guid? parentId);
+    Task CopyAsync(Guid id, Guid? parentId);
+    Task DeleteAsync(Guid id);
     Task<Dictionary<string, object>> GetMultiLingualAsync(Guid id);
     Task UpdateMultiLingualAsync(Guid id, Dictionary<string, object> input);
     Task<List<string>> GetPermissionsListAsync(Guid id);
