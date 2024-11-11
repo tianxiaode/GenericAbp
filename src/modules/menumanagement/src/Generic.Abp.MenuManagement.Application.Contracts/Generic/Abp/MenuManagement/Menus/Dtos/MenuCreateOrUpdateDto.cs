@@ -1,5 +1,6 @@
 ﻿using Generic.Abp.Extensions.Entities.Trees;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Volo.Abp.Validation;

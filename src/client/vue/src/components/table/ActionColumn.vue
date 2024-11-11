@@ -40,8 +40,8 @@ const props = defineProps({
 // 默认的编辑和删除按钮配置
 const defaultButtons = {
     detail:{
-        type: 'default',
-        icon: 'fa fa-ellipsis', 
+        type: 'info',
+        icon: 'fa fa-file-lines', 
         title: 'Components.Detail',
         order: 1        
     },

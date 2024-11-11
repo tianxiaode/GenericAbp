@@ -17,8 +17,8 @@ public interface IMenuAppService : IApplicationService
     Task MoveAsync(Guid id, Guid? parentId);
     Task CopyAsync(Guid id, Guid? parentId);
     Task DeleteAsync(Guid id);
-    Task<Dictionary<string, object>> GetMultiLingualAsync(Guid id);
-    Task UpdateMultiLingualAsync(Guid id, Dictionary<string, object> input);
+    Task<Dictionary<string, object>> GetMultilingualAsync(Guid id);
+    Task UpdateMultilingualAsync(Guid id, Dictionary<string, object> input);
     Task<List<string>> GetPermissionsListAsync(Guid id);
     Task UpdatePermissionsAsync(Guid id, List<string> input);
 }

@@ -19,5 +19,6 @@ public class MenuDto : ExtensibleAuditedEntityDto<Guid>
     public string ConcurrencyStamp { get; set; } = default!;
     public MenuDto? Parent { get; set; } = default!;
     public List<MenuDto>? Children { get; set; } = default!;
-    public Dictionary<string, object>? MultiLingual { get; set; } = new();
+    public Dictionary<string, object>? Multilingual { get; set; } = new();
+    public List<string>? Permissions { get; set; } = default!;
 }

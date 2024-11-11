@@ -33,20 +33,21 @@
     </div>
 
     <MenuForm v-if="dialogVisible" v-model="dialogVisible" v-model:entity-id="currentEntityId" :parent="currentParent" />
-
+    <Detail v-if="detailVisible" :title="detailTitle" :data="detailData" :row-items="rowItems" v-model="detailVisible"></Detail>
 </template>
 
 
 <script setup lang="ts">
 import ActionToolbar from '../../toolbars/ActionToolbar.vue';
 import { ref, watch } from 'vue';
-import { useI18n, useRepository, useTree } from '~/composables';
+import { useI18n, useRepository, useTree, useDetail } from '~/composables';
 import { MenuType } from '~/repositories';
 import CheckColumn from '../../table/CheckColumn.vue';
 import ActionColumn from '../../table/ActionColumn.vue';
 import MenuForm from './MenuForm.vue';
 import TreeColumn from '~/components/table/TreeColumn.vue';
 import CustomSortColumn from '~/components/table/CustomSortColumn.vue';
+import Detail from '../../Detail.vue';
 
 const groupName = ref('');
 const permissionVisible = ref(false);
@@ -77,12 +78,23 @@ watch(groupName, () => {
     api.search('groupName', groupName.value, true);
 })
 
+const { detailVisible, detailData, detailTitle, showDetails, rowItems } = useDetail(api,[
+    { field: 'name'},
+    { field: 'parent', convert: (_: any, data: MenuType) => data.parent ? data.parent.name : '-' },
+    { field: 'icon', render: (value: any) =>  value? `<i class="${value}"></i>` : '-' },    
+    { field: 'router'},
+    { field: 'order'},
+    { field: 'isEnabled', type: 'boolean'},
+    { field: 'isStatic', type: 'boolean'},
+    { field: 'multilingual', type: 'multilingual'},
+    { field: 'permissions', type: 'list'}
+])
 
 
 
 const tableButtons = {
     ...buttons,
-    detail: { visible: false },
+    detail: { action: showDetails },
     edit: { action: update, disabled: (row: MenuType) => row.isStatic, visible: api.canUpdate },
     delete: { action: remove, disabled: (row: MenuType) => row.isStatic, visible: api.canDelete },
     permission: { action: openPermissionWindow, icon: 'fa fa-lock', title: 'AbpIdentity.Permissions', order: 300, type: 'primary', visible: api.canUpdate },

@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Generic.Abp.Extensions.Entities.MultiLingual;
+using Generic.Abp.Extensions.Entities.Multilingual;
 using Generic.Abp.Extensions.Entities.Permissions;
 using Generic.Abp.Extensions.Entities.Trees;
 using Generic.Abp.Extensions.Exceptions;
@@ -148,15 +148,15 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
     [UnitOfWork]
     [DisableEntityChangeTracking]
     [Authorize(MenuManagementPermissions.Menus.Default)]
-    public virtual async Task<Dictionary<string, object>> GetMultiLingualAsync(Guid id)
+    public virtual async Task<Dictionary<string, object>> GetMultilingualAsync(Guid id)
     {
         var entity = await Repository.GetAsync(id);
-        return entity.GetMultiLingual();
+        return entity.GetMultilingual();
     }
 
     [Authorize(MenuManagementPermissions.Menus.Update)]
     [UnitOfWork]
-    public virtual async Task UpdateMultiLingualAsync(Guid id, Dictionary<string, object> input)
+    public virtual async Task UpdateMultilingualAsync(Guid id, Dictionary<string, object> input)
     {
         var validateResult = await input.MaxLengthAsync(TreeConsts.NameMaxLength);
         if (!validateResult.Success)
@@ -168,7 +168,7 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
         var languages = input.Keys.Intersect(AbpLocalizationOptions.Languages.Select(m => m.CultureName));
         var adds = new Dictionary<string, object>(input.Where(m => languages.Contains(m.Key)));
         var entity = await Repository.GetAsync(id);
-        entity.SetMultiLingual(adds);
+        entity.SetMultilingual(adds);
         await Repository.UpdateAsync(entity, true);
     }
 

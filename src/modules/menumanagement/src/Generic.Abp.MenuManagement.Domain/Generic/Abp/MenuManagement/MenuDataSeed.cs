@@ -3,7 +3,7 @@ using Generic.Abp.MenuManagement.Menus;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Generic.Abp.Extensions.Entities.MultiLingual;
+using Generic.Abp.Extensions.Entities.Multilingual;
 using Generic.Abp.Extensions.Entities.Permissions;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
@@ -41,7 +41,7 @@ public class MenuDataSeed : ITransientDependency, IMenuDataSeed
         dashboard.SetIcon("fa fa-home");
         dashboard.SetRouter("dashboard");
         ;
-        dashboard.SetMultiLingual(new Dictionary<string, object>()
+        dashboard.SetMultilingual(new Dictionary<string, object>()
         {
             { "en", "Dashboard" },
             { "zh-Hans", "综合看板" },
@@ -55,7 +55,7 @@ public class MenuDataSeed : ITransientDependency, IMenuDataSeed
             new Menu(GuidGenerator.Create(), defaultMenu.Id, "Systems Maintenance", tenantId, true);
         systemsMaintenance.SetOrder(100);
         systemsMaintenance.SetIcon("fa fa-cogs");
-        systemsMaintenance.SetMultiLingual(new Dictionary<string, object>()
+        systemsMaintenance.SetMultilingual(new Dictionary<string, object>()
         {
             { "en", "Systems Maintenance" },
             { "zh-Hans", "系统维护" },
@@ -69,7 +69,7 @@ public class MenuDataSeed : ITransientDependency, IMenuDataSeed
             tenantId, true);
         identityManagement.SetOrder(101);
         identityManagement.SetIcon("fa fa-id-card");
-        identityManagement.SetMultiLingual(new Dictionary<string, object>()
+        identityManagement.SetMultilingual(new Dictionary<string, object>()
         {
             { "en", "Identity Management" },
             { "zh-Hans", "身份管理" },
@@ -82,7 +82,7 @@ public class MenuDataSeed : ITransientDependency, IMenuDataSeed
         users.SetOrder(102);
         users.SetIcon("fa fa-users");
         users.SetRouter("users");
-        users.SetMultiLingual(new Dictionary<string, object>()
+        users.SetMultilingual(new Dictionary<string, object>()
         {
             { "en", "Users" },
             { "zh-Hans", "用户" },
@@ -98,7 +98,7 @@ public class MenuDataSeed : ITransientDependency, IMenuDataSeed
         roles.SetOrder(104);
         roles.SetIcon("fa fa-user-lock");
         roles.SetRouter("roles");
-        roles.SetMultiLingual(new Dictionary<string, object>()
+        roles.SetMultilingual(new Dictionary<string, object>()
         {
             { "en", "Roles" },
             { "zh-Hans", "角色" },
@@ -112,7 +112,7 @@ public class MenuDataSeed : ITransientDependency, IMenuDataSeed
         securityLogManagement.SetOrder(105);
         securityLogManagement.SetIcon("fa fa-user-shield");
         securityLogManagement.SetRouter("security-logs");
-        securityLogManagement.SetMultiLingual(new Dictionary<string, object>()
+        securityLogManagement.SetMultilingual(new Dictionary<string, object>()
         {
             { "en", "Security Logs" },
             { "zh-Hans", "安全日志" },
@@ -127,7 +127,7 @@ public class MenuDataSeed : ITransientDependency, IMenuDataSeed
                 isStatic: true);
             openIdDictManagement.SetOrder(106);
             openIdDictManagement.SetIcon("fa fa-shield");
-            openIdDictManagement.SetMultiLingual(new Dictionary<string, object>()
+            openIdDictManagement.SetMultilingual(new Dictionary<string, object>()
             {
                 { "en", "Authorization Grant" },
                 { "zh-Hans", "授权管理" },
@@ -141,7 +141,7 @@ public class MenuDataSeed : ITransientDependency, IMenuDataSeed
             applications.SetOrder(107);
             applications.SetIcon("fa fa-anchor-lock");
             applications.SetRouter("applications");
-            applications.SetMultiLingual(new Dictionary<string, object>()
+            applications.SetMultilingual(new Dictionary<string, object>()
             {
                 { "en", "Applications" },
                 { "zh-Hans", "应用" },
@@ -155,7 +155,7 @@ public class MenuDataSeed : ITransientDependency, IMenuDataSeed
             scopes.SetOrder(108);
             scopes.SetRouter("scopes");
             scopes.SetIcon("fa fa-anchor");
-            scopes.SetMultiLingual(new Dictionary<string, object>()
+            scopes.SetMultilingual(new Dictionary<string, object>()
             {
                 { "en", "Scopes" },
                 { "zh-Hans", "授权范围" },
@@ -169,7 +169,7 @@ public class MenuDataSeed : ITransientDependency, IMenuDataSeed
             tenants.SetOrder(109);
             tenants.SetIcon("fa fa-building-user");
             tenants.SetRouter("tenants");
-            tenants.SetMultiLingual(new Dictionary<string, object>()
+            tenants.SetMultilingual(new Dictionary<string, object>()
             {
                 { "en", "Tenants" },
                 { "zh-Hans", "租户" },
@@ -185,7 +185,7 @@ public class MenuDataSeed : ITransientDependency, IMenuDataSeed
             settings.SetOrder(110);
             settings.SetIcon("fa fa-cog");
             settings.SetRouter("settings");
-            settings.SetMultiLingual(new Dictionary<string, object>()
+            settings.SetMultilingual(new Dictionary<string, object>()
             {
                 { "en", "Settings" },
                 { "zh-Hans", "系统设置" },
@@ -199,7 +199,7 @@ public class MenuDataSeed : ITransientDependency, IMenuDataSeed
             auditLogs.SetOrder(111);
             auditLogs.SetIcon("fa fa-file-lines");
             auditLogs.SetRouter("audit-logs");
-            auditLogs.SetMultiLingual(new Dictionary<string, object>()
+            auditLogs.SetMultilingual(new Dictionary<string, object>()
             {
                 { "en", "Audit Logs" },
                 { "zh-Hans", "审计日志" },
@@ -215,7 +215,7 @@ public class MenuDataSeed : ITransientDependency, IMenuDataSeed
         menus.SetOrder(111);
         menus.SetIcon("fa fa-list");
         menus.SetRouter("menus");
-        menus.SetMultiLingual(new Dictionary<string, object>()
+        menus.SetMultilingual(new Dictionary<string, object>()
         {
             { "en", "Menus" },
             { "zh-Hans", "菜单" },

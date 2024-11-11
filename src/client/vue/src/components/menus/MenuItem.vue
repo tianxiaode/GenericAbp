@@ -27,7 +27,7 @@ defineProps({
 
 const { locale } = useI18n();
 const getDisplayName = (item: MenuType) => {
-    return item.multiLingual[locale.value] || item.name;
+    return item.multilingual[locale.value] || item.name;
 }
 
 const getRouter = (item: MenuType) => {

@@ -78,17 +78,17 @@ public class MenuController : MenuManagementController, IMenuAppService
     }
 
     [HttpGet]
-    [Route("{id:guid}/multi-lingual")]
-    public async Task<Dictionary<string, object>> GetMultiLingualAsync(Guid id)
+    [Route("{id:guid}/multilingual")]
+    public async Task<Dictionary<string, object>> GetMultilingualAsync(Guid id)
     {
-        return await AppService.GetMultiLingualAsync(id);
+        return await AppService.GetMultilingualAsync(id);
     }
 
     [HttpPut]
-    [Route("{id:guid}/multi-lingual")]
-    public async Task UpdateMultiLingualAsync(Guid id, Dictionary<string, object> input)
+    [Route("{id:guid}/multilingual")]
+    public async Task UpdateMultilingualAsync(Guid id, Dictionary<string, object> input)
     {
-        await AppService.UpdateMultiLingualAsync(id, input);
+        await AppService.UpdateMultilingualAsync(id, input);
     }
 
 

@@ -32,7 +32,7 @@ export class AppConfig {
         }
     }
 
-    getLanguages() {
+    get languages() {
         return this.config?.localization?.languages || [];
     }
 

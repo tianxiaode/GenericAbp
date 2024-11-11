@@ -10,10 +10,10 @@
                         <template #label>
                             <div>{{ t(property.label) }}</div>
                         </template>
-                        <component v-if="group === 'default-'" :is="comMap[property.type || 'input']"
+                        <component v-if="group === 'default-'" :is="comMap[property.type || 'input']" v-bind="property.props"
                             v-model="model[property.name]" clearable>
                         </component>
-                        <component v-else :is="comMap[property.type || 'input']" v-model="model[getGroupName(group)][property.name]" clearable>
+                        <component v-else :is="comMap[property.type || 'input']" v-model="model[getGroupName(group)][property.name]" clearable v-bind="property.props">
                         </component>
                     </el-descriptions-item>
                 </el-descriptions>

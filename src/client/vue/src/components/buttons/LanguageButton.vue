@@ -21,27 +21,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import { useConfigStore } from '~/store';
-import { useBrowseEnv, useConfig, useI18n } from '~/composables';
-import { appConfig, LanguageType } from '~/libs';
+import { useBrowseEnv, useI18n, useMultilingual } from '~/composables';
 
 const { hasHover, isMobile } = useBrowseEnv();
 const { t } = useI18n();
-const languages = ref<LanguageType[]>([]);
-const currentLanguage = ref<LanguageType>();
-const refresh = () => {
-    languages.value = appConfig.getLanguages();
-    currentLanguage.value = appConfig.currentCulture;
-}
 
-const { } = useConfig(refresh);
+const { languages, currentLanguage, changeLanguage } = useMultilingual();
 
-const configStore = useConfigStore();
-
-const changeLanguage = (cultureName: string) => {
-    configStore.setLocale(cultureName);
-}
 
 
 

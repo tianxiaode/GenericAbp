@@ -12,7 +12,7 @@ export interface MenuType extends EntityInterface {
     router: string,
     groupName: string,
     parent: Record<string, any>,
-    multiLingual: Record<string, string>,
+    multilingual: Record<string, string>,
     children: MenuType[],
     hasChildren?: boolean
 }

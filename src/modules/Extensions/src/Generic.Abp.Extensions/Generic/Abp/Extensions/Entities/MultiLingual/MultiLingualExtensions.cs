@@ -3,27 +3,27 @@ using System.Security;
 using System.Text.Json;
 using Volo.Abp.Data;
 
-namespace Generic.Abp.Extensions.Entities.MultiLingual;
+namespace Generic.Abp.Extensions.Entities.Multilingual;
 
-public static class MultiLingualExtensions
+public static class MultilingualExtensions
 {
-    private const string MultiLingualPropertyName = "MultiLingual";
+    private const string MultilingualPropertyName = "Multilingual";
 
-    public static void SetMultiLingual<TEntity>(this TEntity entity, Dictionary<string, object> languages)
+    public static void SetMultilingual<TEntity>(this TEntity entity, Dictionary<string, object> languages)
         where TEntity : IHasExtraProperties
     {
-        entity.SetProperty(MultiLingualPropertyName, languages);
+        entity.SetProperty(MultilingualPropertyName, languages);
     }
 
-    public static Dictionary<string, object> GetMultiLingual<TEntity>(this TEntity entity)
+    public static Dictionary<string, object> GetMultilingual<TEntity>(this TEntity entity)
         where TEntity : IHasExtraProperties
     {
-        var multiLingual = entity.GetProperty(MultiLingualPropertyName);
-        if (multiLingual == null)
+        var multilingual = entity.GetProperty(MultilingualPropertyName);
+        if (multilingual == null)
         {
             return new Dictionary<string, object>();
         }
 
-        return JsonSerializer.Deserialize<Dictionary<string, object>>(((JsonElement)multiLingual).GetRawText()) ?? [];
+        return JsonSerializer.Deserialize<Dictionary<string, object>>(((JsonElement)multilingual).GetRawText()) ?? [];
     }
 }

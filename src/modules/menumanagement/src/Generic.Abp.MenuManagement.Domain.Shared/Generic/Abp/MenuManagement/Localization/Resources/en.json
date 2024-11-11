@@ -16,6 +16,8 @@
     "Menu:Order": "Order",
     "Menu:Router": "Router",
     "Menu:Parent": "Parent",
-    "MenuEntityVersion": "Entity Version"
+    "Menu:EntityVersion": "Entity Version",
+    "Menu:Multilingual": "Multilingual",
+    "Menu:Permissions": "Permissions"
   }
 }
