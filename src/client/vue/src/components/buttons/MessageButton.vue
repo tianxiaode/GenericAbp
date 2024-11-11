@@ -4,8 +4,8 @@
             <span :class="type === 'error'? 'text-danger' :'text-success'" v-html="t(message)" ></span>
         </template>
         <template #reference>
-            <i v-if="type !== 'error'" class="fa fa-check text-success" @mouseenter="visible = true"></i>
-            <i v-if ="type === 'error'" class="fa fa-x text-danger" @mouseenter="visible = true"></i>
+            <i v-if="type !== 'error'" class="fa fa-check text-success" @mouseenter="autoClose"></i>
+            <i v-if ="type === 'error'" class="fa fa-x text-danger" @mouseenter="autoClose"></i>
         </template>
     </el-popover>
 </template>
@@ -24,11 +24,12 @@ defineExpose({
     success:(msg: string) => {
         type.value ='success';
         message.value = msg;
-        visible.value = true;
+        autoClose();
     },
     error:(msg: string) => {
         type.value = 'error';
         message.value = msg;
+        autoClose();
     },
     clear: () => {
         if(message){
@@ -37,6 +38,13 @@ defineExpose({
         visible.value = false;
     }
 });
+
+const autoClose = () => {
+    visible.value = true;
+    setTimeout(() => {
+        visible.value = false;
+    },2000);
+}
 
 onMounted(() => {
     if (message.value !== '') {

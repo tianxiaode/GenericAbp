@@ -4,7 +4,7 @@ export type FormMessageTypeType = "success" | "error" | "info" | "warning" | "";
 
 export function useFormMessageExpose() {
 
-    const formMessage = ref("");
+    const message = ref("");
     const formMessageType = ref<FormMessageTypeType>("");
     const formMessageParams = ref<any>();
 
@@ -13,7 +13,7 @@ export function useFormMessageExpose() {
         messageType: FormMessageTypeType,
         params?: any,
     ) => {
-        formMessage.value = message;
+        message.value = message;
         formMessageType.value = messageType;
         if(params){
             formMessageParams.value = params;
@@ -47,7 +47,7 @@ export function useFormMessageExpose() {
     };
 
     return {
-        formMessage,
+        formMessage: message,
         formMessageType,
         formMessageParams,
         formMessageExpose,

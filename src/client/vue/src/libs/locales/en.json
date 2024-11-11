@@ -81,6 +81,7 @@
         "Selected": "Selected: ",
         "MoveTo": "Move To ...",
         "CopyTo": "Copy To ...",
+        "MultilingualSomething": " Multilingual - {title}",
         "PropertyInput":{
             "Label":"Properties",
             "Name": "Name",

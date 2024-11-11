@@ -4,24 +4,19 @@
         <ActionToolbar :title="t('MenuManagement.Menus')" @filter="filter" :buttons="toolbarButtons">
         </ActionToolbar>
         <el-table ref="tableRef" :data="data" stripe border style="width: 100%" :row-key="api.idFieldName"
-            :highlight-current-row="true"
-        >
+            :highlight-current-row="true">
             <TreeColumn prop="name" :label="t('MenuManagement.Menu:Name')" width="full" :filterText="filterText"
-                :order="sorts.name"
-                :sort-change="sortChange"
-                :expand="expandNode">
+                :order="sorts.name" :sort-change="sortChange" :expand="expandNode">
             </TreeColumn>
             <CustomSortColumn :label="t('MenuManagement.Menu:Icon')" prop="icon" width="100" :sort-change="sortChange"
-                :order="sorts.icon"
-            >
+                :order="sorts.icon">
                 <template #default="{ row }">
                     <i v-if="row.icon" :class="row.icon"></i>
                     <span v-else>-</span>
                 </template>
             </CustomSortColumn>
             <CustomSortColumn :label="t('MenuManagement.Menu:Router')" prop="router" width="full" :is-highlight="true"
-                :order="sorts.router"
-                :filter="filterText" :sort-change="sortChange">
+                :order="sorts.router" :filter="filterText" :sort-change="sortChange">
             </CustomSortColumn>
             <CustomSortColumn :label="t('MenuManagement.Menu:Order')" prop="order" width="100" align="right"
                 :order="sorts.order" :sort-change="sortChange">
@@ -32,15 +27,20 @@
         </el-table>
     </div>
 
-    <MenuForm v-if="dialogVisible" v-model="dialogVisible" v-model:entity-id="currentEntityId" :parent="currentParent" />
-    <Detail v-if="detailVisible" :title="detailTitle" :data="detailData" :row-items="rowItems" v-model="detailVisible"></Detail>
+    <MenuForm v-if="dialogVisible" v-model="dialogVisible" v-model:entity-id="currentEntityId"
+        :parent="currentParent" />
+    <Detail v-if="detailVisible" :title="detailTitle" :data="detailData" :row-items="rowItems" v-model="detailVisible">
+    </Detail>
+    <MultilingualDialog v-bind="multilingualDialogProps" v-if="multilingualDialogVisible"
+        v-model="multilingualDialogData">
+    </MultilingualDialog>
 </template>
 
 
 <script setup lang="ts">
 import ActionToolbar from '../../toolbars/ActionToolbar.vue';
 import { ref, watch } from 'vue';
-import { useI18n, useRepository, useTree, useDetail } from '~/composables';
+import { useI18n, useRepository, useTree, useDetail, useMultilingualDialog } from '~/composables';
 import { MenuType } from '~/repositories';
 import CheckColumn from '../../table/CheckColumn.vue';
 import ActionColumn from '../../table/ActionColumn.vue';
@@ -48,6 +48,7 @@ import MenuForm from './MenuForm.vue';
 import TreeColumn from '~/components/table/TreeColumn.vue';
 import CustomSortColumn from '~/components/table/CustomSortColumn.vue';
 import Detail from '../../Detail.vue';
+import MultilingualDialog from '~/components/dialogs/MultilingualDialog.vue';
 
 const groupName = ref('');
 const permissionVisible = ref(false);
@@ -65,7 +66,7 @@ const {
     data, dialogVisible, currentEntityId, tableRef,
     filterText, sorts, buttons, currentParent,
     create, update, remove, checkChange, filter,
-    sortChange, expandNode } = useTree<MenuType>(api,{ order: 'ascending'});
+    sortChange, expandNode } = useTree<MenuType>(api, { order: 'ascending' });
 
 
 const toolbarButtons = {
@@ -78,19 +79,19 @@ watch(groupName, () => {
     api.search('groupName', groupName.value, true);
 })
 
-const { detailVisible, detailData, detailTitle, showDetails, rowItems } = useDetail(api,[
-    { field: 'name'},
+const { detailVisible, detailData, detailTitle, showDetails, rowItems } = useDetail(api, [
+    { field: 'name' },
     { field: 'parent', convert: (_: any, data: MenuType) => data.parent ? data.parent.name : '-' },
-    { field: 'icon', render: (value: any) =>  value? `<i class="${value}"></i>` : '-' },    
-    { field: 'router'},
-    { field: 'order'},
-    { field: 'isEnabled', type: 'boolean'},
-    { field: 'isStatic', type: 'boolean'},
-    { field: 'multilingual', type: 'multilingual'},
-    { field: 'permissions', type: 'list'}
+    { field: 'icon', render: (value: any) => value ? `<i class="${value}"></i>` : '-' },
+    { field: 'router' },
+    { field: 'order' },
+    { field: 'isEnabled', type: 'boolean' },
+    { field: 'isStatic', type: 'boolean' },
+    { field: 'multilingual', type: 'multilingual' },
+    { field: 'permissions', type: 'list' }
 ])
 
-
+const { multilingualDialogVisible, multilingualDialogProps, multilingualDialogData, multilingualShowDialog } = useMultilingualDialog(api);
 
 const tableButtons = {
     ...buttons,
@@ -98,7 +99,7 @@ const tableButtons = {
     edit: { action: update, disabled: (row: MenuType) => row.isStatic, visible: api.canUpdate },
     delete: { action: remove, disabled: (row: MenuType) => row.isStatic, visible: api.canDelete },
     permission: { action: openPermissionWindow, icon: 'fa fa-lock', title: 'AbpIdentity.Permissions', order: 300, type: 'primary', visible: api.canUpdate },
-    global: { action: openPermissionWindow, icon: 'fa fa-globe', title: 'AbpIdentity.Permissions', order: 400, type: 'primary', visible: api.canUpdate },
+    global: { action: multilingualShowDialog, icon: 'fa fa-globe', title: 'AbpIdentity.Permissions', order: 400, type: 'primary', visible: api.canUpdate },
 }
 
 //arrows-up-down-left-right

@@ -3,18 +3,18 @@
         {{ t('Home') }}
 
         <PropertyInput :list="[
-            { label: 'en', name: 'en' },
-            { label: 'zh-Hans', name: 'zh-Hans' },
-            { label: 'zh-Hant',  name: 'zh-Hant' }
+            { label: 'en', field: 'en' },
+            { label: 'zh-Hans', field: 'zh-Hans' },
+            { label: 'zh-Hant',  field: 'zh-Hant' }
         ]" v-model="model1">
         </PropertyInput>
         <PropertyInput :list="[
-            { label: 'name',  type:'input' ,  group: 'en', name: 'name' },
-            { label: 'description',  type:'input' ,  group: 'en', name: 'description', props: { type: 'textarea', rows:3 } },
-            { label: 'name',  type:'input' ,  group: 'zh-Hans', name: 'name' },
-            { label: 'description',  type:'input' ,  group: 'zh-Hans', name: 'description', props: { type: 'textarea', rows:3 } },
-            { label: 'name',  type:'input' ,  group: 'zh-Hant', name: 'name' },
-            { label: 'description',  type:'input' ,  group: 'zh-Hant', name: 'description', props: { type: 'textarea', rows:3 } },
+            { label: 'name',  type:'input' ,  group: 'en', field: 'name' },
+            { label: 'description',  type:'input' ,  group: 'en', field: 'description', props: { type: 'textarea', rows:3 } },
+            { label: 'name',  type:'input' ,  group: 'zh-Hans', field: 'name' },
+            { label: 'description',  type:'input' ,  group: 'zh-Hans', field: 'description', props: { type: 'textarea', rows:3 } },
+            { label: 'name',  type:'input' ,  group: 'zh-Hant', field: 'name' },
+            { label: 'description',  type:'input' ,  group: 'zh-Hant', field: 'description', props: { type: 'textarea', rows:3 } },
         ]" v-model="model2">
         </PropertyInput>
     </div>

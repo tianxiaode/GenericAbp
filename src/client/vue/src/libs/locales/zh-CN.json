@@ -80,6 +80,7 @@
         "Selected": "已选择 ({count}) : ",
         "MoveTo": "移动到...",
         "CopyTo": "复制到...",
+        "MultilingualSomething": " 多语言 - {title}",
         "PropertyInput":{
             "Name": "名称",
             "Value": "值",

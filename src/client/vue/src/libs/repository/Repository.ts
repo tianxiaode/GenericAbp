@@ -123,6 +123,14 @@ export class Repository<T extends EntityInterface> extends BaseRepository<T> {
         }
     };
 
+    getMultilingual = (id: string | number) =>{
+        return this.send(this.getUrl() + `/${id}/multilingual`, "GET");
+    }
+
+    updateMultilingual = (id: string, multiLingual: Record<string, string>) =>{
+        return this.send(this.getUrl() + `/${id}/multilingual`, 'PUT',  multiLingual);
+    }
+
     create = async (entity: T): Promise<T | undefined> => {
         if (!this.beforeCreate(entity)) return undefined;
 
