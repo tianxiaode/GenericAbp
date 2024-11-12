@@ -22,7 +22,6 @@ export function useDialog(config: UseDialogConfig = {}) {
     const dialogData = ref<any>(null);
     const dialogRef = ref<any>(null);
     const initValues = ref<any>(config?.initData || {});
-    const messageRef = ref<any>(null);
     const { confirm } = useConfirm();
 
     const setInitValues = (data: any) => {
@@ -67,7 +66,7 @@ export function useDialog(config: UseDialogConfig = {}) {
     };
 
     const close = (data?: any) => {
-        messageRef.value.clear();
+        dialogRef.value.clear();
         dialogVisible.value = false;
         initValues.value = null;
         dialogData.value = null;
@@ -77,9 +76,7 @@ export function useDialog(config: UseDialogConfig = {}) {
 
     const dialogProps = () => {
         return {
-            dialogRef: dialogRef,
             titleRef: dialogTitle,
-            messageRef: messageRef,  
             visible: dialogVisible,
             beforeClose: async () => {
                 await beforeClose();
@@ -98,10 +95,10 @@ export function useDialog(config: UseDialogConfig = {}) {
     }
 
     return {
+        dialogRef,
         dialogVisible,
         dialogTitle,
         dialogData,
-        messageRef,                        
         dialogProps: dialogProps(),
         setInitValues
     };

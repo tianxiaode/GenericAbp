@@ -1,11 +1,11 @@
 import { ref } from "vue";
 
-export type FormMessageTypeType = "success" | "error" | "info" | "warning" | "";
+export type FormMessageTypeType = "success" | "error" | "info" | "warning";
 
 export function useFormMessageExpose() {
 
-    const message = ref("");
-    const formMessageType = ref<FormMessageTypeType>("");
+    const formMessage = ref("");
+    const formMessageType = ref<FormMessageTypeType>("success");
     const formMessageParams = ref<any>();
 
     const setFormMessage = (
@@ -13,7 +13,7 @@ export function useFormMessageExpose() {
         messageType: FormMessageTypeType,
         params?: any,
     ) => {
-        message.value = message;
+        formMessage.value = message;
         formMessageType.value = messageType;
         if(params){
             formMessageParams.value = params;
@@ -47,7 +47,7 @@ export function useFormMessageExpose() {
     };
 
     return {
-        formMessage: message,
+        formMessage,
         formMessageType,
         formMessageParams,
         formMessageExpose,

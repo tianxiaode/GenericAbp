@@ -9,8 +9,8 @@
             <slot name="dialog-footer">
                 <div class="flex-1 flex items-center gap-2">
                     <slot name="dialog-actions"></slot>
-                    <MessageButton ref="messageRef" style="order: 100;" circle class="none-border"></MessageButton>
-                    <IconButton icon="fa fa-undo" @click="resetClick" style="order: 200;" circle class="none-border"
+                    <FormMessage v-if="formMessage" :message="formMessage" :message-type="formMessageType" :message-params="formMessageParams" type="button" :button-props="{style: 'order:100;'}" ></FormMessage>
+                    <IconButton link icon="fa fa-undo" @click="resetClick" style="order: 200;"
                         title="Components.Reset">
                     </IconButton>
                     <span class="flex-grow" style="order: 300;"></span>
@@ -23,12 +23,12 @@
 </template>
 
 <script setup lang="ts">
-import { useI18n } from '~/composables';
-import MessageButton from '../buttons/MessageButton.vue';
+import { useFormMessageExpose, useI18n } from '~/composables';
 import IconButton from '../buttons/IconButton.vue';
-import { PropType, ref } from 'vue';
+import { PropType } from 'vue';
+import FormMessage from '../forms/FormMessage.vue';
 
-const messageRef = ref<any>();
+
 const dialogVisible = defineModel<any>('visible');
 defineProps({
     titlePrefix: {
@@ -61,16 +61,10 @@ defineProps({
     }
 })
 
+const { formMessage, formMessageType, formMessageParams, formMessageExpose} = useFormMessageExpose();
+
 defineExpose({
-    success(message: string){
-        messageRef.value.success(message);
-    },
-    error(message: string){
-        messageRef.value.error(message);
-    },
-    clear(){
-        me
-    }
+    ...formMessageExpose()
 })
 
 const { t } = useI18n();

@@ -1,5 +1,5 @@
 <template>
-    <BaseDialog v-bind="$attrs">
+    <BaseDialog v-bind="$attrs" ref="dialogRef">
         <PropertyInput v-if="!rowItems" :list="getRowItems" v-model="model"></PropertyInput>
         <PropertyGroupInput v-else :groups="getRowItems"  v-model="model"></PropertyGroupInput>
     </BaseDialog>
@@ -20,6 +20,7 @@ const props = defineProps({
 
 const { defaultRowItems } = useMultilingual();
 const model = defineModel<any>();
+const dialogRef = defineModel<any>('dialogRef');
 const getRowItems = computed(() => {
     if (props.rowItems) {
         const rowItems = [] as any;

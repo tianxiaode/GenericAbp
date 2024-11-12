@@ -241,3 +241,7 @@ fieldset {
     border: 2px solid #dcdfe6;
     border-radius: 5px;
 }
+
+.el-button+.el-button{
+    margin: 0;
+}
