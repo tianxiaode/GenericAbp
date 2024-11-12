@@ -4,7 +4,7 @@
             <el-input v-model="tenant" size="large" :placeholder="t('AbpTenantManagement.DisplayName:TenantName')"
                 @keyup.enter="switchTenant">
                 <template #append>
-                    <span class="cursor-pointer" @click="switchTenant">{{ t('AbpTenantManagement.Switch') }}</span>
+                    <span class="cursor-pointer text-primary" @click="switchTenant">{{ t('AbpTenantManagement.Switch') }}</span>
                 </template>
             </el-input>
         </el-tooltip>
