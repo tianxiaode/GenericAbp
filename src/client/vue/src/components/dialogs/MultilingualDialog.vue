@@ -6,24 +6,17 @@
 </template>
 
 <script setup lang="ts">
-import {  useMultilingual } from '~/composables';
+import {  useMultilingual, usePropertyListProps } from '~/composables';
 import { PropType, computed } from 'vue';
 import PropertyInput from '../forms/PropertyInput.vue';
 import BaseDialog from './BaseDialog.vue';
 import PropertyGroupInput from '../forms/PropertyGroupInput.vue';
 
 const props = defineProps({
-    className: {
-        type: String,
-        default: 'w-9/12'
-    },
-    labelClassName: {
-        type: String,
-        default: ''
-    },
     rowItems: {
         type: Array as PropType<any>
-    }
+    },
+    ...usePropertyListProps()
 })
 
 

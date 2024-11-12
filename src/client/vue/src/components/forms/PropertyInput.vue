@@ -14,7 +14,7 @@
 
 <script setup lang="ts">
 import { PropType, reactive, markRaw } from 'vue';
-import { useI18n } from '~/composables';
+import { useI18n, usePropertyListProps } from '~/composables';
 import { ElInput, ElSelect } from 'element-plus';
 
 const model = defineModel<any>({ default: {} });
@@ -29,16 +29,11 @@ export interface PropertyInputType {
 
 
 defineProps({
-    className: {
-        type: String,
-    },
-    labelClassName: {
-        type: String,
-    },
     list: {
         type: Array as PropType<PropertyInputType[]>,
         required: true,
-    }
+    },
+    ...usePropertyListProps(),
 });
 
 const { t } = useI18n();

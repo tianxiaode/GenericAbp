@@ -1,6 +1,6 @@
 <template>
         <el-descriptions :column="1" size="large" border>
-            <el-descriptions-item v-for="item in rowItems" :label="t(item.label)">
+            <el-descriptions-item v-for="item in rowItems" :label="t(item.label)" :class-name="className" :labek-class-name="labelClassName">
                 <div v-if="item.render" v-html="item.render(data[item.field], data, item)"></div>
                 <div v-else-if="isEmpty(item.type)"> {{ getValue(item, data) || '-' }}</div>
                 <CheckStatus v-if="item.type === 'boolean'" :value="getValue(item, data)" />
@@ -24,7 +24,7 @@
 <script setup lang="ts">
 import { PropType } from 'vue';
 import { formatDate, isEmpty } from '~/libs';
-import { useI18n } from '~/composables';
+import { useI18n, usePropertyListProps } from '~/composables';
 import CheckStatus from '../icons/CheckStatus.vue';
 import List from './List.vue';
 import JsonPretty from 'vue-json-pretty';
@@ -50,6 +50,7 @@ defineProps({
         type: Array as PropType<RowItemType[]>,
         default: () => []
     },
+    ...usePropertyListProps()
 })
 
 const {t, format } = useI18n();

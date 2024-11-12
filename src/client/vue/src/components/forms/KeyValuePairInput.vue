@@ -1,5 +1,5 @@
 <template>
-    <el-descriptions v-bind="$attrs" :column="1" border class="h-full overflow-auto property-input" size="small">
+    <el-descriptions v-bind="$attrs" :column="1" border class="h-full overflow-auto key-value-pair-input" size="small">
         <el-descriptions-item class-name="w-1/2">
             <template #label>
                 <div class="w-full">
@@ -87,7 +87,7 @@ function removeProperty(key: any) {
 </script>
 
 <style lang="scss">
-.property-input {
+.key-value-pair-input {
     .el-input-group__append {
         padding: 0 10px;
     }

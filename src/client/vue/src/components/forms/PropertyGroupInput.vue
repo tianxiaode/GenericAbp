@@ -5,7 +5,7 @@
                 <el-text size="large" class="font-bold">{{ t(group.displayName || group.name) }}</el-text>
             </template>
             <PropertyInput :list="group.items" v-model="model[group.name]"
-                :class-name="group.className" :label-class-name="group.labelClassName"
+                :class-name="className" :label-class-name="labelClassName"
             >
 
             </PropertyInput>
@@ -15,7 +15,7 @@
 
 <script setup lang="ts">
 import { onMounted, PropType, ref} from 'vue';
-import { useI18n } from '~/composables';
+import { useI18n, usePropertyListProps } from '~/composables';
 import PropertyInput, { PropertyInputType } from './PropertyInput.vue';
 
 const model = defineModel<any>({ default: {} });
@@ -23,8 +23,6 @@ const model = defineModel<any>({ default: {} });
 export interface PropertyGroupType{
     name: string,
     displayName?: string,
-    className?: string,
-    labelClassName?: string,
     items: PropertyInputType[],
 }
 
@@ -32,7 +30,8 @@ const props = defineProps({
     groups:{
         type: Array as PropType<PropertyGroupType[]>,
         default: () => []
-    }
+    },
+    ...usePropertyListProps()
 });
 
 const { t } = useI18n();
