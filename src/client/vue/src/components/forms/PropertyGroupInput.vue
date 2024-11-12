@@ -4,7 +4,11 @@
             <template #title>
                 <el-text size="large" class="font-bold">{{ t(group.displayName || group.name) }}</el-text>
             </template>
-            <PropertyInput :list="group.items" v-model="model[group.name]"></PropertyInput>
+            <PropertyInput :list="group.items" v-model="model[group.name]"
+                :class-name="group.className" :label-class-name="group.labelClassName"
+            >
+
+            </PropertyInput>
         </el-collapse-item>
     </el-collapse>
 </template>
@@ -19,6 +23,8 @@ const model = defineModel<any>({ default: {} });
 export interface PropertyGroupType{
     name: string,
     displayName?: string,
+    className?: string,
+    labelClassName?: string,
     items: PropertyInputType[],
 }
 

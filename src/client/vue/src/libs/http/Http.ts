@@ -212,6 +212,9 @@ export class Http extends BaseHttp {
                 request.statusText ||
                 request.status ||
                 "unknownError";
+            if(errorText === request.status){
+                errorText = "Http." + errorText;
+            }
             if (data?.error?.validationErrors) {
                 errorText = data.error.details.replaceAll("\r\n", "<br>");
             }

@@ -12,7 +12,6 @@ import App from "./App.vue";
 import { logger, envConfig,  LocalStorage, i18n, BaseHttp, normalizedLanguage, account, RepositoryGlobalConfig, RepositoryFactory,textToHtml } from "./libs";
 import router from "./router"; // 引入 router.ts
 import { useConfigStore } from "./store";
-import { Logger, WebStorageStateStore } from "oidc-client-ts";
 import {repositoryRegisters} from "./repositories"
 import { useConfirm } from "./composables";
 
@@ -56,7 +55,6 @@ i18n.init({
 });
 
 
-Logger.debug('[main.ts]',"app started");
 // 初始化仓库
 RepositoryGlobalConfig.init({
     api:{

@@ -44,14 +44,6 @@ export class MenuRepository extends Repository<MenuType> {
         return http.get(this.getUrl() + `/groups`);
     }
 
-    getMultiLingual = (id: string) =>{
-        return http.get(this.getUrl() + `/${id}/multi-lingual`);
-    }
-
-    updateMultiLingual = (id: string, multiLingual: Record<string, string>) =>{
-        return http.put(this.getUrl() + `/${id}/multi-lingual`, multiLingual);
-    }
-
     getPermissions = (id: string) =>{
         return http.get(this.getUrl() + `/${id}/permissions`);
     }

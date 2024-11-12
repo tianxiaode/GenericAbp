@@ -95,9 +95,9 @@ export function useDialog(config: UseDialogConfig = {}) {
     }
 
     return {
-        dialogRef,
         dialogVisible,
         dialogTitle,
+        dialogRef,
         dialogData,
         dialogProps: dialogProps(),
         setInitValues

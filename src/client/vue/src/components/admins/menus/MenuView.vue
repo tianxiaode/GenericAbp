@@ -32,7 +32,6 @@
     <Detail v-if="detailVisible" :title="detailTitle" :data="detailData" :row-items="rowItems" v-model="detailVisible">
     </Detail>
     <MultilingualDialog v-bind="multilingualDialogProps" v-if="multilingualDialogVisible"
-        v-model:dialog-visible="multilingualDialogVisible"
         v-model:dialog-ref="multilingualDialogRef"
         v-model="multilingualDialogData">
     </MultilingualDialog>

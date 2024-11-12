@@ -13,13 +13,12 @@ export function useMultilingualDialog(
     const submit = async (values: any) => {
         try {
             await api.updateMultilingual(
-                entity.value[api.idFieldName] + 1,
+                entity.value[api.idFieldName],
                 values
             );
-            dialogVisible.value = false;
             dialogRef.value?.success("Message.SaveSuccessAndClose");
-            entity.value = null;
             setTimeout(() => {
+                entity.value = null;
                 dialogVisible.value = false;
             }, 3000);
         } catch (e: any) {
@@ -32,8 +31,8 @@ export function useMultilingualDialog(
         dialogVisible,
         dialogTitle,
         dialogData,
-        dialogRef,
         dialogProps,
+        dialogRef,
         setInitValues,
     } = useDialog({
         submit,

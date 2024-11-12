@@ -2,16 +2,17 @@
     <el-dialog v-bind="{
         destroyOnClose: true,
         alignCenter: true,
-        ...$attrs        
-    }" :title="t(titlePrefix, {title: titleRef.value})" v-model="dialogVisible.value">
+        ...$attrs
+    }" :title="t(titlePrefix, { title: titleRef.value })" v-model="dialogVisible.value">
         <slot name="default"></slot>
         <template #footer>
             <slot name="dialog-footer">
                 <div class="flex-1 flex items-center gap-2">
                     <slot name="dialog-actions"></slot>
-                    <FormMessage v-if="formMessage" :message="formMessage" :message-type="formMessageType" :message-params="formMessageParams" type="button" :button-props="{style: 'order:100;'}" ></FormMessage>
-                    <IconButton link icon="fa fa-undo" @click="resetClick" style="order: 200;"
-                        title="Components.Reset">
+                    <FormMessage v-if="formMessage" :message="formMessage" :message-type="formMessageType"
+                        :message-params="formMessageParams" type="button" :button-props="{ style: 'order:100;' }">
+                    </FormMessage>
+                    <IconButton link icon="fa fa-undo" @click="resetClick" style="order: 200;" title="Components.Reset">
                     </IconButton>
                     <span class="flex-grow" style="order: 300;"></span>
                     <el-button style="order: 400;" @click="cancelClick">{{ t(cancelText) }}</el-button>
@@ -30,12 +31,13 @@ import FormMessage from '../forms/FormMessage.vue';
 
 
 const dialogVisible = defineModel<any>('visible');
+const { t } = useI18n();
 defineProps({
     titlePrefix: {
         type: String,
-        default: ''    
+        default: ''
     },
-    titleRef:{
+    titleRef: {
         type: Object,
         default: () => ({ value: '' })
     },
@@ -61,11 +63,10 @@ defineProps({
     }
 })
 
-const { formMessage, formMessageType, formMessageParams, formMessageExpose} = useFormMessageExpose();
+const { formMessage, formMessageType, formMessageParams, formMessageExpose } = useFormMessageExpose();
 
 defineExpose({
     ...formMessageExpose()
 })
 
-const { t } = useI18n();
 </script>
