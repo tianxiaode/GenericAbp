@@ -5,7 +5,7 @@
 
 <script setup lang="ts">
 import { ref, watch } from 'vue';
-const isDark = ref(false);
+const isDark = ref(document.documentElement.classList.contains('dark'));
 
 //这里要根据value修改html的class，所以需要监听value的变化
 watch(isDark, (newValue) => {
