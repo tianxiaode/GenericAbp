@@ -8,8 +8,10 @@
             <el-form ref="formRef" v-bind="$attrs" :model="formData" size="large" :inline-message="true"
                 :validate-on-rule-change="false" :scroll-to-error="true">
                 <slot></slot>
-                <FormMessage v-model="formMessage" v-model:form-message-type="formMessageType"
-                    :message-params="formMessageParams">
+                <FormMessage :message="formMessage" :message-type="formMessageType"
+                    :message-params="formMessageParams" 
+                    :clear="clear"
+                    >
                 </FormMessage>
             </el-form>
             <template #footer v-if="providers.length > 0">
@@ -37,7 +39,7 @@ defineProps({
     title: String,
 })
 const { formRef, formExpose } = useFormExpose();
-const { formMessage, formMessageType, formMessageParams, formMessageExpose, error, success } = useFormMessageExpose();
+const { formMessage, formMessageType, formMessageParams, formMessageExpose, error, success, clear } = useFormMessageExpose();
 defineExpose({
     ...formExpose(),
     ...formMessageExpose()

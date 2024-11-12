@@ -60,6 +60,7 @@ export function useFormMessageExpose() {
         success,
         error,
         info,
-        warning
+        warning,
+        clear
     };
 }

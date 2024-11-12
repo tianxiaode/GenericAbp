@@ -1,6 +1,6 @@
 <template>
     <div class="w-full" v-if="type !== 'button' && message">
-        <el-alert :type="messageType" show-icon closable>
+        <el-alert :type="messageType" show-icon closable @close="close">
             <template #title>
                 <span v-html="t(message, messageParams)"> </span>
             </template>
@@ -48,8 +48,13 @@ const props = defineProps({
     buttonProps:{
         type: Object as PropType<Record<string, any>>,
         default: () => ({})
+    },
+    clear:{
+        type: Function,
+        default: () => {}
     }
 })
+
 
 const IconMap = {
     success: 'fa fa-circle-check',
@@ -63,6 +68,9 @@ const iconClass = computed(() => IconMap[props.messageType])
 
 const visible = ref(false);
 
+const close = () => {
+    props.clear();
+}
 
 const autoClose = () => {
     visible.value = true;
