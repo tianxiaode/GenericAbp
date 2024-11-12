@@ -31,7 +31,7 @@ export function useTree<T extends EntityInterface>(
         const changed = api.currentChanged;
         const row: any = data.value.find((item: any) => item[idFieldName] === changed[idFieldName]);
         if (row) {
-            replaceMembers(row, changed);
+            replaceMembers(changed, row);
         } else {
             const parent: any = findParent(changed);
             if(parent){

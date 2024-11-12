@@ -3,6 +3,7 @@ import { deepMerge, i18n, logger } from "~/libs";
 import { useConfirm } from "./useConfirm";
 
 export interface UseDialogConfig {
+    visible?: any,
     initData?: any,
     dialogProps?:{
         resetClick?: any;
@@ -17,8 +18,9 @@ export interface UseDialogConfig {
 }
 
 export function useDialog(config: UseDialogConfig = {}) {
-    const dialogVisible = ref(false);
+    const dialogVisible = config.visible || ref(false);
     const dialogTitle = ref("");
+    const dialogTitlePrefix = ref("");
     const dialogData = ref<any>(null);
     const dialogRef = ref<any>(null);
     const initValues = ref<any>(config?.initData || {});
@@ -76,7 +78,8 @@ export function useDialog(config: UseDialogConfig = {}) {
 
     const dialogProps = () => {
         return {
-            titleRef: dialogTitle,
+            titlePrefix: dialogTitlePrefix,
+            titleValue: dialogTitle,
             visible: dialogVisible,
             beforeClose: async () => {
                 await beforeClose();
@@ -96,10 +99,13 @@ export function useDialog(config: UseDialogConfig = {}) {
 
     return {
         dialogVisible,
+        dialogTitlePrefix,
         dialogTitle,
         dialogRef,
         dialogData,
         dialogProps: dialogProps(),
-        setInitValues
+        initValues,
+        setInitValues,
+        close
     };
 }

@@ -87,6 +87,7 @@ export function replaceMembers(source:any, target:any):void{
 
     for (const key in source) {
         if (source.hasOwnProperty(key)) {
+            console.log(key);
             if (isObject(source[key]) && isObject(target[key])) {
                 replaceMembers(source[key], target[key]);
             } else {

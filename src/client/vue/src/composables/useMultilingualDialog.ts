@@ -30,6 +30,7 @@ export function useMultilingualDialog(
     const {
         dialogVisible,
         dialogTitle,
+        dialogTitlePrefix,
         dialogData,
         dialogProps,
         dialogRef,
@@ -43,6 +44,7 @@ export function useMultilingualDialog(
         const data = await api.getMultilingual(row[api.idFieldName]);
         entity.value = row;
         setInitValues(data);
+        dialogTitlePrefix.value = "Components.MultilingualSomething",
         dialogTitle.value = row[api.messageField];
         dialogVisible.value = true;
     };
@@ -52,7 +54,6 @@ export function useMultilingualDialog(
         multilingualDialogVisible: dialogVisible,
         multilingualDialogData: dialogData,
         multilingualDialogProps: {
-            titlePrefix: "Components.MultilingualSomething",
             rowItems: config.rowItems,
             ...dialogProps,
         },

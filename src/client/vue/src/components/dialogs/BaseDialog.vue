@@ -3,7 +3,7 @@
         destroyOnClose: true,
         alignCenter: true,
         ...$attrs
-    }" :title="t(titlePrefix, { title: titleRef.value })" v-model="dialogVisible.value">
+    }" :title="t(titlePrefix.value, { title: titleValue.value })" v-model="dialogVisible.value">
         <slot name="default"></slot>
         <template #footer>
             <slot name="dialog-footer">
@@ -34,10 +34,10 @@ const dialogVisible = defineModel<any>('visible');
 const { t } = useI18n();
 defineProps({
     titlePrefix: {
-        type: String,
-        default: ''
+        type: Object,
+        default: () => ({ value: '' })
     },
-    titleRef: {
+    titleValue: {
         type: Object,
         default: () => ({ value: '' })
     },
