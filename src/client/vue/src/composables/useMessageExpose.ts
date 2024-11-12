@@ -36,13 +36,18 @@ export function useFormMessageExpose() {
         setFormMessage(message, "warning", params);
     };
 
+    const clear = () => {
+        formMessage.value = "";
+    };
+
     const formMessageExpose = ()=> {
         return {
             setFormMessage,
             success,
             error,
             info,
-            warning
+            warning,
+            clear
         }
     };
 
