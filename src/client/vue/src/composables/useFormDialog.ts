@@ -87,7 +87,7 @@ export function useFormDialog(
                     config.afterGetData(data);
                 }
             } catch (e) {
-                logger.error("[useEntityForm][onMounted]", e);
+                logger.error("[useFormDialog][onMounted]", e);
             }
         } else {
             setInitValues(config.initData || {});
