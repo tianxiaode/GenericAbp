@@ -1,4 +1,4 @@
-import { EntityInterface, http, isGranted, logger, Repository } from "../libs";
+import { EntityInterface, http, isGranted, logger, permission, Repository } from "../libs";
 
 export interface RoleType extends EntityInterface {
   name: string;
@@ -26,6 +26,13 @@ export class RoleRepository extends Repository<RoleType> {
         return http.get(this.readUrl + '/all');
     }
 
+    getPermissions = async (providerKey: string) => {
+        return permission.get("R", providerKey);
+    }
+
+    updatePermissions = async (providerKey: string, permissions: any) => {
+        return permission.update("R", providerKey, permissions);
+    }
 
 }
 

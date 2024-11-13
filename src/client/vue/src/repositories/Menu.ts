@@ -48,7 +48,7 @@ export class MenuRepository extends Repository<MenuType> {
         return http.get(this.getUrl() + `/${id}/permissions`);
     }
 
-    updatePermissions = (id: string, permissions: Record<string, boolean>) =>{  
+    updatePermissions = (id: string, permissions: any) =>{  
         return http.put(this.getUrl() + `/${id}/permissions`, permissions);
     }
 

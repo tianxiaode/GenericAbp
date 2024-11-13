@@ -39,8 +39,8 @@
 
     <Detail v-if="detailVisible" :title="detailTitle" :data="detailData" :row-items="rowItems" v-model="detailVisible"></Detail>
 
-    <PermissionView v-if="permissionVisible" v-model:isVisible="permissionVisible" provider-name="U"
-        :provider-key="providerKey" :title="permissionViewTitle"></PermissionView>
+    <PermissionsDialog v-bind="permissionsDialogProps" v-if="permissionsDialogVisible"
+        v-model:dialog-ref="permissionsDialogRef" v-model="permissionsDialogData" />
 
 </template>
 
@@ -54,10 +54,9 @@ import ActionColumn from '../../table/ActionColumn.vue';
 import UserForm from './UserForm.vue';
 import { formatDate, highlightText } from '~/libs';
 import DateColumn from '../../table/DateColumn.vue';
-import { ref } from 'vue';
 import Detail from '../../Detail.vue';
-import { useDetail, useI18n, useRepository,useTable } from '~/composables';
-import PermissionView from '../permissions/PermissionView.vue';
+import { useDetail, useI18n, usePermissionsDialog, useRepository,useTable } from '~/composables';
+import PermissionsDialog from '../../dialogs/PermissionsDialog.vue';
 
 const {t, format} = useI18n();
 const userApi = useRepository('user');
@@ -79,9 +78,6 @@ const toolbarButtons = {
     create: { action: create, isVisible: userApi.canCreate },
 }
 
-const permissionVisible = ref(false);
-const providerKey = ref('');
-const permissionViewTitle = ref('');
 const { detailVisible, detailData, detailTitle, showDetails, rowItems } = useDetail(userApi,[
     { field: 'userName'},
     { field: 'name'},
@@ -94,18 +90,15 @@ const { detailVisible, detailData, detailTitle, showDetails, rowItems } = useDet
     { field: 'roleNames', type: 'list', label: 'AbpIdentity.Roles'}
 ])
 
-const openPermissionWindow = (row: any) => {
-    // TODO: 打开权限定义窗口
-    providerKey.value = row.id;
-    permissionViewTitle.value = row.userName;
-    permissionVisible.value = true;
-}
+const { permissionsDialogData, permissionsDialogProps,
+    permissionsDialogRef, permissionsDialogVisible, permissionsShowDialog }
+    = usePermissionsDialog(userApi, userApi.idFieldName);
 
 const tableButtons = {
     detail: { action: showDetails },
     edit: { action: update, isVisible: userApi.canUpdate },
     delete: { action: remove, isVisible: userApi.canDelete },
-    permission: { action: openPermissionWindow, icon: 'fa fa-lock', title: 'AbpIdentity.Permissions', order: 300, type: 'primary', isVisible: userApi.canManagePermissions }
+    permission: { action: permissionsShowDialog, icon: 'fa fa-lock', title: 'AbpIdentity.Permissions', order: 300, type: 'primary', isVisible: userApi.canManagePermissions }
 }
 
 

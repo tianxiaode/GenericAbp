@@ -123,13 +123,6 @@ export class Repository<T extends EntityInterface> extends BaseRepository<T> {
         }
     };
 
-    getMultilingual = (id: string | number) =>{
-        return this.send(this.getUrl() + `/${id}/multilingual`, "GET");
-    }
-
-    updateMultilingual = (id: string, multiLingual: Record<string, string>) =>{
-        return this.send(this.getUrl() + `/${id}/multilingual`, 'PUT',  multiLingual);
-    }
 
     create = async (entity: T): Promise<T | undefined> => {
         if (!this.beforeCreate(entity)) return undefined;
@@ -212,10 +205,13 @@ export class Repository<T extends EntityInterface> extends BaseRepository<T> {
         }
         this.fireEvent("filter");
     };
+    
+    getMultilingual = (id: string | number) =>{
+        return this.send(this.getUrl() + `/${id}/multilingual`, "GET");
+    }
 
-    private updatePagination() {
-        this.total = this.records.length;
-        this.pages = Math.ceil(this.total / this.pageSize);
+    updateMultilingual = (id: string, multiLingual: Record<string, string>) =>{
+        return this.send(this.getUrl() + `/${id}/multilingual`, 'PUT',  multiLingual);
     }
 
     localSort = (field: string, order: string, fireEvent: boolean = true) => {
@@ -230,6 +226,11 @@ export class Repository<T extends EntityInterface> extends BaseRepository<T> {
             this.fireEvent("sort");
         }
     };
+
+    private updatePagination() {
+        this.total = this.records.length;
+        this.pages = Math.ceil(this.total / this.pageSize);
+    }
 
     private getDeleteMessages = (
         ids: (string | number)[]

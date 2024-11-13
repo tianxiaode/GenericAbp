@@ -16,6 +16,7 @@ export interface UseDialogConfig {
     beforeClose?: any;
     afterClose?: any;
     submit?:any
+    checkChange?:any
 }
 
 export function useDialog(config: UseDialogConfig = {}) {
@@ -29,6 +30,11 @@ export function useDialog(config: UseDialogConfig = {}) {
 
     const setInitValues = (data: any) => {
         logger.debug("[useDialog][setInitValues]", data);
+        if(Array.isArray(data)){
+            initValues.value = [...data];
+            dialogData.value = [...initValues.value];
+            return;
+        }
         initValues.value = deepMerge(initValues.value || {}, data);
         dialogData.value = deepMerge({}, initValues.value);
     };
@@ -38,8 +44,9 @@ export function useDialog(config: UseDialogConfig = {}) {
     }
 
     const checkChange = async () => {
-        return new Promise<boolean>((resolve) => {
-            const hasChange =
+        return new Promise<boolean>((resolve) => {            
+            const hasChange = config.checkChange 
+                ? config.checkChange() :
                 JSON.stringify(dialogData.value) !==
                 JSON.stringify(initValues.value);
             //没有改变，不做任何操作

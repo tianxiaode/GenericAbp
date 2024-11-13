@@ -4,8 +4,7 @@
         <ActionToolbar :title="t('AbpIdentity.Roles')" @filter="filter" :buttons="toolbarButtons" />
 
         <!-- 数据展示区域 -->
-        <el-table :data="data" stripe border style="width: 100%" @sort-change="sortChange"
-            :highlight-current-row="true"
+        <el-table :data="data" stripe border style="width: 100%" @sort-change="sortChange" :highlight-current-row="true"
             :default-sort="{ prop: 'name', order: 'ascending' }">
             <HighlightColumn :label="t('AbpIdentity.DisplayName:RoleName')" prop="name" width="full" sortable
                 :filterText="filterText" />
@@ -22,8 +21,9 @@
 
     <RoleForm v-if="dialogVisible" v-model="dialogVisible" v-model:entity-id="currentEntityId" />
 
-    <PermissionView v-if="permissionVisible" v-model:isVisible="permissionVisible" provider-name="R"
-        :provider-key="providerKey" :title="providerKey"></PermissionView>
+    <PermissionsDialog v-bind="permissionsDialogProps" v-if="permissionsDialogVisible"
+        v-model:dialog-ref="permissionsDialogRef" v-model="permissionsDialogData" />
+
 </template>
 
 <script setup lang="ts">
@@ -33,38 +33,34 @@ import RoleForm from './RoleForm.vue';
 import { RoleType } from '~/repositories';
 import HighlightColumn from '../../table/HighlightColumn.vue';
 import CheckColumn from '../../table/CheckColumn.vue';
-import { useTable, useRepository, useI18n } from '~/composables';
+import { useTable, useRepository, useI18n, usePermissionsDialog } from '~/composables';
 import ActionColumn from '../../table/ActionColumn.vue';
-import PermissionView from '../permissions/PermissionView.vue';
-import { ref } from 'vue';
+import PermissionsDialog from '~/components/dialogs/PermissionsDialog.vue';
 
-const permissionVisible = ref(false);
-const providerKey = ref('');
 
 const api = useRepository('Role');
 const { t } = useI18n();
 
-const openPermissionWindow = (row: RoleType) => {
-    // TODO: 打开权限定义窗口
-    providerKey.value = row.name;
-    permissionVisible.value = true;
-}
 
 
 const {
     data, dialogVisible, currentEntityId,
     filterText,
     create, update, remove, filter, checkChange,
-    sortChange,  } = useTable<RoleType>(api);
+    sortChange, } = useTable<RoleType>(api);
+
+const { permissionsDialogData, permissionsDialogProps,
+    permissionsDialogRef, permissionsDialogVisible, permissionsShowDialog }
+    = usePermissionsDialog(api, 'name');
 
 const toolbarButtons = {
     create: { action: create, visible: api.canCreate },
 }
 const tableButtons = {
-    detail:{visible: false},
+    detail: { visible: false },
     edit: { disabled: (row: RoleType) => row.isStatic, action: update, visible: api.canUpdate },
     delete: { disabled: (row: RoleType) => row.isStatic, action: remove, visible: api.canDelete },
-    permission: { action: openPermissionWindow, icon: 'fa fa-lock', title: 'AbpIdentity.Permissions', order: 300, type: 'primary', visible: api.canManagePermissions },
+    permission: { action: permissionsShowDialog, icon: 'fa fa-lock', title: 'AbpIdentity.Permissions', order: 300, type: 'primary', visible: api.canManagePermissions },
 }
 
 </script>

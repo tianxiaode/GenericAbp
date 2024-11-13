@@ -82,6 +82,7 @@
         "MoveTo": "Move To ...",
         "CopyTo": "Copy To ...",
         "MultilingualSomething": " Multilingual - {title}",
+        "PermissionsSomething": " Permissions - {title}",
         "PropertyInput":{
             "Label":"Properties",
             "Name": "Name",

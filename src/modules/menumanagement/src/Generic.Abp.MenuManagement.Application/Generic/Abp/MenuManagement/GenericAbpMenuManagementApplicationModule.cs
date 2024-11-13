@@ -3,6 +3,7 @@ using Volo.Abp.AutoMapper;
 using Volo.Abp.Modularity;
 using Volo.Abp.Application;
 using Volo.Abp.Localization;
+using Volo.Abp.PermissionManagement;
 
 namespace Generic.Abp.MenuManagement
 {
@@ -11,7 +12,8 @@ namespace Generic.Abp.MenuManagement
         typeof(GenericAbpMenuManagementApplicationContractsModule),
         typeof(AbpDddApplicationModule),
         typeof(AbpAutoMapperModule),
-        typeof(AbpLocalizationModule)
+        typeof(AbpLocalizationModule),
+        typeof(AbpPermissionManagementDomainModule)
     )]
     public class GenericAbpMenuManagementApplicationModule : AbpModule
     {

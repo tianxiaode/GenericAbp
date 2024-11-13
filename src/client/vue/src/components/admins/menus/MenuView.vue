@@ -35,13 +35,17 @@
         v-model:dialog-ref="multilingualDialogRef"
         v-model="multilingualDialogData">
     </MultilingualDialog>
+
+    <PermissionsDialog v-bind="permissionsDialogProps" v-if="permissionsDialogVisible"
+        v-model:dialog-ref="permissionsDialogRef" v-model="permissionsDialogData" />
+
 </template>
 
 
 <script setup lang="ts">
 import ActionToolbar from '../../toolbars/ActionToolbar.vue';
 import { ref, watch } from 'vue';
-import { useI18n, useRepository, useTree, useDetail, useMultilingualDialog } from '~/composables';
+import { useI18n, useRepository, useTree, useDetail, useMultilingualDialog, usePermissionsDialog } from '~/composables';
 import { MenuType } from '~/repositories';
 import CheckColumn from '../../table/CheckColumn.vue';
 import ActionColumn from '../../table/ActionColumn.vue';
@@ -50,17 +54,11 @@ import TreeColumn from '~/components/table/TreeColumn.vue';
 import CustomSortColumn from '~/components/table/CustomSortColumn.vue';
 import Detail from '../../Detail.vue';
 import MultilingualDialog from '~/components/dialogs/MultilingualDialog.vue';
+import PermissionsDialog from '~/components/dialogs/PermissionsDialog.vue';
 
 const groupName = ref('');
-const permissionVisible = ref(false);
-const providerKey = ref('');
 const api = useRepository('menu');
 const { t } = useI18n();
-const openPermissionWindow = (row: MenuType) => {
-    // TODO: 打开权限定义窗口
-    providerKey.value = row.name;
-    permissionVisible.value = true;
-}
 
 
 const {
@@ -94,15 +92,27 @@ const { detailVisible, detailData, detailTitle, showDetails, rowItems } = useDet
 
 const { multilingualDialogRef, multilingualDialogVisible, multilingualDialogProps, multilingualDialogData, multilingualShowDialog } = useMultilingualDialog(api);
 
+const { permissionsDialogData, permissionsDialogProps,
+    permissionsDialogRef, permissionsDialogVisible, permissionsShowDialog }
+    = usePermissionsDialog(api, api.idFieldName, {
+        getSubmitValue(values: any){
+            const permissions = values.flatMap((group: any) => 
+                group.permissions
+                    .filter((permission: any) => permission.isGranted) // 只返回isGrant为true的权限
+                    .map((permission: any) => permission.name) // 返回name字段
+            );
+            return { permissions };
+        }
+    });
+
 const tableButtons = {
     ...buttons,
     detail: { action: showDetails },
     edit: { action: update, disabled: (row: MenuType) => row.isStatic, visible: api.canUpdate },
     delete: { action: remove, disabled: (row: MenuType) => row.isStatic, visible: api.canDelete },
-    permission: { action: openPermissionWindow, icon: 'fa fa-lock', title: 'AbpIdentity.Permissions', order: 300, type: 'primary', visible: api.canUpdate },
+    permission: { action: permissionsShowDialog, icon: 'fa fa-lock', title: 'AbpIdentity.Permissions', order: 300, type: 'primary', visible: api.canUpdate },
     global: { action: multilingualShowDialog, icon: 'fa fa-globe', title: 'AbpIdentity.Permissions', order: 400, type: 'primary', visible: api.canUpdate },
 }
 
-//arrows-up-down-left-right
 
 </script>

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Generic.Abp.MenuManagement.Menus.Dtos;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.PermissionManagement;
 
 namespace Generic.Abp.MenuManagement.Menus;
 
@@ -94,14 +95,14 @@ public class MenuController : MenuManagementController, IMenuAppService
 
     [HttpGet]
     [Route("{id:guid}/permissions")]
-    public async Task<List<string>> GetPermissionsListAsync(Guid id)
+    public async Task<GetPermissionListResultDto> GetPermissionsAsync(Guid id)
     {
-        return await AppService.GetPermissionsListAsync(id);
+        return await AppService.GetPermissionsAsync(id);
     }
 
     [HttpPut]
     [Route("{id:guid}/permissions")]
-    public async Task UpdatePermissionsAsync(Guid id, [FromBody] List<string> input)
+    public async Task UpdatePermissionsAsync(Guid id, [FromBody] MenuPermissionsUpdateDto input)
     {
         await AppService.UpdatePermissionsAsync(id, input);
     }

@@ -20,17 +20,24 @@ using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Localization;
 using Volo.Abp.Uow;
+using Volo.Abp.PermissionManagement;
+using Volo.Abp.Authorization.Permissions;
+using Volo.Abp.MultiTenancy;
+using Volo.Abp.SimpleStateChecking;
 
 namespace Generic.Abp.MenuManagement.Menus;
 
 public class MenuAppService : MenuManagementAppService, IMenuAppService
 {
     public MenuAppService(IMenuRepository repository, MenuManager menuManager,
-        IAbpAuthorizationPolicyProvider abpAuthorizationPolicyProvider, IOptions<AbpLocalizationOptions> options)
+        IAbpAuthorizationPolicyProvider abpAuthorizationPolicyProvider, IOptions<AbpLocalizationOptions> options,
+        IPermissionManager permissionManager, IPermissionDefinitionManager permissionDefinitionManager)
     {
         Repository = repository;
         MenuManager = menuManager;
         AbpAuthorizationPolicyProvider = abpAuthorizationPolicyProvider;
+        PermissionManager = permissionManager;
+        PermissionDefinitionManager = permissionDefinitionManager;
         AbpLocalizationOptions = options.Value;
     }
 
@@ -38,6 +45,8 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
     protected MenuManager MenuManager { get; }
     protected IAbpAuthorizationPolicyProvider AbpAuthorizationPolicyProvider { get; }
     protected AbpLocalizationOptions AbpLocalizationOptions { get; }
+    protected IPermissionManager PermissionManager { get; }
+    protected IPermissionDefinitionManager PermissionDefinitionManager { get; }
 
     [UnitOfWork]
     [Authorize(MenuManagementPermissions.Menus.Default)]
@@ -180,17 +189,42 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
     [UnitOfWork]
     [DisableEntityChangeTracking]
     [Authorize(MenuManagementPermissions.Menus.Default)]
-    public virtual async Task<List<string>> GetPermissionsListAsync(Guid id)
+    public virtual async Task<GetPermissionListResultDto> GetPermissionsAsync(Guid id)
     {
         var entity = await Repository.GetAsync(id);
-        return entity.GetPermissions().ToList();
+        var menPermissions = entity.GetPermissions();
+        var result = new GetPermissionListResultDto
+        {
+            EntityDisplayName = "M",
+            Groups = []
+        };
+
+        foreach (var group in await PermissionDefinitionManager.GetGroupsAsync())
+        {
+            var groupDto = CreatePermissionGroupDto(group);
+
+
+            var permissions = group.GetPermissionsWithChildren()
+                .Where(x => x.IsEnabled);
+
+            //Logger.LogDebug($"permissions:{System.Text.Json.JsonSerializer.Serialize(permissions)}");
+            var grantInfoDtos = permissions
+                .Select(m => CreatePermissionGrantInfoDto(m, menPermissions))
+                .ToList();
+
+            groupDto.Permissions.AddRange(grantInfoDtos);
+
+            result.Groups.Add(groupDto);
+        }
+
+        return result;
     }
 
     [Authorize(MenuManagementPermissions.Menus.Update)]
     [UnitOfWork]
-    public virtual async Task UpdatePermissionsAsync(Guid id, List<string> input)
+    public virtual async Task UpdatePermissionsAsync(Guid id, MenuPermissionsUpdateDto input)
     {
-        var list = input.Where(m => !string.IsNullOrEmpty(m)).ToList();
+        var list = input.Permissions.Where(m => !string.IsNullOrEmpty(m)).ToList();
         if (list is { Count: > 0 })
         {
             var policyNames = await AbpAuthorizationPolicyProvider.GetPoliciesNamesAsync();
@@ -315,5 +349,35 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
         {
             throw new StaticEntityCanNotBeUpdatedOrDeletedBusinessException(L["Menu"], menu.Name);
         }
+    }
+
+    protected virtual PermissionGrantInfoDto CreatePermissionGrantInfoDto(PermissionDefinition permission,
+        List<string> permissions)
+    {
+        return new PermissionGrantInfoDto
+        {
+            Name = permission.Name,
+            DisplayName = permission.DisplayName?.Localize(StringLocalizerFactory) ?? permission.Name,
+            ParentName = permission.Parent?.Name,
+            AllowedProviders = permission.Providers,
+            GrantedProviders = [],
+            IsGranted = permissions.Contains(permission.Name)
+        };
+    }
+
+    protected virtual PermissionGroupDto CreatePermissionGroupDto(PermissionGroupDefinition group)
+    {
+        var localizableDisplayName = group.DisplayName as LocalizableString;
+
+        return new PermissionGroupDto
+        {
+            Name = group.Name,
+            DisplayName = group.DisplayName?.Localize(StringLocalizerFactory) ?? group.Name,
+            DisplayNameKey = localizableDisplayName?.Name,
+            DisplayNameResource = localizableDisplayName?.ResourceType != null
+                ? LocalizationResourceNameAttribute.GetName(localizableDisplayName.ResourceType)
+                : null,
+            Permissions = []
+        };
     }
 }
