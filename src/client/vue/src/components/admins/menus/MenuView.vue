@@ -5,23 +5,23 @@
         </ActionToolbar>
         <el-table ref="tableRef" :data="data" stripe border style="width: 100%" :row-key="api.idFieldName"
             :highlight-current-row="true">
-            <TreeColumn prop="name" :label="t('MenuManagement.Menu:Name')" width="full" :filterText="filterText"
+            <TreeColumn prop="name" :label="t(getLabel('Name'))" width="full" :filterText="filterText"
                 :order="sorts.name" :sort-change="sortChange" :expand="expandNode">
             </TreeColumn>
-            <CustomSortColumn :label="t('MenuManagement.Menu:Icon')" prop="icon" width="100" :sort-change="sortChange"
+            <CustomSortColumn :label="t(getLabel('Icon'))" prop="icon" width="100" :sort-change="sortChange"
                 :order="sorts.icon">
                 <template #default="{ row }">
                     <i v-if="row.icon" :class="row.icon"></i>
                     <span v-else>-</span>
                 </template>
             </CustomSortColumn>
-            <CustomSortColumn :label="t('MenuManagement.Menu:Router')" prop="router" width="full" :is-highlight="true"
+            <CustomSortColumn :label="t(getLabel('Router'))" prop="router" width="full" :is-highlight="true"
                 :order="sorts.router" :filter="filterText" :sort-change="sortChange">
             </CustomSortColumn>
-            <CustomSortColumn :label="t('MenuManagement.Menu:Order')" prop="order" width="100" align="right"
+            <CustomSortColumn :label="t(getLabel('Order'))" prop="order" width="100" align="right"
                 :order="sorts.order" :sort-change="sortChange">
             </CustomSortColumn>
-            <CheckColumn :label="t('MenuManagement.Menu:IsEnabled')" prop="isEnabled" width="100"
+            <CheckColumn :label="t(getLabel('IsEnabled'))" prop="isEnabled" width="100"
                 :filterText="filterText" :checkChange="checkChange"></CheckColumn>
             <ActionColumn width="200" align="center" :buttons="tableButtons"></ActionColumn>
         </el-table>
@@ -66,7 +66,7 @@ const openPermissionWindow = (row: MenuType) => {
 const {
     data, dialogVisible, currentEntityId, tableRef,
     filterText, sorts, buttons, currentParent,
-    create, update, remove, checkChange, filter,
+    create, update, remove, checkChange, filter, getLabel,
     sortChange, expandNode } = useTree<MenuType>(api, { order: 'ascending' });
 
 

@@ -24,7 +24,8 @@ import BaseDialog from '~/components/dialogs/BaseDialog.vue';
 const { t } = useI18n();
 const entityId = defineModel('entityId');
 const api = useRepository('menu');
-const visible = defineModel<boolean>({default: false});
+const visible = defineModel<boolean>({ default: false });
+
 const rules = {
     name: { required: true },
 };
@@ -35,7 +36,9 @@ const props = defineProps({
     parent: { type: Object, default: null }
 })
 
-const { formData,formDialogRef,formRef, getLabel, formDialogProps, formProps, formSetInitValues } = useFormDialog(
+const { formData, formDialogRef, formRef,
+    getLabel, formDialogProps, formProps, formSetInitValues
+} = useFormDialog(
     api,
     entityId,
     {

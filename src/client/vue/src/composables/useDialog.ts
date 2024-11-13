@@ -11,7 +11,8 @@ export interface UseDialogConfig {
         cancelClick?: any;
         okText?: string;
         okClick?: any;    
-    }
+        [key: string]: any;
+    },
     beforeClose?: any;
     afterClose?: any;
     submit?:any
@@ -21,7 +22,7 @@ export function useDialog(config: UseDialogConfig = {}) {
     const dialogVisible = config.visible || ref(false);
     const dialogTitle = ref("");
     const dialogTitlePrefix = ref("");
-    const dialogData = ref<any>(null);
+    const dialogData = ref<any>({});
     const dialogRef = ref<any>(null);
     const initValues = ref<any>(config?.initData || {});
     const { confirm } = useConfirm();

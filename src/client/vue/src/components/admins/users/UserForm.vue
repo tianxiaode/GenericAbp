@@ -1,7 +1,6 @@
 <template>
-    <FormDialog v-bind="formDialogProps" v-model="formData" v-model:rules="rules" :title="dialogTitle"
-        v-model:visible="dialogVisible">
-        <template #form-items>
+    <BaseDialog v-bind="formDialogProps" ref="formDialogRef">
+        <el-form v-bind="formProps" :rules="rules" :model="formData" ref="formRef">
             <el-tabs v-model="activeTab" style="min-height: 540px;">
                 <el-tab-pane :label="t('AbpIdentity.UserInformations')" name="basic">
                     <Input :label="t(getLabel('userName'))" v-model="formData.userName" form-item-prop="userName" 
@@ -9,7 +8,7 @@
                     <Input :label="t(getLabel('email'))" v-model="formData.email" form-item-prop="email"
                         :disabled="!!entityId && !appConfig.isEmailUpdateEnabled" />
                     <Input type="password" :label="t(getLabel('password'))" v-model="formData.password" :show-password-strength="true" 
-                        form-item-prop="password"
+                        form-item-prop="password" 
                     />
                     <Input type="password" :label="t('Pages.Register.ConfirmPassword')" v-model="formData.confirmPassword" 
                         form-item-prop="confirmPassword" 
@@ -35,14 +34,13 @@
 
                 </el-tab-pane>
             </el-tabs>
-        </template>
-    </FormDialog>
+        </el-form>
+    </BaseDialog>
 </template>
 
 <script setup lang="ts">
-import FormDialog from '../../dialogs/FormDialog.vue';
-
-import { useConfig, useEntityForm, useRepository, useFormRules, useI18n } from '~/composables'
+import BaseDialog from '~/components/dialogs/BaseDialog.vue';
+import { useConfig, useFormDialog, useRepository, useFormRules, useI18n } from '~/composables'
 import { appConfig } from '~/libs';
 import { onMounted, ref } from 'vue';
 import Switch from '../../forms/Switch.vue';
@@ -54,7 +52,7 @@ const { t } = useI18n();
 const entityId = defineModel('entityId');
 const api = useRepository('user');
 const roleApi = useRepository('role');
-const dialogVisible = defineModel<boolean>();
+const visible = defineModel<boolean>({ default: false });
 const allowedManageRoles = api.canManageRoles;
 const formRules = {
     userName: { required: true },
@@ -63,14 +61,21 @@ const formRules = {
     confirmPassword: { equalTo: 'password' }
 };
 
-
-const { formRef, formData, dialogTitle, formDialogProps, getLabel } = useEntityForm(api, entityId, dialogVisible, {
-    initData: { isActive: true, lockoutEnabled: true },
-    props: {
-        dialogProps: { width: '800px' },
+const { formData, formDialogRef, formRef,
+    getLabel, formDialogProps, formProps
+} = useFormDialog(api, entityId, { 
+    visible, 
+    dialogProps: {
+        width: '800px' ,
+    },
+    initData:{
+        isActive: true,
+        lockoutEnabled:true
     },
     loadAdditionalData: allowedManageRoles
 });
+
+
 const { rules, updateRules } = useFormRules(formRules, formRef);
 
 

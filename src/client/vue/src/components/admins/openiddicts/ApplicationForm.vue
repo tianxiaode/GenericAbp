@@ -1,10 +1,9 @@
 <template>
-    <FormDialog v-bind="formDialogProps" v-model="formData" v-model:rules="rules" :title="dialogTitle"
-        v-model:visible="dialogVisible">
-        <template #form-items>
+    <BaseDialog v-bind="formDialogProps" ref="formDialogRef">
+        <el-form v-bind="formProps" :rules="rules" :model="formData" ref="formRef">
             <el-tabs v-model="activeTab" class="w-full openiddict-application-form-tabs">
                 <el-tab-pane :label="t('OpenIddict.Tabs:Basic')" name="basic">
-                    <el-form-item :label="t('OpenIddict.Application:ApplicationType')" prop="applicationType">
+                    <el-form-item :label="t(getLabel('ApplicationType'))" prop="applicationType">
                         <el-radio-group v-model="formData.applicationType">
                             <el-radio :value="ApplicationTypes.Web.value">
                                 {{ t(ApplicationTypes.Web.displayName) }}
@@ -14,18 +13,10 @@
                             </el-radio>
                         </el-radio-group>
                     </el-form-item>
-                    <el-form-item :label="t('OpenIddict.Application:ClientId')" prop="clientId">
-                        <el-input v-model="formData.clientId"></el-input>
-                    </el-form-item>
-                    <el-form-item :label="t('OpenIddict.Application:DisplayName')" prop="displayName">
-                        <el-input v-model="formData.displayName"></el-input>
-                    </el-form-item>
-                    <el-form-item :label="t('OpenIddict.Application:ClientUri')" prop="ClientUri">
-                        <el-input v-model="formData.ClientUri"></el-input>
-                    </el-form-item>
-                    <el-form-item :label="t('OpenIddict.Application:LogoUri')" prop="logoUri">
-                        <el-input v-model="formData.logoUri"></el-input>
-                    </el-form-item>
+                    <Input :label="t(getLabel('ClientId'))" v-model="formData.clientId" form-item-prop="clientId" />
+                    <Input :label="t(getLabel('DisplayName'))" v-model="formData.displayName" form-item-prop="displayName" />
+                    <Input :label="t(getLabel('ClientUri'))" v-model="formData.clientUri" form-item-prop="ClientUri" />
+                    <Input :label="t(getLabel('LogoUri'))" v-model="formData.logoUri" form-item-prop="logoUri" />
                     <el-form-item :label="t('OpenIddict.Application:ClientType')" prop="clientType">
                         <el-radio-group v-model="formData.clientType" @change="onClientTypeChange">
                             <el-radio :value="ApplicationClientTypes.Confidential.value">
@@ -128,25 +119,26 @@
                     <ApplicationSettingForm v-model="formData.settings" ></ApplicationSettingForm>
                 </el-tab-pane>
             </el-tabs>
-        </template>
-    </FormDialog>
+        </el-form>
+    </BaseDialog>
 </template>
 
 <script setup lang="ts">
-import FormDialog from '../../dialogs/FormDialog.vue';
+import BaseDialog from '~/components/dialogs/BaseDialog.vue';
 
-import { useEntityForm, useRepository, useFormRules, useI18n } from '~/composables'
+import { useFormDialog, useRepository, useFormRules, useI18n } from '~/composables'
 import { onMounted,   ref, watch } from 'vue';
 import {  AllApplicationPermissionsGrantTypesValue, ApplicationClientTypes, ApplicationConsentTypes, ApplicationPermissions,  ApplicationTypes, customPermissionConvert, customPermissionValueConvert } from '~/repositories';
 import ValueListInput from '../../forms/ValueListInput.vue';
 import GrantTypeSelect from './GrantTypeSelect.vue';
 import ApplicationSettingForm from './ApplicationSettingForm.vue';
+import Input from '../../forms/Input.vue';
 
 const activeTab = ref('basic');
 const allScopes = ref([] as string[]);
 const { t } = useI18n();
 const entityId = defineModel('entityId');
-const dialogVisible = defineModel<boolean>();
+const visible = defineModel<boolean>({ default: false });
 const api = useRepository('application');
 const scopeApi = useRepository('scope');
 const disabledRedirectUris = ref(true);
@@ -167,15 +159,14 @@ const formRules = {
 };
 
 
-const { formRef,formData, dialogTitle, formDialogProps,setInitValues } = useEntityForm(api, entityId,dialogVisible,{
-    props:{
-        dialogProps:{ width: '800px'},
-    },
+const { formRef,formData, formDialogRef, formDialogProps,formProps, formSetInitValues, getLabel } = useFormDialog(api, entityId,{
+    visible,
+    dialogProps:{ width: '800px'},
     afterGetData(data: any){
         const permissions = data.permissions || [];
         isPublic.value = data.clientType === ApplicationClientTypes.Public.value;
         disabledRedirectUris.value = !permissions.includes(ApplicationPermissions.GrantTypes.Implicit.value) && !permissions.includes(ApplicationPermissions.GrantTypes.AuthorizationCode.value);
-        setInitValues({
+        formSetInitValues({
             customPermissions: permissions.filter((permission: any) => permission.startsWith('gt:') && !AllApplicationPermissionsGrantTypesValue.includes(permission)),
             scopes: permissions.filter((permission: any) => permission.startsWith('scp:')),
             authorizationCode: permissions.includes(ApplicationPermissions.GrantTypes.AuthorizationCode.value),
@@ -240,7 +231,7 @@ onMounted(() => {
         allScopes.value = res.items.map((item: any) => item.name);
     })
     if (!entityId.value) {
-        setInitValues({
+        formSetInitValues({
             applicationType: ApplicationTypes.Web.value,
             clientType: ApplicationClientTypes.Confidential.value,
             redirectUris: [],

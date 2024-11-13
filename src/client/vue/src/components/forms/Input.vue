@@ -9,7 +9,7 @@
             ...$attrs
         }" v-model="prop">
         </el-input>
-        <PasswordStrength v-if="showPasswordStrength" />
+        <PasswordStrength v-if="showPasswordStrength" :value="prop" />
     </component>
 
 </template>
@@ -17,7 +17,7 @@
 <script setup lang="ts">
 import PasswordStrength from '../accounts/PasswordStrength.vue';
 
-const prop = defineModel();
+const prop = defineModel<any>();
 defineProps({
     label: {
         type: String,

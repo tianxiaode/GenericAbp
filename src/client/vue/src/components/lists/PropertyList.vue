@@ -2,7 +2,7 @@
         <el-descriptions :column="1" size="large" border>
             <el-descriptions-item v-for="item in rowItems" :label="t(item.label)" :class-name="className" :labek-class-name="labelClassName">
                 <div v-if="item.render" v-html="item.render(data[item.field], data, item)"></div>
-                <div v-else-if="isEmpty(item.type)"> {{ getValue(item, data) || '-' }}</div>
+                <div v-else-if="isEmpty(item.type)" class="break-all"> {{ getValue(item, data) || '-' }}</div>
                 <CheckStatus v-if="item.type === 'boolean'" :value="getValue(item, data)" />
                 <List v-else-if="item.type === 'list'" :data="getValue(item, data)"></List>
                 <div v-else-if="item.type === 'json'">
