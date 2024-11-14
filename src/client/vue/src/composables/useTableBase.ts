@@ -18,6 +18,7 @@ export function useTableBase<T extends EntityInterface>(
     const { delay } = useDelay();
     const { getLabel} = useLabel(api);
     const tableRef = ref<any>();
+    const loading = ref(false);
 
     // Add a new entry
     const create = () => {
@@ -41,6 +42,7 @@ export function useTableBase<T extends EntityInterface>(
     // Filter data based on the filterText
     const filter = (filter: string) => {
         delay(() => {
+            loading.value = true;
             filterText.value = filter;
             api.filter = filter;
         });
@@ -71,6 +73,7 @@ export function useTableBase<T extends EntityInterface>(
             router.push("/login");
         }
         api.on("load", loaded);
+        loading.value = true;
         api.load();
     });
 
@@ -79,6 +82,7 @@ export function useTableBase<T extends EntityInterface>(
     });
 
     return {
+        loading,
         resourceName,
         entity,
         data,

@@ -1,6 +1,6 @@
 import { onMounted, onUnmounted, ref } from "vue";
 
-export function usePagination(api: any) {
+export function usePagination(api: any, loading:any) {
     const currentPage = ref(1);
     const pageSizes = ref(api.pageSizes);
     const pageSize = ref(api.pageSize);
@@ -12,17 +12,20 @@ export function usePagination(api: any) {
     };
 
     const pageChange = (page: number) => {
+        loading.value = true;
         currentPage.value = page;
         api.page = page;
     };
 
     const pageSizeChange = (size: number) => {
+        loading.value = true;
         pageSize.value = size;
         api.pageSize = size;
     };
 
 
     const refresh = () => {
+        loading.value = true;
         api.load();
     }
 

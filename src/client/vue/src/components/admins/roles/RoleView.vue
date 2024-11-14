@@ -4,7 +4,7 @@
         <ActionToolbar :title="t('AbpIdentity.Roles')" @filter="filter" :buttons="toolbarButtons" />
 
         <!-- 数据展示区域 -->
-        <el-table :data="data" stripe border style="width: 100%" @sort-change="sortChange" :highlight-current-row="true"
+        <el-table v-loading="loading" :data="data" stripe border style="width: 100%" @sort-change="sortChange" :highlight-current-row="true"
             :default-sort="{ prop: 'name', order: 'ascending' }">
             <HighlightColumn :label="t('AbpIdentity.DisplayName:RoleName')" prop="name" width="full" sortable
                 :filterText="filterText" />
@@ -16,7 +16,7 @@
         </el-table>
 
         <!-- 底部分页工具栏 -->
-        <Pagination style="margin-top: 10px;" :api="api" />
+        <Pagination style="margin-top: 10px;" :api="api" v-model:loading="loading" />
     </div>
 
     <RoleForm v-if="dialogVisible" v-model="dialogVisible" v-model:entity-id="currentEntityId" />
@@ -45,7 +45,7 @@ const { t } = useI18n();
 
 const {
     data, dialogVisible, currentEntityId,
-    filterText,
+    filterText,loading,
     create, update, remove, filter, checkChange,
     sortChange, } = useTable<RoleType>(api);
 

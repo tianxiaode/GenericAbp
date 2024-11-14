@@ -3,7 +3,7 @@
         <!-- 顶部工具栏 -->
         <ActionToolbar :title="t('MenuManagement.Menus')" @filter="filter" :buttons="toolbarButtons">
         </ActionToolbar>
-        <el-table ref="tableRef" :data="data" stripe border style="width: 100%" :row-key="api.idFieldName"
+        <el-table v-loading="loading" ref="tableRef" :data="data" stripe border style="width: 100%" :row-key="api.idFieldName"
             :highlight-current-row="true">
             <TreeColumn prop="name" :label="t(getLabel('Name'))" width="full" :filterText="filterText"
                 :order="sorts.name" :sort-change="sortChange" :expand="expandNode">
@@ -44,7 +44,6 @@
 
 <script setup lang="ts">
 import ActionToolbar from '../../toolbars/ActionToolbar.vue';
-import { ref, watch } from 'vue';
 import { useI18n, useRepository, useTree, useDetail, useMultilingualDialog, usePermissionsDialog } from '~/composables';
 import { MenuType } from '~/repositories';
 import CheckColumn from '../../table/CheckColumn.vue';
@@ -56,13 +55,11 @@ import Detail from '../../Detail.vue';
 import MultilingualDialog from '~/components/dialogs/MultilingualDialog.vue';
 import PermissionsDialog from '~/components/dialogs/PermissionsDialog.vue';
 
-const groupName = ref('');
 const api = useRepository('menu');
 const { t } = useI18n();
 
-
 const {
-    data, dialogVisible, currentEntityId, tableRef,
+    data, dialogVisible, currentEntityId, tableRef,loading,
     filterText, sorts, buttons, currentParent,
     create, update, remove, checkChange, filter, getLabel,
     sortChange, expandNode } = useTree<MenuType>(api, { order: 'ascending' });
@@ -74,9 +71,6 @@ const toolbarButtons = {
 }
 
 
-watch(groupName, () => {
-    api.search('groupName', groupName.value, true);
-})
 
 const { detailVisible, detailData, detailTitle, showDetails, rowItems } = useDetail(api, [
     { field: 'name' },

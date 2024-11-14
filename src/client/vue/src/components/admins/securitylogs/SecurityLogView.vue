@@ -22,7 +22,7 @@
         </ActionToolbar>
 
         <!-- 数据展示区域 -->
-        <el-table :data="data" stripe border style="width: 100%" @sort-change="sortChange"
+        <el-table v-loading="loading" :data="data" stripe border style="width: 100%" @sort-change="sortChange"
             :highlight-current-row="true"
             :default-sort="{ prop: 'creationTime', order: 'descending' }">
             <DateColumn prop="creationTime" :label="t('AbpIdentity.CreationTime')" width="180" sortable />
@@ -42,14 +42,14 @@
                 :filterText="filterText" />
             <HighlightColumn :label="t('AbpIdentity.SecurityLog:ClientId')" prop="clientId" width="full" sortable
                 :filterText="filterText" />
-            <el-table-column :label="t('AbpIdentity.SecurityLog:ClientIpAddress')" prop="clientIpAddress" width="120"
+            <el-table-column :label="t('AbpIdentity.SecurityLog:ClientIpAddress')" prop="clientIpAddress" width="180"
                 sortable>
             </el-table-column>
             <ActionColumn width="90" align="center" :buttons="tableButtons"></ActionColumn>
         </el-table>
 
         <!-- 底部分页工具栏 -->
-        <Pagination style="margin-top: 10px;" :api="api" />
+        <Pagination style="margin-top: 10px;" :api="api" v-model:loading="loading" />
     </div>
 
     <Detail v-if="detailVisible" :title="detailTitle" :data="detailData" :row-items="rowItems" v-model="detailVisible">
@@ -90,7 +90,7 @@ watch(searchValue.value, (newValue: any) => {
     api.search(newValue, true);
 }, { deep: true })
 
-const { data, filterText, filter, sortChange, getLabel } = useTable<SecurityLogType>(api);
+const { data, filterText,loading, filter, sortChange, getLabel } = useTable<SecurityLogType>(api);
 
 const { detailVisible, detailData, detailTitle, showDetails, rowItems } = useDetail(api, [
     { field: 'applicationName' },

@@ -15,7 +15,7 @@
         </ActionToolbar>
 
         <!-- 数据展示区域 -->
-        <el-table :data="data" stripe border style="width: 100%" @sort-change="sortChange"
+        <el-table v-loading="loading" :data="data" stripe border style="width: 100%" @sort-change="sortChange"
             :default-sort="{ prop: 'executionTime', order: 'descending' }">
             <DateColumn prop="executionTime" :label="t('AbpAuditLogging.ExecutionTime')" width="180" sortable />
             <el-table-column :label="t('AbpAuditLogging.ExecutionDuration')" prop="executionDuration" width="120" sortable align="right">
@@ -32,7 +32,7 @@
             </HighlightColumn>
             <HighlightColumn :label="t('AbpAuditLogging.UserName')" prop="userName" width="full" sortable
                 :filterText="filterText" />
-            <el-table-column :label="t('AbpAuditLogging.ClientIpAddress')" prop="clientIpAddress" width="120" sortable>
+            <el-table-column :label="t('AbpAuditLogging.ClientIpAddress')" prop="clientIpAddress" width="180" sortable>
             </el-table-column>
             <ActionColumn width="80" align="center" :buttons="tableButtons"></ActionColumn>
         </el-table>
@@ -40,7 +40,7 @@
   
 
         <!-- 底部分页工具栏 -->
-        <Pagination style="margin-top: 10px;" :api="api" />
+        <Pagination style="margin-top: 10px;" :api="api" v-model:loading="loading" />
     </div>
 
     <Detail v-if="detailVisible" :title="detailTitle" :data="detailData" :row-items="rowItems" v-model="detailVisible"></Detail>
@@ -81,7 +81,7 @@ watch(searchValue.value, (newValue:any) => {
     api.search(newValue, true);
 }, { deep: true })
 
-const { data, filterText, filter, sortChange, getLabel } = useTable<AuditLogType>(api);
+const { loading,data, filterText, filter, sortChange, getLabel } = useTable<AuditLogType>(api);
 
 const toolbarButtons = {
     create: { visible: false },

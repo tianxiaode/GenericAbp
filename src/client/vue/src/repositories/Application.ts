@@ -1,4 +1,4 @@
-import { EntityInterface, isGranted, logger, Repository } from "../libs";
+import { EntityInterface, isGranted, logger, permission, Repository } from "../libs";
 
 export interface ApplicationType extends EntityInterface {
     applicationType: string;
@@ -119,6 +119,14 @@ export class ApplicationRepository extends Repository<ApplicationType> {
 
     get canManagePermissions(): boolean {
         return isGranted(`${this.resourceName}.${this.entityPlural}.ManagePermissions`);
+    }
+
+    getPermissions = async (providerKey: string) => {
+        return permission.get("C", providerKey);
+    }
+
+    updatePermissions = async (providerKey: string, permissions: any) => {
+        return permission.update("C", providerKey, permissions);
     }
 
 }

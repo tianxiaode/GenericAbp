@@ -18,6 +18,7 @@ export function useTree<T extends EntityInterface>(
         ...defaultSort,
     });
     const loaded = (records: T[]) => {
+        loading.value = false;
         if(isEmpty(filterText.value)){
             resetData(records);
         }else{
@@ -101,6 +102,7 @@ export function useTree<T extends EntityInterface>(
         delay(() => {
             filterText.value = text;
             if(!isEmpty(text)){
+                loading.value = true;
                 api.filter = text;
             }
 
@@ -109,6 +111,7 @@ export function useTree<T extends EntityInterface>(
     };
 
     const {
+        loading,
         resourceName,
         entity,
         data,
@@ -228,6 +231,7 @@ export function useTree<T extends EntityInterface>(
     })
 
     return {
+        loading,
         resourceName,
         entity,
         data,

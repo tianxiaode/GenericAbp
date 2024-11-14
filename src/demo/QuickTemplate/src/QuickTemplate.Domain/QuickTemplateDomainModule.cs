@@ -4,6 +4,7 @@ using Generic.Abp.MenuManagement;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using QuickTemplate.MultiTenancy;
+using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.Emailing;
 using Volo.Abp.FeatureManagement;
@@ -11,6 +12,7 @@ using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.OpenIddict;
+using Volo.Abp.PermissionManagement;
 using Volo.Abp.PermissionManagement.Identity;
 using Volo.Abp.PermissionManagement.OpenIddict;
 using Volo.Abp.SettingManagement;
@@ -60,6 +62,13 @@ public class QuickTemplateDomainModule : AbpModule
         });
 
         Configure<AbpMultiTenancyOptions>(options => { options.IsEnabled = MultiTenancyConsts.IsEnabled; });
+
+        Configure<PermissionManagementOptions>(options =>
+        {
+            options.ManagementProviders.Add<ApplicationPermissionManagementProvider>();
+            options.ProviderPolicies[ClientPermissionValueProvider.ProviderName] =
+                "OpenIddict.Applications.ManagePermissions";
+        });
 
 
 #if DEBUG

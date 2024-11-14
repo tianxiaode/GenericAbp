@@ -11,11 +11,12 @@
 <script setup lang="ts">
 import { useI18n, usePagination } from '~/composables';
 const { t} = useI18n();
+const loading = defineModel<any>('loading', { default: false })
 const props = defineProps({
     api: { type: Object, required: true }
 });
 
-const { currentPage, pageSize, pageSizes, totalRecords, pageChange, pageSizeChange, refresh } = usePagination(props.api);
+const { currentPage, pageSize, pageSizes, totalRecords, pageChange, pageSizeChange, refresh } = usePagination(props.api, loading);
 
 
 

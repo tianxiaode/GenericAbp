@@ -4,7 +4,7 @@
         <ActionToolbar :title="t('OpenIddict.Scopes')" @filter="filter" :buttons="toolbarButtons" />
 
         <!-- 数据展示区域 -->
-        <el-table :data="data" stripe border style="width: 100%" @sort-change="sortChange"
+        <el-table v-loading="loading" :data="data" stripe border style="width: 100%" @sort-change="sortChange"
             :highlight-current-row="true"
             :default-sort="{ prop: 'name', order: 'ascending' }">
             <HighlightColumn :label="t('OpenIddict.Scope:Name')" prop="name" width="200'" sortable
@@ -17,7 +17,7 @@
         </el-table>
 
         <!-- 底部分页工具栏 -->
-        <Pagination style="margin-top: 10px;" :api="api" />
+        <Pagination style="margin-top: 10px;" :api="api" v-model:loading="loading"/>
     </div>
 
     <ScopeForm v-if="dialogVisible" v-model="dialogVisible" :entity-id="currentEntityId" @close="formClose" />
@@ -40,7 +40,7 @@ const { t } = useI18n();
 
 const {
     data, dialogVisible, currentEntityId,
-    filterText,
+    filterText,loading,
     create, update, remove, filter,
     sortChange, formClose, } = useTable<RoleType>(api);
 

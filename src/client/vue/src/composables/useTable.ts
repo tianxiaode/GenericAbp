@@ -3,15 +3,18 @@ import { useTableBase } from "./useTableBase";
 
 export function useTable<T extends EntityInterface>(api: any) {
     const loaded = (records: T[]) => {
+        loading.value = false;
         data.value = records;
         return;
     };
 
     const refresh = () => {
+        loading.value = true;
         api.load();
     };
 
     const {
+        loading,
         resourceName,
         entity,
         data,
@@ -30,6 +33,7 @@ export function useTable<T extends EntityInterface>(api: any) {
     // Load data for the table
 
     return {
+        loading,
         resourceName,
         entity,
         data,

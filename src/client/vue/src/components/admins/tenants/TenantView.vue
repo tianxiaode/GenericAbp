@@ -4,7 +4,7 @@
         <ActionToolbar :title="t('AbpTenantManagement.Tenants')" @filter="filter" :buttons="toolbarButtons" />
 
         <!-- 数据展示区域 -->
-        <el-table :data="data" stripe border style="width: 100%" @sort-change="sortChange"
+        <el-table v-loading="loading" :data="data" stripe border style="width: 100%" @sort-change="sortChange"
             :highlight-current-row="true"
             :default-sort="{ prop: 'name', order: 'ascending' }">
             <HighlightColumn :label="t('AbpTenantManagement.DisplayName:TenantName')" prop="name" width="full" sortable
@@ -13,7 +13,7 @@
         </el-table>
 
         <!-- 底部分页工具栏 -->
-        <Pagination style="margin-top: 10px;" :api="api" />
+        <Pagination style="margin-top: 10px;" :api="api" v-model:loading="loading" />
     </div>
 
     <TenantForm v-if="dialogVisible" v-model="dialogVisible" v-model:entity-id="currentEntityId" />
@@ -36,7 +36,7 @@ const { t } = useI18n();
 
 const {
     data, dialogVisible, currentEntityId,
-    filterText,
+    filterText,loading,
     create, update, remove, filter, 
     sortChange,  } = useTable<TenantType>(api);
 

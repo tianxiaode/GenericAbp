@@ -4,7 +4,7 @@
         <ActionToolbar :title="t('AbpIdentity.Users')" @filter="filter" :buttons="toolbarButtons" />
 
         <!-- 数据展示区域 -->
-        <el-table :data="data" stripe border style="width: 100%" @sort-change="sortChange"
+        <el-table v-loading="loading" :data="data" stripe border style="width: 100%" @sort-change="sortChange"
             :highlight-current-row="true"
             :default-sort="{ prop: 'userName', order: 'ascending' }">
             <HighlightColumn :label="t('AbpIdentity.DisplayName:UserName')" prop="userName" width="full" sortable :filterText="filterText" >
@@ -32,7 +32,7 @@
         </el-table>
 
         <!-- 底部分页工具栏 -->
-        <Pagination style="margin-top: 10px;" :api="userApi" />
+        <Pagination style="margin-top: 10px;" :api="userApi" v-model:loading="Loading" />
     </div>
 
     <UserForm v-if="dialogVisible" v-model="dialogVisible" v-model:entity-id="currentEntityId" />
@@ -57,6 +57,7 @@ import DateColumn from '../../table/DateColumn.vue';
 import Detail from '../../Detail.vue';
 import { useDetail, useI18n, usePermissionsDialog, useRepository,useTable } from '~/composables';
 import PermissionsDialog from '../../dialogs/PermissionsDialog.vue';
+import { Loading } from '@element-plus/icons-vue';
 
 const {t, format} = useI18n();
 const userApi = useRepository('user');
@@ -70,7 +71,7 @@ const formatLockoutDate = (date: string | null) => {
 
 const {
     data, dialogVisible, currentEntityId,
-    filterText,
+    filterText,loading,
     create, update, remove, filter, checkChange,
     sortChange } = useTable<UserType>(userApi);
 
