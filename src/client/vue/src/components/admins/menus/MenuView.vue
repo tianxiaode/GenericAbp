@@ -1,7 +1,7 @@
 <template>
     <div class="flex flex-col gap-2">
         <!-- 顶部工具栏 -->
-        <ActionToolbar :title="t('MenuManagement.Menus')" @filter="filter" :buttons="toolbarButtons">
+        <ActionToolbar :title="t('MenuManagement.Menus')" :filter="filter" :buttons="toolbarButtons">
         </ActionToolbar>
         <el-table v-loading="loading" ref="tableRef" :data="data" stripe border style="width: 100%" :row-key="api.idFieldName"
             :highlight-current-row="true">

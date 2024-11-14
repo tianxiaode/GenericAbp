@@ -4,17 +4,9 @@
             <slot name="action-items"></slot>
             <h3 class="title" style="order:100;">{{ title }}</h3> <!-- 显示父视图传递过来的 title -->
             <div class="spacer" style="order:200;"></div>
-            <el-input :placeholder="t('Components.Search')" prefix-icon="el-icon-search" v-model="filterQuery"
-                @input="handleFilterInput" style="max-width: 200px; order:300;" clearable>
-                <template #prefix>                    
-                    <el-icon><i class="fa fa-search"></i></el-icon>
-                </template>
-                <template #suffix>
-                    <el-icon v-if="showEllipsisIcon" @click="toggleAdvancedSearch" class="cursor-pointer">
-                        <i class="fa fa-ellipsis-v"></i>
-                    </el-icon>
-                </template>
-            </el-input>
+            <Search :filter="filter" :show-ellipsis-icon="showEllipsisIcon" :ellipsis-icon-click="toggleAdvancedSearch" 
+                style="max-width: 200px; order: 300;"
+            />
             <div class="spacer" style="order: 400;"></div>
             <div v-for="(button) in buttonsList" :style="{ order: button.order }">
                 <IconButton v-if="handleButtonVisibility(button)" 
@@ -44,6 +36,7 @@
 import { ref,  } from 'vue';
 import IconButton from '../buttons/IconButton.vue';
 import { useActionButtons, useI18n } from '~/composables';
+import Search from '../forms/Search.vue';
 // 定义 props 接收父组件传递的标题、是否显示新建按钮、是否显示 ellipsis 图标
 const props = defineProps({
     title: { type: String, default: '' },
@@ -55,13 +48,16 @@ const props = defineProps({
     selected:{
         type: Array,
         default: () => []
+    },
+    filter:{
+        type: Function,
+        default: () => {}
     }
 
 });
 
 
 
-const emit = defineEmits(['filter']);
 const {t} = useI18n();
 
 // 默认按钮配置
@@ -78,17 +74,12 @@ const defaultButtons = {
 
 const { buttonsList, handleButtonClick, handleButtonDisabled, handleButtonVisibility } = useActionButtons(defaultButtons,props.buttons);
 const isAdvancedSearchVisible = ref(false);
-const filterQuery = ref(''); // 新增搜索查询变量
 
 function toggleAdvancedSearch() {
     isAdvancedSearchVisible.value = !isAdvancedSearchVisible.value;
 }
 
 
-// 处理搜索框输入事件
-const handleFilterInput = () => {
-    emit('filter', filterQuery.value); // 触发 search 事件并传递当前搜索值
-}
 </script>
 
 <style scoped>

@@ -1,7 +1,7 @@
 <template>
     <div class="flex flex-col gap-2">
         <!-- 顶部工具栏 -->
-        <ActionToolbar :title="t('OpenIddict.Applications')" @filter="filter" :buttons="toolbarButtons" />
+        <ActionToolbar :title="t('OpenIddict.Applications')" :filter="filter" :buttons="toolbarButtons" />
 
         <!-- 数据展示区域 -->
         <el-table v-loading="loading" :data="data" stripe border style="width: 100%" @sort-change="sortChange"

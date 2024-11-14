@@ -1,7 +1,7 @@
 <template>
     <div class="flex flex-col gap-2">
         <!-- 顶部工具栏 -->
-        <ActionToolbar :title="t('AbpIdentity.SecurityLogs')" @filter="filter" :show-ellipsis-icon="true"
+        <ActionToolbar :title="t('AbpIdentity.SecurityLogs')" :filter="filter" :show-ellipsis-icon="true"
             :buttons="toolbarButtons">
             <template #advanced-search-items>
                 <Select :method="api.getAllApplicationNames" v-model="searchValue.applicationName"
