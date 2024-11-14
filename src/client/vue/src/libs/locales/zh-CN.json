@@ -78,8 +78,13 @@
         "LastModifierId": "最后修改者",
         "Refresh": "刷新",
         "Selected": "已选择 ({count}) : ",
-        "MoveTo": "移动到...",
-        "CopyTo": "复制到...",
+        "SelectedMoveTarget": "选择移动目标",
+        "SelectedCopyTarget": "选择复制目标",
+        "MoveNode": "移动节点",
+        "CopyNode": "复制节点",
+        "Move":"移动",
+        "Copy": "复制",
+        "NoSelectedNodeToMoveOrCopy": "请选择一个节点，再执行移动或复制操作。",
         "MultilingualSomething": " 多语言 - {title}",
         "PermissionsSomething": " 权限 - {title}",
         "PropertyInput":{
@@ -126,7 +131,9 @@
         "ConfirmDeleteTreeMessage": "<p class='p-2 m-0'>确认要删除以下数据及其子节点吗？</p>",
         "HasDirtyData": "有未保存的数据，是否确认不保存并离开？",
         "SaveSuccessAndClose": "保存成功，3秒后关闭窗口。",
-        "ConfirmNotSavedTitle": "未保存数据"
+        "ConfirmNotSavedTitle": "未保存数据",
+        "ConfirmMoveOrCopyMessage": "确定要将节点{source}及其子节点{action}到节点{target}?",
+        "ConfirmMoveOrCopyTitle": "{action}节点"
     },
     "Notify": {
         "DefaultInfoTitle": "信息",

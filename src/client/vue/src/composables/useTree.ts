@@ -5,7 +5,8 @@ import { useDelay } from "./useDelay";
 
 export function useTree<T extends EntityInterface>(
     api: any,
-    defaultSort: Record<string, "ascending" | "descending"> = {}
+    defaultSort: Record<string, "ascending" | "descending"> = {},
+    filterNode?: any
 ) {
 
     const {delay} = useDelay();
@@ -43,6 +44,18 @@ export function useTree<T extends EntityInterface>(
         }
     };
 
+    const moveOrCopyRefresh = async (action:string, source: any, target: any) => {
+        //如果是复制，只需要重新加载target
+        const findTarget = data.value.find((item: any) => item[idFieldName] === target[idFieldName]);
+        //没有找到，说明没显示，根据target的code，从最顶层找已经显示的父节点，然后逐层展开父节点
+        if(!findTarget){
+            return;
+        }
+
+
+        //如果是移动，则需要移除source的子节点，然后重新加载target
+    }
+
     const sortChange = (
         field: string,
         order: "ascending" | "descending" | null
@@ -64,7 +77,7 @@ export function useTree<T extends EntityInterface>(
         const roots = data.filter((item: any) => !item[parentIdFieldName]);
         //先对根节点排序
         sortBy(roots, api.sortField, api.sortOrder || "asc");
-        const result: any[] = [];
+        let result: any[] = [];
 
         // 遍历根节点，并将其添加到结果中
         roots.forEach((item: any) => {
@@ -72,6 +85,9 @@ export function useTree<T extends EntityInterface>(
             // 递归获取并插入子节点
             getSortChildren(data, item, result);
         });
+        if(filterNode){
+            result = result.filter(m=>!m.code.startsWith(filterNode.code));
+        }
         return result; // 返回最终的平面数据
     };
 
@@ -213,22 +229,6 @@ export function useTree<T extends EntityInterface>(
                 order: 10,
                 visible: api.canCreate,
             },
-            move:{
-                action: () => {},
-                type: 'primary',
-                icon: 'fa fa-arrows',
-                title: 'Components.MoveTo',
-                order: 250,
-                visible: api.canUpdate,
-            },
-            copy:{
-                action: () => {},
-                type: 'primary',
-                icon: 'fa fa-copy',
-                title: 'Components.CopyTo',
-                order: 255,
-                visible: api.canUpdate,
-            }
         };
     };
 
@@ -250,6 +250,7 @@ export function useTree<T extends EntityInterface>(
         tableRef,
         buttons: buttons(),
         refresh,
+        moveOrCopyRefresh,
         filter,
         create: treeCreate,
         update: treeUpdate,

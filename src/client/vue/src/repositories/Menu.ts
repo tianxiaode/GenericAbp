@@ -52,6 +52,14 @@ export class MenuRepository extends Repository<MenuType> {
         return http.put(this.getUrl() + `/${id}/permissions`, permissions);
     }
 
+    move = (id: string, parentId: string) =>{
+        return http.put(this.getUrl() + `/${id}/move/${parentId}`);
+    }
+
+    copy = (id: string, parentId: string) =>{
+        return http.put(this.getUrl() + `/${id}/copy/${parentId}`);
+    }
+
 }
 
 

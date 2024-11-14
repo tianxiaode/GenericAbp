@@ -23,7 +23,7 @@ import Search from '../forms/Search.vue';
 import { PropType, ref } from 'vue';
 import { isEmpty } from '~/libs';
 
-const currentRow = defineModel<any>('currentRow');
+const currentRow = defineModel<any>();
 const currentRowId = ref('');
 const props = defineProps({
     api: {
@@ -36,6 +36,9 @@ const props = defineProps({
     showSearch: {
         type: Boolean,
         default: true
+    },
+    filterNode:{
+        type: Object
     }
 })
 
@@ -44,7 +47,12 @@ const props = defineProps({
 const {
     data,
     filterText,
-    filter, expandNode } = useTree<any>(props.api, { [props.displayField]: 'ascending' });
+    filter, expandNode 
+} = useTree<any>(
+    props.api, 
+    {  [props.displayField]: 'ascending'},
+    props.filterNode
+);
 
 const selectRow = (row: any) => {
     if(isEmpty(currentRowId.value) || currentRowId.value !== row[props.api.idFieldName]){

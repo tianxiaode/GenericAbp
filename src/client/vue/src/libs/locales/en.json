@@ -79,8 +79,13 @@
         "Refresh": "Refresh",
         "SelectedMessage": " {count} item(s) selected.",
         "Selected": "Selected: ",
-        "MoveTo": "Move To ...",
-        "CopyTo": "Copy To ...",
+        "SelectedMoveTarget": "Selected Move Target",
+        "SelectedCopyTarget": "Selected Copy Target",
+        "MoveNode": "Move Node",
+        "CopyNode": "Copy Node",
+        "Move":"Move",
+        "Copy": "Copy",
+        "NoSelectedNodeToMoveOrCopy": "Please select a node to move or copy.",
         "MultilingualSomething": " Multilingual - {title}",
         "PermissionsSomething": " Permissions - {title}",
         "PropertyInput":{
@@ -128,7 +133,9 @@
         "ConfirmDeleteTreeMessage": "<p class='p-2 m-0'>Are you sure you want to delete the following data and its children?</p>",
         "HasDirtyData": "You have unsaved changes. Are you sure you want to leave this page?",
         "SaveSuccessAndClose": "Save Success, and close after 3 seconds...",
-        "ConfirmNotSavedTitle": "Unsaved Changes"
+        "ConfirmNotSavedTitle": "Unsaved Changes",
+        "ConfirmMoveOrCopyMessage": "Are you sure you want to {action} node {source} and its children to node {target}?",
+        "ConfirmMoveOrCopyTitle": "{action} Node"
     },
     "Notify": {
         "DefaultInfoTitle": "Info",

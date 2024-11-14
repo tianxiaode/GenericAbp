@@ -7,7 +7,7 @@
         <slot name="default"></slot>
         <template #footer>
             <slot name="dialog-footer">
-                <div class="flex-1 flex items-center gap-2">
+                <div class="flex-1 flex items-center gap-2 base-dialog-actions">
                     <slot name="dialog-actions"></slot>
                     <FormMessage v-if="formMessage" :message="formMessage" :message-type="formMessageType"
                         :message-params="formMessageParams" type="button" :button-props="{ style: 'order:100;' }">
@@ -70,3 +70,11 @@ defineExpose({
 })
 
 </script>
+
+<style lang="scss">
+.base-dialog-actions {
+    .el-button+.el-button {
+        margin: 0;
+    }
+}
+</style>

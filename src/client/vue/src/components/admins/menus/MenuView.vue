@@ -3,8 +3,8 @@
         <!-- 顶部工具栏 -->
         <ActionToolbar :title="t('MenuManagement.Menus')" :filter="filter" :buttons="toolbarButtons">
         </ActionToolbar>
-        <el-table v-loading="loading" ref="tableRef" :data="data" stripe border style="width: 100%" :row-key="api.idFieldName"
-            :highlight-current-row="true">
+        <el-table v-loading="loading" ref="tableRef" :data="data" stripe border style="width: 100%"
+            :row-key="api.idFieldName" :highlight-current-row="true">
             <TreeColumn prop="name" :label="t(getLabel('Name'))" width="full" :filterText="filterText"
                 :order="sorts.name" :sort-change="sortChange" :expand="expandNode">
             </TreeColumn>
@@ -18,11 +18,11 @@
             <CustomSortColumn :label="t(getLabel('Router'))" prop="router" width="full" :is-highlight="true"
                 :order="sorts.router" :filter="filterText" :sort-change="sortChange">
             </CustomSortColumn>
-            <CustomSortColumn :label="t(getLabel('Order'))" prop="order" width="100" align="right"
-                :order="sorts.order" :sort-change="sortChange">
+            <CustomSortColumn :label="t(getLabel('Order'))" prop="order" width="100" align="right" :order="sorts.order"
+                :sort-change="sortChange">
             </CustomSortColumn>
-            <CheckColumn :label="t(getLabel('IsEnabled'))" prop="isEnabled" width="100"
-                :filterText="filterText" :checkChange="checkChange"></CheckColumn>
+            <CheckColumn :label="t(getLabel('IsEnabled'))" prop="isEnabled" width="100" :filterText="filterText"
+                :checkChange="checkChange"></CheckColumn>
             <ActionColumn width="200" align="center" :buttons="tableButtons"></ActionColumn>
         </el-table>
     </div>
@@ -32,19 +32,23 @@
     <Detail v-if="detailVisible" :title="detailTitle" :data="detailData" :row-items="rowItems" v-model="detailVisible">
     </Detail>
     <MultilingualDialog v-bind="multilingualDialogProps" v-if="multilingualDialogVisible"
-        v-model:dialog-ref="multilingualDialogRef"
-        v-model="multilingualDialogData">
+        v-model:dialog-ref="multilingualDialogRef" v-model="multilingualDialogData">
     </MultilingualDialog>
 
     <PermissionsDialog v-bind="permissionsDialogProps" v-if="permissionsDialogVisible"
         v-model:dialog-ref="permissionsDialogRef" v-model="permissionsDialogData" />
+
+    <TreeSelectDialog v-bind="treeMoveOrCopyDialogProps" v-if="treeMoveOrCopyDialogVisible"
+        v-model="treeMoveOrCopyTarget" :filter-node="treeMoveOrCopySource" v-model:dialog-ref="treeMoveOrCopyDialogRef"
+        :api="api" :display-field="api.messageField" />
+
 
 </template>
 
 
 <script setup lang="ts">
 import ActionToolbar from '../../toolbars/ActionToolbar.vue';
-import { useI18n, useRepository, useTree, useDetail, useMultilingualDialog, usePermissionsDialog } from '~/composables';
+import { useI18n, useRepository, useTree, useDetail, useMultilingualDialog, usePermissionsDialog, useTreeMoveOrCopy } from '~/composables';
 import { MenuType } from '~/repositories';
 import CheckColumn from '../../table/CheckColumn.vue';
 import ActionColumn from '../../table/ActionColumn.vue';
@@ -54,16 +58,22 @@ import CustomSortColumn from '~/components/table/CustomSortColumn.vue';
 import Detail from '../../Detail.vue';
 import MultilingualDialog from '~/components/dialogs/MultilingualDialog.vue';
 import PermissionsDialog from '~/components/dialogs/PermissionsDialog.vue';
+import TreeSelectDialog from '~/components/dialogs/TreeSelectDialog.vue';
 
 const api = useRepository('menu');
 const { t } = useI18n();
 
 const {
-    data, dialogVisible, currentEntityId, tableRef,loading,
+    data, dialogVisible, currentEntityId, tableRef, loading,
     filterText, sorts, buttons, currentParent,
-    create, update, remove, checkChange, filter, getLabel,
+    create, update, remove, checkChange, filter, getLabel,moveOrCopyRefresh,
     sortChange, expandNode } = useTree<MenuType>(api, { order: 'ascending' });
 
+const {
+    treeMoveOrCopyDialogRef, treeMoveOrCopyDialogVisible,
+    treeMoveOrCopyDialogProps, treeMoveOrCopyButtons,
+    treeMoveOrCopyTarget, treeMoveOrCopySource
+} = useTreeMoveOrCopy(api, {moveOrCopyRefresh});
 
 const toolbarButtons = {
     //refresh: { action: api.load, icon: 'fa fa-refresh text-primary', title: 'Components.Refresh', order: 450, visible: true },
@@ -89,8 +99,8 @@ const { multilingualDialogRef, multilingualDialogVisible, multilingualDialogProp
 const { permissionsDialogData, permissionsDialogProps,
     permissionsDialogRef, permissionsDialogVisible, permissionsShowDialog }
     = usePermissionsDialog(api, api.idFieldName, {
-        getSubmitValue(values: any){
-            const permissions = values.flatMap((group: any) => 
+        getSubmitValue(values: any) {
+            const permissions = values.flatMap((group: any) =>
                 group.permissions
                     .filter((permission: any) => permission.isGranted) // 只返回isGrant为true的权限
                     .map((permission: any) => permission.name) // 返回name字段
@@ -106,6 +116,8 @@ const tableButtons = {
     delete: { action: remove, disabled: (row: MenuType) => row.isStatic, visible: api.canDelete },
     permission: { action: permissionsShowDialog, icon: 'fa fa-lock', title: 'AbpIdentity.Permissions', order: 300, type: 'primary', visible: api.canUpdate },
     global: { action: multilingualShowDialog, icon: 'fa fa-globe', title: 'AbpIdentity.Permissions', order: 400, type: 'primary', visible: api.canUpdate },
+    move: { disabled: (row: any) => row.isStatic, ...treeMoveOrCopyButtons.move },
+    copy: { ...treeMoveOrCopyButtons.copy }
 }
 
 
