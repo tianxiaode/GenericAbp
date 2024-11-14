@@ -8,6 +8,7 @@
                     <i v-else class="fa fa-caret-right w-4 h-4" @click="expand(row, true)"></i>
                 </div>
                 <div v-else class="w-4 h-4"></div>
+                <Loading v-if="row.loading === true" />
                 <HighlightText class="flex-1" :text="row[column.property]" :filter="filterText"></HighlightText>
             </div>
         </template>
@@ -17,6 +18,7 @@
 
 <script setup lang="ts">
 import HighlightText from '../HighlightText.vue';
+import Loading from '../Loading.vue';
 import CustomSortColumn from './CustomSortColumn.vue';
 
 defineProps({

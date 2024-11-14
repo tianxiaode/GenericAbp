@@ -1,7 +1,6 @@
 <template>
     <div class="hero">
         {{ t('Home') }}
-
         <PropertyInput :list="[
             { label: 'en', field: 'en' },
             { label: 'zh-Hans', field: 'zh-Hans' },
@@ -29,6 +28,7 @@ import AccountForm from '~/components/forms/AccountForm.vue';
 import { hexToHsl } from '~/libs';
 import Input from '~/components/forms/Input.vue';
 import { ElInput } from 'element-plus';
+import {Loading} from '@element-plus/icons-vue'
 const { t } = useI18n();
 
 

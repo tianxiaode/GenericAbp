@@ -140,17 +140,24 @@ export function useTree<T extends EntityInterface>(
             );
             return;
         }
-        const loadData = await api.getList({ parentId: id });
-        row.expanded = true;
-        const cachedData = cache.get(id);
-        if (!cachedData) {
-            resetData([...data.value,  ...loadData]);
-            return;
-        }            
-        //移除cacheData中已存在于loadData的记录
-        const newData = cachedData.filter((item: any) => !loadData.some( (dataItem:any) => dataItem[idFieldName] === item[idFieldName]));
-        cache.delete(id);
-        resetData([...data.value, ...newData, ...loadData]);
+        row.loading = true;
+        try {
+            const loadData = await api.getList({ parentId: id });
+            row.expanded = true;
+            const cachedData = cache.get(id);
+            if (!cachedData) {
+                resetData([...data.value,  ...loadData]);
+                return;
+            }            
+            //移除cacheData中已存在于loadData的记录
+            const newData = cachedData.filter((item: any) => !loadData.some( (dataItem:any) => dataItem[idFieldName] === item[idFieldName]));
+            cache.delete(id);
+            resetData([...data.value, ...newData, ...loadData]);                
+        } catch (error) {
+            logger.error('[useTree][expandNode] error:', error);
+        } finally {
+            row.loading = false;
+        }
 
     };
 
