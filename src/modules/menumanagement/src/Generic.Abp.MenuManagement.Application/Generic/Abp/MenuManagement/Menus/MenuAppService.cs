@@ -77,23 +77,6 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
         return new ListResultDto<MenuDto>(dtos);
     }
 
-    [UnitOfWork]
-    //[Authorize(MenuManagementPermissions.Menus.Default)]
-    public virtual async Task<ListResultDto<MenuDto>> GetAllParentAndChildrenAsync(Guid id)
-    {
-        var entity = await Repository.GetAsync(id, false);
-        var list = await Repository.GetListAsync(m =>
-            m.Code.StartsWith(entity.Code + ".") || entity.Code.StartsWith(m.Code + "."));
-        var dtos = ObjectMapper.Map<List<Menu>, List<MenuDto>>(list);
-
-        foreach (var dto in dtos)
-        {
-            dto.Leaf = !await Repository.HasChildAsync(dto.Id);
-        }
-
-        return new ListResultDto<MenuDto>(dtos);
-    }
-
 
     //获取用于显示的菜单列表
     [UnitOfWork]
@@ -148,6 +131,7 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
     {
         var entity = await Repository.GetAsync(id);
         CheckIsStaticMenu(entity);
+        await CheckMoveOrCopyAsync(entity, parentId);
         await MenuManager.MoveAsync(entity, parentId);
     }
 
@@ -155,6 +139,7 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
     [UnitOfWork(true)]
     public virtual async Task CopyAsync(Guid id, Guid? parentId)
     {
+        await CheckMoveOrCopyAsync(await Repository.GetAsync(id), parentId);
         await MenuManager.CopyAsync(id, parentId);
     }
 
@@ -394,5 +379,18 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
                 : null,
             Permissions = []
         };
+    }
+
+    protected virtual async Task CheckMoveOrCopyAsync(Menu entity, Guid? parentId)
+    {
+        if (parentId.HasValue)
+        {
+            var parent = await Repository.GetAsync(parentId.Value);
+        }
+
+        if (entity.Id == parentId || entity.ParentId == parentId)
+        {
+            throw new CannotMoveOrCopyToItselfBusinessException();
+        }
     }
 }

@@ -37,12 +37,6 @@ public class MenuController : MenuManagementController, IMenuAppService
         return await AppService.GetAsync(id);
     }
 
-    [HttpGet]
-    [Route("{id:guid}/all-parent-and-children")]
-    public virtual async Task<ListResultDto<MenuDto>> GetAllParentAndChildrenAsync(Guid id)
-    {
-        return await AppService.GetAllParentAndChildrenAsync(id);
-    }
 
     [HttpGet]
     [Route(("show/{name}"))]

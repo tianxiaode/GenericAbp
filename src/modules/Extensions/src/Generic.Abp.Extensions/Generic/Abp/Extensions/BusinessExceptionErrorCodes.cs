@@ -60,5 +60,7 @@
         public const string StaticEntityCanNotBeUpdatedOrDeletedParamName = "Name";
 
         public const string StaticEntityCanNotBeUpdatedOrDeletedParamValue = "Value";
+
+        public const string CannotMoveOrCopyToItself = "Generic.Abp.BusinessException:000014";
     }
 }
