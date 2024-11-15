@@ -84,7 +84,6 @@
         "CopyNode": "复制节点",
         "Move":"移动",
         "Copy": "复制",
-        "NoSelectedNodeToMoveOrCopy": "请选择一个节点，再执行移动或复制操作。",
         "MultilingualSomething": " 多语言 - {title}",
         "PermissionsSomething": " 权限 - {title}",
         "PropertyInput":{
@@ -133,7 +132,9 @@
         "SaveSuccessAndClose": "保存成功，3秒后关闭窗口。",
         "ConfirmNotSavedTitle": "未保存数据",
         "ConfirmMoveOrCopyMessage": "确定要将节点{source}及其子节点{action}到节点{target}?",
-        "ConfirmMoveOrCopyTitle": "{action}节点"
+        "ConfirmMoveOrCopyTitle": "{action}节点",
+        "NoSelectedNodeToMoveOrCopy": "请选择一个节点，再执行移动或复制操作。",
+        "CannotMoveOrCopyToItself": "不能移动或复制到自身。"
     },
     "Notify": {
         "DefaultInfoTitle": "信息",

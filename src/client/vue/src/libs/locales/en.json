@@ -85,7 +85,6 @@
         "CopyNode": "Copy Node",
         "Move":"Move",
         "Copy": "Copy",
-        "NoSelectedNodeToMoveOrCopy": "Please select a node to move or copy.",
         "MultilingualSomething": " Multilingual - {title}",
         "PermissionsSomething": " Permissions - {title}",
         "PropertyInput":{
@@ -135,7 +134,9 @@
         "SaveSuccessAndClose": "Save Success, and close after 3 seconds...",
         "ConfirmNotSavedTitle": "Unsaved Changes",
         "ConfirmMoveOrCopyMessage": "Are you sure you want to {action} node {source} and its children to node {target}?",
-        "ConfirmMoveOrCopyTitle": "{action} Node"
+        "ConfirmMoveOrCopyTitle": "{action} Node",
+        "NoSelectedNodeToMoveOrCopy": "Please select a node to move or copy.",
+        "CannotMoveOrCopyToItself": "Cannot move or copy a node to itself."
     },
     "Notify": {
         "DefaultInfoTitle": "Info",

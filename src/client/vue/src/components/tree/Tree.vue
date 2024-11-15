@@ -17,7 +17,7 @@
 </template>
 
 <script setup lang="ts">
-import { useTree } from '~/composables';
+import { useReadOnlyTree, useTree } from '~/composables';
 import TreeNode from './TreeNode.vue';
 import Search from '../forms/Search.vue';
 import { PropType, ref } from 'vue';
@@ -48,9 +48,9 @@ const {
     data,
     filterText,
     filter, expandNode 
-} = useTree<any>(
+} = useReadOnlyTree(
     props.api, 
-    {  [props.displayField]: 'ascending'},
+    { prop: props.displayField, order: 'ascending' },
     props.filterNode
 );
 

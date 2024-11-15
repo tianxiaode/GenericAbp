@@ -1,29 +1,26 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Generic.Abp.Extensions.Entities.Multilingual;
+﻿using Generic.Abp.Extensions.Entities.Multilingual;
 using Generic.Abp.Extensions.Entities.Permissions;
 using Generic.Abp.Extensions.Entities.Trees;
 using Generic.Abp.Extensions.Exceptions;
 using Generic.Abp.Extensions.Validates;
 using Generic.Abp.MenuManagement.Menus.Dtos;
 using Generic.Abp.MenuManagement.Permissions;
-using Volo.Abp;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Authorization;
+using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Domain.ChangeTracking;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Localization;
-using Volo.Abp.Uow;
 using Volo.Abp.PermissionManagement;
-using Volo.Abp.Authorization.Permissions;
-using Volo.Abp.MultiTenancy;
-using Volo.Abp.SimpleStateChecking;
+using Volo.Abp.Uow;
 
 namespace Generic.Abp.MenuManagement.Menus;
 
@@ -80,6 +77,24 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
         return new ListResultDto<MenuDto>(dtos);
     }
 
+    [UnitOfWork]
+    //[Authorize(MenuManagementPermissions.Menus.Default)]
+    public virtual async Task<ListResultDto<MenuDto>> GetAllParentAndChildrenAsync(Guid id)
+    {
+        var entity = await Repository.GetAsync(id, false);
+        var list = await Repository.GetListAsync(m =>
+            m.Code.StartsWith(entity.Code + ".") || entity.Code.StartsWith(m.Code + "."));
+        var dtos = ObjectMapper.Map<List<Menu>, List<MenuDto>>(list);
+
+        foreach (var dto in dtos)
+        {
+            dto.Leaf = !await Repository.HasChildAsync(dto.Id);
+        }
+
+        return new ListResultDto<MenuDto>(dtos);
+    }
+
+
     //获取用于显示的菜单列表
     [UnitOfWork]
     [AllowAnonymous]
@@ -101,7 +116,7 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
 
 
     [UnitOfWork(true)]
-    //[Authorize(MenuManagementPermissions.Menus.Create)]
+    [Authorize(MenuManagementPermissions.Menus.Create)]
     public virtual async Task<MenuDto> CreateAsync(MenuCreateDto input)
     {
         var entity = new Menu(GuidGenerator.Create(), input.ParentId, input.Name, CurrentTenant.Id);
@@ -220,8 +235,8 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
         return result;
     }
 
-    [Authorize(MenuManagementPermissions.Menus.Update)]
     [UnitOfWork]
+    [Authorize(MenuManagementPermissions.Menus.Update)]
     public virtual async Task UpdatePermissionsAsync(Guid id, MenuPermissionsUpdateDto input)
     {
         var list = input.Permissions.Where(m => !string.IsNullOrEmpty(m)).ToList();

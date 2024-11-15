@@ -11,4 +11,5 @@ export * from './Validator';
 export * from './AccessControl';
 export * from './Plural';
 export * from './Color';
+export * from './Error';
 

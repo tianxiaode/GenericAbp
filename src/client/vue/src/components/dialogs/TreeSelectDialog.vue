@@ -1,5 +1,5 @@
 <template>
-    <BaseDialog v-bind="$attrs" ref="dialogRef">
+    <BaseDialog v-bind="$attrs" ref="dialogRef" class="tree-select-dialog">
         <Tree :api="api" :display-field="displayField" v-model="selected" :filter-node="filterNode" />
     </BaseDialog>
 </template>
@@ -12,16 +12,26 @@ import BaseDialog from './BaseDialog.vue';
 const selected = defineModel();
 const dialogRef = defineModel<any>('dialogRef');
 defineProps({
-    api:{
+    api: {
         type: Object,
         required: true
     },
-    displayField:{
+    displayField: {
         type: String,
         required: true
     },
-    filterNode:{
+    filterNode: {
         type: Object
     }
 });    
 </script>
+
+<style lang="scss">
+.tree-select-dialog {
+    .el-tree{
+        min-height: 500px;
+        max-height: 500px;
+        overflow-y: auto;
+    }
+}
+</style>

@@ -6,19 +6,19 @@
         <el-table v-loading="loading" ref="tableRef" :data="data" stripe border style="width: 100%"
             :row-key="api.idFieldName" :highlight-current-row="true">
             <TreeColumn prop="name" :label="t(getLabel('Name'))" width="full" :filterText="filterText"
-                :order="sorts.name" :sort-change="sortChange" :expand="expandNode">
+                :sort="treeSort" :sort-change="sortChange" :expand="expandNode">
             </TreeColumn>
             <CustomSortColumn :label="t(getLabel('Icon'))" prop="icon" width="100" :sort-change="sortChange"
-                :order="sorts.icon">
+                :sort="treeSort">
                 <template #default="{ row }">
                     <i v-if="row.icon" :class="row.icon"></i>
                     <span v-else>-</span>
                 </template>
             </CustomSortColumn>
             <CustomSortColumn :label="t(getLabel('Router'))" prop="router" width="full" :is-highlight="true"
-                :order="sorts.router" :filter="filterText" :sort-change="sortChange">
+                :sort="treeSort" :filter="filterText" :sort-change="sortChange">
             </CustomSortColumn>
-            <CustomSortColumn :label="t(getLabel('Order'))" prop="order" width="100" align="right" :order="sorts.order"
+            <CustomSortColumn :label="t(getLabel('Order'))" prop="order" width="100" align="right" :sort="treeSort"
                 :sort-change="sortChange">
             </CustomSortColumn>
             <CheckColumn :label="t(getLabel('IsEnabled'))" prop="isEnabled" width="100" :filterText="filterText"
@@ -65,9 +65,9 @@ const { t } = useI18n();
 
 const {
     data, dialogVisible, currentEntityId, tableRef, loading,
-    filterText, sorts, buttons, currentParent,
+    filterText, treeSort, buttons, currentParent,
     create, update, remove, checkChange, filter, getLabel,moveOrCopyRefresh,
-    sortChange, expandNode } = useTree<MenuType>(api, { order: 'ascending' });
+    sortChange, expandNode } = useTree<MenuType>(api, { prop: 'order', order: 'ascending' });
 
 const {
     treeMoveOrCopyDialogRef, treeMoveOrCopyDialogVisible,

@@ -1,42 +1,39 @@
-import {  EntityInterface,  isEmpty,  logger,  replaceMembers, sortBy } from "~/libs";
-import { useTableBase } from "./useTableBase";
-import { onUnmounted, ref } from "vue";
-import { useDelay } from "./useDelay";
+import {
+    debounce,
+    EntityInterface,
+    findItemInArray,
+    isEmpty,
+    mergeArray,
+    replaceMembers,
+    SortType,
+} from "~/libs";
+import { onUnmounted } from "vue";
+import { useTreeBase } from "./useTreeBase";
 
 export function useTree<T extends EntityInterface>(
     api: any,
-    defaultSort: Record<string, "ascending" | "descending"> = {},
-    filterNode?: any
+    defaultSort: SortType = {} as SortType
 ) {
-
-    const {delay} = useDelay();
     const idFieldName = api.idFieldName;
-    const parentIdFieldName = api.parentIdFieldName;
-    const currentParent = ref<any>();
     let cache = new Map<string, any>();
 
-    const sorts = ref<Record<string, "ascending" | "descending" | null>>({
-        ...defaultSort,
-    });
     const loaded = (records: T[]) => {
         loading.value = false;
-        if(isEmpty(filterText.value)){
+        if (isEmpty(filterText.value)) {
             resetData(records);
-        }else{
-            //移除records中已存在于data的记录
-            const newData = records.filter((item:any) =>!data.value.some( (dataItem:any) => dataItem[idFieldName] === item[idFieldName]));
-            resetData([...data.value, ...newData]);
+        } else {
+            resetData(mergeArray([data.value, records], idFieldName));
         }
     };
 
     const refresh = async () => {
         const changed = api.currentChanged;
-        const row: any = data.value.find((item: any) => item[idFieldName] === changed[idFieldName]);
+        const row: any = findItemInArray(data.value, idFieldName, changed)
         if (row) {
             replaceMembers(changed, row);
         } else {
             const parent: any = findParent(changed);
-            if(parent){
+            if (parent) {
                 parent.leaf = false;
                 parent.expanded = true;
             }
@@ -44,198 +41,133 @@ export function useTree<T extends EntityInterface>(
         }
     };
 
-    const moveOrCopyRefresh = async (action:string, source: any, target: any) => {
-        //如果是复制，只需要重新加载target
-        const findTarget = data.value.find((item: any) => item[idFieldName] === target[idFieldName]);
-        //没有找到，说明没显示，根据target的code，从最顶层找已经显示的父节点，然后逐层展开父节点
-        if(!findTarget){
-            return;
+    const moveOrCopyRefresh = async (
+        action: string,
+        source: any,
+        target: any
+    ) => {
+        action === "move"
+            ? moveRefresh(source, target)
+            : refreshTarget([...data.value], target);
+    };
+
+    const moveRefresh = async (source: any, target: any) => {
+        console.log(source)
+        //移除sourcenode及其子节点
+        let originalRecords = data.value.filter(
+            (item: any) => !item.code.startsWith(source.code)
+        );
+        const sourceParent: any = findParent(source);
+        if (sourceParent) {
+            sourceParent.leaf = !originalRecords.some(
+                (item: any) =>
+                    item[api.parentIdFieldName] ===
+                    sourceParent[api.idFieldName]
+            );
         }
+        await refreshTarget(originalRecords, target);
+    };
 
+    const refreshTarget = async (original: any, target: any) => {
+        const targetNode: any = data.value.find(
+            (item: any) => item[idFieldName] === target[idFieldName]
+        );
+        if (targetNode) {
+            targetNode.leaf = false;
 
-        //如果是移动，则需要移除source的子节点，然后重新加载target
-    }
+            const newData = await api.getList({
+                [api.parentIdFieldName]: target[idFieldName],
+            });
+            resetData(mergeArray([original, newData], idFieldName));
+        }
+    };
 
     const sortChange = (
-        field: string,
-        order: "ascending" | "descending" | null
+        field: string
     ) => {
-        sorts.value[api.sortField] = null;
-        sorts.value[field] = order;
-        api.sortField = field;
-        api.sortOrder = order;
-        resetData([...data.value])
-    };
-
-    const resetData = (records: any[]) => {
-        data.value = sort(records);
-    }
-
-
-    const sort = (data: any[]) => {
-        // 找到所有根节点
-        const roots = data.filter((item: any) => !item[parentIdFieldName]);
-        //先对根节点排序
-        sortBy(roots, api.sortField, api.sortOrder || "asc");
-        let result: any[] = [];
-
-        // 遍历根节点，并将其添加到结果中
-        roots.forEach((item: any) => {
-            result.push(item);
-            // 递归获取并插入子节点
-            getSortChildren(data, item, result);
-        });
-        if(filterNode){
-            result = result.filter(m=>!m.code.startsWith(filterNode.code));
+        if(treeSort.value.prop === field){
+            const order = treeSort.value.order === "ascending" ? "descending" : "ascending";
+            treeSort.value.order = order;
+        }else{
+            treeSort.value.prop = field;
+            treeSort.value.order = "ascending";
         }
-        return result; // 返回最终的平面数据
+        resetData([...data.value]);
     };
 
-    // 对指定parentId的子节点进行排序并插入到结果中
-    const getSortChildren = (data: any[], parent: any, result: any[]) => {
-        // 找到当前parentId的所有子节点
-        const children = data.filter(
-            (item: any) => item[parentIdFieldName] === parent[idFieldName]
-        );
-
-        if (children.length === 0) {
-            return;
+    const filter = debounce((text: string) => {
+        filterText.value = text;
+        if (!isEmpty(text)) {
+            loading.value = true;
+            api.filter = text;
         }
-
-        parent.expanded = true;
-        // 对子节点进行排序
-        sortBy(children, api.sortField, api.sortOrder || "asc");
-
-        // 将子节点添加到结果数组并递归处理其子节点
-        children.forEach((child: any) => {
-            result.push(child);
-            // 递归调用以获取并插入子节点的子节点
-            getSortChildren(data, child, result);
-        });
-    };
-
-    const filter = (text: string) => {
-        delay(() => {
-            filterText.value = text;
-            if(!isEmpty(text)){
-                loading.value = true;
-                api.filter = text;
-            }
-
-        });
-
-    };
+    }, 500);
 
     const {
         loading,
         resourceName,
         entity,
         data,
+        treeSort,
         filterText,
         dialogVisible,
         currentEntityId,
+        currentParent,
         tableRef,
+        checkChange,
         create,
         update,
         remove,
-        checkChange,
+        refreshNode,
+        findParent,
         formClose,
-        getLabel
-    } = useTableBase(api, loaded, refresh);
-
-    const expandNode = async (row: any, expanded: boolean) => {
-        const id = row[idFieldName];
-        const originalRecords = [...data.value];
-        if (!expanded) {
-            //移除以row.code+'.'开始的数据
-            row.expanded = false;
-            const allChild = originalRecords.filter((item: any) => item.code.startsWith(row.code + "."));
-            cache.set(id, allChild);
-            data.value = originalRecords.filter(
-                (item: any) => !item.code.startsWith(row.code + ".")
-            );
-            return;
-        }
-        row.loading = true;
-        try {
-            const loadData = await api.getList({ parentId: id });
-            row.expanded = true;
-            const cachedData = cache.get(id);
-            if (!cachedData) {
-                resetData([...data.value,  ...loadData]);
-                return;
-            }            
-            //移除cacheData中已存在于loadData的记录
-            const newData = cachedData.filter((item: any) => !loadData.some( (dataItem:any) => dataItem[idFieldName] === item[idFieldName]));
-            cache.delete(id);
-            resetData([...data.value, ...newData, ...loadData]);                
-        } catch (error) {
-            logger.error('[useTree][expandNode] error:', error);
-        } finally {
-            row.loading = false;
-        }
-
-    };
-
-    const refreshNode = (id: string | number) =>{
-        const row:any = data.value.find((item: any) => item[idFieldName] === id);
-        if (row) {
-            //移除row的子节点，然后调用expandNode展开
-            row.expanded = false;
-            data.value = data.value.filter(
-                (item: any) => !item[parentIdFieldName] || item[parentIdFieldName] !== id
-            );
-            expandNode(row, true);
-        }else{
-            logger.error(`Can not find row with id ${id}`);
-        }
-    }
-
+        expandNode,
+        getLabel,
+        resetData,
+    } = useTreeBase(api, defaultSort, { loaded, refresh });
 
     const treeCreate = (row?: any) => {
         currentParent.value = row;
         create();
-    }
+    };
 
     const treeUpdate = (row: any) => {
         currentParent.value = findParent(row);
         update(row);
-    }
+    };
 
     const treeRemove = async (row: any) => {
         await remove(row);
-        data.value = data.value.filter((item: any) => !item.code.startsWith(row.code));
-    }
-
-    const findParent = (row: any) => {
-        return data.value.find((item: any) => item[idFieldName] === row[parentIdFieldName]);
-    }
+        data.value = data.value.filter(
+            (item: any) => !item.code.startsWith(row.code)
+        );
+    };
 
     const buttons = () => {
         return {
-            refresh:{
+            refresh: {
                 action: (row: any) => refreshNode(row[idFieldName]),
                 type: "primary",
                 icon: "fa fa-refresh",
                 title: "Components.Refresh",
                 order: 5,
-                visible: true,    
+                visible: true,
             },
             create: {
-                action: (row:any) => treeCreate(row),
-                type: 'success',
-                icon: 'fa fa-plus',
-                title: 'Components.New',
+                action: (row: any) => treeCreate(row),
+                type: "success",
+                icon: "fa fa-plus",
+                title: "Components.New",
                 order: 10,
                 visible: api.canCreate,
             },
         };
     };
 
-    onUnmounted(()=>{
+    onUnmounted(() => {
         cache.clear();
         cache = new Map<string, any>();
-    })
+    });
 
     return {
         loading,
@@ -246,7 +178,7 @@ export function useTree<T extends EntityInterface>(
         dialogVisible,
         currentEntityId,
         currentParent,
-        sorts,
+        treeSort,
         tableRef,
         buttons: buttons(),
         refresh,

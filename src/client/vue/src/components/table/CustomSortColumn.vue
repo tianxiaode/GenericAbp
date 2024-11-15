@@ -1,11 +1,11 @@
 <template>
     <el-table-column v-bind="$attrs">
         <template #header="{ column }">
-            <div :class="`flex flex-row items-center w-full cursor-pointer ${order || ''}`" @click="sortChange(column.property)">
+            <div :class="`flex flex-row items-center w-full cursor-pointer ${column.property === sort?.prop && sort?.order ? sort.order : '' }`" @click="sortChange(column.property)">
                 {{ column.label }}
                 <span class="caret-wrapper">
-                    <i :class="`sort-caret ascending `"></i>
-                    <i :class="`sort-caret descending ${order === 'descending'? 'text-primary' : ''}`"></i>
+                    <i :class="`sort-caret ascending ${column.property === sort?.prop && sort?.order === 'ascending'? 'text-primary' : ''}`"></i>
+                    <i :class="`sort-caret descending ${column.property === sort?.prop && sort?.order === 'descending' ? 'text-primary' : ''}`"></i>
                 </span>
             </div>
         </template>
@@ -20,10 +20,11 @@
 </template>
 
 <script setup lang="ts">
+import { PropType } from 'vue';
 import HighlightText from '../HighlightText.vue';
+import { SortType } from '~/libs';
 
-const order = defineModel<'ascending' | 'descending' | null>('order', { default: null });
-const props = defineProps({
+defineProps({
     isHighlight:{
         type: Boolean,
         default: false
@@ -32,13 +33,13 @@ const props = defineProps({
         type: String,
         default: ''
     },
+    sort:{
+        type: Object as PropType<SortType>,
+    },
     sortChange:{
         type: Function,
         default: () => {}
     }
 })
-const sortChange = (property: string) => {
-    order.value = order.value === 'ascending'? 'descending' : order.value === 'descending' ? null : 'ascending';
-    props.sortChange(property, order.value);
-}
+
 </script>

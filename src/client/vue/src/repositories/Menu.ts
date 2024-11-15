@@ -60,6 +60,10 @@ export class MenuRepository extends Repository<MenuType> {
         return http.put(this.getUrl() + `/${id}/copy/${parentId}`);
     }
 
+    getAllParentAndChildren = (id: string) =>{
+        return http.get(this.getUrl() + `/${id}/all-parent-and-children`);
+    }
+
 }
 
 
