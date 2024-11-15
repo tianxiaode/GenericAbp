@@ -112,7 +112,7 @@ const { permissionsDialogData, permissionsDialogProps,
 const tableButtons = {
     ...buttons,
     detail: { action: showDetails },
-    edit: { action: update, disabled: (row: MenuType) => row.isStatic, visible: api.canUpdate },
+    edit: { action: update, visible: api.canUpdate },
     delete: { action: remove, disabled: (row: MenuType) => row.isStatic, visible: api.canDelete },
     permission: { action: permissionsShowDialog, icon: 'fa fa-lock', title: 'AbpIdentity.Permissions', order: 300, type: 'primary', visible: api.canUpdate },
     global: { action: multilingualShowDialog, icon: 'fa fa-globe', title: 'AbpIdentity.Permissions', order: 400, type: 'primary', visible: api.canUpdate },
