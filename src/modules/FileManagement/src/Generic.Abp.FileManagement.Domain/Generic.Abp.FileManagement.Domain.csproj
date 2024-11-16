@@ -3,20 +3,24 @@
   <Import Project="..\..\..\..\common.props" />
   
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <TargetFrameworks>net8.0</TargetFrameworks>
+    <OutputType>Library</OutputType>
+    <IsPackable>true</IsPackable>
     <RootNamespace />
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
 	  <PackageReference Include="Volo.Abp.SettingManagement.Domain" Version="$(AbpVersion)" />
+    <PackageReference Include="SkiaSharp" Version="2.88.8" />
+    <PackageReference Include="SkiaSharp.NativeAssets.Linux.NoDependencies" Version="2.88.8" />
+    <ProjectReference Include="..\..\..\Extensions\src\Generic.Abp.Extensions.Domain\Generic.Abp.Extensions.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Generic.Abp.FileManagement.Domain.Shared\Generic.Abp.FileManagement.Domain.Shared.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Generic\Abp\FileManagement\Files\" />
-  </ItemGroup>
 
 </Project>

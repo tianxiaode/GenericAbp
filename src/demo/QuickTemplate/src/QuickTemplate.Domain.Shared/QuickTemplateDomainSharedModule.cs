@@ -1,4 +1,5 @@
-﻿using Generic.Abp.MenuManagement;
+﻿using Generic.Abp.FileManagement;
+using Generic.Abp.MenuManagement;
 using QuickTemplate.Localization;
 using Volo.Abp.AuditLogging;
 using Volo.Abp.BackgroundJobs;
@@ -25,7 +26,8 @@ namespace QuickTemplate;
     typeof(AbpPermissionManagementDomainSharedModule),
     typeof(AbpSettingManagementDomainSharedModule),
     typeof(AbpTenantManagementDomainSharedModule),
-    typeof(GenericAbpMenuManagementDomainSharedModule)
+    typeof(GenericAbpMenuManagementDomainSharedModule),
+    typeof(GenericAbpFileManagementDomainSharedModule)
 )]
 public class QuickTemplateDomainSharedModule : AbpModule
 {

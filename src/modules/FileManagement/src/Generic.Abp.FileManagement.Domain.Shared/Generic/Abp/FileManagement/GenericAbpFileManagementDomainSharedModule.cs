@@ -1,20 +1,20 @@
-﻿using Generic.Abp.BusinessException;
-using Generic.Abp.BusinessException.Localization;
+﻿using Generic.Abp.Extensions;
+using Generic.Abp.Extensions.Localization;
 using Generic.Abp.FileManagement.Localization;
-using Generic.Abp.Helper;
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.ExceptionHandling;
 using Volo.Abp.Modularity;
 using Volo.Abp.SettingManagement;
+using Volo.Abp.Validation;
+using Volo.Abp.Validation.Localization;
 using Volo.Abp.VirtualFileSystem;
 
 namespace Generic.Abp.FileManagement
 {
     [DependsOn(
         typeof(AbpSettingManagementDomainSharedModule),
-        typeof(GenericAbpBusinessExceptionModule),
-        typeof(GenericAbpHelperFileModule),
-        typeof(GenericAbpHelperCommonModule)
+        typeof(GenericAbpExtensionsModule),
+        typeof(AbpValidationModule)
     )]
     public class GenericAbpFileManagementDomainSharedModule : AbpModule
     {
@@ -29,8 +29,9 @@ namespace Generic.Abp.FileManagement
             {
                 options.Resources
                     .Add<FileManagementResource>("en")
-                    .AddBaseTypes(typeof(BusinessExceptionResource))
-                    .AddVirtualJson("/Generic/Abp/FileManagement/Localization/FileManagement");
+                    .AddBaseTypes(typeof(ExtensionsResource))
+                    .AddBaseTypes(typeof(AbpValidationResource))
+                    .AddVirtualJson("/Generic/Abp/FileManagement/Localization/Resources");
             });
 
             Configure<AbpExceptionLocalizationOptions>(options =>

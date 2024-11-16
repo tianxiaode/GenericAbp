@@ -3,21 +3,24 @@
   <Import Project="..\..\..\..\common.props" />
   
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
-     <RootNamespace />
+    <LangVersion>latest</LangVersion>
+    <TargetFrameworks>netstandard2.0;netstandard2.1;net8.0</TargetFrameworks>
+    <OutputType>Library</OutputType>
+    <IsPackable>true</IsPackable>
+    <RootNamespace />
+    <Nullable>enable</Nullable>
+    <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
   </PropertyGroup>
 
   <ItemGroup>
-	  <PackageReference Include="SkiaSharp" Version="$(SkiaSharpVersion)" />
 	  <PackageReference Include="Volo.Abp.SettingManagement.Domain.Shared" Version="$(AbpVersion)" />
-	  <ProjectReference Include="..\..\..\businessexception\src\Generic.Abp.BusinessException\Generic.Abp.BusinessException.csproj" />
-	  <ProjectReference Include="..\..\..\helper\src\Generic.Abp.Helper.File\Generic.Abp.Helper.File.csproj" />
-	  <ProjectReference Include="..\..\..\helper\src\Generic.Abp.Helper.Common\Generic.Abp.Helper.Common.csproj" />
+    <PackageReference Include="Volo.Abp.Validation" Version="$(AbpVersion)" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="$(MicrosoftExtensionsFileProvidersEmbeddedVersion)" />
+    <ProjectReference Include="..\..\..\Extensions\src\Generic.Abp.Extensions\Generic.Abp.Extensions.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Generic\Abp\FileManagement\Localization\FileManagement\*.json" />
-    <Content Remove="Generic\Abp\FileManagement\Localization\FileManagement\*.json" />
+    <EmbeddedResource Include="Generic\Abp\FileManagement\Localization\Resources\*.json" />
   </ItemGroup>
 
 </Project>

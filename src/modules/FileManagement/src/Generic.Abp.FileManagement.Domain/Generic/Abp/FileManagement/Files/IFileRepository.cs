@@ -7,10 +7,11 @@ using Volo.Abp.Domain.Repositories;
 
 namespace Generic.Abp.FileManagement.Files;
 
-public interface IFileRepository: IRepository<File,Guid>
+public interface IFileRepository : IRepository<File, Guid>
 {
     Task<List<File>> GetPagedListAsync(int skipCount, int maxResultCount, string sorting,
-        Expression<Func<File, bool>> predicate = null, CancellationToken cancellationToken = default);
+        Expression<Func<File, bool>>? predicate = null, CancellationToken cancellationToken = default);
+
     Task<List<File>> GetPagedListAsync(int skipCount, int maxResultCount, string sorting, string filter,
         CancellationToken cancellationToken = default);
 }

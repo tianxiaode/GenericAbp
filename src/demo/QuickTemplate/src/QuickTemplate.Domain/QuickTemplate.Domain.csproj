@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\modules\AuditLogging\src\Generic.Abp.AuditLogging.Domain\Generic.Abp.AuditLogging.Domain.csproj" />
+    <ProjectReference Include="..\..\..\..\modules\FileManagement\src\Generic.Abp.FileManagement.Domain\Generic.Abp.FileManagement.Domain.csproj" />
     <ProjectReference Include="..\..\..\..\modules\identity\src\Generic.Abp.Identity.Domain\Generic.Abp.Identity.Domain.csproj" />
     <ProjectReference Include="..\..\..\..\modules\menumanagement\src\Generic.Abp.MenuManagement.Domain\Generic.Abp.MenuManagement.Domain.csproj" />
     <ProjectReference Include="..\QuickTemplate.Domain.Shared\QuickTemplate.Domain.Shared.csproj" />

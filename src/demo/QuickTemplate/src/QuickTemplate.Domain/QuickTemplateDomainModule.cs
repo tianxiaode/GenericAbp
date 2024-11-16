@@ -1,4 +1,5 @@
 ﻿using Generic.Abp.AuditLogging;
+using Generic.Abp.FileManagement;
 using Generic.Abp.Identity;
 using Generic.Abp.MenuManagement;
 using Microsoft.Extensions.DependencyInjection;
@@ -34,7 +35,8 @@ namespace QuickTemplate;
     typeof(AbpEmailingModule),
     typeof(GenericAbpIdentityDomainModule),
     typeof(GenericAbpAuditLoggingDomainModule),
-    typeof(GenericAbpMenuManagementDomainModule)
+    typeof(GenericAbpMenuManagementDomainModule),
+    typeof(GenericAbpFileManagementDomainModule)
 )]
 public class QuickTemplateDomainModule : AbpModule
 {

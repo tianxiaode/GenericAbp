@@ -1,5 +1,23 @@
 {
   "culture": "zh-Hant",
   "texts": {
+    "Menu": "選單",
+    "Menus": "選單列表",
+    "NewMenu": "新增選單",
+    "EditMenu": "編輯選單",
+    "Permission:MenuManagement": "選單管理",
+    "Permission:Create": "建立",
+    "Permission:Edit": "編輯",
+    "Permission:Delete": "刪除",
+    "Menu:Name": "名稱",
+    "Menu:Icon": "圖示",
+    "Menu:IsEnabled": "啟用",
+    "Menu:IsStatic": "靜態",
+    "Menu:Order": "順序",
+    "Menu:Router": "路由",
+    "Menu:Parent": "父層",
+    "Menu:EntityVersion": "實體版本",
+    "Menu:Multilingual": "多語言",
+    "Menu:Permissions": "權限"
   }
 }

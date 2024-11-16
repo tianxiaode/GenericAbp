@@ -2,12 +2,12 @@
 
 namespace Generic.Abp.FileManagement.Files;
 
-public class FileCheckResult: ICheckFileResult
+public class FileCheckResult : ICheckFileResult
 {
     public string Hash { get; set; }
-    public bool IsExits { get; set; }
-    public Dictionary<int, bool> Uploaded { get; set; }
-    public IFile File { get; set; }
+    public bool IsExits { get; set; } = false;
+    public Dictionary<int, bool> Uploaded { get; set; } = default!;
+    public IFile File { get; set; } = default!;
 
     public FileCheckResult(string hash)
     {
