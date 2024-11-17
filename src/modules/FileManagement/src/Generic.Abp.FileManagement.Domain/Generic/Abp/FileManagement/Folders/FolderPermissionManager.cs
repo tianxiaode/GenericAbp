@@ -1,7 +1,6 @@
-﻿using Volo.Abp.Domain.Services;
+﻿namespace Generic.Abp.FileManagement.Folders;
 
-namespace Generic.Abp.FileManagement.Folders;
-
-public class FolderPermissionManager : DomainService
+public class FolderPermissionManager(IFolderPermissionRepository repository)
+    : FileManagementPermissionManagerBase<FolderPermission, IFolderPermissionRepository>(repository)
 {
 }

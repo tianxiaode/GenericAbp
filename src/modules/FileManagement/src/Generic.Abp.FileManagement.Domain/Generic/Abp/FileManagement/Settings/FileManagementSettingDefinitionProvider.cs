@@ -13,12 +13,19 @@ namespace Generic.Abp.FileManagement.Settings
              */
             context.Add(
                 new SettingDefinition(
-                    FileManagementSettings.Public.StoragePath,
-                    "/files/public",
+                    FileManagementSettings.StoragePath,
+                    "/files",
                     L("Settings:StoragePath"),
                     L("Description:StoragePath"),
                     true // 可选，决定是否对外暴露
                 ),
+                // new SettingDefinition(
+                //     FileManagementSettings.TempPath,
+                //     "/files",
+                //     L("Settings:TempPath"),
+                //     L("Description:TempPath"),
+                //     true // 可选，决定是否对外暴露
+                // ),
                 new SettingDefinition(
                     FileManagementSettings.Public.DefaultFileTypes,
                     ".docx,.pdf,.xlsx,.pptx,.txt,.csv,.xml,.json,.html,.js,.css,.md,.jpg,.png,.gif,.zip,.rar,.7z",
@@ -28,24 +35,17 @@ namespace Generic.Abp.FileManagement.Settings
                 ),
                 new SettingDefinition(
                     FileManagementSettings.Public.DefaultMaxFileSize,
-                    "2m",
+                    "2mb",
                     L("Settings:DefaultMaxFileSize"),
                     L("Description:DefaultMaxFileSize"),
                     true
                 ),
                 new SettingDefinition(
                     FileManagementSettings.Public.DefaultQuota,
-                    "2m",
+                    "2mb",
                     L("Settings:DefaultQuota"),
                     L("Description:DefaultQuota"),
                     true
-                ),
-                new SettingDefinition(
-                    FileManagementSettings.Shared.StoragePath,
-                    "/files/shared",
-                    L("Settings:StoragePath"),
-                    L("Description:StoragePath"),
-                    true // 可选，决定是否对外暴露
                 ),
                 new SettingDefinition(
                     FileManagementSettings.Shared.DefaultFileTypes,
@@ -56,42 +56,35 @@ namespace Generic.Abp.FileManagement.Settings
                 ),
                 new SettingDefinition(
                     FileManagementSettings.Shared.DefaultMaxFileSize,
-                    "2m",
+                    "2mb",
                     L("Settings:DefaultMaxFileSize"),
                     L("Description:DefaultMaxFileSize"),
                     true
                 ),
                 new SettingDefinition(
                     FileManagementSettings.Shared.DefaultQuota,
-                    "2m",
+                    "2mb",
                     L("Settings:DefaultQuota"),
                     L("Description:DefaultQuota"),
                     true
                 ),
                 new SettingDefinition(
-                    FileManagementSettings.Private.StoragePath,
-                    "/files/private",
-                    L("Settings:StoragePath"),
-                    L("Description:StoragePath"),
-                    true // 可选，决定是否对外暴露
-                ),
-                new SettingDefinition(
-                    FileManagementSettings.Private.DefaultFileTypes,
+                    FileManagementSettings.Users.DefaultFileTypes,
                     ".docx,.pdf,.xlsx,.pptx,.txt,.csv,.xml,.json,.html,.js,.css,.md,.jpg,.png,.gif,.zip,.rar,.7z",
                     L("Settings:DefaultFileTypes"),
                     L("Description:DefaultFileTypes"),
                     true // 可选，决定是否对外暴露
                 ),
                 new SettingDefinition(
-                    FileManagementSettings.Private.DefaultMaxFileSize,
-                    "2m",
+                    FileManagementSettings.Users.DefaultMaxFileSize,
+                    "2mb",
                     L("Settings:DefaultMaxFileSize"),
                     L("Description:DefaultMaxFileSize"),
                     true
                 ),
                 new SettingDefinition(
-                    FileManagementSettings.Private.DefaultQuota,
-                    "2m",
+                    FileManagementSettings.Users.DefaultQuota,
+                    "2mb",
                     L("Settings:DefaultQuota"),
                     L("Description:DefaultQuota"),
                     true

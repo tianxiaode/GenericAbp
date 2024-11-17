@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using Generic.Abp.FileManagement.Files;
+using Generic.Abp.FileManagement.Folders;
+using Generic.Abp.FileManagement.Folders.Dtos;
 
 namespace Generic.Abp.FileManagement
 {
@@ -14,6 +16,11 @@ namespace Generic.Abp.FileManagement
             CreateMap<Files.File, FileDto>();
 
             CreateMap<FileCheckResult, FileCheckResultDto>();
+
+            CreateMap<Folder, FolderDto>()
+                .ForMember(m => m.Leaf, opts => opts.MapFrom(m => true))
+                .ForMember(m => m.Parent, opts => opts.MapFrom(m => m.Parent))
+                .MapExtraProperties();
         }
     }
 }

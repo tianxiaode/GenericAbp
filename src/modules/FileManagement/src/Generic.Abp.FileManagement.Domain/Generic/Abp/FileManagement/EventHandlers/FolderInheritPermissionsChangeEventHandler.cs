@@ -1,16 +1,31 @@
-﻿using System.Threading.Tasks;
-using Generic.Abp.FileManagement.Events;
+﻿using Generic.Abp.FileManagement.Events;
+using Generic.Abp.FileManagement.Folders;
+using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus.Distributed;
 
 namespace Generic.Abp.FileManagement.EventHandlers;
 
-public class FolderInheritPermissionsChangeEventHandler :
+public class FolderInheritPermissionsChangeEventHandler(FolderManager folderManager) :
     IDistributedEventHandler<FolderInheritPermissionsChangeEto>,
     ITransientDependency
 {
-    public Task HandleEventAsync(FolderInheritPermissionsChangeEto eventData)
+    protected FolderManager FolderManager { get; } = folderManager;
+
+    public async Task HandleEventAsync(FolderInheritPermissionsChangeEto eventData)
     {
-        throw new System.NotImplementedException();
+        if (!eventData.InheritPermissions)
+        {
+            return;
+        }
+
+        var folder = await FolderManager.GetAsync(eventData.Id);
+        if (!folder.ParentId.HasValue)
+        {
+            return;
+        }
+
+        var parent = await FolderManager.GetAsync(folder.ParentId.Value);
+        await FolderManager.SetPermissionsAsync(folder, await FolderManager.GetPermissionsAsync(parent));
     }
 }

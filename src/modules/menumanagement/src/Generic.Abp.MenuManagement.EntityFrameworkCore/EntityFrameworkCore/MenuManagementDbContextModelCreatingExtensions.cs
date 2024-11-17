@@ -61,7 +61,7 @@ namespace Generic.Abp.MenuManagement.EntityFrameworkCore
                 }
 
                 //Relations
-                b.HasOne<Menu>(m => m.Parent).WithMany(m => m.Children).HasForeignKey(m => m.ParentId)
+                b.HasOne(m => m.Parent).WithMany(m => m.Children).HasForeignKey(m => m.ParentId)
                     .IsRequired(false);
 
                 //Indexes

@@ -1,4 +1,5 @@
 ﻿using Generic.Abp.AuditLogging.EntityFrameworkCore;
+using Generic.Abp.FileManagement.EntityFrameworkCore;
 using Generic.Abp.Identity.EntityFrameworkCore;
 using Generic.Abp.MenuManagement.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -29,7 +30,8 @@ namespace QuickTemplate.EntityFrameworkCore;
     typeof(AbpFeatureManagementEntityFrameworkCoreModule),
     typeof(GenericAbpIdentityEntityFrameworkCoreModule),
     typeof(GenericAbpAuditLoggingEntityFrameworkCoreModule),
-    typeof(GenericAbpMenuManagementEntityFrameworkCoreModule)
+    typeof(GenericAbpMenuManagementEntityFrameworkCoreModule),
+    typeof(GenericAbpFileManagementEntityFrameworkCoreModule)
 )]
 public class QuickTemplateEntityFrameworkCoreModule : AbpModule
 {

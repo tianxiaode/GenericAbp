@@ -6,6 +6,8 @@ namespace Generic.Abp.FileManagement.Permissions
     {
         public const string GroupName = "FileManagement";
 
+        public const string AdministratorPermission = GroupName + ".administrator";
+
         public static string[] GetAll()
         {
             return ReflectionHelper.GetPublicConstantsRecursively(typeof(FileManagementPermissions));

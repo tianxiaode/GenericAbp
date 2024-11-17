@@ -6,31 +6,31 @@ using Volo.Abp.MultiTenancy;
 
 namespace Generic.Abp.FileManagement.Files;
 
-public class FilePermission : AuditedAggregateRoot<Guid>, IMultiTenant
+public class FilePermission : AuditedAggregateRoot<Guid>, IMultiTenant, IPermission
 {
     public virtual Guid? TenantId { get; protected set; }
-    public virtual Guid FolderId { get; protected set; }
+    public virtual Guid TargetId { get; protected set; }
 
     // 'R' for Role, 'U' for User, "A" for Authenticated User
-    [DisplayName("Permission:ProviderType")]
-    public virtual string ProviderType { get; protected set; } = "A";
+    [DisplayName("Permission:ProviderName")]
+    public virtual string ProviderName { get; protected set; } = "A";
 
     // User ID or Role Name, empty for authenticated user
-    [DisplayName("Permission:ProviderName")]
-    public virtual string? ProviderName { get; protected set; }
+    [DisplayName("Permission:ProviderKey")]
+    public virtual string? ProviderKey { get; protected set; }
 
     [DisplayName("Permission:CanRead")] public virtual bool CanRead { get; protected set; }
     [DisplayName("Permission:CanWrite")] public virtual bool CanWrite { get; protected set; }
     [DisplayName("Permission:CanDelete")] public virtual bool CanDelete { get; protected set; }
 
-    public FilePermission(Guid id, Guid folderId, string providerType, string? providerName = null,
+    public FilePermission(Guid id, Guid targetId, string providerName, string? providerKey = null,
         Guid? tenantId = null) :
         base(id)
     {
-        Check.NotNull(providerType, nameof(providerType));
-        FolderId = folderId;
-        ProviderType = providerType;
+        Check.NotNull(providerName, nameof(providerName));
+        TargetId = targetId;
         ProviderName = providerName;
+        ProviderKey = providerKey;
         TenantId = tenantId;
     }
 

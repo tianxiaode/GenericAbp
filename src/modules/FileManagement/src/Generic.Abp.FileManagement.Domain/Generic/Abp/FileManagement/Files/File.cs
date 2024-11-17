@@ -21,16 +21,13 @@ public class File : AuditedAggregateRoot<Guid>, IFile, IMultiTenant
     [DisplayName("File:IsInheritPermissions")]
     public virtual bool IsInheritPermissions { get; protected set; } = true;
 
-    public virtual Guid FolderId { get; protected set; }
-
-    public File(Guid id, Guid folderId, string hash, string mimeType, string fileType, long size,
+    public File(Guid id, string hash, string mimeType, string fileType, long size,
         Guid? tenantId = null) : base(id)
     {
         Check.NotNullOrEmpty(hash, nameof(Hash));
         Check.NotNullOrEmpty(mimeType, nameof(MimeType));
         Check.NotNullOrEmpty(fileType, nameof(FileType));
 
-        FolderId = folderId;
         TenantId = tenantId;
         MimeType = mimeType;
         FileType = fileType;

@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Domain.Entities;
+using Volo.Abp.MultiTenancy;
 
 namespace Generic.Abp.MenuManagement.Menus.Dtos;
 
 [Serializable]
-public class MenuDto : ExtensibleAuditedEntityDto<Guid>
+public class MenuDto : ExtensibleAuditedEntityDto<Guid>, IMultiTenant, IHasConcurrencyStamp
 {
+    public Guid? TenantId { get; set; }
     public string Code { get; set; } = default!;
     public string Name { get; set; } = default!;
     public Guid? ParentId { get; set; } = default!;

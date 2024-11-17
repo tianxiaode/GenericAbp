@@ -11,6 +11,6 @@ public class FileConsts
 
     public const int DefaultChunkSize = 2097152;
 
-    public static int ProviderTypeMaxLength { get; set; } = 16;
-    public static int ProviderNameMaxLength { get; set; } = 64;
+    public static int ProviderNameMaxLength { get; set; } = 16;
+    public static int ProviderKeyMaxLength { get; set; } = 64;
 }

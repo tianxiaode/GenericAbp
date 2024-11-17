@@ -29,6 +29,11 @@ namespace Generic.Abp.Extensions.Trees
             CancellationTokenProvider = cancellationTokenProvider;
         }
 
+        public virtual async Task<TEntity> GetAsync(Guid id)
+        {
+            return await Repository.GetAsync(id, false, CancellationToken);
+        }
+
         [UnitOfWork]
         public virtual async Task CreateAsync(TEntity entity, bool autoSave = true)
         {

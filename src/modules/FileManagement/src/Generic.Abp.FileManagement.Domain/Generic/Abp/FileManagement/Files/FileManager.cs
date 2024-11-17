@@ -1,5 +1,10 @@
-﻿using Generic.Abp.FileManagement.Exceptions;
+﻿using Generic.Abp.Extensions.Exceptions;
+using Generic.Abp.Extensions.Extensions;
+using Generic.Abp.Extensions.MimeDetective;
+using Generic.Abp.FileManagement.Exceptions;
+using Generic.Abp.FileManagement.Folders;
 using Microsoft.Extensions.Logging;
+using SkiaSharp;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,73 +12,61 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
-using Generic.Abp.Extensions.Exceptions;
-using Generic.Abp.Extensions.Extensions;
-using Generic.Abp.Extensions.MimeDetective;
-using SkiaSharp;
+using Generic.Abp.FileManagement.Settings;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Domain.Services;
+using Volo.Abp.Identity;
+using Volo.Abp.SettingManagement;
 using Volo.Abp.Threading;
 using Volo.Abp.Uow;
 
 namespace Generic.Abp.FileManagement.Files;
 
-public class FileManager : DomainService
+public class FileManager(
+    IFileRepository repository,
+    ICancellationTokenProvider cancellationTokenProvider,
+    FilePermissionManager permissionManager,
+    IdentityUserManager userManager,
+    ISettingManager settingManager)
+    : DomainService
 {
-    public FileManager(IFileRepository fileRepository, ICancellationTokenProvider cancellationTokenProvider)
-    {
-        FileRepository = fileRepository;
-        CancellationTokenProvider = cancellationTokenProvider;
-    }
-
-    protected IFileRepository FileRepository { get; }
-    protected ICancellationTokenProvider CancellationTokenProvider { get; }
+    protected IFileRepository Repository { get; } = repository;
+    protected ICancellationTokenProvider CancellationTokenProvider { get; } = cancellationTokenProvider;
     protected CancellationToken CancellationToken => CancellationTokenProvider.Token;
+    protected FilePermissionManager PermissionManager { get; } = permissionManager;
+    protected IdentityUserManager UserManager { get; } = userManager;
+    protected ISettingManager SettingManager { get; } = settingManager;
 
     [UnitOfWork]
-    public virtual Task<File> CreateAsync(File entity)
+    public virtual Task<File> CreateAsync(File entity, bool autoSave = true)
     {
-        return FileRepository.InsertAsync(entity, true, CancellationToken);
+        return Repository.InsertAsync(entity, autoSave, CancellationToken);
     }
 
     [UnitOfWork]
-    public virtual Task<File> UpdateAsync(File entity)
+    public virtual Task<File> UpdateAsync(File entity, bool autoSave = true)
     {
-        return FileRepository.UpdateAsync(entity, true, CancellationToken);
+        return Repository.UpdateAsync(entity, autoSave, CancellationToken);
     }
 
     [UnitOfWork]
-    public virtual Task DeleteAsync(File entity)
+    public virtual Task DeleteAsync(File entity, bool autoSave = true)
     {
-        return FileRepository.DeleteAsync(m => m.Id == entity.Id, true, CancellationToken);
+        return Repository.DeleteAsync(m => m.Id == entity.Id, autoSave, CancellationToken);
     }
 
-    [UnitOfWork]
-    public virtual Task<List<File>> GetPagedListAsync(int skipCount, int maxResultCount, string sorting, string filter)
-    {
-        return FileRepository.GetPagedListAsync(skipCount, maxResultCount, sorting, filter, CancellationToken);
-    }
-
-    [UnitOfWork]
-    public virtual Task<List<File>> GetPagedListAsync(int skipCount, int maxResultCount, string sorting,
-        Expression<Func<File, bool>>? predicate = null)
-    {
-        predicate ??= m => true;
-
-        return FileRepository.GetPagedListAsync(skipCount, maxResultCount, sorting, predicate, CancellationToken);
-    }
 
     [UnitOfWork]
     public virtual Task<File> GetAsync(Guid id)
     {
-        return FileRepository.GetAsync(id, false, CancellationToken);
+        return Repository.GetAsync(id, false, CancellationToken);
     }
 
     [UnitOfWork]
     public virtual Task<File?> FindAsync(Expression<Func<File, bool>> predicate)
     {
-        return FileRepository.FirstOrDefaultAsync(predicate, CancellationToken);
+        return Repository.FirstOrDefaultAsync(predicate, CancellationToken);
     }
 
     [UnitOfWork]
@@ -84,7 +77,7 @@ public class FileManager : DomainService
             return null;
         }
 
-        var entity = await FileRepository.FirstOrDefaultAsync(m => m.Hash.Equals(hash), CancellationToken);
+        var entity = await Repository.FirstOrDefaultAsync(m => m.Hash.Equals(hash), CancellationToken);
         if (entity != null)
         {
             return entity;
@@ -192,7 +185,10 @@ public class FileManager : DomainService
     {
         //如果文件存在，直接返回
         var exits = await FindByHashAsync(hash, false);
-        if (exits != null) return;
+        if (exits != null)
+        {
+            return;
+        }
 
         //保存文件
         var dir = await GetTempPathAsync(hash);
@@ -204,7 +200,6 @@ public class FileManager : DomainService
     /// 合并文件块
     /// Merge file chunks
     /// </summary>
-    /// <param name="folderId"></param>
     /// <param name="hash">The hash value of the file</param>
     /// <param name="totalChunks">Total chunks</param>
     /// <param name="uploadPath">Save the path</param>
@@ -215,12 +210,15 @@ public class FileManager : DomainService
     /// <returns></returns>
     /// <exception cref="FileChunkErrorBusinessException"></exception>
     [UnitOfWork]
-    public virtual async Task<File> MergeAsync(Guid folderId, string hash, int totalChunks, string uploadPath,
+    public virtual async Task<File> MergeAsync(string hash, int totalChunks, string uploadPath,
         string filename,
         List<FileType> allowTypes, int allowSize, long thumbnailSize = 102400)
     {
         var exits = await FindByHashAsync(hash, false);
-        if (exits != null) return exits;
+        if (exits != null)
+        {
+            return exits;
+        }
 
         var done = true;
         var dir = await GetTempPathAsync(hash);
@@ -229,24 +227,34 @@ public class FileManager : DomainService
         for (var i = 0; i < totalChunks; i++)
         {
             var filePath = Path.Combine(dir, $"{hash}_{i}");
-            if (System.IO.File.Exists(filePath)) continue;
+            if (System.IO.File.Exists(filePath))
+            {
+                continue;
+            }
+
             done = false;
             break;
         }
 
-        if (!done) throw new FileChunkErrorBusinessException();
+        if (!done)
+        {
+            throw new FileChunkErrorBusinessException();
+        }
 
 
-        var dto = await SaveAsync(folderId, hash, totalChunks, uploadPath, filename, dir, allowTypes, allowSize,
+        var dto = await SaveAsync(hash, totalChunks, uploadPath, filename, dir, allowTypes, allowSize,
             thumbnailSize);
-        if (Directory.Exists(dir)) Directory.Delete(dir, true);
+        if (Directory.Exists(dir))
+        {
+            Directory.Delete(dir, true);
+        }
 
 
         return dto;
     }
 
     [UnitOfWork]
-    protected virtual async Task<File> SaveAsync(Guid folderId, string hash, int totalChunks, string uploadPath,
+    protected virtual async Task<File> SaveAsync(string hash, int totalChunks, string uploadPath,
         string filename,
         string tempDir, List<FileType> allowTypes, int allowSize, long thumbnailSize)
     {
@@ -261,9 +269,16 @@ public class FileManager : DomainService
         }
 
         var fileType = await memorySteam.ToArray().GetFileTypeAsync(allowTypes);
-        if (fileType == null) throw new InvalidFileTypeBusinessException();
+        if (fileType == null)
+        {
+            throw new InvalidFileTypeBusinessException();
+        }
+
         var fileSize = memorySteam.Length;
-        if (fileSize > allowSize) throw new FileSizeOutOfRangeBusinessException(allowSize, fileSize);
+        if (fileSize > allowSize)
+        {
+            throw new FileSizeOutOfRangeBusinessException(allowSize, fileSize);
+        }
 
         var filenamePath = await GetAccessPathAsync(hash);
         var path = Path.Combine(uploadPath, filenamePath).Replace("\\", "/");
@@ -272,7 +287,7 @@ public class FileManager : DomainService
             $"{hash}.{fileType.Extension}");
         memorySteam.Close();
 
-        var entity = new File(GuidGenerator.Create(), folderId, hash, fileType.Mime, fileType.Extension, fileSize);
+        var entity = new File(GuidGenerator.Create(), hash, fileType.Mime, fileType.Extension, fileSize);
         entity.SetFilename(filename);
         entity.SetDescription(filename);
         entity.SetPath(path);
@@ -296,8 +311,16 @@ public class FileManager : DomainService
     protected virtual async Task ThumbnailAsync(string hash, string storageDirectory, long size, FileType fileType,
         long thumbnailSize, MemoryStream stream)
     {
-        if (!MimeTypes.ImageTypes.Contains(fileType)) return;
-        if (size < thumbnailSize) return;
+        if (!MimeTypes.ImageTypes.Contains(fileType))
+        {
+            return;
+        }
+
+        if (size < thumbnailSize)
+        {
+            return;
+        }
+
         using var original = SKBitmap.Decode(stream);
         var width = original.Width;
         var height = original.Height;
@@ -332,17 +355,79 @@ public class FileManager : DomainService
     public virtual Task<string> GetPhysicalPathAsync(string path, bool isCreated = false)
     {
         var dir = $"{Directory.GetCurrentDirectory().Replace("\\", "/")}/{path}/".Replace("//", "/");
-        if (isCreated && !Directory.Exists(path)) Directory.CreateDirectory(path);
+        if (isCreated && !Directory.Exists(path))
+        {
+            Directory.CreateDirectory(path);
+        }
+
         return Task.FromResult(dir);
     }
 
-    protected virtual Task<string> GetTempPathAsync(string hash)
+    protected virtual async Task<string> GetTempPathAsync(string hash)
     {
-        return Task.FromResult(Path.Combine(Directory.GetCurrentDirectory(), "temp", hash));
+        var tempPath = await SettingManager.GetOrNullForCurrentTenantAsync(FileManagementSettings.StoragePath) +
+                       "/temp";
+        return Path.Combine(Directory.GetCurrentDirectory(), tempPath, hash);
     }
 
     protected virtual Task<string> GetThumbnailFileNameAsync(string hash)
     {
         return Task.FromResult($"{hash}_thumbnail.png");
+    }
+
+
+    public virtual async Task SetPermissionsAsync(File entity, List<FilePermission> permissions)
+    {
+        var currentPermissions = await PermissionManager.GetListAsync(entity.Id, CancellationToken);
+
+        var currentPermissionIds = new HashSet<Guid>(currentPermissions.Select(m => m.Id));
+        var newPermissionIds = new HashSet<Guid>(permissions.Select(m => m.Id));
+
+        // 找出需要删除的权限
+        var removePermissions = currentPermissions.Where(m => !newPermissionIds.Contains(m.Id)).ToList();
+        await PermissionManager.DeleteManyAsync(removePermissions, CancellationToken);
+
+        // 找出需要新增的权限
+        var insertPermissions = permissions.Where(m => !currentPermissionIds.Contains(m.Id)).ToList();
+        await PermissionManager.InsertManyAsync(insertPermissions, CancellationToken);
+
+        // 找出需要更新的权限
+        var updatePermissions = permissions.Where(m => currentPermissionIds.Contains(m.Id)).ToList();
+        await PermissionManager.UpdateManyAsync(updatePermissions, CancellationToken);
+    }
+
+    public virtual async Task<bool> CadReadAsync(File entity, Guid userId)
+    {
+        return await CheckPermissionAsync(entity, userId, PermissionManager.CanReadAsync);
+    }
+
+    public virtual async Task<bool> CadWriteAsync(File entity, Guid userId)
+    {
+        return await CheckPermissionAsync(entity, userId, PermissionManager.CanWriteAsync);
+    }
+
+    public virtual async Task<bool> CadDeleteAsync(File entity, Guid userId)
+    {
+        return await CheckPermissionAsync(entity, userId, PermissionManager.CanDeleteAsync);
+    }
+
+    public virtual async Task<bool> CheckPermissionAsync(File entity, Guid userId,
+        Func<Guid, IList<string>, Expression<Func<FilePermission, bool>>, System.Threading.CancellationToken,
+                Task<bool>>
+            permissionCheckFunc)
+    {
+        Expression<Func<FilePermission, bool>> subPredicate = m =>
+            m.ProviderName == FolderConsts.AuthorizationUserProviderName;
+
+        var roles = await UserManager.GetRolesAsync(await UserManager.GetByIdAsync(userId));
+
+        //判断文件夹是否存在认证用户权限
+        subPredicate = subPredicate.OrIfNotTrue(m =>
+            m.ProviderName == FolderConsts.AuthorizationUserProviderName);
+
+        //判断是否包含用户
+        subPredicate.OrIfNotTrue(m =>
+            m.ProviderName == FolderConsts.UserProviderName && m.ProviderKey == userId.ToString());
+        return await permissionCheckFunc(entity.Id, roles, subPredicate, CancellationToken);
     }
 }

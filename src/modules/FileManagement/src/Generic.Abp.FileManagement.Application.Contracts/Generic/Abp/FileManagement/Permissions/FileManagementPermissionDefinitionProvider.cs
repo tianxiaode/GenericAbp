@@ -8,7 +8,10 @@ namespace Generic.Abp.FileManagement.Permissions
     {
         public override void Define(IPermissionDefinitionContext context)
         {
-            var myGroup = context.AddGroup(FileManagementPermissions.GroupName, L("Permission:FileManagement"));
+            var fileManagementGroup =
+                context.AddGroup(FileManagementPermissions.GroupName, L("Permission:FileManagement"));
+            fileManagementGroup.AddPermission(FileManagementPermissions.AdministratorPermission,
+                L("Permission:Administrator"));
         }
 
         private static LocalizableString L(string name)
