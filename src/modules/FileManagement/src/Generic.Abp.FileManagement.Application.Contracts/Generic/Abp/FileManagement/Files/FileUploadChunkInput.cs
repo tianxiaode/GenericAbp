@@ -1,12 +1,19 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using Volo.Abp.Validation;
 
 namespace Generic.Abp.FileManagement.Files;
 
-public class FileUploadChunkInput:IHasHash
+[Serializable]
+public class FileUploadChunkInput : IHasHash
 {
     [Required]
-    public string Hash { get; set; }
-    public byte[] ChunkBytes { get; set; }
-    public int Index { get; set; }
+    [DisplayName("File:Hash")]
+    [DynamicMaxLength(typeof(FileConsts), nameof(FileConsts.HashMaxLength))]
 
+    public string Hash { get; set; } = default!;
+
+    public byte[] ChunkBytes { get; set; } = default!;
+    public int Index { get; set; } = default!;
 }

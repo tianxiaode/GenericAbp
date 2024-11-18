@@ -19,4 +19,16 @@ public class FolderDto : ExtensibleEntityDto<Guid>, IHasConcurrencyStamp, IMulti
     public long MaxFileSize { get; set; } = 0;
     public string ConcurrencyStamp { get; set; } = default!;
     public bool Leaf { get; set; } = true;
+
+    public FolderDto()
+    {
+    }
+
+    public FolderDto(Guid id, string code, string name)
+    {
+        Id = id;
+        Code = code;
+        Name = name;
+        Leaf = false;
+    }
 }

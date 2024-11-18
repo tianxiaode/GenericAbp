@@ -10,11 +10,11 @@ namespace Generic.Abp.MenuManagement.Permissions
         {
             var myGroup = context.AddGroup(MenuManagementPermissions.GroupName, L("Permission:MenuManagement"));
 
-            var districtPermission = myGroup.AddPermission(MenuManagementPermissions.Menus.Default,
+            var menusPermission = myGroup.AddPermission(MenuManagementPermissions.Menus.Default,
                 L($"Permission:MenuManagement"));
-            districtPermission.AddChild(MenuManagementPermissions.Menus.Create, L("Permission:Create"));
-            districtPermission.AddChild(MenuManagementPermissions.Menus.Update, L("Permission:Edit"));
-            districtPermission.AddChild(MenuManagementPermissions.Menus.Delete, L("Permission:Delete"));
+            menusPermission.AddChild(MenuManagementPermissions.Menus.Create, L("Permission:Create"));
+            menusPermission.AddChild(MenuManagementPermissions.Menus.Update, L("Permission:Edit"));
+            menusPermission.AddChild(MenuManagementPermissions.Menus.Delete, L("Permission:Delete"));
         }
 
         private static LocalizableString L(string name)

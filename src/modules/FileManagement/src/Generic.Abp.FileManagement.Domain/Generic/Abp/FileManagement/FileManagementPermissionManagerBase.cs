@@ -12,7 +12,8 @@ using Volo.Abp.Domain.Services;
 namespace Generic.Abp.FileManagement;
 
 public class FileManagementPermissionManagerBase<TEntity, TRepository>(
-    TRepository repository) : DomainService
+    TRepository repository
+) : DomainService
     where TEntity : class, IPermission, IEntity<Guid>
     where TRepository : IRepository<TEntity, Guid>
 {
@@ -63,7 +64,8 @@ public class FileManagementPermissionManagerBase<TEntity, TRepository>(
     }
 
     protected virtual async Task<bool> CheckPermissionAsync(Guid targetId, IList<string> roles,
-        Expression<Func<TEntity, bool>> subPredicate, CancellationToken cancellationToken,
+        Expression<Func<TEntity, bool>> subPredicate,
+        CancellationToken cancellationToken,
         bool canRead = false, bool canWrite = false, bool canDelete = false)
     {
         Expression<Func<TEntity, bool>> predicate = m => m.TargetId == targetId;

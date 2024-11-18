@@ -24,11 +24,6 @@ public static class AbpAuditLoggingQueryableExtensions
         this IQueryable<EntityChange> queryable,
         bool include = true)
     {
-        if (!include)
-        {
-            return queryable;
-        }
-
-        return queryable.Include(x => x.PropertyChanges);
+        return !include ? queryable : queryable.Include(x => x.PropertyChanges);
     }
 }

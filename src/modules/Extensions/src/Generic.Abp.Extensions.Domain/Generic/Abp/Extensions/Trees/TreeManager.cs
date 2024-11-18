@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Dynamic.Core;
+using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
+using Generic.Abp.Extensions.Exceptions;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Domain.Services;
 using Volo.Abp.Threading;
@@ -91,7 +94,7 @@ namespace Generic.Abp.Extensions.Trees
         public virtual async Task MoveAsync(TEntity entity, Guid? parentId)
         {
             //Should find children before Code change
-            var children = await FindChildrenAsync(entity, true);
+            var children = await FindChildrenAsync(entity, false, true);
 
             //Store old code of entity
             var oldCode = entity.Code;
@@ -113,7 +116,7 @@ namespace Generic.Abp.Extensions.Trees
         [UnitOfWork]
         public virtual async Task CopyAsync(Guid id, Guid? parentId)
         {
-            var entity = await Repository.GetAsync(id, false, CancellationToken);
+            var entity = await Repository.GetAsync(id, true, CancellationToken);
             if (entity.ParentId == parentId)
             {
                 return;
@@ -131,8 +134,15 @@ namespace Generic.Abp.Extensions.Trees
 
             //要递归复制子节点
             await CopyChildesAsync(entity, newEntity);
+            await AfterCopyAsync(entity, newEntity);
         }
 
+        [UnitOfWork]
+        protected virtual Task AfterCopyAsync(TEntity entity, TEntity newEntity)
+        {
+            //TODO: 复制后需要做的其他操作
+            return Task.CompletedTask;
+        }
 
         [UnitOfWork]
         public virtual async Task CopyChildesAsync(TEntity source, TEntity target)
@@ -194,15 +204,29 @@ namespace Generic.Abp.Extensions.Trees
         }
 
         [UnitOfWork]
-        public virtual async Task<List<TEntity>> FindChildrenAsync(TEntity entity, bool recursive = false)
+        public virtual async Task<List<TEntity>> FindChildrenAsync(TEntity entity, bool includeDetails = false,
+            bool recursive = false)
         {
             if (!recursive)
             {
-                return await Repository.GetListAsync(m => m.ParentId == entity.Id, false, CancellationToken);
+                return await Repository.GetListAsync(m => m.ParentId == entity.Id, includeDetails, CancellationToken);
             }
 
 
-            return await Repository.GetListAsync(m => m.Code.StartsWith(entity.Code + "."), false, CancellationToken);
+            return await Repository.GetListAsync(m => m.Code.StartsWith(entity.Code + "."), includeDetails,
+                CancellationToken);
+        }
+
+        [UnitOfWork]
+        public virtual async Task<List<TEntity>> FindAllChildrenByCodeAsync(string code)
+        {
+            return await Repository.GetListAsync(m => m.Code.StartsWith(code + "."), false, CancellationToken);
+        }
+
+        [UnitOfWork]
+        public virtual async Task<bool> HasChildrenAsync(Guid id)
+        {
+            return await Repository.AnyAsync(m => m.ParentId == id, CancellationToken);
         }
 
         [UnitOfWork]
@@ -211,6 +235,53 @@ namespace Generic.Abp.Extensions.Trees
             var query = await Repository.GetQueryableAsync();
             return await AsyncExecuter.ToListAsync(query.Where(new ParentSpecification<TEntity>(code, level)),
                 CancellationToken);
+        }
+
+        [UnitOfWork]
+        public virtual async Task<List<TEntity>> GetSearchListAsync(Expression<Func<TEntity, bool>> predicate)
+        {
+            //先找出所有符合条件的code
+            var codes = await (await Repository.GetQueryableAsync()).Where(predicate).Select(m => m.Code)
+                .ToDynamicListAsync<string>(CancellationToken);
+            ;
+            if (!codes.Any())
+            {
+                return [];
+            }
+
+
+            var allParents = await GetAllParents(codes);
+
+            return await Repository.GetListAsync(m => allParents.Contains(m.Code), false, CancellationToken);
+        }
+
+        [UnitOfWork]
+        public virtual Task<HashSet<string>> GetAllParents(List<string> codes)
+        {
+            var parents = new HashSet<string>();
+            foreach (var parts in codes.Select(code => code.Split('.')))
+            {
+                for (var i = 1; i <= parts.Length; i++)
+                {
+                    var parent = string.Join(".", parts.Take(i));
+                    parents.Add(parent);
+                }
+            }
+
+            return Task.FromResult(parents);
+        }
+
+        public virtual async Task CheckMoveOrCopyAsync(TEntity entity, Guid? parentId)
+        {
+            if (parentId.HasValue)
+            {
+                var parent = await GetAsync(parentId.Value);
+            }
+
+            if (entity.Id == parentId || entity.ParentId == parentId)
+            {
+                throw new CannotMoveOrCopyToItselfBusinessException();
+            }
         }
     }
 }

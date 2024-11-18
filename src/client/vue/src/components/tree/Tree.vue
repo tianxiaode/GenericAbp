@@ -17,7 +17,7 @@
 </template>
 
 <script setup lang="ts">
-import { useReadOnlyTree, useTree } from '~/composables';
+import { useReadOnlyTree } from '~/composables';
 import TreeNode from './TreeNode.vue';
 import Search from '../forms/Search.vue';
 import { PropType, ref } from 'vue';

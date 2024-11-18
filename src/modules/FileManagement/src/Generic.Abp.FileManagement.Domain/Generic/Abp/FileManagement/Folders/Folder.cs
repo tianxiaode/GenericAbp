@@ -16,12 +16,14 @@ public class Folder : AuditedAggregateRoot<Guid>, ITree<Folder>, IMultiTenant
     public virtual Guid? ParentId { get; protected set; }
 
     [DisplayName("Folder Name")] public virtual string Name { get; protected set; } = default!;
-    public Guid? TenantId { get; protected set; }
+    public virtual Guid? TenantId { get; protected set; }
     [DisplayName("Folder:Parent")] public Folder? Parent { get; set; }
     public ICollection<Folder>? Children { get; set; }
 
     [DisplayName("Folder:IsInheritPermissions")]
     public virtual bool IsInheritPermissions { get; protected set; } = true;
+
+    [DisplayName("Folder:IsStatic")] public virtual bool IsStatic { get; protected set; } = false;
 
     [DisplayName("Folder:AllowedFileTypes")]
     public virtual string AllowedFileTypes { get; protected set; } = default!;
@@ -31,13 +33,14 @@ public class Folder : AuditedAggregateRoot<Guid>, ITree<Folder>, IMultiTenant
     [DisplayName("Folder:MaxFileSize")] public virtual long MaxFileSize { get; protected set; } = 0;
     public virtual ICollection<FolderFile> Files { get; protected set; } = [];
 
-    public Folder(Guid id, Guid? parentId, string name, Guid? tenantId = null)
+    public Folder(Guid id, Guid? parentId, string name, bool isStatic = false, Guid? tenantId = null)
     {
         Check.NotNullOrWhiteSpace(name, nameof(name));
 
         Id = id;
         ParentId = parentId;
         Name = name;
+        IsStatic = isStatic;
         TenantId = tenantId;
     }
 
@@ -75,6 +78,7 @@ public class Folder : AuditedAggregateRoot<Guid>, ITree<Folder>, IMultiTenant
     }
 
     public void SetMaxFileSize(long maxFileSize) => MaxFileSize = maxFileSize;
+    public void SetAllowedFileTypes(string allowedFileTypes) => AllowedFileTypes = allowedFileTypes;
 
     public void AddFile(Guid fileId)
     {

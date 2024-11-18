@@ -4,8 +4,10 @@ using Generic.Abp.FileManagement.EntityFrameworkCore.VirtualPaths;
 using Generic.Abp.FileManagement.Files;
 using Generic.Abp.FileManagement.Folders;
 using Generic.Abp.FileManagement.VirtualPaths;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.EntityFrameworkCore.DependencyInjection;
 using Volo.Abp.Modularity;
 
 namespace Generic.Abp.FileManagement.EntityFrameworkCore
@@ -29,6 +31,14 @@ namespace Generic.Abp.FileManagement.EntityFrameworkCore
                 options.AddRepository<FolderPermission, FolderPermissionRepository>();
                 options.AddRepository<VirtualPath, VirtualPathRepository>();
                 options.AddRepository<VirtualPathPermission, VirtualPathPermissionRepository>();
+            });
+
+            Configure<AbpEntityOptions>(options =>
+            {
+                options.Entity<Folder>(entityOptions =>
+                {
+                    entityOptions.DefaultWithDetailsFunc = query => query.Include(m => m.Parent);
+                });
             });
         }
     }

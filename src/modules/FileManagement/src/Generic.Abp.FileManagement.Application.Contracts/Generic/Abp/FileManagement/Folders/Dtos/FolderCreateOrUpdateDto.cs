@@ -8,10 +8,6 @@ namespace Generic.Abp.FileManagement.Folders.Dtos;
 [Serializable]
 public class FolderCreateOrUpdateDto
 {
-    [Required]
-    [DisplayName("Folder:Parent")]
-    public Guid ParentId { get; set; } = default!;
-
     [DisplayName("Folder:Name")]
     [Required]
     [DynamicMaxLength(typeof(FolderConsts), nameof(FolderConsts.NameMaxLength))]

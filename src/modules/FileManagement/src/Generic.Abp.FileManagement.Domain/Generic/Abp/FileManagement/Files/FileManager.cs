@@ -1,8 +1,12 @@
 ﻿using Generic.Abp.Extensions.Exceptions;
 using Generic.Abp.Extensions.Extensions;
 using Generic.Abp.Extensions.MimeDetective;
+using Generic.Abp.Extensions.RemoteContents;
 using Generic.Abp.FileManagement.Exceptions;
 using Generic.Abp.FileManagement.Folders;
+using Generic.Abp.FileManagement.Localization;
+using Generic.Abp.FileManagement.Settings;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using SkiaSharp;
 using System;
@@ -12,8 +16,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
-using Generic.Abp.FileManagement.Settings;
-using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Domain.Services;
 using Volo.Abp.Identity;
@@ -28,7 +30,8 @@ public class FileManager(
     ICancellationTokenProvider cancellationTokenProvider,
     FilePermissionManager permissionManager,
     IdentityUserManager userManager,
-    ISettingManager settingManager)
+    ISettingManager settingManager,
+    IStringLocalizer<FileManagementResource> localizer)
     : DomainService
 {
     protected IFileRepository Repository { get; } = repository;
@@ -37,6 +40,7 @@ public class FileManager(
     protected FilePermissionManager PermissionManager { get; } = permissionManager;
     protected IdentityUserManager UserManager { get; } = userManager;
     protected ISettingManager SettingManager { get; } = settingManager;
+    protected IStringLocalizer<FileManagementResource> Localizer { get; } = localizer;
 
     [UnitOfWork]
     public virtual Task<File> CreateAsync(File entity, bool autoSave = true)
@@ -70,41 +74,57 @@ public class FileManager(
     }
 
     [UnitOfWork]
-    public virtual async Task<File?> FindByHashAsync(string hash, bool throwException = true)
+    public virtual async Task<File?> FindByHashAsync(string hash)
     {
         if (!hash.IsAscii())
         {
             return null;
         }
 
-        var entity = await Repository.FirstOrDefaultAsync(m => m.Hash.Equals(hash), CancellationToken);
-        if (entity != null)
-        {
-            return entity;
-        }
-
-        if (throwException)
-        {
-            throw new EntityNotFoundException(typeof(File), hash);
-        }
-
-        return null;
+        return await Repository.FirstOrDefaultAsync(m => m.Hash.Equals(hash), CancellationToken);
     }
 
     #region Get File
 
-    public virtual async Task<byte[]?> GetFileAsync(File entity, int chunkSize = FileConsts.DefaultChunkSize,
+    public virtual async Task<IRemoteContent> GetFileAsync(File entity, int chunkSize = FileConsts.DefaultChunkSize,
         int index = 0)
     {
         var filename = $"{entity.Hash}.{entity.FileType}";
-        var file = Path.Combine(await GetPhysicalPathAsync(entity.Path), filename);
-        if (!System.IO.File.Exists(file))
+        var filePath = Path.Combine(await GetPhysicalPathAsync(entity.Path), filename);
+
+        if (!System.IO.File.Exists(filePath))
         {
-            return null;
+            throw new EntityNotFoundBusinessException(Localizer["File"], entity.Hash);
         }
 
-        var bytes = await System.IO.File.ReadAllBytesAsync(file, CancellationToken);
-        return chunkSize == 0 ? bytes : bytes.Skip(chunkSize * index).Take(chunkSize).ToArray();
+        await using var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read,
+            bufferSize: 4096, useAsync: true);
+        // 计算起始位置
+        long startPosition = chunkSize * index;
+        if (startPosition >= fileStream.Length)
+        {
+            throw new EntityNotFoundBusinessException(Localizer["File"], entity.Hash);
+        }
+
+        // 计算实际读取的字节数
+        var actualChunkSize = (int)Math.Min(chunkSize, fileStream.Length - startPosition);
+
+        // 根据文件大小决定返回类型
+        if (fileStream.Length <= FileConsts.LargeFileSizeThreshold)
+        {
+            // 小文件，返回 RemoteByteContent
+            var buffer = new byte[actualChunkSize];
+            fileStream.Seek(startPosition, SeekOrigin.Begin);
+            var i = await fileStream.ReadAsync(buffer, 0, actualChunkSize, CancellationToken);
+            return new RemoteByteContent(buffer, filename, "application/octet-stream", actualChunkSize);
+        }
+
+        // 大文件，返回 RemoteStreamContent
+        var memoryStream = new MemoryStream();
+        fileStream.Seek(startPosition, SeekOrigin.Begin);
+        await fileStream.CopyToAsync(memoryStream, actualChunkSize, CancellationToken);
+        memoryStream.Position = 0;
+        return new RemoteStreamContent(memoryStream, filename, "application/octet-stream", actualChunkSize);
     }
 
     public virtual async Task<byte[]?> GetThumbnailAsync(File entity)
@@ -145,7 +165,7 @@ public class FileManager(
     public virtual async Task<TFileCheckResult?> CheckAsync<TFileCheckResult>(string hash, int size,
         int chunkSize = FileConsts.DefaultChunkSize) where TFileCheckResult : FileCheckResult
     {
-        var file = await FindByHashAsync(hash, false);
+        var file = await FindByHashAsync(hash);
         var result = new FileCheckResult(hash);
         if (file != null)
         {
@@ -184,7 +204,7 @@ public class FileManager(
     public virtual async Task UploadChunkAsync(string hash, byte[] chunkBytes, int index)
     {
         //如果文件存在，直接返回
-        var exits = await FindByHashAsync(hash, false);
+        var exits = await FindByHashAsync(hash);
         if (exits != null)
         {
             return;
@@ -214,7 +234,7 @@ public class FileManager(
         string filename,
         List<FileType> allowTypes, int allowSize, long thumbnailSize = 102400)
     {
-        var exits = await FindByHashAsync(hash, false);
+        var exits = await FindByHashAsync(hash);
         if (exits != null)
         {
             return exits;
@@ -352,22 +372,22 @@ public class FileManager(
         return Task.FromResult($"{hash[..2]}/{hash.Substring(2, 2)}/{hash.Substring(4, 2)}");
     }
 
-    public virtual Task<string> GetPhysicalPathAsync(string path, bool isCreated = false)
+    public virtual async Task<string> GetPhysicalPathAsync(string path, bool isCreated = false)
     {
-        var dir = $"{Directory.GetCurrentDirectory().Replace("\\", "/")}/{path}/".Replace("//", "/");
+        var storagePath = await GetStoragePathAsync();
+        var dir = Path.Combine(Directory.GetCurrentDirectory(), storagePath, path);
         if (isCreated && !Directory.Exists(path))
         {
             Directory.CreateDirectory(path);
         }
 
-        return Task.FromResult(dir);
+        return dir;
     }
 
     protected virtual async Task<string> GetTempPathAsync(string hash)
     {
-        var tempPath = await SettingManager.GetOrNullForCurrentTenantAsync(FileManagementSettings.StoragePath) +
-                       "/temp";
-        return Path.Combine(Directory.GetCurrentDirectory(), tempPath, hash);
+        var storagePath = await GetStoragePathAsync();
+        return Path.Combine(Directory.GetCurrentDirectory(), storagePath, "temp", hash);
     }
 
     protected virtual Task<string> GetThumbnailFileNameAsync(string hash)
@@ -429,5 +449,10 @@ public class FileManager(
         subPredicate.OrIfNotTrue(m =>
             m.ProviderName == FolderConsts.UserProviderName && m.ProviderKey == userId.ToString());
         return await permissionCheckFunc(entity.Id, roles, subPredicate, CancellationToken);
+    }
+
+    public virtual async Task<string> GetStoragePathAsync()
+    {
+        return await SettingManager.GetOrNullForCurrentTenantAsync(FileManagementSettings.StoragePath);
     }
 }

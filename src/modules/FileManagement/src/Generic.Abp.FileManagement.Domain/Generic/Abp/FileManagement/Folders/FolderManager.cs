@@ -8,6 +8,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Generic.Abp.Extensions.Extensions;
+using Generic.Abp.FileManagement.Events;
 using Generic.Abp.FileManagement.Settings;
 using Volo.Abp;
 using Volo.Abp.Caching;
@@ -15,6 +16,8 @@ using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Identity;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.Threading;
+using Volo.Abp.EventBus.Distributed;
+using Volo.Abp.Domain.Entities;
 
 namespace Generic.Abp.FileManagement.Folders;
 
@@ -26,7 +29,9 @@ public class FolderManager(
     IDistributedCache<FolderCacheItem, string> cache,
     FolderPermissionManager folderPermissionManager,
     IdentityUserManager userManager,
-    ISettingManager settingManager)
+    ISettingManager settingManager,
+    IDistributedEventBus distributedEventBus
+)
     : TreeManager<Folder, IFolderRepository>(repository, treeCodeGenerator,
         cancellationTokenProvider)
 {
@@ -35,6 +40,7 @@ public class FolderManager(
     protected FolderPermissionManager FolderPermissionManager { get; } = folderPermissionManager;
     protected IdentityUserManager UserManager { get; } = userManager;
     protected ISettingManager SettingManager { get; } = settingManager;
+    protected IDistributedEventBus DistributedEventBus { get; } = distributedEventBus;
 
     public override async Task CreateAsync(Folder entity, bool autoSave = true)
     {
@@ -62,6 +68,17 @@ public class FolderManager(
             throw new DuplicateWarningBusinessException(Localizer[nameof(Folder)], entity.Name);
         }
     }
+
+    #region files
+
+    public virtual async Task<bool> FileExistAsync(Guid folderId, Guid fileId)
+    {
+        return await Repository.FilesExistAsync(folderId, fileId, CancellationToken);
+    }
+
+    #endregion
+
+    #region permissions
 
     public virtual async Task<List<FolderPermission>> GetPermissionsAsync(Folder folder)
     {
@@ -125,6 +142,8 @@ public class FolderManager(
             m.ProviderName == FolderConsts.UserProviderName && m.ProviderKey == userId.ToString());
         return await permissionCheckFunc(folder.Id, roles, subPredicate, CancellationToken);
     }
+
+    #endregion
 
 
     public virtual async Task<bool> IsPublicFolderAsync(Folder folder)
@@ -192,11 +211,11 @@ public class FolderManager(
         }
 
         var parent = await GetUsersRootFolderAsync();
-        entity = new Folder(GuidGenerator.Create(), parent.Id, userRootFolderName, CurrentTenant.Id);
-        var quotaStr = await settingManager.GetOrNullForCurrentTenantAsync(FileManagementSettings.Users.DefaultQuota) ??
+        entity = new Folder(GuidGenerator.Create(), parent.Id, userRootFolderName, true, CurrentTenant.Id);
+        var quotaStr = await SettingManager.GetOrNullForCurrentTenantAsync(FileManagementSettings.Users.DefaultQuota) ??
                        "2mb";
         var maxFileSizeStr =
-            await settingManager.GetOrNullForCurrentTenantAsync(FileManagementSettings.Users.DefaultMaxFileSize) ??
+            await SettingManager.GetOrNullForCurrentTenantAsync(FileManagementSettings.Users.DefaultMaxFileSize) ??
             "2mb";
         entity.SetStorageQuota(quotaStr.ParseToBytes());
         entity.SetMaxFileSize(maxFileSizeStr.ParseToBytes());
@@ -224,13 +243,31 @@ public class FolderManager(
         return Task.FromResult(FolderConsts.UsersRootFolderName + "_" + userId);
     }
 
-    public override Task<Folder> CloneAsync(Folder source)
+    public override async Task<Folder> CloneAsync(Folder source)
     {
-        var folder = new Folder(GuidGenerator.Create(), source.ParentId, source.Name, source.TenantId);
+        var folder = new Folder(GuidGenerator.Create(), source.ParentId, source.Name, source.IsStatic, source.TenantId);
         folder.ChangeInheritPermissions(source.IsInheritPermissions);
         folder.SetStorageQuota(source.StorageQuota);
         folder.SetUsedStorage(source.UsedStorage);
 
-        return Task.FromResult(folder);
+        await DistributedEventBus.PublishAsync(
+            new FolderCopyEto(source.Id, folder.Id, folder.TenantId)
+        );
+
+        return folder;
+    }
+
+    public virtual async Task MoveFilesAsync(Guid sourceFolderId, Guid destinationFolderId)
+    {
+        var sourceFolder = await GetAsync(sourceFolderId);
+        var destinationFolder = await GetAsync(destinationFolderId);
+
+        var files = await Repository.GetFilesAsync(sourceFolder.Id);
+        foreach (var file in files)
+        {
+            destinationFolder.AddFile(file.FileId);
+        }
+
+        await Repository.UpdateAsync(destinationFolder);
     }
 }

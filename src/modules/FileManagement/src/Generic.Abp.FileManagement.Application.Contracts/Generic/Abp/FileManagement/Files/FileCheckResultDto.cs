@@ -1,11 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Generic.Abp.FileManagement.Files;
 
-public class FileCheckResultDto: ICheckFileResult
+[Serializable]
+public class FileCheckResultDto : ICheckFileResult
 {
-    public string Hash { get; set; }
-    public bool IsExits { get; set;}
-    public IFile File { get; set; }
-    public Dictionary<int, bool> Uploaded { get; set;}
+    public string Hash { get; set; } = default!;
+    public bool IsExits { get; set; } = default!;
+    public IFile File { get; set; } = default!;
+    public Dictionary<int, bool> Uploaded { get; set; } = default!;
 }

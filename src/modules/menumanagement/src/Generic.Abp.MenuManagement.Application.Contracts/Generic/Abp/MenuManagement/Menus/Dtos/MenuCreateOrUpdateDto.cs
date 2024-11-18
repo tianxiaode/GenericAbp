@@ -1,6 +1,5 @@
 ﻿using Generic.Abp.Extensions.Entities.Trees;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Volo.Abp.Validation;
@@ -26,6 +25,4 @@ public class MenuCreateOrUpdateDto
     [DisplayName("Menu:ISEnabled")] public bool IsEnabled { get; set; } = true;
 
     [DisplayName("Menu:Order")] public int Order { get; set; } = 1;
-
-    [DisplayName("Menu:ParentName")] public Guid? ParentId { get; set; } = default!;
 }

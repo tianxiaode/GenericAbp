@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
+using Generic.Abp.FileManagement.Dtos;
 using Generic.Abp.FileManagement.Files;
 using Generic.Abp.FileManagement.Folders;
 using Generic.Abp.FileManagement.Folders.Dtos;
+using Generic.Abp.FileManagement.VirtualPaths;
+using Generic.Abp.FileManagement.VirtualPaths.Dtos;
 
 namespace Generic.Abp.FileManagement
 {
@@ -13,14 +16,34 @@ namespace Generic.Abp.FileManagement
              * Alternatively, you can split your mapping configurations
              * into multiple profile classes for a better organization. */
 
-            CreateMap<Files.File, FileDto>();
+            CreateMap<Files.File, FileDto>().MapExtraProperties();
 
             CreateMap<FileCheckResult, FileCheckResultDto>();
+
 
             CreateMap<Folder, FolderDto>()
                 .ForMember(m => m.Leaf, opts => opts.MapFrom(m => true))
                 .ForMember(m => m.Parent, opts => opts.MapFrom(m => m.Parent))
                 .MapExtraProperties();
+
+            CreateMap<VirtualPath, VirtualPathDto>()
+                .MapExtraProperties();
+
+            CreateMap<VirtualPathPermission, VirtualPathPermissionDto>();
+
+            // CreateMap<VirtualPathPermissionCreateOrUpdateDto, VirtualPathPermission>()
+            //     .ForMember(dest => dest.TargetId, opt => opt.MapAtRuntime());
+
+            var mapperConfiguration = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<PermissionCreateOrUpdateDto, VirtualPathPermission>()
+                    .ForMember(dest => dest.TargetId, opt => opt.MapFrom((src, dest, destMember, context) =>
+                    {
+                        // 获取映射上下文中的参数
+                        var targetId = (string)context.Items["TargetId"];
+                        return targetId;
+                    }));
+            });
         }
     }
 }

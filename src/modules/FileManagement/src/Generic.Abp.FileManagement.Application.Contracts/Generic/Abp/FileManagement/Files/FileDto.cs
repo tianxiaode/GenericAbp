@@ -5,6 +5,7 @@ using Volo.Abp.MultiTenancy;
 
 namespace Generic.Abp.FileManagement.Files;
 
+[Serializable]
 public class FileDto : ExtensibleAuditedEntityDto, IFile, IMultiTenant, IHasConcurrencyStamp
 {
     public Guid? TenantId { get; set; } = default!;

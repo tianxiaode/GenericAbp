@@ -11,6 +11,7 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Authorization;
@@ -57,10 +58,13 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
     [Authorize(MenuManagementPermissions.Menus.Default)]
     public virtual async Task<ListResultDto<MenuDto>> GetListAsync(MenuGetListInput input)
     {
+        // var a = await Repository.GetListAsync(m => m.Name.Contains((input.Filter ?? "test")));
+        // Logger.LogDebug($"searched:{JsonSerializer.Serialize(a.Select(m => new { m.Name, m.Code }))}");
         List<Menu> list;
         if (!string.IsNullOrEmpty(input.Filter))
         {
-            list = await GetSearchMenuList(input);
+            list = await MenuManager.GetSearchListAsync(m =>
+                m.Name.Contains(input.Filter) || (!string.IsNullOrEmpty(m.Router) && m.Router.Contains(input.Filter)));
         }
         else
         {
@@ -71,7 +75,7 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
 
         foreach (var dto in dtos)
         {
-            dto.Leaf = !await Repository.HasChildAsync(dto.Id);
+            dto.Leaf = !await MenuManager.HasChildrenAsync(dto.Id);
         }
 
         return new ListResultDto<MenuDto>(dtos);
@@ -130,8 +134,8 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
     public virtual async Task MoveAsync(Guid id, Guid? parentId)
     {
         var entity = await Repository.GetAsync(id);
-        CheckIsStaticMenu(entity);
-        await CheckMoveOrCopyAsync(entity, parentId);
+        CheckIsStaticAsync(entity);
+        await MenuManager.CheckMoveOrCopyAsync(entity, parentId);
         await MenuManager.MoveAsync(entity, parentId);
     }
 
@@ -139,7 +143,7 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
     [UnitOfWork(true)]
     public virtual async Task CopyAsync(Guid id, Guid? parentId)
     {
-        await CheckMoveOrCopyAsync(await Repository.GetAsync(id), parentId);
+        await MenuManager.CheckMoveOrCopyAsync(await Repository.GetAsync(id), parentId);
         await MenuManager.CopyAsync(id, parentId);
     }
 
@@ -148,7 +152,7 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
     public virtual async Task DeleteAsync(Guid id)
     {
         var entity = await Repository.GetAsync(id);
-        CheckIsStaticMenu(entity);
+        CheckIsStaticAsync(entity);
         await MenuManager.DeleteAsync(entity);
     }
 
@@ -293,37 +297,6 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
         return chilrenDtos;
     }
 
-    protected virtual async Task<List<Menu>> GetSearchMenuList(MenuGetListInput input)
-    {
-        //先找出所有符合条件的code
-        var codes = await Repository.GetAllCodesByFilterAsync(input.Filter!, input.GroupName);
-        if (!codes.Any())
-        {
-            return [];
-        }
-
-
-        var allParents = await GetAllParents(codes);
-
-        return await Repository.GetListAsync(m => allParents.Contains(m.Code));
-    }
-
-
-    protected virtual Task<HashSet<string>> GetAllParents(List<string> codes)
-    {
-        var parents = new HashSet<string>();
-        foreach (var parts in codes.Select(code => code.Split('.')))
-        {
-            for (var i = 1; i <= parts.Length; i++)
-            {
-                var parent = string.Join(".", parts.Take(i));
-                parents.Add(parent);
-            }
-        }
-
-        return Task.FromResult(parents);
-    }
-
 
     protected virtual Task UpdateMenuByInputAsync(Menu entity, MenuCreateOrUpdateDto input)
     {
@@ -343,7 +316,7 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
         return Task.CompletedTask;
     }
 
-    protected virtual void CheckIsStaticMenu(Menu menu)
+    protected virtual void CheckIsStaticAsync(Menu menu)
     {
         if (menu.IsStatic)
         {
@@ -379,18 +352,5 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
                 : null,
             Permissions = []
         };
-    }
-
-    protected virtual async Task CheckMoveOrCopyAsync(Menu entity, Guid? parentId)
-    {
-        if (parentId.HasValue)
-        {
-            var parent = await Repository.GetAsync(parentId.Value);
-        }
-
-        if (entity.Id == parentId || entity.ParentId == parentId)
-        {
-            throw new CannotMoveOrCopyToItselfBusinessException();
-        }
     }
 }

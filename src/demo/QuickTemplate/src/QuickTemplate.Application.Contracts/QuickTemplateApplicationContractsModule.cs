@@ -1,4 +1,5 @@
 ﻿using Generic.Abp.AuditLogging;
+using Generic.Abp.FileManagement;
 using Generic.Abp.Identity;
 using Generic.Abp.MenuManagement;
 using Generic.Abp.OpenIddict;
@@ -25,7 +26,8 @@ namespace QuickTemplate;
     typeof(AbpSettingManagementApplicationContractsModule),
     typeof(AbpTenantManagementApplicationContractsModule),
     typeof(AbpObjectExtendingModule),
-    typeof(GenericAbpMenuManagementApplicationContractsModule)
+    typeof(GenericAbpMenuManagementApplicationContractsModule),
+    typeof(GenericAbpFileManagementApplicationContractsModule)
 )]
 public class QuickTemplateApplicationContractsModule : AbpModule
 {

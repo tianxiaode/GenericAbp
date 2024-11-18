@@ -82,6 +82,11 @@ public class VirtualPathManager(
         }
     }
 
+    public virtual async Task<List<VirtualPathPermission>> GetPermissionsAsync(Guid id)
+    {
+        return await PermissionManager.GetListAsync(id, CancellationToken);
+    }
+
     public virtual async Task SetPermissionsAsync(VirtualPath entity, List<VirtualPathPermission> permissions)
     {
         var currentPermissions = await PermissionManager.GetListAsync(entity.Id, CancellationToken);
@@ -124,21 +129,21 @@ public class VirtualPathManager(
     {
         Expression<Func<VirtualPathPermission, bool>> subPredicate = m =>
             m.ProviderName == FolderConsts.EveryoneProviderName;
-        //如果没提供用户，说明是匿名用户，直接判断是否 everyone权限
+        //如果未提供用户，说明是匿名用户，直接判断是否 everyone权限
         if (!userId.HasValue)
         {
             return await permissionCheckFunc(entity.Id, [], subPredicate, CancellationToken);
         }
 
+        //是否认证用户
         subPredicate = m => m.ProviderName == FolderConsts.AuthorizationUserProviderName;
-        var roles = await UserManager.GetRolesAsync(await UserManager.GetByIdAsync(userId.Value));
-        //判断文件夹是否存在认证用户权限
-        subPredicate = subPredicate.OrIfNotTrue(m =>
-            m.ProviderName == FolderConsts.AuthorizationUserProviderName);
 
-        //判断是否包含用户
+        //结合是否包含用户
         subPredicate = subPredicate.OrIfNotTrue(m =>
             m.ProviderName == FolderConsts.UserProviderName && m.ProviderKey == userId.ToString());
+
+        var roles = await UserManager.GetRolesAsync(await UserManager.GetByIdAsync(userId.Value));
+        //再结合是否包含用户角色
         return await permissionCheckFunc(entity.Id, roles, subPredicate, CancellationToken);
     }
 }
