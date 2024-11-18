@@ -89,8 +89,8 @@ public class FileManager(
     public virtual async Task<IRemoteContent> GetFileAsync(File entity, int chunkSize = FileConsts.DefaultChunkSize,
         int index = 0)
     {
-        var filename = $"{entity.Hash}.{entity.FileType}";
-        var filePath = Path.Combine(await GetPhysicalPathAsync(entity.Path), filename);
+        var filename = $"{entity.Hash}.{entity.FileInfoBase.FileType}";
+        var filePath = Path.Combine(await GetPhysicalPathAsync(entity.FileInfoBase.Path), filename);
 
         if (!System.IO.File.Exists(filePath))
         {
@@ -130,14 +130,14 @@ public class FileManager(
     public virtual async Task<byte[]?> GetThumbnailAsync(File entity)
     {
         var filename = await GetThumbnailFileNameAsync(entity.Hash);
-        var dir = await GetPhysicalPathAsync(entity.Path);
+        var dir = await GetPhysicalPathAsync(entity.FileInfoBase.Path);
         var file = Path.Combine(dir, filename);
         if (System.IO.File.Exists(file))
         {
             return await System.IO.File.ReadAllBytesAsync(file, CancellationToken);
         }
 
-        filename = $"{entity.Hash}.{entity.FileType}";
+        filename = $"{entity.Hash}.{entity.FileInfoBase.FileType}";
         file = Path.Combine(dir, filename);
         if (System.IO.File.Exists(file))
         {
@@ -169,7 +169,7 @@ public class FileManager(
         var result = new FileCheckResult(hash);
         if (file != null)
         {
-            result.SetFile(file);
+            //result.SetFile(file);
             return result as TFileCheckResult;
         }
 
@@ -220,6 +220,7 @@ public class FileManager(
     /// 合并文件块
     /// Merge file chunks
     /// </summary>
+    /// <param name="folderId"></param>
     /// <param name="hash">The hash value of the file</param>
     /// <param name="totalChunks">Total chunks</param>
     /// <param name="uploadPath">Save the path</param>
@@ -230,7 +231,7 @@ public class FileManager(
     /// <returns></returns>
     /// <exception cref="FileChunkErrorBusinessException"></exception>
     [UnitOfWork]
-    public virtual async Task<File> MergeAsync(string hash, int totalChunks, string uploadPath,
+    public virtual async Task<File> MergeAsync(Guid folderId, string hash, int totalChunks, string uploadPath,
         string filename,
         List<FileType> allowTypes, int allowSize, long thumbnailSize = 102400)
     {
@@ -262,7 +263,7 @@ public class FileManager(
         }
 
 
-        var dto = await SaveAsync(hash, totalChunks, uploadPath, filename, dir, allowTypes, allowSize,
+        var dto = await SaveAsync(folderId, hash, totalChunks, uploadPath, filename, dir, allowTypes, allowSize,
             thumbnailSize);
         if (Directory.Exists(dir))
         {
@@ -274,7 +275,7 @@ public class FileManager(
     }
 
     [UnitOfWork]
-    protected virtual async Task<File> SaveAsync(string hash, int totalChunks, string uploadPath,
+    protected virtual async Task<File> SaveAsync(Guid folderId, string hash, int totalChunks, string uploadPath,
         string filename,
         string tempDir, List<FileType> allowTypes, int allowSize, long thumbnailSize)
     {
@@ -307,10 +308,11 @@ public class FileManager(
             $"{hash}.{fileType.Extension}");
         memorySteam.Close();
 
-        var entity = new File(GuidGenerator.Create(), hash, fileType.Mime, fileType.Extension, fileSize);
+        var entity = new File(GuidGenerator.Create(), folderId, hash, CurrentTenant.Id);
         entity.SetFilename(filename);
         entity.SetDescription(filename);
-        entity.SetPath(path);
+        // entity.fi
+        // entity.SetPath(path);
         await ThumbnailAsync(hash, storageDirectory, fileSize, fileType, thumbnailSize, memorySteam);
 
         await CreateAsync(entity);

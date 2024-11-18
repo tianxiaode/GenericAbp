@@ -1,4 +1,5 @@
-﻿using Generic.Abp.FileManagement.Files;
+﻿using Generic.Abp.FileManagement.FileInfoBases;
+using Generic.Abp.FileManagement.Files;
 using Generic.Abp.FileManagement.Folders;
 using Generic.Abp.FileManagement.VirtualPaths;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +17,29 @@ namespace Generic.Abp.FileManagement.EntityFrameworkCore
 
             var dbType = builder.GetDatabaseProvider();
 
+            builder.Entity<FileInfoBase>(b =>
+            {
+                //Configure table & schema name
+                b.ToTable(FileManagementDbProperties.DbTablePrefix + "FileInfoBases",
+                    FileManagementDbProperties.DbSchema);
+
+                b.ConfigureByConvention();
+
+                //Properties
+                b.Property(m => m.MimeType).IsRequired().HasMaxLength(FileConsts.MimeTypeMaxLength);
+                b.Property(m => m.FileType).IsRequired().HasMaxLength(FileConsts.FileTypeMaxLength);
+                b.Property(m => m.Hash).IsRequired().HasMaxLength(FileConsts.HashMaxLength);
+                b.Property(m => m.Path).IsRequired().HasMaxLength(FileConsts.PathMaxLength);
+                b.Property(m => m.Size).IsRequired().HasDefaultValue(0);
+
+
+                //Indexes
+                b.HasIndex(m => m.CreationTime);
+                b.HasIndex(m => m.Hash).IsUnique();
+                b.HasIndex(m => m.FileType);
+                b.ApplyObjectExtensionMappings();
+            });
+
             builder.Entity<File>(b =>
             {
                 //Configure table & schema name
@@ -25,28 +49,19 @@ namespace Generic.Abp.FileManagement.EntityFrameworkCore
 
                 //Properties
                 b.Property(m => m.Filename).IsRequired().HasMaxLength(FileConsts.FilenameMaxLength);
-                b.Property(m => m.MimeType).IsRequired().HasMaxLength(FileConsts.MimeTypeMaxLength);
-                b.Property(m => m.FileType).IsRequired().HasMaxLength(FileConsts.FileTypeMaxLength);
                 b.Property(m => m.Hash).IsRequired().HasMaxLength(FileConsts.HashMaxLength);
-                b.Property(m => m.Path).IsRequired().HasMaxLength(FileConsts.PathMaxLength);
                 b.Property(m => m.Description).IsRequired().HasMaxLength(FileConsts.DescriptionMaxLength);
-                b.Property(m => m.Size).IsRequired().HasDefaultValue(0);
                 b.Property(m => m.IsInheritPermissions).IsRequired().HasDefaultValue(false);
 
                 if (dbType == EfCoreDatabaseProvider.MySql)
                 {
                     b.Property(m => m.Filename).UseCollation("gbk_chinese_ci");
-                    b.Property(m => m.MimeType).UseCollation("ascii_general_ci");
-                    b.Property(m => m.FileType).UseCollation("ascii_general_ci");
-                    b.Property(m => m.Hash).UseCollation("ascii_general_ci");
-                    b.Property(m => m.Path).UseCollation("ascii_general_ci");
                 }
 
                 //Indexes
                 b.HasIndex(m => m.CreationTime);
-                b.HasIndex(m => m.Hash).IsUnique();
+                b.HasIndex(m => new { m.FolderId, m.Hash });
                 b.HasIndex(m => m.Filename);
-                b.HasIndex(m => m.FileType);
                 b.ApplyObjectExtensionMappings();
             });
 
@@ -135,24 +150,6 @@ namespace Generic.Abp.FileManagement.EntityFrameworkCore
                 b.HasIndex(m => new { m.TargetId, m.ProviderName, m.ProviderKey });
                 b.ApplyObjectExtensionMappings();
             });
-
-            builder.Entity<FolderFile>(b =>
-            {
-                b.ToTable(FileManagementDbProperties.DbTablePrefix + "FolderFiles",
-                    FileManagementDbProperties.DbSchema);
-
-                b.ConfigureByConvention();
-
-                b.HasKey(m => new { m.FolderId, m.FileId });
-
-                b.HasOne<File>().WithMany().HasForeignKey(m => m.FileId).IsRequired();
-                //b.HasOne<Folder>().WithMany().HasForeignKey(m => m.FolderId).IsRequired();
-
-                b.HasIndex(m => new { m.FileId, m.FolderId });
-
-                b.ApplyObjectExtensionMappings();
-            });
-
 
             builder.Entity<VirtualPath>(b =>
             {

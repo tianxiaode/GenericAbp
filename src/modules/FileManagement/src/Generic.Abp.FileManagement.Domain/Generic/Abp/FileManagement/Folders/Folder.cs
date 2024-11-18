@@ -3,7 +3,6 @@ using Generic.Abp.FileManagement.Events;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.MultiTenancy;
@@ -31,7 +30,6 @@ public class Folder : AuditedAggregateRoot<Guid>, ITree<Folder>, IMultiTenant
     [DisplayName("Folder:StorageQuota")] public virtual long StorageQuota { get; protected set; } = 0;
     [DisplayName("Folder:UsedStorage")] public virtual long UsedStorage { get; protected set; } = 0;
     [DisplayName("Folder:MaxFileSize")] public virtual long MaxFileSize { get; protected set; } = 0;
-    public virtual ICollection<FolderFile> Files { get; protected set; } = [];
 
     public Folder(Guid id, Guid? parentId, string name, bool isStatic = false, Guid? tenantId = null)
     {
@@ -79,35 +77,4 @@ public class Folder : AuditedAggregateRoot<Guid>, ITree<Folder>, IMultiTenant
 
     public void SetMaxFileSize(long maxFileSize) => MaxFileSize = maxFileSize;
     public void SetAllowedFileTypes(string allowedFileTypes) => AllowedFileTypes = allowedFileTypes;
-
-    public void AddFile(Guid fileId)
-    {
-        if (IsInFiles(fileId))
-        {
-            return;
-        }
-
-        Files.Add(
-            new FolderFile(
-                Id,
-                fileId,
-                TenantId
-            )
-        );
-    }
-
-    public void RemoveFile(Guid fileId)
-    {
-        if (!IsInFiles(fileId))
-        {
-            return;
-        }
-
-        Files.RemoveAll(m => m.FileId == fileId);
-    }
-
-    public virtual bool IsInFiles(Guid fileId)
-    {
-        return Files.Any(m => m.FileId == fileId);
-    }
 }

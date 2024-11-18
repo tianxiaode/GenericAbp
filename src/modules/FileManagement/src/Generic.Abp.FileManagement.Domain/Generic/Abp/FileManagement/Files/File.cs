@@ -1,37 +1,34 @@
 ﻿using System;
 using System.ComponentModel;
+using Generic.Abp.FileManagement.FileInfoBases;
+using Generic.Abp.FileManagement.Folders;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.MultiTenancy;
 
 namespace Generic.Abp.FileManagement.Files;
 
-public class File : AuditedAggregateRoot<Guid>, IFile, IMultiTenant
+public class File : AuditedAggregateRoot<Guid>, IMultiTenant
 {
-    public Guid? TenantId { get; protected set; }
-
+    public virtual Guid? TenantId { get; protected set; }
     [DisplayName("File:Filename")] public virtual string Filename { get; protected set; } = default!;
-    [DisplayName("File:MimeType")] public virtual string MimeType { get; protected set; }
-    [DisplayName("File:FileType")] public virtual string FileType { get; protected set; }
-    [DisplayName("File:Size")] public virtual long Size { get; protected set; } = 0;
     [DisplayName("File:Description")] public virtual string Description { get; protected set; } = default!;
     [DisplayName("File:Hash")] public virtual string Hash { get; protected set; }
-    [DisplayName("File:Path")] public virtual string Path { get; protected set; } = default!;
 
     [DisplayName("File:IsInheritPermissions")]
     public virtual bool IsInheritPermissions { get; protected set; } = true;
 
-    public File(Guid id, string hash, string mimeType, string fileType, long size,
-        Guid? tenantId = null) : base(id)
+    public virtual Guid FolderId { get; protected set; }
+    public virtual Folder Folder { get; set; } = default!;
+    public virtual Guid FileInfoBaseId { get; set; }
+    public virtual FileInfoBase FileInfoBase { get; set; } = default!;
+
+    public File(Guid id, Guid folderId, string hash, Guid? tenantId = null) : base(id)
     {
         Check.NotNullOrEmpty(hash, nameof(Hash));
-        Check.NotNullOrEmpty(mimeType, nameof(MimeType));
-        Check.NotNullOrEmpty(fileType, nameof(FileType));
 
+        FolderId = folderId;
         TenantId = tenantId;
-        MimeType = mimeType;
-        FileType = fileType;
-        Size = size;
         Hash = hash;
         IsInheritPermissions = true;
     }
@@ -48,9 +45,18 @@ public class File : AuditedAggregateRoot<Guid>, IFile, IMultiTenant
         Description = description;
     }
 
-    public void SetPath(string path)
+    public void SetFileInfoBase(FileInfoBase fileInfoBase)
     {
-        Check.NotNullOrEmpty(path, nameof(Path));
-        Path = path;
+        FileInfoBaseId = fileInfoBase.Id;
+    }
+
+    public void ChangeInheritPermissions(bool inheritPermissions)
+    {
+        IsInheritPermissions = inheritPermissions;
+    }
+
+    public void ChangeFolder(Folder folder)
+    {
+        FolderId = folder.Id;
     }
 }

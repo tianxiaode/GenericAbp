@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Generic.Abp.FileManagement.Files;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Uow;
@@ -17,8 +18,8 @@ public class FolderRepository(IDbContextProvider<IFileManagementDbContext> dbCon
     public virtual async Task<bool> FilesExistAsync(Guid folderId, Guid fileId, CancellationToken cancellationToken)
     {
         var dbContext = await GetDbContextAsync();
-        var dbSet = dbContext.Set<FolderFile>();
-        return await dbSet.AnyAsync(m => m.FolderId == folderId && m.FileId == fileId, cancellationToken);
+        var dbSet = dbContext.Set<File>();
+        return await dbSet.AnyAsync(m => m.FolderId == folderId && m.Id == fileId, cancellationToken);
     }
 
     [UnitOfWork]
@@ -40,10 +41,10 @@ public class FolderRepository(IDbContextProvider<IFileManagementDbContext> dbCon
     }
 
     [UnitOfWork]
-    public virtual async Task<List<FolderFile>> GetFilesAsync(Guid id, CancellationToken cancellationToken = default)
+    public virtual async Task<List<File>> GetFilesAsync(Guid id, CancellationToken cancellationToken = default)
     {
         var dbContext = await GetDbContextAsync();
-        var dbSet = dbContext.Set<FolderFile>();
+        var dbSet = dbContext.Set<File>();
         return await dbSet.AsNoTracking().Where(m => m.FolderId == id).ToListAsync(cancellationToken);
     }
 }

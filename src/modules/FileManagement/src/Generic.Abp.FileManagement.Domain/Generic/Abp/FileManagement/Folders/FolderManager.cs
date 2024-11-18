@@ -253,7 +253,7 @@ public class FolderManager(
         var files = await Repository.GetFilesAsync(sourceFolder.Id);
         foreach (var file in files)
         {
-            destinationFolder.AddFile(file.FileId);
+            //destinationFolder.AddFile(file.FileId);
         }
 
         await Repository.UpdateAsync(destinationFolder);

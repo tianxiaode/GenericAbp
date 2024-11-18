@@ -1,4 +1,5 @@
-﻿using Generic.Abp.FileManagement.Files;
+﻿using Generic.Abp.FileManagement.FileInfoBases;
+using Generic.Abp.FileManagement.Files;
 using Generic.Abp.FileManagement.Folders;
 using Generic.Abp.FileManagement.VirtualPaths;
 using Microsoft.EntityFrameworkCore;
@@ -21,7 +22,7 @@ namespace Generic.Abp.FileManagement.EntityFrameworkCore
         public DbSet<FilePermission> FilePermissions { get; set; } = default!;
         public DbSet<FolderPermission> FolderPermissions { get; set; } = default!;
         public DbSet<VirtualPathPermission> VirtualPathPermissions { get; set; } = default!;
-        public DbSet<FolderFile> FolderFiles { get; set; } = default!;
+        public DbSet<FileInfoBase> FileInfoBases { get; set; } = default!;
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
