@@ -8,16 +8,19 @@ using System.Threading.Tasks;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Domain.Services;
+using Volo.Abp.Identity;
 
 namespace Generic.Abp.FileManagement;
 
 public class FileManagementPermissionManagerBase<TEntity, TRepository>(
-    TRepository repository
+    TRepository repository,
+    IdentityUserManager userManager
 ) : DomainService
     where TEntity : class, IPermission, IEntity<Guid>
     where TRepository : IRepository<TEntity, Guid>
 {
     protected TRepository Repository { get; } = repository;
+    protected IdentityUserManager UserManager { get; } = userManager;
 
     public virtual async Task<List<TEntity>> GetListAsync(Guid targetId, CancellationToken cancellationToken)
     {
@@ -39,32 +42,74 @@ public class FileManagementPermissionManagerBase<TEntity, TRepository>(
         return Repository.DeleteManyAsync(permissions, cancellationToken: cancellationToken);
     }
 
-    public virtual async Task<bool> ExistAsync(Guid targetId, IList<string> roles,
-        Expression<Func<TEntity, bool>> subPredicate, CancellationToken cancellationToken)
+    public virtual async Task<bool> AllowEveryOneReadAsync(Guid targetId, CancellationToken cancellationToken)
     {
-        return await CheckPermissionAsync(targetId, roles, subPredicate, cancellationToken);
+        return await Repository.AnyAsync(
+            m => m.TargetId == targetId && m.CanRead && m.ProviderName == FolderConsts.EveryoneProviderName,
+            cancellationToken);
     }
 
-    public virtual async Task<bool> CanReadAsync(Guid targetId, IList<string> roles,
-        Expression<Func<TEntity, bool>> subPredicate, CancellationToken cancellationToken)
+    public virtual async Task<bool> AllowAuthenticatedUserReadAsync(Guid targetId, CancellationToken cancellationToken)
     {
-        return await CheckPermissionAsync(targetId, roles, subPredicate, cancellationToken, canRead: true);
+        return await Repository.AnyAsync(
+            m => m.TargetId == targetId && m.CanRead && m.ProviderName == FolderConsts.AuthorizationUserProviderName,
+            cancellationToken);
     }
 
-    public virtual async Task<bool> CanWriteAsync(Guid targetId, IList<string> roles,
-        Expression<Func<TEntity, bool>> subPredicate, CancellationToken cancellationToken)
+    public virtual async Task<bool> AllowUserOrRolesReadAsync(Guid targetId, Guid userId,
+        CancellationToken cancellationToken)
     {
-        return await CheckPermissionAsync(targetId, roles, subPredicate, cancellationToken, canWrite: true);
+        return await CheckPermissionAsync(targetId, userId, cancellationToken);
     }
 
-    public virtual async Task<bool> CanDeleteAsync(Guid targetId, IList<string> roles,
-        Expression<Func<TEntity, bool>> subPredicate, CancellationToken cancellationToken)
+    public virtual async Task<bool> AllowEveryOneWriteAsync(Guid targetId, CancellationToken cancellationToken)
     {
-        return await CheckPermissionAsync(targetId, roles, subPredicate, cancellationToken, canDelete: true);
+        return await Repository.AnyAsync(
+            m => m.TargetId == targetId && m.CanWrite && m.ProviderName == FolderConsts.EveryoneProviderName,
+            cancellationToken);
     }
 
-    protected virtual async Task<bool> CheckPermissionAsync(Guid targetId, IList<string> roles,
-        Expression<Func<TEntity, bool>> subPredicate,
+    public virtual async Task<bool> AllowAuthenticatedUserWriteAsync(Guid targetId, CancellationToken cancellationToken)
+    {
+        return await Repository.AnyAsync(
+            m => m.TargetId == targetId && m.CanWrite && m.ProviderName == FolderConsts.AuthorizationUserProviderName,
+            cancellationToken);
+    }
+
+    public virtual async Task<bool> AllowUserOrRolesWriteAsync(Guid targetId, Guid userId,
+        CancellationToken cancellationToken)
+    {
+        return await CheckPermissionAsync(targetId, userId, cancellationToken, canWrite: true);
+    }
+
+    public virtual async Task<bool> AllowEveryOneDeleteAsync(Guid targetId, CancellationToken cancellationToken)
+    {
+        return await Repository.AnyAsync(
+            m => m.TargetId == targetId && m.CanDelete && m.ProviderName == FolderConsts.EveryoneProviderName,
+            cancellationToken);
+    }
+
+    public virtual async Task<bool> AllowAuthenticatedUserDeleteAsync(Guid targetId,
+        CancellationToken cancellationToken)
+    {
+        return await Repository.AnyAsync(
+            m => m.TargetId == targetId && m.CanDelete && m.ProviderName == FolderConsts.AuthorizationUserProviderName,
+            cancellationToken);
+    }
+
+    public virtual async Task<bool> AllowUserOrRolesDeleteAsync(Guid targetId, Guid userId,
+        CancellationToken cancellationToken)
+    {
+        return await CheckPermissionAsync(targetId, userId, cancellationToken, canDelete: true);
+    }
+
+    public virtual async Task<bool> HasPermissionAsync(Guid targetId, CancellationToken cancellationToken)
+    {
+        return await Repository.AnyAsync(m => m.TargetId == targetId, cancellationToken: cancellationToken);
+    }
+
+
+    protected virtual async Task<bool> CheckPermissionAsync(Guid targetId, Guid userId,
         CancellationToken cancellationToken,
         bool canRead = false, bool canWrite = false, bool canDelete = false)
     {
@@ -85,8 +130,11 @@ public class FileManagementPermissionManagerBase<TEntity, TRepository>(
             predicate = predicate.And(m => m.CanDelete);
         }
 
+        Expression<Func<TEntity, bool>> subPredicate = m =>
+            m.ProviderName == FolderConsts.AuthorizationUserProviderName && m.ProviderKey == userId.ToString();
 
         //判断是否包含用户角色
+        var roles = await UserManager.GetRolesAsync(await UserManager.GetByIdAsync(userId));
         if (roles.Count > 0)
         {
             subPredicate = subPredicate.OrIfNotTrue(m =>
@@ -95,7 +143,6 @@ public class FileManagementPermissionManagerBase<TEntity, TRepository>(
         }
 
         predicate = predicate.AndIfNotTrue(subPredicate);
-        // 权限主体判断逻辑可由子类扩展实现
         return await Repository.AnyAsync(predicate, cancellationToken: cancellationToken);
     }
 }

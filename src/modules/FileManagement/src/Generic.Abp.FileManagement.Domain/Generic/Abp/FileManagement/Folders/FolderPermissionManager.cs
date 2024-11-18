@@ -1,6 +1,8 @@
-﻿namespace Generic.Abp.FileManagement.Folders;
+﻿using Volo.Abp.Identity;
 
-public class FolderPermissionManager(IFolderPermissionRepository repository)
-    : FileManagementPermissionManagerBase<FolderPermission, IFolderPermissionRepository>(repository)
+namespace Generic.Abp.FileManagement.Folders;
+
+public class FolderPermissionManager(IFolderPermissionRepository repository, IdentityUserManager userManager)
+    : FileManagementPermissionManagerBase<FolderPermission, IFolderPermissionRepository>(repository, userManager)
 {
 }

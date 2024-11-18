@@ -416,19 +416,82 @@ public class FileManager(
         await PermissionManager.UpdateManyAsync(updatePermissions, CancellationToken);
     }
 
-    public virtual async Task<bool> CadReadAsync(File entity, Guid userId)
+    public virtual async Task<bool> CadReadAsync(File entity, Guid? userId)
     {
-        return await CheckPermissionAsync(entity, userId, PermissionManager.CanReadAsync);
+        //如果没有权限定义，则默认有读权限
+        if (!await PermissionManager.HasPermissionAsync(entity.Id, CancellationToken))
+        {
+            return true;
+        }
+
+        if (await PermissionManager.AllowEveryOneReadAsync(entity.Id, CancellationToken))
+        {
+            return true;
+        }
+
+        if (!userId.HasValue)
+        {
+            return false;
+        }
+
+        if (await PermissionManager.AllowAuthenticatedUserReadAsync(entity.Id, CancellationToken))
+        {
+            return true;
+        }
+
+        return await PermissionManager.AllowUserOrRolesReadAsync(entity.Id, userId.Value, CancellationToken);
     }
 
-    public virtual async Task<bool> CadWriteAsync(File entity, Guid userId)
+    public virtual async Task<bool> CadWriteAsync(File entity, Guid? userId)
     {
-        return await CheckPermissionAsync(entity, userId, PermissionManager.CanWriteAsync);
+        //如果没有权限定义，则默认有读权限
+        if (!await PermissionManager.HasPermissionAsync(entity.Id, CancellationToken))
+        {
+            return true;
+        }
+
+        if (await PermissionManager.AllowEveryOneWriteAsync(entity.Id, CancellationToken))
+        {
+            return true;
+        }
+
+        if (!userId.HasValue)
+        {
+            return false;
+        }
+
+        if (await PermissionManager.AllowAuthenticatedUserWriteAsync(entity.Id, CancellationToken))
+        {
+            return true;
+        }
+
+        return await PermissionManager.AllowUserOrRolesWriteAsync(entity.Id, userId.Value, CancellationToken);
     }
 
-    public virtual async Task<bool> CadDeleteAsync(File entity, Guid userId)
+    public virtual async Task<bool> CadDeleteAsync(File entity, Guid? userId)
     {
-        return await CheckPermissionAsync(entity, userId, PermissionManager.CanDeleteAsync);
+        //如果没有权限定义，则默认有读权限
+        if (!await PermissionManager.HasPermissionAsync(entity.Id, CancellationToken))
+        {
+            return true;
+        }
+
+        if (await PermissionManager.AllowEveryOneDeleteAsync(entity.Id, CancellationToken))
+        {
+            return true;
+        }
+
+        if (!userId.HasValue)
+        {
+            return false;
+        }
+
+        if (await PermissionManager.AllowAuthenticatedUserDeleteAsync(entity.Id, CancellationToken))
+        {
+            return true;
+        }
+
+        return await PermissionManager.AllowUserOrRolesDeleteAsync(entity.Id, userId.Value, CancellationToken);
     }
 
     public virtual async Task<bool> CheckPermissionAsync(File entity, Guid userId,

@@ -1,7 +1,11 @@
-﻿namespace Generic.Abp.FileManagement.VirtualPaths;
+﻿using Volo.Abp.Identity;
+
+namespace Generic.Abp.FileManagement.VirtualPaths;
 
 public class VirtualPathPermissionManager(
-    IVirtualPathPermissionRepository repository)
-    : FileManagementPermissionManagerBase<VirtualPathPermission, IVirtualPathPermissionRepository>(repository)
+    IVirtualPathPermissionRepository repository,
+    IdentityUserManager userManager)
+    : FileManagementPermissionManagerBase<VirtualPathPermission, IVirtualPathPermissionRepository>(repository,
+        userManager)
 {
 }

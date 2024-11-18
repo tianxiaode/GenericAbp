@@ -4,13 +4,13 @@ using Volo.Abp.MultiTenancy;
 
 namespace Generic.Abp.FileManagement.Folders;
 
-public class FolderFile : CreationAuditedEntity, IMultiTenant
+public class FolderFile : CreationAuditedEntity<Guid>, IMultiTenant
 {
     public Guid FolderId { get; protected set; }
     public Guid FileId { get; protected set; }
     public Guid? TenantId { get; protected set; }
 
-    public FolderFile(Guid folderId, Guid fileId, Guid? tenantId = null)
+    public FolderFile(Guid id, Guid folderId, Guid fileId, Guid? tenantId = null)
     {
         FolderId = folderId;
         FileId = fileId;

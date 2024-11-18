@@ -1,23 +1,20 @@
 ﻿using Generic.Abp.Extensions.Exceptions;
+using Generic.Abp.Extensions.Extensions;
 using Generic.Abp.Extensions.Trees;
+using Generic.Abp.FileManagement.Events;
 using Generic.Abp.FileManagement.Localization;
+using Generic.Abp.FileManagement.Settings;
 using Microsoft.Extensions.Localization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Generic.Abp.Extensions.Extensions;
-using Generic.Abp.FileManagement.Events;
-using Generic.Abp.FileManagement.Settings;
 using Volo.Abp;
 using Volo.Abp.Caching;
 using Volo.Abp.Domain.Repositories;
-using Volo.Abp.Identity;
+using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.Threading;
-using Volo.Abp.EventBus.Distributed;
-using Volo.Abp.Domain.Entities;
 
 namespace Generic.Abp.FileManagement.Folders;
 
@@ -28,7 +25,6 @@ public class FolderManager(
     IStringLocalizer<FileManagementResource> localizer,
     IDistributedCache<FolderCacheItem, string> cache,
     FolderPermissionManager folderPermissionManager,
-    IdentityUserManager userManager,
     ISettingManager settingManager,
     IDistributedEventBus distributedEventBus
 )
@@ -38,7 +34,6 @@ public class FolderManager(
     protected IStringLocalizer<FileManagementResource> Localizer { get; } = localizer;
     protected IDistributedCache<FolderCacheItem, string> Cache { get; } = cache;
     protected FolderPermissionManager FolderPermissionManager { get; } = folderPermissionManager;
-    protected IdentityUserManager UserManager { get; } = userManager;
     protected ISettingManager SettingManager { get; } = settingManager;
     protected IDistributedEventBus DistributedEventBus { get; } = distributedEventBus;
 
@@ -108,39 +103,32 @@ public class FolderManager(
 
     public virtual async Task<bool> CadReadAsync(Folder folder, Guid userId)
     {
-        return await CheckFolderPermissionAsync(folder, userId, FolderPermissionManager.CanReadAsync);
+        if (await FolderPermissionManager.AllowAuthenticatedUserReadAsync(folder.Id, CancellationToken))
+        {
+            return true;
+        }
+
+        return await FolderPermissionManager.AllowUserOrRolesReadAsync(folder.Id, userId, CancellationToken);
     }
 
     public virtual async Task<bool> CadWriteAsync(Folder folder, Guid userId)
     {
-        return await CheckFolderPermissionAsync(folder, userId, FolderPermissionManager.CanWriteAsync);
+        if (await FolderPermissionManager.AllowAuthenticatedUserWriteAsync(folder.Id, CancellationToken))
+        {
+            return true;
+        }
+
+        return await FolderPermissionManager.AllowUserOrRolesWriteAsync(folder.Id, userId, CancellationToken);
     }
 
     public virtual async Task<bool> CadDeleteAsync(Folder folder, Guid userId)
     {
-        return await CheckFolderPermissionAsync(folder, userId, FolderPermissionManager.CanDeleteAsync);
-    }
-
-    public virtual async Task<bool> CheckFolderPermissionAsync(Folder folder, Guid userId,
-        Func<Guid, IList<string>, Expression<Func<FolderPermission, bool>>, System.Threading.CancellationToken,
-                Task<bool>>
-            permissionCheckFunc)
-    {
-        // 私人文件夹，直接判断权限
-        if (await IsPrivateFolderAsync(folder))
+        if (await FolderPermissionManager.AllowAuthenticatedUserDeleteAsync(folder.Id, CancellationToken))
         {
-            return await IsOwnerAsync(folder, userId);
+            return true;
         }
 
-        var roles = await UserManager.GetRolesAsync(await UserManager.GetByIdAsync(userId));
-        //判断文件夹是否存在认证用户权限
-        Expression<Func<FolderPermission, bool>> subPredicate = m =>
-            m.ProviderName == FolderConsts.AuthorizationUserProviderName;
-
-        //判断是否包含用户
-        subPredicate = subPredicate.OrIfNotTrue(m =>
-            m.ProviderName == FolderConsts.UserProviderName && m.ProviderKey == userId.ToString());
-        return await permissionCheckFunc(folder.Id, roles, subPredicate, CancellationToken);
+        return await FolderPermissionManager.AllowUserOrRolesDeleteAsync(folder.Id, userId, CancellationToken);
     }
 
     #endregion

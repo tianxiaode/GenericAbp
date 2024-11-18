@@ -1,18 +1,14 @@
 ﻿using Generic.Abp.Extensions.Exceptions;
-using Generic.Abp.FileManagement.Folders;
 using Generic.Abp.FileManagement.Localization;
 using Microsoft.Extensions.Localization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
-using Generic.Abp.Extensions.Extensions;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Domain.Services;
-using Volo.Abp.Identity;
 using Volo.Abp.Threading;
 
 namespace Generic.Abp.FileManagement.VirtualPaths;
@@ -20,7 +16,6 @@ namespace Generic.Abp.FileManagement.VirtualPaths;
 public class VirtualPathManager(
     IVirtualPathRepository repository,
     IStringLocalizer<FileManagementResource> localizer,
-    IdentityUserManager userManager,
     ICancellationTokenProvider cancellationTokenProvider,
     VirtualPathPermissionManager permissionManager)
     : DomainService
@@ -30,7 +25,6 @@ public class VirtualPathManager(
     protected CancellationToken CancellationToken => CancellationTokenProvider.Token;
     protected VirtualPathPermissionManager PermissionManager { get; } = permissionManager;
     protected IVirtualPathRepository Repository { get; } = repository;
-    protected IdentityUserManager UserManager { get; } = userManager;
 
     public virtual async Task<VirtualPath> GetAsync(Guid id)
     {
@@ -109,41 +103,61 @@ public class VirtualPathManager(
 
     public virtual async Task<bool> CadReadAsync(VirtualPath entity, Guid? userId = null)
     {
-        return await CheckPermissionAsync(entity, userId, PermissionManager.CanReadAsync);
+        if (await PermissionManager.AllowEveryOneReadAsync(entity.Id, CancellationToken))
+        {
+            return true;
+        }
+
+        if (!userId.HasValue)
+        {
+            return false;
+        }
+
+        if (await PermissionManager.AllowAuthenticatedUserReadAsync(entity.Id, CancellationToken))
+        {
+            return true;
+        }
+
+        return await PermissionManager.AllowUserOrRolesReadAsync(entity.Id, userId.Value, CancellationToken);
     }
 
     public virtual async Task<bool> CadWriteAsync(VirtualPath entity, Guid? userId = null)
     {
-        return await CheckPermissionAsync(entity, userId, PermissionManager.CanWriteAsync);
+        if (await PermissionManager.AllowEveryOneWriteAsync(entity.Id, CancellationToken))
+        {
+            return true;
+        }
+
+        if (!userId.HasValue)
+        {
+            return false;
+        }
+
+        if (await PermissionManager.AllowAuthenticatedUserWriteAsync(entity.Id, CancellationToken))
+        {
+            return true;
+        }
+
+        return await PermissionManager.AllowUserOrRolesWriteAsync(entity.Id, userId.Value, CancellationToken);
     }
 
     public virtual async Task<bool> CadDeleteAsync(VirtualPath entity, Guid? userId = null)
     {
-        return await CheckPermissionAsync(entity, userId, PermissionManager.CanDeleteAsync);
-    }
-
-    public virtual async Task<bool> CheckPermissionAsync(VirtualPath entity, Guid? userId,
-        Func<Guid, IList<string>, Expression<Func<VirtualPathPermission, bool>>, System.Threading.CancellationToken,
-                Task<bool>>
-            permissionCheckFunc)
-    {
-        Expression<Func<VirtualPathPermission, bool>> subPredicate = m =>
-            m.ProviderName == FolderConsts.EveryoneProviderName;
-        //如果未提供用户，说明是匿名用户，直接判断是否 everyone权限
-        if (!userId.HasValue)
+        if (await PermissionManager.AllowEveryOneDeleteAsync(entity.Id, CancellationToken))
         {
-            return await permissionCheckFunc(entity.Id, [], subPredicate, CancellationToken);
+            return true;
         }
 
-        //是否认证用户
-        subPredicate = m => m.ProviderName == FolderConsts.AuthorizationUserProviderName;
+        if (!userId.HasValue)
+        {
+            return false;
+        }
 
-        //结合是否包含用户
-        subPredicate = subPredicate.OrIfNotTrue(m =>
-            m.ProviderName == FolderConsts.UserProviderName && m.ProviderKey == userId.ToString());
+        if (await PermissionManager.AllowAuthenticatedUserDeleteAsync(entity.Id, CancellationToken))
+        {
+            return true;
+        }
 
-        var roles = await UserManager.GetRolesAsync(await UserManager.GetByIdAsync(userId.Value));
-        //再结合是否包含用户角色
-        return await permissionCheckFunc(entity.Id, roles, subPredicate, CancellationToken);
+        return await PermissionManager.AllowUserOrRolesDeleteAsync(entity.Id, userId.Value, CancellationToken);
     }
 }
