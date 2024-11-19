@@ -54,7 +54,9 @@ public class FolderRepository(IDbContextProvider<IFileManagementDbContext> dbCon
         var folderDbSet = dbContext.Set<Folder>();
         var allowedFolderIds = await GetAllowedFolderIdsAsync(publicRootFolderCode, sharedFolderCode, userFolderCode,
             userId, roles);
-        return await folderDbSet.Where(m => allowedFolderIds.Contains(m.Id)).Where(predicate)
+        return await folderDbSet
+            .AsNoTracking()
+            .Where(m => allowedFolderIds.Contains(m.Id)).Where(predicate)
             .ToListAsync(cancellationToken);
     }
 
@@ -91,7 +93,10 @@ public class FolderRepository(IDbContextProvider<IFileManagementDbContext> dbCon
         var fileDbSet = dbContext.Set<File>();
         var allowedFileIds = await GetAllowedFileIdsAsync(publicRootFolderCode, sharedFolderCode, userFolderCode,
             userId, roles);
-        return await fileDbSet.AsNoTracking().Where(m => allowedFileIds.Contains(m.Id)).Where(predicate)
+        return await fileDbSet.AsNoTracking()
+            .Include(m => m.FileInfoBase)
+            .Include(m => m.Folder)
+            .Where(m => allowedFileIds.Contains(m.Id)).Where(predicate)
             .OrderBy(sorting ?? "CreationTime DESC").PageBy(skipCount, maxResultCount).ToListAsync(cancellationToken);
     }
 

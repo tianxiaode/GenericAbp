@@ -1,4 +1,5 @@
 ﻿using System;
+using Generic.Abp.FileManagement.Folders.Dtos;
 using Microsoft.Extensions.FileSystemGlobbing.Abstractions;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Domain.Entities;
@@ -18,4 +19,7 @@ public class FileDto : ExtensibleAuditedEntityDto, IMultiTenant, IHasConcurrency
     public string Description { get; set; } = default!;
     public string Hash { get; set; } = default!;
     public bool IsInheritPermissions { get; set; } = true;
+    public Guid FileInfoBaseId { get; set; } = default!;
+    public Guid FolderId { get; set; } = default!;
+    public FolderDto Folder { get; set; } = default!;
 }
