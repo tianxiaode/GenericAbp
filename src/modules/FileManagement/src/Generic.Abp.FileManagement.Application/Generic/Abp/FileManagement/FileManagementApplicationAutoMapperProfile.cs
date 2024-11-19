@@ -16,7 +16,11 @@ namespace Generic.Abp.FileManagement
              * Alternatively, you can split your mapping configurations
              * into multiple profile classes for a better organization. */
 
-            CreateMap<Files.File, FileDto>().MapExtraProperties();
+            CreateMap<Files.File, FileDto>()
+                .ForMember(m => m.MimeType, opts => opts.MapFrom(m => m.FileInfoBase.MimeType))
+                .ForMember(m => m.FileType, opts => opts.MapFrom(m => m.FileInfoBase.FileType))
+                .ForMember(m => m.Size, opts => opts.MapFrom(m => m.FileInfoBase.Size))
+                .MapExtraProperties();
 
             CreateMap<FileCheckResult, FileCheckResultDto>();
 
@@ -30,6 +34,8 @@ namespace Generic.Abp.FileManagement
                 .MapExtraProperties();
 
             CreateMap<VirtualPathPermission, VirtualPathPermissionDto>();
+            CreateMap<FilePermission, FilePermissionDto>();
+            CreateMap<FolderPermission, FolderPermissionDto>();
 
             // CreateMap<VirtualPathPermissionCreateOrUpdateDto, VirtualPathPermission>()
             //     .ForMember(dest => dest.TargetId, opt => opt.MapAtRuntime());
@@ -37,6 +43,20 @@ namespace Generic.Abp.FileManagement
             var mapperConfiguration = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<PermissionCreateOrUpdateDto, VirtualPathPermission>()
+                    .ForMember(dest => dest.TargetId, opt => opt.MapFrom((src, dest, destMember, context) =>
+                    {
+                        // 获取映射上下文中的参数
+                        var targetId = (string)context.Items["TargetId"];
+                        return targetId;
+                    }));
+                cfg.CreateMap<PermissionCreateOrUpdateDto, FilePermission>()
+                    .ForMember(dest => dest.TargetId, opt => opt.MapFrom((src, dest, destMember, context) =>
+                    {
+                        // 获取映射上下文中的参数
+                        var targetId = (string)context.Items["TargetId"];
+                        return targetId;
+                    }));
+                cfg.CreateMap<PermissionCreateOrUpdateDto, FolderPermission>()
                     .ForMember(dest => dest.TargetId, opt => opt.MapFrom((src, dest, destMember, context) =>
                     {
                         // 获取映射上下文中的参数

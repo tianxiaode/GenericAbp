@@ -35,6 +35,18 @@ public class FolderPermission : AuditedAggregateRoot<Guid>, IMultiTenant, IPermi
         TenantId = tenantId;
     }
 
+    public FolderPermission(Guid id, Guid targetId, string providerName, string? providerKey,
+        bool canRead, bool canWrite, bool canDelete, Guid? tenantId = null) : base(id)
+    {
+        TenantId = tenantId;
+        TargetId = targetId;
+        ProviderName = providerName;
+        ProviderKey = providerKey;
+        CanRead = canRead;
+        CanWrite = canWrite;
+        CanDelete = canDelete;
+    }
+
 
     public void SetPermissions(bool canRead, bool canWrite, bool canDelete)
     {

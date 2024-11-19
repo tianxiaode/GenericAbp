@@ -7,14 +7,14 @@ public class FileCheckResult : ICheckFileResult
     public string Hash { get; set; }
     public bool IsExits { get; set; } = false;
     public Dictionary<int, bool> Uploaded { get; set; } = default!;
-    public IFile File { get; set; } = default!;
+    public IFileInfoBase File { get; set; } = default!;
 
     public FileCheckResult(string hash)
     {
         Hash = hash;
     }
 
-    public void SetFile(IFile file)
+    public void SetFile(IFileInfoBase file)
     {
         File = file;
         IsExits = true;

@@ -37,9 +37,8 @@ public class VirtualPathPermission : AuditedAggregateRoot<Guid>, IMultiTenant, I
     }
 
     public VirtualPathPermission(Guid id, Guid targetId, string providerName, string? providerKey, bool canRead,
-        bool canWrite, bool canDelete, Guid? tenantId)
+        bool canWrite, bool canDelete, Guid? tenantId) : base(id)
     {
-        Id = id;
         TenantId = tenantId;
         TargetId = targetId;
         ProviderName = providerName;

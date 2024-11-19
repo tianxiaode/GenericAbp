@@ -42,7 +42,7 @@ namespace Generic.Abp.FileManagement.EntityFrameworkCore
                 options.Entity<File>(entityOptions =>
                 {
                     entityOptions.DefaultWithDetailsFunc = query =>
-                        query.Include(m => m.FileInfoBase);
+                        query.Include(m => m.FileInfoBase).Include(m => m.Folder);
                 });
             });
         }

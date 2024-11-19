@@ -51,6 +51,7 @@
     "Generic.Abp.FileManagement:000002": "File chunk error.",
     "Generic.Abp.FileManagement:000003": "Invalid file type.",
     "Generic.Abp.FileManagement:000004": "File size `{Value}` has exceeded `{Max}`",
+    "Generic.Abp.FileManagement:000005": "Insufficient storage space.File size `{Value}` has exceeded `{Used}/{Max}`",
     "Settings:DefaultFileTypes": "Default File Types",
     "Settings:DefaultMaxFileSize": "Default Max File Size",
     "Settings:DefaultQuota": "Default Quota",
@@ -66,6 +67,7 @@
     "PersonalFolders": "Personal",
     "SharedFolders": "Shared",
     "PublicFolders": "Public",
-    "AccessDenied": "Access Denied"
+    "AccessDenied": "Access Denied",
+    "NoFilterAndFolderSelected": "Please select a folder or input a filter."
   }
 }

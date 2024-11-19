@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Generic.Abp.FileManagement.FileInfoBases;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Authorization;
@@ -20,15 +21,15 @@ namespace Generic.Abp.FileManagement.VirtualPaths;
 public class VirtualPathAppService(
     VirtualPathManager virtualPathManager,
     IVirtualPathRepository repository,
-    FileManager fileManager,
-    FolderManager folderManager
+    FileInfoBaseManager fileInfoBaseManager,
+    FileManager fileManager
 )
     : FileManagementAppService, IVirtualPathAppService
 {
     protected VirtualPathManager VirtualPathManager { get; } = virtualPathManager;
     protected IVirtualPathRepository Repository { get; } = repository;
+    protected FileInfoBaseManager FileInfoBaseManager { get; } = fileInfoBaseManager;
     protected FileManager FileManager { get; } = fileManager;
-    protected FolderManager FolderManager { get; } = folderManager;
 
     [AllowAnonymous]
     public virtual async Task<IRemoteContent> GetFileAsync(string path, string hash, GetFileDto input)
@@ -42,19 +43,19 @@ public class VirtualPathAppService(
         }
 
         //是否存在
-        var file = await FileManager.FindByHashAsync(hash);
+        var file = await FileInfoBaseManager.FindByHashAsync(hash);
         if (file == null)
         {
             throw new EntityNotFoundBusinessException(L["File"], hash);
         }
 
-        var exits = await FolderManager.FileExistAsync(entity.FolderId, file.Id);
+        var exits = await FileManager.FileExistsAsync(entity.FolderId, file.Id);
         if (!exits)
         {
             throw new EntityNotFoundBusinessException(L["File"], hash);
         }
 
-        return await FileManager.GetFileAsync(file, input.ChunkSize, input.Index);
+        return await FileInfoBaseManager.GetFileAsync(file, input.ChunkSize, input.Index);
     }
 
     [Authorize(FileManagementPermissions.VirtualPaths.Default)]

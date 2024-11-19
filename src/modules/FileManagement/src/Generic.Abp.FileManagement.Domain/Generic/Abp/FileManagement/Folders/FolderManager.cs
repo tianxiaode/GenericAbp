@@ -66,10 +66,11 @@ public class FolderManager(
 
     #region files
 
-    public virtual async Task<bool> FileExistAsync(Guid folderId, Guid fileId)
-    {
-        return await Repository.FilesExistAsync(folderId, fileId, CancellationToken);
-    }
+    // public virtual async Task<bool> FileExistAsync(Guid folderId, string hash)
+    // {
+    //     return await Repository.FilesExistAsync(folderId, has, CancellationToken);
+    // }
+    //
 
     #endregion
 
@@ -133,6 +134,12 @@ public class FolderManager(
 
     #endregion
 
+    public virtual Task<bool> IsRooFolderAsync(Folder folder)
+    {
+        return Task.FromResult(folder.Name is FolderConsts.PublicRootFolderName or FolderConsts.UsersRootFolderName
+            or FolderConsts.SharedRootFolderName
+        );
+    }
 
     public virtual async Task<bool> IsPublicFolderAsync(Folder folder)
     {
@@ -140,7 +147,7 @@ public class FolderManager(
         return folder.Code.StartsWith(publicRoot.Code);
     }
 
-    public virtual async Task<bool> IsPrivateFolderAsync(Folder folder)
+    public virtual async Task<bool> IsUsersFolderAsync(Folder folder)
     {
         var privateRoot = await GetUsersRootFolderAsync();
         return folder.Code.StartsWith(privateRoot.Code);

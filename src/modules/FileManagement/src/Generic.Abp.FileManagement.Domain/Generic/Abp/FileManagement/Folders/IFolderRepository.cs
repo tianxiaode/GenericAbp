@@ -9,7 +9,6 @@ namespace Generic.Abp.FileManagement.Folders;
 
 public interface IFolderRepository : IRepository<Folder, Guid>
 {
-    Task<bool> FilesExistAsync(Guid folderId, Guid fileId, CancellationToken cancellationToken);
     Task<List<File>> GetFilesAsync(Guid id, CancellationToken cancellationToken = default);
     Task<bool> HasChildAsync(Guid id, CancellationToken cancellation = default);
 

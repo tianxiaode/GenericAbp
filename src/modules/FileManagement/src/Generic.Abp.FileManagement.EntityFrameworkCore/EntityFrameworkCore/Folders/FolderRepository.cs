@@ -15,13 +15,6 @@ namespace Generic.Abp.FileManagement.EntityFrameworkCore.Folders;
 public class FolderRepository(IDbContextProvider<IFileManagementDbContext> dbContextProvider)
     : EfCoreRepository<IFileManagementDbContext, Folder, Guid>(dbContextProvider), IFolderRepository
 {
-    public virtual async Task<bool> FilesExistAsync(Guid folderId, Guid fileId, CancellationToken cancellationToken)
-    {
-        var dbContext = await GetDbContextAsync();
-        var dbSet = dbContext.Set<File>();
-        return await dbSet.AnyAsync(m => m.FolderId == folderId && m.Id == fileId, cancellationToken);
-    }
-
     [UnitOfWork]
     public virtual async Task<bool> HasChildAsync(Guid id, CancellationToken cancellation = default)
     {

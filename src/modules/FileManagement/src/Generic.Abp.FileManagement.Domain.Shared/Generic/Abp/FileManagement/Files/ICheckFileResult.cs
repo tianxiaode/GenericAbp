@@ -2,10 +2,9 @@
 
 namespace Generic.Abp.FileManagement.Files;
 
-public interface ICheckFileResult: IHasHash
+public interface ICheckFileResult : IHasHash
 {
-    bool IsExits {get;}
-    IFile File { get; set; }
-    Dictionary<int,bool> Uploaded { get; }
-
+    bool IsExits { get; }
+    IFileInfoBase File { get; set; }
+    Dictionary<int, bool> Uploaded { get; }
 }

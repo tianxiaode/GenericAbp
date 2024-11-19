@@ -3,21 +3,30 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Generic.Abp.Extensions.Exceptions;
+using Generic.Abp.FileManagement.Dtos;
+using Generic.Abp.FileManagement.Files;
 using Generic.Abp.FileManagement.Folders.Dtos;
 using Generic.Abp.FileManagement.Permissions;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Uow;
 
 namespace Generic.Abp.FileManagement.Folders;
 
 [RemoteService(false)]
-public class FolderAppService(FolderManager folderManager, IFolderRepository repository)
+public class FolderAppService(
+    FolderManager folderManager,
+    IFolderRepository repository,
+    IFileRepository fileRepository,
+    FileManager fileManager)
     : FileManagementAppService, IFolderAppService
 {
     protected FolderManager FolderManager { get; } = folderManager;
     protected IFolderRepository Repository { get; } = repository;
+    protected IFileRepository FileRepository { get; } = fileRepository;
+    protected FileManager FileManager { get; } = fileManager;
 
     [Authorize(FileManagementPermissions.Folders.Default)]
     public virtual async Task<ListResultDto<FolderDto>> GetRootFoldersAsync()
@@ -106,6 +115,116 @@ public class FolderAppService(FolderManager folderManager, IFolderRepository rep
         await FolderManager.DeleteAsync(entity);
     }
 
+    #region Files
+
+    [Authorize(FileManagementPermissions.Folders.Default)]
+    public virtual async Task<FileDto> GetFileAsync(Guid id)
+    {
+        var file = await FileRepository.GetAsync(id);
+        return ObjectMapper.Map<File, FileDto>(file);
+    }
+
+    [Authorize(FileManagementPermissions.Folders.Default)]
+    public virtual async Task<PagedResultDto<FileDto>> GetFileListAsync(FileGetListInput input)
+    {
+        if (string.IsNullOrEmpty(input.Filter) && !input.FolderId.HasValue)
+        {
+            throw new UserFriendlyException(L["NoFilterAndFolderSelected"]);
+        }
+
+        var predicate = await FileRepository.BuildPredicate(input.FolderId, input.Filter, input.StartTime,
+            input.EndTime,
+            input.FileTypes, input.MinSize, input.MaxSize);
+        var count = await FileRepository.LongCountAsync(predicate);
+        var list = await FileRepository.GetListAsync(predicate, input.Sorting, input.MaxResultCount,
+            input.SkipCount);
+        return new PagedResultDto<FileDto>(count, ObjectMapper.Map<List<File>, List<FileDto>>(list));
+    }
+
+    [Authorize(FileManagementPermissions.Folders.Update)]
+    public virtual async Task<FileDto> UpdateFileAsync(Guid id, FileUpdateDto input)
+    {
+        var entity = await FileRepository.GetAsync(id);
+        await CheckIsStaticAsync(entity.Folder);
+        entity.Rename(input.Filename);
+        entity.SetDescription(input.Description);
+        await FileRepository.UpdateAsync(entity);
+        return ObjectMapper.Map<File, FileDto>(entity);
+    }
+
+    [Authorize(FileManagementPermissions.Folders.Delete)]
+    public virtual async Task DeleteFileAsync(Guid id)
+    {
+        var entity = await FileRepository.GetAsync(id);
+        await CheckIsStaticAsync(entity.Folder);
+        await FileRepository.DeleteAsync(entity);
+    }
+
+    [Authorize(FileManagementPermissions.Folders.ManagePermissions)]
+    public virtual async Task<FilePermissionDto> GetFilePermissionsAsync(Guid id)
+    {
+        var entity = await FileManager.GetAsync(id);
+        var permissions = await FileManager.GetPermissionsAsync(id);
+        var dto = new FilePermissionDto(entity.IsInheritPermissions)
+        {
+            Permissions = ObjectMapper.Map<List<FilePermission>, List<PermissionDto>>(permissions)
+        };
+        return dto;
+    }
+
+    [Authorize(FileManagementPermissions.Folders.ManagePermissions)]
+    public virtual async Task UpdateFilePermissionsAsync(Guid id, FilePermissionUpdateDto input)
+    {
+        var entity = await FileManager.GetAsync(id);
+        if (input.IsInheritPermissions)
+        {
+            entity.ChangeInheritPermissions(true);
+        }
+        else
+        {
+            entity.ChangeInheritPermissions(false);
+            var permissions = input.Permissions.Select(m =>
+                new FilePermission(m.Id ?? GuidGenerator.Create(), id, m.ProviderName, m.ProviderKey,
+                    m.CanRead, m.CanWrite, m.CanDelete, CurrentTenant.Id)).ToList();
+            await FileManager.SetPermissionsAsync(entity, permissions);
+        }
+    }
+
+    #endregion
+
+    #region Permissons
+
+    [Authorize(FileManagementPermissions.Folders.ManagePermissions)]
+    public virtual async Task<FolderPermissionDto> GetFolderPermissionsAsync(Guid id)
+    {
+        var entity = await FolderManager.GetAsync(id);
+        var permissions = await FolderManager.GetPermissionsAsync(entity);
+        var dto = new FolderPermissionDto(entity.IsInheritPermissions)
+        {
+            Permissions = ObjectMapper.Map<List<FolderPermission>, List<PermissionDto>>(permissions)
+        };
+        return dto;
+    }
+
+    [Authorize(FileManagementPermissions.Folders.ManagePermissions)]
+    public virtual async Task UpdateFolderPermissionsAsync(Guid id, FolderPermissionUpdateDto input)
+    {
+        var entity = await FolderManager.GetAsync(id);
+        if (input.IsInheritPermissions)
+        {
+            entity.ChangeInheritPermissions(true);
+        }
+        else
+        {
+            entity.ChangeInheritPermissions(false);
+            var permissions = input.Permissions.Select(m =>
+                new FolderPermission(m.Id ?? GuidGenerator.Create(), id, m.ProviderName, m.ProviderKey,
+                    m.CanRead, m.CanWrite, m.CanDelete, CurrentTenant.Id)).ToList();
+            await FolderManager.SetPermissionsAsync(entity, permissions);
+        }
+    }
+
+    #endregion
 
     protected virtual Task UpdateByInputAsync(Folder folder, FolderCreateOrUpdateDto input)
     {
@@ -113,8 +232,8 @@ public class FolderAppService(FolderManager folderManager, IFolderRepository rep
         folder.SetUsedStorage(input.UsedStorage);
         folder.SetMaxFileSize(input.MaxFileSize);
         folder.SetAllowedFileTypes(input.AllowedFileTypes);
-        ;
-        folder.ChangeInheritPermissions(input.IsInheritPermissions);
+
+        //folder.ChangeInheritPermissions(input.IsInheritPermissions);
         return Task.CompletedTask;
     }
 

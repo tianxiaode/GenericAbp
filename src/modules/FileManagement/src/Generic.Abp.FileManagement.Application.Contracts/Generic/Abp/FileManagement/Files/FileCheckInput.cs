@@ -15,4 +15,5 @@ public class FileCheckInput : IHasHash
 
     public long Size { get; set; } = 0;
     public int ChunkSize { get; set; } = FileConsts.DefaultChunkSize;
+    public Guid FolderId { get; set; } = default!;
 }

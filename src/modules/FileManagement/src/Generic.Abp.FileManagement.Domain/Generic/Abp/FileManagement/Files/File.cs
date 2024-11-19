@@ -33,7 +33,7 @@ public class File : AuditedAggregateRoot<Guid>, IMultiTenant
         IsInheritPermissions = true;
     }
 
-    public void SetFilename(string filename)
+    public void Rename(string filename)
     {
         Check.NotNullOrEmpty(filename, nameof(Filename));
         Filename = filename;

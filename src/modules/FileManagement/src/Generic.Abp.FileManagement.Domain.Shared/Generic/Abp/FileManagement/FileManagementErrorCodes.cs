@@ -13,5 +13,10 @@
 
         public const string FileSizeOutOfRangeValue = "{Value}";
         public const string FileSizeOutOfRangeMax = "{Max}";
+
+        public const string InsufficientStorageSpaceBusinessException = "Generic.Abp.FileManagement:000005";
+        public const string InsufficientStorageSpaceValue = "{Value}";
+        public const string InsufficientStorageSpaceUsed = "{Used}";
+        public const string InsufficientStorageSpaceMax = "{Max}";
     }
 }
