@@ -16,14 +16,17 @@ public class FolderDataSeed(FolderManager folderManager, IGuidGenerator guidGene
     {
         var publicRootFolder =
             new Folder(GuidGenerator.Create(), null, FolderConsts.PublicRootFolderName, true, tenantId);
+        publicRootFolder.SetAllowedFileTypes("*");
         await FolderManager.CreateAsync(publicRootFolder);
 
         var usersRootFolder =
             new Folder(GuidGenerator.Create(), null, FolderConsts.UsersRootFolderName, true, tenantId);
+        usersRootFolder.SetAllowedFileTypes("*");
         await FolderManager.CreateAsync(usersRootFolder);
 
         var sharedRootFolder =
             new Folder(GuidGenerator.Create(), null, FolderConsts.SharedRootFolderName, true, tenantId);
+        sharedRootFolder.SetAllowedFileTypes("*");
         await FolderManager.CreateAsync(sharedRootFolder);
     }
 }

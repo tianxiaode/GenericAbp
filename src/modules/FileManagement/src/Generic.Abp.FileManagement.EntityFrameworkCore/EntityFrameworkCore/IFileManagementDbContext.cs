@@ -15,7 +15,7 @@ namespace Generic.Abp.FileManagement.EntityFrameworkCore
          * DbSet<Question> Questions { get; }
          */
 
-        DbSet<Generic.Abp.FileManagement.Files.File> Files { get; }
+        DbSet<File> Files { get; }
         DbSet<FilePermission> FilePermissions { get; }
         DbSet<Folder> Folders { get; }
         DbSet<FolderPermission> FolderPermissions { get; }

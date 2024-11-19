@@ -17,34 +17,6 @@ namespace Generic.Abp.FileManagement.EntityFrameworkCore.Files;
 public class FileRepository(IDbContextProvider<IFileManagementDbContext> dbContextProvider)
     : EfCoreRepository<IFileManagementDbContext, File, Guid>(dbContextProvider), IFileRepository
 {
-    // public virtual async Task<long> GetCountAsync(
-    //     Expression<Func<File, bool>> predicate, 
-    //     Guid userId,
-    //     List<string> roles,
-    //     string publicFolderCode,
-    //     string sharedFolderCode, 
-    //     string personalFolderCode, CancellationToken cancellationToken = default)
-    // {
-    //     var dbContext = await GetDbContextAsync();
-    //     var folderDbSet = dbContext.Folders;
-    //     var folderPermissionsDbSet = dbContext.FolderPermissions;
-    //     var folderIds = folderDbSet.Where(m =>
-    //         m.Code.StartsWith(personalFolderCode + ".") || m.Code.StartsWith(sharedFolderCode + ".") ||
-    //         m.Code.StartsWith(publicFolderCode + ".")).Select(m=>m.Id);
-    //     var allowedFolderIds = folderPermissionsDbSet.Where(m => folderIds.Contains(m.TargetId) && m.CanRead && (
-    //             (m.ProviderName == FolderConsts.AuthorizationUserProviderName)
-    //             || (m.ProviderName == FolderConsts.UserProviderName && m.ProviderName == userId.ToString())
-    //             || (m.ProviderName == FolderConsts.RoleProviderName && roles.Contains(m.ProviderName))))
-    //         .Select(m => m.TargetId);
-    //     predicate = predicate.AndIfNotTrue(m => allowedFolderIds.Contains(m.FolderId));
-    //     var filePermissionDbSet = dbContext.FilePermissions;
-    //     var allowedFileIds = filePermissionDbSet.Where(m=>m.
-    //         
-    //     )
-    //     return await (await GetDbSetAsync()).CountAsync(predicate, cancellationToken);
-    //         
-    // }
-
     public virtual async Task<List<File>> GetListAsync(Expression<Func<File, bool>> predicate, string? sorting,
         int maxResultCount, int skipCount, CancellationToken cancellationToken = default)
     {

@@ -158,9 +158,9 @@ namespace QuickTemplate.Migrations
 
                     b.HasIndex("FileInfoBaseId");
 
-                    b.HasIndex("Filename");
+                    b.HasIndex("FolderId", "FileInfoBaseId");
 
-                    b.HasIndex("FolderId", "Hash");
+                    b.HasIndex("FolderId", "Filename");
 
                     b.ToTable("FileManagementFiles", (string)null);
                 });

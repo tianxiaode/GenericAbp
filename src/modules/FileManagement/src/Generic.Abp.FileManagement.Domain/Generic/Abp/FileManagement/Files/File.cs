@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations.Schema;
 using Generic.Abp.FileManagement.FileInfoBases;
 using Generic.Abp.FileManagement.Folders;
 using Volo.Abp;
@@ -19,8 +20,10 @@ public class File : AuditedAggregateRoot<Guid>, IMultiTenant
     public virtual bool IsInheritPermissions { get; protected set; } = true;
 
     public virtual Guid FolderId { get; protected set; }
+
     public virtual Folder Folder { get; set; } = default!;
     public virtual Guid FileInfoBaseId { get; set; }
+
     public virtual FileInfoBase FileInfoBase { get; set; } = default!;
 
     public File(Guid id, Guid folderId, string hash, Guid? tenantId = null) : base(id)

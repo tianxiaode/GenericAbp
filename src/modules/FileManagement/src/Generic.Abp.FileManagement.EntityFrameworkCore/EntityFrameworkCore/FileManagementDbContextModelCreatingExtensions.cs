@@ -60,7 +60,7 @@ namespace Generic.Abp.FileManagement.EntityFrameworkCore
 
                 //Indexes
                 b.HasIndex(m => m.CreationTime);
-                b.HasIndex(m => new { m.FolderId, m.FileInfoBase });
+                b.HasIndex(m => new { m.FolderId, m.FileInfoBaseId });
                 b.HasIndex(m => new { m.FolderId, m.Filename });
                 b.ApplyObjectExtensionMappings();
             });

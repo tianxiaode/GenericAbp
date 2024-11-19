@@ -273,7 +273,7 @@ public class FileInfoBaseManager(
             throw new FileSizeOutOfRangeBusinessException(allowSize, fileSize);
         }
 
-        if (fileSize > storageQuota - usedStorage)
+        if (storageQuota != 0 && fileSize > storageQuota - usedStorage)
         {
             throw new InsufficientStorageSpaceBusinessException(fileSize, usedStorage, storageQuota);
         }

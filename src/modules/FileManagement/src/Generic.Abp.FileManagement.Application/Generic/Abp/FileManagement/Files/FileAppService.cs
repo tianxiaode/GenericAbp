@@ -41,7 +41,7 @@ public class FileAppService(
             throw new FileSizeOutOfRangeBusinessException(folder.MaxFileSize, input.Size);
         }
 
-        if (input.Size > folder.StorageQuota - folder.UsedStorage)
+        if (folder.StorageQuota != 0 && input.Size > folder.StorageQuota - folder.UsedStorage)
         {
             throw new InsufficientStorageSpaceBusinessException(input.Size, folder.UsedStorage, folder.StorageQuota);
         }

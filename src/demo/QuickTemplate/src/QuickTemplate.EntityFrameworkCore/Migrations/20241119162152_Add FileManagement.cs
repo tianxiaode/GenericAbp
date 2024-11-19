@@ -12,6 +12,32 @@ namespace QuickTemplate.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "FileManagementFileInfoBases",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    TenantId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    MimeType = table.Column<string>(type: "varchar(128)", maxLength: 128, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    FileType = table.Column<string>(type: "varchar(32)", maxLength: 32, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Size = table.Column<long>(type: "bigint", nullable: false, defaultValue: 0L),
+                    Hash = table.Column<string>(type: "varchar(32)", maxLength: 32, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Path = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    CreatorId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    LastModifierId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FileManagementFileInfoBases", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "FileManagementFilePermissions",
                 columns: table => new
                 {
@@ -35,36 +61,6 @@ namespace QuickTemplate.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_FileManagementFilePermissions", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "FileManagementFiles",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    TenantId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
-                    Filename = table.Column<string>(type: "varchar(128)", maxLength: 128, nullable: false, collation: "gbk_chinese_ci"),
-                    MimeType = table.Column<string>(type: "varchar(128)", maxLength: 128, nullable: false, collation: "ascii_general_ci"),
-                    FileType = table.Column<string>(type: "varchar(32)", maxLength: 32, nullable: false, collation: "ascii_general_ci"),
-                    Size = table.Column<long>(type: "bigint", nullable: false, defaultValue: 0L),
-                    Description = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Hash = table.Column<string>(type: "varchar(32)", maxLength: 32, nullable: false, collation: "ascii_general_ci"),
-                    Path = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: false, collation: "ascii_general_ci"),
-                    IsInheritPermissions = table.Column<bool>(type: "tinyint(1)", nullable: false, defaultValue: false),
-                    ExtraProperties = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    ConcurrencyStamp = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    CreatorId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
-                    LastModificationTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
-                    LastModifierId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_FileManagementFiles", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -106,8 +102,12 @@ namespace QuickTemplate.Migrations
                     Name = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: false, collation: "gbk_chinese_ci"),
                     TenantId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
                     IsInheritPermissions = table.Column<bool>(type: "tinyint(1)", nullable: false, defaultValue: false),
+                    IsStatic = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    AllowedFileTypes = table.Column<string>(type: "varchar(1024)", maxLength: 1024, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     StorageQuota = table.Column<long>(type: "bigint", nullable: false, defaultValue: 0L),
                     UsedStorage = table.Column<long>(type: "bigint", nullable: false, defaultValue: 0L),
+                    MaxFileSize = table.Column<long>(type: "bigint", nullable: false, defaultValue: 0L),
                     ExtraProperties = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ConcurrencyStamp = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: false)
@@ -179,32 +179,61 @@ namespace QuickTemplate.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "FileManagementFolderFiles",
+                name: "FileManagementFiles",
                 columns: table => new
                 {
-                    FolderId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    FileId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     TenantId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    Filename = table.Column<string>(type: "varchar(128)", maxLength: 128, nullable: false, collation: "gbk_chinese_ci"),
+                    Description = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Hash = table.Column<string>(type: "varchar(32)", maxLength: 32, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    IsInheritPermissions = table.Column<bool>(type: "tinyint(1)", nullable: false, defaultValue: false),
+                    FolderId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    FileInfoBaseId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    ExtraProperties = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ConcurrencyStamp = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    CreatorId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci")
+                    CreatorId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    LastModifierId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_FileManagementFolderFiles", x => new { x.FolderId, x.FileId });
+                    table.PrimaryKey("PK_FileManagementFiles", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_FileManagementFolderFiles_FileManagementFiles_FileId",
-                        column: x => x.FileId,
-                        principalTable: "FileManagementFiles",
+                        name: "FK_FileManagementFiles_FileManagementFileInfoBases_FileInfoBase~",
+                        column: x => x.FileInfoBaseId,
+                        principalTable: "FileManagementFileInfoBases",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_FileManagementFolderFiles_FileManagementFolders_FolderId",
+                        name: "FK_FileManagementFiles_FileManagementFolders_FolderId",
                         column: x => x.FolderId,
                         principalTable: "FileManagementFolders",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FileManagementFileInfoBases_CreationTime",
+                table: "FileManagementFileInfoBases",
+                column: "CreationTime");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FileManagementFileInfoBases_FileType",
+                table: "FileManagementFileInfoBases",
+                column: "FileType");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FileManagementFileInfoBases_Hash",
+                table: "FileManagementFileInfoBases",
+                column: "Hash",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_FileManagementFilePermissions_TargetId_ProviderName_Provider~",
@@ -217,25 +246,19 @@ namespace QuickTemplate.Migrations
                 column: "CreationTime");
 
             migrationBuilder.CreateIndex(
-                name: "IX_FileManagementFiles_Filename",
+                name: "IX_FileManagementFiles_FileInfoBaseId",
                 table: "FileManagementFiles",
-                column: "Filename");
+                column: "FileInfoBaseId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_FileManagementFiles_FileType",
+                name: "IX_FileManagementFiles_FolderId_FileInfoBaseId",
                 table: "FileManagementFiles",
-                column: "FileType");
+                columns: new[] { "FolderId", "FileInfoBaseId" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_FileManagementFiles_Hash",
+                name: "IX_FileManagementFiles_FolderId_Filename",
                 table: "FileManagementFiles",
-                column: "Hash",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_FileManagementFolderFiles_FileId_FolderId",
-                table: "FileManagementFolderFiles",
-                columns: new[] { "FileId", "FolderId" });
+                columns: new[] { "FolderId", "Filename" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_FileManagementFolderPermissions_TargetId_ProviderName_Provid~",
@@ -281,7 +304,7 @@ namespace QuickTemplate.Migrations
                 name: "FileManagementFilePermissions");
 
             migrationBuilder.DropTable(
-                name: "FileManagementFolderFiles");
+                name: "FileManagementFiles");
 
             migrationBuilder.DropTable(
                 name: "FileManagementFolderPermissions");
@@ -293,7 +316,7 @@ namespace QuickTemplate.Migrations
                 name: "FileManagementVirtualPaths");
 
             migrationBuilder.DropTable(
-                name: "FileManagementFiles");
+                name: "FileManagementFileInfoBases");
 
             migrationBuilder.DropTable(
                 name: "FileManagementFolders");

@@ -50,7 +50,7 @@ namespace Generic.Abp.Extensions.Extensions
             }
 
             // 移除所有空白字符
-            str = str.Replace(" ", "");
+            str = str.Replace(" ", "").ToUpper();
 
             // 定义单位及其对应的乘数
             var units = new Dictionary<string, double>

@@ -34,8 +34,8 @@ namespace Generic.Abp.FileManagement
                 .MapExtraProperties();
 
             CreateMap<VirtualPathPermission, VirtualPathPermissionDto>();
-            CreateMap<FilePermission, FilePermissionDto>();
-            CreateMap<FolderPermission, FolderPermissionDto>();
+            CreateMap<FilePermission, PermissionDto>();
+            CreateMap<FolderPermission, PermissionDto>();
 
             // CreateMap<VirtualPathPermissionCreateOrUpdateDto, VirtualPathPermission>()
             //     .ForMember(dest => dest.TargetId, opt => opt.MapAtRuntime());

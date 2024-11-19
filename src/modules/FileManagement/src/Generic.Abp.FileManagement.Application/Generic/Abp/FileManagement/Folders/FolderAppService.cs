@@ -58,9 +58,9 @@ public class FolderAppService(
         {
             list = await FolderManager.GetSearchListAsync(m => m.Name.Contains(input.Filter));
         }
-        else if (input.ParentId.HasValue)
+        else if (input.FolderId.HasValue)
         {
-            list = await Repository.GetListAsync(m => m.ParentId == input.ParentId.Value);
+            list = await Repository.GetListAsync(m => m.ParentId == input.FolderId.Value);
         }
 
         return new ListResultDto<FolderDto>(ObjectMapper.Map<List<Folder>, List<FolderDto>>(list));

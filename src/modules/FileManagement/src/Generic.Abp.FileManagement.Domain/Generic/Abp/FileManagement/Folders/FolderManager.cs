@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Generic.Abp.Extensions.MimeDetective;
 using Volo.Abp;
 using Volo.Abp.Caching;
 using Volo.Abp.Domain.Repositories;
@@ -212,9 +213,12 @@ public class FolderManager(
         var maxFileSizeStr =
             await SettingManager.GetOrNullForCurrentTenantAsync(FileManagementSettings.Users.DefaultMaxFileSize) ??
             "2mb";
+        var allowedFileTypesStr =
+            await SettingManager.GetOrNullForCurrentTenantAsync(FileManagementSettings.Users.DefaultFileTypes) ??
+            MimeTypes.ImageTypes.Select(m => "." + m.Extension).JoinAsString(",");
         entity.SetStorageQuota(quotaStr.ParseToBytes());
         entity.SetMaxFileSize(maxFileSizeStr.ParseToBytes());
-
+        entity.SetAllowedFileTypes(allowedFileTypesStr);
         await CreateAsync(entity);
 
         return entity;

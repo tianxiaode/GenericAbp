@@ -5,7 +5,7 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace Generic.Abp.FileManagement.EntityFrameworkCore.FileInfoBases;
 
-public class FileInfoBaseRepository(IDbContextProvider<IFileManagementDbContext> dbContextProvider)
-    : EfCoreRepository<IFileManagementDbContext, FileInfoBase, Guid>(dbContextProvider), IFileInfoBaseRepository
+public class FileInfoBaseRepository(IDbContextProvider<FileManagementDbContext> dbContextProvider)
+    : EfCoreRepository<FileManagementDbContext, FileInfoBase, Guid>(dbContextProvider), IFileInfoBaseRepository
 {
 }

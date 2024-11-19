@@ -13,7 +13,7 @@ using Volo.Abp.EntityFrameworkCore;
 namespace QuickTemplate.Migrations
 {
     [DbContext(typeof(QuickTemplateDbContext))]
-    [Migration("20241117094318_Add FileManagement")]
+    [Migration("20241119162152_Add FileManagement")]
     partial class AddFileManagement
     {
         /// <inheritdoc />
@@ -26,6 +26,69 @@ namespace QuickTemplate.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
+
+            modelBuilder.Entity("Generic.Abp.FileManagement.FileInfoBases.FileInfoBase", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("CreationTime");
+
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnType("char(36)")
+                        .HasColumnName("CreatorId");
+
+                    b.Property<string>("FileType")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("varchar(32)");
+
+                    b.Property<string>("Hash")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("varchar(32)");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("LastModificationTime");
+
+                    b.Property<Guid?>("LastModifierId")
+                        .HasColumnType("char(36)")
+                        .HasColumnName("LastModifierId");
+
+                    b.Property<string>("MimeType")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("varchar(128)");
+
+                    b.Property<string>("Path")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
+
+                    b.Property<long>("Size")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasDefaultValue(0L);
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("char(36)")
+                        .HasColumnName("TenantId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreationTime");
+
+                    b.HasIndex("FileType");
+
+                    b.HasIndex("Hash")
+                        .IsUnique();
+
+                    b.ToTable("FileManagementFileInfoBases", (string)null);
+                });
 
             modelBuilder.Entity("Generic.Abp.FileManagement.Files.File", b =>
                 {
@@ -58,11 +121,8 @@ namespace QuickTemplate.Migrations
                         .HasColumnType("longtext")
                         .HasColumnName("ExtraProperties");
 
-                    b.Property<string>("FileType")
-                        .IsRequired()
-                        .HasMaxLength(32)
-                        .HasColumnType("varchar(32)")
-                        .UseCollation("ascii_general_ci");
+                    b.Property<Guid>("FileInfoBaseId")
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("Filename")
                         .IsRequired()
@@ -70,11 +130,13 @@ namespace QuickTemplate.Migrations
                         .HasColumnType("varchar(128)")
                         .UseCollation("gbk_chinese_ci");
 
+                    b.Property<Guid>("FolderId")
+                        .HasColumnType("char(36)");
+
                     b.Property<string>("Hash")
                         .IsRequired()
                         .HasMaxLength(32)
-                        .HasColumnType("varchar(32)")
-                        .UseCollation("ascii_general_ci");
+                        .HasColumnType("varchar(32)");
 
                     b.Property<bool>("IsInheritPermissions")
                         .ValueGeneratedOnAdd()
@@ -89,23 +151,6 @@ namespace QuickTemplate.Migrations
                         .HasColumnType("char(36)")
                         .HasColumnName("LastModifierId");
 
-                    b.Property<string>("MimeType")
-                        .IsRequired()
-                        .HasMaxLength(128)
-                        .HasColumnType("varchar(128)")
-                        .UseCollation("ascii_general_ci");
-
-                    b.Property<string>("Path")
-                        .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("varchar(256)")
-                        .UseCollation("ascii_general_ci");
-
-                    b.Property<long>("Size")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasDefaultValue(0L);
-
                     b.Property<Guid?>("TenantId")
                         .HasColumnType("char(36)")
                         .HasColumnName("TenantId");
@@ -114,12 +159,11 @@ namespace QuickTemplate.Migrations
 
                     b.HasIndex("CreationTime");
 
-                    b.HasIndex("FileType");
+                    b.HasIndex("FileInfoBaseId");
 
-                    b.HasIndex("Filename");
+                    b.HasIndex("FolderId", "FileInfoBaseId");
 
-                    b.HasIndex("Hash")
-                        .IsUnique();
+                    b.HasIndex("FolderId", "Filename");
 
                     b.ToTable("FileManagementFiles", (string)null);
                 });
@@ -204,6 +248,11 @@ namespace QuickTemplate.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
+                    b.Property<string>("AllowedFileTypes")
+                        .IsRequired()
+                        .HasMaxLength(1024)
+                        .HasColumnType("varchar(1024)");
+
                     b.Property<string>("Code")
                         .IsRequired()
                         .HasMaxLength(256)
@@ -234,6 +283,9 @@ namespace QuickTemplate.Migrations
                         .HasColumnType("tinyint(1)")
                         .HasDefaultValue(false);
 
+                    b.Property<bool>("IsStatic")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<DateTime?>("LastModificationTime")
                         .HasColumnType("datetime(6)")
                         .HasColumnName("LastModificationTime");
@@ -241,6 +293,11 @@ namespace QuickTemplate.Migrations
                     b.Property<Guid?>("LastModifierId")
                         .HasColumnType("char(36)")
                         .HasColumnName("LastModifierId");
+
+                    b.Property<long>("MaxFileSize")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasDefaultValue(0L);
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -274,33 +331,6 @@ namespace QuickTemplate.Migrations
                     b.HasIndex("ParentId");
 
                     b.ToTable("FileManagementFolders", (string)null);
-                });
-
-            modelBuilder.Entity("Generic.Abp.FileManagement.Folders.FolderFile", b =>
-                {
-                    b.Property<Guid>("FolderId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<Guid>("FileId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime(6)")
-                        .HasColumnName("CreationTime");
-
-                    b.Property<Guid?>("CreatorId")
-                        .HasColumnType("char(36)")
-                        .HasColumnName("CreatorId");
-
-                    b.Property<Guid?>("TenantId")
-                        .HasColumnType("char(36)")
-                        .HasColumnName("TenantId");
-
-                    b.HasKey("FolderId", "FileId");
-
-                    b.HasIndex("FileId", "FolderId");
-
-                    b.ToTable("FileManagementFolderFiles", (string)null);
                 });
 
             modelBuilder.Entity("Generic.Abp.FileManagement.Folders.FolderPermission", b =>
@@ -2394,6 +2424,25 @@ namespace QuickTemplate.Migrations
                     b.ToTable("AbpTenantConnectionStrings", (string)null);
                 });
 
+            modelBuilder.Entity("Generic.Abp.FileManagement.Files.File", b =>
+                {
+                    b.HasOne("Generic.Abp.FileManagement.FileInfoBases.FileInfoBase", "FileInfoBase")
+                        .WithMany()
+                        .HasForeignKey("FileInfoBaseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Generic.Abp.FileManagement.Folders.Folder", "Folder")
+                        .WithMany()
+                        .HasForeignKey("FolderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("FileInfoBase");
+
+                    b.Navigation("Folder");
+                });
+
             modelBuilder.Entity("Generic.Abp.FileManagement.Folders.Folder", b =>
                 {
                     b.HasOne("Generic.Abp.FileManagement.Folders.Folder", "Parent")
@@ -2401,21 +2450,6 @@ namespace QuickTemplate.Migrations
                         .HasForeignKey("ParentId");
 
                     b.Navigation("Parent");
-                });
-
-            modelBuilder.Entity("Generic.Abp.FileManagement.Folders.FolderFile", b =>
-                {
-                    b.HasOne("Generic.Abp.FileManagement.Files.File", null)
-                        .WithMany()
-                        .HasForeignKey("FileId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Generic.Abp.FileManagement.Folders.Folder", null)
-                        .WithMany("Files")
-                        .HasForeignKey("FolderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Generic.Abp.MenuManagement.Menus.Menu", b =>
@@ -2572,8 +2606,6 @@ namespace QuickTemplate.Migrations
             modelBuilder.Entity("Generic.Abp.FileManagement.Folders.Folder", b =>
                 {
                     b.Navigation("Children");
-
-                    b.Navigation("Files");
                 });
 
             modelBuilder.Entity("Generic.Abp.MenuManagement.Menus.Menu", b =>

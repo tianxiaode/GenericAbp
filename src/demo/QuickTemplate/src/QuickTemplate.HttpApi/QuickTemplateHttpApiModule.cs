@@ -1,5 +1,6 @@
 ﻿using Generic.Abp.AuditLogging;
 using Generic.Abp.Extensions;
+using Generic.Abp.FileManagement;
 using Generic.Abp.Identity;
 using Generic.Abp.MenuManagement;
 using Generic.Abp.OpenIddict;
@@ -29,6 +30,7 @@ namespace QuickTemplate;
     typeof(AbpFeatureManagementHttpApiModule),
     typeof(AbpSettingManagementHttpApiModule),
     typeof(GenericAbpMenuManagementHttpApiModule)
+    //typeof(GenericAbpFileManagementHttpApiModule)
 )]
 public class QuickTemplateHttpApiModule : AbpModule
 {

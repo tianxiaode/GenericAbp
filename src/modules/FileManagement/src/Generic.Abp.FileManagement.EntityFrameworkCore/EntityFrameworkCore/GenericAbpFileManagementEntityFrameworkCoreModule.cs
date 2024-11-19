@@ -1,6 +1,8 @@
-﻿using Generic.Abp.FileManagement.EntityFrameworkCore.Files;
+﻿using Generic.Abp.FileManagement.EntityFrameworkCore.FileInfoBases;
+using Generic.Abp.FileManagement.EntityFrameworkCore.Files;
 using Generic.Abp.FileManagement.EntityFrameworkCore.Folders;
 using Generic.Abp.FileManagement.EntityFrameworkCore.VirtualPaths;
+using Generic.Abp.FileManagement.FileInfoBases;
 using Generic.Abp.FileManagement.Files;
 using Generic.Abp.FileManagement.Folders;
 using Generic.Abp.FileManagement.VirtualPaths;
@@ -25,6 +27,7 @@ namespace Generic.Abp.FileManagement.EntityFrameworkCore
                 /* Add custom repositories here. Example:
                  * options.AddRepository<Question, EfCoreQuestionRepository>();
                  */
+                options.AddRepository<FileInfoBase, FileInfoBaseRepository>();
                 options.AddRepository<File, FileRepository>();
                 options.AddRepository<FilePermission, FilePermissionRepository>();
                 options.AddRepository<Folder, FolderRepository>();
