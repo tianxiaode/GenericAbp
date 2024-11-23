@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Authorization;
 using Volo.Abp.Identity;
@@ -48,11 +47,7 @@ public class PersonalFolderAppService(
 
     public virtual async Task<ListResultDto<FolderDto>> GetListAsync(FolderGetListInput input)
     {
-        var userId = new Guid("3a16576b-3492-9ac7-49f8-15f80c48bafa");
-        // if (!CurrentUser.Id.HasValue)
-        // {
-        //     throw new AbpAuthorizationException(L["AccessDenied"]);
-        // }
+        var userId = GetUserId();
 
         List<Folder> list = [];
         if (!string.IsNullOrEmpty(input.Filter))
@@ -78,7 +73,7 @@ public class PersonalFolderAppService(
 
     public virtual async Task<PagedResultDto<FileDto>> GetFilesAsync(FileGetListInput input)
     {
-        var userId = new Guid("3a16576b-3492-9ac7-49f8-15f80c48bafa");
+        var userId = GetUserId();
         var predicate = await BuildFilePredicate(input);
         var publicRootFolder = await FolderManager.GetPublicRootFolderAsync();
         var sharedRootFolder = await FolderManager.GetSharedRootFolderAsync();
@@ -96,17 +91,12 @@ public class PersonalFolderAppService(
 
     protected virtual async Task CheckFilePermission(File entity)
     {
-        if (!CurrentUser.Id.HasValue)
-        {
-            throw new AbpAuthorizationException(L["AccessDenied"]);
-        }
-
         if (entity.IsInheritPermissions)
         {
             return;
         }
 
-        if (await FileManager.CadReadAsync(entity, CurrentUser.Id.Value))
+        if (await FileManager.CadReadAsync(entity, CurrentUser.Id))
         {
             return;
         }
@@ -185,5 +175,15 @@ public class PersonalFolderAppService(
         }
 
         return Task.FromResult(predicate);
+    }
+
+    protected virtual Guid GetUserId()
+    {
+        if (!CurrentUser.Id.HasValue)
+        {
+            throw new AbpAuthorizationException(L["AccessDenied"]);
+        }
+
+        return CurrentUser.Id.Value;
     }
 }

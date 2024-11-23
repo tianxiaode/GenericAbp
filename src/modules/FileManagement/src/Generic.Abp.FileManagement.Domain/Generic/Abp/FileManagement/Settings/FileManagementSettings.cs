@@ -9,6 +9,7 @@
          */
         public const string StoragePath = GroupName + ".StoragePath";
         public const string TempPath = GroupName + ".TempPath";
+        public const string HardDeleteFileOnDelete = GroupName + ".HardDeleteFileOnDelete";
 
         public static class Public
         {
