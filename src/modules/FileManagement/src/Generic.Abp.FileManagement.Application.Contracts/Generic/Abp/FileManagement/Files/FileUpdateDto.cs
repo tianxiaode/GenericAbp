@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using Generic.Abp.FileManagement.FileInfoBases;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Validation;
 

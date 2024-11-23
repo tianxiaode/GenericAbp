@@ -1,15 +1,10 @@
 ﻿using Generic.Abp.Extensions.MimeDetective;
+using Generic.Abp.FileManagement.Exceptions;
 using Generic.Abp.FileManagement.FileInfoBases;
 using Generic.Abp.FileManagement.Folders;
 using Microsoft.AspNetCore.Authorization;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Generic.Abp.Extensions.Extensions;
-using Generic.Abp.FileManagement.Exceptions;
-using Volo.Abp.Application.Dtos;
 using Volo.Abp.Authorization;
 
 namespace Generic.Abp.FileManagement.Files;

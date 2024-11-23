@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Generic.Abp.FileManagement.Files;
+namespace Generic.Abp.FileManagement.FileInfoBases;
 
 public class FileCheckResult : ICheckFileResult
 {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using Generic.Abp.FileManagement.Resources;
 using Volo.Abp.Validation;
 
 namespace Generic.Abp.FileManagement.Folders.Dtos;
@@ -10,14 +11,14 @@ public class FolderCreateOrUpdateDto
 {
     [DisplayName("Folder:Name")]
     [Required]
-    [DynamicMaxLength(typeof(FolderConsts), nameof(FolderConsts.NameMaxLength))]
+    [DynamicMaxLength(typeof(ResourceConsts), nameof(ResourceConsts.NameMaxLength))]
     public string Name { get; set; } = default!;
 
     [DisplayName("Folder:IsInheritPermissions")]
     public bool IsInheritPermissions { get; protected set; } = true;
 
     [Required]
-    [DynamicMaxLength(typeof(FolderConsts), nameof(FolderConsts.AllowedFileTypesMaxLength))]
+    [DynamicMaxLength(typeof(ResourceConsts), nameof(ResourceConsts.AllowedFileTypesMaxLength))]
     [DisplayName("Folder:AllowedFileTypes")]
     public string AllowedFileTypes { get; protected set; } = default!;
 

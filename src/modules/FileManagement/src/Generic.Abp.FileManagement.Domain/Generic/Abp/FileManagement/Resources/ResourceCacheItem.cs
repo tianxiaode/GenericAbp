@@ -1,9 +1,9 @@
 ﻿using System;
 
-namespace Generic.Abp.FileManagement.Folders;
+namespace Generic.Abp.FileManagement.Resources;
 
 [Serializable]
-public class FolderCacheItem(Guid id, string code, string name)
+public class ResourceCacheItem(Guid id, string code, string name)
 {
     public Guid Id { get; set; } = id;
     public string Code { get; set; } = code;

@@ -9,7 +9,8 @@
          */
         public const string StoragePath = GroupName + ".StoragePath";
         public const string TempPath = GroupName + ".TempPath";
-        public const string HardDeleteFileOnDelete = GroupName + ".HardDeleteFileOnDelete";
+        public const string DefaultRetentionPeriod = GroupName + ".DefaultRetentionPeriod ";
+        public const string TemporaryRetentionPeriod = GroupName + ".TemporaryRetentionPeriod";
 
         public static class Public
         {

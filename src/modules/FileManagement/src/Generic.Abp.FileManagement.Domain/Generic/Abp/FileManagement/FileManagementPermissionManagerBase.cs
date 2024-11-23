@@ -3,6 +3,7 @@ using Generic.Abp.FileManagement.Folders;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Security;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Entities;

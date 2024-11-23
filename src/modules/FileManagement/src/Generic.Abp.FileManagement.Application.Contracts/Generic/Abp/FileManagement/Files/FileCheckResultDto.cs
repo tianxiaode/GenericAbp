@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Generic.Abp.FileManagement.FileInfoBases;
 
 namespace Generic.Abp.FileManagement.Files;
 

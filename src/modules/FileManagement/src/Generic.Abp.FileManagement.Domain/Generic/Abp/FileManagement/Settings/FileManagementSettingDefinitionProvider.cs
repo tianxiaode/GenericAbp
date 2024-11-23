@@ -19,6 +19,20 @@ namespace Generic.Abp.FileManagement.Settings
                     L("Description:StoragePath"),
                     true // 可选，决定是否对外暴露
                 ),
+                new SettingDefinition(
+                    FileManagementSettings.DefaultRetentionPeriod,
+                    "30",
+                    L("Settings:DefaultRetentionPeriod"),
+                    L("Description:DefaultRetentionPeriod"),
+                    true // 可选，决定是否对外暴露
+                ),
+                new SettingDefinition(
+                    FileManagementSettings.TemporaryRetentionPeriod,
+                    "7",
+                    L("Settings:TemporaryRetentionPeriod"),
+                    L("Description:TemporaryRetentionPeriod"),
+                    true // 可选，决定是否对外暴露
+                ),
                 // new SettingDefinition(
                 //     FileManagementSettings.TempPath,
                 //     "/files",

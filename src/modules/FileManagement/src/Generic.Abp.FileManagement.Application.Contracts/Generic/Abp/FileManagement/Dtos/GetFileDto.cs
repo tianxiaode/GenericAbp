@@ -1,5 +1,5 @@
-﻿using System;
-using Generic.Abp.FileManagement.Files;
+﻿using Generic.Abp.FileManagement.FileInfoBases;
+using System;
 
 namespace Generic.Abp.FileManagement.Dtos;
 

@@ -4,7 +4,7 @@ using Volo.Abp.MultiTenancy;
 namespace Generic.Abp.FileManagement.Events;
 
 [Serializable]
-public class FolderCopyEto(Guid sourceId, Guid destinationId, Guid? tenantId) : IMultiTenant
+public class ResourceCopyEto(Guid sourceId, Guid destinationId, Guid? tenantId) : IMultiTenant
 {
     public Guid SourceId { get; set; } = sourceId;
     public Guid DestinationId { get; set; } = destinationId;

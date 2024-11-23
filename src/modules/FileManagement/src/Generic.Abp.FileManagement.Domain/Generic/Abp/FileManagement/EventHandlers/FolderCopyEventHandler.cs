@@ -6,12 +6,12 @@ using Volo.Abp.EventBus.Distributed;
 
 namespace Generic.Abp.FileManagement.EventHandlers;
 
-public class FolderCopyEventHandler(FolderManager folderManager) : IDistributedEventHandler<FolderCopyEto>,
+public class FolderCopyEventHandler(FolderManager folderManager) : IDistributedEventHandler<ResourceCopyEto>,
     ITransientDependency
 {
     protected FolderManager FolderManager { get; } = folderManager;
 
-    public async Task HandleEventAsync(FolderCopyEto eventData)
+    public async Task HandleEventAsync(ResourceCopyEto eventData)
     {
         await FolderManager.MoveFilesAsync(eventData.SourceId, eventData.DestinationId);
     }
