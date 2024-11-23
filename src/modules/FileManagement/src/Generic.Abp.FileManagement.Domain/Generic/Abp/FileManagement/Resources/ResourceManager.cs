@@ -115,9 +115,18 @@ public class ResourceManager(
         return await PermissionManager.AllowUserOrRolesDeleteAsync(entity.Id, userId, CancellationToken);
     }
 
+    // TODO:找出全部父级权限，然后逐级往上查找带权限的文件夹，然后将该权限作为当前资源的权限
     public virtual Task<bool> GetAllParentPermissionsAsync(Resource entity, Guid userId)
     {
+        throw new NotImplementedException();
     }
+
+    #endregion
+
+    #region 配额和文件大小限制
+
+    // TODO:找出全部父级权限，然后逐级往上查找带有空间配额和文件大小限制的文件夹，然后将该限额和文件大小限制作为当前资源的限额和文件大小限制
+    //TODO:在设置配额和文件大小限制的时候， 必须两个参数同时设置，否则不生效
 
     #endregion
 

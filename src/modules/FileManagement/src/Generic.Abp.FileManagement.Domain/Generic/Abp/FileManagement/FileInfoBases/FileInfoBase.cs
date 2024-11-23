@@ -16,7 +16,15 @@ public class FileInfoBase : AuditedEntity<Guid>, IFileInfoBase
 
     [DisplayName("File:RetentionPolicy")] public virtual FileRetentionPolicy RetentionPolicy { get; protected set; }
 
-    [DisplayName("File:ExpireAt")] public virtual DateTime? ExpireAt { get; protected set; }
+    /// <summary>
+    /// ExpireAt 的设置来源：
+    /// 系统默认规则：通过配置的清理策略自动设置。如资源删除后，如果文件与资源关联，则文件会根据保留策略自动设置过期时间。
+    /// 用户上传时选择：提供用户对保留时间的控制。
+    /// 管理员后期调整：手动或批量修改。
+    /// 业务模块动态设置：根据特定场景计算保留时间。
+    /// </summary>
+    [DisplayName("File:ExpireAt")]
+    public virtual DateTime? ExpireAt { get; protected set; }
 
     public FileInfoBase(Guid id, string hash, string mimeType, string fileType, long size, string path,
         Guid? tenantId = null) : base(id)
