@@ -35,6 +35,7 @@ namespace Generic.Abp.FileManagement.EntityFrameworkCore
                 b.HasIndex(m => m.CreationTime);
                 b.HasIndex(m => m.Hash).IsUnique();
                 b.HasIndex(m => m.Extension);
+                b.HasIndex(m => new { m.ExpireAt, m.RetentionPolicy });
             });
 
             builder.Entity<Resource>(b =>
@@ -62,6 +63,7 @@ namespace Generic.Abp.FileManagement.EntityFrameworkCore
                 b.HasIndex(m => m.CreationTime);
                 b.HasIndex(m => m.Name);
                 b.HasIndex(m => m.ParentId);
+                b.HasIndex(m => m.Code).IsUnique();
 
                 b.ApplyObjectExtensionMappings();
             });

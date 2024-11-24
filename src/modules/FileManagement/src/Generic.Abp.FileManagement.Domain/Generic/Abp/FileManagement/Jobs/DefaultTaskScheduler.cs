@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
@@ -59,6 +60,12 @@ public class DefaultTaskScheduler(ILogger<DefaultTaskScheduler> logger) : ITaskS
         }
 
         return Task.CompletedTask;
+    }
+
+    public IEnumerable<string> GetScheduledTaskNames()
+    {
+        // 返回所有调度任务的名字
+        return Timers.Keys;
     }
 
     public virtual void Dispose()

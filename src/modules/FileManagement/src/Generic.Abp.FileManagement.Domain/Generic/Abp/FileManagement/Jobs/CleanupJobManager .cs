@@ -2,6 +2,7 @@
 using Generic.Abp.FileManagement.Settings;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
@@ -25,6 +26,11 @@ public class CleanupJobManager(
     protected CancellationToken CancellationToken => CancellationTokenProvider.Token;
 
     public virtual async Task ApplySettingsAsync(Guid? tenantId)
+    {
+        await StartAsync(tenantId);
+    }
+
+    public virtual async Task StartAsync(Guid? tenantId)
     {
         try
         {
@@ -56,6 +62,34 @@ public class CleanupJobManager(
         {
             Logger.LogError(ex, "Error applying settings for tenant {TenantId}", tenantId);
         }
+    }
+
+    public virtual async Task StopAllAsync(CancellationToken cancellationToken)
+    {
+        try
+        {
+            // 假设你有一个跟踪已调度任务的列表或字典
+            var allTaskNames = GetAllScheduledTaskNames();
+
+            foreach (var taskName in allTaskNames)
+            {
+                Logger.LogInformation($"Cancelling task: {taskName}");
+                await TaskScheduler.CancelAsync(taskName); // 取消任务
+            }
+
+            Logger.LogInformation("All scheduled tasks have been cancelled.");
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error occurred while stopping all tasks.");
+        }
+    }
+
+    private IEnumerable<string> GetAllScheduledTaskNames()
+    {
+        // 返回一个所有已调度任务的名字的集合
+        // 你可以从 TaskScheduler 中获取当前的任务名称列表（例如从字典 Timers 中）
+        return TaskScheduler.GetScheduledTaskNames(); // 假设 TaskScheduler 有此方法
     }
 
     protected virtual async Task ScheduleOrUpdateTaskAsync(

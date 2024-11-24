@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Generic.Abp.FileManagement.Resources;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 
@@ -39,6 +40,53 @@ public class ResourceRepository(IDbContextProvider<IFileManagementDbContext> dbC
     public Task<List<Resource>> GetAllParentAsync(string code, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
+    }
+
+    public virtual async Task DeleteByCodeAsync(string code, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            Logger.LogInformation("Starting delete operation for code: {Code}", code);
+
+            await (await GetDbContextAsync()).Set<Resource>()
+                .Where(r => r.Code.StartsWith(code))
+                .ExecuteDeleteAsync(cancellationToken);
+
+            Logger.LogInformation("Delete operation completed for code: {Code}", code);
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error occurred during delete operation for code: {Code}", code);
+            throw;
+        }
+    }
+
+    public virtual async Task UpdateByCodeAsync(string oldParentCode, string newParentCode,
+        CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            Logger.LogInformation(
+                "Starting update operation for oldParentCode: {OldParentCode}, newParentCode: {NewParentCode}",
+                oldParentCode, newParentCode);
+
+            await (await GetDbContextAsync()).Set<Resource>()
+                .Where(r => r.Code.StartsWith(oldParentCode + "."))
+                .ExecuteUpdateAsync(setters =>
+                        setters.SetProperty(r => r.Code, r => r.Code.Replace(oldParentCode, newParentCode)),
+                    cancellationToken: cancellationToken);
+
+            Logger.LogInformation(
+                "Update operation completed for oldParentCode: {OldParentCode}, newParentCode: {NewParentCode}",
+                oldParentCode, newParentCode);
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex,
+                "Error occurred during update operation for oldParentCode: {OldParentCode}, newParentCode: {NewParentCode}",
+                oldParentCode, newParentCode);
+            throw;
+        }
     }
 
     // public virtual async Task<List<File>> GetFilesAsync(Guid id, CancellationToken cancellationToken = default)

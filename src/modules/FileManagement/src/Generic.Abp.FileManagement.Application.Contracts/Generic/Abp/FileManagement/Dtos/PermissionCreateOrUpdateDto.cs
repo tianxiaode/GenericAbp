@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using Generic.Abp.FileManagement.Resources;
 using Generic.Abp.FileManagement.VirtualPaths;
 using Volo.Abp.Validation;
 
@@ -12,11 +13,11 @@ public class PermissionCreateOrUpdateDto
     public string ConcurrencyStamp { get; set; } = default!;
 
     [DisplayName("Permission:ProviderName")]
-    [DynamicMaxLength(typeof(VirtualPathConsts), nameof(VirtualPathConsts.ProviderNameMaxLength))]
+    [DynamicMaxLength(typeof(ResourceConsts), nameof(ResourceConsts.ProviderNameMaxLength))]
     public string ProviderName { get; set; } = default!;
 
     [DisplayName("Permission:ProviderKey")]
-    [DynamicMaxLength(typeof(VirtualPathConsts), nameof(VirtualPathConsts.ProviderKeyMaxLength))]
+    [DynamicMaxLength(typeof(ResourceConsts), nameof(ResourceConsts.ProviderKeyMaxLength))]
     public string? ProviderKey { get; set; } = default!;
 
     [DisplayName("Permission:CanRead")] public bool CanRead { get; set; }
