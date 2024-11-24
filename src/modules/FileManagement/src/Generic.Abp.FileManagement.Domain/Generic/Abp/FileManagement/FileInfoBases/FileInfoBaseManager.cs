@@ -1,8 +1,10 @@
 ﻿using Generic.Abp.Extensions.Exceptions;
 using Generic.Abp.Extensions.MimeDetective;
+using Generic.Abp.Extensions.RemoteContents;
 using Generic.Abp.FileManagement.Exceptions;
-using Generic.Abp.FileManagement.Files;
+using Generic.Abp.FileManagement.Localization;
 using Generic.Abp.FileManagement.Settings;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using SkiaSharp;
 using System;
@@ -10,15 +12,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using Generic.Abp.Extensions.RemoteContents;
-using Generic.Abp.FileManagement.Localization;
 using Volo.Abp.Domain.Services;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.Threading;
 using Volo.Abp.Uow;
 using File = System.IO.File;
-using Microsoft.Extensions.Localization;
-using Generic.Abp.FileManagement.Folders;
 
 namespace Generic.Abp.FileManagement.FileInfoBases;
 
@@ -45,12 +43,12 @@ public class FileInfoBaseManager(
         return entity;
     }
 
-    public virtual async Task DeleteAsync(FileInfoBase entity)
+    public virtual async Task DeleteAsync(FileInfoBase entity, bool deleteFileOnly = false)
     {
         //删除文件
         var path = entity.Path;
         var storageDirectory = await GetPhysicalPathAsync(path, false);
-        var file = Path.Combine(storageDirectory, await GetFileNameAsync(entity.Hash, entity.FileType));
+        var file = Path.Combine(storageDirectory, await GetFileNameAsync(entity.Hash, entity.Extension));
         if (File.Exists(storageDirectory))
         {
             File.Delete(file);
@@ -62,14 +60,17 @@ public class FileInfoBaseManager(
             }
         }
 
-        await Repository.DeleteAsync(entity, true, CancellationToken);
+        if (!deleteFileOnly)
+        {
+            await Repository.DeleteAsync(entity, true, CancellationToken);
+        }
     }
 
     public virtual async Task<IRemoteContent> GetFileAsync(FileInfoBase entity,
         int chunkSize = FileConsts.DefaultChunkSize,
         int index = 0)
     {
-        var filename = $"{entity.Hash}.{entity.FileType}";
+        var filename = $"{entity.Hash}.{entity.Extension}";
         var filePath = Path.Combine(await GetPhysicalPathAsync(entity.Path), filename);
 
         if (!File.Exists(filePath))
@@ -107,17 +108,17 @@ public class FileInfoBaseManager(
         return new RemoteStreamContent(memoryStream, filename, "application/octet-stream", actualChunkSize);
     }
 
-    public virtual async Task<byte[]?> GetThumbnailAsync(Files.File entity)
+    public virtual async Task<byte[]?> GetThumbnailAsync(FileInfoBase entity)
     {
         var filename = await GetThumbnailFileNameAsync(entity.Hash);
-        var dir = await GetPhysicalPathAsync(entity.FileInfoBase.Path);
+        var dir = await GetPhysicalPathAsync(entity.Path);
         var file = Path.Combine(dir, filename);
         if (File.Exists(file))
         {
             return await File.ReadAllBytesAsync(file, CancellationToken);
         }
 
-        filename = $"{entity.Hash}.{entity.FileInfoBase.FileType}";
+        filename = $"{entity.Hash}.{entity.Extension}";
         file = Path.Combine(dir, filename);
         if (File.Exists(file))
         {

@@ -8,7 +8,5 @@ public interface IResourcePermission : IMultiTenant
     Guid ResourceId { get; }
     string ProviderName { get; }
     string? ProviderKey { get; }
-    bool CanRead { get; }
-    bool CanWrite { get; }
-    bool CanDelete { get; }
+    int Permissions { get; }
 }

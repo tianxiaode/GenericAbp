@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
-using Generic.Abp.Extensions.Extensions;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Domain.Services;
 using Volo.Abp.Identity;
@@ -39,47 +37,52 @@ public class ResourcePermissionManager(IResourcePermissionRepository repository,
     public virtual async Task<bool> AllowEveryOneReadAsync(Guid id, CancellationToken cancellationToken)
     {
         return await Repository.AnyAsync(
-            m => m.ResourceId == id && m.CanRead && m.ProviderName == ResourceConsts.EveryoneProviderName,
+            await ResourcePermissionHelper.GetEveryOneReadExpressionAsync<ResourcePermission>(id),
             cancellationToken);
     }
 
     public virtual async Task<bool> AllowAuthenticatedUserReadAsync(Guid id, CancellationToken cancellationToken)
     {
         return await Repository.AnyAsync(
-            m => m.ResourceId == id && m.CanRead && m.ProviderName == ResourceConsts.AuthorizationUserProviderName,
+            await ResourcePermissionHelper.GetAuthenticatedUserReadExpressionAsync<ResourcePermission>(id),
             cancellationToken);
     }
 
-    public virtual async Task<bool> AllowUserOrRolesReadAsync(Guid id, Guid userId,
-        CancellationToken cancellationToken)
+    public virtual async Task<bool> AllowUserOrRolesReadAsync(Guid id, Guid userId, CancellationToken cancellationToken)
     {
-        return await CheckPermissionAsync(id, userId, cancellationToken);
+        return await Repository.AnyAsync(
+            await ResourcePermissionHelper.GetUserOrRoleReadExpressionAsync<ResourcePermission>(id, userId,
+                await GetRolesAsync(userId)),
+            cancellationToken);
     }
 
     public virtual async Task<bool> AllowEveryOneWriteAsync(Guid id, CancellationToken cancellationToken)
     {
         return await Repository.AnyAsync(
-            m => m.ResourceId == id && m.CanWrite && m.ProviderName == ResourceConsts.EveryoneProviderName,
+            await ResourcePermissionHelper.GetEveryOneWriteExpressionAsync<ResourcePermission>(id),
             cancellationToken);
     }
 
     public virtual async Task<bool> AllowAuthenticatedUserWriteAsync(Guid id, CancellationToken cancellationToken)
     {
         return await Repository.AnyAsync(
-            m => m.ResourceId == id && m.CanWrite && m.ProviderName == ResourceConsts.AuthorizationUserProviderName,
+            await ResourcePermissionHelper.GetAuthenticatedUserWriteExpressionAsync<ResourcePermission>(id),
             cancellationToken);
     }
 
     public virtual async Task<bool> AllowUserOrRolesWriteAsync(Guid id, Guid userId,
         CancellationToken cancellationToken)
     {
-        return await CheckPermissionAsync(id, userId, cancellationToken, canWrite: true);
+        return await Repository.AnyAsync(
+            await ResourcePermissionHelper.GetUserOrRoleWriteExpressionAsync<ResourcePermission>(id, userId,
+                await GetRolesAsync(userId)),
+            cancellationToken);
     }
 
     public virtual async Task<bool> AllowEveryOneDeleteAsync(Guid id, CancellationToken cancellationToken)
     {
         return await Repository.AnyAsync(
-            m => m.ResourceId == id && m.CanDelete && m.ProviderName == ResourceConsts.EveryoneProviderName,
+            await ResourcePermissionHelper.GetEveryOneDeleteExpressionAsync<ResourcePermission>(id),
             cancellationToken);
     }
 
@@ -87,15 +90,17 @@ public class ResourcePermissionManager(IResourcePermissionRepository repository,
         CancellationToken cancellationToken)
     {
         return await Repository.AnyAsync(
-            m => m.ResourceId == id && m.CanDelete &&
-                 m.ProviderName == ResourceConsts.AuthorizationUserProviderName,
+            await ResourcePermissionHelper.GetAuthenticatedUserDeleteExpressionAsync<ResourcePermission>(id),
             cancellationToken);
     }
 
     public virtual async Task<bool> AllowUserOrRolesDeleteAsync(Guid id, Guid userId,
         CancellationToken cancellationToken)
     {
-        return await CheckPermissionAsync(id, userId, cancellationToken, canDelete: true);
+        return await Repository.AnyAsync(
+            await ResourcePermissionHelper.GetUserOrRoleDeleteExpressionAsync<ResourcePermission>(id, userId,
+                await GetRolesAsync(userId)),
+            cancellationToken);
     }
 
     public virtual async Task<bool> HasPermissionAsync(Guid id, CancellationToken cancellationToken)
@@ -104,41 +109,9 @@ public class ResourcePermissionManager(IResourcePermissionRepository repository,
     }
 
 
-    protected virtual async Task<bool> CheckPermissionAsync(Guid id, Guid userId,
-        CancellationToken cancellationToken,
-        bool canRead = false, bool canWrite = false, bool canDelete = false)
+    protected virtual async Task<IList<string>> GetRolesAsync(Guid userId)
     {
-        Expression<Func<ResourcePermission, bool>> predicate = m => m.ResourceId == id;
-
-        if (canRead)
-        {
-            predicate = predicate.AndIfNotTrue(m => m.CanRead);
-        }
-
-        if (canWrite)
-        {
-            predicate = predicate.AndIfNotTrue(m => m.CanWrite);
-        }
-
-        if (canDelete)
-        {
-            predicate = predicate.AndIfNotTrue(m => m.CanDelete);
-        }
-
-        Expression<Func<ResourcePermission, bool>> subPredicate = m =>
-            m.ProviderName == ResourceConsts.AuthorizationUserProviderName && m.ProviderKey == userId.ToString();
-
-        //判断是否包含用户角色
-        var roles = await UserManager.GetRolesAsync(await UserManager.GetByIdAsync(userId));
-        if (roles.Count > 0)
-        {
-            subPredicate = subPredicate.OrIfNotTrue(m =>
-                m.ProviderName == ResourceConsts.RoleProviderName && string.IsNullOrEmpty(m.ProviderKey) &&
-                m.ProviderKey.IsIn(roles));
-        }
-
-        predicate = predicate.AndIfNotTrue(subPredicate);
-        return await Repository.AnyAsync(predicate, cancellationToken: cancellationToken);
+        return await UserManager.GetRolesAsync(await UserManager.GetByIdAsync(userId));
     }
 
     public virtual async Task<List<ResourcePermission>> GetAllParentPermissionsAsync(List<Guid> parentIds,

@@ -204,13 +204,13 @@ public class ResourceManager(
         var parent = await GetUsersRootFolderAsync();
         entity = new Resource(GuidGenerator.Create(), userRootFolderName, ResourceType.Folder, false, CurrentTenant.Id);
         var quotaStr = await SettingManager.GetOrNullForCurrentTenantAsync(FileManagementSettings.Users.DefaultQuota) ??
-                       "2mb";
+                       ResourceConsts.User.DefaultQuota;
         var maxFileSizeStr =
-            await SettingManager.GetOrNullForCurrentTenantAsync(FileManagementSettings.Users.DefaultMaxFileSize) ??
-            "2mb";
+            await SettingManager.GetOrNullForCurrentTenantAsync(FileManagementSettings.Users.DefaultFileMaxSize) ??
+            ResourceConsts.User.DefaultFileMaxSize;
         var allowedFileTypesStr =
             await SettingManager.GetOrNullForCurrentTenantAsync(FileManagementSettings.Users.DefaultFileTypes) ??
-            MimeTypes.ImageTypes.Select(m => "." + m.Extension).JoinAsString(",");
+            ResourceConsts.User.DefaultFileTypes;
         entity.SetQuota(quotaStr.ParseToBytes());
         entity.SetMaxFileSize(maxFileSizeStr.ParseToBytes());
         entity.SetAllowedFileTypes(allowedFileTypesStr);
@@ -241,9 +241,9 @@ public class ResourceManager(
     {
         var entity = new Resource(GuidGenerator.Create(), source.Name, ResourceType.Folder, source.IsStatic,
             source.TenantId);
-        entity.SetQuota(source.GetQuota());
-        entity.SetUsedSize(source.GetUsedSize());
-        entity.SetMaxFileSize(source.GetMaxFileSize());
+        // entity.SetQuota(source.GetQuota());
+        // entity.SetUsedSize(source.GetUsedSize());
+        // entity.SetMaxFileSize(source.GetMaxFileSize());
 
         await DistributedEventBus.PublishAsync(
             new ResourceCopyEto(source.Id, entity.Id, entity.TenantId)

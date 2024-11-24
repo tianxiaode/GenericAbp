@@ -1,7 +1,5 @@
 ﻿using Generic.Abp.FileManagement.FileInfoBases;
-using Generic.Abp.FileManagement.Files;
-using Generic.Abp.FileManagement.Folders;
-using Generic.Abp.FileManagement.VirtualPaths;
+using Generic.Abp.FileManagement.Resources;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp;
 using Volo.Abp.EntityFrameworkCore;
@@ -27,7 +25,7 @@ namespace Generic.Abp.FileManagement.EntityFrameworkCore
 
                 //Properties
                 b.Property(m => m.MimeType).IsRequired().HasMaxLength(FileConsts.MimeTypeMaxLength);
-                b.Property(m => m.FileType).IsRequired().HasMaxLength(FileConsts.FileTypeMaxLength);
+                b.Property(m => m.Extension).IsRequired().HasMaxLength(FileConsts.ExtensionMaxLength);
                 b.Property(m => m.Hash).IsRequired().HasMaxLength(FileConsts.HashMaxLength);
                 b.Property(m => m.Path).IsRequired().HasMaxLength(FileConsts.PathMaxLength);
                 b.Property(m => m.Size).IsRequired().HasDefaultValue(0);
@@ -36,76 +34,19 @@ namespace Generic.Abp.FileManagement.EntityFrameworkCore
                 //Indexes
                 b.HasIndex(m => m.CreationTime);
                 b.HasIndex(m => m.Hash).IsUnique();
-                b.HasIndex(m => m.FileType);
-                b.ApplyObjectExtensionMappings();
+                b.HasIndex(m => m.Extension);
             });
 
-            builder.Entity<File>(b =>
+            builder.Entity<Resource>(b =>
             {
-                //Configure table & schema name
-                b.ToTable(FileManagementDbProperties.DbTablePrefix + "Files", FileManagementDbProperties.DbSchema);
-
-                b.ConfigureByConvention();
-
-                //Properties
-                b.Property(m => m.Filename).IsRequired().HasMaxLength(FileConsts.FilenameMaxLength);
-                b.Property(m => m.Hash).IsRequired().HasMaxLength(FileConsts.HashMaxLength);
-                b.Property(m => m.Description).IsRequired().HasMaxLength(FileConsts.DescriptionMaxLength);
-                b.Property(m => m.IsInheritPermissions).IsRequired().HasDefaultValue(false);
-
-                if (dbType == EfCoreDatabaseProvider.MySql)
-                {
-                    b.Property(m => m.Filename).UseCollation("gbk_chinese_ci");
-                }
-
-                //Indexes
-                b.HasIndex(m => m.CreationTime);
-                b.HasIndex(m => new { m.FolderId, m.FileInfoBaseId });
-                b.HasIndex(m => new { m.FolderId, m.Filename });
-                b.ApplyObjectExtensionMappings();
-            });
-
-            builder.Entity<FilePermission>(b =>
-            {
-                //Configure table & schema name
-                b.ToTable(FileManagementDbProperties.DbTablePrefix + "FilePermissions",
+                b.ToTable(FileManagementDbProperties.DbTablePrefix + "Resources",
                     FileManagementDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
                 //Properties
-                b.Property(m => m.ProviderName).IsRequired().HasMaxLength(FileConsts.ProviderNameMaxLength);
-                b.Property(m => m.ProviderKey).HasMaxLength(FileConsts.ProviderKeyMaxLength);
-                b.Property(m => m.CanRead).IsRequired().HasDefaultValue(false);
-                b.Property(m => m.CanWrite).IsRequired().HasDefaultValue(false);
-                b.Property(m => m.CanDelete).IsRequired().HasDefaultValue(false);
-
-                if (dbType == EfCoreDatabaseProvider.MySql)
-                {
-                    b.Property(m => m.ProviderName).UseCollation("ascii_general_ci");
-                    b.Property(m => m.ProviderKey).UseCollation("ascii_general_ci");
-                }
-
-                //Indexes
-                b.HasIndex(m => new { m.TargetId, m.ProviderName, m.ProviderKey });
-                b.ApplyObjectExtensionMappings();
-            });
-
-            builder.Entity<Folder>(b =>
-            {
-                b.ToTable(FileManagementDbProperties.DbTablePrefix + "Folders",
-                    FileManagementDbProperties.DbSchema);
-
-                b.ConfigureByConvention();
-
-                //Properties
-                b.Property(m => m.Name).IsRequired().HasMaxLength(FolderConsts.NameMaxLength);
-                b.Property(m => m.Code).IsRequired().HasMaxLength(FolderConsts.CodeMaxLength);
-                b.Property(m => m.AllowedFileTypes).IsRequired().HasMaxLength(FolderConsts.AllowedFileTypesMaxLength);
-                b.Property(m => m.StorageQuota).IsRequired().HasDefaultValue(0);
-                b.Property(m => m.UsedStorage).IsRequired().HasDefaultValue(0);
-                b.Property(m => m.MaxFileSize).IsRequired().HasDefaultValue(0);
-                b.Property(m => m.IsInheritPermissions).IsRequired().HasDefaultValue(false);
+                b.Property(m => m.Name).IsRequired().HasMaxLength(ResourceConsts.NameMaxLength);
+                b.Property(m => m.Code).IsRequired().HasMaxLength(ResourceConsts.CodeMaxLength);
 
                 if (dbType == EfCoreDatabaseProvider.MySql)
                 {
@@ -125,20 +66,18 @@ namespace Generic.Abp.FileManagement.EntityFrameworkCore
                 b.ApplyObjectExtensionMappings();
             });
 
-            builder.Entity<FolderPermission>(b =>
+            builder.Entity<ResourcePermission>(b =>
             {
                 //Configure table & schema name
-                b.ToTable(FileManagementDbProperties.DbTablePrefix + "FolderPermissions",
+                b.ToTable(FileManagementDbProperties.DbTablePrefix + "ResourcePermissions",
                     FileManagementDbProperties.DbSchema);
 
                 b.ConfigureByConvention();
 
                 //Properties
-                b.Property(m => m.ProviderName).IsRequired().HasMaxLength(FolderConsts.ProviderNameMaxLength);
-                b.Property(m => m.ProviderKey).HasMaxLength(FolderConsts.ProviderKeyMaxLength);
-                b.Property(m => m.CanRead).IsRequired().HasDefaultValue(false);
-                b.Property(m => m.CanWrite).IsRequired().HasDefaultValue(false);
-                b.Property(m => m.CanDelete).IsRequired().HasDefaultValue(false);
+                b.Property(m => m.ProviderName).IsRequired().HasMaxLength(ResourceConsts.ProviderNameMaxLength);
+                b.Property(m => m.ProviderKey).HasMaxLength(ResourceConsts.ProviderKeyMaxLength);
+                b.Property(m => m.Permissions).IsRequired().HasDefaultValue(0);
 
                 if (dbType == EfCoreDatabaseProvider.MySql)
                 {
@@ -147,56 +86,7 @@ namespace Generic.Abp.FileManagement.EntityFrameworkCore
                 }
 
                 //Indexes
-                b.HasIndex(m => new { m.TargetId, m.ProviderName, m.ProviderKey });
-                b.ApplyObjectExtensionMappings();
-            });
-
-            builder.Entity<VirtualPath>(b =>
-            {
-                //Configure table & schema name
-                b.ToTable(FileManagementDbProperties.DbTablePrefix + "VirtualPaths",
-                    FileManagementDbProperties.DbSchema);
-
-                b.ConfigureByConvention();
-
-                //Properties
-                b.Property(m => m.Path).IsRequired().HasMaxLength(VirtualPathConsts.PathMaxLength);
-
-                if (dbType == EfCoreDatabaseProvider.MySql)
-                {
-                    b.Property(m => m.Path).UseCollation("ascii_general_ci");
-                }
-
-                //Indexes
-                b.HasIndex(m => new { m.FolderId });
-                b.HasIndex(m => new { m.Path }).IsUnique();
-                b.ApplyObjectExtensionMappings();
-            });
-
-            builder.Entity<VirtualPathPermission>(b =>
-            {
-                //Configure table & schema name
-                b.ToTable(FileManagementDbProperties.DbTablePrefix + "VirtualPathPermissions",
-                    FileManagementDbProperties.DbSchema);
-
-                b.ConfigureByConvention();
-
-                //Properties
-                b.Property(m => m.ProviderName).IsRequired().HasMaxLength(VirtualPathConsts.ProviderNameMaxLength);
-                b.Property(m => m.ProviderKey).HasMaxLength(VirtualPathConsts.ProviderKeyMaxLength);
-                b.Property(m => m.CanRead).IsRequired().HasDefaultValue(false);
-                b.Property(m => m.CanWrite).IsRequired().HasDefaultValue(false);
-                b.Property(m => m.CanDelete).IsRequired().HasDefaultValue(false);
-
-                if (dbType == EfCoreDatabaseProvider.MySql)
-                {
-                    b.Property(m => m.ProviderName).UseCollation("ascii_general_ci");
-                    b.Property(m => m.ProviderKey).UseCollation("ascii_general_ci");
-                }
-
-                //Indexes
-                b.HasIndex(m => new { m.TargetId, m.ProviderName, m.ProviderKey });
-                b.ApplyObjectExtensionMappings();
+                b.HasIndex(m => new { m.ResourceId, m.Permissions, m.ProviderName, m.ProviderKey });
             });
 
 

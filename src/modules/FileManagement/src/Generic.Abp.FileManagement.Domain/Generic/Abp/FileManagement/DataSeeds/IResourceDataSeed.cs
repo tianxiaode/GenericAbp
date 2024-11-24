@@ -3,7 +3,7 @@ using System;
 
 namespace Generic.Abp.FileManagement.DataSeeds;
 
-public interface IFolderDataSeed
+public interface IResourceDataSeed
 {
     Task SeedAsync(Guid? tenantId = null);
 }
