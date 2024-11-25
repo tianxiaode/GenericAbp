@@ -1,8 +1,7 @@
-﻿using System;
-using Volo.Abp.Domain.Repositories;
+﻿using Generic.Abp.Extensions.Trees;
 
 namespace Generic.Abp.MenuManagement.Menus;
 
-public interface IMenuRepository : IRepository<Menu, Guid>
+public interface IMenuRepository : ITreeRepository<Menu>
 {
 }

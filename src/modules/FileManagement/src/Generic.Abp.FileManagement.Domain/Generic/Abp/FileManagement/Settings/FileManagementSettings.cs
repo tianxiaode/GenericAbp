@@ -9,61 +9,82 @@
          */
         public const string StoragePath = GroupName + ".StoragePath";
         public const string TempPath = GroupName + ".TempPath";
+        public const string FolderCopyMaxNodeCount = GroupName + ".FolderCopyMaxNodeCount";
 
-        public static class Public
+        public static class PublicFolder
         {
-            private const string PublicPrefix = GroupName + ".Public";
-            public const string DefaultQuota = PublicPrefix + ".DefaultQuota";
-            public const string DefaultFileMaxSize = PublicPrefix + ".DefaultFileMaxSize";
-            public const string DefaultFileTypes = PublicPrefix + ".DefaultFileTypes";
+            private const string PublicFolderPrefix = GroupName + ".PublicFolder";
+            public const string DefaultQuota = PublicFolderPrefix + ".DefaultQuota";
+            public const string DefaultFileMaxSize = PublicFolderPrefix + ".DefaultFileMaxSize";
+            public const string DefaultFileTypes = PublicFolderPrefix + ".DefaultFileTypes";
         }
 
-        public static class Shared
+        public static class SharedFolder
         {
-            private const string SharedPrefix = GroupName + ".Shared";
-            public const string DefaultQuota = SharedPrefix + ".DefaultQuota";
-            public const string DefaultFileMaxSize = SharedPrefix + ".DefaultFileMaxSize";
-            public const string DefaultFileTypes = SharedPrefix + ".DefaultFileTypes";
+            private const string SharedFolderPrefix = GroupName + ".SharedFolder";
+            public const string DefaultQuota = SharedFolderPrefix + ".DefaultQuota";
+            public const string DefaultFileMaxSize = SharedFolderPrefix + ".DefaultFileMaxSize";
+            public const string DefaultFileTypes = SharedFolderPrefix + ".DefaultFileTypes";
         }
 
-        public static class Users
+        public static class UserFolder
         {
-            private const string PrivatePrefix = GroupName + ".Private";
-            public const string DefaultQuota = PrivatePrefix + ".DefaultQuota";
-            public const string DefaultFileMaxSize = PrivatePrefix + ".DefaultFileMaxSize";
-            public const string DefaultFileTypes = PrivatePrefix + ".DefaultFileTypes";
+            private const string UserFolderPrefix = GroupName + ".UserFolder";
+            public const string DefaultQuota = UserFolderPrefix + ".DefaultQuota";
+            public const string DefaultFileMaxSize = UserFolderPrefix + ".DefaultFileMaxSize";
+            public const string DefaultFileTypes = UserFolderPrefix + ".DefaultFileTypes";
         }
 
-        public static class Virtual
+        public static class VirtualPath
         {
-            private const string VirtualPrefix = GroupName + ".Virtual";
-            public const string DefaultQuota = VirtualPrefix + ".DefaultQuota";
-            public const string DefaultFileMaxSize = VirtualPrefix + ".DefaultFileMaxSize";
-            public const string DefaultFileTypes = VirtualPrefix + ".DefaultFileTypes";
+            private const string VirtualPathPrefix = GroupName + ".Virtual";
+            public const string DefaultQuota = VirtualPathPrefix + ".DefaultQuota";
+            public const string DefaultFileMaxSize = VirtualPathPrefix + ".DefaultFileMaxSize";
+            public const string DefaultFileTypes = VirtualPathPrefix + ".DefaultFileTypes";
         }
 
-        public static class Default
+        public static class DefaultFile
         {
-            private const string DefaultPrefix = GroupName + ".Default";
-            public const string UpdateEnable = DefaultPrefix + ".Update.Enable";
-            public const string UpdateRetentionPeriod = DefaultPrefix + ".Update.RetentionPeriod";
-            public const string UpdateFrequency = DefaultPrefix + ".Update.Frequency";
-            public const string UpdateBatchSize = DefaultPrefix + ".Update.BatchSize";
-            public const string CleanupEnable = DefaultPrefix + ".Cleanup.Enable";
-            public const string CleanupFrequency = DefaultPrefix + ".Cleanup.Frequency";
-            public const string CleanupBatchSize = DefaultPrefix + ".Cleanup.BatchSize";
+            private const string DefaultPrefix = GroupName + ".DefaultFile";
+
+            public static class Update
+            {
+                private const string UpdatePrefix = DefaultPrefix + ".Update";
+                public const string Enable = UpdatePrefix + ".Enable";
+                public const string RetentionPeriod = UpdatePrefix + ".RetentionPeriod";
+                public const string Frequency = UpdatePrefix + ".Frequency";
+                public const string BatchSize = UpdatePrefix + ".BatchSize";
+            }
+
+            public static class Cleanup
+            {
+                private const string CleanupPrefix = DefaultPrefix + ".Cleanup";
+                public const string Enable = CleanupPrefix + ".Enable";
+                public const string Frequency = CleanupPrefix + ".Frequency";
+                public const string BatchSize = CleanupPrefix + ".BatchSize";
+            }
         }
 
-        public static class Temporary
+        public static class TemporaryFile
         {
-            private const string TemporaryPrefix = GroupName + ".Temporary";
-            public const string UpdateEnable = TemporaryPrefix + ".Update.Enable";
-            public const string UpdateRetentionPeriod = TemporaryPrefix + ".Update.RetentionPeriod";
-            public const string UpdateFrequency = TemporaryPrefix + ".Update.Frequency";
-            public const string UpdateBatchSize = TemporaryPrefix + ".Update.BatchSize";
-            public const string CleanupEnable = TemporaryPrefix + ".Cleanup.Enable";
-            public const string CleanupFrequency = TemporaryPrefix + ".Cleanup.Frequency";
-            public const string CleanupBatchSize = TemporaryPrefix + ".Cleanup.BatchSize";
+            private const string TemporaryFilePrefix = GroupName + ".TemporaryFile";
+
+            public static class Update
+            {
+                private const string UpdatePrefix = TemporaryFilePrefix + ".Update";
+                public const string Enable = UpdatePrefix + ".Enable";
+                public const string RetentionPeriod = UpdatePrefix + ".RetentionPeriod";
+                public const string Frequency = UpdatePrefix + ".Frequency";
+                public const string BatchSize = UpdatePrefix + ".BatchSize";
+            }
+
+            public static class Cleanup
+            {
+                private const string CleanupPrefix = TemporaryFilePrefix + ".Cleanup";
+                public const string Enable = CleanupPrefix + ".Enable";
+                public const string Frequency = CleanupPrefix + ".Frequency";
+                public const string BatchSize = CleanupPrefix + ".BatchSize";
+            }
         }
     }
 }

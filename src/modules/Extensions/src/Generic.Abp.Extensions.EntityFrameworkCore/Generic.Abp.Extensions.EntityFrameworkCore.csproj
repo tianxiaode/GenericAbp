@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Generic.Abp.Extensions\Generic.Abp.Extensions.csproj" />
+    <ProjectReference Include="..\Generic.Abp.Extensions.Domain\Generic.Abp.Extensions.Domain.csproj" />
   </ItemGroup>
 
 </Project>

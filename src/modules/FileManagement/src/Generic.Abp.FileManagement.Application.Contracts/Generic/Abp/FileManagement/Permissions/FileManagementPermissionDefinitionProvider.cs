@@ -1,5 +1,4 @@
 ﻿using Generic.Abp.FileManagement.Localization;
-using System.Text.RegularExpressions;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Localization;
 
@@ -12,12 +11,18 @@ namespace Generic.Abp.FileManagement.Permissions
             var fileManagementGroup =
                 context.AddGroup(FileManagementPermissions.GroupName, L("Permission:FileManagement"));
 
-            var foldersPermission = fileManagementGroup.AddPermission(FileManagementPermissions.Folders.Default,
-                L($"Permission:Folders"));
-            foldersPermission.AddChild(FileManagementPermissions.Folders.Create, L("Permission:Create"));
-            foldersPermission.AddChild(FileManagementPermissions.Folders.Update, L("Permission:Edit"));
-            foldersPermission.AddChild(FileManagementPermissions.Folders.Delete, L("Permission:Delete"));
-            foldersPermission.AddChild(FileManagementPermissions.Folders.ManagePermissions,
+            var fileInfoBasePermission = fileManagementGroup.AddPermission(
+                FileManagementPermissions.FileInfoBases.Default,
+                L($"Permission:FileInfoBases"));
+            fileInfoBasePermission.AddChild(FileManagementPermissions.FileInfoBases.ManageRetentionPolicy,
+                L("Permission:ManageRetentionPolicy"));
+
+            var foldersPermission = fileManagementGroup.AddPermission(FileManagementPermissions.Resources.Default,
+                L($"Permission:Resources"));
+            foldersPermission.AddChild(FileManagementPermissions.Resources.Create, L("Permission:Create"));
+            foldersPermission.AddChild(FileManagementPermissions.Resources.Update, L("Permission:Edit"));
+            foldersPermission.AddChild(FileManagementPermissions.Resources.Delete, L("Permission:Delete"));
+            foldersPermission.AddChild(FileManagementPermissions.Resources.ManagePermissions,
                 L("Permission:ChangePermissions"));
 
             var virtualPathsPermission = fileManagementGroup.AddPermission(

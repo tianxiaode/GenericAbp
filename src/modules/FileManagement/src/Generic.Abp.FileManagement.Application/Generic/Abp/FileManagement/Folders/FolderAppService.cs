@@ -28,7 +28,7 @@ public class FolderAppService(
     protected IFileRepository FileRepository { get; } = fileRepository;
     protected FileManager FileManager { get; } = fileManager;
 
-    [Authorize(FileManagementPermissions.Folders.Default)]
+    [Authorize(FileManagementPermissions.Resources.Default)]
     public virtual async Task<ListResultDto<FolderDto>> GetRootFoldersAsync()
     {
         var folderDtos = new List<FolderDto>();
@@ -43,14 +43,14 @@ public class FolderAppService(
         return new ListResultDto<FolderDto>(folderDtos);
     }
 
-    [Authorize(FileManagementPermissions.Folders.Default)]
+    [Authorize(FileManagementPermissions.Resources.Default)]
     public virtual async Task<FolderDto> GetAsync(Guid id)
     {
         var folder = await Repository.GetAsync(id, false);
         return ObjectMapper.Map<Folder, FolderDto>(folder);
     }
 
-    [Authorize(FileManagementPermissions.Folders.Default)]
+    [Authorize(FileManagementPermissions.Resources.Default)]
     public virtual async Task<ListResultDto<FolderDto>> GetListAsync(FolderGetListInput input)
     {
         List<Folder> list = [];
@@ -66,7 +66,7 @@ public class FolderAppService(
         return new ListResultDto<FolderDto>(ObjectMapper.Map<List<Folder>, List<FolderDto>>(list));
     }
 
-    [Authorize(FileManagementPermissions.Folders.Create)]
+    [Authorize(FileManagementPermissions.Resources.Create)]
     public async Task<FolderDto> CreateAsync(FolderCreateDto input)
     {
         var folder = new Folder(GuidGenerator.Create(), input.ParentId, input.Name, false, CurrentTenant.Id);
@@ -75,7 +75,7 @@ public class FolderAppService(
         return ObjectMapper.Map<Folder, FolderDto>(folder);
     }
 
-    [Authorize(FileManagementPermissions.Folders.Update)]
+    [Authorize(FileManagementPermissions.Resources.Update)]
     public async Task<FolderDto> UpdateAsync(Guid id, FolderUpdateDto input)
     {
         var folder = await Repository.GetAsync(id, true);
@@ -89,7 +89,7 @@ public class FolderAppService(
         return ObjectMapper.Map<Folder, FolderDto>(folder);
     }
 
-    [Authorize(FileManagementPermissions.Folders.Update)]
+    [Authorize(FileManagementPermissions.Resources.Update)]
     [UnitOfWork(true)]
     public virtual async Task MoveAsync(Guid id, Guid? parentId)
     {
@@ -99,7 +99,7 @@ public class FolderAppService(
         await FolderManager.MoveAsync(entity, parentId);
     }
 
-    [Authorize(FileManagementPermissions.Folders.Update)]
+    [Authorize(FileManagementPermissions.Resources.Update)]
     [UnitOfWork(true)]
     public virtual async Task CopyAsync(Guid id, Guid? parentId)
     {
@@ -107,7 +107,7 @@ public class FolderAppService(
         await FolderManager.CopyAsync(id, parentId);
     }
 
-    [Authorize(FileManagementPermissions.Folders.Delete)]
+    [Authorize(FileManagementPermissions.Resources.Delete)]
     public async Task DeleteAsync(Guid id)
     {
         var entity = await FolderManager.GetAsync(id);
@@ -117,14 +117,14 @@ public class FolderAppService(
 
     #region Files
 
-    [Authorize(FileManagementPermissions.Folders.Default)]
+    [Authorize(FileManagementPermissions.Resources.Default)]
     public virtual async Task<FileDto> GetFileAsync(Guid id)
     {
         var file = await FileRepository.GetAsync(id);
         return ObjectMapper.Map<File, FileDto>(file);
     }
 
-    [Authorize(FileManagementPermissions.Folders.Default)]
+    [Authorize(FileManagementPermissions.Resources.Default)]
     public virtual async Task<PagedResultDto<FileDto>> GetFileListAsync(FileGetListInput input)
     {
         if (string.IsNullOrEmpty(input.Filter) && !input.FolderId.HasValue)
@@ -141,7 +141,7 @@ public class FolderAppService(
         return new PagedResultDto<FileDto>(count, ObjectMapper.Map<List<File>, List<FileDto>>(list));
     }
 
-    [Authorize(FileManagementPermissions.Folders.Update)]
+    [Authorize(FileManagementPermissions.Resources.Update)]
     public virtual async Task<FileDto> UpdateFileAsync(Guid id, FileUpdateDto input)
     {
         var entity = await FileRepository.GetAsync(id);
@@ -152,7 +152,7 @@ public class FolderAppService(
         return ObjectMapper.Map<File, FileDto>(entity);
     }
 
-    [Authorize(FileManagementPermissions.Folders.Delete)]
+    [Authorize(FileManagementPermissions.Resources.Delete)]
     public virtual async Task DeleteFileAsync(Guid id)
     {
         var entity = await FileRepository.GetAsync(id);
@@ -160,7 +160,7 @@ public class FolderAppService(
         await FileRepository.DeleteAsync(entity);
     }
 
-    [Authorize(FileManagementPermissions.Folders.ManagePermissions)]
+    [Authorize(FileManagementPermissions.Resources.ManagePermissions)]
     public virtual async Task<FilePermissionDto> GetFilePermissionsAsync(Guid id)
     {
         var entity = await FileManager.GetAsync(id);
@@ -172,7 +172,7 @@ public class FolderAppService(
         return dto;
     }
 
-    [Authorize(FileManagementPermissions.Folders.ManagePermissions)]
+    [Authorize(FileManagementPermissions.Resources.ManagePermissions)]
     public virtual async Task UpdateFilePermissionsAsync(Guid id, FilePermissionUpdateDto input)
     {
         var entity = await FileManager.GetAsync(id);
@@ -194,7 +194,7 @@ public class FolderAppService(
 
     #region Permissons
 
-    [Authorize(FileManagementPermissions.Folders.ManagePermissions)]
+    [Authorize(FileManagementPermissions.Resources.ManagePermissions)]
     public virtual async Task<FolderPermissionDto> GetFolderPermissionsAsync(Guid id)
     {
         var entity = await FolderManager.GetAsync(id);
@@ -206,7 +206,7 @@ public class FolderAppService(
         return dto;
     }
 
-    [Authorize(FileManagementPermissions.Folders.ManagePermissions)]
+    [Authorize(FileManagementPermissions.Resources.ManagePermissions)]
     public virtual async Task UpdateFolderPermissionsAsync(Guid id, FolderPermissionUpdateDto input)
     {
         var entity = await FolderManager.GetAsync(id);

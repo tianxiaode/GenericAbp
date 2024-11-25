@@ -16,6 +16,7 @@
 	</ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Extensions\src\Generic.Abp.Extensions.EntityFrameworkCore\Generic.Abp.Extensions.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\Generic.Abp.FileManagement.Domain\Generic.Abp.FileManagement.Domain.csproj" />
   </ItemGroup>
 

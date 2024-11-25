@@ -1,94 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Dynamic.Core;
-using System.Linq.Expressions;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using Generic.Abp.Extensions.EntityFrameworkCore.Trees;
 using Generic.Abp.FileManagement.Resources;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 
 namespace Generic.Abp.FileManagement.EntityFrameworkCore.Resources;
 
 public class ResourceRepository(IDbContextProvider<IFileManagementDbContext> dbContextProvider)
-    : EfCoreRepository<IFileManagementDbContext, Resource, Guid>(dbContextProvider), IResourceRepository
+    : TreeRepository<IFileManagementDbContext, Resource>(dbContextProvider)
 {
-    public virtual async Task<bool> HasChildAsync(Guid id, CancellationToken cancellation = default)
-    {
-        return await (await GetQueryableAsync()).AnyAsync(m => m.ParentId == id, GetCancellationToken(cancellation));
-    }
-
-
-    public virtual async Task<List<string>> GetAllCodesByFilterAsync(string filter,
-        CancellationToken cancellationToken = default)
-    {
-        return await (await GetDbSetAsync())
-            .AsNoTracking()
-            .Where(m => EF.Functions.Like(m.Name, $"%{filter}%"))
-            .Select(m => m.Code)
-            .ToListAsync(cancellationToken);
-    }
-
-    public Task<List<Guid>> GetAllParentIdsAsync(string code, CancellationToken cancellationToken = default)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<List<Resource>> GetAllParentAsync(string code, CancellationToken cancellationToken = default)
-    {
-        throw new NotImplementedException();
-    }
-
-    public virtual async Task DeleteByCodeAsync(string code, CancellationToken cancellationToken = default)
-    {
-        try
-        {
-            Logger.LogInformation("Starting delete operation for code: {Code}", code);
-
-            await (await GetDbContextAsync()).Set<Resource>()
-                .Where(r => r.Code.StartsWith(code))
-                .ExecuteDeleteAsync(cancellationToken);
-
-            Logger.LogInformation("Delete operation completed for code: {Code}", code);
-        }
-        catch (Exception ex)
-        {
-            Logger.LogError(ex, "Error occurred during delete operation for code: {Code}", code);
-            throw;
-        }
-    }
-
-    public virtual async Task UpdateByCodeAsync(string oldParentCode, string newParentCode,
-        CancellationToken cancellationToken = default)
-    {
-        try
-        {
-            Logger.LogInformation(
-                "Starting update operation for oldParentCode: {OldParentCode}, newParentCode: {NewParentCode}",
-                oldParentCode, newParentCode);
-
-            await (await GetDbContextAsync()).Set<Resource>()
-                .Where(r => r.Code.StartsWith(oldParentCode + "."))
-                .ExecuteUpdateAsync(setters =>
-                        setters.SetProperty(r => r.Code, r => r.Code.Replace(oldParentCode, newParentCode)),
-                    cancellationToken: cancellationToken);
-
-            Logger.LogInformation(
-                "Update operation completed for oldParentCode: {OldParentCode}, newParentCode: {NewParentCode}",
-                oldParentCode, newParentCode);
-        }
-        catch (Exception ex)
-        {
-            Logger.LogError(ex,
-                "Error occurred during update operation for oldParentCode: {OldParentCode}, newParentCode: {NewParentCode}",
-                oldParentCode, newParentCode);
-            throw;
-        }
-    }
-
     // public virtual async Task<List<File>> GetFilesAsync(Guid id, CancellationToken cancellationToken = default)
     // {
     //     var dbContext = await GetDbContextAsync();

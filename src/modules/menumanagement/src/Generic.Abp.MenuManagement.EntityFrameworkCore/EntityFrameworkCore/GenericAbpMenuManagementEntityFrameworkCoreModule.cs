@@ -1,4 +1,5 @@
-﻿using Generic.Abp.MenuManagement.EntityFrameworkCore.Menus;
+﻿using Generic.Abp.Extensions.EntityFrameworkCore;
+using Generic.Abp.MenuManagement.EntityFrameworkCore.Menus;
 using Generic.Abp.MenuManagement.Menus;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,6 +11,7 @@ namespace Generic.Abp.MenuManagement.EntityFrameworkCore
 {
     [DependsOn(
         typeof(GenericAbpMenuManagementDomainModule),
+        typeof(GenericAbpExtensionsEntityFrameworkCoreModule),
         typeof(AbpEntityFrameworkCoreModule)
     )]
     public class GenericAbpMenuManagementEntityFrameworkCoreModule : AbpModule

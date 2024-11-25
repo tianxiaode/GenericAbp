@@ -1,12 +1,7 @@
 ﻿using Generic.Abp.FileManagement.EntityFrameworkCore.FileInfoBases;
-using Generic.Abp.FileManagement.EntityFrameworkCore.Files;
 using Generic.Abp.FileManagement.EntityFrameworkCore.Resources;
-using Generic.Abp.FileManagement.EntityFrameworkCore.VirtualPaths;
 using Generic.Abp.FileManagement.FileInfoBases;
-using Generic.Abp.FileManagement.Files;
-using Generic.Abp.FileManagement.Folders;
 using Generic.Abp.FileManagement.Resources;
-using Generic.Abp.FileManagement.VirtualPaths;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;

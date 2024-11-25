@@ -135,7 +135,7 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
     {
         var entity = await Repository.GetAsync(id);
         CheckIsStaticAsync(entity);
-        await MenuManager.CheckMoveOrCopyAsync(entity, parentId);
+        await MenuManager.IsAllowMoveOrCopyAsync(entity, parentId);
         await MenuManager.MoveAsync(entity, parentId);
     }
 
@@ -143,7 +143,7 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
     [UnitOfWork(true)]
     public virtual async Task CopyAsync(Guid id, Guid? parentId)
     {
-        await MenuManager.CheckMoveOrCopyAsync(await Repository.GetAsync(id), parentId);
+        await MenuManager.IsAllowMoveOrCopyAsync(await Repository.GetAsync(id), parentId);
         await MenuManager.CopyAsync(id, parentId);
     }
 

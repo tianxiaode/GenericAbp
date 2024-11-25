@@ -1,6 +1,8 @@
 {
   "culture": "zh-Hans",
   "texts": {
+    "Display:Name": "名称",
+    "Display:Parent": "父节点",
     "Generic.Abp.BusinessException:000001": "{Name} '{Value}' 已存在",
     "Generic.Abp.BusinessException:000002": "带有子对象的{Name} '{Value}' 不能被删除",
     "Generic.Abp.BusinessException:000003": "值 '{Value}' 已超过了字段允许长度 '{Length}'",

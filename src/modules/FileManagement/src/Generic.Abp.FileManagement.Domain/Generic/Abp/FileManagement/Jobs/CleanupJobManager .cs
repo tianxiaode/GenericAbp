@@ -15,48 +15,43 @@ public class CleanupJobManager(
     ITaskScheduler taskScheduler,
     ILogger<CleanupJobManager> logger,
     DefaultFileManagementBackgroundJobManager backgroundJobManager,
-    ISettingManager settingManager,
+    FileManagementSettingManager settingManager,
     ICancellationTokenProvider cancellationTokenProvider) : ITransientDependency
 {
     protected ITaskScheduler TaskScheduler { get; } = taskScheduler;
     protected ILogger<CleanupJobManager> Logger { get; } = logger;
     protected DefaultFileManagementBackgroundJobManager BackgroundJobManager { get; } = backgroundJobManager;
-    protected ISettingManager SettingManager { get; } = settingManager;
+    protected FileManagementSettingManager FileManagementSettingManager { get; } = settingManager;
     protected ICancellationTokenProvider CancellationTokenProvider { get; } = cancellationTokenProvider;
     protected CancellationToken CancellationToken => CancellationTokenProvider.Token;
-
-    public virtual async Task ApplySettingsAsync(Guid? tenantId)
-    {
-        await StartAsync(tenantId);
-    }
 
     public virtual async Task StartAsync(Guid? tenantId)
     {
         try
         {
-            await ScheduleOrUpdateTaskAsync("DefaultUpdate", tenantId,
-                FileManagementSettings.Default.UpdateEnable,
-                FileManagementSettings.Default.UpdateFrequency,
-                ResourceConsts.Default.UpdateFrequency,
-                () => ExecuteDefaultUpdateAsync(tenantId));
+            var defaultFileSetting = await FileManagementSettingManager.GetDefaultFileSettingAsync();
+            var temporaryFileSetting = await FileManagementSettingManager.GetTemporaryFileSettingAsync();
+            await ScheduleOrUpdateTaskAsync("DefaultFileUpdate", tenantId,
+                defaultFileSetting.UpdateSetting.Enable,
+                defaultFileSetting.UpdateSetting.Frequency,
+                () => ExecuteDefaultUpdateAsync(tenantId, defaultFileSetting.UpdateSetting.RetentionPeriod,
+                    defaultFileSetting.UpdateSetting.BatchSize));
 
             await ScheduleOrUpdateTaskAsync("DefaultCleanup", tenantId,
-                FileManagementSettings.Default.CleanupEnable,
-                FileManagementSettings.Default.CleanupFrequency,
-                ResourceConsts.Default.CleanupFrequency,
-                () => ExecuteDefaultCleanupAsync(tenantId));
+                defaultFileSetting.CleanupSetting.Enable,
+                defaultFileSetting.CleanupSetting.Frequency,
+                () => ExecuteDefaultCleanupAsync(tenantId, defaultFileSetting.CleanupSetting.BatchSize));
 
             await ScheduleOrUpdateTaskAsync("TemporaryUpdate", tenantId,
-                FileManagementSettings.Temporary.UpdateEnable,
-                FileManagementSettings.Temporary.UpdateFrequency,
-                ResourceConsts.Temporary.UpdateFrequency,
-                () => ExecuteTemporaryUpdateAsync(tenantId));
+                temporaryFileSetting.UpdateSetting.Enable,
+                temporaryFileSetting.UpdateSetting.Frequency,
+                () => ExecuteTemporaryUpdateAsync(tenantId, temporaryFileSetting.UpdateSetting.RetentionPeriod,
+                    temporaryFileSetting.UpdateSetting.BatchSize));
 
             await ScheduleOrUpdateTaskAsync("TemporaryCleanup", tenantId,
-                FileManagementSettings.Temporary.CleanupEnable,
-                FileManagementSettings.Temporary.CleanupFrequency,
-                ResourceConsts.Temporary.CleanupFrequency,
-                () => ExecuteTemporaryCleanupAsync(tenantId));
+                temporaryFileSetting.CleanupSetting.Enable,
+                temporaryFileSetting.CleanupSetting.Frequency,
+                () => ExecuteTemporaryCleanupAsync(tenantId, temporaryFileSetting.CleanupSetting.BatchSize));
         }
         catch (Exception ex)
         {
@@ -95,16 +90,13 @@ public class CleanupJobManager(
     protected virtual async Task ScheduleOrUpdateTaskAsync(
         string taskPrefix,
         Guid? tenantId,
-        string enableSettingKey,
-        string frequencySettingKey,
-        int defaultFrequency,
+        bool enable,
+        int frequency,
         Func<Task> task)
     {
         var taskName = $"{taskPrefix}:{tenantId}";
-        var enable = await FileManagementConfigurationHelper.GetEnableAsync(SettingManager, enableSettingKey);
         var interval =
-            TimeSpan.FromMinutes(await FileManagementConfigurationHelper.GetFrequencyAsync(SettingManager,
-                frequencySettingKey, defaultFrequency));
+            TimeSpan.FromMinutes(frequency);
 
         await HandleTaskAsync(taskName, enable, interval, task);
     }
@@ -123,21 +115,14 @@ public class CleanupJobManager(
         }
     }
 
-    protected virtual async Task ExecuteDefaultUpdateAsync(Guid? tenantId)
+    protected virtual async Task ExecuteDefaultUpdateAsync(Guid? tenantId, int retentionPeriod, int batchSize)
     {
         try
         {
             var jobName =
                 await GetJobNameAsync(tenantId, nameof(DefaultRetentionPolicyUpdateJob) + ":" + "TemporaryFile");
-            await BackgroundJobManager.EnqueueAsync(tenantId,
-                jobName,
-                new DefaultRetentionPolicyUpdateJobArgs(tenantId, jobName,
-                    await FileManagementConfigurationHelper.GetRetentionPeriodAsync(SettingManager,
-                        FileManagementSettings.Default.UpdateRetentionPeriod,
-                        ResourceConsts.Default.UpdateRetentionPeriod),
-                    await FileManagementConfigurationHelper.GetBatchSizeAsync(SettingManager,
-                        FileManagementSettings.Default.UpdateBatchSize, ResourceConsts.Default.UpdateBatchSize)
-                ));
+            await BackgroundJobManager.EnqueueAsync(tenantId, jobName,
+                new DefaultRetentionPolicyUpdateJobArgs(tenantId, jobName, retentionPeriod, batchSize));
         }
         catch (Exception ex)
         {
@@ -145,17 +130,13 @@ public class CleanupJobManager(
         }
     }
 
-    protected virtual async Task ExecuteDefaultCleanupAsync(Guid? tenantId)
+    protected virtual async Task ExecuteDefaultCleanupAsync(Guid? tenantId, int batchSize)
     {
         try
         {
             var jobName = await GetJobNameAsync(tenantId, nameof(DefaultFileCleanupJob) + ":" + "DefaultFile");
-            await BackgroundJobManager.EnqueueAsync(tenantId,
-                jobName,
-                new DefaultFileCleanupJobArgs(tenantId, jobName,
-                    await FileManagementConfigurationHelper.GetBatchSizeAsync(SettingManager,
-                        FileManagementSettings.Default.CleanupBatchSize, ResourceConsts.Default.CleanupBatchSize)
-                ));
+            await BackgroundJobManager.EnqueueAsync(tenantId, jobName,
+                new DefaultFileCleanupJobArgs(tenantId, jobName, batchSize));
         }
         catch (Exception ex)
         {
@@ -163,21 +144,14 @@ public class CleanupJobManager(
         }
     }
 
-    protected virtual async Task ExecuteTemporaryUpdateAsync(Guid? tenantId)
+    protected virtual async Task ExecuteTemporaryUpdateAsync(Guid? tenantId, int retentionPeriod, int batchSize)
     {
         try
         {
             var jobName =
                 await GetJobNameAsync(tenantId, nameof(DefaultRetentionPolicyUpdateJob) + ":" + "TemporaryFile");
-            await BackgroundJobManager.EnqueueAsync(tenantId,
-                jobName,
-                new DefaultRetentionPolicyUpdateJobArgs(tenantId, jobName,
-                    await FileManagementConfigurationHelper.GetRetentionPeriodAsync(SettingManager,
-                        FileManagementSettings.Temporary.UpdateRetentionPeriod,
-                        ResourceConsts.Temporary.UpdateRetentionPeriod),
-                    await FileManagementConfigurationHelper.GetBatchSizeAsync(SettingManager,
-                        FileManagementSettings.Temporary.UpdateBatchSize, ResourceConsts.Temporary.UpdateBatchSize)
-                ));
+            await BackgroundJobManager.EnqueueAsync(tenantId, jobName,
+                new DefaultRetentionPolicyUpdateJobArgs(tenantId, jobName, retentionPeriod, batchSize));
         }
         catch (Exception ex)
         {
@@ -185,17 +159,13 @@ public class CleanupJobManager(
         }
     }
 
-    protected virtual async Task ExecuteTemporaryCleanupAsync(Guid? tenantId)
+    protected virtual async Task ExecuteTemporaryCleanupAsync(Guid? tenantId, int batchSize)
     {
         try
         {
             var jobName = await GetJobNameAsync(tenantId, nameof(DefaultFileCleanupJob) + ":" + "TemporaryFile");
-            await BackgroundJobManager.EnqueueAsync(tenantId,
-                jobName,
-                new DefaultFileCleanupJobArgs(tenantId, jobName,
-                    await FileManagementConfigurationHelper.GetBatchSizeAsync(SettingManager,
-                        FileManagementSettings.Temporary.CleanupBatchSize, ResourceConsts.Temporary.CleanupBatchSize)
-                ));
+            await BackgroundJobManager.EnqueueAsync(tenantId, jobName,
+                new DefaultFileCleanupJobArgs(tenantId, jobName, batchSize));
         }
         catch (Exception ex)
         {

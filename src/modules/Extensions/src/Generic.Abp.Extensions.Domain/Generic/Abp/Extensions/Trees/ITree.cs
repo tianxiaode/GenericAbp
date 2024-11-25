@@ -2,10 +2,15 @@
 using System;
 using System.Collections.Generic;
 using Volo.Abp.Domain.Entities;
+using Volo.Abp.MultiTenancy;
 
 namespace Generic.Abp.Extensions.Trees
 {
-    public interface ITree<TEntity> : IEntity<Guid>, ITree
+    public interface ITreeEntity : IEntity<Guid>, IMultiTenant, ITree
+    {
+    }
+
+    public interface ITree<TEntity> : ITreeEntity
         where TEntity : class, ITree<TEntity>
     {
         public TEntity? Parent { get; protected set; }

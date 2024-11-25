@@ -4,17 +4,12 @@ using Volo.Abp.Specifications;
 
 namespace Generic.Abp.Extensions.Trees
 {
-    public class ChildrenSpecification<TEntity> : Specification<TEntity> where TEntity : class, ITree<TEntity>
+    public class ChildrenSpecification<TEntity>(string code = "", Guid? parentId = null) : Specification<TEntity>
+        where TEntity : class, ITree<TEntity>
     {
-        public string Code { get; set; }
+        public string Code { get; set; } = code;
 
-        public Guid? ParentId { get; set; }
-
-        public ChildrenSpecification(string code = "", Guid? parentId = null)
-        {
-            Code = code;
-            ParentId = parentId;
-        }
+        public Guid? ParentId { get; set; } = parentId;
 
         public override Expression<Func<TEntity, bool>> ToExpression()
         {

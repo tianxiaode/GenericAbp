@@ -6,7 +6,13 @@ namespace Generic.Abp.FileManagement.Permissions
     {
         public const string GroupName = "FileManagement";
 
-        public static class Folders
+        public static class FileInfoBases
+        {
+            public const string Default = GroupName + ".FileInfoBases";
+            public const string ManageRetentionPolicy = Default + ".ManageRetentionPolicy";
+        }
+
+        public static class Resources
         {
             public const string Default = GroupName + ".Folders";
             public const string Create = Default + ".Create";

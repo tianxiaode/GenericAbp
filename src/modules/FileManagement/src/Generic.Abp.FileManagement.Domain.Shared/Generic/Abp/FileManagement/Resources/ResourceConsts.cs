@@ -8,9 +8,9 @@ public static class ResourceConsts
     public const string VirtualRootFolderName = "VIRTUAL";
 
     public static string DefaultStoragePath = "/files";
-    public static int DefaultMaxFileSize = 1024 * 1024 * 10;
+    public static int FolderCopyMaxNodeCount = 500;
 
-    public static class Public
+    public static class PublicFolder
     {
         public static string DefaultFileTypes =
             ".docx,.pdf,.xlsx,.pptx,.txt,.csv,.xml,.json,.html,.js,.css,.md,.jpg,.png,.gif,.zip,.rar,.7z";
@@ -19,7 +19,7 @@ public static class ResourceConsts
         public static string DefaultQuota = "1GB";
     }
 
-    public static class Shared
+    public static class SharedFolder
     {
         public const string DefaultFileTypes =
             ".docx,.pdf,.xlsx,.pptx,.txt,.csv,.xml,.json,.html,.js,.css,.md,.jpg,.png,.gif,.zip,.rar,.7z";
@@ -28,7 +28,7 @@ public static class ResourceConsts
         public static string DefaultQuota = "1GB";
     }
 
-    public static class User
+    public static class UserFolder
     {
         public static string DefaultFileTypes =
             ".docx,.pdf,.xlsx,.pptx,.txt,.csv,.xml,.json,.html,.js,.css,.md,.jpg,.png,.gif,.zip,.rar,.7z";
@@ -37,7 +37,7 @@ public static class ResourceConsts
         public static string DefaultQuota = "200MB";
     }
 
-    public static class Virtual
+    public static class VirtualPath
     {
         public static string DefaultFileTypes =
             ".docx,.pdf,.xlsx,.pptx,.txt,.csv,.xml,.json,.html,.js,.css,.md,.jpg,.png,.gif,.zip,.rar,.7z";
@@ -46,22 +46,40 @@ public static class ResourceConsts
         public static string DefaultQuota = "200MB";
     }
 
-    public static class Default
+    public static class DefaultFile
     {
-        public const int UpdateRetentionPeriod = 30;
-        public const int UpdateBatchSize = 1000;
-        public const int UpdateFrequency = 3600 * 12; //12 hours
-        public const int CleanupBatchSize = 1000;
-        public const int CleanupFrequency = 3600 * 24 * 15; //15 days
+        public static class Update
+        {
+            public const bool Enable = true;
+            public const int RetentionPeriod = 30;
+            public const int BatchSize = 1000;
+            public const int Frequency = 3600 * 36; //36 hours
+        }
+
+        public static class Cleanup
+        {
+            public const bool Enable = true;
+            public const int BatchSize = 1000;
+            public const int Frequency = 3600 * 24 * 15; //15 days
+        }
     }
 
-    public static class Temporary
+    public static class TemporaryFile
     {
-        public const int UpdateRetentionPeriod = 7;
-        public const int UpdateBatchSize = 1000;
-        public const int UpdateFrequency = 3600 * 12; //12 hours
-        public const int CleanupBatchSize = 1000;
-        public const int CleanupFrequency = 3600 * 24 * 7; //7 days
+        public static class Update
+        {
+            public const bool Enable = true;
+            public const int RetentionPeriod = 30;
+            public const int BatchSize = 1000;
+            public const int Frequency = 3600 * 12; //12 hours
+        }
+
+        public static class Cleanup
+        {
+            public const bool Enable = true;
+            public const int BatchSize = 1000;
+            public const int Frequency = 3600 * 24 * 7; //7 days
+        }
     }
 
 

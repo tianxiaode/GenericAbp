@@ -130,94 +130,6 @@ public class ResourceManager(
 
     #endregion
 
-    public virtual Task<bool> IsRooFolderAsync(Resource entity)
-    {
-        return Task.FromResult(entity.Name is ResourceConsts.PublicRootFolderName or ResourceConsts.UsersRootFolderName
-            or ResourceConsts.SharedRootFolderName
-        );
-    }
-
-    public virtual async Task<bool> IsPublicFolderAsync(Resource entity)
-    {
-        var publicRoot = await GetPublicRootFolderAsync();
-        return entity.Code.StartsWith(publicRoot.Code);
-    }
-
-    public virtual async Task<bool> IsUsersFolderAsync(Resource entity)
-    {
-        var privateRoot = await GetUsersRootFolderAsync();
-        return entity.Code.StartsWith(privateRoot.Code);
-    }
-
-    public virtual async Task<bool> IsSharedFolderAsync(Resource entity)
-    {
-        var sharedRoot = await GetSharedRootFolderAsync();
-        return entity.Code.StartsWith(sharedRoot.Code);
-    }
-
-    public virtual async Task<ResourceCacheItem> GetPublicRootFolderAsync()
-    {
-        return await GetRootFolderAsync(ResourceConsts.PublicRootFolderName);
-    }
-
-    public virtual async Task<ResourceCacheItem> GetSharedRootFolderAsync()
-    {
-        return await GetRootFolderAsync(ResourceConsts.SharedRootFolderName);
-    }
-
-    public virtual async Task<ResourceCacheItem> GetUsersRootFolderAsync()
-    {
-        return await GetRootFolderAsync(ResourceConsts.UsersRootFolderName);
-    }
-
-    public virtual async Task<ResourceCacheItem> GetRootFolderAsync(string folderName)
-    {
-        var tenantId = CurrentTenant.Id?.ToString() ?? "host";
-        var key = $"root_{folderName}_{tenantId}";
-        var resource = await Cache.GetAsync(key);
-        if (resource != null)
-        {
-            return resource;
-        }
-
-        var entity = await Repository.FirstOrDefaultAsync(m => m.Name == folderName);
-        if (entity == null)
-        {
-            throw new UserFriendlyException($"Root folder not found: {folderName}");
-        }
-
-        resource = new ResourceCacheItem(entity.Id, entity.Code, entity.Name);
-        await Cache.SetAsync(key, resource);
-
-        return resource;
-    }
-
-    public virtual async Task<Resource> GetUserRootFolderAsync(Guid userId)
-    {
-        var userRootFolderName = await GetUserRootFolderNameAsync(userId);
-        var entity = await Repository.FirstOrDefaultAsync(m => m.Name == userRootFolderName);
-        if (entity != null)
-        {
-            return entity;
-        }
-
-        var parent = await GetUsersRootFolderAsync();
-        entity = new Resource(GuidGenerator.Create(), userRootFolderName, ResourceType.Folder, false, CurrentTenant.Id);
-        var quotaStr = await SettingManager.GetOrNullForCurrentTenantAsync(FileManagementSettings.Users.DefaultQuota) ??
-                       ResourceConsts.User.DefaultQuota;
-        var maxFileSizeStr =
-            await SettingManager.GetOrNullForCurrentTenantAsync(FileManagementSettings.Users.DefaultFileMaxSize) ??
-            ResourceConsts.User.DefaultFileMaxSize;
-        var allowedFileTypesStr =
-            await SettingManager.GetOrNullForCurrentTenantAsync(FileManagementSettings.Users.DefaultFileTypes) ??
-            ResourceConsts.User.DefaultFileTypes;
-        entity.SetQuota(quotaStr.ParseToBytes());
-        entity.SetMaxFileSize(maxFileSizeStr.ParseToBytes());
-        entity.SetAllowedFileTypes(allowedFileTypesStr);
-        await CreateAsync(entity);
-
-        return entity;
-    }
 
     public virtual async Task<bool> IsOwnerAsync(Resource entity, Guid userId)
     {
@@ -232,37 +144,13 @@ public class ResourceManager(
         return parent.Name == folderName;
     }
 
-    public virtual Task<string> GetUserRootFolderNameAsync(Guid userId)
-    {
-        return Task.FromResult(ResourceConsts.UsersRootFolderName + "_" + userId);
-    }
 
-    public override async Task<Resource> CloneAsync(Resource source)
+    protected override Task<Resource> CloneAsync(Resource source)
     {
         var entity = new Resource(GuidGenerator.Create(), source.Name, ResourceType.Folder, source.IsStatic,
             source.TenantId);
-        // entity.SetQuota(source.GetQuota());
-        // entity.SetUsedSize(source.GetUsedSize());
-        // entity.SetMaxFileSize(source.GetMaxFileSize());
-
-        await DistributedEventBus.PublishAsync(
-            new ResourceCopyEto(source.Id, entity.Id, entity.TenantId)
-        );
-
-        return entity;
-    }
-
-    public virtual async Task MoveFilesAsync(Guid sourceFolderId, Guid destinationFolderId)
-    {
-        var sourceFolder = await GetAsync(sourceFolderId);
-        var destinationFolder = await GetAsync(destinationFolderId);
-
-        // var files = await Repository.GetFilesAsync(sourceFolder.Id);
-        // foreach (var file in files)
-        // {
-        //     //destinationFolder.AddFile(file.FileId);
-        // }
-
-        await Repository.UpdateAsync(destinationFolder);
+        entity.SetFileInfoBase(source.FileInfoBase);
+        entity.SetFolderId(source.FolderId);
+        return Task.FromResult(entity);
     }
 }

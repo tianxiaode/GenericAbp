@@ -1,7 +1,6 @@
-﻿using System;
+﻿using Generic.Abp.FileManagement.Resources;
+using System;
 using System.ComponentModel;
-using Generic.Abp.FileManagement.Resources;
-using Generic.Abp.FileManagement.VirtualPaths;
 using Volo.Abp.Validation;
 
 namespace Generic.Abp.FileManagement.Dtos;
