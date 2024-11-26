@@ -23,8 +23,8 @@ namespace Generic.Abp.FileManagement
         typeof(AbpIdentityDomainModule),
         typeof(GenericAbpExtensionsDomainModule),
         typeof(GenericAbpFileManagementDomainSharedModule),
-        typeof(AbpBackgroundJobsModule),
-        typeof(AbpDistributedLockingModule)
+        typeof(AbpBackgroundJobsModule)
+        //typeof(AbpDistributedLockingModule)
     )]
     public class GenericAbpFileManagementDomainModule : AbpModule
     {
@@ -32,7 +32,7 @@ namespace Generic.Abp.FileManagement
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<AbpDistributedLockOptions>(options => { options.KeyPrefix = "FileManagement"; });
+            //Configure<AbpDistributedLockOptions>(options => { options.KeyPrefix = "FileManagement"; });
 
             //context.Services.AddHostedService<ScheduledTaskHostService>();
         }

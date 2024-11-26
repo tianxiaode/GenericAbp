@@ -1,6 +1,11 @@
-﻿using Generic.Abp.ExternalAuthentication.AuthenticationProviderHandlers;
+﻿using AspNet.Security.OAuth.GitHub;
+using Generic.Abp.ExternalAuthentication.AuthenticationProviderHandlers;
 using Generic.Abp.ExternalAuthentication.Localization;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
+using System.Reflection.Metadata;
+using System.Text.Encodings.Web;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Caching;
@@ -14,6 +19,7 @@ using Volo.Abp.SettingManagement;
 using Volo.Abp.Validation;
 using Volo.Abp.Validation.Localization;
 using Volo.Abp.VirtualFileSystem;
+using static IdentityModel.ClaimComparer;
 
 namespace Generic.Abp.ExternalAuthentication;
 
@@ -63,7 +69,5 @@ public class GenericAbpExternalAuthenticationAspNetCoreModule : AbpModule
         {
             options.MapCodeNamespace("Generic.Abp.ExternalAuthentication", typeof(ExternalAuthenticationResource));
         });
-        context.Services.AddTransient<ExternalAuthenticationSettingManager>();
-        context.Services.AddSingleton(typeof(IOptionsMonitor<>), typeof(DynamicOAuthOptionsMonitor<>));
     }
 }

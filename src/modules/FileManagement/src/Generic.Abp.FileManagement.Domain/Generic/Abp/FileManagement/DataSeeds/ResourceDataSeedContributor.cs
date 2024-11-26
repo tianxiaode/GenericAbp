@@ -5,7 +5,7 @@ using Volo.Abp.DependencyInjection;
 namespace Generic.Abp.FileManagement.DataSeeds;
 
 public class ResourceDataSeedContributor(IResourceDataSeed resourceDataSeed)
-    : IDataSeedContributor, ITransientDependency
+
 {
     protected IResourceDataSeed ResourceDataSeed { get; } = resourceDataSeed;
 

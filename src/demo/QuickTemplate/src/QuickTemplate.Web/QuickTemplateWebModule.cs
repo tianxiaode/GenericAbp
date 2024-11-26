@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using AspNet.Security.OAuth.Gitee;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
 using Serilog.Core;
@@ -40,6 +41,8 @@ using OpenIddict.Server.AspNetCore;
 using Volo.Abp.PermissionManagement;
 using Microsoft.AspNetCore.Authentication.OAuth;
 using AspNet.Security.OAuth.GitHub;
+using Generic.Abp.ExternalAuthentication.AuthenticationProviderHandlers;
+using Microsoft.AspNetCore.Authentication.MicrosoftAccount;
 
 namespace QuickTemplate.Web;
 
@@ -163,24 +166,32 @@ public class QuickTemplateWebModule : AbpModule
 
     private void ConfigureExternalProviders(ServiceConfigurationContext context, IConfiguration configuration)
     {
+        context.Services.AddTransient<GitHubAuthenticationHandler>();
         context.Services.AddAuthentication()
-            .AddGitHub(options =>
-            {
-                options.ClientId = "ddd";
-                options.ClientSecret = "ddd";
-            })
-            .AddGitee(options =>
-            {
-                options.ClientId = configuration["Authentication:Gitee:ClientId"] ?? "";
-                options.ClientSecret = configuration["Authentication:Gitee:ClientSecret"] ?? "";
-            })
-            .AddMicrosoftAccount(options =>
-            {
-                options.ClientId =
-                    configuration["Authentication:Microsoft:ClientId"] ?? "";
-                options.ClientSecret =
-                    configuration["Authentication:Microsoft:ClientSecret"] ?? "";
-            });
+            .AddOAuth<GitHubAuthenticationOptions,
+                GitHubDynamicAuthenticationHandler>(
+                GitHubAuthenticationDefaults.AuthenticationScheme,
+                options =>
+                {
+                    options.ClientId = "Github";
+                    options.ClientSecret = "Github";
+                })
+            .AddOAuth<GiteeAuthenticationOptions,
+                GiteeDynamicAuthenticationHandler>(
+                GiteeAuthenticationDefaults.AuthenticationScheme,
+                options =>
+                {
+                    options.ClientId = "Gitee";
+                    options.ClientSecret = "Gitee";
+                })
+            .AddOAuth<MicrosoftAccountOptions,
+                MicrosoftAccountDynamicAuthenticationHandler>(
+                MicrosoftAccountDefaults.AuthenticationScheme,
+                options =>
+                {
+                    options.ClientId = "MicrosoftAccount";
+                    options.ClientSecret = "MicrosoftAccount";
+                });
     }
 
     private void ConfigureUrls(IConfiguration configuration)

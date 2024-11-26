@@ -10,6 +10,7 @@ import { LocalStorage } from "./LocalStorage";
 import { appConfig } from "./AppConfig";
 import { http } from "./http";
 import { envConfig } from "./EnvConfig";
+import TenantForm from "~/components/admins/tenants/TenantForm.vue";
 
 class Account {
     $className = "Account";
@@ -92,6 +93,7 @@ class Account {
             await this.userManager!.signinRedirect({
                 extraQueryParams: {
                     provider: provider,
+                    __tenant: LocalStorage.getTenant() as any
                 },
             });
         } catch (e: any) {

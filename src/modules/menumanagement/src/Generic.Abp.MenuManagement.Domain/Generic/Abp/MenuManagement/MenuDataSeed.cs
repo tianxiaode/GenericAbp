@@ -11,23 +11,19 @@ using Volo.Abp.Uow;
 
 namespace Generic.Abp.MenuManagement;
 
-public class MenuDataSeed : ITransientDependency, IMenuDataSeed
+public class MenuDataSeed(
+    IGuidGenerator guidGenerator,
+    IUnitOfWork currentUnitOfWork,
+    ILogger<IMenuDataSeed> logger,
+    MenuManager menuManager,
+    IUnitOfWorkManager unitOfWorkManager)
+    : ITransientDependency, IMenuDataSeed
 {
-    public MenuDataSeed(IGuidGenerator guidGenerator, IUnitOfWork currentUnitOfWork, ILogger<IMenuDataSeed> logger,
-        MenuManager menuManager, IUnitOfWorkManager unitOfWorkManager)
-    {
-        GuidGenerator = guidGenerator;
-        CurrentUnitOfWork = currentUnitOfWork;
-        Logger = logger;
-        MenuManager = menuManager;
-        UnitOfWorkManager = unitOfWorkManager;
-    }
-
-    protected IGuidGenerator GuidGenerator { get; }
-    protected MenuManager MenuManager { get; }
-    protected IUnitOfWork CurrentUnitOfWork { get; }
-    protected ILogger<IMenuDataSeed> Logger { get; }
-    protected IUnitOfWorkManager UnitOfWorkManager { get; }
+    protected IGuidGenerator GuidGenerator { get; } = guidGenerator;
+    protected MenuManager MenuManager { get; } = menuManager;
+    protected IUnitOfWork CurrentUnitOfWork { get; } = currentUnitOfWork;
+    protected ILogger<IMenuDataSeed> Logger { get; } = logger;
+    protected IUnitOfWorkManager UnitOfWorkManager { get; } = unitOfWorkManager;
 
     [UnitOfWork]
     public async Task SeedAsync(Guid? tenantId = null)

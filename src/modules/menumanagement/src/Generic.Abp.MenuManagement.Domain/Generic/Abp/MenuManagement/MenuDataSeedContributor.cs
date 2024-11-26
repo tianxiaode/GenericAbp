@@ -4,14 +4,9 @@ using Volo.Abp.DependencyInjection;
 
 namespace Generic.Abp.MenuManagement;
 
-public class MenuDataSeedContributor : IDataSeedContributor, ITransientDependency
+public class MenuDataSeedContributor(IMenuDataSeed menuDataSeed) : IDataSeedContributor, ITransientDependency
 {
-    protected IMenuDataSeed MenuDataSeed { get; }
-
-    public MenuDataSeedContributor(IMenuDataSeed menuDataSeed)
-    {
-        MenuDataSeed = menuDataSeed;
-    }
+    protected IMenuDataSeed MenuDataSeed { get; } = menuDataSeed;
 
     public virtual async Task SeedAsync(DataSeedContext context)
     {
