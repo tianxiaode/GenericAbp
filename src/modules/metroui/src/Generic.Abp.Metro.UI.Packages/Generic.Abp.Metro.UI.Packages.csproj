@@ -3,7 +3,7 @@
   <Import Project="..\..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>net8.0;net9.0</TargetFramework>
+    <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
     <AssemblyName>Generic.Abp.Metro.UI.Packages</AssemblyName>
     <PackageId>Generic.Abp.Metro.UI.Packages</PackageId>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>

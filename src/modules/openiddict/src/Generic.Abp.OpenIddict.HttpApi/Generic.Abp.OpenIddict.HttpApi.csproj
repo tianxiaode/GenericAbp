@@ -3,7 +3,8 @@
   <Import Project="..\..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>net8.0;net9.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <TargetFramework>net9.0</TargetFramework>
     <OutputType>Library</OutputType>
     <IsPackable>true</IsPackable>
     <ImplicitUsings>enable</ImplicitUsings>
