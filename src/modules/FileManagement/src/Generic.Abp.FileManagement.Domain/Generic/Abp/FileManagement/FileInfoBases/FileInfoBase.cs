@@ -26,6 +26,10 @@ public class FileInfoBase : AuditedEntity<Guid>, IFileInfoBase
     [DisplayName("File:ExpireAt")]
     public virtual DateTime? ExpireAt { get; protected set; }
 
+    public FileInfoBase()
+    {
+    }
+
     public FileInfoBase(Guid id, string hash, string mimeType, string fileType, long size, string path,
         Guid? tenantId = null) : base(id)
     {

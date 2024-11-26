@@ -21,8 +21,4 @@
     <ProjectReference Include="..\Generic.Abp.FileManagement.Domain\Generic.Abp.FileManagement.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Generic\Abp\FileManagement\VirtualPaths\" />
-  </ItemGroup>
-
 </Project>

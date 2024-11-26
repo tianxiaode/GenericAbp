@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Generic.Abp.FileManagement.FileInfoBases;
+using Generic.Abp.FileManagement.Resources;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Authorization;
 using Volo.Abp.Identity;
@@ -14,27 +16,27 @@ namespace Generic.Abp.FileManagement.Folders;
 
 //[Authorize]
 public class PersonalFolderAppService(
-    FolderManager folderManager,
-    IFolderRepository repository,
-    FileManager fileManager,
+    ResourceManager resourceManager,
+    IResourceRepository repository,
+    FileInfoBaseManager fileInfoBaseInfoBaseManager,
     IdentityUserManager userManager)
     : FileManagementAppService, IPersonalFolderAppService
 {
-    protected FolderManager FolderManager { get; } = folderManager;
-    protected IFolderRepository Repository { get; } = repository;
-    protected FileManager FileManager { get; } = fileManager;
+    protected ResourceManager ResourceManager { get; } = resourceManager;
+    protected IResourceRepository Repository { get; } = repository;
+    protected FileInfoBaseManager FileInfoBaseManager { get; } = fileInfoBaseInfoBaseManager;
     protected IdentityUserManager UserManager { get; } = userManager;
 
     public virtual async Task<ListResultDto<FolderDto>> GetRootFoldersAsync()
     {
         var folderDtos = new List<FolderDto>();
-        var publicRoot = await FolderManager.GetPublicRootFolderAsync();
+        var publicRoot = await ResourceManager.GetPublicRootFolderAsync();
         folderDtos.Add(new FolderDto(publicRoot.Id, publicRoot.Code, L[publicRoot.Name]));
 
-        var usersRoot = await FolderManager.GetUsersRootFolderAsync();
+        var usersRoot = await ResourceManager.GetUsersRootFolderAsync();
         folderDtos.Add(new FolderDto(usersRoot.Id, usersRoot.Code, L[usersRoot.Name]));
 
-        var sharedRoot = await FolderManager.GetSharedRootFolderAsync();
+        var sharedRoot = await ResourceManager.GetSharedRootFolderAsync();
         folderDtos.Add(new FolderDto(sharedRoot.Id, sharedRoot.Code, L[sharedRoot.Name]));
         return new ListResultDto<FolderDto>(folderDtos);
     }
@@ -42,91 +44,94 @@ public class PersonalFolderAppService(
     public virtual async Task<FolderDto> GetAsync(Guid id)
     {
         var folder = await CheckFolderPermission(id, canRead: true);
-        return ObjectMapper.Map<Folder, FolderDto>(folder);
+        return ObjectMapper.Map<Resource, FolderDto>(folder);
     }
 
     public virtual async Task<ListResultDto<FolderDto>> GetListAsync(FolderGetListInput input)
     {
-        var userId = GetUserId();
-
-        List<Folder> list = [];
-        if (!string.IsNullOrEmpty(input.Filter))
-        {
-            var publicRootFolder = await FolderManager.GetPublicRootFolderAsync();
-            var sharedRootFolder = await FolderManager.GetSharedRootFolderAsync();
-            var userRootFolder = await FolderManager.GetUserRootFolderAsync(userId);
-            var roles = await UserManager.GetRolesAsync(await UserManager.GetByIdAsync(userId));
-            list = await Repository.GetCanReadFoldersForUserAsync(m => m.Name.Contains(input.Filter),
-                publicRootFolder.Code, sharedRootFolder.Code, userRootFolder.Code, userId,
-                roles.ToList());
-        }
-        else if (input.FolderId.HasValue)
-        {
-            var folder = await CheckFolderPermission(input.FolderId.Value, canRead: true);
-            list = await Repository.GetListAsync(m => m.ParentId == folder.Id);
-        }
-
-        return new ListResultDto<FolderDto>(ObjectMapper.Map<List<Folder>, List<FolderDto>>(list));
+        throw new NotImplementedException();
+        // var userId = GetUserId();
+        //
+        // List<Resource> list = [];
+        // if (!string.IsNullOrEmpty(input.Filter))
+        // {
+        //     var publicRootFolder = await ResourceManager.GetPublicRootFolderAsync();
+        //     var sharedRootFolder = await ResourceManager.GetSharedRootFolderAsync();
+        //     var userRootFolder = await ResourceManager.GetUserRootFolderAsync(userId);
+        //     var roles = await UserManager.GetRolesAsync(await UserManager.GetByIdAsync(userId));
+        //     list = await Repository.GetCanReadFoldersForUserAsync(m => m.Name.Contains(input.Filter),
+        //         publicRootFolder.Code, sharedRootFolder.Code, userRootFolder.Code, userId,
+        //         roles.ToList());
+        // }
+        // else if (input.FolderId.HasValue)
+        // {
+        //     var folder = await CheckFolderPermission(input.FolderId.Value, canRead: true);
+        //     list = await Repository.GetListAsync(m => m.ParentId == folder.Id);
+        // }
+        //
+        // return new ListResultDto<FolderDto>(ObjectMapper.Map<List<Folder>, List<FolderDto>>(list));
     }
 
     #region Files
 
     public virtual async Task<PagedResultDto<FileDto>> GetFilesAsync(FileGetListInput input)
     {
-        var userId = GetUserId();
-        var predicate = await BuildFilePredicate(input);
-        var publicRootFolder = await FolderManager.GetPublicRootFolderAsync();
-        var sharedRootFolder = await FolderManager.GetSharedRootFolderAsync();
-        var userRootFolder = await FolderManager.GetUserRootFolderAsync(userId);
-        var roles = await UserManager.GetRolesAsync(await UserManager.GetByIdAsync(userId));
-        var count = await Repository.GetCanReadFilesCountForUserAsync(predicate, publicRootFolder.Code,
-            sharedRootFolder.Code, userRootFolder.Code, userId, roles.ToList());
-        var files = await Repository.GetCanReadFilesForUserAsync(predicate, publicRootFolder.Code,
-            sharedRootFolder.Code,
-            userRootFolder.Code, userId, roles.ToList(), input.Sorting, input.SkipCount, input.MaxResultCount);
-        return new PagedResultDto<FileDto>(count, ObjectMapper.Map<List<File>, List<FileDto>>(files));
+        throw new NotImplementedException();
+        // var userId = GetUserId();
+        // var predicate = await BuildFilePredicate(input);
+        // var publicRootFolder = await ResourceManager.GetPublicRootFolderAsync();
+        // var sharedRootFolder = await ResourceManager.GetSharedRootFolderAsync();
+        // var userRootFolder = await ResourceManager.GetUserRootFolderAsync(userId);
+        // var roles = await UserManager.GetRolesAsync(await UserManager.GetByIdAsync(userId));
+        // var count = await Repository.GetCanReadFilesCountForUserAsync(predicate, publicRootFolder.Code,
+        //     sharedRootFolder.Code, userRootFolder.Code, userId, roles.ToList());
+        // var files = await Repository.GetCanReadFilesForUserAsync(predicate, publicRootFolder.Code,
+        //     sharedRootFolder.Code,
+        //     userRootFolder.Code, userId, roles.ToList(), input.Sorting, input.SkipCount, input.MaxResultCount);
+        // return new PagedResultDto<FileDto>(count, ObjectMapper.Map<List<File>, List<FileDto>>(files));
     }
 
     #endregion
 
-    protected virtual async Task CheckFilePermission(File entity)
+    protected virtual async Task CheckFilePermission(Resource entity)
     {
-        if (entity.IsInheritPermissions)
-        {
-            return;
-        }
-
-        if (await FileManager.CadReadAsync(entity, CurrentUser.Id))
-        {
-            return;
-        }
-
-        throw new AbpAuthorizationException(L["AccessDenied"]);
+        throw new NotImplementedException();
+        // if (entity.IsInheritPermissions)
+        // {
+        //     return;
+        // }
+        //
+        // if (await FileInfoBaseManager.CadReadAsync(entity, CurrentUser.Id))
+        // {
+        //     return;
+        // }
+        //
+        // throw new AbpAuthorizationException(L["AccessDenied"]);
     }
 
-    protected virtual async Task<Folder> CheckFolderPermission(Guid id, bool canRead = false, bool canWrite = false,
+    protected virtual async Task<Resource> CheckFolderPermission(Guid id, bool canRead = false, bool canWrite = false,
         bool canDelete = false)
     {
-        var folder = await FolderManager.GetAsync(id);
+        var folder = await ResourceManager.GetAsync(id);
         if (!CurrentUser.Id.HasValue)
         {
             throw new AbpAuthorizationException(L["AccessDenied"]);
         }
 
-        if (await FolderManager.IsOwnerAsync(folder, CurrentUser.Id.Value))
+        if (await ResourceManager.IsOwnerAsync(folder, CurrentUser.Id.Value))
         {
             return folder;
         }
 
-        if (canWrite && await FolderManager.IsRooFolderAsync(folder))
+        if (canWrite && await ResourceManager.IsRooFolderAsync(folder))
         {
             throw new AbpAuthorizationException(L["AccessDenied"]);
         }
 
         var can =
-            canRead ? await FolderManager.CadWriteAsync(folder, CurrentUser.Id.Value) :
-            canWrite ? await FolderManager.CadWriteAsync(folder, CurrentUser.Id.Value) :
-            canDelete && await FolderManager.CadDeleteAsync(folder, CurrentUser.Id.Value);
+            canRead ? await ResourceManager.CadWriteAsync(folder, CurrentUser.Id.Value) :
+            canWrite ? await ResourceManager.CadWriteAsync(folder, CurrentUser.Id.Value) :
+            canDelete && await ResourceManager.CadDeleteAsync(folder, CurrentUser.Id.Value);
         if (can)
         {
             return folder;
@@ -135,9 +140,9 @@ public class PersonalFolderAppService(
         throw new AbpAuthorizationException(L["AccessDenied"]);
     }
 
-    protected virtual Task<Expression<Func<File, bool>>> BuildFilePredicate(FileGetListInput input)
+    protected virtual Task<Expression<Func<Resource, bool>>> BuildFilePredicate(FileGetListInput input)
     {
-        Expression<Func<File, bool>> predicate = m => true;
+        Expression<Func<Resource, bool>> predicate = m => true;
         if (input.FolderId.HasValue)
         {
             predicate = predicate.AndIfNotTrue(m => m.FolderId == input.FolderId);
@@ -145,7 +150,7 @@ public class PersonalFolderAppService(
 
         if (!string.IsNullOrEmpty(input.Filter))
         {
-            predicate = predicate.AndIfNotTrue(m => m.Filename.Contains(input.Filter));
+            predicate = predicate.AndIfNotTrue(m => m.Name.Contains(input.Filter));
         }
 
         if (input.StartTime.HasValue)
@@ -161,7 +166,7 @@ public class PersonalFolderAppService(
         if (!input.FileTypes.IsNullOrEmpty())
         {
             var types = input.FileTypes.Split(',').Select(m => m.Trim().ToLower()).ToList();
-            predicate = predicate.AndIfNotTrue(m => types.Contains(m.FileInfoBase.FileType));
+            predicate = predicate.AndIfNotTrue(m => types.Contains(m.FileInfoBase.Extension));
         }
 
         if (input.MinSize.HasValue)
