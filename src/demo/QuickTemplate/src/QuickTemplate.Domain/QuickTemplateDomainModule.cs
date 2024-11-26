@@ -5,10 +5,12 @@ using Generic.Abp.MenuManagement;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using QuickTemplate.MultiTenancy;
+using Volo.Abp.AuditLogging;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.Emailing;
 using Volo.Abp.FeatureManagement;
+using Volo.Abp.Identity;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
@@ -23,10 +25,10 @@ namespace QuickTemplate;
 
 [DependsOn(
     typeof(QuickTemplateDomainSharedModule),
-    //typeof(AbpAuditLoggingDomainModule),
+    typeof(AbpAuditLoggingDomainModule),
     typeof(AbpBackgroundJobsDomainModule),
     typeof(AbpFeatureManagementDomainModule),
-    //typeof(AbpIdentityDomainModule),
+    typeof(AbpIdentityDomainModule),
     typeof(AbpOpenIddictDomainModule),
     typeof(AbpPermissionManagementDomainOpenIddictModule),
     typeof(AbpPermissionManagementDomainIdentityModule),

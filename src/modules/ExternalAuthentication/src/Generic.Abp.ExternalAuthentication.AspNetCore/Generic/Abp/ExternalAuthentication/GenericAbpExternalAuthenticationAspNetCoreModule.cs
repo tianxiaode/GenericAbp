@@ -1,5 +1,6 @@
 ﻿using Generic.Abp.ExternalAuthentication.AuthenticationProviderHandlers;
 using Generic.Abp.ExternalAuthentication.Localization;
+using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Caching;
@@ -63,10 +64,7 @@ public class GenericAbpExternalAuthenticationAspNetCoreModule : AbpModule
             options.MapCodeNamespace("Generic.Abp.ExternalAuthentication", typeof(ExternalAuthenticationResource));
         });
 
-        context.Services.AddTransient<IExternalAuthenticationProviderHandler, GitHubAuthenticationProviderHandler>();
-        context.Services.AddTransient<IExternalAuthenticationProviderHandler, GiteeAuthenticationProviderHandler>();
-        context.Services
-            .AddTransient<IExternalAuthenticationProviderHandler, MicrosoftAccountAuthenticationProviderHandler>();
-        context.Services.AddHostedService<ExternalProviderUpdaterService>();
+        // context.Services.AddTransient<ExternalAuthenticationSettingManager>();
+        // context.Services.AddSingleton(typeof(IOptionsMonitor<>), typeof(DynamicOAuthOptionsMonitor<>));
     }
 }
