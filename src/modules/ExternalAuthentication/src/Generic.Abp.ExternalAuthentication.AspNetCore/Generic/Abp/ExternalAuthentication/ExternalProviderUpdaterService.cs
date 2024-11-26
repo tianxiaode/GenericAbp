@@ -1,19 +1,27 @@
-﻿namespace Generic.Abp.ExternalAuthentication;
+﻿using Volo.Abp.EventBus.Distributed;
 
-public class ExternalProviderUpdaterService : IHostedService
+namespace Generic.Abp.ExternalAuthentication;
+
+public class ExternalProviderUpdaterService(
+    IDistributedEventBus eventBus,
+    ILogger<ExternalProviderUpdaterService> logger) : IHostedService
 {
-    public ExternalProviderUpdaterService(IServiceProvider serviceProvider)
-    {
-        ServiceProvider = serviceProvider;
-    }
-
-    protected IServiceProvider ServiceProvider { get; }
+    protected IDistributedEventBus EventBus { get; } = eventBus;
+    protected ILogger<ExternalProviderUpdaterService> Logger { get; } = logger;
 
     public async Task StartAsync(CancellationToken cancellationToken)
     {
-        using var scope = ServiceProvider.CreateScope();
-        var handler = scope.ServiceProvider.GetRequiredService<ExternalProviderChangedHandler>();
-        await handler.HandleEventAsync(new ExternalProviderChangedEto());
+        Logger.LogInformation("Publishing external provider changed event...");
+        try
+        {
+            await EventBus.PublishAsync(new ExternalProviderChangedEto());
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Failed to publish event");
+        }
+
+        Logger.LogInformation("External provider changed event published.");
     }
 
     public Task StopAsync(CancellationToken cancellationToken)

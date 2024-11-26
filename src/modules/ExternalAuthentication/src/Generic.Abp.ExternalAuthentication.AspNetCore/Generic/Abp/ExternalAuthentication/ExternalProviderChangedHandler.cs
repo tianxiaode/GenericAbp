@@ -4,21 +4,18 @@ using Volo.Abp.EventBus.Distributed;
 
 namespace Generic.Abp.ExternalAuthentication;
 
-public class ExternalProviderChangedHandler : IDistributedEventHandler<ExternalProviderChangedEto>,
-    ITransientDependency
+public class ExternalProviderChangedHandler(
+    ILogger<ExternalProviderChangedHandler> logger,
+    IEnumerable<IExternalAuthenticationProviderHandler> providerHandlers,
+    IExternalAuthenticationSettingManager externalAuthenticationSettingManager)
+    : IDistributedEventHandler<ExternalProviderChangedEto>,
+        ITransientDependency
 {
-    public ExternalProviderChangedHandler(ILogger<ExternalProviderChangedHandler> logger,
-        IEnumerable<IExternalAuthenticationProviderHandler> providerHandlers,
-        IExternalAuthenticationSettingManager externalAuthenticationSettingManager)
-    {
-        Logger = logger;
-        ProviderHandlers = providerHandlers;
-        ExternalAuthenticationSettingManager = externalAuthenticationSettingManager;
-    }
+    protected ILogger<ExternalProviderChangedHandler> Logger { get; } = logger;
+    protected IEnumerable<IExternalAuthenticationProviderHandler> ProviderHandlers { get; } = providerHandlers;
 
-    protected ILogger<ExternalProviderChangedHandler> Logger { get; }
-    protected IEnumerable<IExternalAuthenticationProviderHandler> ProviderHandlers { get; }
-    protected IExternalAuthenticationSettingManager ExternalAuthenticationSettingManager { get; }
+    protected IExternalAuthenticationSettingManager ExternalAuthenticationSettingManager { get; } =
+        externalAuthenticationSettingManager;
 
     public async Task HandleEventAsync(ExternalProviderChangedEto eventData)
     {

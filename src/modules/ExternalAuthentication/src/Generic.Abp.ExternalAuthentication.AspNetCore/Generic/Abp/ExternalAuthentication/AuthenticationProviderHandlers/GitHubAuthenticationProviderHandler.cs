@@ -1,31 +1,24 @@
 ﻿using AspNet.Security.OAuth.GitHub;
-using Generic.Abp.ExternalAuthentication.dtos;
 using Microsoft.Extensions.Options;
+using System.Text.Encodings.Web;
 
 namespace Generic.Abp.ExternalAuthentication.AuthenticationProviderHandlers;
 
-public class GitHubAuthenticationProviderHandler : IExternalAuthenticationProviderHandler
+public class GitHubAuthenticationProviderHandler : GitHubAuthenticationHandler
 {
-    public GitHubAuthenticationProviderHandler(IOptionsMonitor<GitHubAuthenticationOptions> options)
+    public GitHubAuthenticationProviderHandler(IOptionsMonitor<GitHubAuthenticationOptions> options,
+        ILoggerFactory logger, UrlEncoder encoder,
+        ExternalAuthenticationSettingManager externalAuthenticationSettingManager) : base(options, logger, encoder)
     {
-        Options = options;
-    }
-
-    public string Scheme => GitHubAuthenticationDefaults.AuthenticationScheme;
-
-    protected IOptionsMonitor<GitHubAuthenticationOptions> Options { get; }
-
-    public Task UpdateOptionsAsync(ExternalProviderDto? provider)
-    {
-        if (provider is { Enabled: false } || string.IsNullOrEmpty(provider?.ClientId) ||
-            string.IsNullOrEmpty(provider.ClientSecret))
+        var provider =
+            externalAuthenticationSettingManager.GetProviderAsync(GitHubAuthenticationDefaults.AuthenticationScheme)
+                .GetAwaiter().GetResult();
+        if (!provider.Enabled)
         {
-            return Task.CompletedTask;
+            return;
         }
 
-        var options = Options.Get(GitHubAuthenticationDefaults.AuthenticationScheme);
-        options.ClientId = provider.ClientId;
-        options.ClientSecret = provider.ClientSecret;
-        return Task.CompletedTask;
+        options.CurrentValue.ClientId = provider.ClientId;
+        options.CurrentValue.ClientSecret = provider.ClientSecret;
     }
 }

@@ -2,7 +2,7 @@
   <PropertyGroup>
 
     <AbpVersion>9.0.0</AbpVersion>
-		<SerilogExtensionsLoggingVersion>9.0.0</SerilogExtensionsLoggingVersion>
+		<SerilogExtensionsLoggingVersion>8.0.0</SerilogExtensionsLoggingVersion>
     <SerilogSinksAsyncVersion>2.0.0</SerilogSinksAsyncVersion>
     <SerilogSinksFileAndConsoleVersion>6.0.0</SerilogSinksFileAndConsoleVersion>
     <MicrosoftExtensionsHostingVersion>9.0.0.0</MicrosoftExtensionsHostingVersion>

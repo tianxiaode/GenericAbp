@@ -33,6 +33,7 @@ namespace Generic.Abp.FileManagement
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             Configure<AbpDistributedLockOptions>(options => { options.KeyPrefix = "FileManagement"; });
+
             context.Services.AddHostedService<ScheduledTaskHostService>();
         }
     }
