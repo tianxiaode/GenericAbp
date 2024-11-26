@@ -117,8 +117,9 @@ public class ResourceManagerBase(
 
         var parent = await GetUsersRootFolderAsync();
         entity = new Resource(GuidGenerator.Create(), userRootFolderName, ResourceType.Folder, true, CurrentTenant.Id);
-        var quotaStr = await SettingManager.GetOrNullForCurrentTenantAsync(FileManagementSettings.Users.DefaultQuota) ??
-                       ResourceConsts.UserFolder.DefaultQuota;
+        var quotaStr =
+            await SettingManager.GetOrNullForCurrentTenantAsync(FileManagementSettings.UserFolder..DefaultQuota) ??
+            ResourceConsts.UserFolder.DefaultQuota;
         var maxFileSizeStr =
             await SettingManager.GetOrNullForCurrentTenantAsync(FileManagementSettings.Users.DefaultFileMaxSize) ??
             ResourceConsts.UserFolder.DefaultFileMaxSize;

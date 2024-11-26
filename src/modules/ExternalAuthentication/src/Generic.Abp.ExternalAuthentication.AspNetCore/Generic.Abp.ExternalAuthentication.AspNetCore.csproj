@@ -2,6 +2,7 @@
   <Import Project="..\..\..\..\common.props" />
 
   <PropertyGroup>
+    <LangVersion>latest</LangVersion>
     <TargetFramework>net8.0</TargetFramework>
     <OutputType>Library</OutputType>
     <IsPackable>true</IsPackable>

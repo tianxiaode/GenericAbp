@@ -9,8 +9,8 @@ namespace Generic.Abp.FileManagement.Folders;
 
 public interface IPersonalFolderAppService : IApplicationService
 {
-    Task<ListResultDto<FolderDto>> GetRootFoldersAsync();
-    Task<FolderDto> GetAsync(Guid id);
-    Task<ListResultDto<FolderDto>> GetListAsync(FolderGetListInput input);
-    Task<PagedResultDto<FileDto>> GetFilesAsync(FileGetListInput input);
+    // Task<ListResultDto<FolderDto>> GetRootFoldersAsync();
+    // Task<FolderDto> GetAsync(Guid id);
+    // Task<ListResultDto<FolderDto>> GetListAsync(FolderGetListInput input);
+    // Task<PagedResultDto<FileDto>> GetFilesAsync(FileGetListInput input);
 }

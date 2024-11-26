@@ -85,6 +85,19 @@ public class ExternalAuthenticationSettingManager : IExternalAuthenticationSetti
         return result;
     }
 
+    public virtual async Task<ExternalProviderDto> GetProviderAsync(string scheme)
+    {
+        var providerString = await SettingManager.GetOrNullForCurrentTenantAsync(
+            ExternalAuthenticationSettingNames.Provider.ProviderPrefix + scheme);
+
+        var provider = string.IsNullOrEmpty(providerString)
+            ? new ExternalProviderDto(scheme, L[scheme] ?? "", "", "", false)
+            : System.Text.Json.JsonSerializer.Deserialize<ExternalProviderDto>(providerString) ??
+              new ExternalProviderDto(scheme, L[scheme] ?? "", "", "", false);
+
+        return provider;
+    }
+
     public virtual async Task UpdateAsync(ExternalSettingUpdateDto input)
     {
         await SettingManager.SetForCurrentTenantAsync(
