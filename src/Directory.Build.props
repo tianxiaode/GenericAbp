@@ -1,22 +1,18 @@
 ﻿<Project>
   <PropertyGroup>
 
-    <AbpVersion>8.3.1</AbpVersion>
-		<SerilogExtensionsLoggingVersion>8.0.0</SerilogExtensionsLoggingVersion>
+    <AbpVersion>9.0.0</AbpVersion>
+		<SerilogExtensionsLoggingVersion>9.0.0</SerilogExtensionsLoggingVersion>
     <SerilogSinksAsyncVersion>2.0.0</SerilogSinksAsyncVersion>
     <SerilogSinksFileAndConsoleVersion>6.0.0</SerilogSinksFileAndConsoleVersion>
-    <MicrosoftExtensionsHostingVersion>8.0.1</MicrosoftExtensionsHostingVersion>
-    <MicrosoftExtensionsHttpPollyVersion>8.0.10</MicrosoftExtensionsHttpPollyVersion>
-    <MicrosoftExtensionsFileProvidersEmbeddedVersion>8.0.10</MicrosoftExtensionsFileProvidersEmbeddedVersion>
-    <AspNetCoreHealthChecksVersion>8.0.2</AspNetCoreHealthChecksVersion>
-    <AspNetCoreHealthChecksClientVersion>8.0.1</AspNetCoreHealthChecksClientVersion>
-    <AspNetCoreHealthChecksUIInMemoryStorage>8.0.1</AspNetCoreHealthChecksUIInMemoryStorage>
-    <MicrosoftEntityFrameworkCoreVersion>8.0.0</MicrosoftEntityFrameworkCoreVersion>
-    <MicrosoftEntityFrameworkCoreToolsVersion>8.0.10</MicrosoftEntityFrameworkCoreToolsVersion>
-    <MicrosoftEntityFrameworkCoreInMemoryVersion>8.0.10</MicrosoftEntityFrameworkCoreInMemoryVersion>
-    <MicrosoftAspNetCoreAuthenticationVersion>8.0.0</MicrosoftAspNetCoreAuthenticationVersion>
+    <MicrosoftExtensionsHostingVersion>9.0.0.0</MicrosoftExtensionsHostingVersion>
+    <MicrosoftExtensionsHttpPollyVersion>9.0.0.0</MicrosoftExtensionsHttpPollyVersion>
+    <MicrosoftExtensionsFileProvidersEmbeddedVersion>9.0.0.0</MicrosoftExtensionsFileProvidersEmbeddedVersion>
+    <MicrosoftEntityFrameworkCoreVersion>9.0.0.0</MicrosoftEntityFrameworkCoreVersion>
+    <MicrosoftEntityFrameworkCoreToolsVersion>9.0.0.0</MicrosoftEntityFrameworkCoreToolsVersion>
+    <MicrosoftEntityFrameworkCoreInMemoryVersion>9.0.0.0</MicrosoftEntityFrameworkCoreInMemoryVersion>
+    <MicrosoftAspNetCoreAuthenticationVersion>9.0.0.0</MicrosoftAspNetCoreAuthenticationVersion>
     <SerilogAspNetCoreVersion>8.0.2</SerilogAspNetCoreVersion>
-    <LeptonXVersion>3.1.*-*</LeptonXVersion>
     <TestSdkVersion>17.11.1</TestSdkVersion>
     <NSubstituteVersion>5.1.0</NSubstituteVersion>
     <NSubstituteAnalyzersCSharpVersion>1.0.17</NSubstituteAnalyzersCSharpVersion>
@@ -24,11 +20,9 @@
     <XunitVersion>2.9.2</XunitVersion>
     <XunitExtensibilityExecutionVersion>2.9.2</XunitExtensibilityExecutionVersion>
     <XunitRrunnerVisualstudioVersion>2.8.2</XunitRrunnerVisualstudioVersion>
-    <HtmlAgilityPackVersion>1.11.54</HtmlAgilityPackVersion>
-    <MicrosoftDataSqliteVersion>8.0.0</MicrosoftDataSqliteVersion>
-    <OAuthGitHubVersion>8.2.0</OAuthGitHubVersion>
+    <MicrosoftDataSqliteVersion>9.0.0.0</MicrosoftDataSqliteVersion>
+    <OAuthGitHubVersion>9.0.0</OAuthGitHubVersion>
     <OpenIddictVersion>5.8.0</OpenIddictVersion>
-    <MicrosoftAccount>8.0.10</MicrosoftAccount>
-    <MicrosoftAspNetCoreDataProtectionVersion>8.0.10</MicrosoftAspNetCoreDataProtectionVersion>
+    <MicrosoftAccount>9.0.0</MicrosoftAccount>
   </PropertyGroup>
 </Project>

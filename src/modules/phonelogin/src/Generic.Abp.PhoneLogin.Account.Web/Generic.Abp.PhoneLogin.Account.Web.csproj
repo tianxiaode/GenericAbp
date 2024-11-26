@@ -3,7 +3,7 @@
   <Import Project="..\..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net8.0;net9.0</TargetFramework>
     <AssemblyName>Generic.Abp.PhoneLogin.Account.Web</AssemblyName>
     <PackageId>Generic.Abp.PhoneLogin.Account.Web</PackageId>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>

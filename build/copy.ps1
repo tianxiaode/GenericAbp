@@ -24,6 +24,11 @@ foreach($project in $projects) {
 			$framework = "net8.0"
 			$dllFolder = Join-Path $projectFolder $framework
 		} 
+	if(!(Test-Path $dllFolder))
+		{
+			$framework = "net9.0"
+			$dllFolder = Join-Path $projectFolder $framework
+		} 
 	$projectName = $project.Substring($project.LastIndexOf("/") + 1)
 	$dllFile = Join-Path $dllFolder ($projectName + ".dll")
 	$pdbFile = Join-Path $dllFolder ($projectName + ".pdb")
