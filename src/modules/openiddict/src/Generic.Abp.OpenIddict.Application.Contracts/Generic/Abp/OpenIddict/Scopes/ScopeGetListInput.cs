@@ -1,4 +1,5 @@
-﻿using Volo.Abp.Application.Dtos;
+﻿using System;
+using Volo.Abp.Application.Dtos;
 
 namespace Generic.Abp.OpenIddict.Scopes
 {

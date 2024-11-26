@@ -9,9 +9,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\modules\AuditLogging\src\Generic.Abp.AuditLogging.EntityFrameworkCore\Generic.Abp.AuditLogging.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\..\..\..\modules\FileManagement\src\Generic.Abp.FileManagement.EntityFrameworkCore\Generic.Abp.FileManagement.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\..\..\..\modules\identity\src\Generic.Abp.Identity.EntityFrameworkCore\Generic.Abp.Identity.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\..\..\..\modules\menumanagement\src\Generic.Abp.MenuManagement.EntityFrameworkCore\Generic.Abp.MenuManagement.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\QuickTemplate.Domain\QuickTemplate.Domain.csproj" />
-    <PackageReference Include="Volo.Abp.EntityFrameworkCore.MySQL" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.EntityFrameworkCore.SqlServer" Version="$(AbpVersion)" />
     <PackageReference Include="Volo.Abp.PermissionManagement.EntityFrameworkCore" Version="$(AbpVersion)" />
     <PackageReference Include="Volo.Abp.SettingManagement.EntityFrameworkCore" Version="$(AbpVersion)" />
     <PackageReference Include="Volo.Abp.Identity.EntityFrameworkCore" Version="$(AbpVersion)" />

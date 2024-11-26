@@ -34,7 +34,7 @@ namespace Generic.Abp.FileManagement
         {
             Configure<AbpDistributedLockOptions>(options => { options.KeyPrefix = "FileManagement"; });
 
-            context.Services.AddHostedService<ScheduledTaskHostService>();
+            //context.Services.AddHostedService<ScheduledTaskHostService>();
         }
     }
 }

@@ -163,7 +163,7 @@ public class QuickTemplateWebModule : AbpModule
 
     private void ConfigureExternalProviders(ServiceConfigurationContext context, IConfiguration configuration)
     {
-        context.Services.AddAuthentication().AddScheme<GitHubAuthenticationOptions, GitHubAuthenticationHandler>()
+        context.Services.AddAuthentication()
             .AddGitHub(options =>
             {
                 options.ClientId = "ddd";

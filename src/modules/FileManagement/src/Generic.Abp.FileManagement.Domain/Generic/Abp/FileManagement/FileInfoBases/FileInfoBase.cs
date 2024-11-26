@@ -28,6 +28,12 @@ public class FileInfoBase : AuditedEntity<Guid>, IFileInfoBase
 
     public FileInfoBase()
     {
+        RetentionPolicy = FileRetentionPolicy.Default;
+        ExpireAt = default!;
+        MimeType = default!;
+        Extension = default!;
+        Hash = default!;
+        Path = default!;
     }
 
     public FileInfoBase(Guid id, string hash, string mimeType, string fileType, long size, string path,

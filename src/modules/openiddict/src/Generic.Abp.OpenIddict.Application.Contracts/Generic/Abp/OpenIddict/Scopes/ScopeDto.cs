@@ -1,4 +1,6 @@
-﻿using Volo.Abp.Application.Dtos;
+﻿using System;
+using System.Collections.Generic;
+using Volo.Abp.Application.Dtos;
 using Volo.Abp.Domain.Entities;
 
 namespace Generic.Abp.OpenIddict.Scopes

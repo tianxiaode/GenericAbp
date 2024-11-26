@@ -1,4 +1,6 @@
-﻿namespace Generic.Abp.OpenIddict.Applications
+﻿using System;
+
+namespace Generic.Abp.OpenIddict.Applications
 {
     [Serializable]
     public class ApplicationCreateInput : ApplicationCreateOrUpdateInput

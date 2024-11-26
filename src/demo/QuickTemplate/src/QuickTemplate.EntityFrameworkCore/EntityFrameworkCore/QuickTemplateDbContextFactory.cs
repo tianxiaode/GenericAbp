@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
@@ -15,10 +16,15 @@ public class QuickTemplateDbContextFactory : IDesignTimeDbContextFactory<QuickTe
 
         var configuration = BuildConfiguration();
 
+        // var builder =
+        //     new DbContextOptionsBuilder<QuickTemplateDbContext>(new DbContextOptions<QuickTemplateDbContext>())
+        //         .UseMySql(configuration.GetConnectionString("Default"),
+        //             ServerVersion.Create(new Version(10, 5, 8),
+        //                 Pomelo.EntityFrameworkCore.MySql.Infrastructure.ServerType.MariaDb),
+        //             options => options.EnableStringComparisonTranslations());
         var builder =
             new DbContextOptionsBuilder<QuickTemplateDbContext>(new DbContextOptions<QuickTemplateDbContext>())
-                .UseMySql(configuration.GetConnectionString("Default"), MySqlServerVersion.LatestSupportedServerVersion,
-                    options => options.EnableStringComparisonTranslations());
+                .UseSqlServer(configuration.GetConnectionString("Default"));
 
         return new QuickTemplateDbContext(builder.Options);
     }

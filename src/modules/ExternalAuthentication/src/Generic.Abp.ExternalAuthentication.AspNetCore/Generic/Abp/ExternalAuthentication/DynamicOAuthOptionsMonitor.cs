@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.Extensions.Options;
-using Volo.Abp.SettingManagement;
 
 namespace Generic.Abp.ExternalAuthentication;
 
