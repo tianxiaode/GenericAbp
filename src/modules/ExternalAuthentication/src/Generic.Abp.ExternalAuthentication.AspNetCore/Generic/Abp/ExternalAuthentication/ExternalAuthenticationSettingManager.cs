@@ -55,9 +55,11 @@ public class ExternalAuthenticationSettingManager : IExternalAuthenticationSetti
         var dto = new ExternalSettingDto
         {
             NewUserPrefix = await SettingManager.GetOrNullForCurrentTenantAsync(
-                ExternalAuthenticationSettingNames.NewUser.NewUserPrefix) ?? "",
+                                ExternalAuthenticationSettingNames.NewUser.NewUserPrefix) ??
+                            ExternalAuthenticationConsts.DefaultNewUserPrefix,
             NewUserEmailSuffix = await SettingManager.GetOrNullForCurrentTenantAsync(
-                ExternalAuthenticationSettingNames.NewUser.NewUserEmailSuffix) ?? "",
+                                     ExternalAuthenticationSettingNames.NewUser.NewUserEmailSuffix) ??
+                                 ExternalAuthenticationConsts.DefaultNewUserEmail,
             Providers = await GetProvidersAsync()
         };
         return dto;

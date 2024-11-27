@@ -1,11 +1,4 @@
-﻿using AspNet.Security.OAuth.GitHub;
-using Generic.Abp.ExternalAuthentication.AuthenticationProviderHandlers;
-using Generic.Abp.ExternalAuthentication.Localization;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Options;
-using System.Reflection.Metadata;
-using System.Text.Encodings.Web;
+﻿using Generic.Abp.ExternalAuthentication.Localization;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Caching;
@@ -19,7 +12,6 @@ using Volo.Abp.SettingManagement;
 using Volo.Abp.Validation;
 using Volo.Abp.Validation.Localization;
 using Volo.Abp.VirtualFileSystem;
-using static IdentityModel.ClaimComparer;
 
 namespace Generic.Abp.ExternalAuthentication;
 

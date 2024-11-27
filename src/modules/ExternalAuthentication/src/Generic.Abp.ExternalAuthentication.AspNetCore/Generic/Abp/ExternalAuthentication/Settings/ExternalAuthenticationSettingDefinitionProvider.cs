@@ -1,19 +1,14 @@
 ﻿using Generic.Abp.ExternalAuthentication.Localization;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.DataProtection;
 using Volo.Abp.Localization;
 using Volo.Abp.Settings;
 
 namespace Generic.Abp.ExternalAuthentication.Settings;
 
-public class ExternalAuthenticationSettingDefinitionProvider : SettingDefinitionProvider
+public class ExternalAuthenticationSettingDefinitionProvider(IAuthenticationSchemeProvider schemeProvider)
+    : SettingDefinitionProvider
 {
-    protected readonly IAuthenticationSchemeProvider SchemeProvider;
-
-    public ExternalAuthenticationSettingDefinitionProvider(IAuthenticationSchemeProvider schemeProvider)
-    {
-        SchemeProvider = schemeProvider;
-    }
+    protected readonly IAuthenticationSchemeProvider SchemeProvider = schemeProvider;
 
     public override void Define(ISettingDefinitionContext context)
     {

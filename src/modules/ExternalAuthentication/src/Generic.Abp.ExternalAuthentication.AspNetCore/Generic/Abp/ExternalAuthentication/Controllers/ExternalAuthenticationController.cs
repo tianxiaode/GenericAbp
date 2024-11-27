@@ -136,10 +136,10 @@ namespace Generic.Abp.ExternalAuthentication.Controllers
             {
                 var prefix =
                     await SettingManager.GetOrNullForCurrentTenantAsync(ExternalAuthenticationSettingNames.NewUser
-                        .NewUserPrefix) ?? "NewUser-";
+                        .NewUserPrefix) ?? ExternalAuthenticationConsts.DefaultNewUserPrefix;
                 var newUserEmail = await SettingManager.GetOrNullForCurrentTenantAsync(
                     ExternalAuthenticationSettingNames.NewUser
-                        .NewUserEmailSuffix) ?? "@quicktemplate.com";
+                        .NewUserEmailSuffix) ?? ExternalAuthenticationConsts.DefaultNewUserEmail;
                 email = prefix + Guid.NewGuid().ToString("N") + newUserEmail;
             }
 
