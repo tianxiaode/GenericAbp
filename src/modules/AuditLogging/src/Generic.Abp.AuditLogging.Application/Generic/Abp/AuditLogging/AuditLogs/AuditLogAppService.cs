@@ -11,14 +11,9 @@ namespace Generic.Abp.AuditLogging.AuditLogs;
 [RemoteService(false)]
 [Authorize(AuditLoggingPermissions.AuditLogs)]
 [DisableAuditing]
-public class AuditLogAppService : AuditLoggingAppService, IAuditLogAppService
+public class AuditLogAppService(IAuditLogExtensionRepository repository) : AuditLoggingAppService, IAuditLogAppService
 {
-    public AuditLogAppService(IAuditLogExtensionRepository repository)
-    {
-        Repository = repository;
-    }
-
-    protected IAuditLogExtensionRepository Repository { get; }
+    protected IAuditLogExtensionRepository Repository { get; } = repository;
 
 
     public virtual async Task<AuditLogDto> GetAsync(Guid id)
@@ -38,7 +33,8 @@ public class AuditLogAppService : AuditLoggingAppService, IAuditLogAppService
         }
 
         var securityLogs =
-            await Repository.GetListAsync(predicate, input.Sorting, input.MaxResultCount, input.SkipCount);
+            await Repository.GetListAsync(predicate, GetDefaultSorting(input.Sorting), input.MaxResultCount,
+                input.SkipCount);
         return new PagedResultDto<AuditLogDto>(totalCount,
             ObjectMapper.Map<List<AuditLog>, List<AuditLogDto>>(securityLogs));
     }
@@ -103,5 +99,10 @@ public class AuditLogAppService : AuditLoggingAppService, IAuditLogAppService
             .Where(m => !string.IsNullOrEmpty(m))
             .WhereIf(!string.IsNullOrEmpty(filter), m => m.Contains(filter!, StringComparison.OrdinalIgnoreCase))
             .ToList());
+    }
+
+    protected virtual string GetDefaultSorting(string? sorting)
+    {
+        return string.IsNullOrEmpty(sorting) ? $"{nameof(AuditLog.ExecutionTime)} desc" : sorting;
     }
 }

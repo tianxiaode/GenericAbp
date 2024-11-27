@@ -6,7 +6,7 @@ namespace Generic.Abp.AuditLogging
 {
     [DependsOn(
         typeof(AbpAuditLoggingDomainModule),
-        typeof(GenericAbpExtensionsModule)
+        typeof(GenericAbpExtensionsDomainModule)
     )]
     public class GenericAbpAuditLoggingDomainModule : AbpModule
     {

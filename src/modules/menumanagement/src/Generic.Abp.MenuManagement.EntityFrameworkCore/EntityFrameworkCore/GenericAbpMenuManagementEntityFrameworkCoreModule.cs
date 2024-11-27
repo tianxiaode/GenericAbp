@@ -1,7 +1,11 @@
-﻿using Generic.Abp.Extensions.EntityFrameworkCore;
+﻿using System;
+using System.Linq;
+using Generic.Abp.Extensions.EntityFrameworkCore;
 using Generic.Abp.MenuManagement.EntityFrameworkCore.Menus;
 using Generic.Abp.MenuManagement.Menus;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.DependencyInjection;
@@ -30,7 +34,9 @@ namespace Generic.Abp.MenuManagement.EntityFrameworkCore
             {
                 options.Entity<Menu>(entityOptions =>
                 {
-                    entityOptions.DefaultWithDetailsFunc = query => query.Include(m => m.Parent);
+                    entityOptions.DefaultWithDetailsFunc =
+                        query =>
+                            query.Include<Menu, Menu?>(m => m.Parent);
                 });
             });
         }

@@ -55,10 +55,11 @@ namespace Generic.Abp.FileManagement.EntityFrameworkCore
                 }
 
                 //Relations
-                //b.HasMany<File>().WithOne().HasForeignKey(m => m.Id).IsRequired();
                 b.HasOne(m => m.Parent).WithMany(m => m.Children).HasForeignKey(m => m.ParentId)
                     .IsRequired(false);
-
+                b.HasOne(m => m.FileInfoBase).WithMany().HasForeignKey(m => m.FileInfoBaseId).IsRequired(false);
+                // 新增 Folder 外键关系
+                b.HasOne(m => m.Folder).WithMany().HasForeignKey(m => m.FolderId).IsRequired(false);
                 //Indexes
                 b.HasIndex(m => m.CreationTime);
                 b.HasIndex(m => m.Name);

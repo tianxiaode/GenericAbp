@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Extensions\src\Generic.Abp.Extensions\Generic.Abp.Extensions.csproj" />
+    <ProjectReference Include="..\..\..\Extensions\src\Generic.Abp.Extensions.Domain\Generic.Abp.Extensions.Domain.csproj" />
   </ItemGroup>
 
 </Project>

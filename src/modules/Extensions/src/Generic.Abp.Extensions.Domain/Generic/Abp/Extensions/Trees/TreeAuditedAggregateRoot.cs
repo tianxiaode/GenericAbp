@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations.Schema;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities.Auditing;
 
@@ -17,11 +16,9 @@ public class TreeAuditedAggregateRoot<TEntity> : AuditedAggregateRoot<Guid>, ITr
 
     [DisplayName("Display:Name")] public virtual string Name { get; protected set; }
 
-    [DisplayName("Display:Parent")]
-    [NotMapped]
-    public virtual TEntity? Parent { get; set; }
+    [DisplayName("Display:Parent")] public virtual TEntity? Parent { get; set; }
 
-    [NotMapped] public virtual ICollection<TEntity>? Children { get; set; }
+    public virtual ICollection<TEntity>? Children { get; set; }
 
     public TreeAuditedAggregateRoot(Guid id, string name, Guid? tenantId = null) : base(id)
     {

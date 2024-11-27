@@ -249,7 +249,7 @@ public class ResourceManagerBase(
     {
         var entity = new Resource(GuidGenerator.Create(), source.Name, ResourceType.Folder, source.IsStatic,
             source.TenantId);
-        entity.SetFileInfoBase(source.FileInfoBase);
+        entity.SetFileInfoBase(source.FileInfoBaseId);
         entity.SetFolderId(source.FolderId);
         return Task.FromResult(entity);
     }

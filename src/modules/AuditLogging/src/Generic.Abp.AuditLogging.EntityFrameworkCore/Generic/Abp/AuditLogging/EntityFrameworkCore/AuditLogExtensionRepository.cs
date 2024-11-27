@@ -1,4 +1,5 @@
-﻿using Generic.Abp.Extensions.Extensions;
+﻿using Generic.Abp.Extensions.EntityFrameworkCore;
+using Generic.Abp.Extensions.Extensions;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -11,40 +12,14 @@ using Volo.Abp.Auditing;
 using Volo.Abp.AuditLogging;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.Domain.Entities;
-using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 
 namespace Generic.Abp.AuditLogging.EntityFrameworkCore;
 
-public class AuditLogExtensionRepository : EfCoreRepository<AbpAuditLoggingDbContext, AuditLog, Guid>,
-    IAuditLogExtensionRepository
+public class AuditLogExtensionRepository(IDbContextProvider<AbpAuditLoggingDbContext> dbContextProvider)
+    : ExtensionRepository<AbpAuditLoggingDbContext, AuditLog>(dbContextProvider),
+        IAuditLogExtensionRepository
 {
-    public AuditLogExtensionRepository(IDbContextProvider<AbpAuditLoggingDbContext> dbContextProvider) : base(
-        dbContextProvider)
-    {
-    }
-
-    public virtual async Task<long> GetCountAsync(Expression<Func<AuditLog, bool>> predicate,
-        CancellationToken cancellationToken = default)
-    {
-        return await (await GetDbSetAsync()).Where(predicate).LongCountAsync(cancellationToken);
-    }
-
-    public virtual async Task<List<AuditLog>> GetListAsync(
-        Expression<Func<AuditLog, bool>> predicate,
-        string? sorting = null, int maxResultCount = int.MaxValue, int skipCount = 0,
-        bool includeDetails = false,
-        CancellationToken cancellationToken = default)
-    {
-        return await (await GetDbSetAsync())
-            .AsNoTracking()
-            .IncludeDetails(includeDetails)
-            .Where(predicate)
-            .OrderBy(sorting.IsNullOrWhiteSpace() ? $"{nameof(AuditLog.ExecutionTime)} desc" : sorting)
-            .PageBy(skipCount, maxResultCount)
-            .ToListAsync(GetCancellationToken(cancellationToken));
-    }
-
     public virtual async Task<Dictionary<DateTime, double>> GetAverageExecutionDurationPerDayAsync(
         DateTime startDate,
         DateTime endDate,

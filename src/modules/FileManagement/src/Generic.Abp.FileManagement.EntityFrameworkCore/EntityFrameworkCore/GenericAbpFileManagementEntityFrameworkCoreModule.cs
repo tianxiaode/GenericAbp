@@ -28,14 +28,15 @@ namespace Generic.Abp.FileManagement.EntityFrameworkCore
                 options.AddRepository<ResourcePermission, ResourcePermissionRepository>();
             });
 
-            // Configure<AbpEntityOptions>(options =>
-            // {
-            //     options.Entity<Resource>(entityOptions =>
-            //     {
-            //         entityOptions.DefaultWithDetailsFunc = query =>
-            //             query.Include(m => m.Parent).Include(m => m.FileInfoBase);
-            //     });
-            // });
+            Configure<AbpEntityOptions>(options =>
+            {
+                options.Entity<Resource>(entityOptions =>
+                {
+                    entityOptions.DefaultWithDetailsFunc = query =>
+                        query.Include<Resource, Resource?>(m => m.Parent)
+                            .Include<Resource, FileInfoBase?>(m => m.FileInfoBase);
+                });
+            });
         }
     }
 }
