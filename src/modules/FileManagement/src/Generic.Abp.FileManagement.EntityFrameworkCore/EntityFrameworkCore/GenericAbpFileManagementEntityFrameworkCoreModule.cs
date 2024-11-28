@@ -3,7 +3,10 @@ using Generic.Abp.FileManagement.EntityFrameworkCore.Resources;
 using Generic.Abp.FileManagement.FileInfoBases;
 using Generic.Abp.FileManagement.Resources;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.Extensions.DependencyInjection;
+using System.Linq;
+using System;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.DependencyInjection;
 using Volo.Abp.Modularity;
@@ -32,9 +35,12 @@ namespace Generic.Abp.FileManagement.EntityFrameworkCore
             {
                 options.Entity<Resource>(entityOptions =>
                 {
-                    entityOptions.DefaultWithDetailsFunc = query =>
-                        query.Include<Resource, Resource?>(m => m.Parent)
-                            .Include<Resource, FileInfoBase?>(m => m.FileInfoBase);
+                    entityOptions.DefaultWithDetailsFunc =
+                        new Func<IQueryable<Resource>, IQueryable<Resource>>(query =>
+                            query.Include(m => m.Parent)
+                                .Include(m => m.Folder)
+                                .Include(m => m.FileInfoBase)
+                        );
                 });
             });
         }

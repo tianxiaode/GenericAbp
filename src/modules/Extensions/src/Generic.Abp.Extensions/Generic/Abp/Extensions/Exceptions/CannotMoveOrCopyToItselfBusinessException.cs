@@ -2,10 +2,5 @@
 
 namespace Generic.Abp.Extensions.Exceptions;
 
-public class CannotMoveOrCopyToItselfBusinessException : BusinessException
-{
-    public CannotMoveOrCopyToItselfBusinessException()
-    {
-        Code = BusinessExceptionErrorCodes.CannotMoveOrCopyToItself;
-    }
-}
+public class CanNotMoveOrCopyToItselfBusinessException()
+    : BusinessException(BusinessExceptionErrorCodes.CanNotMoveOrCopyToItself);

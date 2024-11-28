@@ -1,10 +1,9 @@
-﻿using Generic.Abp.FileManagement.Folders.Dtos;
-using System;
+﻿using System;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.MultiTenancy;
 
-namespace Generic.Abp.FileManagement.Files;
+namespace Generic.Abp.FileManagement.FileInfoBases;
 
 [Serializable]
 public class FileDto : ExtensibleAuditedEntityDto, IMultiTenant, IHasConcurrencyStamp

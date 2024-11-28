@@ -1,123 +1,102 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Generic.Abp.Extensions.Exceptions;
-using Generic.Abp.FileManagement.Dtos;
+﻿using Generic.Abp.Extensions.Exceptions;
 using Generic.Abp.FileManagement.FileInfoBases;
-using Generic.Abp.FileManagement.Files;
-using Generic.Abp.FileManagement.Folders.Dtos;
 using Generic.Abp.FileManagement.Permissions;
 using Generic.Abp.FileManagement.Resources;
 using Microsoft.AspNetCore.Authorization;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Generic.Abp.FileManagement.Resources.Dtos;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
-using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Uow;
 
 namespace Generic.Abp.FileManagement.Folders;
 
 [RemoteService(false)]
-public class FolderAppService(
+public class ResourceAppService(
     ResourceManager resourceManager,
     IResourceRepository repository,
     FileInfoBaseManager fileInfoBaseManager)
-    : FileManagementAppService, IFolderAppService
+    : FileManagementAppService, IResourceAppService
 {
     protected ResourceManager ResourceManager { get; } = resourceManager;
     protected IResourceRepository Repository { get; } = repository;
     protected FileInfoBaseManager FileManager { get; } = fileInfoBaseManager;
 
     [Authorize(FileManagementPermissions.Resources.Default)]
-    public virtual async Task<ListResultDto<FolderDto>> GetRootFoldersAsync()
+    public virtual async Task<ListResultDto<ResourceDto>> GetRootFoldersAsync()
     {
-        var folderDtos = new List<FolderDto>();
+        var folderDtos = new List<ResourceDto>();
         var publicRoot = await ResourceManager.GetPublicRootFolderAsync();
-        folderDtos.Add(new FolderDto(publicRoot.Id, publicRoot.Code, L[publicRoot.Name]));
+        folderDtos.Add(new ResourceDto(publicRoot.Id, publicRoot.Code, L[publicRoot.Name]));
 
+        //TODO: 允许管理用户文件夹的配额和最大文件大小，但不能管理文件？
         var usersRoot = await ResourceManager.GetUsersRootFolderAsync();
-        folderDtos.Add(new FolderDto(usersRoot.Id, usersRoot.Code, L[usersRoot.Name]));
+        folderDtos.Add(new ResourceDto(usersRoot.Id, usersRoot.Code, L[usersRoot.Name]));
 
         var sharedRoot = await ResourceManager.GetSharedRootFolderAsync();
-        folderDtos.Add(new FolderDto(sharedRoot.Id, sharedRoot.Code, L[sharedRoot.Name]));
-        return new ListResultDto<FolderDto>(folderDtos);
+        folderDtos.Add(new ResourceDto(sharedRoot.Id, sharedRoot.Code, L[sharedRoot.Name]));
+        return new ListResultDto<ResourceDto>(folderDtos);
     }
 
     [Authorize(FileManagementPermissions.Resources.Default)]
-    public virtual async Task<FolderDto> GetAsync(Guid id)
+    public virtual async Task<ResourceDto> GetAsync(Guid id)
     {
         var folder = await Repository.GetAsync(id, false);
-        return ObjectMapper.Map<Resource, FolderDto>(folder);
+        return ObjectMapper.Map<Resource, ResourceDto>(folder);
     }
 
     [Authorize(FileManagementPermissions.Resources.Default)]
-    public virtual async Task<ListResultDto<FolderDto>> GetListAsync(FolderGetListInput input)
+    public virtual async Task<ListResultDto<ResourceDto>> GetFolderListAsync(FolderGetListInput input)
     {
         List<Resource> list = [];
         if (!string.IsNullOrEmpty(input.Filter))
         {
-            list = await ResourceManager.GetSearchListAsync(m => m.Name.Contains(input.Filter));
+            list = await ResourceManager.GetSearchFoldersAsync(input.Filter);
         }
-        else if (input.FolderId.HasValue)
+        else if (input.ParentId.HasValue)
         {
-            list = await Repository.GetListAsync(m => m.ParentId == input.FolderId.Value);
+            list = await ResourceManager.GetChildrenFoldersAsync(input.ParentId.Value);
         }
 
-        return new ListResultDto<FolderDto>(ObjectMapper.Map<List<Resource>, List<FolderDto>>(list));
+        return new ListResultDto<ResourceDto>(ObjectMapper.Map<List<Resource>, List<ResourceDto>>(list));
     }
 
     [Authorize(FileManagementPermissions.Resources.Create)]
-    public async Task<FolderDto> CreateAsync(FolderCreateDto input)
+    public async Task<ResourceDto> CreateAsync(FolderCreateDto input)
     {
-        throw new NotImplementedException();
-        // var folder = new Resource(GuidGenerator.Create(), input.ParentId, input.Name, false, CurrentTenant.Id);
-        // await FolderManager.CreateAsync(folder);
-        // await UpdateByInputAsync(folder, input);
-        // return ObjectMapper.Map<Folder, FolderDto>(folder);
+        var entity = await ResourceManager.CreateFolderAsync(input.Name, input.ParentId, input.AllowedFileTypes,
+            input.Quota, input.MaxFileSize, CurrentTenant.Id);
+        return ObjectMapper.Map<Resource, ResourceDto>(entity);
     }
 
     [Authorize(FileManagementPermissions.Resources.Update)]
-    public async Task<FolderDto> UpdateAsync(Guid id, FolderUpdateDto input)
+    public async Task<ResourceDto> UpdateAsync(Guid id, FolderUpdateDto input)
     {
-        throw new NotImplementedException();
-        // var folder = await Repository.GetAsync(id, true);
-        // if (folder.Name != input.Name)
-        // {
-        //     folder.Rename(input.Name);
-        // }
-        //
-        // await UpdateByInputAsync(folder, input);
-        // await Repository.UpdateAsync(folder);
-        // return ObjectMapper.Map<Folder, FolderDto>(folder);
+        var entity =
+            await ResourceManager.UpdateFolderAsync(id, input.Name, input.AllowedFileTypes, input.Quota,
+                input.MaxFileSize);
+        return ObjectMapper.Map<Resource, ResourceDto>(entity);
     }
 
     [Authorize(FileManagementPermissions.Resources.Update)]
-    [UnitOfWork(true)]
-    public virtual async Task MoveAsync(Guid id, Guid? parentId)
+    public virtual async Task MoveAsync(Guid id, Guid parentId)
     {
-        throw new NotImplementedException();
-        // var entity = await Repository.GetAsync(id);
-        // await CheckIsStaticAsync(entity);
-        // await FolderManager.CheckMoveOrCopyAsync(entity, parentId);
-        // await FolderManager.MoveAsync(entity, parentId);
+        await ResourceManager.MoveFolderAsync(id, parentId);
     }
 
     [Authorize(FileManagementPermissions.Resources.Update)]
-    [UnitOfWork(true)]
-    public virtual async Task CopyAsync(Guid id, Guid? parentId)
+    public virtual async Task CopyAsync(Guid id, Guid parentId)
     {
-        throw new NotImplementedException();
-        // await FolderManager.CheckMoveOrCopyAsync(await Repository.GetAsync(id), parentId);
-        // await FolderManager.CopyAsync(id, parentId);
+        await ResourceManager.CopyFolderAsync(id, parentId);
     }
 
     [Authorize(FileManagementPermissions.Resources.Delete)]
     public async Task DeleteAsync(Guid id)
     {
-        throw new NotImplementedException();
-        // var entity = await FolderManager.GetAsync(id);
-        // await CheckIsStaticAsync(entity);
-        // await FolderManager.DeleteAsync(entity);
+        await ResourceManager.DeleteFolderAsync(id);
     }
 
     #region Files
@@ -206,22 +185,28 @@ public class FolderAppService(
     #region Permissons
 
     [Authorize(FileManagementPermissions.Resources.ManagePermissions)]
-    public virtual async Task<FolderPermissionDto> GetFolderPermissionsAsync(Guid id)
+    public virtual async Task<ListResultDto<ResourcePermissionDto>> GetFolderPermissionsAsync(Guid id)
     {
-        throw new NotImplementedException();
-        // var entity = await ResourceManager.GetAsync(id);
-        // var permissions = await ResourceManager.GetPermissionsAsync(entity);
-        // var dto = new FolderPermissionDto(entity.IsInheritPermissions)
-        // {
-        //     Permissions = ObjectMapper.Map<List<FolderPermission>, List<PermissionDto>>(permissions)
-        // };
-        // return dto;
+        var entity = await ResourceManager.GetAsync(id);
+        if (await ResourceManager.IsVirtualFolderAsync(entity) || entity.Type != ResourceType.Folder)
+        {
+            throw new EntityNotFoundBusinessException(L["Folder"], id);
+        }
+
+        var permissions = await ResourceManager.GetPermissionsAsync(entity);
+        return new ListResultDto<ResourcePermissionDto>(
+            ObjectMapper.Map<List<ResourcePermission>, List<ResourcePermissionDto>>(permissions));
     }
 
     [Authorize(FileManagementPermissions.Resources.ManagePermissions)]
-    public virtual async Task UpdateFolderPermissionsAsync(Guid id, FolderPermissionUpdateDto input)
+    public virtual async Task UpdateFolderPermissionsAsync(Guid id, ResourcePermissionsCreateOrUpdateDto input)
     {
-        throw new NotImplementedException();
+        var entity = await ResourceManager.GetAsync(id);
+        if (await ResourceManager.IsVirtualFolderAsync(entity) || entity.Type != ResourceType.Folder)
+        {
+            throw new EntityNotFoundBusinessException(L["Folder"], id);
+        }
+
         // var entity = await FolderManager.GetAsync(id);
         // if (input.IsInheritPermissions)
         // {
@@ -238,25 +223,4 @@ public class FolderAppService(
     }
 
     #endregion
-
-    protected virtual Task UpdateByInputAsync(Resource folder, FolderCreateOrUpdateDto input)
-    {
-        folder.SetQuota(input.StorageQuota);
-        folder.SetUsedSize(input.UsedStorage);
-        folder.SetMaxFileSize(input.MaxFileSize);
-        folder.SetAllowedFileTypes(input.AllowedFileTypes);
-
-        //folder.ChangeInheritPermissions(input.IsInheritPermissions);
-        return Task.CompletedTask;
-    }
-
-    protected virtual Task CheckIsStaticAsync(Resource entity)
-    {
-        if (entity.IsStatic)
-        {
-            throw new StaticEntityCanNotBeUpdatedOrDeletedBusinessException(L["Folder"], entity.Name);
-        }
-
-        return Task.CompletedTask;
-    }
 }

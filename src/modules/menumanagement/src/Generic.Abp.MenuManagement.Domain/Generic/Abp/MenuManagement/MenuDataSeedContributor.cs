@@ -10,6 +10,6 @@ public class MenuDataSeedContributor(IMenuDataSeed menuDataSeed) : IDataSeedCont
 
     public virtual async Task SeedAsync(DataSeedContext context)
     {
-        await MenuDataSeed.SeedAsync(context?.TenantId);
+        await MenuDataSeed.SeedAsync(context.TenantId);
     }
 }

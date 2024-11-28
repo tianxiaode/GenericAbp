@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using System;
+using Generic.Abp.FileManagement.Resources.Dtos;
 using Generic.Abp.FileManagement.VirtualPaths.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Application.Dtos;
@@ -10,13 +11,13 @@ public interface IVirtualPathAppService : IApplicationService
 {
     Task<VirtualPathDto> GetAsync(Guid id);
     Task<VirtualPathDto> FindByNameAsync(string name);
-    Task<PagedResultDto<VirtualPathDto>> GetListAsync(VirtualPathGetListInput input);
-    Task<VirtualPathDto> CreateAsync(VirtualPathCreateDto input);
-    Task<VirtualPathDto> UpdateAsync(Guid id, VirtualPathUpdateDto input);
+    Task<PagedResultDto<ResourceDto>> GetListAsync(VirtualPathGetListInput input);
+    Task<ResourceDto> CreateAsync(VirtualPathCreateDto input);
+    Task<ResourceDto> UpdateAsync(Guid id, VirtualPathUpdateDto input);
     Task DeleteAsync(Guid id);
 
-    Task<ListResultDto<VirtualPathPermissionDto>> GetPermissionsAsync(Guid id);
+    Task<ListResultDto<ResourcePermissionDto>> GetPermissionsAsync(Guid id);
 
     Task UpdatePermissionAsync(Guid id,
-        VirtualPathPermissionCreateOrUpdateDto input);
+        ResourcePermissionsCreateOrUpdateDto input);
 }

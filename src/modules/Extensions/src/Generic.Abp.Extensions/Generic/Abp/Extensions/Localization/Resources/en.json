@@ -16,6 +16,7 @@
     "Generic.Abp.BusinessException:000011": "{Name} {Value} cannot be deleted.",
     "Generic.Abp.BusinessException:000012": "The parent could not be determined.",
     "Generic.Abp.BusinessException:000013": "Static {Name} '{Value}' cannot be updated or deleted.",
-    "Generic.Abp.BusinessException:000014": "Cannot move or copy a node to itself."
+    "Generic.Abp.BusinessException:000014": "Can't move or copy a node to itself.",
+    "Generic.Abp.BusinessException:000015": "Can't move to child node."
   }
 }

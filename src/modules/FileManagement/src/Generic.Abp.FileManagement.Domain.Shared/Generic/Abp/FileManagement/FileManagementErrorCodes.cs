@@ -18,5 +18,12 @@
         public const string InsufficientStorageSpaceValue = "{Value}";
         public const string InsufficientStorageSpaceUsed = "{Used}";
         public const string InsufficientStorageSpaceMax = "{Max}";
+
+        public const string StaticFolderCanNotBeMoveOrDeleted = "Generic.Abp.FileManagement:000006";
+        public const string OnlyMovePublicFolder = "Generic.Abp.FileManagement:000007";
+
+        public const string OnlyMoveMaxFilesAndFoldersInOnTime = "Generic.Abp.FileManagement:000008";
+        public const string OnlyMoveMaxFilesAndFoldersInOnTimeMax = "{Max}";
+        public const string OnlyMoveMaxFilesAndFoldersInOnTimeCount = "{Count}";
     }
 }

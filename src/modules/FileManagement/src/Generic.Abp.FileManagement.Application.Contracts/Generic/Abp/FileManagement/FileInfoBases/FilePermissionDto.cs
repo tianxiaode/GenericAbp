@@ -1,20 +1,20 @@
 ﻿using System;
-using Generic.Abp.FileManagement.Dtos;
 using System.Collections.Generic;
+using Generic.Abp.FileManagement.Dtos;
 
-namespace Generic.Abp.FileManagement.Folders.Dtos;
+namespace Generic.Abp.FileManagement.FileInfoBases;
 
 [Serializable]
-public class FolderPermissionDto
+public class FilePermissionDto
 {
     public bool IsInheritPermissions { get; set; } = true;
     public List<PermissionDto> Permissions { get; set; } = [];
 
-    public FolderPermissionDto()
+    public FilePermissionDto()
     {
     }
 
-    public FolderPermissionDto(bool isInheritPermissions)
+    public FilePermissionDto(bool isInheritPermissions)
     {
         IsInheritPermissions = isInheritPermissions;
     }

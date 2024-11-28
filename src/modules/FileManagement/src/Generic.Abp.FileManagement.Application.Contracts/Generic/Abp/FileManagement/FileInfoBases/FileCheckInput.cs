@@ -1,10 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using Generic.Abp.FileManagement.FileInfoBases;
 using Volo.Abp.Validation;
 
-namespace Generic.Abp.FileManagement.Files;
+namespace Generic.Abp.FileManagement.FileInfoBases;
 
 [Serializable]
 public class FileCheckInput : IHasHash

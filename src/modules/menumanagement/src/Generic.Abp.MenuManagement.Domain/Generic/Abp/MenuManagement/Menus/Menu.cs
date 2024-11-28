@@ -29,12 +29,6 @@ public class Menu : TreeAuditedAggregateRoot<Menu>, IHasEntityVersion
         IsStatic = isStatic;
     }
 
-    public virtual void Rename(string name)
-    {
-        Check.NotNull(name, nameof(Name));
-        Name = name;
-    }
-
     public virtual void SetIcon(string? icon)
     {
         if (string.IsNullOrEmpty(icon))

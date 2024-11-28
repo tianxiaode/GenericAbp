@@ -1,11 +1,15 @@
 ﻿using Generic.Abp.Extensions.EntityFrameworkCore.Trees;
 using Generic.Abp.FileManagement.Resources;
+using System;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
 using Volo.Abp.EntityFrameworkCore;
 
 namespace Generic.Abp.FileManagement.EntityFrameworkCore.Resources;
 
-public class ResourceRepository(IDbContextProvider<IFileManagementDbContext> dbContextProvider)
-    : TreeRepository<IFileManagementDbContext, Resource>(dbContextProvider)
+public partial class ResourceRepository(IDbContextProvider<IFileManagementDbContext> dbContextProvider)
+    : TreeRepository<IFileManagementDbContext, Resource>(dbContextProvider), IResourceRepository
 {
     // public virtual async Task<List<File>> GetFilesAsync(Guid id, CancellationToken cancellationToken = default)
     // {
@@ -130,4 +134,39 @@ public class ResourceRepository(IDbContextProvider<IFileManagementDbContext> dbC
     //     var noPermissionsAllowedFileIds = fileDbSet.Where(m => !fileIds.Contains(m.Id)).Select(m => m.Id);
     //     return hasPermissionsAllowedFileIds.Concat(noPermissionsAllowedFileIds);
     // }
+
+    public virtual Task<Expression<Func<Resource, bool>>> BuildQueryExpressionAsync(
+        Guid parentId,
+        string? filter,
+        DateTime? startTime,
+        DateTime? endTime,
+        string? filetype)
+    {
+        Expression<Func<Resource, bool>> predicate = m => m.ParentId == parentId;
+
+        if (!string.IsNullOrEmpty(filter))
+        {
+            predicate = predicate.And(m => m.Name.Contains(filter));
+        }
+
+        if (startTime.HasValue)
+        {
+            predicate = predicate.And(m => m.CreationTime >= startTime);
+        }
+
+        if (endTime.HasValue)
+        {
+            predicate = predicate.And(m => m.CreationTime <= endTime);
+        }
+
+        if (string.IsNullOrEmpty(filetype))
+        {
+            return Task.FromResult(predicate);
+        }
+
+        var types = filetype.Split(",");
+        predicate = predicate.And(m => m.FileInfoBaseId != null && types.Contains(m.FileInfoBase!.Extension));
+
+        return Task.FromResult(predicate);
+    }
 }

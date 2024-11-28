@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using System;
+using Volo.Abp.DependencyInjection;
 
 namespace Generic.Abp.FileManagement.DataSeeds;
 

@@ -6,126 +6,125 @@ using Generic.Abp.FileManagement.Resources;
 using Generic.Abp.FileManagement.VirtualPaths.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Generic.Abp.Extensions.Exceptions;
+using Generic.Abp.FileManagement.Resources.Dtos;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Authorization;
+using Resource = Generic.Abp.FileManagement.Resources.Resource;
 
 
 namespace Generic.Abp.FileManagement.VirtualPaths;
 
 [RemoteService(false)]
 public class VirtualPathAppService(
-    VirtualPathManager virtualPathManager,
+    ResourceManager resourceManager,
     IResourceRepository repository,
-    FileInfoBaseManager fileInfoBaseManager
-)
+    FileInfoBaseManager fileInfoBaseManager)
     : FileManagementAppService, IVirtualPathAppService
 {
-    protected VirtualPathManager VirtualPathManager { get; } = virtualPathManager;
+    protected ResourceManager ResourceManager { get; } = resourceManager;
     protected IResourceRepository Repository { get; } = repository;
     protected FileInfoBaseManager FileInfoBaseManager { get; } = fileInfoBaseManager;
 
     [AllowAnonymous]
     public virtual async Task<IRemoteContent> GetFileAsync(string path, string hash, GetFileDto input)
     {
-        throw new NotImplementedException();
-        var entity = await VirtualPathManager.FindByPathAsync(path);
+        var entity = await ResourceManager.FindVirtualPathAsync(path);
+
+        //是否存在关联文件夹
+        if (entity.Folder == null)
+        {
+            throw new EntityNotFoundBusinessException(L["File"], hash);
+        }
+
         //是否有权限
-        // var canRead = await VirtualPathManager.CadReadAsync(entity, CurrentUser.Id);
-        // if (!canRead)
-        // {
-        //     throw new AbpAuthorizationException(L["AccessDenied"]);
-        // }
-        //
-        // //是否存在
-        // var file = await FileInfoBaseManager.FindByHashAsync(hash);
-        // if (file == null)
-        // {
-        //     throw new EntityNotFoundBusinessException(L["File"], hash);
-        // }
-        //
-        // var exits = await FileManager.FileExistsAsync(entity.FolderId, file.Id);
-        // if (!exits)
-        // {
-        //     throw new EntityNotFoundBusinessException(L["File"], hash);
-        // }
-        //
-        //return await FileInfoBaseManager.GetFileAsync(file, input.ChunkSize, input.Index);
+        var canRead = await ResourceManager.CadReadAsync(entity, CurrentUser.Id);
+        if (!canRead)
+        {
+            throw new AbpAuthorizationException(L["AccessDenied"]);
+        }
+
+        //文件是否存在
+        var file = await FileInfoBaseManager.FindByHashAsync(hash);
+        if (file == null)
+        {
+            throw new EntityNotFoundBusinessException(L["File"], hash);
+        }
+
+        //关联文件夹是否存在文件
+        if (!await ResourceManager.FileExistsAsync(entity.Folder.Code, file.Id))
+        {
+            throw new EntityNotFoundBusinessException(L["File"], hash);
+        }
+
+        return await FileInfoBaseManager.GetFileAsync(file, input.ChunkSize, input.Index);
     }
 
     [Authorize(FileManagementPermissions.VirtualPaths.Default)]
     public virtual async Task<VirtualPathDto> GetAsync(Guid id)
     {
-        var entity = await VirtualPathManager.GetAsync(id);
+        var entity = await ResourceManager.GetVirtualPathAsync(id);
+
         return ObjectMapper.Map<Resource, VirtualPathDto>(entity);
     }
 
     [Authorize(FileManagementPermissions.VirtualPaths.Default)]
     public virtual async Task<VirtualPathDto> FindByNameAsync(string name)
     {
-        var entity = await VirtualPathManager.FindByPathAsync(name);
+        var entity = await ResourceManager.FindVirtualPathAsync(name);
         return ObjectMapper.Map<Resource, VirtualPathDto>(entity);
     }
 
     [Authorize(FileManagementPermissions.VirtualPaths.Default)]
-    public virtual async Task<PagedResultDto<VirtualPathDto>> GetListAsync(VirtualPathGetListInput input)
+    public virtual async Task<PagedResultDto<ResourceDto>> GetListAsync(VirtualPathGetListInput input)
     {
-        throw new NotImplementedException();
-        // var predicate = await Repository.BuildPredicateAsync(input.Filter);
-        // var count = await Repository.GetCountAsync(predicate);
-        // var list = await Repository.GetListAsync(predicate, input.Sorting, input.MaxResultCount, input.SkipCount);
-        // var result =
-        //     new PagedResultDto<VirtualPathDto>(count, ObjectMapper.Map<List<VirtualPath>, List<VirtualPathDto>>(list));
-        // return result;
+        var (count, list) = await ResourceManager.GetVirtualPathsAsync(input.Filter, input.StartTime, input.EndTime,
+            input.FileType, input.Sorting, input.MaxResultCount, input.SkipCount);
+        return new PagedResultDto<ResourceDto>(count, ObjectMapper.Map<List<Resource>, List<ResourceDto>>(list));
     }
 
     [Authorize(FileManagementPermissions.VirtualPaths.Create)]
-    public virtual async Task<VirtualPathDto> CreateAsync(VirtualPathCreateDto input)
+    public virtual async Task<ResourceDto> CreateAsync(VirtualPathCreateDto input)
     {
-        throw new NotImplementedException();
-        // var entity = new VirtualPath(GuidGenerator.Create(), input.FolderId, input.Path, CurrentTenant.Id);
-        // await VirtualPathManager.CreateAsync(entity);
-        // return ObjectMapper.Map<VirtualPath, VirtualPathDto>(entity);
+        var entity = await ResourceManager.CreateVirtualPathAsync(input.Name, input.FolderId);
+        return ObjectMapper.Map<Resource, ResourceDto>(entity);
     }
 
     [Authorize(FileManagementPermissions.VirtualPaths.Update)]
-    public virtual async Task<VirtualPathDto> UpdateAsync(Guid id, VirtualPathUpdateDto input)
+    public virtual async Task<ResourceDto> UpdateAsync(Guid id, VirtualPathUpdateDto input)
     {
-        throw new NotImplementedException();
-        // var entity = await VirtualPathManager.GetAsync(id);
-        // entity.ChangeVirtualPath(input.Path);
-        // await VirtualPathManager.UpdateAsync(entity);
-        // return ObjectMapper.Map<VirtualPath, VirtualPathDto>(entity);
+        var entity = await ResourceManager.UpdateVirtualPathAsync(id, input.Name, input.FolderId);
+        return ObjectMapper.Map<Resource, ResourceDto>(entity);
     }
 
     //[Authorize(FileManagementPermissions.VirtualPaths.Delete)]
     public virtual async Task DeleteAsync(Guid id)
     {
-        var entity = await VirtualPathManager.GetAsync(id);
-        await VirtualPathManager.DeleteAsync(entity);
+        await ResourceManager.DeleteVirtualPathAsync(id);
     }
 
     #region Permission
 
     [Authorize(FileManagementPermissions.VirtualPaths.ManagePermissions)]
-    public virtual async Task<ListResultDto<VirtualPathPermissionDto>> GetPermissionsAsync(Guid id)
+    public virtual async Task<ListResultDto<ResourcePermissionDto>> GetPermissionsAsync(Guid id)
     {
-        throw new NotImplementedException();
-        // var list = await VirtualPathManager.GetPermissionsAsync(id);
-        // return new ListResultDto<VirtualPathPermissionDto>(
-        //     ObjectMapper.Map<List<VirtualPathPermission>, List<VirtualPathPermissionDto>>(list));
+        var list = await ResourceManager.GetVirtualPathPermissionAsync(id);
+        return new ListResultDto<ResourcePermissionDto>(
+            ObjectMapper.Map<List<ResourcePermission>, List<ResourcePermissionDto>>(list));
     }
 
     [Authorize(FileManagementPermissions.VirtualPaths.ManagePermissions)]
     public virtual async Task UpdatePermissionAsync(Guid id,
-        VirtualPathPermissionCreateOrUpdateDto input)
+        ResourcePermissionsCreateOrUpdateDto input)
     {
-        throw new NotImplementedException();
-        // var entity = await VirtualPathManager.GetAsync(id);
-        // var permissions = input.Permissions.Select(m =>
-        //     new VirtualPathPermission(m.Id ?? GuidGenerator.Create(), id, m.ProviderName, m.ProviderKey,
-        //         m.CanRead, m.CanWrite, m.CanDelete, CurrentTenant.Id)).ToList();
-        // await VirtualPathManager.SetPermissionsAsync(entity, permissions);
+        var permissions = input.Permissions.Select(m =>
+            new ResourcePermission(m.Id ?? GuidGenerator.Create(), id, m.ProviderName, m.ProviderKey,
+                m.Permissions, CurrentTenant.Id)).ToList();
+        await ResourceManager.UpdateVirtualPathPermissionAsync(id, permissions);
     }
 
     #endregion

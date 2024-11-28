@@ -68,7 +68,7 @@ public class FileInfoBaseManager(
 
     public virtual async Task<IRemoteContent> GetFileAsync(FileInfoBase entity,
         int chunkSize = FileConsts.DefaultChunkSize,
-        int index = 0)
+        int? index = null)
     {
         var filename = $"{entity.Hash}.{entity.Extension}";
         var filePath = Path.Combine(await GetPhysicalPathAsync(entity.Path), filename);
@@ -80,8 +80,17 @@ public class FileInfoBaseManager(
 
         await using var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read,
             bufferSize: 4096, useAsync: true);
+        var memoryStream = new MemoryStream();
+        if (!index.HasValue)
+        {
+            // 返回整个文件
+            await fileStream.CopyToAsync(memoryStream, CancellationToken);
+            memoryStream.Position = 0;
+            return new RemoteStreamContent(memoryStream, filename, "application/octet-stream", (int)fileStream.Length);
+        }
+
         // 计算起始位置
-        long startPosition = chunkSize * index;
+        long startPosition = chunkSize * index.Value;
         if (startPosition >= fileStream.Length)
         {
             throw new EntityNotFoundBusinessException(Localizer["File"], entity.Hash);
@@ -101,7 +110,6 @@ public class FileInfoBaseManager(
         }
 
         // 大文件，返回 RemoteStreamContent
-        var memoryStream = new MemoryStream();
         fileStream.Seek(startPosition, SeekOrigin.Begin);
         await fileStream.CopyToAsync(memoryStream, actualChunkSize, CancellationToken);
         memoryStream.Position = 0;

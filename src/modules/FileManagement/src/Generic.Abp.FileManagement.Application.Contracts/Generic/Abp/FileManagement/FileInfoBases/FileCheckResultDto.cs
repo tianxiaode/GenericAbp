@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Generic.Abp.FileManagement.FileInfoBases;
 
-namespace Generic.Abp.FileManagement.Files;
+namespace Generic.Abp.FileManagement.FileInfoBases;
 
 [Serializable]
 public class FileCheckResultDto : ICheckFileResult

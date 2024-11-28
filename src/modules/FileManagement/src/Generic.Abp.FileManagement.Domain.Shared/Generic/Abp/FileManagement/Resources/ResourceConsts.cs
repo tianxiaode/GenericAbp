@@ -2,16 +2,13 @@
 
 public static class ResourceConsts
 {
-    public const string PublicRootFolderName = "PUBLIC";
-    public const string UsersRootFolderName = "USERS";
-    public const string SharedRootFolderName = "SHARED";
-    public const string VirtualRootFolderName = "VIRTUAL";
-
     public static string DefaultStoragePath = "/files";
     public static int FolderCopyMaxNodeCount = 500;
 
     public static class PublicFolder
     {
+        public const string Name = "PUBLIC";
+
         public static string DefaultFileTypes =
             ".docx,.pdf,.xlsx,.pptx,.txt,.csv,.xml,.json,.html,.js,.css,.md,.jpg,.png,.gif,.zip,.rar,.7z";
 
@@ -21,6 +18,8 @@ public static class ResourceConsts
 
     public static class SharedFolder
     {
+        public const string Name = "SHARED";
+
         public const string DefaultFileTypes =
             ".docx,.pdf,.xlsx,.pptx,.txt,.csv,.xml,.json,.html,.js,.css,.md,.jpg,.png,.gif,.zip,.rar,.7z";
 
@@ -30,6 +29,8 @@ public static class ResourceConsts
 
     public static class UserFolder
     {
+        public const string Name = "USER";
+
         public static string DefaultFileTypes =
             ".docx,.pdf,.xlsx,.pptx,.txt,.csv,.xml,.json,.html,.js,.css,.md,.jpg,.png,.gif,.zip,.rar,.7z";
 
@@ -39,6 +40,8 @@ public static class ResourceConsts
 
     public static class VirtualPath
     {
+        public const string Name = "VIRTUAL";
+
         public static string DefaultFileTypes =
             ".docx,.pdf,.xlsx,.pptx,.txt,.csv,.xml,.json,.html,.js,.css,.md,.jpg,.png,.gif,.zip,.rar,.7z";
 

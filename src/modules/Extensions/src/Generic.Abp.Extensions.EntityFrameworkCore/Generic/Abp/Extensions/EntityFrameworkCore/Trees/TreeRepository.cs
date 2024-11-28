@@ -1,18 +1,17 @@
 ﻿using Generic.Abp.Extensions.Trees;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 
 namespace Generic.Abp.Extensions.EntityFrameworkCore.Trees;
 
 public class TreeRepository<TDbContext, TEntity>(IDbContextProvider<TDbContext> dbContextProvider)
-    : EfCoreRepository<TDbContext, TEntity, Guid>(dbContextProvider), ITreeRepository<TEntity>
+    : ExtensionRepository<TDbContext, TEntity>(dbContextProvider), ITreeRepository<TEntity>
     where TDbContext : IEfCoreDbContext
     where TEntity : class, ITree<TEntity>
 {

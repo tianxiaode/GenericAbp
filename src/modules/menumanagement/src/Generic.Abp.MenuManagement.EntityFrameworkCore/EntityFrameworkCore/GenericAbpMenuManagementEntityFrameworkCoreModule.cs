@@ -35,8 +35,8 @@ namespace Generic.Abp.MenuManagement.EntityFrameworkCore
                 options.Entity<Menu>(entityOptions =>
                 {
                     entityOptions.DefaultWithDetailsFunc =
-                        query =>
-                            query.Include<Menu, Menu?>(m => m.Parent);
+                        new Func<IQueryable<Menu>, IQueryable<Menu>>(query =>
+                            query.Include(m => m.Parent));
                 });
             });
         }

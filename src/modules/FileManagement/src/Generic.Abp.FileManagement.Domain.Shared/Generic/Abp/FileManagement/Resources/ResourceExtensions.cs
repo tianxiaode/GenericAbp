@@ -9,15 +9,16 @@ public static class ResourceExtensions
     private const string AllowedFileTypesPropertyName = "allowedFileTypes";
     private const string MaxFileSizePropertyName = "maxFileSize";
 
-    public static void SetQuota<TEntity>(this TEntity entity, long quota) where TEntity : IHasExtraProperties
+    public static void SetQuota<TEntity>(this TEntity entity, string quota) where TEntity : IHasExtraProperties
     {
         entity.SetProperty(QuotaPropertyName, quota);
     }
 
-    public static long GetQuota<TEntity>(this TEntity entity)
+    public static string GetQuota<TEntity>(this TEntity entity)
         where TEntity : IHasExtraProperties
     {
-        return entity.GetProperty<long>(QuotaPropertyName, 0);
+        return entity.GetProperty(QuotaPropertyName, ResourceConsts.UserFolder.DefaultQuota) ??
+               ResourceConsts.UserFolder.DefaultQuota;
     }
 
     public static void SetUsedSize<TEntity>(this TEntity entity, long usedSize) where TEntity : IHasExtraProperties
@@ -43,15 +44,16 @@ public static class ResourceExtensions
         return entity.GetProperty(AllowedFileTypesPropertyName, "") ?? "";
     }
 
-    public static void SetMaxFileSize<TEntity>(this TEntity entity, long maxFileSize)
+    public static void SetMaxFileSize<TEntity>(this TEntity entity, string maxFileSize)
         where TEntity : IHasExtraProperties
     {
         entity.SetProperty(MaxFileSizePropertyName, maxFileSize);
     }
 
-    public static long GetMaxFileSize<TEntity>(this TEntity entity)
+    public static string GetMaxFileSize<TEntity>(this TEntity entity)
         where TEntity : IHasExtraProperties
     {
-        return entity.GetProperty<long>(MaxFileSizePropertyName, 0);
+        return entity.GetProperty(MaxFileSizePropertyName, ResourceConsts.UserFolder.DefaultFileMaxSize) ??
+               ResourceConsts.UserFolder.DefaultFileMaxSize;
     }
 }

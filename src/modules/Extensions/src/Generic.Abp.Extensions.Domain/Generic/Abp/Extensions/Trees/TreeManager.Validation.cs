@@ -21,7 +21,7 @@ public abstract partial class TreeManager<TEntity, TRepository>
 
         if (entity.Id == parentId || entity.ParentId == parentId)
         {
-            throw new CannotMoveOrCopyToItselfBusinessException();
+            throw new CanNotMoveOrCopyToItselfBusinessException();
         }
     }
 }

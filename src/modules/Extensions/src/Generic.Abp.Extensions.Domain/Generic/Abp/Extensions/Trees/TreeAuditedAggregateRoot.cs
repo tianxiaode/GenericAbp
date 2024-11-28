@@ -28,6 +28,12 @@ public class TreeAuditedAggregateRoot<TEntity> : AuditedAggregateRoot<Guid>, ITr
         TenantId = tenantId;
     }
 
+    public virtual void Rename(string name)
+    {
+        Check.NotNull(name, nameof(Name));
+        Name = name;
+    }
+
     public virtual void MoveTo(Guid? parentId)
     {
         ParentId = parentId;

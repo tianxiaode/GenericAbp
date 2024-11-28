@@ -1,7 +1,7 @@
 ﻿using System;
 using Volo.Abp.Application.Dtos;
 
-namespace Generic.Abp.FileManagement.Files;
+namespace Generic.Abp.FileManagement.FileInfoBases;
 
 [Serializable]
 public class FileGetListInput : PagedAndSortedResultRequestDto

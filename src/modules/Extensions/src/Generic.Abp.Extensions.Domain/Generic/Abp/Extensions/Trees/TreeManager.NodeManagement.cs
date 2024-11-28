@@ -20,7 +20,6 @@ public abstract partial class TreeManager<TEntity, TRepository>
         await MoveAsync(entity, parentId);
     }
 
-    [UnitOfWork]
     public virtual async Task MoveAsync(TEntity entity, Guid? parentId)
     {
         var oldCode = entity.Code;
@@ -83,20 +82,6 @@ public abstract partial class TreeManager<TEntity, TRepository>
                 queue.Enqueue((oldChild, newChild));
             }
         }
-        // var children = allChildren.Where(m => m.ParentId == source.Id).ToList();
-        // if (!children.Any())
-        // {
-        //     return;
-        // }
-        //
-        // foreach (var old in children)
-        // {
-        //     var newChild = await CloneAsync(old);
-        //     newChild.MoveTo(target.Id);
-        //     newChild.SetCode(target.Code + source.Code[(source.Code.Length + 1)..]);
-        //     adds.Add(newChild);
-        //     await CopyChildrenAsync(old, newChild, allChildren, adds);
-        // }
     }
 
     protected virtual Task<TEntity> CloneAsync(TEntity source)

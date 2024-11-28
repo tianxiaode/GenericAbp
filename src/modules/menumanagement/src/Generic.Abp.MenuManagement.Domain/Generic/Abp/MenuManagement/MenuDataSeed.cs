@@ -14,7 +14,7 @@ public class MenuDataSeed(
     IGuidGenerator guidGenerator,
     ILogger<IMenuDataSeed> logger,
     MenuManager menuManager)
-    : ITransientDependency, IMenuDataSeed
+    : IMenuDataSeed
 {
     protected IGuidGenerator GuidGenerator { get; } = guidGenerator;
     protected MenuManager MenuManager { get; } = menuManager;

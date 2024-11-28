@@ -5,55 +5,57 @@ using System.Threading.Tasks;
 using Generic.Abp.FileManagement.Settings;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
+using Microsoft.Extensions.Logging;
 
 namespace Generic.Abp.FileManagement.DataSeeds;
 
 public class ResourceDataSeed(
     ResourceManager resourceManager,
     IGuidGenerator guidGenerator,
-    FileManagementSettingManager settingManager)
+    FileManagementSettingManager settingManager,
+    ILogger<ResourceDataSeed> logger)
     : ITransientDependency, IResourceDataSeed
 {
     protected ResourceManager ResourceManager { get; } = resourceManager;
     protected IGuidGenerator GuidGenerator { get; } = guidGenerator;
     protected FileManagementSettingManager SettingManager { get; } = settingManager;
+    protected ILogger<ResourceDataSeed> Logger { get; } = logger;
 
     public async Task SeedAsync(Guid? tenantId = null)
     {
-        var publicFolderSetting = await SettingManager.GetPublicFolderSettingAsync();
-        var publicRootFolder =
-            new Resource(GuidGenerator.Create(), ResourceConsts.PublicRootFolderName, ResourceType.Folder, true,
-                tenantId);
-        publicRootFolder.SetAllowedFileTypes(publicFolderSetting.FileTypes);
-        publicRootFolder.SetMaxFileSize(publicFolderSetting.FileMaxSize.ParseToBytes());
-        publicRootFolder.SetQuota(publicFolderSetting.Quota.ParseToBytes());
-        await ResourceManager.CreateAsync(publicRootFolder);
+        Logger.LogInformation($"Executing resource data seed...");
 
-        var userFolderSetting = await SettingManager.GetUserFolderSettingAsync();
-        var usersRootFolder =
-            new Resource(GuidGenerator.Create(), ResourceConsts.UsersRootFolderName, ResourceType.Folder, true,
-                tenantId);
-        usersRootFolder.SetAllowedFileTypes(userFolderSetting.FileTypes);
-        usersRootFolder.SetMaxFileSize(userFolderSetting.FileMaxSize.ParseToBytes());
-        usersRootFolder.SetQuota(userFolderSetting.Quota.ParseToBytes());
-        await ResourceManager.CreateAsync(usersRootFolder);
+        Logger.LogInformation($"Creating public root folder.");
+        await CreateFolderAsync(ResourceConsts.PublicFolder.Name, ResourceConsts.PublicFolder.DefaultFileTypes,
+            ResourceConsts.PublicFolder.DefaultFileMaxSize, ResourceConsts.PublicFolder.DefaultQuota, tenantId);
 
-        var sharedFolderSetting = await SettingManager.GetSharedFolderSettingAsync();
-        var sharedRootFolder =
-            new Resource(GuidGenerator.Create(), ResourceConsts.SharedRootFolderName, ResourceType.Folder, true,
-                tenantId);
-        sharedRootFolder.SetAllowedFileTypes(sharedFolderSetting.FileTypes);
-        sharedRootFolder.SetMaxFileSize(sharedFolderSetting.FileMaxSize.ParseToBytes());
-        sharedRootFolder.SetQuota(sharedFolderSetting.Quota.ParseToBytes());
-        await ResourceManager.CreateAsync(sharedRootFolder);
+        Logger.LogInformation($"Creating shared root folder.");
+        await CreateFolderAsync(ResourceConsts.PublicFolder.Name, ResourceConsts.SharedFolder.DefaultFileTypes,
+            ResourceConsts.SharedFolder.DefaultFileMaxSize, ResourceConsts.SharedFolder.DefaultQuota, tenantId);
 
-        var virtualPathSetting = await SettingManager.GetVirtualPathSettingAsync();
-        var virtualRootFolder = new Resource(GuidGenerator.Create(), ResourceConsts.VirtualRootFolderName,
-            ResourceType.Folder, true,
-            tenantId);
-        virtualRootFolder.SetAllowedFileTypes(virtualPathSetting.FileTypes);
-        virtualRootFolder.SetMaxFileSize(virtualPathSetting.FileMaxSize.ParseToBytes());
-        virtualRootFolder.SetQuota(virtualPathSetting.Quota.ParseToBytes());
-        await ResourceManager.CreateAsync(virtualRootFolder);
+        Logger.LogInformation($"Creating user root folder.");
+        await CreateFolderAsync(ResourceConsts.UserFolder.Name, ResourceConsts.UserFolder.DefaultFileTypes,
+            ResourceConsts.UserFolder.DefaultFileMaxSize, ResourceConsts.UserFolder.DefaultQuota, tenantId);
+
+        Logger.LogInformation($"Creating virtual path rood folder.");
+        await CreateFolderAsync(ResourceConsts.VirtualPath.Name, ResourceConsts.VirtualPath.DefaultFileTypes,
+            ResourceConsts.VirtualPath.DefaultFileMaxSize, ResourceConsts.VirtualPath.DefaultQuota, tenantId);
+
+        Logger.LogInformation($"Resource data seed completed.");
+    }
+
+    protected virtual async Task CreateFolderAsync(
+        string name,
+        string fileTypes,
+        string maxFileSize,
+        string quota,
+        Guid? tenantId = null)
+    {
+        var type = name == ResourceConsts.VirtualPath.Name ? ResourceType.Folder : ResourceType.VirtualPath;
+        var resource = new Resource(GuidGenerator.Create(), name, type, true, tenantId);
+        resource.SetAllowedFileTypes(fileTypes);
+        resource.SetMaxFileSize(maxFileSize.ParseToBytes());
+        resource.SetQuota(quota.ParseToBytes());
+        await ResourceManager.CreateAsync(resource);
     }
 }

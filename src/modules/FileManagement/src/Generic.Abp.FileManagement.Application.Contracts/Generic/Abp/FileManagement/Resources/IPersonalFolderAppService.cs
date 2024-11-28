@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Generic.Abp.FileManagement.Files;
-using Generic.Abp.FileManagement.Folders.Dtos;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 

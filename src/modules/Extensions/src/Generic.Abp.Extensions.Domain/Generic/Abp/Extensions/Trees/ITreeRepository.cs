@@ -1,12 +1,12 @@
-﻿using System;
+﻿using Generic.Abp.Extensions.Repositories;
+using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Threading;
-using Volo.Abp.Domain.Repositories;
+using System.Threading.Tasks;
 
 namespace Generic.Abp.Extensions.Trees;
 
-public interface ITreeRepository<TEntity> : IRepository<TEntity, Guid>
+public interface ITreeRepository<TEntity> : IExtensionRepository<TEntity>
     where TEntity : class, ITree<TEntity>
 {
     Task<bool> HasChildAsync(Guid id, CancellationToken cancellation = default);

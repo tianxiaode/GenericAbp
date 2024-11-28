@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Generic.Abp.FileManagement.Dtos;
 
-namespace Generic.Abp.FileManagement.Files;
+namespace Generic.Abp.FileManagement.FileInfoBases;
 
 [Serializable]
 public class FilePermissionUpdateDto

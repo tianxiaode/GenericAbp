@@ -7,5 +7,5 @@ namespace Generic.Abp.FileManagement.Dtos;
 public class GetFileDto
 {
     public int ChunkSize { get; set; } = FileConsts.DefaultChunkSize;
-    public int Index { get; set; } = 0;
+    public int? Index { get; set; } = null;
 }
