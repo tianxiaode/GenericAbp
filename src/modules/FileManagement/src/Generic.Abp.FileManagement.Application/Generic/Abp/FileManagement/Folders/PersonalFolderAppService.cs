@@ -10,6 +10,7 @@ using Generic.Abp.FileManagement.Resources;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Authorization;
 using Volo.Abp.Identity;
+using ResourceManager = Generic.Abp.VirtualPaths.ResourceManager;
 
 namespace Generic.Abp.FileManagement.Folders;
 

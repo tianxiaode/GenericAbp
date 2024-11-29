@@ -33,19 +33,19 @@ public partial class ResourceManager
     }
 
 
-    public virtual async Task<bool> CadReadAsync(Resource entity, Guid? userId)
+    public virtual async Task<bool> CanReadAsync(Resource entity, Guid? userId)
     {
         return await PermissionManager.HasPermissionAsync(entity.Id, userId, (int)ResourcePermissionType.CanRead,
             CancellationToken);
     }
 
-    public virtual async Task<bool> CadWriteAsync(Resource entity, Guid? userId)
+    public virtual async Task<bool> CanWriteAsync(Resource entity, Guid? userId)
     {
         return await PermissionManager.HasPermissionAsync(entity.Id, userId, (int)ResourcePermissionType.CanWrite,
             CancellationToken);
     }
 
-    public virtual async Task<bool> CadDeleteAsync(Resource entity, Guid? userId)
+    public virtual async Task<bool> CanDeleteAsync(Resource entity, Guid? userId)
     {
         return await PermissionManager.HasPermissionAsync(entity.Id, userId, (int)ResourcePermissionType.CanDelete,
             CancellationToken);

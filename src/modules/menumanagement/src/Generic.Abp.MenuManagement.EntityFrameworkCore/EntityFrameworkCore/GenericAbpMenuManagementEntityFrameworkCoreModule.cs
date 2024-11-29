@@ -1,12 +1,10 @@
-﻿using System;
-using System.Linq;
-using Generic.Abp.Extensions.EntityFrameworkCore;
+﻿using Generic.Abp.Extensions.EntityFrameworkCore;
 using Generic.Abp.MenuManagement.EntityFrameworkCore.Menus;
 using Generic.Abp.MenuManagement.Menus;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query;
-using Microsoft.EntityFrameworkCore.Query.Internal;
 using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Linq;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.DependencyInjection;
 using Volo.Abp.Modularity;

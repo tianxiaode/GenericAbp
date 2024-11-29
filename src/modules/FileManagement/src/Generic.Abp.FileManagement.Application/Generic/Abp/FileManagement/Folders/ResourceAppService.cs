@@ -11,6 +11,7 @@ using Generic.Abp.FileManagement.Resources.Dtos;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Uow;
+using ResourceManager = Generic.Abp.VirtualPaths.ResourceManager;
 
 namespace Generic.Abp.FileManagement.Folders;
 

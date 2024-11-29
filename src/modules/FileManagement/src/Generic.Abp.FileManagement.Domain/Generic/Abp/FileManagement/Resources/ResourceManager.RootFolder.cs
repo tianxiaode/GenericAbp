@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Generic.Abp.VirtualPaths;
 using Volo.Abp.Domain.Repositories;
 
 namespace Generic.Abp.FileManagement.Resources;
 
 /// <summary>
-/// Root folder methods  for <see cref="ResourceManager"/>.
+/// Root folder methods  for <see cref="VirtualPaths.ResourceManager"/>.
 /// </summary>
 public partial class ResourceManager
 {

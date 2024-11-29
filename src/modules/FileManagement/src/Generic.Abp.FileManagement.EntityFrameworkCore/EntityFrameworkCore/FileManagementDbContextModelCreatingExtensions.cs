@@ -74,6 +74,7 @@ namespace Generic.Abp.FileManagement.EntityFrameworkCore
                 b.HasIndex(m => m.FileInfoBaseId);
                 b.HasIndex(m => m.ConfigurationId);
                 b.HasIndex(m => m.FolderId);
+                b.HasIndex(m => m.OwnerId);
 
                 b.ApplyObjectExtensionMappings();
             });

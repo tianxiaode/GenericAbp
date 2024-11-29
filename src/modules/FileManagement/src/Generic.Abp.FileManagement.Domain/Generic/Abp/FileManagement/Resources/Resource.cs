@@ -16,12 +16,15 @@ public class Resource : TreeAuditedAggregateRoot<Resource>
     public virtual ResourceConfiguration? Configuration { get; protected set; }
     public virtual Guid? ConfigurationId { get; protected set; }
     public virtual ICollection<ResourcePermission> Permissions { get; set; } = default!;
+    public virtual Guid? OwnerId { get; protected set; }
 
-    public Resource(Guid id, string name, ResourceType type, bool isStatic = false, Guid? tenantId = null) : base(id,
+    public Resource(Guid id, string name, ResourceType type, bool isStatic = false, Guid? ownerId = null,
+        Guid? tenantId = null) : base(id,
         name, tenantId)
     {
         Type = type;
         IsStatic = isStatic;
+        OwnerId = ownerId;
     }
 
     public void SetFileInfoBase(Guid? fileInfoBaseId)

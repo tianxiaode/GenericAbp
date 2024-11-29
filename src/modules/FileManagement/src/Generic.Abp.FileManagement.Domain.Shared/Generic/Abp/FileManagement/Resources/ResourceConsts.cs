@@ -49,6 +49,17 @@ public static class ResourceConsts
         public static string DefaultQuota = "200MB";
     }
 
+    public static class ParticipantIsolationFolder
+    {
+        public const string Name = "ParticipantIsolation";
+
+        public static string DefaultFileTypes =
+            ".docx,.pdf,.xlsx,.pptx,.txt,.csv,.xml,.json,.html,.js,.css,.md,.jpg,.png,.gif,.zip,.rar,.7z";
+
+        public static string DefaultFileMaxSize = "2MB";
+        public static string DefaultQuota = "200MB";
+    }
+
     public static class DefaultFile
     {
         public static class Update

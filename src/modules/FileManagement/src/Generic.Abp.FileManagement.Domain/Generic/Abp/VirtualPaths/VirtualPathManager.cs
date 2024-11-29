@@ -1,16 +1,36 @@
 ﻿using Generic.Abp.Extensions.Exceptions;
+using Generic.Abp.Extensions.Trees;
+using Generic.Abp.FileManagement.Localization;
+using Generic.Abp.FileManagement.Resources;
+using Generic.Abp.FileManagement.Settings;
+using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Volo.Abp.Caching;
+using Volo.Abp.EventBus.Distributed;
+using Volo.Abp.Threading;
 
-namespace Generic.Abp.FileManagement.Resources;
+namespace Generic.Abp.VirtualPaths;
 
-public partial class ResourceManager
+public class VirtualPathManager(
+    IResourceRepository repository,
+    ITreeCodeGenerator<Resource> treeCodeGenerator,
+    IStringLocalizer<FileManagementResource> localizer,
+    IDistributedCache<ResourceCacheItem, string> cache,
+    ResourcePermissionManager resourcePermissionManager,
+    FileManagementSettingManager settingManager,
+    IDistributedEventBus distributedEventBus,
+    ICancellationTokenProvider cancellationTokenProvider) : ResourceManager(repository, treeCodeGenerator, localizer,
+    cache, resourcePermissionManager, settingManager, distributedEventBus, cancellationTokenProvider)
 {
-    public virtual async Task<Resource> GetVirtualPathAsync(Guid id)
+    public virtual async Task<Resource> GetVirtualPathAsync(Guid id, ResourceQueryOptions? options = null)
     {
         var root = await GetVirtualRootFolderAsync();
-        var resource = await Repository.FindAsync(m => m.Id == id && m.ParentId == root.Id, true, CancellationToken);
+        options ??= new ResourceQueryOptions(false, true);
+        var resource =
+            await Repository.GetAsync(id, root.Id, options, CancellationToken);
         if (resource == null)
         {
             throw new EntityNotFoundBusinessException(Localizer["Path"], id);
@@ -19,12 +39,12 @@ public partial class ResourceManager
         return resource;
     }
 
-    public virtual async Task<Resource> FindVirtualPathAsync(string virtualPath)
+    public virtual async Task<Resource> FindVirtualPathAsync(string virtualPath, ResourceQueryOptions? options = null)
     {
         var root = await GetVirtualRootFolderAsync();
+        options ??= new ResourceQueryOptions(false, true);
         var resource = await Repository.FindAsync(
-            m => m.ParentId == root.Id && string.Equals(virtualPath, m.Name, StringComparison.OrdinalIgnoreCase),
-            cancellationToken: CancellationToken);
+            virtualPath, root.Id, options, CancellationToken);
         if (resource == null)
         {
             throw new EntityNotFoundBusinessException(Localizer["Path"], virtualPath);
@@ -43,7 +63,7 @@ public partial class ResourceManager
         var count = await Repository.GetCountAsync(predicate, CancellationToken);
         var resources =
             await Repository.GetListAsync(predicate, sorting, maxResultCount, skipCount, true, CancellationToken);
-        return Tuple.Create(count, resources);
+        return Tuple.Create<long, List<Resource>>(count, resources);
     }
 
     public virtual async Task<Resource> CreateVirtualPathAsync(string name, Guid folderId)
@@ -55,23 +75,28 @@ public partial class ResourceManager
         entity.SetFolderId(folderId);
         entity.MoveTo(root.Id);
         await CreateAsync(entity);
+        Logger.LogInformation("Created virtual path {id} with name {name} and folder {currentTenantId}.{folderId}",
+            entity.Id, entity.Name, CurrentTenant.Id.HasValue ? CurrentTenant.Id.ToString() : "HOST", folderId);
         return entity;
     }
 
     public virtual async Task<Resource> UpdateVirtualPathAsync(Guid id, string name, Guid folderId)
     {
         await ValidateIsPublicFolderAsync(folderId);
-        var entity = await GetVirtualPathAsync(id);
+        var entity = await GetVirtualPathAsync(id, new ResourceQueryOptions(false));
         entity.Rename(name);
         entity.SetFolderId(folderId);
         await UpdateAsync(entity);
+        Logger.LogInformation("Updated virtual path {id} with name {name} and folder {currentTenantId}.{folderId}",
+            entity.Id, entity.Name, CurrentTenant.Id.HasValue ? CurrentTenant.Id.ToString() : "HOST", folderId);
         return entity;
     }
 
 
     public virtual async Task DeleteVirtualPathAsync(Guid id)
     {
-        var entity = await GetVirtualPathAsync(id);
+        var entity = await GetVirtualPathAsync(id, new ResourceQueryOptions(false));
+        ValidateIsStaticFolder(entity);
         await DeleteAsync(entity);
     }
 

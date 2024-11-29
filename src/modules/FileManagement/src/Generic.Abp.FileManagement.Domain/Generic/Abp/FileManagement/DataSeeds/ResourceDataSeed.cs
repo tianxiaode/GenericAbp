@@ -6,6 +6,7 @@ using Generic.Abp.FileManagement.Settings;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
 using Microsoft.Extensions.Logging;
+using ResourceManager = Generic.Abp.VirtualPaths.ResourceManager;
 
 namespace Generic.Abp.FileManagement.DataSeeds;
 

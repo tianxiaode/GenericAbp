@@ -13,6 +13,37 @@ namespace Generic.Abp.FileManagement.EntityFrameworkCore.Resources;
 public partial class ResourceRepository(IDbContextProvider<IFileManagementDbContext> dbContextProvider)
     : TreeRepository<IFileManagementDbContext, Resource>(dbContextProvider), IResourceRepository
 {
+    public async Task<Resource?> FindAsync(
+        Expression<Func<Resource, bool>> predicate,
+        Guid? parentId,
+        ResourceQueryOptions options,
+        CancellationToken cancellation = default)
+    {
+        return await (await GetDbSetAsync())
+            .IncludeIf(options.IncludeParent, m => m.Parent)
+            .IncludeIf(options.IncludeFolder, m => m.Folder)
+            .IncludeIf(options.IncludeFile, m => m.FileInfoBase)
+            .IncludeIf(options.IncludeConfiguration, m => m.Configuration)
+            .IncludeIf(options.IncludePermissions, m => m.Permissions)
+            .Where(predicate)
+            .WhereIf(parentId.HasValue, m => m.ParentId == parentId)
+            .FirstOrDefaultAsync(cancellation);
+    }
+
+    public virtual async Task<Resource?> FindAsync(string name, Guid? parentId, ResourceQueryOptions options,
+        CancellationToken cancellation = default)
+    {
+        return await FindAsync(m => m.Name.ToLower() == name.ToLower(), parentId, options,
+            cancellation);
+    }
+
+    public virtual async Task<Resource?> GetAsync(Guid id, Guid? parentId, ResourceQueryOptions options,
+        CancellationToken cancellation = default)
+    {
+        return await FindAsync(m => m.Id == id, parentId, options, cancellation);
+    }
+
+
     public virtual async Task<Resource?> GetInheritedPermissionParentAsync(Guid id, string code,
         CancellationToken cancellationToken = default)
     {

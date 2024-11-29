@@ -215,7 +215,7 @@ public class FileInfoBaseManager(
     /// <exception cref="FileChunkErrorBusinessException"></exception>
     [UnitOfWork]
     public virtual async Task<FileInfoBase> MergeAsync(string hash, int totalChunks,
-        List<FileType> allowTypes, long allowSize, long storageQuota, long usedStorage, long thumbnailSize = 102400)
+        string allowTypes, long allowSize, long storageQuota, long usedStorage, long thumbnailSize = 102400)
     {
         var fileInfoBase = await FindByHashAsync(hash);
         //文件已经上传
@@ -258,7 +258,7 @@ public class FileInfoBaseManager(
     }
 
     protected virtual async Task<FileInfoBase> SaveAsync(string hash, int totalChunks, string tempDir,
-        List<FileType> allowTypes, long allowSize, long storageQuota, long usedStorage, long thumbnailSize)
+        string allowTypes, long allowSize, long storageQuota, long usedStorage, long thumbnailSize)
     {
         await using var memorySteam = new MemoryStream();
         for (var i = 0; i < totalChunks; i++)
@@ -270,7 +270,7 @@ public class FileInfoBaseManager(
             await memorySteam.WriteAsync(bytes, 0, bytes.Length, CancellationToken);
         }
 
-        var fileType = await memorySteam.ToArray().GetFileTypeAsync(allowTypes);
+        var fileType = await memorySteam.ToArray().GetFileTypeAsync(await allowTypes.GetFileTypesAsync());
         if (fileType == null)
         {
             throw new InvalidFileTypeBusinessException();

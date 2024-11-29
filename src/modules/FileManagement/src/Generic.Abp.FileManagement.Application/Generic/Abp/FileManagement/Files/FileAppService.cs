@@ -7,6 +7,7 @@ using System;
 using System.Threading.Tasks;
 using Generic.Abp.FileManagement.Resources;
 using Volo.Abp.Authorization;
+using ResourceManager = Generic.Abp.VirtualPaths.ResourceManager;
 
 namespace Generic.Abp.FileManagement.Files;
 
