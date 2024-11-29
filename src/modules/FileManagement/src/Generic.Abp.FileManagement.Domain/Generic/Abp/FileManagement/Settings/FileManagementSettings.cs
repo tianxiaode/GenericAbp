@@ -10,7 +10,8 @@
         public const string StoragePath = GroupName + ".StoragePath";
         public const string TempPath = GroupName + ".TempPath";
         public const string FolderCopyMaxNodeCount = GroupName + ".FolderCopyMaxNodeCount";
-
+        public const string EnablePersonalFolderForRoles = GroupName + ".EnablePersonalFolderForRoles";
+        
         public static class PublicFolder
         {
             private const string PublicFolderPrefix = GroupName + ".PublicFolder";

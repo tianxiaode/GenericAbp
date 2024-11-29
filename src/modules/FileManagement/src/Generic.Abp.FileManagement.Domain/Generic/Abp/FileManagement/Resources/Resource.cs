@@ -17,7 +17,7 @@ public class Resource : TreeAuditedAggregateRoot<Resource>
     public virtual Guid? ConfigurationId { get; protected set; }
     public virtual ICollection<ResourcePermission> Permissions { get; set; } = default!;
     public virtual Guid? OwnerId { get; protected set; }
-
+    public virtual bool IsEnabled  { get; protected set; }
     public Resource(Guid id, string name, ResourceType type, bool isStatic = false, Guid? ownerId = null,
         Guid? tenantId = null) : base(id,
         name, tenantId)
@@ -25,6 +25,7 @@ public class Resource : TreeAuditedAggregateRoot<Resource>
         Type = type;
         IsStatic = isStatic;
         OwnerId = ownerId;
+        IsEnabled = true;
     }
 
     public void SetFileInfoBase(Guid? fileInfoBaseId)
@@ -40,5 +41,10 @@ public class Resource : TreeAuditedAggregateRoot<Resource>
     public void SetConfiguration(Guid resourceConfigurationId)
     {
         ConfigurationId = resourceConfigurationId;
+    }
+
+    public void SetIsEnabled(bool isEnabled)
+    {
+        IsEnabled = isEnabled;
     }
 }
