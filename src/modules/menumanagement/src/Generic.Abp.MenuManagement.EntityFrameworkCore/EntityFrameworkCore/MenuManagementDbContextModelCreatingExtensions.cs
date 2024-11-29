@@ -65,6 +65,7 @@ namespace Generic.Abp.MenuManagement.EntityFrameworkCore
                     .IsRequired(false);
 
                 //Indexes
+                b.HasIndex(m => m.TenantId);
                 b.HasIndex(m => m.Code);
                 b.HasIndex(m => m.Name);
                 b.HasIndex(m => m.ParentId);

@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Volo.Abp;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.Modeling;
+using Volo.Abp.MultiTenancy;
 
 namespace Generic.Abp.FileManagement.EntityFrameworkCore
 {
@@ -32,6 +33,7 @@ namespace Generic.Abp.FileManagement.EntityFrameworkCore
 
 
                 //Indexes
+                b.HasIndex(m => m.TenantId);
                 b.HasIndex(m => m.CreationTime);
                 b.HasIndex(m => m.Hash).IsUnique();
                 b.HasIndex(m => m.Extension);
@@ -60,11 +62,18 @@ namespace Generic.Abp.FileManagement.EntityFrameworkCore
                 b.HasOne(m => m.FileInfoBase).WithMany().HasForeignKey(m => m.FileInfoBaseId).IsRequired(false);
                 // 新增 Folder 外键关系
                 b.HasOne(m => m.Folder).WithMany().HasForeignKey(m => m.FolderId).IsRequired(false);
+                b.HasOne(m => m.Configuration).WithMany().HasForeignKey(m => m.ConfigurationId).IsRequired(false);
+                b.HasMany(r => r.Permissions).WithOne(p => p.Resource).HasForeignKey(p => p.ResourceId);
+
                 //Indexes
+                b.HasIndex(m => new { m.TenantId, m.Name });
+                b.HasIndex(m => new { m.TenantId, m.Code }).IsUnique();
+                b.HasIndex(m => new { m.TenantId, m.CreationTime });
+                b.HasIndex(m => new { m.TenantId, m.ParentId });
                 b.HasIndex(m => m.CreationTime);
-                b.HasIndex(m => m.Name);
-                b.HasIndex(m => m.ParentId);
-                b.HasIndex(m => m.Code).IsUnique();
+                b.HasIndex(m => m.FileInfoBaseId);
+                b.HasIndex(m => m.ConfigurationId);
+                b.HasIndex(m => m.FolderId);
 
                 b.ApplyObjectExtensionMappings();
             });
@@ -89,9 +98,31 @@ namespace Generic.Abp.FileManagement.EntityFrameworkCore
                 }
 
                 //Indexes
-                b.HasIndex(m => new { m.ResourceId, m.Permissions, m.ProviderName, m.ProviderKey });
+                b.HasIndex(m => new { m.TenantId, m.ResourceId });
+                b.HasIndex(m => new { m.TenantId, m.ResourceId, m.ProviderName, m.ProviderKey });
             });
 
+            builder.Entity<ResourceConfiguration>(b =>
+            {
+                //Configure table & schema name
+                b.ToTable(FileManagementDbProperties.DbTablePrefix + "ResourceConfigurations",
+                    FileManagementDbProperties.DbSchema);
+
+                b.ConfigureByConvention();
+
+                //Properties
+                b.Property(m => m.AllowedFileTypes).IsRequired().HasMaxLength(ResourceConsts.AllowedFileTypesMaxLength);
+                b.Property(m => m.UsedStorage).IsRequired().HasDefaultValue(0);
+                b.Property(m => m.StorageQuota).IsRequired().HasDefaultValue(0);
+                b.Property(m => m.MaxFileSize).IsRequired().HasDefaultValue(0);
+
+
+                //Indexes
+                b.HasIndex(m => m.TenantId);
+                b.HasIndex(m => new { m.UsedStorage });
+                b.HasIndex(m => new { m.StorageQuota });
+                b.HasIndex(m => new { m.MaxFileSize });
+            });
 
             /* Configure all entities here. Example:
 

@@ -18,6 +18,8 @@ namespace Generic.Abp.FileManagement.EntityFrameworkCore
         public DbSet<Resource> Resources { get; set; } = default!;
         public DbSet<ResourcePermission> ResourcePermissions { get; set; } = default!;
 
+        public DbSet<ResourceConfiguration> ResourceConfigurations { get; set; } = default!;
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

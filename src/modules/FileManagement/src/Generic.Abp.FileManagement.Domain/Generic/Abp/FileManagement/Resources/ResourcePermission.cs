@@ -11,6 +11,7 @@ public class ResourcePermission : AuditedEntity<Guid>, IResourcePermission
     public virtual string ProviderName { get; protected set; }
     public virtual string? ProviderKey { get; protected set; }
     public virtual int Permissions { get; protected set; }
+    public virtual Resource Resource { get; set; } = default!;
 
     public ResourcePermission(Guid id, Guid resourceId, string providerName, string? providerKey, int permissions,
         Guid? tenantId = null) : base(id)

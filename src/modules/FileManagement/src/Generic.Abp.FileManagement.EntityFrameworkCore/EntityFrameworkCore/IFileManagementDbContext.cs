@@ -15,5 +15,6 @@ namespace Generic.Abp.FileManagement.EntityFrameworkCore
         DbSet<FileInfoBase> FileInfoBases { get; }
         DbSet<Resource> Resources { get; }
         DbSet<ResourcePermission> ResourcePermissions { get; }
+        DbSet<ResourceConfiguration> ResourceConfigurations { get; }
     }
 }

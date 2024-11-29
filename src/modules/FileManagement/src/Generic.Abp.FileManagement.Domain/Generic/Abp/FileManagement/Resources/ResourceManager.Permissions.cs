@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System;
 
 namespace Generic.Abp.FileManagement.Resources;
 
@@ -35,42 +35,52 @@ public partial class ResourceManager
 
     public virtual async Task<bool> CadReadAsync(Resource entity, Guid? userId)
     {
-        if (!userId.HasValue)
-        {
-            return await PermissionManager.AllowEveryOneReadAsync(entity.Id, CancellationToken);
-        }
-
-        if (await PermissionManager.AllowAuthenticatedUserReadAsync(entity.Id, CancellationToken))
-        {
-            return true;
-        }
-
-        return await PermissionManager.AllowUserOrRolesReadAsync(entity.Id, userId.Value, CancellationToken);
+        return await PermissionManager.HasPermissionAsync(entity.Id, userId, (int)ResourcePermissionType.CanRead,
+            CancellationToken);
     }
 
-    public virtual async Task<bool> CadWriteAsync(Resource entity, Guid userId)
+    public virtual async Task<bool> CadWriteAsync(Resource entity, Guid? userId)
     {
-        if (await PermissionManager.AllowAuthenticatedUserWriteAsync(entity.Id, CancellationToken))
-        {
-            return true;
-        }
-
-        return await PermissionManager.AllowUserOrRolesWriteAsync(entity.Id, userId, CancellationToken);
+        return await PermissionManager.HasPermissionAsync(entity.Id, userId, (int)ResourcePermissionType.CanWrite,
+            CancellationToken);
     }
 
-    public virtual async Task<bool> CadDeleteAsync(Resource entity, Guid userId)
+    public virtual async Task<bool> CadDeleteAsync(Resource entity, Guid? userId)
     {
-        if (await PermissionManager.AllowAuthenticatedUserDeleteAsync(entity.Id, CancellationToken))
-        {
-            return true;
-        }
-
-        return await PermissionManager.AllowUserOrRolesDeleteAsync(entity.Id, userId, CancellationToken);
+        return await PermissionManager.HasPermissionAsync(entity.Id, userId, (int)ResourcePermissionType.CanDelete,
+            CancellationToken);
     }
 
-    // TODO:找出全部父级权限，然后逐级往上查找带权限的文件夹，然后将该权限作为当前资源的权限
-    public virtual Task<bool> GetAllParentPermissionsAsync(Resource entity, Guid userId)
+    /// <summary>
+    /// 检查是否有继承权限
+    /// </summary>
+    /// <param name="entity"></param>
+    /// <param name="userId"></param>
+    /// <returns></returns>
+    public virtual async Task<bool> CanReadByInheritPermissionsAsync(Resource entity, Guid? userId)
     {
-        throw new NotImplementedException();
+        return await HasInheritPermissionAsync(entity, userId, (int)ResourcePermissionType.CanRead);
+    }
+
+    public virtual async Task<bool> CanWriteByInheritPermissionsAsync(Resource entity, Guid? userId)
+    {
+        return await HasInheritPermissionAsync(entity, userId, (int)ResourcePermissionType.CanWrite);
+    }
+
+    public virtual async Task<bool> CanDeleteByInheritPermissionsAsync(Resource entity, Guid? userId)
+    {
+        return await HasInheritPermissionAsync(entity, userId, (int)ResourcePermissionType.CanDelete);
+    }
+
+    public virtual async Task<bool> HasInheritPermissionAsync(Resource entity, Guid? userId, int requiredPermission)
+    {
+        var parent = await Repository.GetInheritedPermissionParentAsync(entity.Id, entity.Code, CancellationToken);
+        if (parent == null)
+        {
+            return false;
+        }
+
+        return await PermissionManager.AllowByInheritPermissionsAsync(parent.Permissions.ToList(), userId,
+            requiredPermission);
     }
 }

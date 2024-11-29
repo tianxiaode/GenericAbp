@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories;
@@ -11,6 +13,10 @@ namespace Generic.Abp.FileManagement.Resources;
 public class ResourcePermissionManager(IResourcePermissionRepository repository, IdentityUserManager userManager)
     : DomainService
 {
+    public const string UserProviderName = "U";
+    public const string RoleProviderName = "R";
+    public const string AuthorizationUserProviderName = "A";
+    public const string EveryoneProviderName = "E";
     protected IResourcePermissionRepository Repository { get; } = repository;
     protected IdentityUserManager UserManager { get; } = userManager;
 
@@ -34,89 +40,123 @@ public class ResourcePermissionManager(IResourcePermissionRepository repository,
         return Repository.DeleteManyAsync(permissions, cancellationToken: cancellationToken);
     }
 
-    public virtual async Task<bool> AllowEveryOneReadAsync(Guid id, CancellationToken cancellationToken)
+    public virtual async Task<bool> HasPermissionAsync(
+        Guid id,
+        Guid? userId,
+        int permission,
+        CancellationToken cancellationToken = default)
     {
-        return await Repository.AnyAsync(
-            await ResourcePermissionHelper.GetEveryOneReadExpressionAsync<ResourcePermission>(id),
+        // Everyone permissions
+        if (!userId.HasValue)
+        {
+            return await CheckPermissionAsync(id, EveryoneProviderName, permission, null, cancellationToken);
+        }
+
+        // Authenticated user permissions
+        if (await CheckPermissionAsync(id, AuthorizationUserProviderName, permission, null, cancellationToken))
+        {
+            return true;
+        }
+
+        // User-specific permissions
+        if (await CheckPermissionAsync(id, UserProviderName, permission, [userId.Value.ToString()], cancellationToken))
+        {
+            return true;
+        }
+
+        // Role-based permissions
+        return await CheckRolePermissionAsync(id, userId.Value, permission, cancellationToken);
+    }
+
+    public virtual async Task<bool> CheckPermissionAsync(
+        Guid id,
+        string providerName,
+        int permission,
+        IList<string>? providerKeys = null,
+        CancellationToken cancellationToken = default)
+    {
+        return await Repository.AnyAsync(await HasPermission(id, providerName, permission, providerKeys),
             cancellationToken);
     }
 
-    public virtual async Task<bool> AllowAuthenticatedUserReadAsync(Guid id, CancellationToken cancellationToken)
+    public virtual async Task<bool> CheckRolePermissionAsync(
+        Guid id,
+        Guid userId,
+        int permission,
+        CancellationToken cancellationToken = default)
     {
-        return await Repository.AnyAsync(
-            await ResourcePermissionHelper.GetAuthenticatedUserReadExpressionAsync<ResourcePermission>(id),
-            cancellationToken);
-    }
-
-    public virtual async Task<bool> AllowUserOrRolesReadAsync(Guid id, Guid userId, CancellationToken cancellationToken)
-    {
-        return await Repository.AnyAsync(
-            await ResourcePermissionHelper.GetUserOrRoleReadExpressionAsync<ResourcePermission>(id, userId,
-                await GetRolesAsync(userId)),
-            cancellationToken);
-    }
-
-    public virtual async Task<bool> AllowEveryOneWriteAsync(Guid id, CancellationToken cancellationToken)
-    {
-        return await Repository.AnyAsync(
-            await ResourcePermissionHelper.GetEveryOneWriteExpressionAsync<ResourcePermission>(id),
-            cancellationToken);
-    }
-
-    public virtual async Task<bool> AllowAuthenticatedUserWriteAsync(Guid id, CancellationToken cancellationToken)
-    {
-        return await Repository.AnyAsync(
-            await ResourcePermissionHelper.GetAuthenticatedUserWriteExpressionAsync<ResourcePermission>(id),
-            cancellationToken);
-    }
-
-    public virtual async Task<bool> AllowUserOrRolesWriteAsync(Guid id, Guid userId,
-        CancellationToken cancellationToken)
-    {
-        return await Repository.AnyAsync(
-            await ResourcePermissionHelper.GetUserOrRoleWriteExpressionAsync<ResourcePermission>(id, userId,
-                await GetRolesAsync(userId)),
-            cancellationToken);
-    }
-
-    public virtual async Task<bool> AllowEveryOneDeleteAsync(Guid id, CancellationToken cancellationToken)
-    {
-        return await Repository.AnyAsync(
-            await ResourcePermissionHelper.GetEveryOneDeleteExpressionAsync<ResourcePermission>(id),
-            cancellationToken);
-    }
-
-    public virtual async Task<bool> AllowAuthenticatedUserDeleteAsync(Guid id,
-        CancellationToken cancellationToken)
-    {
-        return await Repository.AnyAsync(
-            await ResourcePermissionHelper.GetAuthenticatedUserDeleteExpressionAsync<ResourcePermission>(id),
-            cancellationToken);
-    }
-
-    public virtual async Task<bool> AllowUserOrRolesDeleteAsync(Guid id, Guid userId,
-        CancellationToken cancellationToken)
-    {
-        return await Repository.AnyAsync(
-            await ResourcePermissionHelper.GetUserOrRoleDeleteExpressionAsync<ResourcePermission>(id, userId,
-                await GetRolesAsync(userId)),
-            cancellationToken);
-    }
-
-    public virtual async Task<bool> HasPermissionAsync(Guid id, CancellationToken cancellationToken)
-    {
-        return await Repository.AnyAsync(m => m.ResourceId == id, cancellationToken: cancellationToken);
+        var roles = await GetRolesAsync(userId);
+        return await CheckPermissionAsync(id, RoleProviderName, permission, roles, cancellationToken);
     }
 
 
-    protected virtual async Task<IList<string>> GetRolesAsync(Guid userId)
+    public virtual async Task<bool> AllowByInheritPermissionsAsync(
+        List<ResourcePermission> permissions,
+        Guid? userId,
+        int requiredPermission)
+    {
+        // Everyone permissions
+        if (!userId.HasValue)
+        {
+            return await HasPermission(permissions, EveryoneProviderName, requiredPermission);
+        }
+
+        // Authenticated users
+        if (await HasPermission(permissions, AuthorizationUserProviderName, requiredPermission))
+        {
+            return true;
+        }
+
+        // User-specific permissions
+        if (await HasPermission(permissions, UserProviderName, requiredPermission, [userId.Value.ToString()]))
+        {
+            return true;
+        }
+
+        // Role-based permissions
+        var roles = await GetRolesAsync(userId.Value);
+        return await HasPermission(permissions, RoleProviderName, requiredPermission, roles);
+    }
+
+    public virtual async Task<IList<string>> GetRolesAsync(Guid userId)
     {
         return await UserManager.GetRolesAsync(await UserManager.GetByIdAsync(userId));
     }
 
-    public virtual async Task<List<ResourcePermission>> GetAllParentPermissionsAsync(List<Guid> parentIds,
-        CancellationToken cancellationToken)
+    protected virtual Task<Expression<Func<ResourcePermission, bool>>> HasPermission(Guid id, string providerName,
+        int permission, IList<string>? providerKeys = null)
     {
-        return await Repository.GetListAsync(m => parentIds.Contains(m.ResourceId), false, cancellationToken);
+        Expression<Func<ResourcePermission, bool>> predicate = providerKeys switch
+        {
+            null => m => m.ResourceId == id &&
+                         m.ProviderName == providerName &&
+                         (m.Permissions & permission) == permission,
+            { Count: 1 } => m => m.ResourceId == id &&
+                                 m.ProviderName == providerName &&
+                                 m.ProviderKey == providerKeys[0] &&
+                                 (m.Permissions & permission) == permission,
+            _ => m => m.ResourceId == id &&
+                      m.ProviderName == providerName &&
+                      !m.ProviderKey.IsNullOrEmpty() &&
+                      providerKeys.Contains(m.ProviderKey) &&
+                      (m.Permissions & permission) == permission
+        };
+        return Task.FromResult(predicate);
+    }
+
+    protected virtual Task<bool> HasPermission(
+        List<ResourcePermission> permissions, string providerName,
+        int permission, IList<string>? providerKeys = null)
+    {
+        return Task.FromResult(providerKeys switch
+        {
+            null => permissions.Any(m => m.ProviderName == providerName && (m.Permissions & permission) == permission),
+            { Count: 1 } => permissions.Any(m =>
+                m.ProviderName == providerName && m.ProviderKey == providerKeys[0] &&
+                (m.Permissions & permission) == permission),
+            _ => permissions.Any(m =>
+                m.ProviderName == providerName && !m.ProviderKey.IsNullOrEmpty() &&
+                providerKeys.Contains(m.ProviderKey) && (m.Permissions & permission) == permission)
+        });
     }
 }
