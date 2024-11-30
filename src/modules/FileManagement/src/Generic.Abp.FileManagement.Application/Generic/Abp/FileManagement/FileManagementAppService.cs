@@ -14,9 +14,9 @@ namespace Generic.Abp.FileManagement
             ObjectMapperContext = typeof(GenericAbpFileManagementApplicationModule);
         }
 
-        protected List<ResourceDto> MapToResourceDtos(List<Resource> resources)
+        protected List<ResourceBaseDto> MapToResourceDtos(List<Resource> resources)
         {
-            return ObjectMapper.Map<List<Resource>, List<ResourceDto>>(resources);
+            return ObjectMapper.Map<List<Resource>, List<ResourceBaseDto>>(resources);
         }
     }
 }

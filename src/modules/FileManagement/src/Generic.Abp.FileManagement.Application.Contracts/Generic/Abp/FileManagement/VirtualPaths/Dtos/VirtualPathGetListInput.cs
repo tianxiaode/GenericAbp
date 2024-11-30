@@ -9,5 +9,4 @@ public class VirtualPathGetListInput : PagedAndSortedResultRequestDto
     public string? Filter { get; set; } = default!;
     public DateTime? StartTime { get; set; } = default!;
     public DateTime? EndTime { get; set; } = default!;
-    public string? FileType { get; set; } = default!;
 }

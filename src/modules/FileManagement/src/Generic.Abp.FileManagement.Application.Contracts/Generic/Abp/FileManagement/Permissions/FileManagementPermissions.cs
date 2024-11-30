@@ -23,9 +23,10 @@ namespace Generic.Abp.FileManagement.Permissions
             public const string ManagePermissions = Default + ".ManagePermissions";
         }
 
-        public static class PersonalFolders
+        public static class UserFolders
         {
-            public const string Default = GroupName + ".PersonalFolders";
+            public const string Default = GroupName + ".UserFolders";
+            public const string ManageEnable = Default + ".ManageEnable";
             public const string ManageConfigurations = Default + ".ManageConfigureds";
         }
 

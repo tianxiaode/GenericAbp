@@ -11,9 +11,9 @@ public interface IVirtualPathAppService : IApplicationService
 {
     Task<VirtualPathDto> GetAsync(Guid id);
     Task<VirtualPathDto> FindByNameAsync(string name);
-    Task<PagedResultDto<ResourceDto>> GetListAsync(VirtualPathGetListInput input);
-    Task<ResourceDto> CreateAsync(VirtualPathCreateDto input);
-    Task<ResourceDto> UpdateAsync(Guid id, VirtualPathUpdateDto input);
+    Task<PagedResultDto<ResourceBaseDto>> GetListAsync(VirtualPathGetListInput input);
+    Task<ResourceBaseDto> CreateAsync(VirtualPathCreateDto input);
+    Task<ResourceBaseDto> UpdateAsync(Guid id, VirtualPathUpdateDto input);
     Task DeleteAsync(Guid id);
 
     Task<ListResultDto<ResourcePermissionDto>> GetPermissionsAsync(Guid id);

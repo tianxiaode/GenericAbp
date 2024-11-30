@@ -12,7 +12,7 @@ using Volo.Abp.Caching;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Threading;
 
-namespace Generic.Abp.VirtualPaths;
+namespace Generic.Abp.FileManagement.VirtualPaths;
 
 public class VirtualPathManager(
     IResourceRepository repository,
@@ -22,8 +22,11 @@ public class VirtualPathManager(
     ResourcePermissionManager resourcePermissionManager,
     FileManagementSettingManager settingManager,
     IDistributedEventBus distributedEventBus,
-    ICancellationTokenProvider cancellationTokenProvider) : ResourceManager(repository, treeCodeGenerator, localizer,
-    cache, resourcePermissionManager, settingManager, distributedEventBus, cancellationTokenProvider)
+    ICancellationTokenProvider cancellationTokenProvider,
+    IResourceConfigurationRepository resourceConfigurationRepository) : ResourceManager(repository, treeCodeGenerator,
+    localizer,
+    cache, resourcePermissionManager, settingManager, distributedEventBus, cancellationTokenProvider,
+    resourceConfigurationRepository)
 {
     public virtual async Task<Resource> GetVirtualPathAsync(Guid id, ResourceQueryOptions? options = null)
     {
@@ -53,17 +56,16 @@ public class VirtualPathManager(
         return resource;
     }
 
-    public virtual async Task<Tuple<long, List<Resource>>> GetVirtualPathsAsync(string? filter, DateTime? startTime,
-        DateTime? endTime, string? fileType, string? sorting = null, int maxResultCount = int.MaxValue,
-        int skipCount = 0)
+    public virtual async Task<Tuple<long, List<Resource>>> GetVirtualPathsAsync(
+        ResourceSearchAndPagedAndSortedParams search)
     {
         var root = await GetVirtualRootFolderAsync();
-        sorting ??= $"{nameof(Resource.Name)}";
-        var predicate = await Repository.BuildQueryExpressionAsync(root.Id, filter, startTime, endTime, fileType);
+        search.Sorting ??= $"{nameof(Resource.Name)}";
+        var predicate = await Repository.BuildQueryExpressionAsync(root.Id, search);
         var count = await Repository.GetCountAsync(predicate, CancellationToken);
         var resources =
-            await Repository.GetListAsync(predicate, sorting, maxResultCount, skipCount, true, CancellationToken);
-        return Tuple.Create<long, List<Resource>>(count, resources);
+            await Repository.GetListAsync(predicate, search, new ResourceQueryOptions(false, true), CancellationToken);
+        return Tuple.Create(count, resources);
     }
 
     public virtual async Task<Resource> CreateVirtualPathAsync(string name, Guid folderId)

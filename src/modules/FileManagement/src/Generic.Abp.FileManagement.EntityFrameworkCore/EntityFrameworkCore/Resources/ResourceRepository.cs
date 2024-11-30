@@ -2,7 +2,9 @@
 using Generic.Abp.FileManagement.Resources;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,7 +15,7 @@ namespace Generic.Abp.FileManagement.EntityFrameworkCore.Resources;
 public partial class ResourceRepository(IDbContextProvider<IFileManagementDbContext> dbContextProvider)
     : TreeRepository<IFileManagementDbContext, Resource>(dbContextProvider), IResourceRepository
 {
-    public async Task<Resource?> FindAsync(
+    public virtual async Task<Resource?> FindAsync(
         Expression<Func<Resource, bool>> predicate,
         Guid? parentId,
         ResourceQueryOptions options,
@@ -29,6 +31,7 @@ public partial class ResourceRepository(IDbContextProvider<IFileManagementDbCont
             .WhereIf(parentId.HasValue, m => m.ParentId == parentId)
             .FirstOrDefaultAsync(cancellation);
     }
+
 
     public virtual async Task<Resource?> FindAsync(string name, Guid? parentId, ResourceQueryOptions options,
         CancellationToken cancellation = default)
@@ -56,37 +59,51 @@ public partial class ResourceRepository(IDbContextProvider<IFileManagementDbCont
                 r.Permissions.Any(), cancellationToken);
     }
 
+    public virtual async Task<List<Resource>> GetListAsync(
+        Expression<Func<Resource, bool>> predicate,
+        ResourceSearchAndPagedAndSortedParams search,
+        ResourceQueryOptions options,
+        CancellationToken cancellation = default)
+    {
+        return await (await GetDbSetAsync())
+            .IncludeIf(options.IncludeParent, m => m.Parent)
+            .IncludeIf(options.IncludeFolder, m => m.Folder)
+            .IncludeIf(options.IncludeFile, m => m.FileInfoBase)
+            .IncludeIf(options.IncludeConfiguration, m => m.Configuration)
+            .IncludeIf(options.IncludePermissions, m => m.Permissions)
+            .OrderBy(search.Sorting!)
+            .Where(predicate)
+            .PageBy(search.SkipCount, search.MaxResultCount)
+            .ToListAsync(cancellation);
+    }
 
     public virtual Task<Expression<Func<Resource, bool>>> BuildQueryExpressionAsync(
         Guid parentId,
-        string? filter,
-        DateTime? startTime,
-        DateTime? endTime,
-        string? filetype)
+        ResourceSearchAndPagedAndSortedParams search)
     {
         Expression<Func<Resource, bool>> predicate = m => m.ParentId == parentId;
 
-        if (!string.IsNullOrEmpty(filter))
+        if (!string.IsNullOrEmpty(search.Filter))
         {
-            predicate = predicate.And(m => m.Name.Contains(filter));
+            predicate = predicate.And(m => m.Name.Contains(search.Filter));
         }
 
-        if (startTime.HasValue)
+        if (search.StartTime.HasValue)
         {
-            predicate = predicate.And(m => m.CreationTime >= startTime);
+            predicate = predicate.And(m => m.CreationTime >= search.StartTime.Value);
         }
 
-        if (endTime.HasValue)
+        if (search.EndTime.HasValue)
         {
-            predicate = predicate.And(m => m.CreationTime <= endTime);
+            predicate = predicate.And(m => m.CreationTime <= search.EndTime.Value);
         }
 
-        if (string.IsNullOrEmpty(filetype))
+        if (string.IsNullOrEmpty(search.FileType))
         {
             return Task.FromResult(predicate);
         }
 
-        var types = filetype.Split(",");
+        var types = search.FileType.Split(",");
         predicate = predicate.And(m => m.FileInfoBaseId != null && types.Contains(m.FileInfoBase!.Extension));
 
         return Task.FromResult(predicate);

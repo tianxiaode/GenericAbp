@@ -27,30 +27,30 @@ public class ResourceAppService(
     protected FileInfoBaseManager FileManager { get; } = fileInfoBaseManager;
 
     [Authorize(FileManagementPermissions.Resources.Default)]
-    public virtual async Task<ListResultDto<ResourceDto>> GetRootFoldersAsync()
+    public virtual async Task<ListResultDto<ResourceBaseDto>> GetRootFoldersAsync()
     {
-        var folderDtos = new List<ResourceDto>();
+        var folderDtos = new List<ResourceBaseDto>();
         var publicRoot = await ResourceManager.GetPublicRootFolderAsync();
-        folderDtos.Add(new ResourceDto(publicRoot.Id, publicRoot.Code, L[publicRoot.Name]));
+        folderDtos.Add(new ResourceBaseDto(publicRoot.Id, publicRoot.Code, L[publicRoot.Name]));
 
         //TODO: 允许管理用户文件夹的配额和最大文件大小，但不能管理文件？
         var usersRoot = await ResourceManager.GetUsersRootFolderAsync();
-        folderDtos.Add(new ResourceDto(usersRoot.Id, usersRoot.Code, L[usersRoot.Name]));
+        folderDtos.Add(new ResourceBaseDto(usersRoot.Id, usersRoot.Code, L[usersRoot.Name]));
 
         var sharedRoot = await ResourceManager.GetSharedRootFolderAsync();
-        folderDtos.Add(new ResourceDto(sharedRoot.Id, sharedRoot.Code, L[sharedRoot.Name]));
-        return new ListResultDto<ResourceDto>(folderDtos);
+        folderDtos.Add(new ResourceBaseDto(sharedRoot.Id, sharedRoot.Code, L[sharedRoot.Name]));
+        return new ListResultDto<ResourceBaseDto>(folderDtos);
     }
 
     [Authorize(FileManagementPermissions.Resources.Default)]
-    public virtual async Task<ResourceDto> GetAsync(Guid id)
+    public virtual async Task<ResourceBaseDto> GetAsync(Guid id)
     {
         var folder = await Repository.GetAsync(id, false);
-        return ObjectMapper.Map<Resource, ResourceDto>(folder);
+        return ObjectMapper.Map<Resource, ResourceBaseDto>(folder);
     }
 
     [Authorize(FileManagementPermissions.Resources.Default)]
-    public virtual async Task<ListResultDto<ResourceDto>> GetFolderListAsync(FolderGetListInput input)
+    public virtual async Task<ListResultDto<ResourceBaseDto>> GetFolderListAsync(FolderGetListInput input)
     {
         List<Resource> list = [];
         if (!string.IsNullOrEmpty(input.Filter))
@@ -62,24 +62,24 @@ public class ResourceAppService(
             list = await ResourceManager.GetChildrenFoldersAsync(input.ParentId.Value);
         }
 
-        return new ListResultDto<ResourceDto>(ObjectMapper.Map<List<Resource>, List<ResourceDto>>(list));
+        return new ListResultDto<ResourceBaseDto>(ObjectMapper.Map<List<Resource>, List<ResourceBaseDto>>(list));
     }
 
     [Authorize(FileManagementPermissions.Resources.Create)]
-    public async Task<ResourceDto> CreateAsync(FolderCreateDto input)
+    public async Task<ResourceBaseDto> CreateAsync(FolderCreateDto input)
     {
         var entity = await ResourceManager.CreateFolderAsync(input.Name, input.ParentId, input.AllowedFileTypes,
             input.Quota, input.MaxFileSize, CurrentTenant.Id);
-        return ObjectMapper.Map<Resource, ResourceDto>(entity);
+        return ObjectMapper.Map<Resource, ResourceBaseDto>(entity);
     }
 
     [Authorize(FileManagementPermissions.Resources.Update)]
-    public async Task<ResourceDto> UpdateAsync(Guid id, FolderUpdateDto input)
+    public async Task<ResourceBaseDto> UpdateAsync(Guid id, FolderUpdateDto input)
     {
         var entity =
             await ResourceManager.UpdateFolderAsync(id, input.Name, input.AllowedFileTypes, input.Quota,
                 input.MaxFileSize);
-        return ObjectMapper.Map<Resource, ResourceDto>(entity);
+        return ObjectMapper.Map<Resource, ResourceBaseDto>(entity);
     }
 
     [Authorize(FileManagementPermissions.Resources.Update)]

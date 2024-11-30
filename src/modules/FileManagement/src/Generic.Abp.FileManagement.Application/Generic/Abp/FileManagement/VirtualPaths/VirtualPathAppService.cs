@@ -6,7 +6,6 @@ using Generic.Abp.FileManagement.Permissions;
 using Generic.Abp.FileManagement.Resources;
 using Generic.Abp.FileManagement.Resources.Dtos;
 using Generic.Abp.FileManagement.VirtualPaths.Dtos;
-using Generic.Abp.VirtualPaths;
 using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
@@ -63,25 +62,25 @@ public class VirtualPathAppService(
     }
 
     [Authorize(FileManagementPermissions.VirtualPaths.Default)]
-    public virtual async Task<PagedResultDto<ResourceDto>> GetListAsync(VirtualPathGetListInput input)
+    public virtual async Task<PagedResultDto<ResourceBaseDto>> GetListAsync(VirtualPathGetListInput input)
     {
         var (count, list) = await VirtualPathManager.GetVirtualPathsAsync(input.Filter, input.StartTime, input.EndTime,
-            input.FileType, input.Sorting, input.MaxResultCount, input.SkipCount);
-        return new PagedResultDto<ResourceDto>(count, MapToResourceDtos(list));
+            null, input.Sorting, input.MaxResultCount, input.SkipCount);
+        return new PagedResultDto<ResourceBaseDto>(count, MapToResourceDtos(list));
     }
 
     [Authorize(FileManagementPermissions.VirtualPaths.Create)]
-    public virtual async Task<ResourceDto> CreateAsync(VirtualPathCreateDto input)
+    public virtual async Task<ResourceBaseDto> CreateAsync(VirtualPathCreateDto input)
     {
         var entity = await VirtualPathManager.CreateVirtualPathAsync(input.Name, input.FolderId);
-        return ObjectMapper.Map<Resource, ResourceDto>(entity);
+        return ObjectMapper.Map<Resource, ResourceBaseDto>(entity);
     }
 
     [Authorize(FileManagementPermissions.VirtualPaths.Update)]
-    public virtual async Task<ResourceDto> UpdateAsync(Guid id, VirtualPathUpdateDto input)
+    public virtual async Task<ResourceBaseDto> UpdateAsync(Guid id, VirtualPathUpdateDto input)
     {
         var entity = await VirtualPathManager.UpdateVirtualPathAsync(id, input.Name, input.FolderId);
-        return ObjectMapper.Map<Resource, ResourceDto>(entity);
+        return ObjectMapper.Map<Resource, ResourceBaseDto>(entity);
     }
 
     [Authorize(FileManagementPermissions.VirtualPaths.Delete)]
