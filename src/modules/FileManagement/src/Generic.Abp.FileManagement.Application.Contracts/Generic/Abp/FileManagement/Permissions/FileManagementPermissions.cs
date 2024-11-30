@@ -26,8 +26,9 @@ namespace Generic.Abp.FileManagement.Permissions
         public static class UserFolders
         {
             public const string Default = GroupName + ".UserFolders";
-            public const string ManageEnable = Default + ".ManageEnable";
-            public const string ManageConfigurations = Default + ".ManageConfigureds";
+            public const string Create = Default + ".Create";
+            public const string Update = Default + ".Update";
+            public const string Delete = Default + ".Delete";
         }
 
         public static class VirtualPaths

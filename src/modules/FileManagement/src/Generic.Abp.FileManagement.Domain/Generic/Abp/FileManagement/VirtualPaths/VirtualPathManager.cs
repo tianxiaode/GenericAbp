@@ -23,10 +23,10 @@ public class VirtualPathManager(
     FileManagementSettingManager settingManager,
     IDistributedEventBus distributedEventBus,
     ICancellationTokenProvider cancellationTokenProvider,
-    IResourceConfigurationRepository resourceConfigurationRepository) : ResourceManager(repository, treeCodeGenerator,
+    IResourceConfigurationRepository configurationRepository) : ResourceManager(repository, treeCodeGenerator,
     localizer,
     cache, resourcePermissionManager, settingManager, distributedEventBus, cancellationTokenProvider,
-    resourceConfigurationRepository)
+    configurationRepository)
 {
     public virtual async Task<Resource> GetVirtualPathAsync(Guid id, ResourceQueryOptions? options = null)
     {

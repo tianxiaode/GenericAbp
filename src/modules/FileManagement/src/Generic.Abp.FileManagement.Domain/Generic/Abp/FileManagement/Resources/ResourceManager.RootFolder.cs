@@ -1,11 +1,7 @@
-﻿using System;
-using System.Threading.Tasks;
-using Generic.Abp.Extensions.Extensions;
-using Generic.Abp.FileManagement.Settings;
-using Generic.Abp.FileManagement.Settings.Result;
-using Generic.Abp.VirtualPaths;
+﻿using Generic.Abp.FileManagement.Settings.Result;
 using Microsoft.Extensions.Logging;
-using Volo.Abp.Domain.Repositories;
+using System;
+using System.Threading.Tasks;
 
 namespace Generic.Abp.FileManagement.Resources;
 
@@ -68,47 +64,52 @@ public partial class ResourceManager
     public virtual async Task<Resource> GetUserRootFolderAsync(Guid userId, Guid? tenantId = null)
     {
         var entity = await CreateRootFolderAsync(ResourceType.UserRootFolder,
-            SettingManager.GetUserFolderSettingAsync, tenantId, userId);
+            await SettingManager.GetUserFolderSettingAsync(), tenantId, userId);
         return entity;
     }
 
     public virtual async Task<Resource> CreatePublicRootFolderAsync(Guid? tenantId = null)
     {
-        return await CreateRootFolderAsync(ResourceType.PublicRootFolder, SettingManager.GetPublicFolderSettingAsync,
+        return await CreateRootFolderAsync(ResourceType.PublicRootFolder,
+            await SettingManager.GetPublicFolderSettingAsync(),
             tenantId);
     }
 
     public virtual async Task<Resource> CreateSharedRootFolderAsync(Guid? tenantId = null)
     {
-        return await CreateRootFolderAsync(ResourceType.SharedRootFolder, SettingManager.GetSharedFolderSettingAsync,
+        return await CreateRootFolderAsync(ResourceType.SharedRootFolder,
+            await SettingManager.GetSharedFolderSettingAsync(),
             tenantId);
     }
 
     public virtual async Task<Resource> CreateUsersRootFolderAsync(Guid? tenantId = null)
     {
-        return await CreateRootFolderAsync(ResourceType.UsersRootFolder, SettingManager.GetUserFolderSettingAsync,
+        return await CreateRootFolderAsync(ResourceType.UsersRootFolder,
+            await SettingManager.GetUserFolderSettingAsync(),
             tenantId);
     }
 
     public virtual async Task<Resource> CreateVirtualPathRootFolderAsync(Guid? tenantId = null)
     {
-        return await CreateRootFolderAsync(ResourceType.VirtualRootFolder, SettingManager.GetVirtualPathSettingAsync,
+        return await CreateRootFolderAsync(ResourceType.VirtualRootFolder,
+            await SettingManager.GetVirtualPathSettingAsync(),
             tenantId);
     }
 
     public virtual async Task<Resource> CreateParticipantIsolationRootFolderAsync(Guid? tenantId = null)
     {
         return await CreateRootFolderAsync(ResourceType.ParticipantIsolationRootFolder,
-            SettingManager.GetParticipantIsolationFolderSettingAsync,
+            await SettingManager.GetParticipantIsolationFolderSettingAsync(),
             tenantId);
     }
 
 
     protected virtual async Task<Resource> CreateRootFolderAsync(
         ResourceType rooType,
-        Func<Task<FolderSetting>> getFolderSetting,
+        FolderSetting settings,
         Guid? tenantId = null,
-        Guid? userId = null)
+        Guid? userId = null,
+        bool isEnabled = true)
     {
         var name = await GetRootFolderNameAsync(rooType, tenantId, userId);
         ResourceCacheItem? usersRootFolder = null;
@@ -118,31 +119,29 @@ public partial class ResourceManager
         }
 
         var existingResource = userId.HasValue
-            ? await Repository.FindAsync(m => m.ParentId == usersRootFolder!.Id && m.OwnerId == userId.Value)
-            : await Repository.FindAsync(m => m.Type == rooType);
+            ? await FindAsync(m => m.ParentId == usersRootFolder!.Id && m.OwnerId == userId.Value, null,
+                new ResourceQueryOptions(false, includeConfiguration: true))
+            : await FindAsync(m => m.Type == rooType, null,
+                new ResourceQueryOptions(false, includeConfiguration: true));
         if (existingResource == null)
         {
             // Create the folder only if it does not exist
             Logger.LogInformation("Creating {name} root folder.", name);
-            var resource = new Resource(GuidGenerator.Create(), name, rooType, true, tenantId);
-            var settings = await getFolderSetting();
+            var entity = new Resource(GuidGenerator.Create(), name, rooType, true, tenantId);
             if (userId.HasValue)
             {
-                resource.MoveTo(usersRootFolder!.Id);
-                resource.SetOwner(userId.Value);
+                entity.MoveTo(usersRootFolder!.Id);
+                entity.SetOwner(userId.Value);
+                entity.SetIsEnabled(isEnabled);
             }
 
-            var configuration = new ResourceConfiguration(GuidGenerator.Create(), settings.FileTypes,
-                settings.Quota.ParseToBytes(), 0, settings.FileMaxSize.ParseToBytes(), tenantId);
-            await ResourceConfigurationRepository.InsertAsync(configuration);
-            resource.SetConfiguration(configuration.Id);
-            await Repository.InsertAsync(resource);
-            return resource;
+            await CreateOrUpdateConfigurationAsync(entity, settings.AllowFileTypes, settings.StorageQuota,
+                settings.MaxFileSize);
+            await CreateAsync(entity);
+            return entity;
         }
-        else
-        {
-            Logger.LogInformation("{name} root folder already exists, skipping creation.", name);
-        }
+
+        Logger.LogInformation("{name} root folder already exists, skipping creation.", name);
 
         return existingResource;
     }

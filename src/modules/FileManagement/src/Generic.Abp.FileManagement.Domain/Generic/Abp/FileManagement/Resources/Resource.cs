@@ -39,9 +39,10 @@ public class Resource : TreeAuditedAggregateRoot<Resource>
         FolderId = folderId;
     }
 
-    public void SetConfiguration(Guid resourceConfigurationId)
+    public void SetConfiguration(ResourceConfiguration configuration)
     {
-        ConfigurationId = resourceConfigurationId;
+        Configuration = configuration;
+        ConfigurationId = configuration.Id;
     }
 
     public void SetIsEnabled(bool isEnabled)

@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
 using Generic.Abp.Extensions.Exceptions;
 using Generic.Abp.Extensions.Trees;
 using Generic.Abp.FileManagement.Localization;
@@ -20,7 +22,7 @@ public partial class ResourceManager(
     FileManagementSettingManager settingManager,
     IDistributedEventBus distributedEventBus,
     ICancellationTokenProvider cancellationTokenProvider,
-    IResourceConfigurationRepository resourceConfigurationRepository)
+    IResourceConfigurationRepository configurationRepository)
     : TreeManager<Resource, IResourceRepository>(repository, treeCodeGenerator, cancellationTokenProvider)
 {
     protected IStringLocalizer<FileManagementResource> Localizer { get; } = localizer;
@@ -28,13 +30,33 @@ public partial class ResourceManager(
     protected ResourcePermissionManager PermissionManager { get; } = resourcePermissionManager;
     protected FileManagementSettingManager SettingManager { get; } = settingManager;
     protected IDistributedEventBus DistributedEventBus { get; } = distributedEventBus;
+    protected IResourceConfigurationRepository ConfigurationRepository { get; } = configurationRepository;
 
-    protected IResourceConfigurationRepository ResourceConfigurationRepository { get; } =
-        resourceConfigurationRepository;
+    public virtual async Task<Resource> GetAsync(Guid id, ResourceQueryOptions options)
+    {
+        var entity = await Repository.GetAsync(id, null, options, CancellationToken);
+        if (entity == null)
+        {
+            throw new EntityNotFoundBusinessException(Localizer["Folder"], id);
+        }
+
+        return entity;
+    }
+
+    public virtual async Task<Resource?> FindAsync(Expression<Func<Resource, bool>> predicate, Guid? parentId,
+        ResourceQueryOptions options)
+    {
+        return await Repository.FindAsync(predicate, null, options, CancellationToken);
+    }
 
     public override async Task DeleteAsync(Resource entity, bool autoSave = true)
     {
         await SetPermissionsAsync(entity, []);
+        if (entity.ConfigurationId.HasValue)
+        {
+            await ConfigurationRepository.DeleteAsync(entity.ConfigurationId.Value, true, CancellationToken);
+        }
+
         await base.DeleteAsync(entity, autoSave);
     }
 
@@ -48,12 +70,37 @@ public partial class ResourceManager(
         }
     }
 
-    protected override Task<Resource> CloneAsync(Resource source)
+    protected override async Task<Resource> CloneAsync(Resource source)
     {
         var entity = new Resource(GuidGenerator.Create(), source.Name, ResourceType.Folder, source.IsStatic,
             source.TenantId);
         entity.SetFileInfoBase(source.FileInfoBaseId);
         entity.SetFolderId(source.FolderId);
-        return Task.FromResult(entity);
+
+        if (source.Configuration != null)
+        {
+            await CreateOrUpdateConfigurationAsync(entity, source.Configuration.AllowedFileTypes,
+                source.Configuration.StorageQuota, source.Configuration.MaxFileSize);
+        }
+
+        return entity;
+    }
+
+    protected virtual Task CreateOrUpdateConfigurationAsync(Resource entity, string allowFileTypes, long storageQuota,
+        long maxFileSize)
+    {
+        if (entity.Configuration == null)
+        {
+            entity.SetConfiguration(new ResourceConfiguration(GuidGenerator.Create(), allowFileTypes, storageQuota,
+                maxFileSize, entity.TenantId));
+        }
+        else
+        {
+            entity.Configuration.SetAllowedFileTypes(allowFileTypes);
+            entity.Configuration.SetStorageQuota(storageQuota);
+            entity.Configuration.SetMaxFileSize(maxFileSize);
+        }
+
+        return Task.CompletedTask;
     }
 }

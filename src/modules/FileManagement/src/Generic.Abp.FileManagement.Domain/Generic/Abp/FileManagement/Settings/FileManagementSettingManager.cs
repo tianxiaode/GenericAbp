@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Generic.Abp.Extensions.Extensions;
 using Generic.Abp.FileManagement.Events;
 using Generic.Abp.FileManagement.Resources;
 using Generic.Abp.FileManagement.Settings.Result;
@@ -43,24 +44,28 @@ public class FileManagementSettingManager(ISettingManager settingManager, IDistr
             await GetSettingAsync(FileManagementSettings.TemporaryFile.Cleanup.Enable, false);
         await SetSettingAsync(FileManagementSettings.StoragePath, settingResult.StoragePath);
         await SetSettingAsync(FileManagementSettings.FolderCopyMaxNodeCount, settingResult.FolderCopyMaxNodeCount);
-        await SetSettingAsync(FileManagementSettings.PublicFolder.DefaultQuota, settingResult.PublicFolder.Quota);
+        await SetSettingAsync(FileManagementSettings.PublicFolder.DefaultQuota,
+            settingResult.PublicFolder.StorageQuota);
         await SetSettingAsync(FileManagementSettings.PublicFolder.DefaultFileMaxSize,
-            settingResult.PublicFolder.FileMaxSize);
+            settingResult.PublicFolder.MaxFileSize);
         await SetSettingAsync(FileManagementSettings.PublicFolder.DefaultFileTypes,
-            settingResult.PublicFolder.FileTypes);
-        await SetSettingAsync(FileManagementSettings.SharedFolder.DefaultQuota, settingResult.SharedFolder.Quota);
+            settingResult.PublicFolder.AllowFileTypes);
+        await SetSettingAsync(FileManagementSettings.SharedFolder.DefaultQuota,
+            settingResult.SharedFolder.StorageQuota);
         await SetSettingAsync(FileManagementSettings.SharedFolder.DefaultFileMaxSize,
-            settingResult.SharedFolder.FileMaxSize);
+            settingResult.SharedFolder.MaxFileSize);
         await SetSettingAsync(FileManagementSettings.SharedFolder.DefaultFileTypes,
-            settingResult.SharedFolder.FileTypes);
-        await SetSettingAsync(FileManagementSettings.UserFolder.DefaultQuota, settingResult.UsersFolder.Quota);
+            settingResult.SharedFolder.AllowFileTypes);
+        await SetSettingAsync(FileManagementSettings.UserFolder.DefaultQuota, settingResult.UsersFolder.StorageQuota);
         await SetSettingAsync(FileManagementSettings.UserFolder.DefaultFileMaxSize,
-            settingResult.UsersFolder.FileMaxSize);
-        await SetSettingAsync(FileManagementSettings.UserFolder.DefaultFileTypes, settingResult.UsersFolder.FileTypes);
-        await SetSettingAsync(FileManagementSettings.VirtualPath.DefaultQuota, settingResult.VirtualPath.Quota);
+            settingResult.UsersFolder.MaxFileSize);
+        await SetSettingAsync(FileManagementSettings.UserFolder.DefaultFileTypes,
+            settingResult.UsersFolder.AllowFileTypes);
+        await SetSettingAsync(FileManagementSettings.VirtualPath.DefaultQuota, settingResult.VirtualPath.StorageQuota);
         await SetSettingAsync(FileManagementSettings.VirtualPath.DefaultFileMaxSize,
-            settingResult.VirtualPath.FileMaxSize);
-        await SetSettingAsync(FileManagementSettings.VirtualPath.DefaultFileTypes, settingResult.VirtualPath.FileTypes);
+            settingResult.VirtualPath.MaxFileSize);
+        await SetSettingAsync(FileManagementSettings.VirtualPath.DefaultFileTypes,
+            settingResult.VirtualPath.AllowFileTypes);
         await SetSettingAsync(FileManagementSettings.DefaultFile.Update.Enable,
             settingResult.DefaultFile.UpdateSetting.Enable);
         await SetSettingAsync(FileManagementSettings.DefaultFile.Update.RetentionPeriod,
@@ -118,11 +123,11 @@ public class FileManagementSettingManager(ISettingManager settingManager, IDistr
     {
         return new FolderSetting()
         {
-            Quota = await GetSettingAsync(FileManagementSettings.PublicFolder.DefaultQuota,
-                ResourceConsts.PublicFolder.DefaultQuota),
-            FileMaxSize = await GetSettingAsync(FileManagementSettings.PublicFolder.DefaultFileMaxSize,
-                ResourceConsts.PublicFolder.DefaultFileMaxSize),
-            FileTypes = await GetSettingAsync(FileManagementSettings.PublicFolder.DefaultFileTypes,
+            StorageQuota = (await GetSettingAsync(FileManagementSettings.PublicFolder.DefaultQuota,
+                ResourceConsts.PublicFolder.DefaultQuota)).ParseToBytes(),
+            MaxFileSize = (await GetSettingAsync(FileManagementSettings.PublicFolder.DefaultFileMaxSize,
+                ResourceConsts.PublicFolder.DefaultFileMaxSize)).ParseToBytes(),
+            AllowFileTypes = await GetSettingAsync(FileManagementSettings.PublicFolder.DefaultFileTypes,
                 ResourceConsts.PublicFolder.DefaultFileTypes)
         };
     }
@@ -131,11 +136,11 @@ public class FileManagementSettingManager(ISettingManager settingManager, IDistr
     {
         return new FolderSetting()
         {
-            Quota = await GetSettingAsync(FileManagementSettings.SharedFolder.DefaultQuota,
-                ResourceConsts.SharedFolder.DefaultQuota),
-            FileMaxSize = await GetSettingAsync(FileManagementSettings.SharedFolder.DefaultFileMaxSize,
-                ResourceConsts.SharedFolder.DefaultFileMaxSize),
-            FileTypes = await GetSettingAsync(FileManagementSettings.SharedFolder.DefaultFileTypes,
+            StorageQuota = (await GetSettingAsync(FileManagementSettings.SharedFolder.DefaultQuota,
+                ResourceConsts.SharedFolder.DefaultQuota)).ParseToBytes(),
+            MaxFileSize = (await GetSettingAsync(FileManagementSettings.SharedFolder.DefaultFileMaxSize,
+                ResourceConsts.SharedFolder.DefaultFileMaxSize)).ParseToBytes(),
+            AllowFileTypes = await GetSettingAsync(FileManagementSettings.SharedFolder.DefaultFileTypes,
                 ResourceConsts.SharedFolder.DefaultFileTypes)
         };
     }
@@ -144,11 +149,11 @@ public class FileManagementSettingManager(ISettingManager settingManager, IDistr
     {
         return new FolderSetting()
         {
-            Quota = await GetSettingAsync(FileManagementSettings.UserFolder.DefaultQuota,
-                ResourceConsts.UserFolder.DefaultQuota),
-            FileMaxSize = await GetSettingAsync(FileManagementSettings.UserFolder.DefaultFileMaxSize,
-                ResourceConsts.UserFolder.DefaultFileMaxSize),
-            FileTypes = await GetSettingAsync(FileManagementSettings.UserFolder.DefaultFileTypes,
+            StorageQuota = (await GetSettingAsync(FileManagementSettings.UserFolder.DefaultQuota,
+                ResourceConsts.UserFolder.DefaultQuota)).ParseToBytes(),
+            MaxFileSize = (await GetSettingAsync(FileManagementSettings.UserFolder.DefaultFileMaxSize,
+                ResourceConsts.UserFolder.DefaultFileMaxSize)).ParseToBytes(),
+            AllowFileTypes = await GetSettingAsync(FileManagementSettings.UserFolder.DefaultFileTypes,
                 ResourceConsts.UserFolder.DefaultFileTypes)
         };
     }
@@ -157,11 +162,11 @@ public class FileManagementSettingManager(ISettingManager settingManager, IDistr
     {
         return new FolderSetting()
         {
-            Quota = await GetSettingAsync(FileManagementSettings.VirtualPath.DefaultQuota,
-                ResourceConsts.VirtualPath.DefaultQuota),
-            FileMaxSize = await GetSettingAsync(FileManagementSettings.VirtualPath.DefaultFileMaxSize,
-                ResourceConsts.VirtualPath.DefaultFileMaxSize),
-            FileTypes = await GetSettingAsync(FileManagementSettings.VirtualPath.DefaultFileTypes,
+            StorageQuota = (await GetSettingAsync(FileManagementSettings.VirtualPath.DefaultQuota,
+                ResourceConsts.VirtualPath.DefaultQuota)).ParseToBytes(),
+            MaxFileSize = (await GetSettingAsync(FileManagementSettings.VirtualPath.DefaultFileMaxSize,
+                ResourceConsts.VirtualPath.DefaultFileMaxSize)).ParseToBytes(),
+            AllowFileTypes = await GetSettingAsync(FileManagementSettings.VirtualPath.DefaultFileTypes,
                 ResourceConsts.VirtualPath.DefaultFileTypes)
         };
     }
@@ -170,12 +175,12 @@ public class FileManagementSettingManager(ISettingManager settingManager, IDistr
     {
         return new FolderSetting()
         {
-            Quota = await GetSettingAsync(FileManagementSettings.ParticipantIsolationFolder.DefaultQuota,
-                ResourceConsts.VirtualPath.DefaultQuota),
-            FileMaxSize = await GetSettingAsync(
+            StorageQuota = (await GetSettingAsync(FileManagementSettings.ParticipantIsolationFolder.DefaultQuota,
+                ResourceConsts.VirtualPath.DefaultQuota)).ParseToBytes(),
+            MaxFileSize = (await GetSettingAsync(
                 FileManagementSettings.ParticipantIsolationFolder.DefaultFileMaxSize,
-                ResourceConsts.VirtualPath.DefaultFileMaxSize),
-            FileTypes = await GetSettingAsync(FileManagementSettings.ParticipantIsolationFolder.DefaultFileTypes,
+                ResourceConsts.VirtualPath.DefaultFileMaxSize)).ParseToBytes(),
+            AllowFileTypes = await GetSettingAsync(FileManagementSettings.ParticipantIsolationFolder.DefaultFileTypes,
                 ResourceConsts.VirtualPath.DefaultFileTypes)
         };
     }

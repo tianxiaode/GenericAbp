@@ -27,8 +27,8 @@ public partial class ResourceRepository(IDbContextProvider<IFileManagementDbCont
             .IncludeIf(options.IncludeFile, m => m.FileInfoBase)
             .IncludeIf(options.IncludeConfiguration, m => m.Configuration)
             .IncludeIf(options.IncludePermissions, m => m.Permissions)
-            .Where(predicate)
             .WhereIf(parentId.HasValue, m => m.ParentId == parentId)
+            .Where(predicate)
             .FirstOrDefaultAsync(cancellation);
     }
 
@@ -98,10 +98,12 @@ public partial class ResourceRepository(IDbContextProvider<IFileManagementDbCont
             predicate = predicate.And(m => m.CreationTime <= search.EndTime.Value);
         }
 
+
         if (string.IsNullOrEmpty(search.FileType))
         {
             return Task.FromResult(predicate);
         }
+
 
         var types = search.FileType.Split(",");
         predicate = predicate.And(m => m.FileInfoBaseId != null && types.Contains(m.FileInfoBase!.Extension));

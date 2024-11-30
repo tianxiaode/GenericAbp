@@ -37,7 +37,6 @@
     "Permission:Permissions": "Permissions",
     "Permission:SettingManagement": "Setting Management",
     "Permission:UserFolders": "User Folders",
-    "Permission:ManageEnable": "Enable/Disable Folder",
     "Permission:FileUpload": "File Upload",
     "ProviderName:A": "Authorization User",
     "ProviderName:R": "Role",

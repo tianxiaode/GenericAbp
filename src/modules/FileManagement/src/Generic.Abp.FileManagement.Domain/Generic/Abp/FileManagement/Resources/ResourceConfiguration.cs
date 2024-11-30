@@ -21,13 +21,33 @@ public class ResourceConfiguration : AuditedEntity<Guid>, IMultiTenant
     [DisplayName("ResourceConfiguration:MaxFileSize")]
     public virtual long MaxFileSize { get; protected set; }
 
-    public ResourceConfiguration(Guid id, string allowedFileTypes, long storageQuota, long usedStorage,
-        long maxFileSize, Guid? tenantId) : base(id)
+    public ResourceConfiguration(Guid id, string allowedFileTypes, long storageQuota, long maxFileSize, Guid? tenantId)
+        : base(id)
     {
         AllowedFileTypes = allowedFileTypes;
         StorageQuota = storageQuota;
-        UsedStorage = usedStorage;
+        UsedStorage = 0;
         MaxFileSize = maxFileSize;
         TenantId = tenantId;
+    }
+
+    public void SetAllowedFileTypes(string allowedFileTypes)
+    {
+        AllowedFileTypes = allowedFileTypes;
+    }
+
+    public void SetStorageQuota(long storageQuota)
+    {
+        StorageQuota = storageQuota;
+    }
+
+    public void SetMaxFileSize(long maxFileSize)
+    {
+        MaxFileSize = maxFileSize;
+    }
+
+    public void SetUsedStorage(long usedStorage)
+    {
+        UsedStorage = usedStorage;
     }
 }

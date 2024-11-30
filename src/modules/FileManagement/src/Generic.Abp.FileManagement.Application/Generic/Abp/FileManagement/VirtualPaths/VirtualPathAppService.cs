@@ -11,9 +11,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Generic.Abp.FileManagement.UserFolders.Dtos;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Authorization;
+using Volo.Abp.ObjectMapping;
 using Resource = Generic.Abp.FileManagement.Resources.Resource;
 
 
@@ -64,8 +66,9 @@ public class VirtualPathAppService(
     [Authorize(FileManagementPermissions.VirtualPaths.Default)]
     public virtual async Task<PagedResultDto<ResourceBaseDto>> GetListAsync(VirtualPathGetListInput input)
     {
-        var (count, list) = await VirtualPathManager.GetVirtualPathsAsync(input.Filter, input.StartTime, input.EndTime,
-            null, input.Sorting, input.MaxResultCount, input.SkipCount);
+        var (count, list) =
+            await VirtualPathManager.GetVirtualPathsAsync(
+                ObjectMapper.Map<VirtualPathGetListInput, ResourceSearchAndPagedAndSortedParams>(input));
         return new PagedResultDto<ResourceBaseDto>(count, MapToResourceDtos(list));
     }
 

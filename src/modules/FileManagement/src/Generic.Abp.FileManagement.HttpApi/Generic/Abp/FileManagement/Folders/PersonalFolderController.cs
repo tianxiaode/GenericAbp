@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
+using Generic.Abp.FileManagement.FileInfoBases;
+using Generic.Abp.FileManagement.Resources.Dtos;
 using Volo.Abp.Application.Dtos;
 
 namespace Generic.Abp.FileManagement.Folders;

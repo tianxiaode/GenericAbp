@@ -30,13 +30,12 @@ namespace Generic.Abp.FileManagement.Permissions
             resourcesPermission.AddChild(FileManagementPermissions.Resources.ManagePermissions,
                 L("Permission:ChangePermissions"));
 
-            var personalFoldersPermission = fileManagementGroup.AddPermission(
+            var userFoldersPermission = fileManagementGroup.AddPermission(
                 FileManagementPermissions.UserFolders.Default,
                 L($"Permission:UserFolders"));
-            personalFoldersPermission.AddChild(FileManagementPermissions.UserFolders.ManageEnable,
-                L("Permission:ManageEnable"));
-            personalFoldersPermission.AddChild(FileManagementPermissions.UserFolders.ManageConfigurations,
-                L("Permission:ManageConfigurations"));
+            userFoldersPermission.AddChild(FileManagementPermissions.UserFolders.Create, L("Permission:Create"));
+            userFoldersPermission.AddChild(FileManagementPermissions.UserFolders.Update, L("Permission:Edit"));
+            userFoldersPermission.AddChild(FileManagementPermissions.UserFolders.Delete, L("Permission:Delete"));
 
             var virtualPathsPermission = fileManagementGroup.AddPermission(
                 FileManagementPermissions.VirtualPaths.Default,
