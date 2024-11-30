@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Generic.Abp.Extensions.Exceptions;
+using Generic.Abp.Extensions.Extensions;
 using Generic.Abp.FileManagement.Exceptions;
+using Microsoft.Extensions.Logging;
 using Volo.Abp.Domain.Entities;
 
 namespace Generic.Abp.FileManagement.Resources;
@@ -19,20 +21,20 @@ public partial class ResourceManager
 
         var entity = new Resource(GuidGenerator.Create(), name, ResourceType.Folder, false, tenantId);
         entity.MoveTo(parentId);
-        if (!string.IsNullOrEmpty(allowFileTypes))
-        {
-            entity.SetAllowedFileTypes(allowFileTypes);
-        }
-
-        if (!string.IsNullOrEmpty(quota))
-        {
-            entity.SetQuota(quota);
-        }
-
-        if (!string.IsNullOrEmpty(maxFileSize))
-        {
-            entity.SetMaxFileSize(maxFileSize);
-        }
+        // if (!string.IsNullOrEmpty(allowFileTypes))
+        // {
+        //     entity.SetAllowedFileTypes(allowFileTypes);
+        // }
+        //
+        // if (!string.IsNullOrEmpty(quota))
+        // {
+        //     entity.SetQuota(quota);
+        // }
+        //
+        // if (!string.IsNullOrEmpty(maxFileSize))
+        // {
+        //     entity.SetMaxFileSize(maxFileSize);
+        // }
 
         await CreateAsync(entity);
         return entity;
@@ -56,20 +58,20 @@ public partial class ResourceManager
 
 
         entity.Rename(name);
-        if (!string.IsNullOrEmpty(allowFileTypes))
-        {
-            entity.SetAllowedFileTypes(allowFileTypes);
-        }
-
-        if (!string.IsNullOrEmpty(quota))
-        {
-            entity.SetQuota(quota);
-        }
-
-        if (!string.IsNullOrEmpty(maxFileSize))
-        {
-            entity.SetMaxFileSize(maxFileSize);
-        }
+        // if (!string.IsNullOrEmpty(allowFileTypes))
+        // {
+        //     entity.SetAllowedFileTypes(allowFileTypes);
+        // }
+        //
+        // if (!string.IsNullOrEmpty(quota))
+        // {
+        //     entity.SetQuota(quota);
+        // }
+        //
+        // if (!string.IsNullOrEmpty(maxFileSize))
+        // {
+        //     entity.SetMaxFileSize(maxFileSize);
+        // }
 
         await UpdateAsync(entity);
         return entity;

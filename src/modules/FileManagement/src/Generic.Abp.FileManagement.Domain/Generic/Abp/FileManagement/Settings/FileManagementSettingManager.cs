@@ -166,6 +166,20 @@ public class FileManagementSettingManager(ISettingManager settingManager, IDistr
         };
     }
 
+    public virtual async Task<FolderSetting> GetParticipantIsolationFolderSettingAsync()
+    {
+        return new FolderSetting()
+        {
+            Quota = await GetSettingAsync(FileManagementSettings.ParticipantIsolationFolder.DefaultQuota,
+                ResourceConsts.VirtualPath.DefaultQuota),
+            FileMaxSize = await GetSettingAsync(
+                FileManagementSettings.ParticipantIsolationFolder.DefaultFileMaxSize,
+                ResourceConsts.VirtualPath.DefaultFileMaxSize),
+            FileTypes = await GetSettingAsync(FileManagementSettings.ParticipantIsolationFolder.DefaultFileTypes,
+                ResourceConsts.VirtualPath.DefaultFileTypes)
+        };
+    }
+
     public virtual async Task<FileSetting> GetDefaultFileSettingAsync()
     {
         return new FileSetting()

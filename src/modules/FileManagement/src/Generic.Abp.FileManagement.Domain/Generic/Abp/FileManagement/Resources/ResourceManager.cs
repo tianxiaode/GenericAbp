@@ -19,7 +19,8 @@ public partial class ResourceManager(
     ResourcePermissionManager resourcePermissionManager,
     FileManagementSettingManager settingManager,
     IDistributedEventBus distributedEventBus,
-    ICancellationTokenProvider cancellationTokenProvider)
+    ICancellationTokenProvider cancellationTokenProvider,
+    IResourceConfigurationRepository resourceConfigurationRepository)
     : TreeManager<Resource, IResourceRepository>(repository, treeCodeGenerator, cancellationTokenProvider)
 {
     protected IStringLocalizer<FileManagementResource> Localizer { get; } = localizer;
@@ -27,6 +28,9 @@ public partial class ResourceManager(
     protected ResourcePermissionManager PermissionManager { get; } = resourcePermissionManager;
     protected FileManagementSettingManager SettingManager { get; } = settingManager;
     protected IDistributedEventBus DistributedEventBus { get; } = distributedEventBus;
+
+    protected IResourceConfigurationRepository ResourceConfigurationRepository { get; } =
+        resourceConfigurationRepository;
 
     public override async Task DeleteAsync(Resource entity, bool autoSave = true)
     {

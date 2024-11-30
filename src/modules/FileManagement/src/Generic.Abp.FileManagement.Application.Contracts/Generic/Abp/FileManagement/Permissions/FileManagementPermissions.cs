@@ -5,6 +5,7 @@ namespace Generic.Abp.FileManagement.Permissions
     public class FileManagementPermissions
     {
         public const string GroupName = "FileManagement";
+        public const string SettingManagement = GroupName + ".SettingManagement";
 
         public static class FileInfoBases
         {
@@ -18,7 +19,14 @@ namespace Generic.Abp.FileManagement.Permissions
             public const string Create = Default + ".Create";
             public const string Update = Default + ".Update";
             public const string Delete = Default + ".Delete";
+            public const string ManageConfigurations = Default + ".ManageConfigureds";
             public const string ManagePermissions = Default + ".ManagePermissions";
+        }
+
+        public static class PersonalFolders
+        {
+            public const string Default = GroupName + ".PersonalFolders";
+            public const string ManageConfigurations = Default + ".ManageConfigureds";
         }
 
         public static class VirtualPaths

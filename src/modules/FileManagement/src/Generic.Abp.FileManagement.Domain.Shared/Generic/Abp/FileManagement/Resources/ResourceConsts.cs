@@ -8,6 +8,7 @@ public static class ResourceConsts
     public static class PublicFolder
     {
         public const string Name = "PUBLIC";
+        public const ResourceType RootType = ResourceType.PublicRootFolder;
 
         public static string DefaultFileTypes =
             ".docx,.pdf,.xlsx,.pptx,.txt,.csv,.xml,.json,.html,.js,.css,.md,.jpg,.png,.gif,.zip,.rar,.7z";
@@ -19,6 +20,7 @@ public static class ResourceConsts
     public static class SharedFolder
     {
         public const string Name = "SHARED";
+        public const ResourceType RootType = ResourceType.SharedRootFolder;
 
         public const string DefaultFileTypes =
             ".docx,.pdf,.xlsx,.pptx,.txt,.csv,.xml,.json,.html,.js,.css,.md,.jpg,.png,.gif,.zip,.rar,.7z";
@@ -30,6 +32,7 @@ public static class ResourceConsts
     public static class UserFolder
     {
         public const string Name = "USER";
+        public const ResourceType RootType = ResourceType.UsersRootFolder;
 
         public static string DefaultFileTypes =
             ".docx,.pdf,.xlsx,.pptx,.txt,.csv,.xml,.json,.html,.js,.css,.md,.jpg,.png,.gif,.zip,.rar,.7z";
@@ -41,6 +44,7 @@ public static class ResourceConsts
     public static class VirtualPath
     {
         public const string Name = "VIRTUAL";
+        public const ResourceType RootType = ResourceType.VirtualRootFolder;
 
         public static string DefaultFileTypes =
             ".docx,.pdf,.xlsx,.pptx,.txt,.csv,.xml,.json,.html,.js,.css,.md,.jpg,.png,.gif,.zip,.rar,.7z";
@@ -52,6 +56,7 @@ public static class ResourceConsts
     public static class ParticipantIsolationFolder
     {
         public const string Name = "ParticipantIsolation";
+        public const ResourceType RootType = ResourceType.ParticipantIsolationRootFolder;
 
         public static string DefaultFileTypes =
             ".docx,.pdf,.xlsx,.pptx,.txt,.csv,.xml,.json,.html,.js,.css,.md,.jpg,.png,.gif,.zip,.rar,.7z";

@@ -11,7 +11,7 @@
         public const string TempPath = GroupName + ".TempPath";
         public const string FolderCopyMaxNodeCount = GroupName + ".FolderCopyMaxNodeCount";
         public const string EnablePersonalFolderForRoles = GroupName + ".EnablePersonalFolderForRoles";
-        
+
         public static class PublicFolder
         {
             private const string PublicFolderPrefix = GroupName + ".PublicFolder";
@@ -42,6 +42,14 @@
             public const string DefaultQuota = VirtualPathPrefix + ".DefaultQuota";
             public const string DefaultFileMaxSize = VirtualPathPrefix + ".DefaultFileMaxSize";
             public const string DefaultFileTypes = VirtualPathPrefix + ".DefaultFileTypes";
+        }
+
+        public static class ParticipantIsolationFolder
+        {
+            private const string ParticipantIsolationFolderPrefix = GroupName + ".ParticipantIsolationRootFolder";
+            public const string DefaultQuota = ParticipantIsolationFolderPrefix + ".DefaultQuota";
+            public const string DefaultFileMaxSize = ParticipantIsolationFolderPrefix + ".DefaultFileMaxSize";
+            public const string DefaultFileTypes = ParticipantIsolationFolderPrefix + ".DefaultFileTypes";
         }
 
         public static class DefaultFile

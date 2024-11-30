@@ -10,6 +10,9 @@ namespace Generic.Abp.FileManagement.Permissions
         {
             var fileManagementGroup =
                 context.AddGroup(FileManagementPermissions.GroupName, L("Permission:FileManagement"));
+            //设置管理
+            fileManagementGroup.AddPermission(FileManagementPermissions.SettingManagement,
+                L("Permission:SettingManagement"));
 
             var fileInfoBasePermission = fileManagementGroup.AddPermission(
                 FileManagementPermissions.FileInfoBases.Default,
@@ -17,13 +20,21 @@ namespace Generic.Abp.FileManagement.Permissions
             fileInfoBasePermission.AddChild(FileManagementPermissions.FileInfoBases.ManageRetentionPolicy,
                 L("Permission:ManageRetentionPolicy"));
 
-            var foldersPermission = fileManagementGroup.AddPermission(FileManagementPermissions.Resources.Default,
+            var resourcesPermission = fileManagementGroup.AddPermission(FileManagementPermissions.Resources.Default,
                 L($"Permission:Resources"));
-            foldersPermission.AddChild(FileManagementPermissions.Resources.Create, L("Permission:Create"));
-            foldersPermission.AddChild(FileManagementPermissions.Resources.Update, L("Permission:Edit"));
-            foldersPermission.AddChild(FileManagementPermissions.Resources.Delete, L("Permission:Delete"));
-            foldersPermission.AddChild(FileManagementPermissions.Resources.ManagePermissions,
+            resourcesPermission.AddChild(FileManagementPermissions.Resources.Create, L("Permission:Create"));
+            resourcesPermission.AddChild(FileManagementPermissions.Resources.Update, L("Permission:Edit"));
+            resourcesPermission.AddChild(FileManagementPermissions.Resources.Delete, L("Permission:Delete"));
+            resourcesPermission.AddChild(FileManagementPermissions.Resources.ManageConfigurations,
+                L("Permission:ManageConfigurations"));
+            resourcesPermission.AddChild(FileManagementPermissions.Resources.ManagePermissions,
                 L("Permission:ChangePermissions"));
+
+            var personalFoldersPermission = fileManagementGroup.AddPermission(
+                FileManagementPermissions.PersonalFolders.Default,
+                L($"Permission:UserFolders"));
+            personalFoldersPermission.AddChild(FileManagementPermissions.PersonalFolders.ManageConfigurations,
+                L("Permission:ManageConfigurations"));
 
             var virtualPathsPermission = fileManagementGroup.AddPermission(
                 FileManagementPermissions.VirtualPaths.Default,

@@ -13,10 +13,6 @@ namespace Generic.Abp.FileManagement.Resources;
 public class ResourcePermissionManager(IResourcePermissionRepository repository, IdentityUserManager userManager)
     : DomainService
 {
-    public const string UserProviderName = "U";
-    public const string RoleProviderName = "R";
-    public const string AuthorizationUserProviderName = "A";
-    public const string EveryoneProviderName = "E";
     protected IResourcePermissionRepository Repository { get; } = repository;
     protected IdentityUserManager UserManager { get; } = userManager;
 
@@ -49,17 +45,20 @@ public class ResourcePermissionManager(IResourcePermissionRepository repository,
         // Everyone permissions
         if (!userId.HasValue)
         {
-            return await CheckPermissionAsync(id, EveryoneProviderName, permission, null, cancellationToken);
+            return await CheckPermissionAsync(id, ProviderNames.EveryoneProviderName, permission, null,
+                cancellationToken);
         }
 
         // Authenticated user permissions
-        if (await CheckPermissionAsync(id, AuthorizationUserProviderName, permission, null, cancellationToken))
+        if (await CheckPermissionAsync(id, ProviderNames.AuthorizationUserProviderName, permission, null,
+                cancellationToken))
         {
             return true;
         }
 
         // User-specific permissions
-        if (await CheckPermissionAsync(id, UserProviderName, permission, [userId.Value.ToString()], cancellationToken))
+        if (await CheckPermissionAsync(id, ProviderNames.UserProviderName, permission, [userId.Value.ToString()],
+                cancellationToken))
         {
             return true;
         }
@@ -86,7 +85,7 @@ public class ResourcePermissionManager(IResourcePermissionRepository repository,
         CancellationToken cancellationToken = default)
     {
         var roles = await GetRolesAsync(userId);
-        return await CheckPermissionAsync(id, RoleProviderName, permission, roles, cancellationToken);
+        return await CheckPermissionAsync(id, ProviderNames.RoleProviderName, permission, roles, cancellationToken);
     }
 
 
@@ -98,24 +97,25 @@ public class ResourcePermissionManager(IResourcePermissionRepository repository,
         // Everyone permissions
         if (!userId.HasValue)
         {
-            return await HasPermission(permissions, EveryoneProviderName, requiredPermission);
+            return await HasPermission(permissions, ProviderNames.EveryoneProviderName, requiredPermission);
         }
 
         // Authenticated users
-        if (await HasPermission(permissions, AuthorizationUserProviderName, requiredPermission))
+        if (await HasPermission(permissions, ProviderNames.AuthorizationUserProviderName, requiredPermission))
         {
             return true;
         }
 
         // User-specific permissions
-        if (await HasPermission(permissions, UserProviderName, requiredPermission, [userId.Value.ToString()]))
+        if (await HasPermission(permissions, ProviderNames.UserProviderName, requiredPermission,
+                [userId.Value.ToString()]))
         {
             return true;
         }
 
         // Role-based permissions
         var roles = await GetRolesAsync(userId.Value);
-        return await HasPermission(permissions, RoleProviderName, requiredPermission, roles);
+        return await HasPermission(permissions, ProviderNames.RoleProviderName, requiredPermission, roles);
     }
 
     public virtual async Task<IList<string>> GetRolesAsync(Guid userId)

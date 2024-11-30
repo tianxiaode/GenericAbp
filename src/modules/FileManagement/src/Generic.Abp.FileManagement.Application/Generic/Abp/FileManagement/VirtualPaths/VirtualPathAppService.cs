@@ -1,25 +1,21 @@
-﻿using Generic.Abp.Extensions.RemoteContents;
+﻿using Generic.Abp.Extensions.Exceptions;
+using Generic.Abp.Extensions.RemoteContents;
 using Generic.Abp.FileManagement.Dtos;
 using Generic.Abp.FileManagement.FileInfoBases;
 using Generic.Abp.FileManagement.Permissions;
 using Generic.Abp.FileManagement.Resources;
+using Generic.Abp.FileManagement.Resources.Dtos;
 using Generic.Abp.FileManagement.VirtualPaths.Dtos;
+using Generic.Abp.VirtualPaths;
 using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
-using System.Data.SqlTypes;
 using System.Linq;
 using System.Threading.Tasks;
-using Generic.Abp.Extensions.Exceptions;
-using Generic.Abp.FileManagement.Exceptions;
-using Generic.Abp.FileManagement.Resources.Dtos;
-using Generic.Abp.VirtualPaths;
-using Microsoft.Extensions.Logging;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Authorization;
 using Resource = Generic.Abp.FileManagement.Resources.Resource;
-using System.IO;
 
 
 namespace Generic.Abp.FileManagement.VirtualPaths;
@@ -35,8 +31,6 @@ public class VirtualPathAppService(
 
     #region 文件相关
 
-    
-
     [AllowAnonymous]
     public virtual async Task<IRemoteContent> GetFileAsync(string path, string hash, GetFileDto input)
     {
@@ -49,88 +43,6 @@ public class VirtualPathAppService(
         var file = await GetAndValidateFileAssociationAsync(entity, hash);
 
         return await FileInfoBaseManager.GetFileAsync(file, input.ChunkSize, input.Index);
-    }
-
-    [Authorize]
-    public virtual async Task<ICheckFileResult> CheckFileAsync(string path, FileCheckInput input)
-    {
-        var entity =
-            await VirtualPathManager.FindVirtualPathAsync(path,
-                new ResourceQueryOptions(false, includeConfiguration: true));
-        await CheckWritePermissionAsync(entity);
-        if (entity.Configuration == null)
-        {
-            Logger.LogError("The virtual path {name} does not have a configuration", entity.Name);
-            throw new AbpException("The virtual path does not have a configuration");
-        }
-
-        if (input.Size > entity.Configuration.MaxFileSize)
-        {
-            throw new FileSizeOutOfRangeBusinessException(entity.Configuration.MaxFileSize, input.Size);
-        }
-
-        if (entity.Configuration.StorageQuota != 0 &&
-            input.Size > entity.Configuration.StorageQuota - entity.Configuration.UsedStorage)
-        {
-            throw new InsufficientStorageSpaceBusinessException(input.Size, entity.Configuration.UsedStorage,
-                entity.Configuration.StorageQuota);
-        }
-
-        return await FileInfoBaseManager.CheckAsync(input.Hash, input.Size, input.ChunkSize);
-    }
-
-    [Authorize]
-    public virtual async Task UploadChunkAsync(string path, FileUploadChunkInput input)
-    {
-        var entity =
-            await VirtualPathManager.FindVirtualPathAsync(path,
-                new ResourceQueryOptions(false, includeConfiguration: true));
-        await CheckWritePermissionAsync(entity);
-        if (entity.Configuration == null)
-        {
-            Logger.LogError("The virtual path {name} does not have a configuration", entity.Name);
-            throw new AbpException("The virtual path does not have a configuration");
-        }
-
-        if (!entity.FolderId.HasValue)
-        {
-            throw new AbpException();
-        }
-
-        await FileInfoBaseManager.UploadChunkAsync(input.Hash, input.ChunkBytes, input.Index);
-    }
-
-    public virtual async Task<ResourceDto> MergeAsync(string path, FileMergeInput input)
-    {
-        var entity =
-            await VirtualPathManager.FindVirtualPathAsync(path,
-                new ResourceQueryOptions(false, true, includeConfiguration: true));
-        await CheckWritePermissionAsync(entity);
-        if (entity.Configuration == null)
-        {
-            Logger.LogError("The virtual path {name} does not have a configuration", entity.Name);
-            throw new AbpException("The virtual path does not have a configuration");
-        }
-
-        if (!entity.FolderId.HasValue)
-        {
-            throw new AbpException();
-        }
-
-        var fileInfoBase = await FileInfoBaseManager.MergeAsync(input.Hash, input.TotalChunks,
-            entity.Configuration.AllowedFileTypes, entity.Configuration.MaxFileSize,
-            entity.Configuration.StorageQuota, entity.Configuration.UsedStorage);
-        var fileResource = new Resource(GuidGenerator.Create(), input.Filename, ResourceType.File, false,
-            CurrentTenant.Id);
-        fileResource.MoveTo(entity.FolderId.Value);
-        fileResource.SetFileInfoBase(fileInfoBase.Id);
-        await VirtualPathManager.CreateAsync(fileResource);
-        return ObjectMapper.Map<Resource, ResourceDto>(entity);
-    }
-
-    public virtual Task DeleteFileAsync(string path, Guid id)
-    {
-
     }
 
     #endregion

@@ -1,17 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
-using Generic.Abp.Extensions;
-using Generic.Abp.FileManagement.Jobs;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Volo.Abp;
+﻿using Generic.Abp.Extensions;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.Caching;
-using Volo.Abp.DistributedLocking;
 using Volo.Abp.Identity;
 using Volo.Abp.Modularity;
-using Volo.Abp.MultiTenancy;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.Threading;
 

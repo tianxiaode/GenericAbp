@@ -50,6 +50,8 @@ namespace Generic.Abp.FileManagement.EntityFrameworkCore
                 //Properties
                 b.Property(m => m.Name).IsRequired().HasMaxLength(ResourceConsts.NameMaxLength);
                 b.Property(m => m.Code).IsRequired().HasMaxLength(ResourceConsts.CodeMaxLength);
+                b.Property(m => m.IsEnabled).IsRequired().HasDefaultValue(true);
+                b.Property(m => m.IsStatic).IsRequired().HasDefaultValue(true);
 
                 if (dbType == EfCoreDatabaseProvider.MySql)
                 {

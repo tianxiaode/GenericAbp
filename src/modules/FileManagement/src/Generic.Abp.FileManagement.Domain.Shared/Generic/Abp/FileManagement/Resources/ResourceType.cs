@@ -4,5 +4,11 @@ public enum ResourceType
 {
     File,
     Folder,
-    VirtualPath
+    VirtualPath,
+    PublicRootFolder,
+    SharedRootFolder,
+    UserRootFolder,
+    UsersRootFolder,
+    VirtualRootFolder,
+    ParticipantIsolationRootFolder
 }
