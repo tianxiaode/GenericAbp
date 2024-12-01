@@ -3,6 +3,7 @@ using Generic.Abp.FileManagement.FileInfoBases;
 using Generic.Abp.FileManagement.Resources;
 using Generic.Abp.FileManagement.Resources.Dtos;
 using Generic.Abp.FileManagement.UserFolders.Dtos;
+using Generic.Abp.FileManagement.VirtualPaths;
 using Generic.Abp.FileManagement.VirtualPaths.Dtos;
 using Volo.Abp.AutoMapper;
 
@@ -22,9 +23,9 @@ namespace Generic.Abp.FileManagement
             CreateMap<Resource, ResourceBaseDto>();
 
             CreateMap<ResourcePermission, ResourcePermissionDto>();
-            CreateMap<Resource, VirtualPathDto>();
-            CreateMap<VirtualPathGetListInput, ResourceSearchAndPagedAndSortedParams>()
-                .Ignore(m => m.FileType);
+
+            CreateMap<VirtualPath, VirtualPathDto>().MapExtraProperties();
+            CreateMap<VirtualPathGetListInput, VirtualPathSearchParams>();
 
             CreateMap<Resource, UserFolderDto>()
                 .ForMember(m => m.AllowedFileTypes, opts => opts.MapFrom(m => m.Configuration!.AllowedFileTypes))

@@ -1,11 +1,10 @@
-﻿using System;
-using System.Threading.Tasks;
-using Asp.Versioning;
+﻿using Asp.Versioning;
 using Generic.Abp.Extensions.RemoteContents;
 using Generic.Abp.FileManagement.Dtos;
-using Generic.Abp.FileManagement.Resources.Dtos;
 using Generic.Abp.FileManagement.VirtualPaths.Dtos;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 
@@ -41,20 +40,20 @@ public class VirtualPathController(IVirtualPathAppService appService) : FileMana
     }
 
     [HttpGet]
-    public Task<PagedResultDto<ResourceBaseDto>> GetListAsync(VirtualPathGetListInput input)
+    public Task<PagedResultDto<VirtualPathDto>> GetListAsync(VirtualPathGetListInput input)
     {
         return AppService.GetListAsync(input);
     }
 
     [HttpPost]
-    public Task<ResourceBaseDto> CreateAsync([FromBody] VirtualPathCreateDto input)
+    public Task<VirtualPathDto> CreateAsync([FromBody] VirtualPathCreateDto input)
     {
         return AppService.CreateAsync(input);
     }
 
     [HttpPut]
     [Route("{id:guid}")]
-    public Task<ResourceBaseDto> UpdateAsync(Guid id, [FromBody] VirtualPathUpdateDto input)
+    public Task<VirtualPathDto> UpdateAsync(Guid id, [FromBody] VirtualPathUpdateDto input)
     {
         return AppService.UpdateAsync(id, input);
     }
@@ -63,19 +62,5 @@ public class VirtualPathController(IVirtualPathAppService appService) : FileMana
     public Task DeleteAsync(Guid id)
     {
         return AppService.DeleteAsync(id);
-    }
-
-    [HttpGet]
-    [Route("{id:guid}/permissions")]
-    public Task<ListResultDto<ResourcePermissionDto>> GetPermissionsAsync(Guid id)
-    {
-        return AppService.GetPermissionsAsync(id);
-    }
-
-    [HttpPut]
-    [Route("{id:guid}/permissions")]
-    public Task UpdatePermissionAsync(Guid id, [FromBody] ResourcePermissionsCreateOrUpdateDto input)
-    {
-        return AppService.UpdatePermissionAsync(id, input);
     }
 }

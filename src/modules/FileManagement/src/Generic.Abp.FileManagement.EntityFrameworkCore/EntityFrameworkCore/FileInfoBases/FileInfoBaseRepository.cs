@@ -1,18 +1,18 @@
-﻿using Generic.Abp.FileManagement.FileInfoBases;
+﻿using Generic.Abp.Extensions.EntityFrameworkCore;
+using Generic.Abp.FileManagement.FileInfoBases;
+using Generic.Abp.FileManagement.Resources;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Generic.Abp.FileManagement.Resources;
-using Microsoft.EntityFrameworkCore;
-using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 
 namespace Generic.Abp.FileManagement.EntityFrameworkCore.FileInfoBases;
 
 public class FileInfoBaseRepository(IDbContextProvider<FileManagementDbContext> dbContextProvider)
-    : EfCoreRepository<FileManagementDbContext, FileInfoBase, Guid>(dbContextProvider), IFileInfoBaseRepository
+    : ExtensionRepository<FileManagementDbContext, FileInfoBase>(dbContextProvider), IFileInfoBaseRepository
 {
     public virtual async Task BulkUpdateExpireAtAsync(FileRetentionPolicy policy, int retentionPeriod, int batchSize,
         CancellationToken cancellationToken = default)

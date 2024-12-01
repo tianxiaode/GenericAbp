@@ -43,8 +43,6 @@ namespace Generic.Abp.FileManagement.Permissions
             virtualPathsPermission.AddChild(FileManagementPermissions.VirtualPaths.Create, L("Permission:Create"));
             virtualPathsPermission.AddChild(FileManagementPermissions.VirtualPaths.Update, L("Permission:Edit"));
             virtualPathsPermission.AddChild(FileManagementPermissions.VirtualPaths.Delete, L("Permission:Delete"));
-            virtualPathsPermission.AddChild(FileManagementPermissions.VirtualPaths.ManagePermissions,
-                L("Permission:ChangePermissions"));
         }
 
         private static LocalizableString L(string name)

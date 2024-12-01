@@ -7,6 +7,7 @@ using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
+using Generic.Abp.Extensions.Entities.GetListParams;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
@@ -35,5 +36,17 @@ public class ExtensionRepository<TDbContext, TEntity>(IDbContextProvider<TDbCont
             .OrderBy(sorting)
             .PageBy(skipCount, maxResultCount)
             .ToListAsync(cancellationToken);
+    }
+}
+
+public class ExtensionRepository<TDbContext, TEntity, TSearchParams>(IDbContextProvider<TDbContext> dbContextProvider)
+    : ExtensionRepository<TDbContext, TEntity>(dbContextProvider), IExtensionRepository<TEntity, TSearchParams>
+    where TDbContext : IEfCoreDbContext
+    where TEntity : class, IEntity<Guid>
+    where TSearchParams : class, ISearchParams
+{
+    public virtual Task<Expression<Func<TEntity, bool>>> BuildPredicateExpression(TSearchParams searchParams)
+    {
+        throw new NotImplementedException();
     }
 }

@@ -4,6 +4,6 @@ namespace Generic.Abp.Extensions.Entities.GetListParams;
 
 public interface IHasCreationTimeSearch
 {
-    DateTime? StartTime { get; set; }
-    DateTime? EndTime { get; set; }
+    public DateTime? StartTime { get; set; }
+    public DateTime? EndTime { get; set; }
 }

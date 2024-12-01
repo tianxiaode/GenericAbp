@@ -2,7 +2,7 @@
 
 public class ExternalShareConsts
 {
-    public static int SharedTokenMaxLength { get; set; } = 36;
+    public static int LinkNameMaxLength { get; set; } = 36;
     public static int PasswordMaxLength { get; set; } = 4;
 
     private const string DefaultSorting = "{0}CreationTime desc";

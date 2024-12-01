@@ -3,14 +3,17 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using System.Threading;
+using Generic.Abp.Extensions.Entities.GetListParams;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Services;
 using Volo.Abp.Threading;
+using Microsoft.Extensions.Localization;
 
 namespace Generic.Abp.Extensions.Entities;
 
-public class EntityManagerBase<TEntity, TRepository>(
+public class EntityManagerBase<TEntity, TRepository, TResource>(
     TRepository repository,
+    IStringLocalizer<TResource> localizer,
     ICancellationTokenProvider cancellationTokenProvider) : DomainService
     where TEntity : class, IEntity<Guid>
     where TRepository : IExtensionRepository<TEntity>
@@ -18,6 +21,7 @@ public class EntityManagerBase<TEntity, TRepository>(
     protected TRepository Repository { get; } = repository;
     protected ICancellationTokenProvider CancellationTokenProvider { get; } = cancellationTokenProvider;
     protected CancellationToken CancellationToken => CancellationTokenProvider.Token;
+    protected IStringLocalizer<TResource> L { get; } = localizer;
 
     public virtual async Task CreateAsync(TEntity entity, bool autoSave = true)
     {
@@ -52,6 +56,17 @@ public class EntityManagerBase<TEntity, TRepository>(
         await Repository.DeleteManyAsync(entities, autoSave, CancellationToken);
     }
 
+    public virtual async Task<TEntity> GetAsync(Guid id, bool includeDetails = false)
+    {
+        return await Repository.GetAsync(id, includeDetails, CancellationToken);
+    }
+
+    public virtual async Task<TEntity?> FindAsync(Expression<Func<TEntity, bool>> predicate,
+        bool includeDetails = false)
+    {
+        return await Repository.FindAsync(predicate, includeDetails, CancellationToken);
+    }
+
     public virtual async Task<long> GetCountAsync(Expression<Func<TEntity, bool>> predicate)
     {
         return await Repository.GetCountAsync(predicate, CancellationToken);
@@ -75,5 +90,20 @@ public class EntityManagerBase<TEntity, TRepository>(
     public virtual Task ValidateAsync(TEntity entity)
     {
         return Task.CompletedTask;
+    }
+}
+
+public class EntityManagerBase<TEntity, TRepository, TResource, TSearchParams>(
+    TRepository repository,
+    IStringLocalizer<TResource> localizer,
+    ICancellationTokenProvider cancellationTokenProvider)
+    : EntityManagerBase<TEntity, TRepository, TResource>(repository, localizer, cancellationTokenProvider)
+    where TEntity : class, IEntity<Guid>
+    where TRepository : IExtensionRepository<TEntity, TSearchParams>
+    where TSearchParams : class, ISearchParams
+{
+    public virtual async Task<Expression<Func<TEntity, bool>>> BuildPredicateExpression(TSearchParams searchParams)
+    {
+        return await Repository.BuildPredicateExpression(searchParams);
     }
 }
