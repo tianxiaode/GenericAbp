@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 
-namespace Generic.Abp.Extensions.Repositories;
+namespace Generic.Abp.Extensions.Entities;
 
 public interface IExtensionRepository<TEntity> : IRepository<TEntity, Guid>
     where TEntity : class, IEntity<Guid>

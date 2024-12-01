@@ -10,14 +10,12 @@ public class Resource : TreeAuditedAggregateRoot<Resource>
     public virtual ResourceType Type { get; protected set; }
     public virtual FileInfoBase? FileInfoBase { get; protected set; }
     public virtual Guid? FileInfoBaseId { get; protected set; }
-    public virtual Guid? FolderId { get; protected set; }
-    public virtual Resource? Folder { get; protected set; }
-    public virtual ResourceConfiguration? Configuration { get; protected set; }
-    public virtual Guid? ConfigurationId { get; protected set; }
+    public virtual bool HasConfiguration { get; protected set; }
+    public virtual bool HasPermissions { get; protected set; }
     public virtual ICollection<ResourcePermission> Permissions { get; set; } = default!;
     public virtual Guid? OwnerId { get; protected set; }
-    public virtual bool IsEnabled { get; protected set; }
     public virtual bool IsStatic { get; protected set; }
+    public virtual bool IsAccessible { get; protected set; }
 
     public Resource(Guid id, string name, ResourceType type, bool isStatic = false, Guid? ownerId = null,
         Guid? tenantId = null) : base(id,
@@ -26,31 +24,32 @@ public class Resource : TreeAuditedAggregateRoot<Resource>
         Type = type;
         IsStatic = isStatic;
         OwnerId = ownerId;
-        IsEnabled = true;
+        HasConfiguration = false;
+        HasPermissions = false;
+        IsAccessible = true;
     }
 
-    public void SetFileInfoBase(Guid? fileInfoBaseId)
+    public virtual void SetFileInfoBase(Guid? fileInfoBaseId)
     {
         FileInfoBaseId = fileInfoBaseId;
     }
 
-    public void SetFolderId(Guid? folderId)
+    public virtual void SetIsAccessible(bool isAccessible)
     {
-        FolderId = folderId;
+        IsAccessible = isAccessible;
     }
 
-    public void SetConfiguration(ResourceConfiguration configuration)
+    public virtual void SetHasConfiguration(bool hasConfiguration)
     {
-        Configuration = configuration;
-        ConfigurationId = configuration.Id;
+        HasConfiguration = hasConfiguration;
     }
 
-    public void SetIsEnabled(bool isEnabled)
+    public virtual void SetHasPermissions(bool hasPermissions)
     {
-        IsEnabled = isEnabled;
+        HasPermissions = hasPermissions;
     }
 
-    public void SetOwner(Guid ownerId)
+    public virtual void SetOwner(Guid ownerId)
     {
         OwnerId = ownerId;
     }

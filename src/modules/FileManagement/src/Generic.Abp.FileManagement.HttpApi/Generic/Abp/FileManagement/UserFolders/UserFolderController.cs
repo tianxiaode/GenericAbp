@@ -37,7 +37,7 @@ public class UserFolderController(IUserFolderAppService appService) : FileManage
 
     [HttpPut]
     [Route("{id:guid}")]
-    public Task<UserFolderDto> UpdateAsync(Guid id, UserFolderUpdateDto input)
+    public Task<UserFolderDto> UpdateAsync(Guid id, [FromBody] UserFolderUpdateDto input)
     {
         return AppService.UpdateAsync(id, input);
     }

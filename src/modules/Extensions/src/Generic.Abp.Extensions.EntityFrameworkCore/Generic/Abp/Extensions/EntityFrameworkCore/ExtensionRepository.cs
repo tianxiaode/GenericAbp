@@ -1,4 +1,4 @@
-﻿using Generic.Abp.Extensions.Repositories;
+﻿using Generic.Abp.Extensions.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

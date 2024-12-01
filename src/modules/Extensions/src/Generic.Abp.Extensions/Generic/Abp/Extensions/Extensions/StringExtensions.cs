@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace Generic.Abp.Extensions.Extensions
 {
     public static class StringExtensions
     {
+        private const string RandomStringChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
         public static string UnCapitalize(this string str)
         {
             if (string.IsNullOrEmpty(str))
@@ -40,6 +43,23 @@ namespace Generic.Abp.Extensions.Extensions
         public static bool IsAscii(this string str)
         {
             return Encoding.UTF8.GetByteCount(str) == str.Length;
+        }
+
+        /// <summary>
+        /// 随机生成字符串
+        /// </summary>
+        /// <param name="length">随机字符串长度</param>
+        /// <returns></returns>
+        public static string GenerateRandomString(int length)
+        {
+            byte[] bytes = new byte[length];
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(bytes);
+            }
+
+            // Convert the random bytes to indices into the character array and build the string.
+            return new string(bytes.Select(b => RandomStringChars[b % RandomStringChars.Length]).ToArray());
         }
 
         public static long ParseToBytes(this string str)
