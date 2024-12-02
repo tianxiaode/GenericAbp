@@ -1,12 +1,10 @@
-﻿using Generic.Abp.FileManagement.Resources;
-using Generic.Abp.FileManagement.Settings;
+﻿using Generic.Abp.FileManagement.Settings;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.SettingManagement;
 using Volo.Abp.Threading;
 
 namespace Generic.Abp.FileManagement.Jobs;
@@ -29,29 +27,15 @@ public class CleanupJobManager(
     {
         try
         {
-            var defaultFileSetting = await FileManagementSettingManager.GetDefaultFileSettingAsync();
-            var temporaryFileSetting = await FileManagementSettingManager.GetTemporaryFileSettingAsync();
-            await ScheduleOrUpdateTaskAsync("DefaultFileUpdate", tenantId,
-                defaultFileSetting.UpdateSetting.Enable,
-                defaultFileSetting.UpdateSetting.Frequency,
-                () => ExecuteDefaultUpdateAsync(tenantId, defaultFileSetting.UpdateSetting.RetentionPeriod,
-                    defaultFileSetting.UpdateSetting.BatchSize));
-
-            await ScheduleOrUpdateTaskAsync("DefaultCleanup", tenantId,
-                defaultFileSetting.CleanupSetting.Enable,
-                defaultFileSetting.CleanupSetting.Frequency,
-                () => ExecuteDefaultCleanupAsync(tenantId, defaultFileSetting.CleanupSetting.BatchSize));
-
-            await ScheduleOrUpdateTaskAsync("TemporaryUpdate", tenantId,
-                temporaryFileSetting.UpdateSetting.Enable,
-                temporaryFileSetting.UpdateSetting.Frequency,
-                () => ExecuteTemporaryUpdateAsync(tenantId, temporaryFileSetting.UpdateSetting.RetentionPeriod,
-                    temporaryFileSetting.UpdateSetting.BatchSize));
-
-            await ScheduleOrUpdateTaskAsync("TemporaryCleanup", tenantId,
-                temporaryFileSetting.CleanupSetting.Enable,
-                temporaryFileSetting.CleanupSetting.Frequency,
-                () => ExecuteTemporaryCleanupAsync(tenantId, temporaryFileSetting.CleanupSetting.BatchSize));
+            var settings = await FileManagementSettingManager.GetAllCleanupOrUpdateSettingsAsync();
+            foreach (var (key, cleanupOrUpdateSetting) in settings)
+            {
+                await ScheduleOrUpdateTaskAsync(key, tenantId,
+                    cleanupOrUpdateSetting.Enable,
+                    cleanupOrUpdateSetting.Frequency,
+                    () => ExecuteAsync(key, tenantId, cleanupOrUpdateSetting.RetentionPeriod,
+                        cleanupOrUpdateSetting.BatchSize));
+            }
         }
         catch (Exception ex)
         {
@@ -91,7 +75,7 @@ public class CleanupJobManager(
         string taskPrefix,
         Guid? tenantId,
         bool enable,
-        int frequency,
+        long frequency,
         Func<Task> task)
     {
         var taskName = $"{taskPrefix}:{tenantId}";
@@ -115,14 +99,22 @@ public class CleanupJobManager(
         }
     }
 
-    protected virtual async Task ExecuteDefaultUpdateAsync(Guid? tenantId, int retentionPeriod, int batchSize)
+    protected virtual async Task ExecuteAsync(string prefix, Guid? tenantId, int? retentionPeriod, int batchSize)
     {
         try
         {
             var jobName =
-                await GetJobNameAsync(tenantId, nameof(DefaultRetentionPolicyUpdateJob) + ":" + "TemporaryFile");
-            await BackgroundJobManager.EnqueueAsync(tenantId, jobName,
-                new DefaultRetentionPolicyUpdateJobArgs(tenantId, jobName, retentionPeriod, batchSize));
+                await GetJobNameAsync(tenantId, prefix, nameof(DefaultRetentionPolicyUpdateJob));
+            if (retentionPeriod.HasValue)
+            {
+                await BackgroundJobManager.EnqueueAsync(tenantId, jobName,
+                    new DefaultRetentionPolicyUpdateJobArgs(tenantId, jobName, retentionPeriod, batchSize));
+            }
+            else
+            {
+                await BackgroundJobManager.EnqueueAsync(tenantId, jobName,
+                    new DefaultFileCleanupJobArgs(tenantId, jobName, batchSize));
+            }
         }
         catch (Exception ex)
         {
@@ -130,51 +122,9 @@ public class CleanupJobManager(
         }
     }
 
-    protected virtual async Task ExecuteDefaultCleanupAsync(Guid? tenantId, int batchSize)
+    protected virtual Task<string> GetJobNameAsync(Guid? tenantId, string prefix, string jobName)
     {
-        try
-        {
-            var jobName = await GetJobNameAsync(tenantId, nameof(DefaultFileCleanupJob) + ":" + "DefaultFile");
-            await BackgroundJobManager.EnqueueAsync(tenantId, jobName,
-                new DefaultFileCleanupJobArgs(tenantId, jobName, batchSize));
-        }
-        catch (Exception ex)
-        {
-            Logger.LogError(ex, "Error executing DefaultCleanup for tenant {TenantId}", tenantId);
-        }
-    }
-
-    protected virtual async Task ExecuteTemporaryUpdateAsync(Guid? tenantId, int retentionPeriod, int batchSize)
-    {
-        try
-        {
-            var jobName =
-                await GetJobNameAsync(tenantId, nameof(DefaultRetentionPolicyUpdateJob) + ":" + "TemporaryFile");
-            await BackgroundJobManager.EnqueueAsync(tenantId, jobName,
-                new DefaultRetentionPolicyUpdateJobArgs(tenantId, jobName, retentionPeriod, batchSize));
-        }
-        catch (Exception ex)
-        {
-            Logger.LogError(ex, "Error executing TemporaryUpdate for tenant {TenantId}", tenantId);
-        }
-    }
-
-    protected virtual async Task ExecuteTemporaryCleanupAsync(Guid? tenantId, int batchSize)
-    {
-        try
-        {
-            var jobName = await GetJobNameAsync(tenantId, nameof(DefaultFileCleanupJob) + ":" + "TemporaryFile");
-            await BackgroundJobManager.EnqueueAsync(tenantId, jobName,
-                new DefaultFileCleanupJobArgs(tenantId, jobName, batchSize));
-        }
-        catch (Exception ex)
-        {
-            Logger.LogError(ex, "Error executing TemporaryCleanup for tenant {TenantId}", tenantId);
-        }
-    }
-
-    protected virtual Task<string> GetJobNameAsync(Guid? tenantId, string jobName)
-    {
+        jobName = $"{prefix}:{jobName}";
         if (tenantId.HasValue)
         {
             jobName += $"-{tenantId.Value}";

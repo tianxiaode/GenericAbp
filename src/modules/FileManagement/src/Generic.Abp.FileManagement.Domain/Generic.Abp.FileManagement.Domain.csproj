@@ -13,7 +13,6 @@
 
   <ItemGroup>
 	  <PackageReference Include="Volo.Abp.Identity.Domain" Version="$(AbpVersion)" />
-    <PackageReference Include="Volo.Abp.SettingManagement.Domain" Version="$(AbpVersion)" />
     <PackageReference Include="Volo.Abp.Caching" Version="$(AbpVersion)" />
     <PackageReference Include="Volo.Abp.BackgroundJobs" Version="$(AbpVersion)" />
     <PackageReference Include="Volo.Abp.DistributedLocking" Version="$(AbpVersion)" />
@@ -27,7 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Generic\Abp\FileManagement\新文件夹\" />
+    <Folder Include="Generic\Abp\FileManagement\Settings\Result\" />
   </ItemGroup>
 
 

@@ -7,7 +7,6 @@ using Generic.Abp.Extensions.Trees;
 using Generic.Abp.FileManagement.Localization;
 using Generic.Abp.FileManagement.Resources;
 using Generic.Abp.FileManagement.Settings;
-using Generic.Abp.FileManagement.Settings.Result;
 using Microsoft.Extensions.Localization;
 using Volo.Abp.Caching;
 using Volo.Abp.EventBus.Distributed;

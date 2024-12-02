@@ -1,7 +1,7 @@
-﻿using Generic.Abp.FileManagement.Settings.Result;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
+using Generic.Abp.FileManagement.Settings;
 
 namespace Generic.Abp.FileManagement.Resources;
 

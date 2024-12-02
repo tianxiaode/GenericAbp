@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <PackageReference Include="Volo.Abp.Ddd.Domain" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.SettingManagement.Domain" Version="$(AbpVersion)" />
   </ItemGroup>
 
   <ItemGroup>

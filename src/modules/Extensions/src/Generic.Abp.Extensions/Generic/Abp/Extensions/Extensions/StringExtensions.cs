@@ -37,7 +37,7 @@ namespace Generic.Abp.Extensions.Extensions
                 return str;
             }
 
-            return str.First().ToString().ToUpperInvariant() + str.Substring(1);
+            return str.First().ToString().ToUpperInvariant() + str[1..];
         }
 
         public static bool IsAscii(this string str)
@@ -107,11 +107,11 @@ namespace Generic.Abp.Extensions.Extensions
                 throw new FormatException("Invalid format. Expected a number followed by an optional unit.");
             }
 
-            var numericPart = double.Parse(str.Substring(0, index));
+            var numericPart = double.Parse(str[..index]);
 
             if (index < str.Length)
             {
-                unitPart = str.Substring(index);
+                unitPart = str[index..];
             }
 
             if (!string.IsNullOrEmpty(unitPart) && units.ContainsKey(unitPart))
@@ -126,6 +126,63 @@ namespace Generic.Abp.Extensions.Extensions
             }
 
             throw new ArgumentException($"Unknown unit '{unitPart}'. Valid units are: {string.Join(", ", units.Keys)}");
+        }
+
+        public static T Parse<T>(this string? stringValue)
+        {
+            if (string.IsNullOrWhiteSpace(stringValue))
+            {
+                return default!;
+            }
+
+            try
+            {
+                if (typeof(T) == typeof(string))
+                {
+                    return (T)(object)stringValue!;
+                }
+
+                if (typeof(T) == typeof(bool))
+                {
+                    return (T)(object)bool.Parse(stringValue)!;
+                }
+
+                if (typeof(T) == typeof(int))
+                {
+                    return (T)(object)int.Parse(stringValue)!;
+                }
+
+                if (typeof(T) == typeof(long))
+                {
+                    return (T)(object)long.Parse(stringValue)!;
+                }
+
+                if (typeof(T) == typeof(double))
+                {
+                    return (T)(object)double.Parse(stringValue)!;
+                }
+
+                if (typeof(T) == typeof(decimal))
+                {
+                    return (T)(object)decimal.Parse(stringValue)!;
+                }
+
+                if (typeof(T) == typeof(DateTime))
+                {
+                    return (T)(object)DateTime.Parse(stringValue)!;
+                }
+
+                if (typeof(T).IsEnum)
+                {
+                    return (T)Enum.Parse(typeof(T), stringValue);
+                }
+
+                return (T)Convert.ChangeType(stringValue, typeof(T));
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Failed to parse '{stringValue}' as {typeof(T).Name}.", ex);
+            }
         }
     }
 }

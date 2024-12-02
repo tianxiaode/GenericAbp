@@ -1,12 +1,12 @@
 ﻿using System;
 
-namespace Generic.Abp.FileManagement.Settings.Result;
+namespace Generic.Abp.FileManagement.Settings;
 
 [Serializable]
 public class FolderSetting
 {
-    public long StorageQuota { get; set; } = default!;
-    public long MaxFileSize { get; set; } = default!;
+    public long StorageQuota { get; set; }
+    public long MaxFileSize { get; set; }
     public string AllowFileTypes { get; set; } = default!;
 
     public FolderSetting()
