@@ -23,10 +23,10 @@ public class FileManagementSettingManager(ISettingManager settingManager, IDistr
         {
             StoragePath = await GetStoragePathAsync(),
             FolderCopyMaxNodeCount = await GetFolderCopyMaxNodeCountAsync(),
+            ExpirationDateOfExternalShared = await GetExpirationDateOfExternalSharedAsync(),
             PublicFolder = await GetPublicFolderSettingAsync(),
             SharedFolder = await GetSharedFolderSettingAsync(),
             UsersFolder = await GetUserFolderSettingAsync(),
-            VirtualPath = await GetVirtualPathSettingAsync(),
             DefaultFile = await GetDefaultFileSettingAsync(),
             TemporaryFile = await GetTemporaryFileSettingAsync()
         };
@@ -110,13 +110,20 @@ public class FileManagementSettingManager(ISettingManager settingManager, IDistr
 
     public virtual async Task<string> GetStoragePathAsync()
     {
-        return await GetSettingAsync(FileManagementSettings.StoragePath, ResourceConsts.DefaultStoragePath);
+        return await GetSettingAsync(FileManagementSettings.StoragePath,
+            FileManagementDefaultSettings.DefaultStoragePath);
     }
 
     public virtual async Task<int> GetFolderCopyMaxNodeCountAsync()
     {
         return await GetSettingAsync(FileManagementSettings.FolderCopyMaxNodeCount,
-            ResourceConsts.FolderCopyMaxNodeCount);
+            FileManagementDefaultSettings.FolderCopyMaxNodeCount);
+    }
+
+    public virtual async Task<int> GetExpirationDateOfExternalSharedAsync()
+    {
+        return await GetSettingAsync(FileManagementSettings.ExpirationDateOfExternalShared,
+            FileManagementDefaultSettings.ExpirationDateOfExternalShared);
     }
 
     public virtual async Task<FolderSetting> GetPublicFolderSettingAsync()
@@ -124,11 +131,11 @@ public class FileManagementSettingManager(ISettingManager settingManager, IDistr
         return new FolderSetting()
         {
             StorageQuota = (await GetSettingAsync(FileManagementSettings.PublicFolder.DefaultQuota,
-                ResourceConsts.PublicFolder.DefaultQuota)).ParseToBytes(),
+                FileManagementDefaultSettings.PublicFolder.DefaultQuota)).ParseToBytes(),
             MaxFileSize = (await GetSettingAsync(FileManagementSettings.PublicFolder.DefaultFileMaxSize,
-                ResourceConsts.PublicFolder.DefaultFileMaxSize)).ParseToBytes(),
+                FileManagementDefaultSettings.PublicFolder.DefaultFileMaxSize)).ParseToBytes(),
             AllowFileTypes = await GetSettingAsync(FileManagementSettings.PublicFolder.DefaultFileTypes,
-                ResourceConsts.PublicFolder.DefaultFileTypes)
+                FileManagementDefaultSettings.PublicFolder.DefaultFileTypes)
         };
     }
 
@@ -137,11 +144,11 @@ public class FileManagementSettingManager(ISettingManager settingManager, IDistr
         return new FolderSetting()
         {
             StorageQuota = (await GetSettingAsync(FileManagementSettings.SharedFolder.DefaultQuota,
-                ResourceConsts.SharedFolder.DefaultQuota)).ParseToBytes(),
+                FileManagementDefaultSettings.SharedFolder.DefaultQuota)).ParseToBytes(),
             MaxFileSize = (await GetSettingAsync(FileManagementSettings.SharedFolder.DefaultFileMaxSize,
-                ResourceConsts.SharedFolder.DefaultFileMaxSize)).ParseToBytes(),
+                FileManagementDefaultSettings.SharedFolder.DefaultFileMaxSize)).ParseToBytes(),
             AllowFileTypes = await GetSettingAsync(FileManagementSettings.SharedFolder.DefaultFileTypes,
-                ResourceConsts.SharedFolder.DefaultFileTypes)
+                FileManagementDefaultSettings.SharedFolder.DefaultFileTypes)
         };
     }
 
@@ -150,24 +157,11 @@ public class FileManagementSettingManager(ISettingManager settingManager, IDistr
         return new FolderSetting()
         {
             StorageQuota = (await GetSettingAsync(FileManagementSettings.UserFolder.DefaultQuota,
-                ResourceConsts.UserFolder.DefaultQuota)).ParseToBytes(),
+                FileManagementDefaultSettings.UserFolder.DefaultQuota)).ParseToBytes(),
             MaxFileSize = (await GetSettingAsync(FileManagementSettings.UserFolder.DefaultFileMaxSize,
-                ResourceConsts.UserFolder.DefaultFileMaxSize)).ParseToBytes(),
+                FileManagementDefaultSettings.UserFolder.DefaultFileMaxSize)).ParseToBytes(),
             AllowFileTypes = await GetSettingAsync(FileManagementSettings.UserFolder.DefaultFileTypes,
-                ResourceConsts.UserFolder.DefaultFileTypes)
-        };
-    }
-
-    public virtual async Task<FolderSetting> GetVirtualPathSettingAsync()
-    {
-        return new FolderSetting()
-        {
-            StorageQuota = (await GetSettingAsync(FileManagementSettings.VirtualPath.DefaultQuota,
-                ResourceConsts.VirtualPath.DefaultQuota)).ParseToBytes(),
-            MaxFileSize = (await GetSettingAsync(FileManagementSettings.VirtualPath.DefaultFileMaxSize,
-                ResourceConsts.VirtualPath.DefaultFileMaxSize)).ParseToBytes(),
-            AllowFileTypes = await GetSettingAsync(FileManagementSettings.VirtualPath.DefaultFileTypes,
-                ResourceConsts.VirtualPath.DefaultFileTypes)
+                FileManagementDefaultSettings.UserFolder.DefaultFileTypes)
         };
     }
 
@@ -176,12 +170,12 @@ public class FileManagementSettingManager(ISettingManager settingManager, IDistr
         return new FolderSetting()
         {
             StorageQuota = (await GetSettingAsync(FileManagementSettings.ParticipantIsolationFolder.DefaultQuota,
-                ResourceConsts.VirtualPath.DefaultQuota)).ParseToBytes(),
+                FileManagementDefaultSettings.ParticipantIsolationFolder.DefaultQuota)).ParseToBytes(),
             MaxFileSize = (await GetSettingAsync(
                 FileManagementSettings.ParticipantIsolationFolder.DefaultFileMaxSize,
-                ResourceConsts.VirtualPath.DefaultFileMaxSize)).ParseToBytes(),
+                FileManagementDefaultSettings.ParticipantIsolationFolder.DefaultFileMaxSize)).ParseToBytes(),
             AllowFileTypes = await GetSettingAsync(FileManagementSettings.ParticipantIsolationFolder.DefaultFileTypes,
-                ResourceConsts.VirtualPath.DefaultFileTypes)
+                FileManagementDefaultSettings.ParticipantIsolationFolder.DefaultFileTypes)
         };
     }
 
@@ -208,13 +202,13 @@ public class FileManagementSettingManager(ISettingManager settingManager, IDistr
         return new FileUpdateSetting()
         {
             Enable = await GetSettingAsync(FileManagementSettings.DefaultFile.Update.Enable,
-                ResourceConsts.DefaultFile.Update.Enable),
+                FileManagementDefaultSettings.DefaultFile.Update.Enable),
             RetentionPeriod = await GetSettingAsync(FileManagementSettings.DefaultFile.Update.RetentionPeriod,
-                ResourceConsts.DefaultFile.Update.RetentionPeriod),
+                FileManagementDefaultSettings.DefaultFile.Update.RetentionPeriod),
             Frequency = await GetSettingAsync(FileManagementSettings.DefaultFile.Update.Frequency,
-                ResourceConsts.DefaultFile.Update.Frequency),
+                FileManagementDefaultSettings.DefaultFile.Update.Frequency),
             BatchSize = await GetSettingAsync(FileManagementSettings.DefaultFile.Update.BatchSize,
-                ResourceConsts.DefaultFile.Update.BatchSize),
+                FileManagementDefaultSettings.DefaultFile.Update.BatchSize),
         };
     }
 
@@ -223,11 +217,11 @@ public class FileManagementSettingManager(ISettingManager settingManager, IDistr
         return new FileCleanupSetting()
         {
             Enable = await GetSettingAsync(FileManagementSettings.DefaultFile.Cleanup.Enable,
-                ResourceConsts.DefaultFile.Cleanup.Enable),
+                FileManagementDefaultSettings.DefaultFile.Cleanup.Enable),
             Frequency = await GetSettingAsync(FileManagementSettings.DefaultFile.Cleanup.Frequency,
-                ResourceConsts.DefaultFile.Cleanup.Frequency),
+                FileManagementDefaultSettings.DefaultFile.Cleanup.Frequency),
             BatchSize = await GetSettingAsync(FileManagementSettings.DefaultFile.Cleanup.BatchSize,
-                ResourceConsts.DefaultFile.Cleanup.BatchSize),
+                FileManagementDefaultSettings.DefaultFile.Cleanup.BatchSize),
         };
     }
 
@@ -236,13 +230,13 @@ public class FileManagementSettingManager(ISettingManager settingManager, IDistr
         return new FileUpdateSetting()
         {
             Enable = await GetSettingAsync(FileManagementSettings.TemporaryFile.Update.Enable,
-                ResourceConsts.TemporaryFile.Update.Enable),
+                FileManagementDefaultSettings.TemporaryFile.Update.Enable),
             RetentionPeriod = await GetSettingAsync(FileManagementSettings.TemporaryFile.Update.RetentionPeriod,
-                ResourceConsts.TemporaryFile.Update.RetentionPeriod),
+                FileManagementDefaultSettings.TemporaryFile.Update.RetentionPeriod),
             Frequency = await GetSettingAsync(FileManagementSettings.TemporaryFile.Update.Frequency,
-                ResourceConsts.TemporaryFile.Update.Frequency),
+                FileManagementDefaultSettings.TemporaryFile.Update.Frequency),
             BatchSize = await GetSettingAsync(FileManagementSettings.TemporaryFile.Update.BatchSize,
-                ResourceConsts.TemporaryFile.Update.BatchSize),
+                FileManagementDefaultSettings.TemporaryFile.Update.BatchSize),
         };
     }
 
@@ -251,11 +245,11 @@ public class FileManagementSettingManager(ISettingManager settingManager, IDistr
         return new FileCleanupSetting()
         {
             Enable = await GetSettingAsync(FileManagementSettings.TemporaryFile.Cleanup.Enable,
-                ResourceConsts.TemporaryFile.Cleanup.Enable),
+                FileManagementDefaultSettings.TemporaryFile.Cleanup.Enable),
             Frequency = await GetSettingAsync(FileManagementSettings.DefaultFile.Cleanup.Frequency,
-                ResourceConsts.TemporaryFile.Cleanup.Frequency),
+                FileManagementDefaultSettings.TemporaryFile.Cleanup.Frequency),
             BatchSize = await GetSettingAsync(FileManagementSettings.DefaultFile.Cleanup.BatchSize,
-                ResourceConsts.TemporaryFile.Cleanup.BatchSize),
+                FileManagementDefaultSettings.TemporaryFile.Cleanup.BatchSize),
         };
     }
 

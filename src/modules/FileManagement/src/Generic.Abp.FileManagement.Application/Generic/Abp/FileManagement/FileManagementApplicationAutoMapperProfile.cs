@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Generic.Abp.FileManagement.ExternalShares;
+using Generic.Abp.FileManagement.ExternalShares.Dtos;
 using Generic.Abp.FileManagement.FileInfoBases;
 using Generic.Abp.FileManagement.Resources;
 using Generic.Abp.FileManagement.Resources.Dtos;
@@ -35,6 +37,9 @@ namespace Generic.Abp.FileManagement
 
             CreateMap<UserFolderGetListInput, ResourceSearchAndPagedAndSortedParams>()
                 .Ignore(m => m.FileType);
+
+            CreateMap<ExternalShare, ExternalShareDto>().MapExtraProperties();
+            CreateMap<ExternalShareGetListInput, ExternalShareSearchParams>();
         }
     }
 }

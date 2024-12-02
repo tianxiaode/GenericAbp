@@ -49,7 +49,6 @@ public partial class ResourceManager
         {
             ResourceType.SharedRootFolder => await CreateSharedRootFolderAsync(CurrentTenant.Id),
             ResourceType.UsersRootFolder => await CreateUsersRootFolderAsync(CurrentTenant.Id),
-            ResourceType.VirtualRootFolder => await CreateVirtualPathRootFolderAsync(CurrentTenant.Id),
             ResourceType.ParticipantIsolationRootFolder => await CreateParticipantIsolationRootFolderAsync(CurrentTenant
                 .Id),
             _ => await CreatePublicRootFolderAsync()
@@ -86,13 +85,6 @@ public partial class ResourceManager
     {
         return await CreateRootFolderAsync(ResourceType.UsersRootFolder,
             await SettingManager.GetUserFolderSettingAsync(),
-            tenantId);
-    }
-
-    public virtual async Task<Resource> CreateVirtualPathRootFolderAsync(Guid? tenantId = null)
-    {
-        return await CreateRootFolderAsync(ResourceType.VirtualRootFolder,
-            await SettingManager.GetVirtualPathSettingAsync(),
             tenantId);
     }
 

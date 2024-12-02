@@ -43,7 +43,15 @@ namespace Generic.Abp.FileManagement.Permissions
             virtualPathsPermission.AddChild(FileManagementPermissions.VirtualPaths.Create, L("Permission:Create"));
             virtualPathsPermission.AddChild(FileManagementPermissions.VirtualPaths.Update, L("Permission:Edit"));
             virtualPathsPermission.AddChild(FileManagementPermissions.VirtualPaths.Delete, L("Permission:Delete"));
+
+            var externalSharesPermission = fileManagementGroup.AddPermission(
+                FileManagementPermissions.ExternalShares.Default,
+                L($"Permission:ExternalShares"));
+            externalSharesPermission.AddChild(FileManagementPermissions.ExternalShares.Create, L("Permission:Create"));
+            externalSharesPermission.AddChild(FileManagementPermissions.ExternalShares.Update, L("Permission:Edit"));
+            externalSharesPermission.AddChild(FileManagementPermissions.ExternalShares.Delete, L("Permission:Delete"));
         }
+
 
         private static LocalizableString L(string name)
         {

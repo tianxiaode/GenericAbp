@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
+using Generic.Abp.FileManagement.EntityFrameworkCore.ExternalShares;
+using Generic.Abp.FileManagement.EntityFrameworkCore.VirtualPaths;
 using Generic.Abp.FileManagement.ExternalShares;
 using Generic.Abp.FileManagement.VirtualPaths;
 using Volo.Abp.EntityFrameworkCore;
@@ -30,6 +32,8 @@ namespace Generic.Abp.FileManagement.EntityFrameworkCore
                 options.AddRepository<FileInfoBase, FileInfoBaseRepository>();
                 options.AddRepository<Resource, ResourceRepository>();
                 options.AddRepository<ResourcePermission, ResourcePermissionRepository>();
+                options.AddRepository<VirtualPath, VirtualPathRepository>();
+                options.AddRepository<ExternalShare, ExternalShareRepository>();
             });
 
             Configure<AbpEntityOptions>(options =>

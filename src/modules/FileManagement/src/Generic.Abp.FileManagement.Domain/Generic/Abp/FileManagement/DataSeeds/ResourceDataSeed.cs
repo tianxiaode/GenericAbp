@@ -35,9 +35,6 @@ public class ResourceDataSeed(
         Logger.LogInformation($"Creating user root folder.");
         await ResourceManager.CreateUsersRootFolderAsync(tenantId);
 
-        Logger.LogInformation($"Creating virtual path rood folder.");
-        await ResourceManager.CreateVirtualPathRootFolderAsync(tenantId);
-
         Logger.LogInformation($"Creating participant isolationFolder path rood folder.");
         await ResourceManager.CreateParticipantIsolationRootFolderAsync(tenantId);
 

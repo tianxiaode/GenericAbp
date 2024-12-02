@@ -11,6 +11,7 @@
         public const string TempPath = GroupName + ".TempPath";
         public const string FolderCopyMaxNodeCount = GroupName + ".FolderCopyMaxNodeCount";
         public const string EnablePersonalFolderForRoles = GroupName + ".EnablePersonalFolderForRoles";
+        public const string ExpirationDateOfExternalShared = GroupName + ".ExpirationDateOfExternalShared";
 
         public static class PublicFolder
         {

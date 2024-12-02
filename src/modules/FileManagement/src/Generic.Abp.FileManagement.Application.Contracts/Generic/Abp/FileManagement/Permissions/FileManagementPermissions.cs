@@ -39,6 +39,14 @@ namespace Generic.Abp.FileManagement.Permissions
             public const string Delete = Default + ".Delete";
         }
 
+        public static class ExternalShares
+        {
+            public const string Default = GroupName + ".ExternalShares";
+            public const string Create = Default + ".Create";
+            public const string Update = Default + ".Update";
+            public const string Delete = Default + ".Delete";
+        }
+
         public static string[] GetAll()
         {
             return ReflectionHelper.GetPublicConstantsRecursively(typeof(FileManagementPermissions));

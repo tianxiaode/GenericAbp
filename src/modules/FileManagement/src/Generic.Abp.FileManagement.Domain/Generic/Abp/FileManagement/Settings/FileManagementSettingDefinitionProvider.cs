@@ -29,6 +29,15 @@ namespace Generic.Abp.FileManagement.Settings
                     L("Description:EnablePersonalFolderForRoles"),
                     true // 可选，决定是否对外暴露
                 ),
+                //外部共享有效期
+                new SettingDefinition(
+                    FileManagementSettings.ExpirationDateOfExternalShared,
+                    ResourceConsts.ExpirationDateOfExternalShared.ToString(),
+                    L("Settings:ExpirationDateOfExternalShared"),
+                    L("Description:ExpirationDateOfExternalShared"),
+                    true // 可选，决定是否对外暴露
+                ),
+
                 //复制文件夹最大节点数量
                 new SettingDefinition(
                     FileManagementSettings.FolderCopyMaxNodeCount,
@@ -99,28 +108,6 @@ namespace Generic.Abp.FileManagement.Settings
                 new SettingDefinition(
                     FileManagementSettings.UserFolder.DefaultQuota,
                     ResourceConsts.UserFolder.DefaultQuota,
-                    L("Settings:DefaultQuota"),
-                    L("Description:DefaultQuota"),
-                    true
-                ),
-                //虚拟文件夹默认配置
-                new SettingDefinition(
-                    FileManagementSettings.VirtualPath.DefaultFileTypes,
-                    ResourceConsts.VirtualPath.DefaultFileTypes,
-                    L("Settings:DefaultFileTypes"),
-                    L("Description:DefaultFileTypes"),
-                    true // 可选，决定是否对外暴露
-                ),
-                new SettingDefinition(
-                    FileManagementSettings.VirtualPath.DefaultFileMaxSize,
-                    ResourceConsts.VirtualPath.DefaultFileMaxSize,
-                    L("Settings:DefaultFileMaxSize"),
-                    L("Description:DefaultFileMaxSize"),
-                    true
-                ),
-                new SettingDefinition(
-                    FileManagementSettings.VirtualPath.DefaultQuota,
-                    ResourceConsts.VirtualPath.DefaultQuota,
                     L("Settings:DefaultQuota"),
                     L("Description:DefaultQuota"),
                     true

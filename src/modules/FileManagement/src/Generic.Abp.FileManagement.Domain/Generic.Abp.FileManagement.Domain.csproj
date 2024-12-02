@@ -26,5 +26,9 @@
     <ProjectReference Include="..\Generic.Abp.FileManagement.Domain.Shared\Generic.Abp.FileManagement.Domain.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Generic\Abp\FileManagement\新文件夹\" />
+  </ItemGroup>
+
 
 </Project>
