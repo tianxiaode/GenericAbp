@@ -30,10 +30,10 @@ namespace Generic.Abp.FileManagement
             CreateMap<VirtualPathGetListInput, VirtualPathSearchParams>();
 
             CreateMap<Resource, UserFolderDto>()
-                .ForMember(m => m.AllowedFileTypes, opts => opts.MapFrom(m => m.Configuration!.AllowedFileTypes))
-                .ForMember(m => m.UsedStorage, opts => opts.MapFrom(m => m.Configuration!.UsedStorage))
-                .ForMember(m => m.StorageQuota, opts => opts.MapFrom(m => m.Configuration!.StorageQuota))
-                .ForMember(m => m.MaxFileSize, opts => opts.MapFrom(m => m.Configuration!.MaxFileSize));
+                .ForMember(m => m.AllowedFileTypes, opts => opts.MapFrom(m => m.GetAllowedFileTypes()))
+                .ForMember(m => m.UsedStorage, opts => opts.MapFrom(m => m.GetUsedStorage()))
+                .ForMember(m => m.StorageQuota, opts => opts.MapFrom(m => m.GetStorageQuota()))
+                .ForMember(m => m.MaxFileSize, opts => opts.MapFrom(m => m.GetMaxFileSize()));
 
             CreateMap<UserFolderGetListInput, ResourceSearchAndPagedAndSortedParams>()
                 .Ignore(m => m.FileType);

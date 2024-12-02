@@ -9,4 +9,5 @@ public interface IExternalShareSearchParams
     DateTime? ExpireTimeStart { get; set; }
     DateTime? ExpireTimeEnd { get; set; }
     string? Filter { get; set; }
+    public Guid? OwnerId { get; set; }
 }

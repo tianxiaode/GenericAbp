@@ -10,4 +10,5 @@ public class ExternalShareGetListInput : PagedAndSortedResultRequestDto, IExtern
     public DateTime? ExpireTimeStart { get; set; }
     public DateTime? ExpireTimeEnd { get; set; }
     public string? Filter { get; set; }
+    public Guid? OwnerId { get; set; }
 }

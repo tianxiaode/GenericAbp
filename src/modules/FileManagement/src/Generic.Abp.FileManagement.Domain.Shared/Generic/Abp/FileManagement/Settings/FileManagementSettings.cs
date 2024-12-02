@@ -1,5 +1,5 @@
-﻿using System;
-using Generic.Abp.Extensions.Settings;
+﻿using Generic.Abp.Extensions.Settings;
+using System;
 using System.Collections.Generic;
 
 namespace Generic.Abp.FileManagement.Settings;

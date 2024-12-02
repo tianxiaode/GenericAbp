@@ -46,12 +46,12 @@ public class EntityManagerBase<TEntity, TRepository, TResource>(
         await Repository.DeleteAsync(entity, true, CancellationToken);
     }
 
-    public virtual async Task DeleteAsync(List<Guid> ids, bool autoSave = true)
+    public virtual async Task DeleteManyAsync(List<Guid> ids, bool autoSave = true)
     {
         await Repository.DeleteManyAsync(ids, autoSave, CancellationToken);
     }
 
-    public virtual async Task DeleteAsync(List<TEntity> entities, bool autoSave = true)
+    public virtual async Task DeleteManyAsync(List<TEntity> entities, bool autoSave = true)
     {
         await Repository.DeleteManyAsync(entities, autoSave, CancellationToken);
     }

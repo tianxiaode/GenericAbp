@@ -39,6 +39,11 @@ public class FileManagementSettingManager(ISettingManager settingManager, IDistr
         return settings;
     }
 
+    public virtual async Task<int> GetExpirationDateOfExternalSharedAsync()
+    {
+        return await GetSettingAsync<int>(FileManagementSettings.ExpirationDateOfExternalShared);
+    }
+
     protected override Dictionary<string, ISettingDefinitionExtensions> GetSettings()
     {
         return FileManagementSettings.Settings;

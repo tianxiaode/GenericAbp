@@ -41,6 +41,11 @@ public class ExternalShareRepository(IDbContextProvider<IFileManagementDbContext
             predicate = predicate.AndIfNotTrue(x => x.ExpireTime <= searchParams.ExpireTimeEnd.Value);
         }
 
+        if (searchParams.OwnerId.HasValue)
+        {
+            predicate = predicate.AndIfNotTrue(x => x.CreatorId == searchParams.OwnerId.Value);
+        }
+
         return Task.FromResult(predicate);
     }
 }

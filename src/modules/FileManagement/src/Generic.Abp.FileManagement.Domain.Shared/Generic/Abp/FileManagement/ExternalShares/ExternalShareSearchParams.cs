@@ -9,4 +9,5 @@ public class ExternalShareSearchParams : SearchParams, IHasCreationTimeSearch, I
     public DateTime? EndTime { get; set; } = default!;
     public DateTime? ExpireTimeStart { get; set; } = default!;
     public DateTime? ExpireTimeEnd { get; set; } = default!;
+    public Guid? OwnerId { get; set; } = default!;
 }
