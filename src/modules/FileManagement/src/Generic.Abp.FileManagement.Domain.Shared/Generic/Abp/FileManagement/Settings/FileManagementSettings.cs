@@ -45,6 +45,11 @@ public static class FileManagementSettings
     public static readonly string[] CleanupOrUpdateSettingValueNames =
         ["Enable", "RetentionPeriod", "Frequency", "BatchSize"];
 
+    public const string UserFolderPrefix = "UserFolder";
+    public const string PublicFolderPrefix = "PublicFolder";
+    public const string SharedFolderPrefix = "SharedFolder";
+    public const string ParticipantIsolationFolderPrefix = "ParticipantIsolationFolder";
+
     public static Dictionary<string, ISettingDefinitionExtensions> Settings => new()
     {
         { StoragePath, new SettingDefinitionExtensions("/files") },

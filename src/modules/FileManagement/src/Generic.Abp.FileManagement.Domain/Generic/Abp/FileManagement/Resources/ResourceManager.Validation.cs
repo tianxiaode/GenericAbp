@@ -85,7 +85,7 @@ public partial class ResourceManager
 
     public virtual async Task<bool> IsOwnerAsync(Resource entity, Guid userId)
     {
-        var folderName = await GetUserRootFolderNameAsync(userId);
+        var folderName = await GetRootFolderNameAsync(ResourceType.Folder, CurrentTenant.Id, userId);
         var codeLength = ResourceConsts.GetCodeLength(2);
         if (entity.Code.Length <= codeLength)
         {

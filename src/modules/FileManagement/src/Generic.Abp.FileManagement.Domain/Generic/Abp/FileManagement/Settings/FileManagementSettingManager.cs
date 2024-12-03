@@ -39,6 +39,16 @@ public class FileManagementSettingManager(ISettingManager settingManager, IDistr
         return settings;
     }
 
+    public virtual async Task<FolderSetting> GetFolderSettingAsync(string prefix)
+    {
+        var settings = new FolderSetting(
+            await GetSettingAsync<long>(prefix + ".StorageQuota"),
+            await GetSettingAsync<long>(prefix + ".MaxFileSize"),
+            await GetSettingAsync<string>(prefix + ".AllowFileTypes")
+        );
+        return settings;
+    }
+
     public virtual async Task<int> GetExpirationDateOfExternalSharedAsync()
     {
         return await GetSettingAsync<int>(FileManagementSettings.ExpirationDateOfExternalShared);

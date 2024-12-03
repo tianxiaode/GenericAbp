@@ -92,6 +92,11 @@ public partial class ResourceRepository(IDbContextProvider<IFileManagementDbCont
             predicate = predicate.And(m => m.CreationTime <= search.EndTime.Value);
         }
 
+        if (search.OwnerId.HasValue)
+        {
+            predicate = predicate.And(m => m.OwnerId == search.OwnerId);
+        }
+
 
         if (string.IsNullOrEmpty(search.FileType))
         {

@@ -63,35 +63,35 @@ public partial class ResourceManager
     public virtual async Task<Resource> GetUserRootFolderAsync(Guid userId, Guid? tenantId = null)
     {
         var entity = await CreateRootFolderAsync(ResourceType.UserRootFolder,
-            await SettingManager.GetUserFolderSettingAsync(), tenantId, userId);
+            await SettingManager.GetFolderSettingAsync(FileManagementSettings.UserFolderPrefix), tenantId, userId);
         return entity;
     }
 
     public virtual async Task<Resource> CreatePublicRootFolderAsync(Guid? tenantId = null)
     {
         return await CreateRootFolderAsync(ResourceType.PublicRootFolder,
-            await SettingManager.GetPublicFolderSettingAsync(),
+            await SettingManager.GetFolderSettingAsync(FileManagementSettings.PublicFolderPrefix),
             tenantId);
     }
 
     public virtual async Task<Resource> CreateSharedRootFolderAsync(Guid? tenantId = null)
     {
         return await CreateRootFolderAsync(ResourceType.SharedRootFolder,
-            await SettingManager.GetSharedFolderSettingAsync(),
+            await SettingManager.GetFolderSettingAsync(FileManagementSettings.SharedFolderPrefix),
             tenantId);
     }
 
     public virtual async Task<Resource> CreateUsersRootFolderAsync(Guid? tenantId = null)
     {
         return await CreateRootFolderAsync(ResourceType.UsersRootFolder,
-            await SettingManager.GetUserFolderSettingAsync(),
+            await SettingManager.GetFolderSettingAsync(FileManagementSettings.UserFolderPrefix),
             tenantId);
     }
 
     public virtual async Task<Resource> CreateParticipantIsolationRootFolderAsync(Guid? tenantId = null)
     {
         return await CreateRootFolderAsync(ResourceType.ParticipantIsolationRootFolder,
-            await SettingManager.GetParticipantIsolationFolderSettingAsync(),
+            await SettingManager.GetFolderSettingAsync(FileManagementSettings.ParticipantIsolationFolderPrefix),
             tenantId);
     }
 
@@ -101,7 +101,7 @@ public partial class ResourceManager
         FolderSetting settings,
         Guid? tenantId = null,
         Guid? userId = null,
-        bool isEnabled = true)
+        bool isAccessible = true)
     {
         var name = await GetRootFolderNameAsync(rooType, tenantId, userId);
         ResourceCacheItem? usersRootFolder = null;
@@ -112,9 +112,9 @@ public partial class ResourceManager
 
         var existingResource = userId.HasValue
             ? await FindAsync(m => m.ParentId == usersRootFolder!.Id && m.OwnerId == userId.Value, null,
-                new ResourceQueryOptions(false, includeConfiguration: true))
+                new ResourceQueryOptions(false))
             : await FindAsync(m => m.Type == rooType, null,
-                new ResourceQueryOptions(false, includeConfiguration: true));
+                new ResourceQueryOptions(false));
         if (existingResource == null)
         {
             // Create the folder only if it does not exist
@@ -124,11 +124,14 @@ public partial class ResourceManager
             {
                 entity.MoveTo(usersRootFolder!.Id);
                 entity.SetOwner(userId.Value);
-                entity.SetIsEnabled(isEnabled);
+                entity.SetIsAccessible(isAccessible);
             }
 
-            await CreateOrUpdateConfigurationAsync(entity, settings.AllowFileTypes, settings.StorageQuota,
-                settings.MaxFileSize);
+            entity.SetHasConfiguration(true);
+            entity.SetAllowedFileTypes(settings.AllowFileTypes);
+            entity.SetMaxFileSize(settings.MaxFileSize);
+            entity.SetStorageQuota(settings.StorageQuota);
+            entity.SetUsedStorage(0);
             await CreateAsync(entity);
             return entity;
         }
@@ -142,10 +145,5 @@ public partial class ResourceManager
     {
         var name = type + (tenantId.ToString() ?? "host") + "_" + (userId.ToString() ?? "");
         return Task.FromResult(name);
-    }
-
-    public virtual Task<string> GetUserRootFolderNameAsync(Guid userId)
-    {
-        return Task.FromResult(ResourceConsts.UserFolder.Name + "_" + userId);
     }
 }

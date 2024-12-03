@@ -21,8 +21,7 @@ public partial class ResourceManager(
     ResourcePermissionManager resourcePermissionManager,
     FileManagementSettingManager settingManager,
     IDistributedEventBus distributedEventBus,
-    ICancellationTokenProvider cancellationTokenProvider,
-    IResourceConfigurationRepository configurationRepository)
+    ICancellationTokenProvider cancellationTokenProvider)
     : TreeManager<Resource, IResourceRepository, FileManagementResource>(repository, treeCodeGenerator, localizer,
         cancellationTokenProvider)
 {
@@ -30,7 +29,6 @@ public partial class ResourceManager(
     protected ResourcePermissionManager PermissionManager { get; } = resourcePermissionManager;
     protected FileManagementSettingManager SettingManager { get; } = settingManager;
     protected IDistributedEventBus DistributedEventBus { get; } = distributedEventBus;
-    protected IResourceConfigurationRepository ConfigurationRepository { get; } = configurationRepository;
 
     public virtual async Task<Resource> GetAsync(Guid id, ResourceQueryOptions options)
     {
@@ -57,16 +55,6 @@ public partial class ResourceManager(
         await base.DeleteAsync(entity, autoSave);
     }
 
-    public override async Task ValidateAsync(Resource entity)
-    {
-        if (await Repository.AnyAsync(m =>
-                m.ParentId == entity.ParentId && m.Id != entity.Id &&
-                m.Name.ToLower() == entity.Name.ToLowerInvariant()))
-        {
-            throw new DuplicateWarningBusinessException(L[nameof(Resource)], entity.Name);
-        }
-    }
-
     protected override Task<Resource> CloneAsync(Resource source)
     {
         var entity = new Resource(GuidGenerator.Create(), source.Name, ResourceType.Folder, source.IsStatic,
@@ -80,23 +68,5 @@ public partial class ResourceManager(
         //entity.SetPermissions(source.Permissions);
         entity.SetHasPermissions(false);
         return Task.FromResult(entity);
-    }
-
-    protected virtual Task CreateOrUpdateConfigurationAsync(Resource entity, string allowFileTypes, long storageQuota,
-        long maxFileSize)
-    {
-        if (entity.Configuration == null)
-        {
-            entity.SetConfiguration(new ResourceConfiguration(GuidGenerator.Create(), allowFileTypes, storageQuota,
-                maxFileSize, entity.TenantId));
-        }
-        else
-        {
-            entity.Configuration.SetAllowedFileTypes(allowFileTypes);
-            entity.Configuration.SetStorageQuota(storageQuota);
-            entity.Configuration.SetMaxFileSize(maxFileSize);
-        }
-
-        return Task.CompletedTask;
     }
 }

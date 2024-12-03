@@ -33,6 +33,7 @@ public class ExternalShareAppService(
         return new ExternalShareTokenDto(await ExternalShareManager.GetTokenAsync(entity));
     }
 
+    //TODO: GetExternalShareResourcesDto需要从ResourceGetListInput继承
     [AllowAnonymous]
     public virtual async Task<PagedResultDto<ResourceBaseDto>> GetExternalShareResourcesAsync(string linkName,
         GetExternalShareResourcesDto input)

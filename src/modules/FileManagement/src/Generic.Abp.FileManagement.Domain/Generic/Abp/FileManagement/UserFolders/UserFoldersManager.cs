@@ -22,10 +22,8 @@ public class UserFoldersManager(
     ResourcePermissionManager resourcePermissionManager,
     FileManagementSettingManager settingManager,
     IDistributedEventBus distributedEventBus,
-    ICancellationTokenProvider cancellationTokenProvider,
-    IResourceConfigurationRepository configurationRepository) : ResourceManager(repository, treeCodeGenerator,
-    localizer, cache, resourcePermissionManager, settingManager, distributedEventBus, cancellationTokenProvider,
-    configurationRepository)
+    ICancellationTokenProvider cancellationTokenProvider) : ResourceManager(repository, treeCodeGenerator,
+    localizer, cache, resourcePermissionManager, settingManager, distributedEventBus, cancellationTokenProvider)
 {
     public virtual async Task<Resource> GetUserFolderAsync(Guid id, ResourceQueryOptions? options = null)
     {
@@ -35,46 +33,43 @@ public class UserFoldersManager(
             await Repository.GetAsync(id, root.Id, options, CancellationToken);
         if (resource == null)
         {
-            throw new EntityNotFoundBusinessException(Localizer["Folder"], id);
+            throw new EntityNotFoundBusinessException(L["Folder"], id);
         }
 
         return resource;
     }
 
-    public virtual async Task<Tuple<long, List<Resource>>> GetListAsync(
+    public virtual async Task<(long, List<Resource>)> GetListAsync(
+        ResourceQueryOptions options,
         ResourceSearchParams search, Guid? ownerId = null)
     {
         var root = await GetUsersRootFolderAsync();
-        search.Sorting ??= $"{nameof(Resource.Name)}";
+        search.OwnerId = ownerId;
         var predicate = await Repository.BuildQueryExpressionAsync(root.Id, search);
-        if (ownerId.HasValue)
-        {
-            predicate = predicate.And(m => m.Name.Contains(ownerId.Value.ToString()));
-        }
-
+        options.IncludeParent = false;
         var count = await Repository.GetCountAsync(predicate, CancellationToken);
         var resources =
-            await Repository.GetListAsync(predicate, search,
-                new ResourceQueryOptions(false, includeConfiguration: true), CancellationToken);
-        return Tuple.Create(count, resources);
+            await Repository.GetListAsync(predicate, search, options, CancellationToken);
+        return (count, resources);
     }
 
     public virtual async Task<Resource> CreateAsync(Guid userId, long quota, long maxFileSize, string allowFileTypes,
-        bool isEnabled,
+        bool isAccessible,
         Guid? tenantId = null)
     {
         var entity = await CreateRootFolderAsync(ResourceType.UserRootFolder,
-            new FolderSetting(quota, maxFileSize, allowFileTypes), tenantId, userId, isEnabled);
+            new FolderSetting(quota, maxFileSize, allowFileTypes), tenantId, userId, isAccessible);
         return entity;
     }
 
     public virtual async Task<Resource> UpdateAsync(Guid id, long storageQuota, long maxFileSize, string allowFileTypes,
-        bool isEnabled, Guid? tenantId = null)
+        bool isAccessible, Guid? tenantId = null)
     {
-        var entity = await GetUserFolderAsync(id, new ResourceQueryOptions(false, includeConfiguration: true));
-        await CreateOrUpdateConfigurationAsync(entity, allowFileTypes, storageQuota, maxFileSize);
-
-        entity.SetIsEnabled(isEnabled);
+        var entity = await GetUserFolderAsync(id, new ResourceQueryOptions(false));
+        entity.SetAllowedFileTypes(allowFileTypes);
+        entity.SetStorageQuota(storageQuota);
+        entity.SetMaxFileSize(maxFileSize);
+        entity.SetIsAccessible(isAccessible);
         await UpdateAsync(entity);
         return entity;
     }
