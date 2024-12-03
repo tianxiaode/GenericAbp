@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq.Dynamic.Core.Tokenizer;
-using System.Threading.Tasks;
-using Generic.Abp.Extensions.Exceptions;
-using Generic.Abp.Extensions.Tokens;
+﻿using Generic.Abp.Extensions.Exceptions;
 using Generic.Abp.FileManagement.ExternalShares.Dtos;
 using Generic.Abp.FileManagement.Permissions;
 using Generic.Abp.FileManagement.Resources;
 using Generic.Abp.FileManagement.Resources.Dtos;
 using Generic.Abp.FileManagement.Settings;
 using Microsoft.AspNetCore.Authorization;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
-using Volo.Abp.Authorization;
 
 namespace Generic.Abp.FileManagement.ExternalShares;
 
@@ -69,7 +66,8 @@ public class ExternalShareAppService(
     public virtual async Task DeleteMyExternalSharesAsync(List<Guid> ids)
     {
         var list = await ExternalShareManager.GetListAsync(m => m.CreatorId == CurrentUser.Id && ids.Contains(m.Id),
-            ExternalShareConsts.GetDefaultSorting());
+            new ExternalShareQueryOption()
+        );
         await ExternalShareManager.DeleteManyAsync(list);
     }
 
@@ -109,7 +107,7 @@ public class ExternalShareAppService(
                 ObjectMapper.Map<ExternalShareGetListInput, ExternalShareSearchParams>(input));
         var count = await ExternalShareManager.GetCountAsync(predicate);
         var list = await ExternalShareManager.GetListAsync(predicate,
-            input.Sorting ?? ExternalShareConsts.GetDefaultSorting(), input.MaxResultCount, input.SkipCount);
+            new ExternalShareQueryOption(input.Sorting, input.SkipCount, input.MaxResultCount));
         return new PagedResultDto<ExternalShareDto>(count,
             ObjectMapper.Map<List<ExternalShare>, List<ExternalShareDto>>(list));
     }

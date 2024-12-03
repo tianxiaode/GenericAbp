@@ -7,24 +7,18 @@ using System.Collections.Generic;
 
 namespace Generic.Abp.FileManagement.Resources;
 
-public interface IResourceRepository : ITreeRepository<Resource>
+public interface IResourceRepository : ITreeRepository<Resource, ResourceQueryOption, ResourceSearchParams>
 {
     Task<Resource?> FindAsync(
         Expression<Func<Resource, bool>> predicate,
         Guid? parentId,
-        ResourceQueryOptions options,
+        ResourceQueryOption option,
         CancellationToken cancellation = default);
 
-    Task<Resource?> FindAsync(string name, Guid? parentId, ResourceQueryOptions options,
+    Task<Resource?> FindAsync(string name, Guid? parentId, ResourceQueryOption option,
         CancellationToken cancellation = default);
 
-    Task<Resource?> GetAsync(Guid id, Guid? parentId, ResourceQueryOptions options,
-        CancellationToken cancellation = default);
-
-    Task<List<Resource>> GetListAsync(
-        Expression<Func<Resource, bool>> predicate,
-        ResourceSearchParams search,
-        ResourceQueryOptions options,
+    Task<Resource?> GetAsync(Guid id, Guid? parentId, ResourceQueryOption option,
         CancellationToken cancellation = default);
 
     Task<Resource?> GetInheritedPermissionParentAsync(Guid id, string code, CancellationToken cancellationToken);

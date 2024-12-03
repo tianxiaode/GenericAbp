@@ -13,35 +13,36 @@ using Volo.Abp.EntityFrameworkCore;
 namespace Generic.Abp.FileManagement.EntityFrameworkCore.Resources;
 
 public partial class ResourceRepository(IDbContextProvider<IFileManagementDbContext> dbContextProvider)
-    : TreeRepository<IFileManagementDbContext, Resource>(dbContextProvider), IResourceRepository
+    : TreeRepository<IFileManagementDbContext, Resource, ResourceQueryOption, ResourceSearchParams>(dbContextProvider),
+        IResourceRepository
 {
     public virtual async Task<Resource?> FindAsync(
         Expression<Func<Resource, bool>> predicate,
         Guid? parentId,
-        ResourceQueryOptions options,
+        ResourceQueryOption option,
         CancellationToken cancellation = default)
     {
         return await (await GetDbSetAsync())
-            .IncludeIf(options.IncludeParent, m => m.Parent)
-            .IncludeIf(options.IncludeFile, m => m.FileInfoBase)
-            .IncludeIf(options.IncludePermissions, m => m.Permissions)
+            .IncludeIf(option.IncludeParent, m => m.Parent)
+            .IncludeIf(option.IncludeFile, m => m.FileInfoBase)
+            .IncludeIf(option.IncludePermissions, m => m.Permissions)
             .WhereIf(parentId.HasValue, m => m.ParentId == parentId)
             .Where(predicate)
             .FirstOrDefaultAsync(cancellation);
     }
 
 
-    public virtual async Task<Resource?> FindAsync(string name, Guid? parentId, ResourceQueryOptions options,
+    public virtual async Task<Resource?> FindAsync(string name, Guid? parentId, ResourceQueryOption option,
         CancellationToken cancellation = default)
     {
-        return await FindAsync(m => m.Name.ToLower() == name.ToLower(), parentId, options,
+        return await FindAsync(m => m.Name.ToLower() == name.ToLower(), parentId, option,
             cancellation);
     }
 
-    public virtual async Task<Resource?> GetAsync(Guid id, Guid? parentId, ResourceQueryOptions options,
+    public virtual async Task<Resource?> GetAsync(Guid id, Guid? parentId, ResourceQueryOption option,
         CancellationToken cancellation = default)
     {
-        return await FindAsync(m => m.Id == id, parentId, options, cancellation);
+        return await FindAsync(m => m.Id == id, parentId, option, cancellation);
     }
 
 
@@ -55,20 +56,13 @@ public partial class ResourceRepository(IDbContextProvider<IFileManagementDbCont
             .FirstOrDefaultAsync(cancellationToken);
     }
 
-    public virtual async Task<List<Resource>> GetListAsync(
-        Expression<Func<Resource, bool>> predicate,
-        ResourceSearchParams search,
-        ResourceQueryOptions options,
-        CancellationToken cancellation = default)
+
+    protected override async Task<IQueryable<Resource>> IncludeDetailsAsync(ResourceQueryOption option)
     {
-        return await (await GetDbSetAsync())
-            .IncludeIf(options.IncludeParent, m => m.Parent)
-            .IncludeIf(options.IncludeFile, m => m.FileInfoBase)
-            .IncludeIf(options.IncludePermissions, m => m.Permissions)
-            .OrderBy(options.Sorting!)
-            .Where(predicate)
-            .PageBy(options.SkipCount, options.MaxResultCount)
-            .ToListAsync(cancellation);
+        return (await base.IncludeDetailsAsync(option))
+            .IncludeIf(option.IncludeParent, m => m.Parent)
+            .IncludeIf(option.IncludeFile, m => m.FileInfoBase)
+            .IncludeIf(option.IncludePermissions, m => m.Permissions);
     }
 
     public virtual Task<Expression<Func<Resource, bool>>> BuildQueryExpressionAsync(

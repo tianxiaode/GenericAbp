@@ -20,7 +20,8 @@ public class ExternalShareManager(
     ICancellationTokenProvider cancellationTokenProvider,
     TokenManager tokenManager,
     ResourceManager resourceManager)
-    : EntityManagerBase<ExternalShare, IExternalShareRepository, FileManagementResource, ExternalShareSearchParams>(
+    : EntityManagerBase<ExternalShare, IExternalShareRepository, FileManagementResource, ExternalShareQueryOption,
+        ExternalShareSearchParams>(
         repository, localizer,
         cancellationTokenProvider)
 {

@@ -9,7 +9,8 @@ using Volo.Abp.EntityFrameworkCore;
 namespace Generic.Abp.FileManagement.EntityFrameworkCore.ExternalShares;
 
 public class ExternalShareRepository(IDbContextProvider<IFileManagementDbContext> dbContextProvider)
-    : ExtensionRepository<IFileManagementDbContext, ExternalShare, ExternalShareSearchParams>(dbContextProvider),
+    : ExtensionRepository<IFileManagementDbContext, ExternalShare, ExternalShareQueryOption, ExternalShareSearchParams>(
+            dbContextProvider),
         IExternalShareRepository
 {
     public override Task<Expression<Func<ExternalShare, bool>>> BuildPredicateExpression(

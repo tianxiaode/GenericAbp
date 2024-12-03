@@ -1,4 +1,4 @@
-﻿namespace Generic.Abp.Extensions.Entities.GetListParams;
+﻿namespace Generic.Abp.Extensions.Entities.SearchParams;
 
 public class SearchParams : ISearchParams
 {

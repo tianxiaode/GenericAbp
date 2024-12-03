@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Generic.Abp.Extensions.Entities.GetListParams;
+namespace Generic.Abp.Extensions.Entities.SearchParams;
 
 public interface IHasCreationTimeSearch
 {

@@ -30,9 +30,9 @@ public partial class ResourceManager(
     protected FileManagementSettingManager SettingManager { get; } = settingManager;
     protected IDistributedEventBus DistributedEventBus { get; } = distributedEventBus;
 
-    public virtual async Task<Resource> GetAsync(Guid id, ResourceQueryOptions options)
+    public virtual async Task<Resource> GetAsync(Guid id, ResourceQueryOption option)
     {
-        var entity = await Repository.GetAsync(id, null, options, CancellationToken);
+        var entity = await Repository.GetAsync(id, null, option, CancellationToken);
         if (entity == null)
         {
             throw new EntityNotFoundBusinessException(L["Folder"], id);
@@ -42,9 +42,9 @@ public partial class ResourceManager(
     }
 
     public virtual async Task<Resource?> FindAsync(Expression<Func<Resource, bool>> predicate, Guid? parentId,
-        ResourceQueryOptions options)
+        ResourceQueryOption option)
     {
-        return await Repository.FindAsync(predicate, null, options, CancellationToken);
+        return await Repository.FindAsync(predicate, null, option, CancellationToken);
     }
 
     public override async Task DeleteAsync(Resource entity, bool autoSave = true)

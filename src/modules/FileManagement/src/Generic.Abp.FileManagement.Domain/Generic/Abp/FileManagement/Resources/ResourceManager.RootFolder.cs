@@ -112,9 +112,9 @@ public partial class ResourceManager
 
         var existingResource = userId.HasValue
             ? await FindAsync(m => m.ParentId == usersRootFolder!.Id && m.OwnerId == userId.Value, null,
-                new ResourceQueryOptions(false))
+                new ResourceQueryOption(false))
             : await FindAsync(m => m.Type == rooType, null,
-                new ResourceQueryOptions(false));
+                new ResourceQueryOption(false));
         if (existingResource == null)
         {
             // Create the folder only if it does not exist

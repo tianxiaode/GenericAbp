@@ -6,14 +6,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Generic.Abp.Extensions.Entities.QueryOptions;
+using Generic.Abp.Extensions.Entities.SearchParams;
 using Volo.Abp.EntityFrameworkCore;
 
 namespace Generic.Abp.Extensions.EntityFrameworkCore.Trees;
 
-public class TreeRepository<TDbContext, TEntity>(IDbContextProvider<TDbContext> dbContextProvider)
-    : ExtensionRepository<TDbContext, TEntity>(dbContextProvider), ITreeRepository<TEntity>
+public class TreeRepository<TDbContext, TEntity, TQueryOptions, TSearchParams>(
+    IDbContextProvider<TDbContext> dbContextProvider)
+    : ExtensionRepository<TDbContext, TEntity, TQueryOptions, TSearchParams>(dbContextProvider),
+        ITreeRepository<TEntity, TQueryOptions, TSearchParams>
     where TDbContext : IEfCoreDbContext
     where TEntity : class, ITree<TEntity>
+    where TSearchParams : class, ISearchParams
+    where TQueryOptions : QueryOption
 {
     public virtual async Task<bool> HasChildAsync(Guid id, CancellationToken cancellation = default)
     {

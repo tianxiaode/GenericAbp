@@ -1,5 +1,5 @@
 ﻿using System;
-using Generic.Abp.Extensions.Entities.GetListParams;
+using Generic.Abp.Extensions.Entities.SearchParams;
 using Volo.Abp.Application.Dtos;
 
 namespace Generic.Abp.FileManagement.UserFolders.Dtos;

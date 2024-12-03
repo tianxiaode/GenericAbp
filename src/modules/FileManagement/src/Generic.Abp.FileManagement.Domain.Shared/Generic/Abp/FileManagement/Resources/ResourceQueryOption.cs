@@ -1,17 +1,16 @@
-﻿namespace Generic.Abp.FileManagement.Resources;
+﻿using Generic.Abp.Extensions.Entities.QueryOptions;
 
-public class ResourceQueryOptions(
+namespace Generic.Abp.FileManagement.Resources;
+
+public class ResourceQueryOption(
     bool includeParent = true,
     bool includeFile = false,
     bool includePermissions = false,
     string sorting = "",
     int skipCount = 0,
-    int maxResultCount = int.MaxValue)
+    int maxResultCount = int.MaxValue) : QueryOption(sorting, skipCount, maxResultCount)
 {
     public bool IncludeParent { get; set; } = includeParent;
     public bool IncludeFile { get; set; } = includeFile;
     public bool IncludePermissions { get; set; } = includePermissions;
-    public string Sorting { get; set; } = sorting;
-    public int SkipCount { get; set; } = skipCount;
-    public int MaxResultCount { get; set; } = maxResultCount;
 }

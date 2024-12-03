@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using System.Threading;
-using Generic.Abp.Extensions.Entities.GetListParams;
+using Generic.Abp.Extensions.Entities.QueryOptions;
+using Generic.Abp.Extensions.Entities.SearchParams;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Services;
 using Volo.Abp.Threading;
@@ -11,12 +12,13 @@ using Microsoft.Extensions.Localization;
 
 namespace Generic.Abp.Extensions.Entities;
 
-public class EntityManagerBase<TEntity, TRepository, TResource>(
+public abstract class EntityManagerBase<TEntity, TRepository, TResource, TQueryOption>(
     TRepository repository,
     IStringLocalizer<TResource> localizer,
     ICancellationTokenProvider cancellationTokenProvider) : DomainService
     where TEntity : class, IEntity<Guid>
-    where TRepository : IExtensionRepository<TEntity>
+    where TRepository : IExtensionRepository<TEntity, TQueryOption>
+    where TQueryOption : QueryOption
 {
     protected TRepository Repository { get; } = repository;
     protected ICancellationTokenProvider CancellationTokenProvider { get; } = cancellationTokenProvider;
@@ -74,15 +76,12 @@ public class EntityManagerBase<TEntity, TRepository, TResource>(
 
     public virtual async Task<List<TEntity>> GetListAsync(
         Expression<Func<TEntity, bool>> predicate,
-        string sorting, int maxResultCount = int.MaxValue, int skipCount = 0,
+        TQueryOption option,
         bool includeDetails = false)
     {
         return await Repository.GetListAsync(
             predicate,
-            sorting,
-            maxResultCount,
-            skipCount,
-            includeDetails,
+            option,
             CancellationToken);
     }
 
@@ -93,14 +92,17 @@ public class EntityManagerBase<TEntity, TRepository, TResource>(
     }
 }
 
-public class EntityManagerBase<TEntity, TRepository, TResource, TSearchParams>(
+public abstract class EntityManagerBase<TEntity, TRepository, TResource, TQueryOption, TSearchParams>(
     TRepository repository,
     IStringLocalizer<TResource> localizer,
     ICancellationTokenProvider cancellationTokenProvider)
-    : EntityManagerBase<TEntity, TRepository, TResource>(repository, localizer, cancellationTokenProvider)
+    : EntityManagerBase<TEntity, TRepository, TResource, TQueryOption>(repository, localizer,
+        cancellationTokenProvider)
     where TEntity : class, IEntity<Guid>
-    where TRepository : IExtensionRepository<TEntity, TSearchParams>
+    where TRepository : IExtensionRepository<TEntity, TQueryOption, TSearchParams>,
+    IExtensionRepository<TEntity, TQueryOption>
     where TSearchParams : class, ISearchParams
+    where TQueryOption : QueryOption
 {
     public virtual async Task<Expression<Func<TEntity, bool>>> BuildPredicateExpression(TSearchParams searchParams)
     {
