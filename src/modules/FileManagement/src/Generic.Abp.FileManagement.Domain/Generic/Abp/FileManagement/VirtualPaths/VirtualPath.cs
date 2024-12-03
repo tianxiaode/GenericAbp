@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using Generic.Abp.FileManagement.Resources;
 using Volo.Abp;
+using Volo.Abp.Auditing;
 using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.MultiTenancy;
 
@@ -16,6 +17,8 @@ public class VirtualPath : AuditedAggregateRoot<Guid>, IMultiTenant
     /// </summary>
     [DisplayName("VirtualPath:Name")]
     public virtual string Name { get; protected set; }
+
+    [DisableAuditing] public virtual string NormalizedName { get; protected set; }
 
     /// <summary>
     /// 绑定的公共文件夹
@@ -52,9 +55,11 @@ public class VirtualPath : AuditedAggregateRoot<Guid>, IMultiTenant
         Check.NotNullOrEmpty(name, nameof(Name));
 
         Name = name;
+        NormalizedName = name.ToUpperInvariant();
         ResourceId = resourceId;
         IsAccessible = isAccessible;
         TenantId = tenantId;
+        ConcurrencyStamp = Guid.NewGuid().ToString("N");
     }
 
     public virtual void Rename(string name)
@@ -62,6 +67,7 @@ public class VirtualPath : AuditedAggregateRoot<Guid>, IMultiTenant
         Check.NotNullOrEmpty(name, nameof(Name));
 
         Name = name;
+        NormalizedName = name.ToUpperInvariant();
     }
 
     public virtual void ChangeResource(Guid resourceId)

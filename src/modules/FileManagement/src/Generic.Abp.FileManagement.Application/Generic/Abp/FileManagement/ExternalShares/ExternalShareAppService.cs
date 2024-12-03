@@ -1,22 +1,48 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq.Dynamic.Core.Tokenizer;
 using System.Threading.Tasks;
 using Generic.Abp.Extensions.Exceptions;
+using Generic.Abp.Extensions.Tokens;
 using Generic.Abp.FileManagement.ExternalShares.Dtos;
 using Generic.Abp.FileManagement.Permissions;
+using Generic.Abp.FileManagement.Resources;
+using Generic.Abp.FileManagement.Resources.Dtos;
 using Generic.Abp.FileManagement.Settings;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Authorization;
 
 namespace Generic.Abp.FileManagement.ExternalShares;
 
 public class ExternalShareAppService(
     ExternalShareManager externalShareManager,
     FileManagementSettingManager settingManager)
-    : FileManagementAppService, IExternalShareAppService, IExternalShareAppService1
+    : FileManagementAppService, IExternalShareAppService
 {
     protected ExternalShareManager ExternalShareManager { get; } = externalShareManager;
     protected FileManagementSettingManager SettingManager { get; } = settingManager;
+
+    [AllowAnonymous]
+    public virtual async Task<ExternalShareTokenDto> GetExternalShareTokenAsync(string linkName,
+        ExternalShareGetTokenDto input)
+    {
+        var entity = await ExternalShareManager.FindByLinkNameAsync(linkName);
+        await ExternalShareManager.CanRedAsync(entity, input.Password);
+
+        return new ExternalShareTokenDto(await ExternalShareManager.GetTokenAsync(entity));
+    }
+
+    [AllowAnonymous]
+    public virtual async Task<PagedResultDto<ResourceBaseDto>> GetExternalShareResourcesAsync(string linkName,
+        GetExternalShareResourcesDto input)
+    {
+        var entity = await ExternalShareManager.FindByLinkNameAsync(linkName);
+        await ExternalShareManager.ValidateTokenAsync(entity, input.Token);
+        var (count, list) = await ExternalShareManager.GetResourcesAsync(entity, input.ResourceId);
+        return new PagedResultDto<ResourceBaseDto>(count,
+            ObjectMapper.Map<List<Resource>, List<ResourceBaseDto>>(list));
+    }
 
     [Authorize]
     public virtual async Task<ExternalShareDto> GetMyExternalShareAsync(Guid id)

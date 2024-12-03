@@ -32,7 +32,7 @@ public partial class ResourceManager
     {
         if (!await IsPublicFolderAsync(folderId))
         {
-            throw new EntityNotFoundBusinessException(Localizer["Folder"], folderId);
+            throw new EntityNotFoundBusinessException(L["Folder"], folderId);
         }
     }
 
@@ -59,7 +59,7 @@ public partial class ResourceManager
     {
         if (!await IsPublicFolderAsync(folderId) || !await IsSharedFolderAsync(folderId))
         {
-            throw new EntityNotFoundBusinessException(Localizer["Folder"], folderId);
+            throw new EntityNotFoundBusinessException(L["Folder"], folderId);
         }
     }
 
@@ -102,5 +102,12 @@ public partial class ResourceManager
         {
             throw new StaticFolderCanNotBeMoveOrDeletedBusinessException();
         }
+    }
+
+    public virtual async Task<bool> IsExistsAsync(Guid id, Guid parentId)
+    {
+        var parent = await Repository.GetAsync(parentId);
+        var entity = await Repository.GetAsync(id);
+        return entity.Code.StartsWith(parent.Code);
     }
 }

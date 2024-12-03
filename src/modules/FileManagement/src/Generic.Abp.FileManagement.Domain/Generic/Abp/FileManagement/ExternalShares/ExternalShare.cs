@@ -46,7 +46,7 @@ public class ExternalShare : AuditedAggregateRoot<Guid>, IMultiTenant
     {
         ResourceId = resourceId;
         TenantId = tenantId;
-        LinkName = Guid.NewGuid().ToString("N");
+        LinkName = Guid.NewGuid().ToString("N").ToLowerInvariant();
         Password = StringExtensions.GenerateRandomString(4);
         ExpireTime = DateTime.Now.AddDays(days);
     }

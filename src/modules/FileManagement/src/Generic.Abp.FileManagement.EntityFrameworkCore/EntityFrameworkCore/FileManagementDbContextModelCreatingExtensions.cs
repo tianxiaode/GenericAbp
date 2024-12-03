@@ -111,6 +111,7 @@ namespace Generic.Abp.FileManagement.EntityFrameworkCore
 
                 //Properties
                 b.Property(m => m.Name).IsRequired().HasMaxLength(VirtualPathConsts.NameMaxLength);
+                b.Property(m => m.NormalizedName).IsRequired().HasMaxLength(VirtualPathConsts.NameMaxLength);
                 b.Property(m => m.IsAccessible).IsRequired().HasDefaultValue(true);
 
                 //Relations
@@ -120,6 +121,7 @@ namespace Generic.Abp.FileManagement.EntityFrameworkCore
                 //Indexes
                 b.HasIndex(m => m.TenantId);
                 b.HasIndex(m => m.Name);
+                b.HasIndex(m => m.NormalizedName);
                 b.HasIndex(m => m.CreationTime);
             });
 

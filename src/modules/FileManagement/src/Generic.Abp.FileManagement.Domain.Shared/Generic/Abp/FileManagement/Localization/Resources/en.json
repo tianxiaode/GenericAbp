@@ -111,6 +111,10 @@
     "UserFolders": "User Folders",
     "ParticipantIsolationrFolders": "Participant Isolation Folders",
     "AccessDenied": "Access Denied",
-    "NoFilterAndFolderSelected": "Please select a folder or input a filter."
+    "NoFilterAndFolderSelected": "Please select a folder or input a filter.",
+    "InvalidPassword": "Invalid Password",
+    "ExternalShareExpired": "Shared link has expired",
+    "InvalidToken": "Invalid Token",
+    "TokenExpired": "Token Expired"
   }
 }

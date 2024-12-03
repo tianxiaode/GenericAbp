@@ -18,7 +18,7 @@ public class VirtualPathManager(
 {
     public virtual async Task<VirtualPath> FinByNameAsync(string name, bool includeDetails = true)
     {
-        var entity = await FindAsync(m => m.Name.ToLower() == name.ToLower(), includeDetails);
+        var entity = await FindAsync(m => string.Equals(m.NormalizedName, name.ToUpperInvariant()), includeDetails);
         if (entity == null)
         {
             throw new EntityNotFoundBusinessException(L["VirtualPath"], name);
@@ -39,7 +39,8 @@ public class VirtualPathManager(
 
     public override async Task ValidateAsync(VirtualPath entity)
     {
-        if (await Repository.AnyAsync(m => m.Name.ToLower() == entity.Name.ToLower() && m.Id != entity.Id,
+        if (await Repository.AnyAsync(
+                m => string.Equals(m.NormalizedName, entity.Name.ToUpperInvariant()) && m.Id != entity.Id,
                 CancellationToken))
         {
             throw new DuplicateWarningBusinessException(L["VirtualPath"], entity.Name);
