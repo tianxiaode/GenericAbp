@@ -21,8 +21,8 @@
     <Content Remove="Generic\Abp\Extensions\Localization\Resources\*.json" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Generic\Abp\Extensions\Entities\Permissions\" />
-  </ItemGroup>
 
+  <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <DefineConstants>NETSTANDARD2_0</DefineConstants>
+  </PropertyGroup>
 </Project>

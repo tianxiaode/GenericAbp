@@ -35,7 +35,7 @@ namespace Generic.Abp.FileManagement
                 .ForMember(m => m.StorageQuota, opts => opts.MapFrom(m => m.GetStorageQuota()))
                 .ForMember(m => m.MaxFileSize, opts => opts.MapFrom(m => m.GetMaxFileSize()));
 
-            CreateMap<UserFolderGetListInput, ResourceSearchAndPagedAndSortedParams>()
+            CreateMap<UserFolderGetListInput, ResourceSearchParams>()
                 .Ignore(m => m.FileType);
 
             CreateMap<ExternalShare, ExternalShareDto>().MapExtraProperties();

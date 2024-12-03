@@ -9,20 +9,24 @@ public abstract class SettingDefinitionExtensionsProvider<TResource> : SettingDe
     public override void Define(ISettingDefinitionContext context)
     {
         var groupNames = GetGroupName();
-        foreach (var (key, definition) in GetSettings())
+        foreach (var pair in GetSettings())
         {
+            var key = pair.Key;
+            var definition = pair.Value;
+
+            // 继续使用 key 和 definition
             var displayName = definition.DisplayName ?? key;
-            context.Add(
-                new SettingDefinition(
-                    groupNames + "." + key,
-                    definition.DefaultValue?.ToString(),
-                    L($"Settings:{displayName}"),
-                    L($"Description:{displayName}"),
-                    definition.IsVisibleToClients,
-                    definition.IsInherited,
-                    definition.IsEncrypted
-                )
-            );
+            var settingKey = $"{groupNames}.{key}";
+
+            context.Add(new SettingDefinition(
+                settingKey,
+                definition.DefaultValue?.ToString(),
+                L($"Settings:{displayName}"),
+                L($"Description:{displayName}"),
+                definition.IsVisibleToClients,
+                definition.IsInherited,
+                definition.IsEncrypted
+            ));
         }
     }
 

@@ -23,9 +23,9 @@ public partial class ResourceManager(
     IDistributedEventBus distributedEventBus,
     ICancellationTokenProvider cancellationTokenProvider,
     IResourceConfigurationRepository configurationRepository)
-    : TreeManager<Resource, IResourceRepository>(repository, treeCodeGenerator, cancellationTokenProvider)
+    : TreeManager<Resource, IResourceRepository, FileManagementResource>(repository, treeCodeGenerator, localizer,
+        cancellationTokenProvider)
 {
-    protected IStringLocalizer<FileManagementResource> Localizer { get; } = localizer;
     protected IDistributedCache<ResourceCacheItem, string> Cache { get; } = cache;
     protected ResourcePermissionManager PermissionManager { get; } = resourcePermissionManager;
     protected FileManagementSettingManager SettingManager { get; } = settingManager;
@@ -37,7 +37,7 @@ public partial class ResourceManager(
         var entity = await Repository.GetAsync(id, null, options, CancellationToken);
         if (entity == null)
         {
-            throw new EntityNotFoundBusinessException(Localizer["Folder"], id);
+            throw new EntityNotFoundBusinessException(L["Folder"], id);
         }
 
         return entity;
@@ -52,10 +52,7 @@ public partial class ResourceManager(
     public override async Task DeleteAsync(Resource entity, bool autoSave = true)
     {
         await SetPermissionsAsync(entity, []);
-        if (entity.ConfigurationId.HasValue)
-        {
-            await ConfigurationRepository.DeleteAsync(entity.ConfigurationId.Value, true, CancellationToken);
-        }
+        entity.SetHasPermissions(false);
 
         await base.DeleteAsync(entity, autoSave);
     }
@@ -66,24 +63,23 @@ public partial class ResourceManager(
                 m.ParentId == entity.ParentId && m.Id != entity.Id &&
                 m.Name.ToLower() == entity.Name.ToLowerInvariant()))
         {
-            throw new DuplicateWarningBusinessException(Localizer[nameof(Resource)], entity.Name);
+            throw new DuplicateWarningBusinessException(L[nameof(Resource)], entity.Name);
         }
     }
 
-    protected override async Task<Resource> CloneAsync(Resource source)
+    protected override Task<Resource> CloneAsync(Resource source)
     {
         var entity = new Resource(GuidGenerator.Create(), source.Name, ResourceType.Folder, source.IsStatic,
             source.TenantId);
         entity.SetFileInfoBase(source.FileInfoBaseId);
-        entity.SetFolderId(source.FolderId);
 
-        if (source.Configuration != null)
-        {
-            await CreateOrUpdateConfigurationAsync(entity, source.Configuration.AllowedFileTypes,
-                source.Configuration.StorageQuota, source.Configuration.MaxFileSize);
-        }
+        //不复制配置，否则会导致配置副作用，譬如扩容
+        entity.SetHasConfiguration(false);
 
-        return entity;
+        //不复制权限，否则会导致权限副作用，譬如扩权
+        //entity.SetPermissions(source.Permissions);
+        entity.SetHasPermissions(false);
+        return Task.FromResult(entity);
     }
 
     protected virtual Task CreateOrUpdateConfigurationAsync(Resource entity, string allowFileTypes, long storageQuota,

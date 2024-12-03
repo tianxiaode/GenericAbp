@@ -30,7 +30,7 @@ public class UserFoldersManager(
     public virtual async Task<Resource> GetUserFolderAsync(Guid id, ResourceQueryOptions? options = null)
     {
         var root = await GetUsersRootFolderAsync();
-        options ??= new ResourceQueryOptions(false, includeConfiguration: true);
+        options ??= new ResourceQueryOptions(false);
         var resource =
             await Repository.GetAsync(id, root.Id, options, CancellationToken);
         if (resource == null)
@@ -42,7 +42,7 @@ public class UserFoldersManager(
     }
 
     public virtual async Task<Tuple<long, List<Resource>>> GetListAsync(
-        ResourceSearchAndPagedAndSortedParams search, Guid? ownerId = null)
+        ResourceSearchParams search, Guid? ownerId = null)
     {
         var root = await GetUsersRootFolderAsync();
         search.Sorting ??= $"{nameof(Resource.Name)}";

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Generic.Abp.Extensions.MimeDetective
@@ -60,10 +61,17 @@ namespace Generic.Abp.Extensions.MimeDetective
 
         #endregion
 
+        #region Txt, MD
+
+        public static readonly FileType Txt = new(null, "txt", "text/plain");
+        public static readonly FileType Md = new(null, "md", "text/markdown");
+
+        #endregion
+
         public const int MaxHeaderSize = 560;
 
         public static readonly List<FileType> Types =
-            [Word, WordX, Excel, ExcelX, Ppt, PptX, Jpg, Png, Pdf, Gif, Bmp, Mp4, Mkv, Mp3, Wav];
+            [Word, WordX, Excel, ExcelX, Ppt, PptX, Jpg, Png, Pdf, Gif, Bmp, Mp4, Mkv, Mp3, Wav, Zip, Txt, Md, Xml];
 
         public static readonly List<FileType> AudioTypes = [Mp3, Wav];
         public static readonly List<FileType> VideoTypes = [Mp4, Mkv];
@@ -71,20 +79,56 @@ namespace Generic.Abp.Extensions.MimeDetective
         public static readonly List<FileType> DocumentTypes = [Word, WordX, Excel, ExcelX, Ppt, PptX, Pdf, Xml];
         public static readonly List<FileType> OfficeTypes = [Word, WordX, Excel, ExcelX, Ppt, PptX];
         public static readonly List<FileType> ArchiveTypes = [Zip];
+        public static readonly List<FileType> TextTypes = [Txt, Md];
 
 
         // 所有文件类型检查方法合并为一个异步方法
-        public static async Task<(bool, string)> IsFileTypeAsync(this byte[] header, List<FileType> allowedTypes)
+        public static async Task<(bool, string)> IsFileTypeAsync(this byte[] header, List<FileType> allowedTypes,
+            string fileName = "")
         {
             try
             {
+                // 文件头检测
                 var fileType = await GetFileTypeAsync(header, allowedTypes);
+
+                // 无法通过文件头检测时，尝试通过扩展名匹配
+                if (fileType != null || string.IsNullOrEmpty(fileName))
+                {
+                    return (fileType != null, fileType?.Extension ?? string.Empty);
+                }
+
+                var extension = Path.GetExtension(fileName)?.TrimStart('.').ToLower();
+                fileType = allowedTypes.FirstOrDefault(t =>
+                    t.Extension.Equals(extension, StringComparison.OrdinalIgnoreCase));
+
                 return (fileType != null, fileType?.Extension ?? string.Empty);
             }
             catch (Exception ex)
             {
                 throw new ApplicationException("文件类型识别失败: " + ex.Message);
             }
+        }
+
+        public static async Task<(bool, string)> IsFileTypeAsync(this Stream file, List<FileType> allowedTypes,
+            string fileName = "", CancellationToken cancellationToken = default)
+        {
+            var header = await ReadFileHeaderAsync(file, MaxHeaderSize, cancellationToken);
+
+            // 优先尝试文件头和扩展名
+            var (isMatched, extension) = await IsFileTypeAsync(header, allowedTypes, fileName);
+            if (isMatched)
+            {
+                return (true, extension);
+            }
+
+            // 无扩展名且无法通过文件头识别，默认处理为文本文件
+            if (!string.IsNullOrEmpty(fileName))
+            {
+                return (false, string.Empty);
+            }
+
+            var contentType = await AnalyzeContentAsync(header, TextTypes);
+            return (true, contentType?.Extension ?? string.Empty);
         }
 
         public static async Task<FileType?> GetFileTypeAsync(this byte[] header, List<FileType> allowedFileTypes)
@@ -99,6 +143,12 @@ namespace Generic.Abp.Extensions.MimeDetective
                 }
             }
 
+            // 检测文本文件类型
+            if (allowedFileTypes.Any(t => TextTypes.Contains(t)))
+            {
+                return await AnalyzeContentAsync(header, TextTypes);
+            }
+
             return null;
         }
 
@@ -110,6 +160,21 @@ namespace Generic.Abp.Extensions.MimeDetective
             return Task.FromResult(types);
         }
 
+        private static Task<FileType> AnalyzeContentAsync(byte[] content, List<FileType> textFileTypes)
+        {
+            var textContent = System.Text.Encoding.UTF8.GetString(content);
+
+            // 如果包含 Markdown 特有符号，判断为 Markdown
+            if (textContent.Contains("#") || textContent.Contains("```") || textContent.Contains("- ["))
+            {
+                return Task.FromResult(Md);
+            }
+
+            // 默认判断为纯文本
+            return Task.FromResult(Txt);
+        }
+
+
         private static Task<int> GetFileMatchingCountAsync(byte[] fileHeader, byte[] header, int offset)
         {
             return Task.FromResult(header.Where((t, i) => t != fileHeader[i + offset]).Any()
@@ -118,18 +183,25 @@ namespace Generic.Abp.Extensions.MimeDetective
                 header.Length); // 直接返回匹配的长度
         }
 
-        private static async Task<byte[]> ReadFileHeaderAsync(Stream file, int maxHeaderSize)
+        private static async Task<byte[]> ReadFileHeaderAsync(Stream file, int maxHeaderSize,
+            CancellationToken cancellationToken = default)
         {
             var header = new byte[maxHeaderSize];
             try
             {
-                // 直接读取文件头
-                await file.ReadAsync(header, 0, maxHeaderSize);
+#if NETSTANDARD2_0
+                // 使用老式重载方法（不支持 Memory<byte>）
+                var bytesRead = await file.ReadAsync(header, 0, maxHeaderSize, cancellationToken);
+#else
+                // 使用现代化重载方法（支持 Memory<byte>）
+                var memory = header.AsMemory(0, maxHeaderSize);
+                var bytesRead = await file.ReadAsync(memory, cancellationToken);
+#endif
                 return header;
             }
             catch (Exception e)
             {
-                throw new ApplicationException("无法读取文件: " + e.Message);
+                throw new ApplicationException("无法读取文件: " + e.Message, e);
             }
         }
     }

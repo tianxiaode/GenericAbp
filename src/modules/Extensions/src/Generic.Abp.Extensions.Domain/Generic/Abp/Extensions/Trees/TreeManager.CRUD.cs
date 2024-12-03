@@ -3,7 +3,7 @@ using System;
 
 namespace Generic.Abp.Extensions.Trees;
 
-public abstract partial class TreeManager<TEntity, TRepository>
+public abstract partial class TreeManager<TEntity, TRepository, TResource>
 {
     public virtual async Task<TEntity> GetAsync(Guid id)
     {

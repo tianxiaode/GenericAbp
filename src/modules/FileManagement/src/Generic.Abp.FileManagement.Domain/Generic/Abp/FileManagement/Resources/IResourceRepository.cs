@@ -23,7 +23,7 @@ public interface IResourceRepository : ITreeRepository<Resource>
 
     Task<List<Resource>> GetListAsync(
         Expression<Func<Resource, bool>> predicate,
-        ResourceSearchAndPagedAndSortedParams search,
+        ResourceSearchParams search,
         ResourceQueryOptions options,
         CancellationToken cancellation = default);
 
@@ -32,5 +32,5 @@ public interface IResourceRepository : ITreeRepository<Resource>
 
     Task<Expression<Func<Resource, bool>>> BuildQueryExpressionAsync(
         Guid parentId,
-        ResourceSearchAndPagedAndSortedParams search);
+        ResourceSearchParams search);
 }

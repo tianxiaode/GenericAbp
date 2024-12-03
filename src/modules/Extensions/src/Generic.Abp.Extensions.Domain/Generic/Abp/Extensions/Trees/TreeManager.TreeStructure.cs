@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Generic.Abp.Extensions.Trees;
 
-public abstract partial class TreeManager<TEntity, TRepository>
+public abstract partial class TreeManager<TEntity, TRepository, TResource>
 {
     public virtual async Task<string> GetNextChildCodeAsync(Guid? parentId)
     {

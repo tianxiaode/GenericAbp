@@ -53,6 +53,7 @@ namespace Generic.Abp.FileManagement.EntityFrameworkCore
                 //Properties
                 b.Property(m => m.Name).IsRequired().HasMaxLength(ResourceConsts.NameMaxLength);
                 b.Property(m => m.Code).IsRequired().HasMaxLength(ResourceConsts.CodeMaxLength);
+                b.Property(m => m.FileExtension).HasMaxLength(ResourceConsts.FileExtensionMaxLength);
                 b.Property(m => m.IsAccessible).IsRequired().HasDefaultValue(true);
                 b.Property(m => m.IsStatic).IsRequired().HasDefaultValue(true);
                 b.Property(m => m.HasConfiguration).IsRequired().HasDefaultValue(false);
@@ -76,6 +77,7 @@ namespace Generic.Abp.FileManagement.EntityFrameworkCore
                 b.HasIndex(m => new { m.TenantId, m.ParentId });
                 b.HasIndex(m => m.CreationTime);
                 b.HasIndex(m => m.FileInfoBaseId);
+                b.HasIndex(m => m.FileExtension);
                 b.HasIndex(m => m.OwnerId);
 
                 b.ApplyObjectExtensionMappings();
@@ -93,12 +95,6 @@ namespace Generic.Abp.FileManagement.EntityFrameworkCore
                 b.Property(m => m.ProviderName).IsRequired().HasMaxLength(ResourceConsts.ProviderNameMaxLength);
                 b.Property(m => m.ProviderKey).HasMaxLength(ResourceConsts.ProviderKeyMaxLength);
                 b.Property(m => m.Permissions).IsRequired().HasDefaultValue(0);
-
-                if (dbType == EfCoreDatabaseProvider.MySql)
-                {
-                    b.Property(m => m.ProviderName).UseCollation("ascii_general_ci");
-                    b.Property(m => m.ProviderKey).UseCollation("ascii_general_ci");
-                }
 
                 //Indexes
                 b.HasIndex(m => new { m.TenantId, m.ResourceId });

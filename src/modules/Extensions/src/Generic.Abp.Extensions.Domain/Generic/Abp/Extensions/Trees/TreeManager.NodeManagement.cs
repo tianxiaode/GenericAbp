@@ -7,7 +7,7 @@ using Volo.Abp.Uow;
 
 namespace Generic.Abp.Extensions.Trees;
 
-public abstract partial class TreeManager<TEntity, TRepository>
+public abstract partial class TreeManager<TEntity, TRepository, TResource>
 {
     public virtual async Task MoveAsync(Guid id, Guid? parentId)
     {

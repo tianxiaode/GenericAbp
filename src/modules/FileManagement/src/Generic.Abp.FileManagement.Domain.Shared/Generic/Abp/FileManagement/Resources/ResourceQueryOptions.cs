@@ -2,14 +2,16 @@
 
 public class ResourceQueryOptions(
     bool includeParent = true,
-    bool includeFolder = false,
     bool includeFile = false,
     bool includePermissions = false,
-    bool includeConfiguration = false)
+    string sorting = "",
+    int skipCount = 0,
+    int maxResultCount = int.MaxValue)
 {
     public bool IncludeParent { get; set; } = includeParent;
-    public bool IncludeFolder { get; set; } = includeFolder;
     public bool IncludeFile { get; set; } = includeFile;
     public bool IncludePermissions { get; set; } = includePermissions;
-    public bool IncludeConfiguration { get; set; } = includeConfiguration;
+    public string Sorting { get; set; } = sorting;
+    public int SkipCount { get; set; } = skipCount;
+    public int MaxResultCount { get; set; } = maxResultCount;
 }

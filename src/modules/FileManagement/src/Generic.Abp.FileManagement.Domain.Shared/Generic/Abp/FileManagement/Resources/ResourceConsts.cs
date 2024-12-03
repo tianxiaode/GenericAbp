@@ -6,6 +6,7 @@ public static class ResourceConsts
     public static int ProviderNameMaxLength { get; set; } = 16;
     public static int ProviderKeyMaxLength { get; set; } = 64;
     public static int AllowedFileTypesMaxLength { get; set; } = 2048;
+    public static int FileExtensionMaxLength { get; set; } = 16;
     public static int MaxDepth { get; set; } = 32;
 
     public static int CodeUnitLength { get; set; } = 6;

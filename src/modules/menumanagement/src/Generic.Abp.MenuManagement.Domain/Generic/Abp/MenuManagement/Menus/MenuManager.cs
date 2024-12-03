@@ -13,20 +13,9 @@ public class MenuManager(
     ITreeCodeGenerator<Menu> treeCodeGenerator,
     ICancellationTokenProvider cancellationTokenProvider,
     IStringLocalizer<MenuManagementResource> localizer)
-    : TreeManager<Menu, IMenuRepository>(repository, treeCodeGenerator, cancellationTokenProvider)
+    : TreeManager<Menu, IMenuRepository, MenuManagementResource>(repository, treeCodeGenerator, localizer,
+        cancellationTokenProvider)
 {
-    protected IStringLocalizer<MenuManagementResource> Localizer { get; } = localizer;
-
-    public override async Task ValidateAsync(Menu entity)
-    {
-        if (await Repository.AnyAsync(m =>
-                m.ParentId == entity.ParentId && m.Id != entity.Id &&
-                m.Name.ToLower() == entity.Name.ToLowerInvariant()))
-        {
-            throw new DuplicateWarningBusinessException(Localizer[nameof(Menu)], entity.Name);
-        }
-    }
-
     protected override Task<Menu> CloneAsync(Menu source)
     {
         var newMenu = new Menu(GuidGenerator.Create(), source.ParentId, source.Name, source.TenantId);

@@ -5,25 +5,28 @@ using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Localization;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Domain.Services;
 using Volo.Abp.Threading;
 
 namespace Generic.Abp.Extensions.Trees
 {
-    public abstract partial class TreeManager<TEntity, TRepository>(
+    public abstract partial class TreeManager<TEntity, TRepository, TResource>(
         TRepository repository,
         ITreeCodeGenerator<TEntity> treeCodeGenerator,
+        IStringLocalizer<TResource> localizer,
         ICancellationTokenProvider cancellationTokenProvider)
         : DomainService
         where TEntity : TreeAuditedAggregateRoot<TEntity>
         where TRepository : ITreeRepository<TEntity>
+        where TResource : class
     {
         protected TRepository Repository { get; } = repository;
         protected ITreeCodeGenerator<TEntity> TreeCodeGenerator { get; } = treeCodeGenerator;
         protected ICancellationTokenProvider CancellationTokenProvider { get; } = cancellationTokenProvider;
         protected CancellationToken CancellationToken => CancellationTokenProvider.Token;
-
+        protected IStringLocalizer<TResource> L { get; } = localizer;
 
         public virtual async Task<List<TEntity>> FindChildrenAsync(TEntity entity, bool includeDetails = false,
             bool recursive = false)
