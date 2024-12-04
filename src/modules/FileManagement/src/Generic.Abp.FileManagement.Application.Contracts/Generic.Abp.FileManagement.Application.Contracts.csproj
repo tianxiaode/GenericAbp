@@ -22,4 +22,8 @@
     <ProjectReference Include="..\Generic.Abp.FileManagement.Domain.Shared\Generic.Abp.FileManagement.Domain.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Generic\Abp\FileManagement\Resources\Dtos\Files\" />
+  </ItemGroup>
+
 </Project>

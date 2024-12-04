@@ -30,7 +30,7 @@ public partial class ResourceManager(
     protected FileManagementSettingManager SettingManager { get; } = settingManager;
     protected IDistributedEventBus DistributedEventBus { get; } = distributedEventBus;
 
-    public virtual async Task<Resource> GetAsync(Guid id, ResourceQueryOption option)
+    public virtual async Task<Resource> GetAsync(Guid id, ResourceIncludeOptions option)
     {
         var entity = await Repository.GetAsync(id, null, option, CancellationToken);
         if (entity == null)
@@ -42,7 +42,7 @@ public partial class ResourceManager(
     }
 
     public virtual async Task<Resource?> FindAsync(Expression<Func<Resource, bool>> predicate, Guid? parentId,
-        ResourceQueryOption option)
+        ResourceIncludeOptions option)
     {
         return await Repository.FindAsync(predicate, null, option, CancellationToken);
     }

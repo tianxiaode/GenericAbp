@@ -78,6 +78,7 @@ namespace Generic.Abp.FileManagement.EntityFrameworkCore
                 b.HasIndex(m => m.CreationTime);
                 b.HasIndex(m => m.FileInfoBaseId);
                 b.HasIndex(m => m.FileExtension);
+                b.HasIndex(m => m.FileSize);
                 b.HasIndex(m => m.OwnerId);
 
                 b.ApplyObjectExtensionMappings();

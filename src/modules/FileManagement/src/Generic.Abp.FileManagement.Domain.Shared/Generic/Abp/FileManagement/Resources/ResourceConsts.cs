@@ -17,11 +17,4 @@ public static class ResourceConsts
     {
         return CodeUnitLength * level + level - 1;
     }
-
-    private const string DefaultSorting = "{0}Name asc";
-
-    public static string GetDefaultSorting(bool withEntityName = false)
-    {
-        return string.Format(DefaultSorting, withEntityName ? "FileManagementResources." : string.Empty);
-    }
 }

@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Generic.Abp.FileManagement.Resources.Dtos;
+namespace Generic.Abp.FileManagement.Resources.Dtos.Folders;
 
 [Serializable]
 public class FolderCreateDto : FolderCreateOrUpdateDto

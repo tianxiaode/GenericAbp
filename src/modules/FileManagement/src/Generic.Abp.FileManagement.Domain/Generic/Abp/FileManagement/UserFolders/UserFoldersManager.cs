@@ -25,10 +25,10 @@ public class UserFoldersManager(
     ICancellationTokenProvider cancellationTokenProvider) : ResourceManager(repository, treeCodeGenerator,
     localizer, cache, resourcePermissionManager, settingManager, distributedEventBus, cancellationTokenProvider)
 {
-    public virtual async Task<Resource> GetUserFolderAsync(Guid id, ResourceQueryOption? options = null)
+    public virtual async Task<Resource> GetUserFolderAsync(Guid id, ResourceIncludeOptions? options = null)
     {
         var root = await GetUsersRootFolderAsync();
-        options ??= new ResourceQueryOption(false);
+        options ??= new ResourceIncludeOptions(false);
         var resource =
             await Repository.GetAsync(id, root.Id, options, CancellationToken);
         if (resource == null)
@@ -40,12 +40,12 @@ public class UserFoldersManager(
     }
 
     public virtual async Task<(long, List<Resource>)> GetListAsync(
-        ResourceQueryOption option,
-        ResourceSearchParams search, Guid? ownerId = null)
+        ResourceIncludeOptions option,
+        ResourceQueryParams query, Guid? ownerId = null)
     {
         var root = await GetUsersRootFolderAsync();
-        search.OwnerId = ownerId;
-        var predicate = await Repository.BuildQueryExpressionAsync(root.Id, search);
+        query.OwnerId = ownerId;
+        var predicate = await Repository.BuildQueryExpressionAsync(root.Id, query);
         option.IncludeParent = false;
         var count = await Repository.GetCountAsync(predicate, CancellationToken);
         var resources =
@@ -65,7 +65,7 @@ public class UserFoldersManager(
     public virtual async Task<Resource> UpdateAsync(Guid id, long storageQuota, long maxFileSize, string allowFileTypes,
         bool isAccessible, Guid? tenantId = null)
     {
-        var entity = await GetUserFolderAsync(id, new ResourceQueryOption(false));
+        var entity = await GetUserFolderAsync(id, new ResourceIncludeOptions(false));
         entity.SetAllowedFileTypes(allowFileTypes);
         entity.SetStorageQuota(storageQuota);
         entity.SetMaxFileSize(maxFileSize);

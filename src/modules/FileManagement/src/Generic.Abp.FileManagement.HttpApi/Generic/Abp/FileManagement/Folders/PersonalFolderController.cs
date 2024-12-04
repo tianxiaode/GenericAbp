@@ -32,7 +32,7 @@ public class PersonalFolderController(IPersonalFolderAppService appService)
     }
 
     [HttpGet]
-    public Task<ListResultDto<FolderDto>> GetListAsync(FolderGetListInput input)
+    public Task<ListResultDto<FolderDto>> GetListAsync(ResourceGetListInput input)
     {
         return AppService.GetListAsync(input);
     }

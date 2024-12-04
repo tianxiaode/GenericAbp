@@ -12,6 +12,7 @@ using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Uow;
 using ResourceManager = Generic.Abp.VirtualPaths.ResourceManager;
+using Generic.Abp.FileManagement.Resources.Dtos.Folders;
 
 namespace Generic.Abp.FileManagement.Folders;
 
@@ -50,7 +51,7 @@ public class ResourceAppService(
     }
 
     [Authorize(FileManagementPermissions.Resources.Default)]
-    public virtual async Task<ListResultDto<ResourceBaseDto>> GetFolderListAsync(FolderGetListInput input)
+    public virtual async Task<ListResultDto<ResourceBaseDto>> GetFolderListAsync(ResourceGetListInput input)
     {
         List<Resource> list = [];
         if (!string.IsNullOrEmpty(input.Filter))

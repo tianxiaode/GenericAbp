@@ -28,7 +28,7 @@ public class UserFolderAppService(UserFoldersManager userFoldersManager, Identit
     public virtual async Task<PagedResultDto<UserFolderDto>> GetListAsync(UserFolderGetListInput input)
     {
         var (cout, list) = await UserFoldersManager.GetListAsync(
-            ObjectMapper.Map<UserFolderGetListInput, ResourceSearchParams>(input), input.OwnerId);
+            ObjectMapper.Map<UserFolderGetListInput, ResourceQueryParams>(input), input.OwnerId);
         return new PagedResultDto<UserFolderDto>(cout, ObjectMapper.Map<List<Resource>, List<UserFolderDto>>(list));
     }
 

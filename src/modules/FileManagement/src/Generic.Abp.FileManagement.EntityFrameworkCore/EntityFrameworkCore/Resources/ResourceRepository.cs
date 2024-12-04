@@ -13,13 +13,14 @@ using Volo.Abp.EntityFrameworkCore;
 namespace Generic.Abp.FileManagement.EntityFrameworkCore.Resources;
 
 public partial class ResourceRepository(IDbContextProvider<IFileManagementDbContext> dbContextProvider)
-    : TreeRepository<IFileManagementDbContext, Resource, ResourceQueryOption, ResourceSearchParams>(dbContextProvider),
+    : TreeRepository<IFileManagementDbContext, Resource, ResourceIncludeOptions, ResourceQueryParams>(
+            dbContextProvider),
         IResourceRepository
 {
     public virtual async Task<Resource?> FindAsync(
         Expression<Func<Resource, bool>> predicate,
         Guid? parentId,
-        ResourceQueryOption option,
+        ResourceIncludeOptions option,
         CancellationToken cancellation = default)
     {
         return await (await GetDbSetAsync())
@@ -32,14 +33,14 @@ public partial class ResourceRepository(IDbContextProvider<IFileManagementDbCont
     }
 
 
-    public virtual async Task<Resource?> FindAsync(string name, Guid? parentId, ResourceQueryOption option,
+    public virtual async Task<Resource?> FindAsync(string name, Guid? parentId, ResourceIncludeOptions option,
         CancellationToken cancellation = default)
     {
         return await FindAsync(m => m.Name.ToLower() == name.ToLower(), parentId, option,
             cancellation);
     }
 
-    public virtual async Task<Resource?> GetAsync(Guid id, Guid? parentId, ResourceQueryOption option,
+    public virtual async Task<Resource?> GetAsync(Guid id, Guid? parentId, ResourceIncludeOptions option,
         CancellationToken cancellation = default)
     {
         return await FindAsync(m => m.Id == id, parentId, option, cancellation);
@@ -57,7 +58,7 @@ public partial class ResourceRepository(IDbContextProvider<IFileManagementDbCont
     }
 
 
-    protected override async Task<IQueryable<Resource>> IncludeDetailsAsync(ResourceQueryOption option)
+    protected override async Task<IQueryable<Resource>> IncludeDetailsAsync(ResourceIncludeOptions option)
     {
         return (await base.IncludeDetailsAsync(option))
             .IncludeIf(option.IncludeParent, m => m.Parent)
@@ -67,38 +68,38 @@ public partial class ResourceRepository(IDbContextProvider<IFileManagementDbCont
 
     public virtual Task<Expression<Func<Resource, bool>>> BuildQueryExpressionAsync(
         Guid parentId,
-        ResourceSearchParams search)
+        ResourceQueryParams query)
     {
         Expression<Func<Resource, bool>> predicate = m => m.ParentId == parentId;
 
-        if (!string.IsNullOrEmpty(search.Filter))
+        if (!string.IsNullOrEmpty(query.Filter))
         {
-            predicate = predicate.And(m => m.Name.Contains(search.Filter));
+            predicate = predicate.And(m => m.Name.Contains(query.Filter));
         }
 
-        if (search.StartTime.HasValue)
+        if (query.StartTime.HasValue)
         {
-            predicate = predicate.And(m => m.CreationTime >= search.StartTime.Value);
+            predicate = predicate.And(m => m.CreationTime >= query.StartTime.Value);
         }
 
-        if (search.EndTime.HasValue)
+        if (query.EndTime.HasValue)
         {
-            predicate = predicate.And(m => m.CreationTime <= search.EndTime.Value);
+            predicate = predicate.And(m => m.CreationTime <= query.EndTime.Value);
         }
 
-        if (search.OwnerId.HasValue)
+        if (query.OwnerId.HasValue)
         {
-            predicate = predicate.And(m => m.OwnerId == search.OwnerId);
+            predicate = predicate.And(m => m.OwnerId == query.OwnerId);
         }
 
 
-        if (string.IsNullOrEmpty(search.FileType))
+        if (string.IsNullOrEmpty(query.FileType))
         {
             return Task.FromResult(predicate);
         }
 
 
-        var types = search.FileType.Split(",");
+        var types = query.FileType.Split(",");
         predicate = predicate.And(m => types.Contains(m.FileExtension));
 
         return Task.FromResult(predicate);

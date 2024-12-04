@@ -17,6 +17,7 @@ public class Resource : TreeAuditedAggregateRoot<Resource>
     public virtual bool IsStatic { get; protected set; }
     public virtual bool IsAccessible { get; protected set; }
     public virtual string? FileExtension { get; protected set; }
+    public virtual long? FileSize { get; protected set; }
 
     public Resource(Guid id, string name, ResourceType type, bool isStatic = false, Guid? ownerId = null,
         Guid? tenantId = null) : base(id,
@@ -58,5 +59,10 @@ public class Resource : TreeAuditedAggregateRoot<Resource>
     public virtual void SetFileExtension(string fileExtension)
     {
         FileExtension = fileExtension.ToLower();
+    }
+
+    public virtual void SetFileSize(long fileSize)
+    {
+        FileSize = fileSize;
     }
 }
