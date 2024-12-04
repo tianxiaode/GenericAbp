@@ -1,6 +1,5 @@
 ﻿using Generic.Abp.Extensions.Trees;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Volo.Abp;
 using Volo.Abp.Auditing;
@@ -11,11 +10,11 @@ namespace Generic.Abp.MenuManagement.Menus;
 public class Menu : TreeAuditedAggregateRoot<Menu>, IHasEntityVersion
 {
     public virtual int EntityVersion { get; protected set; }
-    [Display(Name = "Menu:Icon")] public virtual string? Icon { get; protected set; } = default!;
+    [Display(Name = "Menu:Icon")] public virtual string? Icon { get; protected set; }
     [Display(Name = "Menu:IsEnabled")] public virtual bool IsEnabled { get; protected set; }
     [Display(Name = "Menu:IsStatic")] public virtual bool IsStatic { get; protected set; }
     [Display(Name = "Menu:Order")] public virtual int Order { get; protected set; }
-    [Display(Name = "Menu:Router")] public virtual string? Router { get; protected set; } = default!;
+    [Display(Name = "Menu:Router")] public virtual string? Router { get; protected set; }
 
     public Menu(Guid id, Guid? parentId, string name, Guid? tenantId = null,
         bool isStatic = false) : base(id, name, tenantId)

@@ -3,6 +3,6 @@
 namespace Generic.Abp.FileManagement.ExternalShares;
 
 public interface
-    IExternalShareRepository : IExtensionRepository<ExternalShare, ExternalShareQueryOption, ExternalShareSearchParams>
+    IExternalShareRepository : IExtensionRepository<ExternalShare>
 {
 }

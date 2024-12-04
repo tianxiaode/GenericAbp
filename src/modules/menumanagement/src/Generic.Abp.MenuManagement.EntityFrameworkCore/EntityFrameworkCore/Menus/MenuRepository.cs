@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using Generic.Abp.Extensions.Entities.IncludeOptions;
+using Generic.Abp.Extensions.Entities.Trees;
 using Generic.Abp.Extensions.EntityFrameworkCore.Trees;
 using Generic.Abp.MenuManagement.Menus;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +14,7 @@ public class MenuRepository(IDbContextProvider<IMenuManagementDbContext> dbConte
 {
     protected override async Task<IQueryable<Menu>> IncludeDetailsAsync(IIncludeOptions? includeOptions)
     {
-        var menuOptions = includeOptions as MenuIncludeOptions;
+        var menuOptions = includeOptions as TreeIncludeOptions;
         var queryable = await base.IncludeDetailsAsync(includeOptions);
         if (menuOptions == null)
         {

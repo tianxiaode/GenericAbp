@@ -1,13 +1,11 @@
 ﻿using System;
+using Generic.Abp.Extensions.Entities.QueryParams;
 
 namespace Generic.Abp.FileManagement.ExternalShares;
 
-public interface IExternalShareSearchParams
+public interface IExternalShareSearchParams : IBaseQueryParams, IHasCreationTimeQuery
 {
-    DateTime? StartTime { get; set; }
-    DateTime? EndTime { get; set; }
     DateTime? ExpireTimeStart { get; set; }
     DateTime? ExpireTimeEnd { get; set; }
-    string? Filter { get; set; }
     public Guid? OwnerId { get; set; }
 }

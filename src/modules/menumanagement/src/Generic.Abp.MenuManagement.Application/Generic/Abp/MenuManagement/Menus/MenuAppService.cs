@@ -39,7 +39,7 @@ public class MenuAppService(
     [Authorize(MenuManagementPermissions.Menus.Default)]
     public virtual async Task<MenuDto> GetAsync(Guid id)
     {
-        var entity = await MenuManager.GetAsync(id, new MenuIncludeOptions());
+        var entity = await MenuManager.GetAsync(id, new TreeIncludeOptions());
         return ObjectMapper.Map<Menu, MenuDto>(entity);
     }
 

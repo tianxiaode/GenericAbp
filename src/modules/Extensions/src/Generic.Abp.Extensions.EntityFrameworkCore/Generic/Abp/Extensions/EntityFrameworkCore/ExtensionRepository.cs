@@ -89,7 +89,7 @@ public class ExtensionRepository<TDbContext, TEntity>(IDbContextProvider<TDbCont
         IIncludeOptions? includeOptions = null,
         CancellationToken cancellationToken = default)
     {
-        return await GetPagedListAsync(predicate, queryParams.Sorting, queryParams.SkipCount,
+        return await GetPagedListAsync(predicate, queryParams.GetSorting(), queryParams.SkipCount,
             queryParams.MaxResultCount,
             includeOptions, cancellationToken);
     }
