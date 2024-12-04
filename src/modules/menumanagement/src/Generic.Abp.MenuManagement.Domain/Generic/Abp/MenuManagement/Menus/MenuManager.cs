@@ -1,9 +1,7 @@
-﻿using Generic.Abp.Extensions.Exceptions;
-using Generic.Abp.Extensions.Trees;
+﻿using Generic.Abp.Extensions.Trees;
 using Generic.Abp.MenuManagement.Localization;
 using Microsoft.Extensions.Localization;
 using System.Threading.Tasks;
-using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Threading;
 
 namespace Generic.Abp.MenuManagement.Menus;

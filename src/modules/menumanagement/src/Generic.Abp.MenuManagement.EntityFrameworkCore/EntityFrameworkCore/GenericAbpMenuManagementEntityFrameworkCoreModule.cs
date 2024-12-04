@@ -27,16 +27,6 @@ namespace Generic.Abp.MenuManagement.EntityFrameworkCore
                  */
                 options.AddRepository<Menu, MenuRepository>();
             });
-
-            Configure<AbpEntityOptions>(options =>
-            {
-                options.Entity<Menu>(entityOptions =>
-                {
-                    entityOptions.DefaultWithDetailsFunc =
-                        new Func<IQueryable<Menu>, IQueryable<Menu>>(query =>
-                            query.Include(m => m.Parent));
-                });
-            });
         }
     }
 }

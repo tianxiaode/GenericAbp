@@ -3,35 +3,44 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
-using Generic.Abp.Extensions.Entities.QueryOptions;
-using Generic.Abp.Extensions.Entities.SearchParams;
+using Generic.Abp.Extensions.Entities.IncludeOptions;
+using Generic.Abp.Extensions.Entities.QueryParams;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 
 namespace Generic.Abp.Extensions.Entities;
 
-public interface IExtensionRepository<TEntity, in TQueryOptions> : IRepository<TEntity, Guid>
+public interface IExtensionRepository<TEntity> : IRepository<TEntity, Guid>
     where TEntity : class, IEntity<Guid>
-    where TQueryOptions : QueryOption
 {
+    Task<TEntity> GetAsync(Guid id,
+        IIncludeOptions includeOptions,
+        CancellationToken cancellationToken = default);
+
+    Task<TEntity?> FindAsync(Expression<Func<TEntity, bool>> predicate,
+        IIncludeOptions? includeOptions = null,
+        CancellationToken cancellationToken = default);
+
     Task<long> GetCountAsync(Expression<Func<TEntity, bool>> predicate,
         CancellationToken cancellationToken = default);
 
     Task<List<TEntity>> GetListAsync(
         Expression<Func<TEntity, bool>> predicate,
-        string sorting, int maxResultCount = int.MaxValue, int skipCount = 0,
-        bool includeDetails = false,
+        string sorting,
+        IIncludeOptions? includeOptions = null,
         CancellationToken cancellationToken = default);
 
-    Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> predicate,
-        TQueryOptions option, CancellationToken cancellationToken = default);
-}
+    Task<List<TEntity>> GetPagedListAsync(
+        Expression<Func<TEntity, bool>> predicate,
+        string sorting,
+        int skipCount = 0,
+        int maxResultCount = int.MaxValue,
+        IIncludeOptions? includeOptions = null,
+        CancellationToken cancellationToken = default);
 
-public interface
-    IExtensionRepository<TEntity, in TQueryOptions, in TSearchParams> : IExtensionRepository<TEntity, TQueryOptions>
-    where TEntity : class, IEntity<Guid>
-    where TSearchParams : class, ISearchParams
-    where TQueryOptions : QueryOption
-{
-    Task<Expression<Func<TEntity, bool>>> BuildPredicateExpression(TSearchParams searchParams);
+    Task<List<TEntity>> GetPagedListAsync(
+        Expression<Func<TEntity, bool>> predicate,
+        BaseQueryParams queryParams,
+        IIncludeOptions? includeOptions = null,
+        CancellationToken cancellationToken = default);
 }

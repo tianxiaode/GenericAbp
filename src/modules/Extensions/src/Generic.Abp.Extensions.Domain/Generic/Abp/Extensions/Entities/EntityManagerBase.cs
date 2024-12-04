@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using System.Threading;
-using Generic.Abp.Extensions.Entities.QueryOptions;
-using Generic.Abp.Extensions.Entities.SearchParams;
+using Generic.Abp.Extensions.Entities.IncludeOptions;
+using Generic.Abp.Extensions.Entities.QueryParams;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Services;
 using Volo.Abp.Threading;
@@ -12,13 +12,12 @@ using Microsoft.Extensions.Localization;
 
 namespace Generic.Abp.Extensions.Entities;
 
-public abstract class EntityManagerBase<TEntity, TRepository, TResource, TQueryOption>(
+public abstract class EntityManagerBase<TEntity, TRepository, TResource>(
     TRepository repository,
     IStringLocalizer<TResource> localizer,
     ICancellationTokenProvider cancellationTokenProvider) : DomainService
     where TEntity : class, IEntity<Guid>
-    where TRepository : IExtensionRepository<TEntity, TQueryOption>
-    where TQueryOption : QueryOption
+    where TRepository : IExtensionRepository<TEntity>
 {
     protected TRepository Repository { get; } = repository;
     protected ICancellationTokenProvider CancellationTokenProvider { get; } = cancellationTokenProvider;
@@ -58,9 +57,14 @@ public abstract class EntityManagerBase<TEntity, TRepository, TResource, TQueryO
         await Repository.DeleteManyAsync(entities, autoSave, CancellationToken);
     }
 
-    public virtual async Task<TEntity> GetAsync(Guid id, bool includeDetails = false)
+    public virtual async Task<TEntity> GetAsync(Guid id)
     {
-        return await Repository.GetAsync(id, includeDetails, CancellationToken);
+        return await Repository.GetAsync(id, false, CancellationToken);
+    }
+
+    public virtual async Task<TEntity> GetAsync(Guid id, IIncludeOptions includeOptions)
+    {
+        return await Repository.GetAsync(id, includeOptions, CancellationToken);
     }
 
     public virtual async Task<TEntity?> FindAsync(Expression<Func<TEntity, bool>> predicate,
@@ -69,43 +73,53 @@ public abstract class EntityManagerBase<TEntity, TRepository, TResource, TQueryO
         return await Repository.FindAsync(predicate, includeDetails, CancellationToken);
     }
 
+    public virtual async Task<TEntity?> FindAsync(Expression<Func<TEntity, bool>> predicate,
+        IIncludeOptions includeOption)
+    {
+        return await Repository.FindAsync(predicate, includeOption, CancellationToken);
+    }
+
     public virtual async Task<long> GetCountAsync(Expression<Func<TEntity, bool>> predicate)
     {
         return await Repository.GetCountAsync(predicate, CancellationToken);
     }
 
-    public virtual async Task<List<TEntity>> GetListAsync(
-        Expression<Func<TEntity, bool>> predicate,
-        TQueryOption option,
-        bool includeDetails = false)
+    public async Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> predicate)
     {
-        return await Repository.GetListAsync(
-            predicate,
-            option,
+        return await Repository.GetListAsync(predicate, false, CancellationToken);
+    }
+
+    public async Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> predicate, string sorting,
+        IIncludeOptions? includeOptions = null)
+    {
+        return await Repository.GetListAsync(predicate, sorting, includeOptions, CancellationToken);
+    }
+
+    public virtual async Task<List<TEntity>> GetPagedListAsync(Expression<Func<TEntity, bool>> predicate,
+        string sorting,
+        int skipCount = 0,
+        int maxResultCount = int.MaxValue,
+        IIncludeOptions? includeOptions = null)
+    {
+        return await Repository.GetPagedListAsync(predicate, sorting, skipCount, maxResultCount, includeOptions,
             CancellationToken);
     }
 
+    public async Task<List<TEntity>> GetPagedListAsync(
+        Expression<Func<TEntity, bool>> predicate,
+        BaseQueryParams queryParams,
+        IIncludeOptions? includeOptions = null)
+    {
+        return await Repository.GetPagedListAsync(predicate, queryParams, includeOptions, CancellationToken);
+    }
 
     public virtual Task ValidateAsync(TEntity entity)
     {
         return Task.CompletedTask;
     }
-}
 
-public abstract class EntityManagerBase<TEntity, TRepository, TResource, TQueryOption, TSearchParams>(
-    TRepository repository,
-    IStringLocalizer<TResource> localizer,
-    ICancellationTokenProvider cancellationTokenProvider)
-    : EntityManagerBase<TEntity, TRepository, TResource, TQueryOption>(repository, localizer,
-        cancellationTokenProvider)
-    where TEntity : class, IEntity<Guid>
-    where TRepository : IExtensionRepository<TEntity, TQueryOption, TSearchParams>,
-    IExtensionRepository<TEntity, TQueryOption>
-    where TSearchParams : class, ISearchParams
-    where TQueryOption : QueryOption
-{
-    public virtual async Task<Expression<Func<TEntity, bool>>> BuildPredicateExpression(TSearchParams searchParams)
+    public virtual Task<Expression<Func<TEntity, bool>>> BuildPredicateExpression(BaseQueryParams queryParams)
     {
-        return await Repository.BuildPredicateExpression(searchParams);
+        throw new NotImplementedException();
     }
 }

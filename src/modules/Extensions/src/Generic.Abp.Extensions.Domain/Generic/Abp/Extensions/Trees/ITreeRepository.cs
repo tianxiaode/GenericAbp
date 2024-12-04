@@ -3,17 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Generic.Abp.Extensions.Entities.QueryOptions;
-using Generic.Abp.Extensions.Entities.SearchParams;
 
 namespace Generic.Abp.Extensions.Trees;
 
 public interface
-    ITreeRepository<TEntity, in TQueryOptions, in TSearchParams> : IExtensionRepository<TEntity, TQueryOptions,
-    TSearchParams>
+    ITreeRepository<TEntity> : IExtensionRepository<TEntity>
     where TEntity : class, ITree<TEntity>
-    where TSearchParams : class, ISearchParams
-    where TQueryOptions : QueryOption
 {
     Task<bool> HasChildAsync(Guid id, CancellationToken cancellation = default);
 

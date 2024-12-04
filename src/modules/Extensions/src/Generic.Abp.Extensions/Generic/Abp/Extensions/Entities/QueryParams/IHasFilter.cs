@@ -1,4 +1,4 @@
-﻿namespace Generic.Abp.Extensions.Entities.SearchParams;
+﻿namespace Generic.Abp.Extensions.Entities.QueryParams;
 
 public interface IHasFilter
 {

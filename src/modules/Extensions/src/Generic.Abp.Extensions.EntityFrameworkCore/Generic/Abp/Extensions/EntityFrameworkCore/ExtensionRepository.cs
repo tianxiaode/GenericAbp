@@ -7,32 +7,75 @@ using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
-using Generic.Abp.Extensions.Entities.QueryOptions;
-using Generic.Abp.Extensions.Entities.SearchParams;
+using Generic.Abp.Extensions.Entities.IncludeOptions;
+using Generic.Abp.Extensions.Entities.QueryParams;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 
 namespace Generic.Abp.Extensions.EntityFrameworkCore;
 
-public class ExtensionRepository<TDbContext, TEntity, TQueryOptions>(IDbContextProvider<TDbContext> dbContextProvider)
-    : EfCoreRepository<TDbContext, TEntity, Guid>(dbContextProvider), IExtensionRepository<TEntity, TQueryOptions>
+public class ExtensionRepository<TDbContext, TEntity>(IDbContextProvider<TDbContext> dbContextProvider)
+    : EfCoreRepository<TDbContext, TEntity, Guid>(dbContextProvider), IExtensionRepository<TEntity>
     where TDbContext : IEfCoreDbContext
     where TEntity : class, IEntity<Guid>
-    where TQueryOptions : QueryOption
 {
+    public virtual async Task<TEntity> GetAsync(Guid id, IIncludeOptions includeOptions,
+        CancellationToken cancellationToken = default)
+    {
+        var entity = await FindAsync(m => m.Id == id, includeOptions, cancellationToken);
+        if (entity == null)
+        {
+            throw new EntityNotFoundException(typeof(TEntity), id);
+        }
+
+        return entity;
+    }
+
+    public virtual async Task<TEntity?> FindAsync(Expression<Func<TEntity, bool>> predicate,
+        IIncludeOptions? includeOptions = null,
+        CancellationToken cancellationToken = default)
+    {
+        return await (await IncludeDetailsAsync(includeOptions)).FirstOrDefaultAsync(predicate, cancellationToken);
+    }
+
     public virtual async Task<long> GetCountAsync(Expression<Func<TEntity, bool>> predicate,
         CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync()).Where(predicate).LongCountAsync(cancellationToken);
     }
 
-    public virtual async Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> predicate,
-        string sorting,
-        int maxResultCount = int.MaxValue, int skipCount = 0,
-        bool includeDetails = false, CancellationToken cancellationToken = default)
+    public async Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> predicate, string sorting,
+        IIncludeOptions? includeOptions = null,
+        CancellationToken cancellationToken = default)
     {
-        return await (includeDetails ? await WithDetailsAsync() : await GetDbSetAsync())
+        if (string.IsNullOrWhiteSpace(sorting))
+        {
+            throw new InvalidOperationException(
+                "Sorting parameter is required but was not provided. Check the query parameters or override the default sorting pattern.");
+        }
+
+        return await (await IncludeDetailsAsync(includeOptions))
+            .AsNoTracking()
+            .Where(predicate)
+            .OrderBy(sorting)
+            .ToListAsync(cancellationToken);
+    }
+
+    public virtual async Task<List<TEntity>> GetPagedListAsync(Expression<Func<TEntity, bool>> predicate,
+        string sorting,
+        int skipCount = 0,
+        int maxResultCount = int.MaxValue,
+        IIncludeOptions? includeOptions = null,
+        CancellationToken cancellationToken = default)
+    {
+        if (string.IsNullOrWhiteSpace(sorting))
+        {
+            throw new InvalidOperationException(
+                "Sorting parameter is required but was not provided. Check the query parameters or override the default sorting pattern.");
+        }
+
+        return await (await IncludeDetailsAsync(includeOptions))
             .AsNoTracking()
             .Where(predicate)
             .OrderBy(sorting)
@@ -40,34 +83,19 @@ public class ExtensionRepository<TDbContext, TEntity, TQueryOptions>(IDbContextP
             .ToListAsync(cancellationToken);
     }
 
-    public virtual async Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> predicate,
-        TQueryOptions option, CancellationToken cancellationToken = default)
+    public async Task<List<TEntity>> GetPagedListAsync(
+        Expression<Func<TEntity, bool>> predicate,
+        BaseQueryParams queryParams,
+        IIncludeOptions? includeOptions = null,
+        CancellationToken cancellationToken = default)
     {
-        return await (await IncludeDetailsAsync(option))
-            .AsNoTracking()
-            .Where(predicate)
-            .OrderBy(option.Sorting)
-            .PageBy(option.SkipCount, option.MaxResultCount)
-            .ToListAsync(cancellationToken);
+        return await GetPagedListAsync(predicate, queryParams.Sorting, queryParams.SkipCount,
+            queryParams.MaxResultCount,
+            includeOptions, cancellationToken);
     }
 
-    protected virtual async Task<IQueryable<TEntity>> IncludeDetailsAsync(TQueryOptions option)
+    protected virtual async Task<IQueryable<TEntity>> IncludeDetailsAsync(IIncludeOptions? includeOptions)
     {
         return await GetQueryableAsync().ConfigureAwait(false);
-    }
-}
-
-public class ExtensionRepository<TDbContext, TEntity, TQueryOptions, TSearchParams>(
-    IDbContextProvider<TDbContext> dbContextProvider)
-    : ExtensionRepository<TDbContext, TEntity, TQueryOptions>(dbContextProvider),
-        IExtensionRepository<TEntity, TQueryOptions, TSearchParams>
-    where TDbContext : IEfCoreDbContext
-    where TEntity : class, IEntity<Guid>
-    where TSearchParams : class, ISearchParams
-    where TQueryOptions : QueryOption
-{
-    public virtual Task<Expression<Func<TEntity, bool>>> BuildPredicateExpression(TSearchParams searchParams)
-    {
-        throw new NotImplementedException();
     }
 }

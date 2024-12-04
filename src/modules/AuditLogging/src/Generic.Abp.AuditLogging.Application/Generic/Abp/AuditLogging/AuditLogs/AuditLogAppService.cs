@@ -33,7 +33,7 @@ public class AuditLogAppService(IAuditLogExtensionRepository repository) : Audit
         }
 
         var securityLogs =
-            await Repository.GetListAsync(predicate, GetDefaultSorting(input.Sorting), input.MaxResultCount,
+            await Repository.GetPagedListAsync(predicate, GetDefaultSorting(input.Sorting), input.MaxResultCount,
                 input.SkipCount);
         return new PagedResultDto<AuditLogDto>(totalCount,
             ObjectMapper.Map<List<AuditLog>, List<AuditLogDto>>(securityLogs));

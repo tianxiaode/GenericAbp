@@ -1,6 +1,4 @@
-﻿using Generic.Abp.Extensions.Entities.QueryOptions;
-
-namespace Generic.Abp.FileManagement.ExternalShares;
+﻿namespace Generic.Abp.FileManagement.ExternalShares;
 
 public class ExternalShareQueryOption(
     string? sorting = null,

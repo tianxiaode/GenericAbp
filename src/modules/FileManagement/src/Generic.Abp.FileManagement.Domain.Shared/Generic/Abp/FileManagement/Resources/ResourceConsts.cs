@@ -1,6 +1,4 @@
-﻿using Generic.Abp.Extensions.Entities.QueryOptions;
-
-namespace Generic.Abp.FileManagement.Resources;
+﻿namespace Generic.Abp.FileManagement.Resources;
 
 public static class ResourceConsts
 {

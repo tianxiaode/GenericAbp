@@ -5,6 +5,7 @@ using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
+using Generic.Abp.Extensions.Entities;
 using Microsoft.Extensions.Localization;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Domain.Services;
@@ -17,16 +18,12 @@ namespace Generic.Abp.Extensions.Trees
         ITreeCodeGenerator<TEntity> treeCodeGenerator,
         IStringLocalizer<TResource> localizer,
         ICancellationTokenProvider cancellationTokenProvider)
-        : DomainService
+        : EntityManagerBase<TEntity, TRepository, TResource>(repository, localizer, cancellationTokenProvider)
         where TEntity : TreeAuditedAggregateRoot<TEntity>
         where TRepository : ITreeRepository<TEntity>
         where TResource : class
     {
-        protected TRepository Repository { get; } = repository;
         protected ITreeCodeGenerator<TEntity> TreeCodeGenerator { get; } = treeCodeGenerator;
-        protected ICancellationTokenProvider CancellationTokenProvider { get; } = cancellationTokenProvider;
-        protected CancellationToken CancellationToken => CancellationTokenProvider.Token;
-        protected IStringLocalizer<TResource> L { get; } = localizer;
 
         public virtual async Task<List<TEntity>> FindChildrenAsync(TEntity entity, bool includeDetails = false,
             bool recursive = false)
@@ -64,7 +61,7 @@ namespace Generic.Abp.Extensions.Trees
             var codes = await (await Repository.GetQueryableAsync()).Where(predicate).Select(m => m.Code)
                 .ToDynamicListAsync<string>(CancellationToken);
             ;
-            if (!codes.Any())
+            if (codes.Count == 0)
             {
                 return [];
             }

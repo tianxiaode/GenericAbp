@@ -11,46 +11,35 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Authorization;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Domain.ChangeTracking;
 using Volo.Abp.Domain.Entities;
-using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Localization;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.Uow;
 
 namespace Generic.Abp.MenuManagement.Menus;
 
-public class MenuAppService : MenuManagementAppService, IMenuAppService
+public class MenuAppService(
+    MenuManager menuManager,
+    IAbpAuthorizationPolicyProvider abpAuthorizationPolicyProvider,
+    IOptions<AbpLocalizationOptions> options,
+    IPermissionDefinitionManager permissionDefinitionManager)
+    : MenuManagementAppService, IMenuAppService
 {
-    public MenuAppService(IMenuRepository repository, MenuManager menuManager,
-        IAbpAuthorizationPolicyProvider abpAuthorizationPolicyProvider, IOptions<AbpLocalizationOptions> options,
-        IPermissionManager permissionManager, IPermissionDefinitionManager permissionDefinitionManager)
-    {
-        Repository = repository;
-        MenuManager = menuManager;
-        AbpAuthorizationPolicyProvider = abpAuthorizationPolicyProvider;
-        PermissionManager = permissionManager;
-        PermissionDefinitionManager = permissionDefinitionManager;
-        AbpLocalizationOptions = options.Value;
-    }
-
-    protected IMenuRepository Repository { get; }
-    protected MenuManager MenuManager { get; }
-    protected IAbpAuthorizationPolicyProvider AbpAuthorizationPolicyProvider { get; }
-    protected AbpLocalizationOptions AbpLocalizationOptions { get; }
-    protected IPermissionManager PermissionManager { get; }
-    protected IPermissionDefinitionManager PermissionDefinitionManager { get; }
+    protected MenuManager MenuManager { get; } = menuManager;
+    protected IAbpAuthorizationPolicyProvider AbpAuthorizationPolicyProvider { get; } = abpAuthorizationPolicyProvider;
+    protected AbpLocalizationOptions AbpLocalizationOptions { get; } = options.Value;
+    protected IPermissionDefinitionManager PermissionDefinitionManager { get; } = permissionDefinitionManager;
 
     [UnitOfWork]
     [Authorize(MenuManagementPermissions.Menus.Default)]
     public virtual async Task<MenuDto> GetAsync(Guid id)
     {
-        var entity = await Repository.GetAsync(id);
+        var entity = await MenuManager.GetAsync(id, new MenuIncludeOptions());
         return ObjectMapper.Map<Menu, MenuDto>(entity);
     }
 
@@ -58,8 +47,6 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
     [Authorize(MenuManagementPermissions.Menus.Default)]
     public virtual async Task<ListResultDto<MenuDto>> GetListAsync(MenuGetListInput input)
     {
-        // var a = await Repository.GetListAsync(m => m.Name.Contains((input.Filter ?? "test")));
-        // Logger.LogDebug($"searched:{JsonSerializer.Serialize(a.Select(m => new { m.Name, m.Code }))}");
         List<Menu> list;
         if (!string.IsNullOrEmpty(input.Filter))
         {
@@ -68,7 +55,7 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
         }
         else
         {
-            list = await Repository.GetListAsync(m => m.ParentId == input.ParentId);
+            list = await MenuManager.GetListAsync(m => m.ParentId == input.ParentId);
         }
 
         var dtos = ObjectMapper.Map<List<Menu>, List<MenuDto>>(list);
@@ -88,14 +75,13 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
     public virtual async Task<ListResultDto<MenuDto>> GetShowListAsync(string name)
     {
         var parent =
-            await Repository.FirstOrDefaultAsync(m =>
-                m.Name.ToLower() == name.ToLowerInvariant() && m.ParentId == null);
+            await MenuManager.FindAsync(m => m.ParentId == null && m.Name.ToLower() == name.ToLowerInvariant());
         if (parent is null)
         {
             throw new EntityNotFoundException(typeof(Menu), name);
         }
 
-        var list = await Repository.GetListAsync(m => m.Code.StartsWith(parent.Code + ".") && m.IsEnabled);
+        var list = await MenuManager.GetListAsync(m => m.Code.StartsWith(parent.Code + ".") && m.IsEnabled);
         var dtos = await GetChildrenAsync(parent.Id, list);
 
         return new ListResultDto<MenuDto>(dtos);
@@ -116,7 +102,7 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
     [UnitOfWork(true)]
     public virtual async Task<MenuDto> UpdateAsync(Guid id, MenuUpdateDto input)
     {
-        var entity = await Repository.GetAsync(id);
+        var entity = await MenuManager.GetAsync(id);
         //CheckIsStaticMenu(entity);
         if (!string.Equals(input.Name, entity.Name, StringComparison.OrdinalIgnoreCase))
         {
@@ -133,7 +119,7 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
     [UnitOfWork(true)]
     public virtual async Task MoveAsync(Guid id, Guid? parentId)
     {
-        var entity = await Repository.GetAsync(id);
+        var entity = await MenuManager.GetAsync(id);
         CheckIsStaticAsync(entity);
         await MenuManager.IsAllowMoveOrCopyAsync(entity, parentId);
         await MenuManager.MoveAsync(entity, parentId);
@@ -143,7 +129,7 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
     [UnitOfWork(true)]
     public virtual async Task CopyAsync(Guid id, Guid? parentId)
     {
-        await MenuManager.IsAllowMoveOrCopyAsync(await Repository.GetAsync(id), parentId);
+        await MenuManager.IsAllowMoveOrCopyAsync(await MenuManager.GetAsync(id), parentId);
         await MenuManager.CopyAsync(id, parentId);
     }
 
@@ -151,7 +137,7 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
     [UnitOfWork]
     public virtual async Task DeleteAsync(Guid id)
     {
-        var entity = await Repository.GetAsync(id);
+        var entity = await MenuManager.GetAsync(id);
         CheckIsStaticAsync(entity);
         await MenuManager.DeleteAsync(entity);
     }
@@ -163,7 +149,7 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
     [Authorize(MenuManagementPermissions.Menus.Default)]
     public virtual async Task<Dictionary<string, object>> GetMultilingualAsync(Guid id)
     {
-        var entity = await Repository.GetAsync(id);
+        var entity = await MenuManager.GetAsync(id);
         return entity.GetMultilingual();
     }
 
@@ -180,9 +166,9 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
 
         var languages = input.Keys.Intersect(AbpLocalizationOptions.Languages.Select(m => m.CultureName));
         var adds = new Dictionary<string, object>(input.Where(m => languages.Contains(m.Key)));
-        var entity = await Repository.GetAsync(id);
+        var entity = await MenuManager.GetAsync(id);
         entity.SetMultilingual(adds);
-        await Repository.UpdateAsync(entity, true);
+        await MenuManager.UpdateAsync(entity);
     }
 
     #endregion
@@ -195,7 +181,7 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
     [Authorize(MenuManagementPermissions.Menus.Default)]
     public virtual async Task<GetPermissionListResultDto> GetPermissionsAsync(Guid id)
     {
-        var entity = await Repository.GetAsync(id);
+        var entity = await MenuManager.GetAsync(id);
         var menPermissions = entity.GetPermissions();
         var result = new GetPermissionListResultDto
         {
@@ -235,9 +221,9 @@ public class MenuAppService : MenuManagementAppService, IMenuAppService
             list = list.Intersect(policyNames).ToList();
         }
 
-        var entity = await Repository.GetAsync(id);
+        var entity = await MenuManager.GetAsync(id);
         entity.SetPermissions(list);
-        await Repository.UpdateAsync(entity);
+        await MenuManager.UpdateAsync(entity);
     }
 
     #endregion
