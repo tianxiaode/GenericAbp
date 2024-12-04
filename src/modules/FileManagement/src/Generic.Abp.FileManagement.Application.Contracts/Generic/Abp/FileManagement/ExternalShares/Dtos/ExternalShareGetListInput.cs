@@ -3,7 +3,7 @@ using Volo.Abp.Application.Dtos;
 
 namespace Generic.Abp.FileManagement.ExternalShares.Dtos;
 
-public class ExternalShareGetListInput : PagedAndSortedResultRequestDto, IExternalShareSearchParams
+public class ExternalShareGetListInput : PagedAndSortedResultRequestDto, IExternalShareQueryParams
 {
     public DateTime? StartTime { get; set; }
     public DateTime? EndTime { get; set; }

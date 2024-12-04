@@ -3,7 +3,7 @@ using Generic.Abp.Extensions.Entities.QueryParams;
 
 namespace Generic.Abp.FileManagement.ExternalShares;
 
-public interface IExternalShareSearchParams : IBaseQueryParams, IHasCreationTimeQuery
+public interface IExternalShareQueryParams : IBaseQueryParams, IHasCreationTimeQuery
 {
     DateTime? ExpireTimeStart { get; set; }
     DateTime? ExpireTimeEnd { get; set; }

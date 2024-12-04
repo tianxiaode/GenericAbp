@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Asp.Versioning;
+﻿using Asp.Versioning;
+using Generic.Abp.Extensions.Entities.Dtos;
 using Generic.Abp.FileManagement.ExternalShares.Dtos;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 
@@ -34,9 +34,9 @@ public class ExternalShareController(IExternalShareAppService appService)
 
     [HttpDelete]
     [Route("my")]
-    public Task DeleteMyExternalSharesAsync([FromBody] List<Guid> ids)
+    public Task DeleteMyExternalSharesAsync([FromBody] DeleteManyDto input)
     {
-        return AppService.DeleteMyExternalSharesAsync(ids);
+        return AppService.DeleteMyExternalSharesAsync(input);
     }
 
     [HttpGet]
@@ -59,8 +59,8 @@ public class ExternalShareController(IExternalShareAppService appService)
     }
 
     [HttpDelete]
-    public Task DeleteManyAsync([FromBody] List<Guid> ids)
+    public Task DeleteManyAsync([FromBody] DeleteManyDto input)
     {
-        return AppService.DeleteManyAsync(ids);
+        return AppService.DeleteManyAsync(input);
     }
 }
