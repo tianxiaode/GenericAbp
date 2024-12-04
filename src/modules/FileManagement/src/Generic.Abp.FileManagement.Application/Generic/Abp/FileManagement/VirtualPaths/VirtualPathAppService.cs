@@ -54,19 +54,17 @@ public class VirtualPathAppService(
     [Authorize(FileManagementPermissions.VirtualPaths.Default)]
     public virtual async Task<VirtualPathDto> FindByNameAsync(string name)
     {
-        var entity = await VirtualPathManager.FinByNameAsync(name, true);
+        var entity = await VirtualPathManager.FinByNameAsync(name);
         return ObjectMapper.Map<VirtualPath, VirtualPathDto>(entity);
     }
 
     [Authorize(FileManagementPermissions.VirtualPaths.Default)]
     public virtual async Task<PagedResultDto<VirtualPathDto>> GetListAsync(VirtualPathGetListInput input)
     {
-        var searchParams = ObjectMapper.Map<VirtualPathGetListInput, VirtualPathSearchParams>(input);
-        var predicate = await VirtualPathManager.BuildPredicateExpression(searchParams);
+        var queryParams = ObjectMapper.Map<VirtualPathGetListInput, VirtualPathQueryParams>(input);
+        var predicate = await VirtualPathManager.BuildPredicateExpression(queryParams);
         var count = await VirtualPathManager.GetCountAsync(predicate);
-        var list = await VirtualPathManager.GetListAsync(predicate,
-            input.Sorting ?? VirtualPathConsts.GetDefaultSorting(), input.MaxResultCount,
-            input.SkipCount);
+        var list = await VirtualPathManager.GetPagedListAsync(predicate, queryParams);
         return new PagedResultDto<VirtualPathDto>(count,
             ObjectMapper.Map<List<VirtualPath>, List<VirtualPathDto>>(list));
     }

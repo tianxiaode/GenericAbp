@@ -4,7 +4,7 @@ using Volo.Abp.Application.Dtos;
 namespace Generic.Abp.FileManagement.VirtualPaths.Dtos;
 
 [Serializable]
-public class VirtualPathGetListInput : PagedAndSortedResultRequestDto, IVirtualPathSearchParams
+public class VirtualPathGetListInput : PagedAndSortedResultRequestDto, IVirtualPathQueryParams
 {
     public string? Filter { get; set; } = default!;
     public DateTime? StartTime { get; set; } = default!;

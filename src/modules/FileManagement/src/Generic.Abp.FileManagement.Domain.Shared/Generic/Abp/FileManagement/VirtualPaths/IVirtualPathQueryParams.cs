@@ -2,7 +2,7 @@
 
 namespace Generic.Abp.FileManagement.VirtualPaths;
 
-public interface IVirtualPathSearchParams
+public interface IVirtualPathQueryParams
 {
     DateTime? StartTime { get; set; }
     DateTime? EndTime { get; set; }

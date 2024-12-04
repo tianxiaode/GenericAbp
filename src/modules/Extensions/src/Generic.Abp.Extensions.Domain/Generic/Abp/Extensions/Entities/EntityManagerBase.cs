@@ -57,9 +57,9 @@ public abstract class EntityManagerBase<TEntity, TRepository, TResource>(
         await Repository.DeleteManyAsync(entities, autoSave, CancellationToken);
     }
 
-    public virtual async Task<TEntity> GetAsync(Guid id)
+    public virtual async Task<TEntity> GetAsync(Guid id, bool includeDetails = false)
     {
-        return await Repository.GetAsync(id, false, CancellationToken);
+        return await Repository.GetAsync(id, includeDetails, CancellationToken);
     }
 
     public virtual async Task<TEntity> GetAsync(Guid id, IIncludeOptions includeOptions)

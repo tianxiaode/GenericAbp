@@ -40,7 +40,7 @@ public class VirtualPathController(IVirtualPathAppService appService) : FileMana
     }
 
     [HttpGet]
-    public Task<PagedResultDto<VirtualPathDto>> GetListAsync(VirtualPathGetListInput input)
+    public Task<PagedResultDto<VirtualPathDto>> GetListAsync(IVirtualPathGetListInput input)
     {
         return AppService.GetListAsync(input);
     }

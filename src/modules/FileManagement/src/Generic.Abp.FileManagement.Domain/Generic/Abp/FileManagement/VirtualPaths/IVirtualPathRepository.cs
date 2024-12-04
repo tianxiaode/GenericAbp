@@ -2,6 +2,6 @@
 
 namespace Generic.Abp.FileManagement.VirtualPaths;
 
-public interface IVirtualPathRepository : IExtensionRepository<VirtualPath, VirtualPathSearchParams>
+public interface IVirtualPathRepository : IExtensionRepository<VirtualPath>
 {
 }

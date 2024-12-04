@@ -27,7 +27,7 @@ namespace Generic.Abp.FileManagement
             CreateMap<ResourcePermission, ResourcePermissionDto>();
 
             CreateMap<VirtualPath, VirtualPathDto>().MapExtraProperties();
-            CreateMap<VirtualPathGetListInput, VirtualPathSearchParams>();
+            CreateMap<VirtualPathGetListInput, VirtualPathQueryParams>();
 
             CreateMap<Resource, UserFolderDto>()
                 .ForMember(m => m.AllowedFileTypes, opts => opts.MapFrom(m => m.GetAllowedFileTypes()))
