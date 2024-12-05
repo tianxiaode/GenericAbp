@@ -15,5 +15,11 @@ public class ResourceBaseDto : ExtensibleAuditedEntityDto<Guid>, IHasConcurrency
     public string Name { get; set; } = default!;
     public Guid? OwnerId { get; set; } = default!;
     public bool IsStatic { get; set; } = false;
-    public bool IsEnabled { get; set; } = false;
+    public bool IsAccessible { get; set; } = false;
+    public string? FileExtension { get; set; } = default!;
+    public long? FileSize { get; set; } = default!;
+    public string? AllowedFileTypes { get; set; } = default!;
+    public long? StorageQuota { get; set; } = default!;
+    public long? UsedStorage { get; set; } = default!;
+    public long? MaxFileSize { get; set; } = default!;
 }

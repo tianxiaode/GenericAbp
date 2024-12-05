@@ -103,7 +103,7 @@ public class ExternalShareAppService(
     protected virtual async Task<PagedResultDto<ExternalShareDto>> GetListBaseAsync(ExternalShareGetListInput input)
     {
         var queryParams = ObjectMapper.Map<ExternalShareGetListInput, ExternalShareQueryParams>(input);
-        var predicate = await ExternalShareManager.BuildPredicateExpression(queryParams);
+        var predicate = await ExternalShareManager.BuildPredicateExpressionAsync(queryParams);
         var count = await ExternalShareManager.GetCountAsync(predicate);
         var list = await ExternalShareManager.GetPagedListAsync(predicate, queryParams);
         return new PagedResultDto<ExternalShareDto>(count,

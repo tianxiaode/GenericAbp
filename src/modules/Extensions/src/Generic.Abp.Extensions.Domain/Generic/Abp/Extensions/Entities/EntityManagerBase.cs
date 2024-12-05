@@ -118,7 +118,7 @@ public abstract class EntityManagerBase<TEntity, TRepository, TResource>(
         return Task.CompletedTask;
     }
 
-    public virtual Task<Expression<Func<TEntity, bool>>> BuildPredicateExpression(BaseQueryParams queryParams)
+    public virtual Task<Expression<Func<TEntity, bool>>> BuildPredicateExpressionAsync(BaseQueryParams queryParams)
     {
         throw new NotImplementedException();
     }

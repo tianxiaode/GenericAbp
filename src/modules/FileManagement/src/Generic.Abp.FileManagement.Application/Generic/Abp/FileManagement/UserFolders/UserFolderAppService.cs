@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Generic.Abp.Extensions.Exceptions;
 using Generic.Abp.FileManagement.Permissions;
 using Generic.Abp.FileManagement.Resources;
+using Generic.Abp.FileManagement.Resources.Dtos;
 using Generic.Abp.FileManagement.UserFolders.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp;
@@ -12,47 +14,78 @@ using Volo.Abp.Identity;
 namespace Generic.Abp.FileManagement.UserFolders;
 
 [RemoteService(false)]
-public class UserFolderAppService(UserFoldersManager userFoldersManager, IdentityUserManager identityUserManager)
+public class UserFolderAppService(
+    ResourceManager resourceManager,
+    IdentityUserManager identityUserManager,
+    IIdentityUserRepository userRepository)
     : FileManagementAppService, IUserFolderAppService
 {
-    protected UserFoldersManager UserFoldersManager { get; } = userFoldersManager;
+    protected ResourceManager ResourceManager { get; } = resourceManager;
     protected IdentityUserManager IdentityUserManager { get; } = identityUserManager;
+    protected IIdentityUserRepository UserRepository { get; } = userRepository;
 
     [Authorize(FileManagementPermissions.UserFolders.Default)]
-    public virtual async Task<UserFolderDto> GetAsync(Guid id)
+    public virtual async Task<ResourceBaseDto> GetAsync(Guid id)
     {
-        return ObjectMapper.Map<Resource, UserFolderDto>(await UserFoldersManager.GetUserFolderAsync(id));
+        return ObjectMapper.Map<Resource, ResourceBaseDto>(await ResourceManager.GetOrCreateUserRootFolderAsync(id));
     }
 
     [Authorize(FileManagementPermissions.UserFolders.Default)]
-    public virtual async Task<PagedResultDto<UserFolderDto>> GetListAsync(UserFolderGetListInput input)
+    public virtual async Task<PagedResultDto<ResourceBaseDto>> GetListAsync(UserFolderGetListInput input)
     {
-        var (cout, list) = await UserFoldersManager.GetListAsync(
-            ObjectMapper.Map<UserFolderGetListInput, ResourceQueryParams>(input), input.OwnerId);
-        return new PagedResultDto<UserFolderDto>(cout, ObjectMapper.Map<List<Resource>, List<UserFolderDto>>(list));
+        var queryParams = ObjectMapper.Map<UserFolderGetListInput, ResourceQueryParams>(input);
+        var rootFolder = await ResourceManager.GetUsersRootFolderAsync();
+        queryParams.ParentId = rootFolder.Id;
+        var predicate = await ResourceManager.BuildPredicateExpressionAsync(queryParams);
+        var count = await ResourceManager.GetCountAsync(predicate);
+        var list = await ResourceManager.GetPagedListAsync(predicate, queryParams);
+        return new PagedResultDto<ResourceBaseDto>(count,
+            ObjectMapper.Map<List<Resource>, List<ResourceBaseDto>>(list));
     }
+
+    [Authorize(FileManagementPermissions.UserFolders.Default)]
+    public virtual async Task<PagedResultDto<UserDto>> GetUsersAsync(UserGetListInput input)
+    {
+        var count = await UserRepository.GetCountAsync(input.Filter);
+        var users = await UserRepository.GetListAsync(input.Sorting, input.MaxResultCount, input.SkipCount,
+            input.Filter);
+        return new PagedResultDto<UserDto>(count, ObjectMapper.Map<List<IdentityUser>, List<UserDto>>(users));
+    }
+
 
     [Authorize(FileManagementPermissions.UserFolders.Create)]
-    public virtual async Task<UserFolderDto> CreateAsync(UserFolderCreateDto input)
+    public virtual async Task<ResourceBaseDto> CreateAsync(UserFolderCreateDto input)
     {
         var owner = await IdentityUserManager.GetByIdAsync(input.OwnerId);
-        var entity = await UserFoldersManager.CreateAsync(owner.Id, input.StorageQuota, input.MaxFileSize,
-            input.AllowedFileTypes, input.IsEnabled, CurrentTenant.Id);
-        return ObjectMapper.Map<Resource, UserFolderDto>(entity);
+        if (owner == null)
+        {
+            throw new EntityNotFoundBusinessException(L["User"], input.OwnerId);
+        }
+
+        var entity = await ResourceManager.GetOrCreateUserRootFolderAsync(owner.Id, CurrentTenant.Id);
+        return ObjectMapper.Map<Resource, ResourceBaseDto>(entity);
     }
 
     [Authorize(FileManagementPermissions.UserFolders.Update)]
-    public virtual async Task<UserFolderDto> UpdateAsync(Guid id, UserFolderUpdateDto input)
+    public virtual async Task<ResourceBaseDto> UpdateAsync(Guid id, UserFolderUpdateDto input)
     {
-        var entity = await UserFoldersManager.UpdateAsync(id, input.StorageQuota, input.MaxFileSize,
-            input.AllowedFileTypes,
-            input.IsEnabled);
-        return ObjectMapper.Map<Resource, UserFolderDto>(entity);
+        var entity = await ResourceManager.GetOrCreateUserRootFolderAsync(id, CurrentTenant.Id);
+        if (entity == null)
+        {
+            throw new EntityNotFoundBusinessException(L["UserFolder"], id);
+        }
+
+        entity.SetAllowedFileTypes(input.AllowedFileTypes);
+        entity.SetMaxFileSize(input.MaxFileSize);
+        entity.SetStorageQuota(input.StorageQuota);
+        entity.SetIsAccessible(input.IsAccessible);
+        await ResourceManager.UpdateAsync(entity);
+        return ObjectMapper.Map<Resource, ResourceBaseDto>(entity);
     }
 
     [Authorize(FileManagementPermissions.UserFolders.Delete)]
     public virtual async Task DeleteAsync(Guid id)
     {
-        await UserFoldersManager.DeleteAsync(id);
+        await ResourceManager.DeleteAsync(id);
     }
 }

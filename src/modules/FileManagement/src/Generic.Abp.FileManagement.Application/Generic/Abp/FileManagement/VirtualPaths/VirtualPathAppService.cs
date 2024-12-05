@@ -62,7 +62,7 @@ public class VirtualPathAppService(
     public virtual async Task<PagedResultDto<VirtualPathDto>> GetListAsync(VirtualPathGetListInput input)
     {
         var queryParams = ObjectMapper.Map<VirtualPathGetListInput, VirtualPathQueryParams>(input);
-        var predicate = await VirtualPathManager.BuildPredicateExpression(queryParams);
+        var predicate = await VirtualPathManager.BuildPredicateExpressionAsync(queryParams);
         var count = await VirtualPathManager.GetCountAsync(predicate);
         var list = await VirtualPathManager.GetPagedListAsync(predicate, queryParams);
         return new PagedResultDto<VirtualPathDto>(count,

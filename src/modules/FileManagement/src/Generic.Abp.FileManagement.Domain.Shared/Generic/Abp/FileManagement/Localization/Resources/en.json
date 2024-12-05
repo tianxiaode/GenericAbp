@@ -115,6 +115,7 @@
     "InvalidPassword": "Invalid Password",
     "ExternalShareExpired": "Shared link has expired",
     "InvalidToken": "Invalid Token",
-    "TokenExpired": "Token Expired"
+    "TokenExpired": "Token Expired",
+    "User": "User"
   }
 }

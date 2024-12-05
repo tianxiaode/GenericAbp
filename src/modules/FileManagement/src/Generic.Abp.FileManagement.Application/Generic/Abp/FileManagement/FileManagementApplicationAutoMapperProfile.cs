@@ -8,6 +8,7 @@ using Generic.Abp.FileManagement.UserFolders.Dtos;
 using Generic.Abp.FileManagement.VirtualPaths;
 using Generic.Abp.FileManagement.VirtualPaths.Dtos;
 using Volo.Abp.AutoMapper;
+using Volo.Abp.Identity;
 
 namespace Generic.Abp.FileManagement
 {
@@ -22,21 +23,26 @@ namespace Generic.Abp.FileManagement
 
             CreateMap<FileCheckResult, FileCheckResultDto>();
 
-            CreateMap<Resource, ResourceBaseDto>();
+            CreateMap<Resource, ResourceBaseDto>()
+                .ForMember(m => m.AllowedFileTypes,
+                    opts => opts.MapFrom(m => m.HasConfiguration ? m.GetAllowedFileTypes() : null))
+                .ForMember(m => m.UsedStorage,
+                    opts => opts.MapFrom(m => m.HasConfiguration ? m.GetUsedStorage() : default!))
+                .ForMember(m => m.StorageQuota,
+                    opts => opts.MapFrom(m => m.HasConfiguration ? m.GetStorageQuota() : default!))
+                .ForMember(m => m.MaxFileSize,
+                    opts => opts.MapFrom(m => m.HasConfiguration ? m.GetMaxFileSize() : default!))
+                .MapExtraProperties();
 
             CreateMap<ResourcePermission, ResourcePermissionDto>();
 
             CreateMap<VirtualPath, VirtualPathDto>().MapExtraProperties();
             CreateMap<VirtualPathGetListInput, VirtualPathQueryParams>();
 
-            CreateMap<Resource, UserFolderDto>()
-                .ForMember(m => m.AllowedFileTypes, opts => opts.MapFrom(m => m.GetAllowedFileTypes()))
-                .ForMember(m => m.UsedStorage, opts => opts.MapFrom(m => m.GetUsedStorage()))
-                .ForMember(m => m.StorageQuota, opts => opts.MapFrom(m => m.GetStorageQuota()))
-                .ForMember(m => m.MaxFileSize, opts => opts.MapFrom(m => m.GetMaxFileSize()));
 
             CreateMap<UserFolderGetListInput, ResourceQueryParams>()
                 .Ignore(m => m.FileType);
+            CreateMap<IdentityUser, UserDto>();
 
             CreateMap<ExternalShare, ExternalShareDto>().MapExtraProperties();
             CreateMap<ExternalShareGetListInput, ExternalShareQueryParams>();

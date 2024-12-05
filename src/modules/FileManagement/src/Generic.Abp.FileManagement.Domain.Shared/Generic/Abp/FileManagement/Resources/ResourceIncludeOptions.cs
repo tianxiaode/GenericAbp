@@ -10,4 +10,6 @@ public class ResourceIncludeOptions(
     public bool IncludeParent { get; set; } = includeParent;
     public bool IncludeFile { get; set; } = includeFile;
     public bool IncludePermissions { get; set; } = includePermissions;
+
+    public static ResourceIncludeOptions Default => new(false);
 }

@@ -18,5 +18,5 @@ public class UserFolderCreateOrUpdateDto
 
     public long StorageQuota { get; set; } = 0;
     public long MaxFileSize { get; set; } = 0;
-    public bool IsEnabled { get; set; } = true;
+    public bool IsAccessible { get; set; } = true;
 }

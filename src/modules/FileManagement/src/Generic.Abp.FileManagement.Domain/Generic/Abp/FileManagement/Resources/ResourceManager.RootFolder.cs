@@ -47,11 +47,11 @@ public partial class ResourceManager
 
         var entity = type switch
         {
-            ResourceType.SharedRootFolder => await CreateSharedRootFolderAsync(CurrentTenant.Id),
-            ResourceType.UsersRootFolder => await CreateUsersRootFolderAsync(CurrentTenant.Id),
+            ResourceType.SharedRootFolder => await GetOrCreateSharedRootFolderAsync(CurrentTenant.Id),
+            ResourceType.UsersRootFolder => await GetOrCreateUsersRootFolderAsync(CurrentTenant.Id),
             ResourceType.ParticipantIsolationRootFolder => await CreateParticipantIsolationRootFolderAsync(CurrentTenant
                 .Id),
-            _ => await CreatePublicRootFolderAsync()
+            _ => await GetOrCreatePublicRootFolderAsync()
         };
 
         resource = new ResourceCacheItem(entity.Id, entity.Code, entity.Name);
@@ -60,43 +60,43 @@ public partial class ResourceManager
         return resource;
     }
 
-    public virtual async Task<Resource> GetUserRootFolderAsync(Guid userId, Guid? tenantId = null)
+    public virtual async Task<Resource> GetOrCreateUserRootFolderAsync(Guid userId, Guid? tenantId = null)
     {
-        var entity = await CreateRootFolderAsync(ResourceType.UserRootFolder,
+        var entity = await GetOrCreateRootFolderAsync(ResourceType.UserRootFolder,
             await SettingManager.GetFolderSettingAsync(FileManagementSettings.UserFolderPrefix), tenantId, userId);
         return entity;
     }
 
-    public virtual async Task<Resource> CreatePublicRootFolderAsync(Guid? tenantId = null)
+    public virtual async Task<Resource> GetOrCreatePublicRootFolderAsync(Guid? tenantId = null)
     {
-        return await CreateRootFolderAsync(ResourceType.PublicRootFolder,
+        return await GetOrCreateRootFolderAsync(ResourceType.PublicRootFolder,
             await SettingManager.GetFolderSettingAsync(FileManagementSettings.PublicFolderPrefix),
             tenantId);
     }
 
-    public virtual async Task<Resource> CreateSharedRootFolderAsync(Guid? tenantId = null)
+    public virtual async Task<Resource> GetOrCreateSharedRootFolderAsync(Guid? tenantId = null)
     {
-        return await CreateRootFolderAsync(ResourceType.SharedRootFolder,
+        return await GetOrCreateRootFolderAsync(ResourceType.SharedRootFolder,
             await SettingManager.GetFolderSettingAsync(FileManagementSettings.SharedFolderPrefix),
             tenantId);
     }
 
-    public virtual async Task<Resource> CreateUsersRootFolderAsync(Guid? tenantId = null)
+    public virtual async Task<Resource> GetOrCreateUsersRootFolderAsync(Guid? tenantId = null)
     {
-        return await CreateRootFolderAsync(ResourceType.UsersRootFolder,
+        return await GetOrCreateRootFolderAsync(ResourceType.UsersRootFolder,
             await SettingManager.GetFolderSettingAsync(FileManagementSettings.UserFolderPrefix),
             tenantId);
     }
 
     public virtual async Task<Resource> CreateParticipantIsolationRootFolderAsync(Guid? tenantId = null)
     {
-        return await CreateRootFolderAsync(ResourceType.ParticipantIsolationRootFolder,
+        return await GetOrCreateRootFolderAsync(ResourceType.ParticipantIsolationRootFolder,
             await SettingManager.GetFolderSettingAsync(FileManagementSettings.ParticipantIsolationFolderPrefix),
             tenantId);
     }
 
 
-    protected virtual async Task<Resource> CreateRootFolderAsync(
+    protected virtual async Task<Resource> GetOrCreateRootFolderAsync(
         ResourceType rooType,
         FolderSetting settings,
         Guid? tenantId = null,
@@ -111,10 +111,8 @@ public partial class ResourceManager
         }
 
         var existingResource = userId.HasValue
-            ? await FindAsync(m => m.ParentId == usersRootFolder!.Id && m.OwnerId == userId.Value, null,
-                new ResourceIncludeOptions(false))
-            : await FindAsync(m => m.Type == rooType, null,
-                new ResourceIncludeOptions(false));
+            ? await FindAsync(m => m.ParentId == usersRootFolder!.Id && m.OwnerId == userId.Value)
+            : await FindAsync(m => m.Type == rooType);
         if (existingResource == null)
         {
             // Create the folder only if it does not exist

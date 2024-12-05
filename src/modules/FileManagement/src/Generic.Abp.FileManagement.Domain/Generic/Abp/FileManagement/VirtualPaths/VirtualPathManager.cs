@@ -51,7 +51,7 @@ public class VirtualPathManager(
         }
     }
 
-    public override Task<Expression<Func<VirtualPath, bool>>> BuildPredicateExpression(
+    public override Task<Expression<Func<VirtualPath, bool>>> BuildPredicateExpressionAsync(
         BaseQueryParams baseQueryParamsqueryParams)
     {
         var queryParams = baseQueryParamsqueryParams as VirtualPathQueryParams;

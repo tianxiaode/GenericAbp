@@ -3,6 +3,7 @@ using Generic.Abp.FileManagement.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Generic.Abp.FileManagement.Settings;
 
 namespace Generic.Abp.FileManagement.Resources;
 
@@ -45,7 +46,7 @@ public partial class ResourceManager
         {
             if (!await IsPublicFolderAsync(entity) || !await IsSharedFolderAsync(entity))
             {
-                throw new EntityNotFoundBusinessException(Localizer["Folder"], name);
+                throw new EntityNotFoundBusinessException(L["Folder"], name);
             }
         }
         else
@@ -93,7 +94,7 @@ public partial class ResourceManager
         var parent = await Repository.GetAsync(parentId);
         if (parent.Type != ResourceType.Folder)
         {
-            throw new EntityNotFoundBusinessException(Localizer["Folder"], parentId);
+            throw new EntityNotFoundBusinessException(L["Folder"], parentId);
         }
 
         if (parent.Code.StartsWith(entity.Code))
@@ -119,10 +120,10 @@ public partial class ResourceManager
         var entity = await Repository.GetAsync(id);
         if (entity.Type != ResourceType.Folder)
         {
-            throw new EntityNotFoundBusinessException(Localizer["Folder"], parentId);
+            throw new EntityNotFoundBusinessException(L["Folder"], parentId);
         }
 
-        var maxNodeCount = await SettingManager.GetFolderCopyMaxNodeCountAsync();
+        var maxNodeCount = await SettingManager.GetSettingAsync<int>(FileManagementSettings.FolderCopyMaxNodeCount);
         var count = await Repository.GetAllChildrenCountByCodeAsync(entity.Code, CancellationToken);
         if (count >= maxNodeCount)
         {
@@ -132,7 +133,7 @@ public partial class ResourceManager
         var parent = await Repository.GetAsync(parentId);
         if (parent.Type != ResourceType.Folder)
         {
-            throw new EntityNotFoundBusinessException(Localizer["Folder"], parentId);
+            throw new EntityNotFoundBusinessException(L["Folder"], parentId);
         }
 
         await CopyAsync(entity, parentId);

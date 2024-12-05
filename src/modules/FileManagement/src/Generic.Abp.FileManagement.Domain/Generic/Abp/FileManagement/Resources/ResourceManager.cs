@@ -1,13 +1,14 @@
-﻿using System;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
-using Generic.Abp.Extensions.Exceptions;
+﻿using Generic.Abp.Extensions.Entities.QueryParams;
+using Generic.Abp.Extensions.Extensions;
 using Generic.Abp.Extensions.Trees;
 using Generic.Abp.FileManagement.Localization;
 using Generic.Abp.FileManagement.Settings;
 using Microsoft.Extensions.Localization;
+using System;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
 using Volo.Abp.Caching;
-using Volo.Abp.Domain.Repositories;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Threading;
 
@@ -30,22 +31,6 @@ public partial class ResourceManager(
     protected FileManagementSettingManager SettingManager { get; } = settingManager;
     protected IDistributedEventBus DistributedEventBus { get; } = distributedEventBus;
 
-    public virtual async Task<Resource> GetAsync(Guid id, ResourceIncludeOptions option)
-    {
-        var entity = await Repository.GetAsync(id, null, option, CancellationToken);
-        if (entity == null)
-        {
-            throw new EntityNotFoundBusinessException(L["Folder"], id);
-        }
-
-        return entity;
-    }
-
-    public virtual async Task<Resource?> FindAsync(Expression<Func<Resource, bool>> predicate, Guid? parentId,
-        ResourceIncludeOptions option)
-    {
-        return await Repository.FindAsync(predicate, null, option, CancellationToken);
-    }
 
     public override async Task DeleteAsync(Resource entity, bool autoSave = true)
     {
@@ -68,5 +53,59 @@ public partial class ResourceManager(
         //entity.SetPermissions(source.Permissions);
         entity.SetHasPermissions(false);
         return Task.FromResult(entity);
+    }
+
+    public override Task<Expression<Func<Resource, bool>>> BuildPredicateExpressionAsync(BaseQueryParams queryParams)
+    {
+        Expression<Func<Resource, bool>> predicate = m => true;
+        if (queryParams is not ResourceQueryParams query)
+        {
+            return Task.FromResult(predicate);
+        }
+
+        predicate = m => m.ParentId == query.ParentId;
+
+
+        if (!string.IsNullOrEmpty(query.Filter))
+        {
+            predicate = predicate.AndIfNotTrue(m => m.Name.Contains(query.Filter));
+        }
+
+        if (query.StartTime.HasValue)
+        {
+            predicate = predicate.AndIfNotTrue(m => m.CreationTime >= query.StartTime.Value);
+        }
+
+        if (query.EndTime.HasValue)
+        {
+            predicate = predicate.AndIfNotTrue(m => m.CreationTime <= query.EndTime.Value);
+        }
+
+        if (query.OwnerId.HasValue)
+        {
+            predicate = predicate.AndIfNotTrue(m => m.OwnerId == query.OwnerId);
+        }
+
+        if (query.MaxFileSize.HasValue)
+        {
+            predicate = predicate.AndIfNotTrue(m => m.FileSize <= query.MaxFileSize.Value);
+        }
+
+        if (query.MinFileSize.HasValue)
+        {
+            predicate = predicate.AndIfNotTrue(m => m.FileSize >= query.MinFileSize.Value);
+        }
+
+
+        if (string.IsNullOrEmpty(query.FileType))
+        {
+            return Task.FromResult(predicate);
+        }
+
+
+        var types = query.FileType.Split(",");
+        predicate = PredicateExtensions.And(predicate, m => types.Contains(m.FileExtension));
+
+        return Task.FromResult(predicate);
     }
 }

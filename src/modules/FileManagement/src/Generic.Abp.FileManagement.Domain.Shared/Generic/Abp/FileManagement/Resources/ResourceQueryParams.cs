@@ -18,6 +18,7 @@ public class ResourceQueryParams : CreationTimeQueryParams, IResourceQueryParams
     public long? MinFileSize { get; set; }
     public long? MaxFileSize { get; set; }
     public Guid? OwnerId { get; set; }
+    public Guid ParentId { get; set; }
 
     protected override HashSet<string> AllowedSortingFields { get; set; } =
     [

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Asp.Versioning;
+using Generic.Abp.FileManagement.Resources.Dtos;
 using Generic.Abp.FileManagement.UserFolders.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp;
@@ -18,26 +19,33 @@ public class UserFolderController(IUserFolderAppService appService) : FileManage
 
     [HttpGet]
     [Route("{id:guid}")]
-    public Task<UserFolderDto> GetAsync(Guid id)
+    public Task<ResourceBaseDto> GetAsync(Guid id)
     {
         return AppService.GetAsync(id);
     }
 
     [HttpGet]
-    public Task<PagedResultDto<UserFolderDto>> GetListAsync(UserFolderGetListInput input)
+    public Task<PagedResultDto<ResourceBaseDto>> GetListAsync(UserFolderGetListInput input)
     {
         return AppService.GetListAsync(input);
     }
 
+    [HttpGet]
+    [Route("users")]
+    public Task<PagedResultDto<UserDto>> GetUsersAsync(UserGetListInput input)
+    {
+        return AppService.GetUsersAsync(input);
+    }
+
     [HttpPost]
-    public Task<UserFolderDto> CreateAsync([FromBody] UserFolderCreateDto input)
+    public Task<ResourceBaseDto> CreateAsync([FromBody] UserFolderCreateDto input)
     {
         return AppService.CreateAsync(input);
     }
 
     [HttpPut]
     [Route("{id:guid}")]
-    public Task<UserFolderDto> UpdateAsync(Guid id, [FromBody] UserFolderUpdateDto input)
+    public Task<ResourceBaseDto> UpdateAsync(Guid id, [FromBody] UserFolderUpdateDto input)
     {
         return AppService.UpdateAsync(id, input);
     }

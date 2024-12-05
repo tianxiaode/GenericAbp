@@ -27,13 +27,13 @@ public class ResourceDataSeed(
         Logger.LogInformation($"Executing resource data seed...");
 
         Logger.LogInformation($"Creating public root folder.");
-        await ResourceManager.CreatePublicRootFolderAsync(tenantId);
+        await ResourceManager.GetOrCreatePublicRootFolderAsync(tenantId);
 
         Logger.LogInformation($"Creating shared root folder.");
-        await ResourceManager.CreateSharedRootFolderAsync(tenantId);
+        await ResourceManager.GetOrCreateSharedRootFolderAsync(tenantId);
 
         Logger.LogInformation($"Creating user root folder.");
-        await ResourceManager.CreateUsersRootFolderAsync(tenantId);
+        await ResourceManager.GetOrCreateUsersRootFolderAsync(tenantId);
 
         Logger.LogInformation($"Creating participant isolationFolder path rood folder.");
         await ResourceManager.CreateParticipantIsolationRootFolderAsync(tenantId);
