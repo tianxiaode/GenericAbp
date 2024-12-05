@@ -42,13 +42,16 @@ public class ResourcePermissionManager(IResourcePermissionRepository repository,
         int permission,
         CancellationToken cancellationToken = default)
     {
+        //因为与匿名用户隔离了，所以这里不考虑匿名用户的权限
         // Everyone permissions
         if (!userId.HasValue)
         {
-            return await CheckPermissionAsync(id, ProviderNames.EveryoneProviderName, permission, null,
-                cancellationToken);
+            return false;
+            //     return await CheckPermissionAsync(id, ProviderNames.EveryoneProviderName, permission, null,
+            //         cancellationToken);
         }
 
+        //这个需要通过FileManagementPermissions.Resources.Default权限来隔离注册用户和内部用户
         // Authenticated user permissions
         if (await CheckPermissionAsync(id, ProviderNames.AuthorizationUserProviderName, permission, null,
                 cancellationToken))
@@ -94,12 +97,15 @@ public class ResourcePermissionManager(IResourcePermissionRepository repository,
         Guid? userId,
         int requiredPermission)
     {
+        //因为与匿名用户隔离了，所以这里不考虑匿名用户的权限
         // Everyone permissions
         if (!userId.HasValue)
         {
-            return await HasPermission(permissions, ProviderNames.EveryoneProviderName, requiredPermission);
+            return false;
+            //return await HasPermission(permissions, ProviderNames.EveryoneProviderName, requiredPermission);
         }
 
+        //这个需要通过FileManagementPermissions.Resources.Default权限来隔离注册用户和内部用户
         // Authenticated users
         if (await HasPermission(permissions, ProviderNames.AuthorizationUserProviderName, requiredPermission))
         {

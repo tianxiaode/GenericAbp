@@ -18,13 +18,13 @@ public class VirtualPath : AuditedAggregateRoot<Guid>, IMultiTenant
     [DisplayName("VirtualPath:Name")]
     public virtual string Name { get; protected set; }
 
-    [DisableAuditing] public virtual string NormalizedName { get; protected set; }
+    [DisableAuditing] public virtual string NormalizedName { get; protected set; } = default!;
 
     /// <summary>
     /// 绑定的公共文件夹
     /// </summary>
     [DisplayName("VirtualPath:Resource")]
-    public virtual Resource Resource { get; set; }
+    public virtual Resource Resource { get; set; } = default!;
 
     /// <summary>
     /// 绑定的公共文件夹Id
@@ -55,7 +55,6 @@ public class VirtualPath : AuditedAggregateRoot<Guid>, IMultiTenant
         Check.NotNullOrEmpty(name, nameof(Name));
 
         Name = name;
-        NormalizedName = name.ToUpperInvariant();
         ResourceId = resourceId;
         IsAccessible = isAccessible;
         TenantId = tenantId;
@@ -67,7 +66,11 @@ public class VirtualPath : AuditedAggregateRoot<Guid>, IMultiTenant
         Check.NotNullOrEmpty(name, nameof(Name));
 
         Name = name;
-        NormalizedName = name.ToUpperInvariant();
+    }
+
+    public void SetNormalizedName(string normalizedName)
+    {
+        NormalizedName = normalizedName;
     }
 
     public virtual void ChangeResource(Guid resourceId)

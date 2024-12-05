@@ -31,14 +31,14 @@ public class ExternalShareAppService(
         return new ExternalShareTokenDto(await ExternalShareManager.GetTokenAsync(entity));
     }
 
-    //TODO: GetExternalShareResourcesDto需要从ResourceGetListInput继承
     [AllowAnonymous]
     public virtual async Task<PagedResultDto<ResourceBaseDto>> GetExternalShareResourcesAsync(string linkName,
         GetExternalShareResourcesDto input)
     {
         var entity = await ExternalShareManager.FindByLinkNameAsync(linkName);
         await ExternalShareManager.ValidateTokenAsync(entity, input.Token);
-        var (count, list) = await ExternalShareManager.GetResourcesAsync(entity, input.ResourceId);
+        var queryParams = ObjectMapper.Map<GetExternalShareResourcesDto, ResourceQueryParams>(input);
+        var (count, list) = await ExternalShareManager.GetResourcesAsync(entity, input.ResourceId, queryParams);
         return new PagedResultDto<ResourceBaseDto>(count,
             ObjectMapper.Map<List<Resource>, List<ResourceBaseDto>>(list));
     }
@@ -97,15 +97,15 @@ public class ExternalShareAppService(
     [Authorize(FileManagementPermissions.ExternalShares.Delete)]
     public virtual async Task DeleteManyAsync(DeleteManyDto input)
     {
-        await ExternalShareManager.DeleteManyAsync(input.Ids);
+        await ExternalShareManager.DeleteManyAsync(input.Ids).ConfigureAwait(false);
     }
 
     protected virtual async Task<PagedResultDto<ExternalShareDto>> GetListBaseAsync(ExternalShareGetListInput input)
     {
         var queryParams = ObjectMapper.Map<ExternalShareGetListInput, ExternalShareQueryParams>(input);
-        var predicate = await ExternalShareManager.BuildPredicateExpressionAsync(queryParams);
-        var count = await ExternalShareManager.GetCountAsync(predicate);
-        var list = await ExternalShareManager.GetPagedListAsync(predicate, queryParams);
+        var predicate = await ExternalShareManager.BuildPredicateExpressionAsync(queryParams).ConfigureAwait(false);
+        var count = await ExternalShareManager.GetCountAsync(predicate).ConfigureAwait(false);
+        var list = await ExternalShareManager.GetPagedListAsync(predicate, queryParams).ConfigureAwait(false);
         return new PagedResultDto<ExternalShareDto>(count,
             ObjectMapper.Map<List<ExternalShare>, List<ExternalShareDto>>(list));
     }

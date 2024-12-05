@@ -7,6 +7,7 @@ using Microsoft.Extensions.Localization;
 using System.Threading.Tasks;
 using Generic.Abp.Extensions.Entities.QueryParams;
 using Generic.Abp.Extensions.Extensions;
+using Microsoft.AspNetCore.Identity;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Threading;
 
@@ -15,20 +16,36 @@ namespace Generic.Abp.FileManagement.VirtualPaths;
 public class VirtualPathManager(
     IVirtualPathRepository repository,
     IStringLocalizer<FileManagementResource> localizer,
-    ICancellationTokenProvider cancellationTokenProvider)
+    ICancellationTokenProvider cancellationTokenProvider,
+    ILookupNormalizer normalizer)
     : EntityManagerBase<VirtualPath, IVirtualPathRepository, FileManagementResource>(
         repository, localizer,
         cancellationTokenProvider)
 {
+    protected ILookupNormalizer LookupNormalizer { get; } = normalizer;
+
     public virtual async Task<VirtualPath> FinByNameAsync(string name, bool includeDetails = true)
     {
-        var entity = await FindAsync(m => string.Equals(m.NormalizedName, name.ToUpperInvariant()), includeDetails);
+        var entity = await FindAsync(m => string.Equals(m.NormalizedName, LookupNormalizer.NormalizeName(name)),
+            includeDetails);
         if (entity == null)
         {
             throw new EntityNotFoundBusinessException(L["VirtualPath"], name);
         }
 
         return entity;
+    }
+
+    public override Task CreateAsync(VirtualPath entity, bool autoSave = true)
+    {
+        entity.SetNormalizedName(LookupNormalizer.NormalizeName(entity.Name));
+        return base.CreateAsync(entity, autoSave);
+    }
+
+    public override Task UpdateAsync(VirtualPath entity, bool autoSave = true)
+    {
+        entity.SetNormalizedName(LookupNormalizer.NormalizeName(entity.Name));
+        return base.UpdateAsync(entity, autoSave);
     }
 
     public virtual Task CheckIsAccessibleAsync(VirtualPath entity)
@@ -44,7 +61,7 @@ public class VirtualPathManager(
     public override async Task ValidateAsync(VirtualPath entity)
     {
         if (await Repository.AnyAsync(
-                m => string.Equals(m.NormalizedName, entity.Name.ToUpperInvariant()) && m.Id != entity.Id,
+                m => string.Equals(m.NormalizedName, entity.NormalizedName) && m.Id != entity.Id,
                 CancellationToken))
         {
             throw new DuplicateWarningBusinessException(L["VirtualPath"], entity.Name);

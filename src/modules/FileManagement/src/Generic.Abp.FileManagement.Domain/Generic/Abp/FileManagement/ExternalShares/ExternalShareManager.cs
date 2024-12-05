@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Generic.Abp.Extensions.Entities;
+﻿using Generic.Abp.Extensions.Entities;
 using Generic.Abp.Extensions.Exceptions;
 using Generic.Abp.Extensions.Tokens;
 using Generic.Abp.FileManagement.Localization;
 using Generic.Abp.FileManagement.Resources;
 using Microsoft.Extensions.Localization;
-using Volo.Abp;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Volo.Abp.Authorization;
-using Volo.Abp.Domain.Entities;
 using Volo.Abp.Threading;
 
 namespace Generic.Abp.FileManagement.ExternalShares;
@@ -30,7 +28,8 @@ public class ExternalShareManager(
     public virtual async Task<ExternalShare> FindByLinkNameAsync(string linkName)
     {
         var entity = await Repository.FindAsync(m => string.Equals(m.LinkName, linkName.ToLowerInvariant()), false,
-            CancellationToken);
+            CancellationToken).ConfigureAwait(false);
+        ;
         if (entity == null)
         {
             throw new EntityNotFoundBusinessException(L["ExternalShare"], linkName);
@@ -56,32 +55,40 @@ public class ExternalShareManager(
         return Task.CompletedTask;
     }
 
-    public virtual async Task<(long, List<Resource>)> GetResourcesAsync(ExternalShare entity, Guid? resourceId)
+    public virtual async Task<(long, List<Resource>)> GetResourcesAsync(ExternalShare entity, Guid? resourceId,
+        ResourceQueryParams query)
     {
-        var root = await Repository.GetAsync(entity.ResourceId);
+        var root = await Repository.GetAsync(entity.ResourceId).ConfigureAwait(false);
         if (root == null)
         {
             throw new EntityNotFoundBusinessException(L["Resource"], entity.LinkName);
         }
 
+        query.ParentId = root.Id;
         if (resourceId.HasValue)
         {
-            var isExist = await ResourceManager.IsExistsAsync(resourceId.Value, entity.ResourceId);
+            var isExist = await ResourceManager.IsExistsAsync(resourceId.Value, entity.ResourceId)
+                .ConfigureAwait(false);
             if (!isExist)
             {
                 throw new EntityNotFoundBusinessException(L["Resource"], entity.LinkName);
             }
+
+            query.ParentId = resourceId.Value;
         }
 
-        // TODO: 获取资源
-        return (0, []);
+        var predicate = await ResourceManager.BuildPredicateExpressionAsync(query).ConfigureAwait(false);
+
+        var count = await ResourceManager.GetCountAsync(predicate).ConfigureAwait(false);
+        var list = await ResourceManager.GetPagedListAsync(predicate, query).ConfigureAwait(false);
+        return (count, list);
     }
 
     public virtual async Task<string> GetTokenAsync(ExternalShare entity)
     {
         var tokenData = TokenManager.GenerateTokenData(entity.Id, entity.ExpireTime, "");
         entity.SetToken(tokenData);
-        await Repository.UpdateAsync(entity, true, CancellationToken);
+        await Repository.UpdateAsync(entity, true, CancellationToken).ConfigureAwait(false);
         return tokenData.Token;
     }
 

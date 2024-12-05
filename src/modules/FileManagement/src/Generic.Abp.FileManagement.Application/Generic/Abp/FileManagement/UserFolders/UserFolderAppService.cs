@@ -27,7 +27,7 @@ public class UserFolderAppService(
     [Authorize(FileManagementPermissions.UserFolders.Default)]
     public virtual async Task<ResourceBaseDto> GetAsync(Guid id)
     {
-        return ObjectMapper.Map<Resource, ResourceBaseDto>(await ResourceManager.GetOrCreateUserRootFolderAsync(id));
+        return ObjectMapper.Map<Resource, ResourceBaseDto>(await ResourceManager.GetUserRootFolderAsync(id));
     }
 
     [Authorize(FileManagementPermissions.UserFolders.Default)]
@@ -62,14 +62,14 @@ public class UserFolderAppService(
             throw new EntityNotFoundBusinessException(L["User"], input.OwnerId);
         }
 
-        var entity = await ResourceManager.GetOrCreateUserRootFolderAsync(owner.Id, CurrentTenant.Id);
+        var entity = await ResourceManager.GetUserRootFolderAsync(owner.Id, CurrentTenant.Id);
         return ObjectMapper.Map<Resource, ResourceBaseDto>(entity);
     }
 
     [Authorize(FileManagementPermissions.UserFolders.Update)]
     public virtual async Task<ResourceBaseDto> UpdateAsync(Guid id, UserFolderUpdateDto input)
     {
-        var entity = await ResourceManager.GetOrCreateUserRootFolderAsync(id, CurrentTenant.Id);
+        var entity = await ResourceManager.GetUserRootFolderAsync(id, CurrentTenant.Id);
         if (entity == null)
         {
             throw new EntityNotFoundBusinessException(L["UserFolder"], id);

@@ -2,13 +2,10 @@
 using Generic.Abp.FileManagement.Resources;
 using Volo.Abp.Application.Dtos;
 
-namespace Generic.Abp.FileManagement.ExternalShares.Dtos;
+namespace Generic.Abp.FileManagement.ParticipantIsolationFolders.Dtos;
 
-[Serializable]
-public class GetExternalShareResourcesDto : PagedAndSortedResultRequestDto, IResourceQueryParams
+public class GetParticipantIsolationFileInput : PagedAndSortedResultRequestDto, IResourceQueryParams
 {
-    public Guid? ResourceId { get; set; }
-    public string Token { get; set; } = default!;
     public string? Filter { get; set; }
     public DateTime? StartTime { get; set; }
     public DateTime? EndTime { get; set; }

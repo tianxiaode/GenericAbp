@@ -12,6 +12,17 @@ namespace Generic.Abp.FileManagement.Resources;
 /// </summary>
 public partial class ResourceManager
 {
+    public virtual async Task<Resource> FindFolderByNameAsync(Guid parentId, string name)
+    {
+        var entity = await FindAsync(m => m.ParentId == parentId && m.Name.ToLower() == name.ToLower());
+        if (entity == null)
+        {
+            throw new EntityNotFoundBusinessException(L["Folder"], name);
+        }
+
+        return entity;
+    }
+
     public virtual async Task<Resource> CreateFolderAsync(string name, Guid parentId, string? allowFileTypes,
         string? quota, string? maxFileSize, Guid? tenantId = null)
     {

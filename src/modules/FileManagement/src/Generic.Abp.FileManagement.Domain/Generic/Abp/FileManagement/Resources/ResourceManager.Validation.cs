@@ -70,18 +70,6 @@ public partial class ResourceManager
         return entity.Code.StartsWith(sharedRoot.Code);
     }
 
-    public virtual async Task<bool> IsVirtualFolderAsync(Guid id)
-    {
-        var publicRoot = await GetVirtualRootFolderAsync();
-        return await Repository.AnyAsync(m => m.Id == id && m.Code.StartsWith(publicRoot.Code), CancellationToken);
-    }
-
-    public virtual async Task<bool> IsVirtualFolderAsync(Resource entity)
-    {
-        var virtualRoot = await GetVirtualRootFolderAsync();
-        return entity.Code.StartsWith(virtualRoot.Code);
-    }
-
 
     public virtual async Task<bool> IsOwnerAsync(Resource entity, Guid userId)
     {

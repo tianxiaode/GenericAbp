@@ -9,6 +9,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Volo.Abp.Caching;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Threading;
 
@@ -31,6 +32,16 @@ public partial class ResourceManager(
     protected FileManagementSettingManager SettingManager { get; } = settingManager;
     protected IDistributedEventBus DistributedEventBus { get; } = distributedEventBus;
 
+    public virtual async Task<Resource> GetAsync(Guid id, Guid parentId)
+    {
+        var entity = await FindAsync(m => m.Id == id && m.ParentId == parentId);
+        if (entity == null)
+        {
+            throw new EntityNotFoundException(typeof(Resource), id);
+        }
+
+        return entity;
+    }
 
     public override async Task DeleteAsync(Resource entity, bool autoSave = true)
     {

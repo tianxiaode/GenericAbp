@@ -25,5 +25,10 @@
         public const string OnlyMoveMaxFilesAndFoldersInOnTime = "Generic.Abp.FileManagement:000008";
         public const string OnlyMoveMaxFilesAndFoldersInOnTimeMax = "{Max}";
         public const string OnlyMoveMaxFilesAndFoldersInOnTimeCount = "{Count}";
+
+        public const string FileCountLimitedBusinessException = "Generic.Abp.FileManagement:000009";
+        public const string FileCountLimitedMax = "{Max}";
+
+        public const string FolderConfigurationNotSetBusinessException = "Generic.Abp.FileManagement:000010";
     }
 }

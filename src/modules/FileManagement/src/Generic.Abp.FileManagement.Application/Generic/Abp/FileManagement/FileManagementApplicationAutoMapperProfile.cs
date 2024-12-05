@@ -2,6 +2,7 @@
 using Generic.Abp.FileManagement.ExternalShares;
 using Generic.Abp.FileManagement.ExternalShares.Dtos;
 using Generic.Abp.FileManagement.FileInfoBases;
+using Generic.Abp.FileManagement.ParticipantIsolationFolders.Dtos;
 using Generic.Abp.FileManagement.Resources;
 using Generic.Abp.FileManagement.Resources.Dtos;
 using Generic.Abp.FileManagement.UserFolders.Dtos;
@@ -46,6 +47,9 @@ namespace Generic.Abp.FileManagement
 
             CreateMap<ExternalShare, ExternalShareDto>().MapExtraProperties();
             CreateMap<ExternalShareGetListInput, ExternalShareQueryParams>();
+            CreateMap<GetExternalShareResourcesDto, ResourceQueryParams>();
+
+            CreateMap<GetParticipantIsolationFileInput, ResourceQueryParams>();
         }
     }
 }

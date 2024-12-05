@@ -9,6 +9,7 @@ public static class ResourceExtensions
     private const string StorageQuotaPropertyName = "storageQuota";
     private const string UsedStoragePropertyName = "usedStorage";
     private const string AllowedFileTypesPropertyName = "allowedFileTypes";
+    private const string AllowedFileCountPropertyName = "allowedFileCount";
     private const string MaxFileSizePropertyName = "maxFileSize";
     private const string StartTimePropertyName = "startTime";
     private const string EndTimePropertyName = "endTime";
@@ -34,7 +35,7 @@ public static class ResourceExtensions
     public static long GetUsedStorage<TEntity>(this TEntity entity)
         where TEntity : IHasExtraProperties
     {
-        return entity.GetProperty<long>(UsedStoragePropertyName, 0);
+        return entity.GetProperty<long>(UsedStoragePropertyName);
     }
 
     public static void SetAllowedFileTypes<TEntity>(this TEntity entity, string allowedFileTypes)
@@ -43,10 +44,10 @@ public static class ResourceExtensions
         entity.SetProperty(AllowedFileTypesPropertyName, allowedFileTypes);
     }
 
-    public static string? GetAllowedFileTypes<TEntity>(this TEntity entity)
+    public static string GetAllowedFileTypes<TEntity>(this TEntity entity)
         where TEntity : IHasExtraProperties
     {
-        return entity.GetProperty(AllowedFileTypesPropertyName, "");
+        return entity.GetProperty(AllowedFileTypesPropertyName, "") ?? "";
     }
 
     public static void SetMaxFileSize<TEntity>(this TEntity entity, long maxFileSize)
@@ -58,7 +59,7 @@ public static class ResourceExtensions
     public static long GetMaxFileSize<TEntity>(this TEntity entity)
         where TEntity : IHasExtraProperties
     {
-        return entity.GetProperty(MaxFileSizePropertyName, -1);
+        return entity.GetProperty<long>(MaxFileSizePropertyName, -1);
     }
 
     public static void SetStartTime<TEntity>(this TEntity entity, DateTime startTime)
@@ -83,5 +84,17 @@ public static class ResourceExtensions
         where TEntity : IHasExtraProperties
     {
         return entity.GetProperty(EndTimePropertyName, "").Parse<DateTime?>();
+    }
+
+    public static void SetAllowedFileCount<TEntity>(this TEntity entity, int allowedFileCount)
+        where TEntity : IHasExtraProperties
+    {
+        entity.SetProperty(AllowedFileCountPropertyName, allowedFileCount);
+    }
+
+    public static int GetAllowedFileCount<TEntity>(this TEntity entity)
+        where TEntity : IHasExtraProperties
+    {
+        return entity.GetProperty(AllowedFileCountPropertyName, -1);
     }
 }

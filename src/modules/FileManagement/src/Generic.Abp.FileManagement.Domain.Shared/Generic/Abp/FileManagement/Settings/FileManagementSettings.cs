@@ -25,6 +25,7 @@ public static class FileManagementSettings
     public const string ParticipantIsolationFolderStorageQuota = "ParticipantIsolationFolder.StorageQuota";
     public const string ParticipantIsolationFolderMaxFileSize = "ParticipantIsolationFolder.MaxFileSize";
     public const string ParticipantIsolationFolderAllowedFileTypes = "ParticipantIsolationFolder.AllowedFileTypes";
+    public const string ParticipantIsolationFolderAllowedFileCount = "ParticipantIsolationFolder.AllowedFileCount ";
     public const string DefaultFileCleanupEnable = "DefaultFile.Cleanup.Enable";
     public const string DefaultFileCleanupFrequency = "DefaultFile.Cleanup.Frequency";
     public const string DefaultFileCleanupBatchSize = "DefaultFile.Cleanup.BatchSize";
@@ -84,6 +85,7 @@ public static class FileManagementSettings
                 "jpg,jpeg,png,gif,svg,pdf,txt,doc,docx,xls,xlsx,ppt,pptx",
                 "AllowedFileTypes")
         },
+        { ParticipantIsolationFolderAllowedFileCount, new IntSettingDefinitionExtensions(1, "AllowedFileCount") },
         { DefaultFileCleanupEnable, new BooleanSettingDefinitionExtensions(true, "Enable") },
         { DefaultFileCleanupFrequency, new LongSettingDefinitionExtensions(3600 * 24 * 15, "Frequency") },
         { DefaultFileCleanupBatchSize, new IntSettingDefinitionExtensions(500, "BatchSize") },
