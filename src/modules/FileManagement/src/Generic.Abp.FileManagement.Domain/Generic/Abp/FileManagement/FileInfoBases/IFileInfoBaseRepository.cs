@@ -1,9 +1,7 @@
-﻿using System;
-using System.Threading.Tasks;
-using System.Threading;
-using Volo.Abp.Domain.Repositories;
+﻿using Generic.Abp.Extensions.Entities;
 using System.Collections.Generic;
-using Generic.Abp.Extensions.Entities;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Generic.Abp.FileManagement.FileInfoBases;
 

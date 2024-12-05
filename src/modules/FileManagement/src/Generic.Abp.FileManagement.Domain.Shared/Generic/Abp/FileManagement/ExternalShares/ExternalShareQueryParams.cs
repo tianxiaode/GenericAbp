@@ -4,6 +4,7 @@ using Generic.Abp.Extensions.Entities.QueryParams;
 
 namespace Generic.Abp.FileManagement.ExternalShares;
 
+[Serializable]
 public class ExternalShareQueryParams : CreationTimeQueryParams, IExternalShareQueryParams
 {
     public DateTime? ExpireTimeStart { get; set; } = default!;

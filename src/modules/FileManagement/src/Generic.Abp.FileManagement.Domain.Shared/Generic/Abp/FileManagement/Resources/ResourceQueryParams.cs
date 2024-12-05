@@ -12,6 +12,7 @@ public interface IResourceQueryParams : IBaseQueryParams, IHasCreationTimeQuery
     Guid? OwnerId { get; set; }
 }
 
+[Serializable]
 public class ResourceQueryParams : CreationTimeQueryParams, IResourceQueryParams
 {
     public string? FileType { get; set; }

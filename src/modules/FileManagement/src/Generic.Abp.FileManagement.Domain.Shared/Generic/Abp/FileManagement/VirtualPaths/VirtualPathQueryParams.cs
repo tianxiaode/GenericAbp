@@ -4,6 +4,7 @@ using Generic.Abp.Extensions.Entities.QueryParams;
 
 namespace Generic.Abp.FileManagement.VirtualPaths;
 
+[Serializable]
 public class VirtualPathQueryParams : CreationTimeQueryParams, IVirtualPathQueryParams
 {
     public bool? IsAccessible { get; set; }

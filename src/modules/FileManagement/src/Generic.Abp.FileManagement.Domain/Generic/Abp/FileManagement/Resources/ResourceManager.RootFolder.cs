@@ -1,8 +1,9 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Generic.Abp.FileManagement.Settings;
+using Medallion.Threading;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Generic.Abp.FileManagement.Settings;
 using Volo.Abp;
 
 namespace Generic.Abp.FileManagement.Resources;
@@ -102,6 +103,15 @@ public partial class ResourceManager
 
     protected virtual async Task<Resource> CreateRootFolderAsync(ResourceType type, Guid? tenantId = null)
     {
+        var lockKey = $"create_root_folder_lock:{type.ToString()}";
+
+        // 使用分布式锁
+        await using var handle = await DistributedLockProvider.TryAcquireLockAsync(lockKey, TimeSpan.FromSeconds(30));
+        if (handle == null)
+        {
+            throw new AbpException("无法获取创建文件夹分布式锁，请稍后重试");
+        }
+
         var name = await GetRootFolderNameAsync(type, tenantId);
         var settingPrefix = GetSettingPrefixForType(type);
         var entity = new Resource(GuidGenerator.Create(), name, type, true, tenantId);

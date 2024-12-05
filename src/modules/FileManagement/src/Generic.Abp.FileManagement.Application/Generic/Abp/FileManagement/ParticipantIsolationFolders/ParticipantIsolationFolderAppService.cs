@@ -41,7 +41,7 @@ public class ParticipantIsolationFolderAppService(
     }
 
     [Authorize]
-    public virtual async Task<PagedResultDto<ResourceBaseDto>> CreateAsync(string folderName,
+    public virtual async Task<PagedResultDto<ResourceBaseDto>> GetListAsync(string folderName,
         GetParticipantIsolationFileInput input)
     {
         var folder = await GetFolderAsync(folderName);
@@ -74,14 +74,15 @@ public class ParticipantIsolationFolderAppService(
     {
         var folder = await GetFolderAsync(folderName);
         await CheckFolderConfigurationAsync(folder);
-        await FileInfoBaseManager.UploadChunkAsync(input.Hash, input.ChunkBytes, input.Index);
+        await FileInfoBaseManager.UploadChunkAsync(input.Hash, input.ChunkBytes, input.Index,
+            folder.GetAllowedFileTypes());
     }
 
     public virtual async Task<FileDto> MergeAsync(string folderName, FileMergeInput input)
     {
         var folder = await GetFolderAsync(folderName);
         await CheckFolderConfigurationAsync(folder);
-        var fileInfoBase = await FileInfoBaseManager.MergeAsync(input.Hash, input.TotalChunks,
+        var fileInfoBase = await FileInfoBaseManager.MergeAsync(input.Hash, input.Filename, input.TotalChunks,
             folder.GetAllowedFileTypes(), folder.GetMaxFileSize(), long.MaxValue, long.MaxValue);
         throw new NotImplementedException();
         // var folder = await CheckFolderPermission(input.FolderId, canWrite: true);

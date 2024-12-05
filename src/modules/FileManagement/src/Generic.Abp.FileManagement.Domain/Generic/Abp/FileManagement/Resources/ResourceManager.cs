@@ -8,6 +8,7 @@ using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Medallion.Threading;
 using Volo.Abp.Caching;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.EventBus.Distributed;
@@ -23,7 +24,8 @@ public partial class ResourceManager(
     ResourcePermissionManager resourcePermissionManager,
     FileManagementSettingManager settingManager,
     IDistributedEventBus distributedEventBus,
-    ICancellationTokenProvider cancellationTokenProvider)
+    ICancellationTokenProvider cancellationTokenProvider,
+    IDistributedLockProvider distributedLockProvider)
     : TreeManager<Resource, IResourceRepository, FileManagementResource>(repository, treeCodeGenerator, localizer,
         cancellationTokenProvider)
 {
@@ -31,6 +33,7 @@ public partial class ResourceManager(
     protected ResourcePermissionManager PermissionManager { get; } = resourcePermissionManager;
     protected FileManagementSettingManager SettingManager { get; } = settingManager;
     protected IDistributedEventBus DistributedEventBus { get; } = distributedEventBus;
+    protected IDistributedLockProvider DistributedLockProvider { get; } = distributedLockProvider;
 
     public virtual async Task<Resource> GetAsync(Guid id, Guid parentId)
     {

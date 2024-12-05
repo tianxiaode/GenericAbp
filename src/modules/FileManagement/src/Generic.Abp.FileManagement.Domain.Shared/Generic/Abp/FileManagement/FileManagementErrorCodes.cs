@@ -29,6 +29,19 @@
         public const string FileCountLimitedBusinessException = "Generic.Abp.FileManagement:000009";
         public const string FileCountLimitedMax = "{Max}";
 
-        public const string FolderConfigurationNotSetBusinessException = "Generic.Abp.FileManagement:000010";
+        public const string FolderConfigurationNotSet = "Generic.Abp.FileManagement:000010";
+        public const string InvalidChunkSize = "Generic.Abp.FileManagement:000011";
+        public const string InvalidChunkSizeValue = "{Value}";
+        public const string InvalidChunkSizeMin = "{Min}";
+        public const string InvalidChunkSizeMax = "{Max}";
+
+        public const string InvalidChunkIndex = "Generic.Abp.FileManagement:000012";
+        public const string InvalidChunkIndexIndex = "{Index}";
+        public const string InvalidChunkIndexTotal = "{Total}";
+
+        public const string InvalidChunkHash = "Generic.Abp.FileManagement:000013";
+        public const string InvalidChunkHashOldHash = "{OldHash}";
+        public const string InvalidChunkHashNewHash = "{NewHash}";
+        public const string InvalidChunkHashIndex = "{Index}";
     }
 }

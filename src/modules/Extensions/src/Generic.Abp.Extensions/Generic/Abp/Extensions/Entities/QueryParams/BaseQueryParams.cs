@@ -4,6 +4,7 @@ using System.Linq;
 
 namespace Generic.Abp.Extensions.Entities.QueryParams;
 
+[Serializable]
 public abstract class BaseQueryParams : IBaseQueryParams
 {
     public virtual string? Sorting { get; set; } = default!;
