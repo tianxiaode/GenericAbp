@@ -14,7 +14,7 @@
         public const string FileSizeOutOfRangeValue = "{Value}";
         public const string FileSizeOutOfRangeMax = "{Max}";
 
-        public const string InsufficientStorageSpaceBusinessException = "Generic.Abp.FileManagement:000005";
+        public const string InsufficientStorageSpace = "Generic.Abp.FileManagement:000005";
         public const string InsufficientStorageSpaceValue = "{Value}";
         public const string InsufficientStorageSpaceUsed = "{Used}";
         public const string InsufficientStorageSpaceMax = "{Max}";
@@ -26,7 +26,7 @@
         public const string OnlyMoveMaxFilesAndFoldersInOnTimeMax = "{Max}";
         public const string OnlyMoveMaxFilesAndFoldersInOnTimeCount = "{Count}";
 
-        public const string FileCountLimitedBusinessException = "Generic.Abp.FileManagement:000009";
+        public const string FileCountLimited = "Generic.Abp.FileManagement:000009";
         public const string FileCountLimitedMax = "{Max}";
 
         public const string FolderConfigurationNotSet = "Generic.Abp.FileManagement:000010";
@@ -43,5 +43,10 @@
         public const string InvalidChunkHashOldHash = "{OldHash}";
         public const string InvalidChunkHashNewHash = "{NewHash}";
         public const string InvalidChunkHashIndex = "{Index}";
+
+        public const string MetadataNotFound = "Generic.Abp.FileManagement:000014";
+        public const string MetadataNotFoundHash = "{Hash}";
+
+        public const string OtherUserUploadingTheFile = "Generic.Abp.FileManagement:000015";
     }
 }

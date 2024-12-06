@@ -18,7 +18,6 @@ public partial class FileInfoBaseManager
     /// Merge file chunks
     /// </summary>
     /// <param name="hash">The hash value of the file</param>
-    /// <param name="totalChunks">Total chunks</param>
     /// <param name="allowTypes">Allowed file types</param>
     /// <param name="allowSize">Allowed file size</param>
     /// <param name="usedStorage">Used storage space</param>
@@ -26,10 +25,10 @@ public partial class FileInfoBaseManager
     /// <param name="storageQuota">Storage quota, The default is 100M</param>
     /// <returns></returns>
     /// <exception cref="FileChunkErrorBusinessException"></exception>
-    public virtual async Task<FileInfoBase> MergeAsync(string hash, string fileName, int totalChunks,
-        string allowTypes, long allowSize, long storageQuota, long usedStorage, long thumbnailSize = 102400)
+    public virtual async Task<FileInfoBase> MergeAsync(string hash, string allowTypes, long allowSize,
+        long storageQuota, long usedStorage, long thumbnailSize = 102400)
     {
-        var fileInfoBase = await FindByHashAsync(hash);
+        var fileInfoBase = await GetAndCheckIsAllowedAsync(hash, allowTypes);
         //文件已经上传
         if (fileInfoBase != null)
         {
@@ -39,10 +38,18 @@ public partial class FileInfoBaseManager
         var done = true;
         var dir = await GetTempPathAsync(hash);
 
-        //检查文件块是否完整
-        for (var i = 0; i < totalChunks; i++)
+        var metadata = await GetFileMetadataCacheAsync(hash, 0, -1, "", "", "");
+        if (metadata.ChunkSize == -1)
         {
-            var filePath = Path.Combine(dir, $"{hash}_{i}");
+            throw new MetadataNotFoundBusinessException(hash);
+        }
+
+        var (chunkDir, chunkMd5Dir) = await GetChunkPathAsync(hash);
+
+        //检查文件块是否完整
+        for (var i = 0; i < metadata.TotalChunks; i++)
+        {
+            var filePath = Path.Combine(chunkDir, $"{hash}_{i}");
             if (File.Exists(filePath))
             {
                 continue;
@@ -58,15 +65,6 @@ public partial class FileInfoBaseManager
         }
 
 
-        var dto = await SaveAsync(hash, fileName, totalChunks, dir, allowTypes, allowSize, storageQuota, usedStorage,
-            thumbnailSize);
-        if (Directory.Exists(dir))
-        {
-            Directory.Delete(dir, true);
-        }
-
-
-        return dto;
     }
 
     protected virtual async Task<FileInfoBase> SaveAsync(string hash, string fileName, int totalChunks, string tempDir,

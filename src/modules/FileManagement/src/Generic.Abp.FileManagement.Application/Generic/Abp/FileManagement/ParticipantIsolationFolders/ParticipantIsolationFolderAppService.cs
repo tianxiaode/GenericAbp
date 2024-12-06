@@ -66,7 +66,8 @@ public class ParticipantIsolationFolderAppService(
     {
         var folder = await GetFolderAsync(folderName);
         await CheckFolderConfigurationAsync(folder, input.Size);
-        return await FileInfoBaseManager.CheckAsync(input.Hash, input.Size, input.ChunkSize);
+        return await FileInfoBaseManager.CheckAsync(input.Hash, input.Filename, folder.GetAllowedFileTypes(),
+            input.Size, folder.GetMaxFileSize(), input.ChunkHash, input.ChunkSize, input.FirstChunk, long.MaxValue, 0);
     }
 
     [Authorize]
@@ -74,7 +75,7 @@ public class ParticipantIsolationFolderAppService(
     {
         var folder = await GetFolderAsync(folderName);
         await CheckFolderConfigurationAsync(folder);
-        await FileInfoBaseManager.UploadChunkAsync(input.Hash, input.ChunkBytes, input.Index,
+        await FileInfoBaseManager.UploadChunkAsync(input.Hash, input.ChunkBytes, input.Index, input.ChunkHash,
             folder.GetAllowedFileTypes());
     }
 

@@ -7,9 +7,14 @@ namespace Generic.Abp.FileManagement.FileInfoBases;
 
 public partial class FileInfoBaseManager
 {
-    protected virtual async Task<string> GetAndCheckTempPathAsync(string hash)
+    protected virtual async Task<string> GetAndCheckTempPathAsync(string hash, string? subPath = null)
     {
         var tempDir = await GetTempPathAsync(hash);
+        if (!string.IsNullOrEmpty(subPath))
+        {
+            tempDir = Path.Combine(tempDir, subPath);
+        }
+
         if (!Directory.Exists(tempDir))
         {
             Directory.CreateDirectory(tempDir);

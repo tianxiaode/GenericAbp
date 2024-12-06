@@ -14,6 +14,7 @@ public class FileUploadChunkInput : IHasHash
 
     public string Hash { get; set; } = default!;
 
+    public string ChunkHash { get; set; } = default!;
     public byte[] ChunkBytes { get; set; } = default!;
     public int Index { get; set; } = default!;
     public Guid FolderId { get; set; } = default!;

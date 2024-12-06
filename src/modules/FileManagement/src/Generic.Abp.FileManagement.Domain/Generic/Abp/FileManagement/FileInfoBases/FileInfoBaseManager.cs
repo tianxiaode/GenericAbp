@@ -2,13 +2,15 @@
 using Generic.Abp.Extensions.Exceptions;
 using Generic.Abp.Extensions.RemoteContents;
 using Generic.Abp.FileManagement.Localization;
-using Generic.Abp.FileManagement.Resources;
 using Microsoft.Extensions.Localization;
 using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
+using Generic.Abp.FileManagement.Exceptions;
 using Medallion.Threading;
 using Volo.Abp.Caching;
+using Volo.Abp.DistributedLocking;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.Threading;
 using File = System.IO.File;
@@ -20,14 +22,19 @@ public partial class FileInfoBaseManager(
     ISettingManager settingManager,
     IStringLocalizer<FileManagementResource> localizer,
     ICancellationTokenProvider cancellationTokenProvider,
-    IDistributedCache<FileMetadataCacheItem, string> cache,
-    IDistributedLockProvider distributedLockProvider)
+    IDistributedCache<FileMetadataCacheItem, string> fileMetadataCache,
+    IDistributedCache<FileChunkStatusCacheItem, string> fileChunkStatusCache,
+    IAbpDistributedLock distributedLock)
     : EntityManagerBase<FileInfoBase, IFileInfoBaseRepository, FileManagementResource>(repository, localizer,
         cancellationTokenProvider)
 {
     protected ISettingManager SettingManager { get; } = settingManager;
-    protected IDistributedCache<FileMetadataCacheItem, string> Cache { get; } = cache;
-    protected IDistributedLockProvider DistributedLockProvider { get; } = distributedLockProvider;
+    protected IDistributedCache<FileMetadataCacheItem, string> FileMetadataCache { get; } = fileMetadataCache;
+
+    protected IDistributedCache<FileChunkStatusCacheItem, string> FileChunkStatusCache { get; } =
+        fileChunkStatusCache;
+
+    protected IAbpDistributedLock DistributedLock { get; } = distributedLock;
 
     public virtual async Task<FileInfoBase?> FindByHashAsync(string hash)
     {
@@ -67,7 +74,7 @@ public partial class FileInfoBaseManager(
 
         if (!File.Exists(filePath))
         {
-            throw new EntityNotFoundBusinessException(Localizer["File"], entity.Hash);
+            throw new EntityNotFoundBusinessException(L["File"], entity.Hash);
         }
 
         await using var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read,
@@ -85,7 +92,7 @@ public partial class FileInfoBaseManager(
         long startPosition = chunkSize * index.Value;
         if (startPosition >= fileStream.Length)
         {
-            throw new EntityNotFoundBusinessException(Localizer["File"], entity.Hash);
+            throw new EntityNotFoundBusinessException(L["File"], entity.Hash);
         }
 
         // 计算实际读取的字节数
@@ -126,5 +133,22 @@ public partial class FileInfoBaseManager(
         }
 
         return null;
+    }
+
+    protected virtual async Task<FileInfoBase?> GetAndCheckIsAllowedAsync(string hash, string allowFileTypes)
+    {
+        var entity = await FindByHashAsync(hash);
+        if (entity == null)
+        {
+            return null;
+        }
+
+        var fileTypes = allowFileTypes.Split(',');
+        if (!fileTypes.Contains(entity.Extension))
+        {
+            throw new InvalidFileTypeBusinessException();
+        }
+
+        return entity;
     }
 }

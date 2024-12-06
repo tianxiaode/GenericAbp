@@ -72,6 +72,8 @@
     "Generic.Abp.FileManagement:000011": "Chunk size must be between {Min} and {Max} bytes, current size is {Value} bytes.",
     "Generic.Abp.FileManagement:000012": "Chunk index must be between 0 and {Total}, current index is {Index}.",
     "Generic.Abp.FileManagement:000013": "Chunk {Index} hash mismatch. Expected: {OldHash}, Got: {NewHash}",
+    "Generic.Abp.FileManagement:000014": "Metadata {Hash} not found, please reupload the file.",
+    "Generic.Abp.FileManagement:000015": "Other user uploading the same file.",
     "Settings:AllowedFileTypes": "Allowed File Types",
     "Settings:AllowedFileCount": "Allowed File Count",
     "Settings:MaxFileSize": "Max File Size",

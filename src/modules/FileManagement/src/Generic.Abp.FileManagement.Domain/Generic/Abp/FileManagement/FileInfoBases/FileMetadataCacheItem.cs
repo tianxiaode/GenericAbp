@@ -1,17 +1,31 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Generic.Abp.FileManagement.FileInfoBases;
 
 [Serializable]
-public class FileMetadataCacheItem(string hash, long size, long chunkSize, string fileName)
+public class FileMetadataCacheItem
 {
-    public string Hash { get; set; } = hash;
-    public string? MimeType { get; set; } = default!;
-    public long Size { get; set; } = size;
-    public long ChunkSize { get; set; } = chunkSize;
-    public string FileName { get; set; } = fileName;
-    public HashSet<int> UploadedChunks = default!;
+    public string Hash { get; set; } = default!;
+    public string Filename { get; set; } = default!;
+    public long Size { get; set; } = 0;
+    public long ChunkSize { get; set; } = 0;
+    public string Mimetype { get; set; } = default!;
+    public string Extension { get; set; } = default!;
+
+    public FileMetadataCacheItem()
+    {
+    }
+
+    public FileMetadataCacheItem(string hash, string filename, long size, long chunkSize, string mimetype,
+        string extension)
+    {
+        Hash = hash;
+        Filename = filename;
+        Size = size;
+        ChunkSize = chunkSize;
+        Mimetype = mimetype;
+        Extension = extension;
+    }
 
     public int TotalChunks => (int)Math.Ceiling((double)Size / ChunkSize);
 }

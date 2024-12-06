@@ -4,7 +4,7 @@ public class InsufficientStorageSpaceBusinessException : Volo.Abp.BusinessExcept
 {
     public InsufficientStorageSpaceBusinessException(long value, long used, long max)
     {
-        Code = FileManagementErrorCodes.FileChunkError;
+        Code = FileManagementErrorCodes.InsufficientStorageSpace;
         WithData(FileManagementErrorCodes.InsufficientStorageSpaceMax, max)
             .WithData(FileManagementErrorCodes.InsufficientStorageSpaceUsed, used)
             .WithData(FileManagementErrorCodes.InsufficientStorageSpaceValue, value);

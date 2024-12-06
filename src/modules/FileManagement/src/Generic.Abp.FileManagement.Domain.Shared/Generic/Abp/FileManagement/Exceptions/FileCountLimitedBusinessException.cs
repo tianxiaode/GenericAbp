@@ -6,7 +6,7 @@ public class FileCountLimitedBusinessException : BusinessException
 {
     public FileCountLimitedBusinessException(int max)
     {
-        Code = FileManagementErrorCodes.FileCountLimitedBusinessException;
+        Code = FileManagementErrorCodes.FileCountLimited;
         WithData(FileManagementErrorCodes.FileCountLimitedMax, max);
     }
 }
