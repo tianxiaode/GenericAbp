@@ -9,6 +9,5 @@ public enum ResourceType
     SharedRootFolder,
     UserRootFolder,
     UsersRootFolder,
-    VirtualRootFolder,
     ParticipantIsolationRootFolder
 }

@@ -8,6 +8,7 @@ using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Generic.Abp.FileManagement.Events;
 using Medallion.Threading;
 using Volo.Abp.Caching;
 using Volo.Abp.Domain.Entities;
@@ -46,12 +47,24 @@ public partial class ResourceManager(
         return entity;
     }
 
-    public override async Task DeleteAsync(Resource entity, bool autoSave = true)
+    public override Task DeleteAsync(Resource entity, bool autoSave = true)
     {
-        await SetPermissionsAsync(entity, []);
-        entity.SetHasPermissions(false);
+        if (entity.Type == ResourceType.Folder)
+        {
+            ValidateIsStaticFolder(entity);
+        }
 
-        await base.DeleteAsync(entity, autoSave);
+        DistributedEventBus.PublishAsync(new ResourceDeletedEto()
+        {
+            ResourceId = entity.Id,
+            TenantId = entity.TenantId,
+        });
+        return base.DeleteAsync(entity, autoSave);
+    }
+
+    public virtual async Task<long> GetSumSizeAsync(string code)
+    {
+        return await Repository.SumSizeByCodeAsync(code);
     }
 
     protected override Task<Resource> CloneAsync(Resource source)

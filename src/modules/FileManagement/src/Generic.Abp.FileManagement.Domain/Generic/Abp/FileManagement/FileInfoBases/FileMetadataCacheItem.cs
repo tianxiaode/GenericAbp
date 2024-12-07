@@ -11,6 +11,13 @@ public class FileMetadataCacheItem
     public long ChunkSize { get; set; } = 0;
     public string Mimetype { get; set; } = default!;
     public string Extension { get; set; } = default!;
+    public Guid FolderId { get; set; } = default!;
+    public DateTime UploadStartTime { get; set; } = default!;
+
+    /// <summary>
+    /// 用于自动清理临时文件夹时判断是否过期，以便给大文件留足够续传时间
+    /// </summary>
+    public DateTimeOffset ExpirationTime { get; set; } = default!;
 
     public FileMetadataCacheItem()
     {
@@ -25,6 +32,7 @@ public class FileMetadataCacheItem
         ChunkSize = chunkSize;
         Mimetype = mimetype;
         Extension = extension;
+        UploadStartTime = DateTime.UtcNow;
     }
 
     public int TotalChunks => (int)Math.Ceiling((double)Size / ChunkSize);

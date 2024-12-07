@@ -1,9 +1,12 @@
 ﻿using Generic.Abp.Extensions.Exceptions;
 using Generic.Abp.FileManagement.Exceptions;
+using Generic.Abp.FileManagement.Settings;
+using Medallion.Threading;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Generic.Abp.FileManagement.Settings;
+using Volo.Abp;
 
 namespace Generic.Abp.FileManagement.Resources;
 
@@ -23,6 +26,70 @@ public partial class ResourceManager
         return entity;
     }
 
+
+    private async Task UpdateUsedStorageAsync(Resource entity, long addSize)
+    {
+        // 获取分布式锁
+        var lockKey = await GetUpdateUsedStorageLockNameAsync(entity.Id);
+        await using var distributedLock =
+            await DistributedLockProvider.TryAcquireLockAsync(lockKey, TimeSpan.FromSeconds(10));
+
+        if (distributedLock == null)
+        {
+            throw new AbpException($"Failed to acquire lock for {lockKey} used storage adjustment.");
+        }
+
+        try
+        {
+            // 更新实体的存储使用量
+            var currentUsedStorage = entity.GetUsedStorage();
+            entity.SetUsedStorage(currentUsedStorage + addSize);
+
+            // 使用事务确保更新操作的一致性
+            await Repository.UpdateAsync(entity);
+        }
+        catch (Exception ex)
+        {
+            // 记录详细的异常信息到日志系统
+            Logger.LogError(ex, "Error acquiring lock or updating used storage for resource {ResourceId}", entity.Id);
+            throw; // 重新抛出异常以保持方法的透明性
+        }
+    }
+
+    public virtual async Task IncreaseUsedStorageAsync(Resource entity, long addSize)
+    {
+        if (addSize <= 0)
+        {
+            return;
+        }
+
+        var currentUsedStorage = entity.GetUsedStorage();
+        var quota = entity.GetStorageQuota();
+
+        // 检查是否会超出配额
+        if (currentUsedStorage + addSize > quota)
+        {
+            throw new InsufficientStorageSpaceBusinessException(addSize, currentUsedStorage, quota);
+        }
+
+        await UpdateUsedStorageAsync(entity, addSize);
+    }
+
+    public virtual async Task DecreaseUsedStorageAsync(Resource entity, long subtractSize)
+    {
+        if (subtractSize < 0)
+        {
+            throw new ArgumentException("Subtract size cannot be negative.", nameof(subtractSize));
+        }
+
+        await UpdateUsedStorageAsync(entity, -subtractSize);
+    }
+
+    protected virtual Task<string> GetUpdateUsedStorageLockNameAsync(Guid id)
+    {
+        return Task.FromResult($"Lock:FileManagement:Folder:UpdateUsedStorage:{id}");
+    }
+
     public virtual async Task<Resource> CreateFolderAsync(string name, Guid parentId, string? allowFileTypes,
         string? quota, string? maxFileSize, Guid? tenantId = null)
     {
@@ -30,21 +97,6 @@ public partial class ResourceManager
 
         var entity = new Resource(GuidGenerator.Create(), name, ResourceType.Folder, false, tenantId);
         entity.MoveTo(parentId);
-        // if (!string.IsNullOrEmpty(allowFileTypes))
-        // {
-        //     entity.SetAllowedFileTypes(allowFileTypes);
-        // }
-        //
-        // if (!string.IsNullOrEmpty(quota))
-        // {
-        //     entity.SetQuota(quota);
-        // }
-        //
-        // if (!string.IsNullOrEmpty(maxFileSize))
-        // {
-        //     entity.SetMaxFileSize(maxFileSize);
-        // }
-
         await CreateAsync(entity);
         return entity;
     }
@@ -67,20 +119,6 @@ public partial class ResourceManager
 
 
         entity.Rename(name);
-        // if (!string.IsNullOrEmpty(allowFileTypes))
-        // {
-        //     entity.SetAllowedFileTypes(allowFileTypes);
-        // }
-        //
-        // if (!string.IsNullOrEmpty(quota))
-        // {
-        //     entity.SetQuota(quota);
-        // }
-        //
-        // if (!string.IsNullOrEmpty(maxFileSize))
-        // {
-        //     entity.SetMaxFileSize(maxFileSize);
-        // }
 
         await UpdateAsync(entity);
         return entity;

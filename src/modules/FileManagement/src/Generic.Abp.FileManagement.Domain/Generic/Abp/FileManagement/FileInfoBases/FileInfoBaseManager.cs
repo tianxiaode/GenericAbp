@@ -1,14 +1,13 @@
 ﻿using Generic.Abp.Extensions.Entities;
 using Generic.Abp.Extensions.Exceptions;
 using Generic.Abp.Extensions.RemoteContents;
+using Generic.Abp.FileManagement.Exceptions;
 using Generic.Abp.FileManagement.Localization;
 using Microsoft.Extensions.Localization;
 using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Generic.Abp.FileManagement.Exceptions;
-using Medallion.Threading;
 using Volo.Abp.Caching;
 using Volo.Abp.DistributedLocking;
 using Volo.Abp.SettingManagement;
@@ -24,6 +23,7 @@ public partial class FileInfoBaseManager(
     ICancellationTokenProvider cancellationTokenProvider,
     IDistributedCache<FileMetadataCacheItem, string> fileMetadataCache,
     IDistributedCache<FileChunkStatusCacheItem, string> fileChunkStatusCache,
+    IDistributedCache<FolderBalanceOfQuotaCacheItem, string> folderBalanceOfQuotaCache,
     IAbpDistributedLock distributedLock)
     : EntityManagerBase<FileInfoBase, IFileInfoBaseRepository, FileManagementResource>(repository, localizer,
         cancellationTokenProvider)
@@ -33,6 +33,9 @@ public partial class FileInfoBaseManager(
 
     protected IDistributedCache<FileChunkStatusCacheItem, string> FileChunkStatusCache { get; } =
         fileChunkStatusCache;
+
+    protected IDistributedCache<FolderBalanceOfQuotaCacheItem, string> FolderBalanceOfQuotaCache { get; } =
+        folderBalanceOfQuotaCache;
 
     protected IAbpDistributedLock DistributedLock { get; } = distributedLock;
 

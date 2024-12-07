@@ -85,6 +85,11 @@ public class VirtualPath : AuditedAggregateRoot<Guid>, IMultiTenant
 
     public virtual void SetDeadline(DateTime? startTime, DateTime? endTime)
     {
+        if (startTime > DateTime.UtcNow)
+        {
+            IsAccessible = false;
+        }
+
         StartTime = startTime;
         EndTime = endTime;
     }

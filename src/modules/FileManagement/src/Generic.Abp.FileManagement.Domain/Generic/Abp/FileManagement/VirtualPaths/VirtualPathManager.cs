@@ -48,14 +48,19 @@ public class VirtualPathManager(
         return base.UpdateAsync(entity, autoSave);
     }
 
-    public virtual Task CheckIsAccessibleAsync(VirtualPath entity)
+    public virtual async Task CheckIsAccessibleAsync(VirtualPath entity)
     {
         if (!entity.IsAccessible || entity.Resource == null)
         {
             throw new EntityNotFoundBusinessException(L["VirtualPath"], entity.Name);
         }
 
-        return Task.CompletedTask;
+        if (entity.StartTime > DateTime.UtcNow || entity.EndTime < DateTime.UtcNow)
+        {
+            entity.SetIsAccessible(false);
+            await UpdateAsync(entity);
+            throw new EntityNotFoundBusinessException(L["VirtualPath"], entity.Name);
+        }
     }
 
     public override async Task ValidateAsync(VirtualPath entity)

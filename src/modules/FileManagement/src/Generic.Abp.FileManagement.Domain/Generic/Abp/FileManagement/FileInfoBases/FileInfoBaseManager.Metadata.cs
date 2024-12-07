@@ -3,6 +3,7 @@ using System;
 using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Generic.Abp.FileManagement.Exceptions;
 using Microsoft.Extensions.Logging;
 
 namespace Generic.Abp.FileManagement.FileInfoBases;
@@ -30,6 +31,8 @@ public partial class FileInfoBaseManager
         return cacheItem;
     }
 
+    private const int BaseAutoCleanupTime = 2; // hours
+
     public virtual async Task<FileMetadataCacheItem> GetOrCreateMetadataAsync(string hash, long size, long chunkSize,
         string filename, string mimeType, string extension)
     {
@@ -47,6 +50,9 @@ public partial class FileInfoBaseManager
             }
 
             metadata = new FileMetadataCacheItem(hash, filename, size, chunkSize, filename, extension);
+            //size每100MB添加1小时
+            var cleanupTime = BaseAutoCleanupTime + (int)Math.Ceiling(size / 100000000.0);
+            metadata.ExpirationTime = DateTimeOffset.Now.AddHours(cleanupTime);
             await JsonSerializer.SerializeAsync(stream, metadata);
 
             return metadata;
@@ -56,6 +62,32 @@ public partial class FileInfoBaseManager
             Logger.LogError(e, "Error while creating metadata for hash: {Hash}", hash);
             throw;
         }
+    }
+
+    protected virtual async Task AddFileMetadataCacheAsync(string hash, long size, long chunkSize, string filename,
+        string mimeType, string extension)
+    {
+        var cacheItem = new FileMetadataCacheItem(hash, filename, size, chunkSize, filename, extension);
+        var cacheKey = await GetFileMetadataCacheNameAsync(hash);
+        await FileMetadataCache.SetAsync(cacheKey, cacheItem);
+    }
+
+    protected virtual async Task<FileMetadataCacheItem> GetFileMetadataCacheAsync(string hash)
+    {
+        var cacheKey = await GetFileMetadataCacheNameAsync(hash);
+        var metadata = await FileMetadataCache.GetAsync(cacheKey, token: CancellationToken);
+        if (metadata == null)
+        {
+            throw new MetadataNotFoundBusinessException(hash);
+        }
+
+        return metadata;
+    }
+
+    protected virtual async Task RemoveFileMetadataCacheAsync(string hash)
+    {
+        var cacheKey = await GetFileMetadataCacheNameAsync(hash);
+        await FileMetadataCache.RemoveAsync(cacheKey, token: CancellationToken);
     }
 
     protected virtual Task<string> GetMetadataFileNameAsync(string hash)

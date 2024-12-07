@@ -1,14 +1,12 @@
-﻿using Generic.Abp.Extensions.EntityFrameworkCore.Trees;
+﻿using Generic.Abp.Extensions.Entities.IncludeOptions;
+using Generic.Abp.Extensions.EntityFrameworkCore.Trees;
 using Generic.Abp.FileManagement.Resources;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
-using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
-using Generic.Abp.Extensions.Entities.IncludeOptions;
 using Volo.Abp.EntityFrameworkCore;
 
 namespace Generic.Abp.FileManagement.EntityFrameworkCore.Resources;
@@ -26,6 +24,13 @@ public partial class ResourceRepository(IDbContextProvider<IFileManagementDbCont
             .Where(m => code.StartsWith(m.Code) && m.HasPermissions) // 匹配所有父级和当前资源
             .OrderByDescending(r => r.Code) // 从最近到最远排序
             .FirstOrDefaultAsync(cancellationToken);
+    }
+
+    public virtual async Task<long> SumSizeByCodeAsync(string code)
+    {
+        var dbSet = await GetDbSetAsync();
+        return await dbSet.Where(m => m.Code.StartsWith(code + '.') && m.Type == ResourceType.File)
+            .SumAsync(m => m.FileSize) ?? 0;
     }
 
 

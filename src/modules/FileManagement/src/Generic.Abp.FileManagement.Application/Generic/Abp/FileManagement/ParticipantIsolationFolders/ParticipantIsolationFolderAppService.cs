@@ -66,8 +66,9 @@ public class ParticipantIsolationFolderAppService(
     {
         var folder = await GetFolderAsync(folderName);
         await CheckFolderConfigurationAsync(folder, input.Size);
+        //需要的话，调用ResourceManager.IncreaseUsedStorageAsync来控制上传空间的使用情况
         return await FileInfoBaseManager.CheckAsync(input.Hash, input.Filename, folder.GetAllowedFileTypes(),
-            input.Size, folder.GetMaxFileSize(), input.ChunkHash, input.ChunkSize, input.FirstChunk, long.MaxValue, 0);
+            input.Size, folder.GetMaxFileSize(), input.ChunkHash, input.ChunkSize, input.FirstChunk, folder.Id);
     }
 
     [Authorize]
@@ -79,31 +80,67 @@ public class ParticipantIsolationFolderAppService(
             folder.GetAllowedFileTypes());
     }
 
-    public virtual async Task<FileDto> MergeAsync(string folderName, FileMergeInput input)
+    [Authorize]
+    public virtual async Task<ResourceBaseDto> MergeAsync(string folderName, FileMergeInput input)
     {
         var folder = await GetFolderAsync(folderName);
         await CheckFolderConfigurationAsync(folder);
-        var fileInfoBase = await FileInfoBaseManager.MergeAsync(input.Hash, input.Filename, input.TotalChunks,
-            folder.GetAllowedFileTypes(), folder.GetMaxFileSize(), long.MaxValue, long.MaxValue);
-        throw new NotImplementedException();
-        // var folder = await CheckFolderPermission(input.FolderId, canWrite: true);
-        // ;
-        // var fileInfoBase = await FileInfoBaseManager.MergeAsync(input.Hash, input.TotalChunks,
-        //     await folder.AllowedFileTypes.GetFileTypesAsync(), folder.MaxFileSize,
-        //     folder.StorageQuota, folder.UsedStorage);
-        // var entity = new File(GuidGenerator.Create(), folder.Id, input.Hash, CurrentTenant.Id);
-        // var filename = await FileManager.GetFileNameAsync(folder.Id, input.Filename);
-        // entity.Rename(filename);
-        // entity.SetFileInfoBase(fileInfoBase);
-        // await FileManager.CreateAsync(entity);
-        // return ObjectMapper.Map<File, FileDto>(entity);
+        var (metadata, fileInfoBase) =
+            await FileInfoBaseManager.MergeAsync(input.Hash, folder.GetAllowedFileTypes(), CurrentTenant.Id);
+        var entity = new Resource(GuidGenerator.Create(), metadata.Filename, ResourceType.File, false, CurrentUser.Id,
+            CurrentTenant.Id);
+        entity.MoveTo(folder.Id);
+        entity.SetFileInfoBase(fileInfoBase.Id);
+        entity.SetFileExtension(metadata.Extension);
+        entity.SetFileSize(metadata.Size);
+        return ObjectMapper.Map<Resource, ResourceBaseDto>(entity);
+    }
+
+    [Authorize]
+    public virtual async Task DeleteAsync(string folderName, Guid id)
+    {
+        var folder = await GetFolderAsync(folderName);
+        var canDelete = await ResourceManager.CanDeleteAsync(folder, CurrentUser.Id);
+        var entity = await ResourceManager.GetAsync(id, folder.Id);
+        if (entity.Type != ResourceType.File)
+        {
+            throw new EntityNotFoundBusinessException(L["File"], id);
+        }
+
+        if (canDelete)
+        {
+            await ResourceManager.DeleteAsync(entity);
+            return;
+        }
+
+        //用户没有删除此文件权限，只能返回属于自己的资源
+        if (entity.OwnerId != CurrentUser.Id)
+        {
+            throw new EntityNotFoundBusinessException(L["File"], id);
+        }
+
+        await ResourceManager.DeleteAsync(entity);
     }
 
     protected virtual async Task<Resource> GetFolderAsync(string folderName)
     {
         var root = await ResourceManager.GetParticipantIsolationsRootFolderAsync(CurrentTenant.Id);
         var folder = await ResourceManager.FindFolderByNameAsync(root.Id, folderName);
-        return folder;
+        var endTime = folder.GetEndTime();
+        var startTime = folder.GetStartTime();
+        if (!folder.IsAccessible)
+        {
+            throw new EntityNotFoundBusinessException(L["Folder"], folderName);
+        }
+
+        if (!(startTime > DateTime.UtcNow) && !(endTime < DateTime.UtcNow))
+        {
+            return folder;
+        }
+
+        folder.SetIsAccessible(false);
+        await ResourceManager.UpdateAsync(folder);
+        throw new EntityNotFoundBusinessException(L["Folder"], folderName);
     }
 
     protected virtual async Task CheckFolderConfigurationAsync(Resource folder, long? fileSize = null)

@@ -21,24 +21,26 @@ public partial class FileInfoBaseManager
     /// </summary>
     public virtual async Task<ICheckFileResult> CheckAsync(string hash, string filename,
         string allowFileTypes, long size, long allowSize, string chunkHash, int chunkSize, byte[] firstChunkBytes,
-        long storageQuota, long usedStorage)
+        Guid folderId)
     {
         // 1. 验证输入参数
         await ValidateInputAsync(filename, allowFileTypes, size, allowSize, chunkSize,
-            firstChunkBytes.Length, chunkHash, firstChunkBytes, 0, storageQuota, usedStorage);
+            firstChunkBytes.Length, chunkHash, firstChunkBytes, 0, folderId);
 
         // 2. 检查文件是否已存在且是否允许上传的文件类型
         var fileInfoBase = await GetAndCheckIsAllowedAsync(hash, allowFileTypes);
         var result = new FileCheckResult(hash);
         if (fileInfoBase != null)
         {
+            //必须创建一个缓存键，为后续合并提供相应元数据
+            await AddFileMetadataCacheAsync(hash, fileInfoBase.Size, chunkSize, filename, fileInfoBase.MimeType,
+                fileInfoBase.Extension);
             result.SetFile(fileInfoBase);
             return result;
         }
 
         // 3. 检查文件类型
-        var filetype =
-            await DetectFileTypeFromFirstChunkAsync(firstChunkBytes, allowFileTypes, await GetTempPathAsync(hash));
+        var filetype = await DetectFileTypeFromFirstChunkAsync(firstChunkBytes, allowFileTypes);
 
         await using var handle =
             await DistributedLock.TryAcquireAsync(await GetDistributedLockNameAsync(hash));
@@ -52,6 +54,7 @@ public partial class FileInfoBaseManager
             await GetFileMetadataCacheAsync(hash, size, chunkSize, filename, filetype.Mime, filetype.Extension);
         var totalChunks = metadata.TotalChunks;
         await SaveChunkAsync(hash, 0, firstChunkBytes, chunkHash, totalChunks);
+
         // 5. 记录分片上传状态（并发检查文件是否存在）
         result.Uploaded = (await GetCheckChunkStatusAsync(hash, totalChunks)).ChunkStatuses;
         result.Uploaded[0] = true;
@@ -68,6 +71,12 @@ public partial class FileInfoBaseManager
         // 再次检查文件是否已存在且是否允许上传的文件类型
         var exists = await GetAndCheckIsAllowedAsync(hash, allowFileTypes);
         if (exists != null)
+        {
+            return;
+        }
+
+        //通过判断md5目录是否存在hash_i文件来判断是否已上传过该分片
+        if (await ValidateChunkUploadedAsync(hash, index))
         {
             return;
         }
@@ -96,7 +105,14 @@ public partial class FileInfoBaseManager
         }
     }
 
-    public async Task<FileType> DetectFileTypeFromFirstChunkAsync(byte[] chunkBytes, string allowedTypes, string dir)
+    protected virtual async Task<bool> ValidateChunkUploadedAsync(string hash, int index)
+    {
+        var chunkDir = await GetTempPathAsync(hash);
+        var filePath = Path.Combine(chunkDir, $"{hash}_{index}");
+        return File.Exists(filePath);
+    }
+
+    public async Task<FileType> DetectFileTypeFromFirstChunkAsync(byte[] chunkBytes, string allowedTypes)
     {
         // 检测文件类型
         var fileType = await chunkBytes.GetFileTypeAsync(await allowedTypes.GetFileTypesAsync());
@@ -111,9 +127,8 @@ public partial class FileInfoBaseManager
     }
 
 
-    protected virtual Task ValidateInputAsync(string filename, string allowFileTypes, long size, long allowSize,
-        long chunkSize, long firsChunkSize, string chunkHash, byte[] chunkBytes, int index, long storageQuota,
-        long usedStorage)
+    protected virtual async Task ValidateInputAsync(string filename, string allowFileTypes, long size, long allowSize,
+        long chunkSize, long firsChunkSize, string chunkHash, byte[] chunkBytes, int index, Guid folderId)
     {
         var fileType = allowFileTypes.Split(",");
         if (!fileType.Contains(Path.GetExtension(filename)))
@@ -126,10 +141,13 @@ public partial class FileInfoBaseManager
             throw new FileSizeOutOfRangeBusinessException(allowSize, size);
         }
 
-        if (size > storageQuota - usedStorage)
-        {
-            throw new InsufficientStorageSpaceBusinessException(size, usedStorage, storageQuota);
-        }
+        //TODO: 验证存储空间已调整到api入口在checkAsync前进行，避免计算复杂化
+        // var balanceItem = await GetFolderBalanceOfQuotaCacheItemAsync(folderId, storageQuota, usedStorage);
+        //
+        // if (size > balanceItem.Balance)
+        // {
+        //     throw new InsufficientStorageSpaceBusinessException(size, usedStorage, storageQuota);
+        // }
 
         if (chunkSize is < MinChunkSize or > MaxChunkSize)
         {
@@ -141,7 +159,7 @@ public partial class FileInfoBaseManager
             throw new InvalidChunkSizeBusinessException(0, chunkSize, firsChunkSize);
         }
 
-        return Task.CompletedTask;
+        await AdjustFolderQuotaWithLockAsync(folderId, size);
     }
 
     protected virtual async Task<int> ValidateChunkAsync(string hash, int chunkIndex, byte[] chunkBytes,
@@ -149,24 +167,32 @@ public partial class FileInfoBaseManager
     {
         var metadata = await GetFileMetadataCacheAsync(hash, 0, 0, "", "", "");
         var chunkSize = chunkBytes.Length;
+        // 验证分片大小
         if (metadata.ChunkSize == 0)
         {
             throw new MetadataNotFoundBusinessException(hash);
         }
 
-        if (chunkIndex >= metadata.TotalChunks)
+        // 验证分片索引是否在合法范围内
+        if (chunkIndex < 0 || chunkIndex >= metadata.TotalChunks)
         {
             throw new InvalidChunkIndexBusinessException(metadata.TotalChunks, chunkIndex);
         }
 
+        // 验证最后一个分片的大小是否小于或等于分片大小
         if ((chunkIndex == metadata.TotalChunks - 1 && metadata.ChunkSize < chunkSize))
         {
             throw new InvalidChunkSizeBusinessException(0, metadata.ChunkSize, chunkSize);
         }
 
-        if (chunkIndex < metadata.TotalChunks && metadata.ChunkSize != chunkSize)
+        // 对于最后一个分片，允许其大小小于或等于预期大小
+        var isLastChunk = chunkIndex == metadata.TotalChunks - 1;
+        var expectedChunkSize = isLastChunk ? metadata.Size - metadata.ChunkSize * chunkIndex : metadata.ChunkSize;
+
+        // 验证分片大小是否与预期相符
+        if (chunkSize != expectedChunkSize)
         {
-            throw new InvalidChunkSizeBusinessException(metadata.ChunkSize, metadata.ChunkSize, chunkSize);
+            throw new InvalidChunkSizeBusinessException(expectedChunkSize, expectedChunkSize, chunkSize);
         }
 
         return metadata.TotalChunks;
@@ -176,26 +202,17 @@ public partial class FileInfoBaseManager
     protected virtual async Task SaveChunkAsync(string hash, int index, byte[] chunkBytes, string expectedChunkHash,
         int totalChunks)
     {
-        var chunkFilePath = string.Empty;
-        var md5FilePath = string.Empty;
+        var chunkDir = await GetAndCheckTempPathAsync(hash);
+        var chunkFilePath = Path.Combine(chunkDir, $"{hash}_{index}");
 
         try
         {
             // 计算分片的MD5值并立即验证
-            var md5Hash = await ComputeAndValidateChunkHashAsync(chunkBytes, expectedChunkHash, index);
-
-            // 保存分片到临时目录下的chunks下
-            var (chunkDir, chunkMd5Dir) = await GetChunkPathAsync(hash);
-            chunkFilePath = Path.Combine(chunkDir, $"{hash}_{index}");
+            await ValidateChunkHashAsync(chunkBytes, expectedChunkHash, index);
 
             // 使用异步方式写入文件
             await File.WriteAllBytesAsync(chunkFilePath, chunkBytes);
 
-            // 保存分片的MD5值到临时目录下的md5下，以二进制格式保存
-            md5FilePath = Path.Combine(chunkMd5Dir, $"{hash}_{index}");
-
-            // 直接将MD5哈希值作为字节数组写入文件
-            await File.WriteAllBytesAsync(md5FilePath, md5Hash);
             await UpdateChunkStatusCacheAsync(hash, index, totalChunks);
         }
         catch (Exception e)
@@ -213,27 +230,19 @@ public partial class FileInfoBaseManager
                 }
             }
 
-            if (string.IsNullOrEmpty(md5FilePath) || !File.Exists(md5FilePath))
-            {
-                throw;
-            }
-
-            try
-            {
-                File.Delete(md5FilePath);
-            }
-            catch (IOException ioEx)
-            {
-                Logger.LogError(ioEx, "Failed to delete MD5 file: {md5FilePath}", md5FilePath);
-            }
-
+            Logger.LogError(e, "Error while saving chunk for hash: {Hash}, Index: {Index}", hash, index);
             throw;
         }
     }
 
-    protected virtual async Task<byte[]> ComputeAndValidateChunkHashAsync(byte[] chunkBytes, string expectedChunkHash,
+    protected virtual async Task ValidateChunkHashAsync(byte[] chunkBytes, string expectedChunkHash,
         int index)
     {
+        if (chunkBytes.Length == 0)
+        {
+            throw new InvalidChunkSizeBusinessException(MinChunkSize, MaxChunkSize, 0);
+        }
+
         using var stream = new MemoryStream(chunkBytes);
         var buffer = new byte[16]; // MD5 produces a 128-bit hash, or 16 bytes.
 
@@ -251,8 +260,6 @@ public partial class FileInfoBaseManager
         {
             throw new InvalidChunkHashBusinessException(index, actualHashHex, expectedChunkHash);
         }
-
-        return buffer;
     }
 
     protected virtual async Task<FileChunkStatusCacheItem> GetCheckChunkStatusAsync(string hash, int totalChunks)
@@ -289,18 +296,16 @@ public partial class FileInfoBaseManager
     protected virtual async Task<FileChunkStatusCacheItem> CheckChunkStatusAsync(string hash, int totalChunks)
     {
         var result = new FileChunkStatusCacheItem();
-        // 定位 md5 目录
-        var md5Dir = Path.Combine(await GetTempPathAsync(hash), "md5");
 
-        // 如果 md5 目录不存在，则所有分片都未完成
-        if (!Directory.Exists(md5Dir))
+        var path = await GetAndCheckTempPathAsync(hash);
+
+        if (!Directory.Exists(path))
         {
             result.ChunkStatuses = Enumerable.Range(0, totalChunks).ToDictionary(i => i, _ => false);
             return result;
         }
 
-        // 获取所有 MD5 文件 (hash_i_md5Value 格式)
-        var md5Files = Directory.EnumerateFiles(md5Dir)
+        var files = Directory.EnumerateFiles(path)
             .Select(Path.GetFileName)
             .ToList();
 
@@ -308,8 +313,8 @@ public partial class FileInfoBaseManager
         var chunkStatus = new Dictionary<int, bool>();
         foreach (var i in Enumerable.Range(0, totalChunks))
         {
-            var expectedFilePrefix = $"{hash}_{i}_";
-            chunkStatus[i] = md5Files.Any(file => !file.IsNullOrEmpty() && file.StartsWith(expectedFilePrefix));
+            var expectedFilePrefix = $"{hash}_{i}";
+            chunkStatus[i] = files.Any(file => file == expectedFilePrefix);
         }
 
         result.ChunkStatuses = chunkStatus;
@@ -324,10 +329,5 @@ public partial class FileInfoBaseManager
     protected virtual Task<string> GetDistributedLockNameAsync(string hash, int chunkIndex = 0)
     {
         return Task.FromResult($"FileManagement_FileInfoBaseManager_DistributedLock_{hash}_{chunkIndex}_lock");
-    }
-
-    protected virtual async Task<(string, string)> GetChunkPathAsync(string hash)
-    {
-        return (await GetAndCheckTempPathAsync(hash, "chunks"), await GetAndCheckTempPathAsync(hash, "md5"));
     }
 }
