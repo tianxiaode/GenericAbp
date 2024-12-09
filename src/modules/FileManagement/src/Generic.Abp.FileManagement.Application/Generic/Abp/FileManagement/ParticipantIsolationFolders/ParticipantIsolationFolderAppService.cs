@@ -119,7 +119,7 @@ public class ParticipantIsolationFolderAppService(
             throw new EntityNotFoundBusinessException(L["File"], id);
         }
 
-        await ResourceManager.DeleteAsync(entity);
+        await ResourceManager.DeleteManyAsync([entity.Id], folder.Id, CurrentTenant.Id, false);
     }
 
     protected virtual async Task<Resource> GetFolderAsync(string folderName)

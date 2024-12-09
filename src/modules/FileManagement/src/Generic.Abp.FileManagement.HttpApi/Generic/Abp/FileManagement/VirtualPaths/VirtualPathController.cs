@@ -5,6 +5,7 @@ using Generic.Abp.FileManagement.VirtualPaths.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
+using Generic.Abp.Extensions.Entities.Dtos;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 
@@ -59,8 +60,8 @@ public class VirtualPathController(IVirtualPathAppService appService) : FileMana
     }
 
     [HttpDelete]
-    public Task DeleteAsync(Guid id)
+    public Task DeleteAsync([FromBody] DeleteManyDto input)
     {
-        return AppService.DeleteAsync(id);
+        return AppService.DeleteAsync(input);
     }
 }

@@ -5,11 +5,13 @@ using Generic.Abp.FileManagement.Localization;
 using Generic.Abp.FileManagement.Settings;
 using Microsoft.Extensions.Localization;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Generic.Abp.FileManagement.Events;
 using Medallion.Threading;
+using Microsoft.Extensions.Logging;
 using Volo.Abp.Caching;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.EventBus.Distributed;
@@ -47,40 +49,21 @@ public partial class ResourceManager(
         return entity;
     }
 
-    public override Task DeleteAsync(Resource entity, bool autoSave = true)
+    public virtual async Task DeleteManyAsync(List<Guid> ids, Guid parentId,
+        Guid? tenantId = null, bool needUpdateUsedStorage = true)
     {
-        if (entity.Type == ResourceType.Folder)
+        await base.DeleteManyAsync(ids);
+        if (needUpdateUsedStorage)
         {
-            ValidateIsStaticFolder(entity);
+            await DistributedEventBus.PublishAsync(new ResourceDeletedEto()
+            {
+                ResourceIds = ids,
+                ParentId = parentId,
+                TenantId = CurrentTenant.Id,
+            });
         }
-
-        DistributedEventBus.PublishAsync(new ResourceDeletedEto()
-        {
-            ResourceId = entity.Id,
-            TenantId = entity.TenantId,
-        });
-        return base.DeleteAsync(entity, autoSave);
     }
 
-    public virtual async Task<long> GetSumSizeAsync(string code)
-    {
-        return await Repository.SumSizeByCodeAsync(code);
-    }
-
-    protected override Task<Resource> CloneAsync(Resource source)
-    {
-        var entity = new Resource(GuidGenerator.Create(), source.Name, ResourceType.Folder, source.IsStatic,
-            source.TenantId);
-        entity.SetFileInfoBase(source.FileInfoBaseId);
-
-        //不复制配置，否则会导致配置副作用，譬如扩容
-        entity.SetHasConfiguration(false);
-
-        //不复制权限，否则会导致权限副作用，譬如扩权
-        //entity.SetPermissions(source.Permissions);
-        entity.SetHasPermissions(false);
-        return Task.FromResult(entity);
-    }
 
     public override Task<Expression<Func<Resource, bool>>> BuildPredicateExpressionAsync(BaseQueryParams queryParams)
     {

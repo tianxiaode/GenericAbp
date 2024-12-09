@@ -14,25 +14,26 @@ public class ResourceDeletedEventHandler(ResourceManager resourceManager)
 
     public virtual async Task HandleEventAsync(ResourceDeletedEto eventData)
     {
-        var entity = await ResourceManager.GetAsync(eventData.ResourceId);
-        if (entity.Type == ResourceType.File)
-        {
-            await ResourceManager.DecreaseUsedStorageAsync(entity, entity.FileSize ?? 0);
-            return;
-        }
-
-        if (entity.Type != ResourceType.Folder)
-        {
-            return;
-        }
-
-        var size = await ResourceManager.GetSumSizeAsync(entity.Code);
-
-        var parents = await ResourceManager.GetListAsync(m => entity.Code.StartsWith(m.Code) && m.HasConfiguration);
-
-        foreach (var parent in parents)
-        {
-            await ResourceManager.DecreaseUsedStorageAsync(parent, size);
-        }
+        var ids = eventData.ResourceIds;
+        // var entity = await ResourceManager.GetAsync(eventData.ResourceId);
+        // if (entity.Type == ResourceType.File)
+        // {
+        //     await ResourceManager.DecreaseUsedStorageAsync(entity, entity.FileSize ?? 0);
+        //     return;
+        // }
+        //
+        // if (entity.Type != ResourceType.Folder)
+        // {
+        //     return;
+        // }
+        //
+        // var size = await ResourceManager.GetSumSizeAsync(entity.Code);
+        //
+        // var parents = await ResourceManager.GetListAsync(m => entity.Code.StartsWith(m.Code) && m.HasConfiguration);
+        //
+        // foreach (var parent in parents)
+        // {
+        //     await ResourceManager.DecreaseUsedStorageAsync(parent, size);
+        // }
     }
 }

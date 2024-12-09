@@ -3,6 +3,7 @@ using Generic.Abp.FileManagement.Dtos;
 using Generic.Abp.FileManagement.VirtualPaths.Dtos;
 using System;
 using System.Threading.Tasks;
+using Generic.Abp.Extensions.Entities.Dtos;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 
@@ -16,5 +17,5 @@ public interface IVirtualPathAppService : IApplicationService
     Task<PagedResultDto<VirtualPathDto>> GetListAsync(VirtualPathGetListInput input);
     Task<VirtualPathDto> CreateAsync(VirtualPathCreateDto input);
     Task<VirtualPathDto> UpdateAsync(Guid id, VirtualPathUpdateDto input);
-    Task DeleteAsync(Guid id);
+    Task DeleteAsync(DeleteManyDto input);
 }

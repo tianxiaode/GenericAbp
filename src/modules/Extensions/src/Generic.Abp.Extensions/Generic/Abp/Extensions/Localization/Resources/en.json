@@ -17,6 +17,8 @@
     "Generic.Abp.BusinessException:000012": "The parent could not be determined.",
     "Generic.Abp.BusinessException:000013": "Static {Name} '{Value}' cannot be updated or deleted.",
     "Generic.Abp.BusinessException:000014": "Can't move or copy a node to itself.",
-    "Generic.Abp.BusinessException:000015": "Can't move to child node."
+    "Generic.Abp.BusinessException:000015": "Can't move to child node.",
+    "Generic.Abp.BusinessException:000016": "Causes circular references that are not allowed to be moved or copied",
+    "Generic.Abp.BusinessException:000017": "Static {Name} '{Value}' cannot be moved."
   }
 }

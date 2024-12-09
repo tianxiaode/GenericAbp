@@ -3,10 +3,12 @@ using Generic.Abp.Extensions.EntityFrameworkCore.Trees;
 using Generic.Abp.FileManagement.Resources;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Threading;
 using System.Threading.Tasks;
+using Generic.Abp.FileManagement.Exceptions;
 using Volo.Abp.EntityFrameworkCore;
 
 namespace Generic.Abp.FileManagement.EntityFrameworkCore.Resources;
@@ -26,11 +28,52 @@ public partial class ResourceRepository(IDbContextProvider<IFileManagementDbCont
             .FirstOrDefaultAsync(cancellationToken);
     }
 
-    public virtual async Task<long> SumSizeByCodeAsync(string code)
+    public virtual async Task<long> SumSizeByCodeAsync(string code, List<Guid> ids,
+        CancellationToken cancellationToken = default)
     {
         var dbSet = await GetDbSetAsync();
-        return await dbSet.Where(m => m.Code.StartsWith(code + '.') && m.Type == ResourceType.File)
-            .SumAsync(m => m.FileSize) ?? 0;
+        if (ids.Count == 0)
+        {
+            return await dbSet.Where(m => m.Code.StartsWith(code + '.') && m.Type == ResourceType.File)
+                .SumAsync(m => m.FileSize, cancellationToken) ?? 0;
+        }
+
+        // 查询条件 1：直接属于 `ids` 的文件
+        var directFilesSize = await dbSet
+            .Where(m => m.Code.StartsWith(code) && m.Type == ResourceType.File && ids.Contains(m.Id))
+            .SumAsync(m => m.FileSize, cancellationToken) ?? 0;
+
+        // 查询条件 2：属于 `childrenFolderCodes` 子路径的文件
+        var childrenFolderCodes = await dbSet
+            .Where(m => m.Code.StartsWith(code) && ids.Contains(m.Id))
+            .Select(m => m.Code)
+            .ToListAsync(cancellationToken);
+
+        var childrenFilesSize = await dbSet
+            .Where(m => m.Code.StartsWith(code) && m.Type == ResourceType.File)
+            .Where(m => dbSet
+                .Where(folder =>
+                    folder.Code.StartsWith(code) && m.Type == ResourceType.Folder && ids.Contains(folder.Id))
+                .Select(folder => folder.Code)
+                .Any(folderCode => m.Code.StartsWith(folderCode + '.')))
+            .SumAsync(m => m.FileSize, cancellationToken) ?? 0;
+        // 合并两个部分的统计结果
+        return directFilesSize + childrenFilesSize;
+    }
+
+
+    public virtual async Task<Resource> GetParentWithConfiguration(string code,
+        CancellationToken cancellationToken = default)
+    {
+        var dbSet = await GetDbSetAsync();
+        var parent = await dbSet.Where(m => code.StartsWith(m.Code) && m.HasConfiguration)
+            .OrderByDescending(m => m.Code).FirstOrDefaultAsync(cancellationToken);
+        if (parent == null)
+        {
+            throw new FolderConfigurationNotSetBusinessException();
+        }
+
+        return parent;
     }
 
 

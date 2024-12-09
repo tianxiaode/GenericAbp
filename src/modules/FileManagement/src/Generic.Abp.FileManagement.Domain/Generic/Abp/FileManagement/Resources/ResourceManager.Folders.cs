@@ -124,40 +124,40 @@ public partial class ResourceManager
         return entity;
     }
 
-    public virtual async Task MoveFolderAsync(Guid id, Guid parentId)
-    {
-        if (parentId == id)
-        {
-            throw new CanNotMoveOrCopyToItselfBusinessException();
-        }
-
-        var entity = await Repository.GetAsync(id);
-
-        if (!await IsPublicFolderAsync(entity))
-        {
-            throw new OnlyMovePublicFolderBusinessException();
-        }
-
-        ValidateIsStaticFolder(entity);
-
-        var parent = await Repository.GetAsync(parentId);
-        if (parent.Type != ResourceType.Folder)
-        {
-            throw new EntityNotFoundBusinessException(L["Folder"], parentId);
-        }
-
-        if (parent.Code.StartsWith(entity.Code))
-        {
-            throw new CanNotMoveToChildBusinessException();
-        }
-
-        if (!await IsPublicFolderAsync(parent))
-        {
-            throw new OnlyMovePublicFolderBusinessException();
-        }
-
-        await MoveAsync(entity, parentId);
-    }
+    // public virtual async Task MoveFolderAsync(Guid id, Guid parentId)
+    // {
+    //     if (parentId == id)
+    //     {
+    //         throw new CanNotMoveOrCopyToItselfBusinessException();
+    //     }
+    //
+    //     var entity = await Repository.GetAsync(id);
+    //
+    //     if (!await IsPublicFolderAsync(entity))
+    //     {
+    //         throw new OnlyMovePublicFolderBusinessException();
+    //     }
+    //
+    //     ValidateIsStaticFolder(entity);
+    //
+    //     var parent = await Repository.GetAsync(parentId);
+    //     if (parent.Type != ResourceType.Folder)
+    //     {
+    //         throw new EntityNotFoundBusinessException(L["Folder"], parentId);
+    //     }
+    //
+    //     if (parent.Code.StartsWith(entity.Code))
+    //     {
+    //         throw new CanNotMoveToChildBusinessException();
+    //     }
+    //
+    //     if (!await IsPublicFolderAsync(parent))
+    //     {
+    //         throw new OnlyMovePublicFolderBusinessException();
+    //     }
+    //
+    //     await MoveAsync(entity, parentId);
+    // }
 
     public virtual async Task CopyFolderAsync(Guid id, Guid parentId)
     {

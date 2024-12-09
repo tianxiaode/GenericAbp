@@ -119,18 +119,14 @@ public class MenuAppService(
     [UnitOfWork(true)]
     public virtual async Task MoveAsync(Guid id, Guid? parentId)
     {
-        var entity = await MenuManager.GetAsync(id);
-        CheckIsStaticAsync(entity);
-        await MenuManager.IsAllowMoveOrCopyAsync(entity, parentId);
-        await MenuManager.MoveAsync(entity, parentId);
+        await MenuManager.MoveAsync([id], parentId);
     }
 
     [Authorize(MenuManagementPermissions.Menus.Update)]
     [UnitOfWork(true)]
     public virtual async Task CopyAsync(Guid id, Guid? parentId)
     {
-        await MenuManager.IsAllowMoveOrCopyAsync(await MenuManager.GetAsync(id), parentId);
-        await MenuManager.CopyAsync(id, parentId);
+        await MenuManager.CopyAsync([id], parentId);
     }
 
     [Authorize(MenuManagementPermissions.Menus.Delete)]

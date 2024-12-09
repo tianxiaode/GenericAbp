@@ -99,6 +99,37 @@ public class TreeRepository<TDbContext, TEntity>(
         }
     }
 
+    public virtual async Task<bool> HasParentChildConflictAsync(List<Guid> sourceIds,
+        CancellationToken cancellation = default)
+    {
+        var dbSet = await GetDbSetAsync();
+
+        // 查询是否存在父子关系冲突
+        var hasConflict = await dbSet
+            .Where(parent => sourceIds.Contains(parent.Id))
+            .AnyAsync(parent => dbSet
+                .Where(child => sourceIds.Contains(child.Id) && child.Id != parent.Id)
+                .Any(child => child.Code.StartsWith(parent.Code + ".")), cancellation);
+        return hasConflict;
+    }
+
+    public virtual async Task<bool> HasParentChildConflictAsync(List<Guid> sourceIds, string? targetCode,
+        CancellationToken cancellation = default)
+    {
+        var sources = (await GetDbSetAsync())
+            .Where(m => sourceIds.Contains(m.Id));
+        // 查询是否存在父子关系冲突
+        if (string.IsNullOrEmpty(targetCode))
+        {
+            return await sources.AnyAsync(m => m.ParentId == null, cancellation);
+        }
+
+        return await sources.AnyAsync(
+            m => targetCode.StartsWith(m.Code + "."),
+            cancellation);
+    }
+
+
     public virtual async Task<int> DeleteAllChildrenByCodeAsync(string code,
         CancellationToken cancellationToken = default)
     {

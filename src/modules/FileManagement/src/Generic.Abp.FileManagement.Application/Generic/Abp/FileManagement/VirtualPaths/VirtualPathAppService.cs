@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Generic.Abp.Extensions.Entities.Dtos;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Resource = Generic.Abp.FileManagement.Resources.Resource;
@@ -91,9 +92,9 @@ public class VirtualPathAppService(
     }
 
     [Authorize(FileManagementPermissions.VirtualPaths.Delete)]
-    public virtual async Task DeleteAsync(Guid id)
+    public virtual async Task DeleteAsync(DeleteManyDto input)
     {
-        await VirtualPathManager.DeleteAsync(id);
+        await VirtualPathManager.DeleteManyAsync(input.Ids);
     }
 
     protected virtual async Task UpdateByInputAsync(VirtualPath entity, VirtualPathCreateOrUpdateDto input)

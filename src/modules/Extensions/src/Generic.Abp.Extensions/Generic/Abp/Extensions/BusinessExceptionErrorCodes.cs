@@ -63,5 +63,12 @@
 
         public const string CanNotMoveOrCopyToItself = "Generic.Abp.BusinessException:000014";
         public const string CanNotMoveToChild = "Generic.Abp.BusinessException:000015";
+
+        public const string CausesCircularReferencesThatAreNotAllowedToBeMovedOrCopied =
+            "Generic.Abp.BusinessException:000016";
+
+        public const string StaticEntityCanNotBeMoved = "Generic.Abp.BusinessException:000017";
+        public const string StaticEntityCanNotBeMovedParamName = "Name";
+        public const string StaticEntityCanNotBeMovedParamValue = "Value";
     }
 }

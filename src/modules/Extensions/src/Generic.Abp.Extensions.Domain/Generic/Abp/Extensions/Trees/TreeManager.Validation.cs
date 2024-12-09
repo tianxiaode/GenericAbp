@@ -7,7 +7,7 @@ namespace Generic.Abp.Extensions.Trees;
 
 public abstract partial class TreeManager<TEntity, TRepository, TResource>
 {
-    public virtual async Task ValidateAsync(TEntity entity)
+    public override async Task ValidateAsync(TEntity entity)
     {
         if (await Repository.AnyAsync(m =>
                 m.ParentId == entity.ParentId && m.Id != entity.Id &&
@@ -16,6 +16,7 @@ public abstract partial class TreeManager<TEntity, TRepository, TResource>
             throw new DuplicateWarningBusinessException(L[nameof(TEntity)], entity.Name);
         }
     }
+
 
     public virtual async Task IsAllowMoveOrCopyAsync(TEntity entity, Guid? parentId)
     {
