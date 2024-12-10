@@ -70,5 +70,26 @@
         public const string StaticEntityCanNotBeMoved = "Generic.Abp.BusinessException:000017";
         public const string StaticEntityCanNotBeMovedParamName = "Name";
         public const string StaticEntityCanNotBeMovedParamValue = "Value";
+
+        public const string NoSelectedItemFound = "Generic.Abp.BusinessException:000018";
+
+        //不能将根目录移动到根目录。
+        public const string CanNotMoveRootToRoot = "Generic.Abp.BusinessException:000019";
+
+        //不能将节点移动到其子节点。
+        public const string CanNotMoveToChildNode = "Generic.Abp.BusinessException:000020";
+
+        //不能同时选择父及其子节点进行移动。
+        public const string CanNotMoveParentAndItsChildren = "Generic.Abp.BusinessException:000021";
+
+        //每次移动或复制的节点总数不能超过{Count}个
+        public const string CanNotMoveOrCopyMoreThanCountNodes = "Generic.Abp.BusinessException:000022";
+        public const string CanNotMoveOrCopyMoreThanCountNodesParamCount = "Count";
+        public const string CanNotMoveOrCopyMoreThanCountNodesParamCurrent = "CurrentCount";
+
+        //每次移动或复制的子节点数量不能超过{Count}个
+        public const string CanNotMoveOrCopyMoreThanCountChildNodes = "Generic.Abp.BusinessException:000023";
+        public const string CanNotMoveOrCopyMoreThanCountChildNodesParamCount = "Count";
+        public const string CanNotMoveOrCopyMoreThanCountChildNodesParamCurrent = "CurrentCount";
     }
 }

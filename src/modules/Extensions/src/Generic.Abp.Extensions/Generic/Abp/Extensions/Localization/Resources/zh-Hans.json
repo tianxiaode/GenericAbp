@@ -19,6 +19,7 @@
     "Generic.Abp.BusinessException:000014": "不能移动或复制到自身。",
     "Generic.Abp.BusinessException:000015": "不能移动到子节点。",
     "Generic.Abp.BusinessException:000016": "会导致循环引用  不能移动或复制。",
-    "Generic.Abp.BusinessException:000017": "静态{Name} '{Value}' 不能被移动。"
+    "Generic.Abp.BusinessException:000017": "静态{Name} '{Value}' 不能被移动。",
+    "Generic.Abp.BusinessException:000018": "没有选择任何条目"
   }
 }

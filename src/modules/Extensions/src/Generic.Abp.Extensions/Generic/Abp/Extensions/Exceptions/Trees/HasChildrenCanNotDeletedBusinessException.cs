@@ -1,4 +1,4 @@
-﻿namespace Generic.Abp.Extensions.Exceptions
+﻿namespace Generic.Abp.Extensions.Exceptions.Trees
 {
     public class HasChildrenCanNotDeletedBusinessException : Volo.Abp.BusinessException
     {

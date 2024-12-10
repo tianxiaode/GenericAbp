@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Generic.Abp.Extensions.Exceptions.Trees;
 using Volo.Abp;
 
 namespace Generic.Abp.FileManagement.Resources;
@@ -159,34 +160,34 @@ public partial class ResourceManager
     //     await MoveAsync(entity, parentId);
     // }
 
-    public virtual async Task CopyFolderAsync(Guid id, Guid parentId)
-    {
-        if (parentId == id)
-        {
-            throw new CanNotMoveOrCopyToItselfBusinessException();
-        }
-
-        var entity = await Repository.GetAsync(id);
-        if (entity.Type != ResourceType.Folder)
-        {
-            throw new EntityNotFoundBusinessException(L["Folder"], parentId);
-        }
-
-        var maxNodeCount = await SettingManager.GetSettingAsync<int>(FileManagementSettings.FolderCopyMaxNodeCount);
-        var count = await Repository.GetAllChildrenCountByCodeAsync(entity.Code, CancellationToken);
-        if (count >= maxNodeCount)
-        {
-            throw new OnlyMoveMaxFilesAndFoldersInOnTimeBusinessException(maxNodeCount, count);
-        }
-
-        var parent = await Repository.GetAsync(parentId);
-        if (parent.Type != ResourceType.Folder)
-        {
-            throw new EntityNotFoundBusinessException(L["Folder"], parentId);
-        }
-
-        await CopyAsync(entity, parentId);
-    }
+    // public virtual async Task CopyFolderAsync(Guid id, Guid parentId)
+    // {
+    //     if (parentId == id)
+    //     {
+    //         throw new CanNotMoveOrCopyToItselfBusinessException();
+    //     }
+    //
+    //     var entity = await Repository.GetAsync(id);
+    //     if (entity.Type != ResourceType.Folder)
+    //     {
+    //         throw new EntityNotFoundBusinessException(L["Folder"], parentId);
+    //     }
+    //
+    //     var maxNodeCount = await SettingManager.GetSettingAsync<int>(FileManagementSettings.FolderCopyMaxNodeCount);
+    //     var count = await Repository.GetAllChildrenCountByCodeAsync(entity.Code, CancellationToken);
+    //     if (count >= maxNodeCount)
+    //     {
+    //         throw new OnlyMoveMaxFilesAndFoldersInOnTimeBusinessException(maxNodeCount, count);
+    //     }
+    //
+    //     var parent = await Repository.GetAsync(parentId);
+    //     if (parent.Type != ResourceType.Folder)
+    //     {
+    //         throw new EntityNotFoundBusinessException(L["Folder"], parentId);
+    //     }
+    //
+    //     await CopyAsync(entity, parentId);
+    // }
 
     public virtual async Task DeleteFolderAsync(Guid id)
     {

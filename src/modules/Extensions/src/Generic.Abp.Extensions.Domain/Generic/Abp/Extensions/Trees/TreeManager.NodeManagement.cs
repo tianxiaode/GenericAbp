@@ -1,9 +1,10 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Generic.Abp.Extensions.Exceptions;
+using Generic.Abp.Extensions.Exceptions.Trees;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Volo.Abp;
 using Volo.Abp.Domain.Repositories;
 
 namespace Generic.Abp.Extensions.Trees;
@@ -19,16 +20,33 @@ public abstract partial class TreeManager<TEntity, TRepository, TResource>
         var sources = await Repository.GetListAsync(m => sourceIds.Contains(m.Id), false, CancellationToken);
         try
         {
+            await BeforeMoveAllAsync(sources, target);
             foreach (var entity in sources)
             {
                 await MoveAsync(entity, target);
             }
+
+            await AfterMoveAllAsync(sources, target);
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
+            Logger.LogError(e, "Move {sourceIds} to {targetId}", sourceIds, targetId);
             throw;
         }
+    }
+
+    // 定义在所有移动操作之前的虚方法
+    protected virtual Task BeforeMoveAllAsync(IEnumerable<TEntity> sources, TEntity? target)
+    {
+        // 默认实现为空操作
+        return Task.CompletedTask;
+    }
+
+// 定义在所有移动操作之后的虚方法
+    protected virtual Task AfterMoveAllAsync(IEnumerable<TEntity> sources, TEntity? target)
+    {
+        // 默认实现为空操作
+        return Task.CompletedTask;
     }
 
     public virtual async Task MoveAsync(TEntity entity, TEntity? target)
@@ -49,29 +67,40 @@ public abstract partial class TreeManager<TEntity, TRepository, TResource>
         var sources = await Repository.GetListAsync(m => sourceIds.Contains(m.Id), false, CancellationToken);
         try
         {
+            await BeforeCopyAllAsync(sources, target);
             foreach (var entity in sources)
             {
-                await CopyAsync(entity, target?.Id);
+                await CopyAsync(entity, target);
             }
+
+            await AfterCopyAllAsync(sources, target);
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
+            Logger.LogError(e, "Copy {sourceIds} to {targetId}", sourceIds, targetId);
             throw;
         }
     }
 
-
-    public virtual async Task CopyAsync(Guid id, Guid? parentId)
+// 定义在所有移动操作之前的虚方法
+    protected virtual Task BeforeCopyAllAsync(IEnumerable<TEntity> sources, TEntity? target)
     {
-        var entity = await Repository.GetAsync(id, true, CancellationToken);
-        await CopyAsync(entity, parentId);
+        // 默认实现为空操作
+        return Task.CompletedTask;
     }
 
-    public virtual async Task CopyAsync(TEntity entity, Guid? parentId)
+// 定义在所有移动操作之后的虚方法
+    protected virtual Task AfterCopyAllAsync(IEnumerable<TEntity> sources, TEntity? target)
     {
+        // 默认实现为空操作
+        return Task.CompletedTask;
+    }
+
+    public virtual async Task CopyAsync(TEntity entity, TEntity? newParent)
+    {
+        await BeforeCopyAsync(entity, newParent);
         var newEntity = await CloneAsync(entity);
-        newEntity.MoveTo(parentId);
+        newEntity.MoveTo(newParent?.Id);
         await CreateAsync(newEntity);
 
         var children = await Repository.GetAllChildrenByCodeAsync(entity.Code, CancellationToken);
@@ -83,7 +112,7 @@ public abstract partial class TreeManager<TEntity, TRepository, TResource>
             await Repository.InsertManyAsync(adds, true, CancellationToken);
         }
 
-        await AfterCopyAsync(entity, newEntity);
+        await AfterCopyAsync(entity, newEntity, newParent);
     }
 
     public virtual async Task CopyChildrenAsync(TEntity source, TEntity target, List<TEntity> allChildren,
@@ -92,7 +121,7 @@ public abstract partial class TreeManager<TEntity, TRepository, TResource>
         var queue = new Queue<(TEntity Source, TEntity Target)>();
         queue.Enqueue((source, target));
 
-        while (queue.Any())
+        while (queue.Count > 0)
         {
             var (currentSource, currentTarget) = queue.Dequeue();
             Logger.LogDebug("Copy Children `{0}`: {1} -> {2}", currentSource.Name, currentSource.Code,
@@ -122,7 +151,7 @@ public abstract partial class TreeManager<TEntity, TRepository, TResource>
         switch (sourceIds.Count)
         {
             case 0:
-                throw new AbpException("请选择要移动或复制的节点。");
+                throw new NoSelectedItemFoundBusinessException();
             case 1:
             {
                 var sourceId = sourceIds[0];
@@ -136,9 +165,9 @@ public abstract partial class TreeManager<TEntity, TRepository, TResource>
 
                 if (hasConflict)
                 {
-                    throw new AbpException(target == null
-                        ? "不能将根目录移动到根目录。"
-                        : "不能将节点移动到其子节点。");
+                    throw (target == null
+                        ? new CanNotMoveRootToRootBusinessException()
+                        : new CanNotMoveToChildNodeBusinessException());
                 }
 
                 await CanMoveOrCopyAdditionalValidationAsync(sourceIds, target, isMove);
@@ -149,10 +178,13 @@ public abstract partial class TreeManager<TEntity, TRepository, TResource>
         // 验证选择的节点数量
         await ValidateMoveOrCopyNodeCountAsync(sourceIds.Count);
 
+        // 验证选择的节点的子节点数量是否超过限制
+        await ValidateMoveOrCopyMaxChildNodeCountAsync(sourceIds);
+
         // 验证多节点是否存在父子关系冲突
         if (await Repository.HasParentChildConflictAsync(sourceIds, CancellationToken))
         {
-            throw new AbpException("不能同时选择目录及其子节点进行移动。");
+            throw new CanNotMoveParentAndItsChildrenBusinessException();
         }
 
         // 验证目标节点是否冲突
@@ -164,7 +196,7 @@ public abstract partial class TreeManager<TEntity, TRepository, TResource>
 
             if (hasRootConflict)
             {
-                throw new AbpException("不能将根目录的直接子节点移动到根目录。");
+                throw new CanNotMoveRootToRootBusinessException();
             }
 
             return;
@@ -174,7 +206,7 @@ public abstract partial class TreeManager<TEntity, TRepository, TResource>
         var hasTargetConflict = await Repository.HasParentChildConflictAsync(sourceIds, target.Code, CancellationToken);
         if (hasTargetConflict)
         {
-            throw new AbpException("不能移动目录到其子节点。");
+            throw new CanNotMoveParentAndItsChildrenBusinessException();
         }
 
         await CanMoveOrCopyAdditionalValidationAsync(sourceIds, target, isMove);
@@ -191,8 +223,17 @@ public abstract partial class TreeManager<TEntity, TRepository, TResource>
         var allowedCount = await GetMoveOrCopyMaxNodeCountPerRequestAsync();
         if (count > allowedCount)
         {
-            throw new AbpException(
-                $"Can not move or copy more than {allowedCount} nodes per request.");
+            throw new CanNotMoveOrCopyMoreThanCountNodesBusinessException(allowedCount, count);
+        }
+    }
+
+    protected virtual async Task ValidateMoveOrCopyMaxChildNodeCountAsync(List<Guid> sourceIds)
+    {
+        var maxChildNodeCount = await GetMoveOrCopyMacChildNodeCountAsync();
+        var childNodeCount = await Repository.GetAllChildrenCountAsync(sourceIds, CancellationToken);
+        if (childNodeCount > maxChildNodeCount)
+        {
+            throw new CanNotMoveOrCopyMoreThanCountChildNodesBusinessException(maxChildNodeCount, childNodeCount);
         }
     }
 
@@ -201,12 +242,22 @@ public abstract partial class TreeManager<TEntity, TRepository, TResource>
         return Task.FromResult(50);
     }
 
+    protected virtual Task<int> GetMoveOrCopyMacChildNodeCountAsync()
+    {
+        return Task.FromResult(100);
+    }
+
     protected virtual Task<TEntity> CloneAsync(TEntity source)
     {
         throw new NotImplementedException();
     }
 
-    protected virtual Task AfterCopyAsync(TEntity entity, TEntity newEntity)
+    protected virtual Task BeforeCopyAsync(TEntity entity, TEntity? newParent)
+    {
+        return Task.CompletedTask;
+    }
+
+    protected virtual Task AfterCopyAsync(TEntity entity, TEntity? newEntity, TEntity? newParent)
     {
         return Task.CompletedTask;
     }

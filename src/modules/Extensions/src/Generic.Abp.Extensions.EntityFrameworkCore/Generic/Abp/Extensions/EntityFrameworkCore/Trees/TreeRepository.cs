@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.EntityFrameworkCore;
@@ -102,6 +103,11 @@ public class TreeRepository<TDbContext, TEntity>(
     public virtual async Task<bool> HasParentChildConflictAsync(List<Guid> sourceIds,
         CancellationToken cancellation = default)
     {
+        if (sourceIds.Count == 0)
+        {
+            return false;
+        }
+
         var dbSet = await GetDbSetAsync();
 
         // 查询是否存在父子关系冲突
@@ -116,6 +122,11 @@ public class TreeRepository<TDbContext, TEntity>(
     public virtual async Task<bool> HasParentChildConflictAsync(List<Guid> sourceIds, string? targetCode,
         CancellationToken cancellation = default)
     {
+        if (sourceIds.Count == 0)
+        {
+            return false;
+        }
+
         var sources = (await GetDbSetAsync())
             .Where(m => sourceIds.Contains(m.Id));
         // 查询是否存在父子关系冲突
@@ -129,6 +140,37 @@ public class TreeRepository<TDbContext, TEntity>(
             cancellation);
     }
 
+    public virtual async Task<long> GetAllChildrenCountAsync(
+        List<Guid> sourceIds,
+        CancellationToken cancellationToken = default)
+    {
+        if (sourceIds.Count == 0)
+        {
+            return 0L; // 如果没有传入 sourceIds，直接返回 0
+        }
+
+        var dbSet = await GetDbSetAsync();
+
+
+        // 查询包含子节点的父节点的 Code（只选择必要字段以减少数据量）
+        var parentCodes = await dbSet
+            .Where(parent => sourceIds.Contains(parent.Id) && dbSet.Any(m => m.ParentId == parent.Id))
+            .Select(parent => parent.Code)
+            .ToListAsync(cancellationToken);
+
+        if (parentCodes.Count == 0)
+        {
+            return 0L; // 如果没有符合条件的父节点，直接返回 0
+        }
+
+        // 直接在数据库中统计每个父节点的子节点数量
+        Expression<Func<TEntity, bool>> predicate = m => false; // 初始值为 false
+        predicate = parentCodes.Aggregate(predicate,
+            (current, code) => System.Linq.PredicateBuilder.Or(current, m => m.Code.StartsWith(code + ".")));
+
+        return await dbSet.Where(predicate)
+            .LongCountAsync(cancellationToken);
+    }
 
     public virtual async Task<int> DeleteAllChildrenByCodeAsync(string code,
         CancellationToken cancellationToken = default)

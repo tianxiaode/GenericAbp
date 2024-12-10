@@ -33,5 +33,9 @@ public interface
     Task<bool> HasParentChildConflictAsync(List<Guid> sourceIds, string? targetCode,
         CancellationToken cancellation = default);
 
+    Task<long> GetAllChildrenCountAsync(
+        List<Guid> sourceIds,
+        CancellationToken cancellationToken = default);
+
     Task<int> DeleteAllChildrenByCodeAsync(string code, CancellationToken cancellationToken = default);
 }

@@ -19,6 +19,12 @@
     "Generic.Abp.BusinessException:000014": "Can't move or copy a node to itself.",
     "Generic.Abp.BusinessException:000015": "Can't move to child node.",
     "Generic.Abp.BusinessException:000016": "Causes circular references that are not allowed to be moved or copied",
-    "Generic.Abp.BusinessException:000017": "Static {Name} '{Value}' cannot be moved."
+    "Generic.Abp.BusinessException:000017": "Static {Name} '{Value}' cannot be moved.",
+    "Generic.Abp.BusinessException:000018": "No Seleceted item found.",
+    "Generic.Abp.BusinessException:000019": "Can not move root to root.",
+    "Generic.Abp.BusinessException:000020": "Can not move root to child node.",
+    "Generic.Abp.BusinessException:000021": "Can not move parent and its chhildren",
+    "Generic.Abp.BusinessException:000022": "Can not move or copy more than {Count} nodes, current count is {CurrentCount}.",
+    "Generic.Abp.BusinessException:000023": "Can not move or copy more than {Count} childes, current count is {CurrentCount}."
   }
 }
