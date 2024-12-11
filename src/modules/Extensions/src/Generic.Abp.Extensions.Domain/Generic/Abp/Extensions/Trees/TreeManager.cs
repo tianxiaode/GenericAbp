@@ -23,6 +23,38 @@ namespace Generic.Abp.Extensions.Trees
     {
         protected ITreeCodeGenerator<TEntity> TreeCodeGenerator { get; } = treeCodeGenerator;
 
+        public virtual async Task<TEntity> GetAsync(Guid id)
+        {
+            return await Repository.GetAsync(id, false, CancellationToken);
+        }
+
+        public override async Task CreateAsync(TEntity entity, bool autoSave = true)
+        {
+            entity.SetCode(await GetNextChildCodeAsync(entity.ParentId));
+            await ValidateAsync(entity);
+            await Repository.InsertAsync(entity, autoSave, cancellationToken: CancellationToken);
+        }
+
+        public override async Task UpdateAsync(TEntity entity, bool autoSave = true)
+        {
+            await ValidateAsync(entity);
+            await Repository.UpdateAsync(entity, autoSave, cancellationToken: CancellationToken);
+        }
+
+        public override async Task DeleteAsync(Guid id, bool autoSave = true)
+        {
+            var entity = await Repository.GetAsync(id, false, CancellationToken);
+            await BeforeDeleteAsync(entity);
+            await DeleteAsync(entity, autoSave);
+            await AfterDeleteAsync(entity);
+        }
+
+        public override async Task DeleteAsync(TEntity entity, bool autoSave = true)
+        {
+            await Repository.DeleteAllChildrenByCodeAsync(entity.Code, CancellationToken);
+            await Repository.DeleteAsync(entity, true, CancellationToken);
+        }
+
         public virtual async Task<List<TEntity>> FindChildrenAsync(TEntity entity, bool includeDetails = false,
             bool recursive = false)
         {
@@ -65,12 +97,12 @@ namespace Generic.Abp.Extensions.Trees
             }
 
 
-            var allParents = await GetAllParents(codes);
+            var allParentCodes = await GetAllParentCodes(codes);
 
-            return await Repository.GetListAsync(m => allParents.Contains(m.Code), false, CancellationToken);
+            return await Repository.GetListAsync(m => allParentCodes.Contains(m.Code), false, CancellationToken);
         }
 
-        public virtual Task<HashSet<string>> GetAllParents(List<string> codes)
+        public virtual Task<HashSet<string>> GetAllParentCodes(List<string> codes)
         {
             var parents = new HashSet<string>();
             foreach (var parts in codes.Select(code => code.Split('.')))
@@ -83,6 +115,17 @@ namespace Generic.Abp.Extensions.Trees
             }
 
             return Task.FromResult(parents);
+        }
+
+
+        protected virtual Task BeforeDeleteAsync(TEntity entity)
+        {
+            return Task.CompletedTask;
+        }
+
+        protected virtual Task AfterDeleteAsync(TEntity entity)
+        {
+            return Task.CompletedTask;
         }
     }
 }

@@ -1,8 +1,8 @@
-﻿using Generic.Abp.Extensions.Exceptions;
-using Generic.Abp.Extensions.Exceptions.Trees;
+﻿using Generic.Abp.Extensions.Exceptions.Trees;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories;
@@ -11,110 +11,82 @@ namespace Generic.Abp.Extensions.Trees;
 
 public abstract partial class TreeManager<TEntity, TRepository, TResource>
 {
-    public virtual async Task MoveAsync(List<Guid> sourceIds, Guid? targetId)
+    /// <summary>
+    /// 移动单个节点
+    /// </summary>
+    /// <param name="id">要移动的节点Id</param>
+    /// <param name="targetId">目标节点id</param>
+    /// <returns></returns>
+    public virtual async Task MoveAsync(Guid id, Guid? targetId)
     {
+        var source = await Repository.GetAsync(id, false, CancellationToken);
         var target = targetId.HasValue ? await Repository.GetAsync(targetId.Value, false, CancellationToken) : null;
-        await CanMoveOrCopyAsync(sourceIds, target);
+        await CanMoveOrCopyAsync(source, target);
 
 
-        var sources = await Repository.GetListAsync(m => sourceIds.Contains(m.Id), false, CancellationToken);
         try
         {
-            await BeforeMoveAllAsync(sources, target);
-            foreach (var entity in sources)
-            {
-                await MoveAsync(entity, target);
-            }
+            await BeforeMoveAsync(source, target);
+            var oldCode = source.Code;
+            var newCode = await GetNextChildCodeAsync(target?.Id);
+            source.SetCode(newCode);
+            await UpdateAsync(source);
+            await Repository.MoveByCodeAsync(oldCode, newCode, CancellationToken);
 
-            await AfterMoveAllAsync(sources, target);
+            await AfterMoveAsync(source, target);
         }
         catch (Exception e)
         {
-            Logger.LogError(e, "Move {sourceIds} to {targetId}", sourceIds, targetId);
+            Logger.LogError(e, "Move {source} to {target}", source.Name, target?.Name ?? targetId?.ToString());
             throw;
         }
     }
 
-    // 定义在所有移动操作之前的虚方法
-    protected virtual Task BeforeMoveAllAsync(IEnumerable<TEntity> sources, TEntity? target)
+    /// <summary>
+    /// 复制单个节点
+    /// </summary>
+    /// <param name="sourceId"> 要复制的节点Id </param>
+    /// <param name="targetId"> 目标节点id </param>
+    /// <returns></returns>
+    public virtual async Task CopyAsync(Guid sourceId, Guid? targetId)
     {
-        // 默认实现为空操作
-        return Task.CompletedTask;
-    }
-
-// 定义在所有移动操作之后的虚方法
-    protected virtual Task AfterMoveAllAsync(IEnumerable<TEntity> sources, TEntity? target)
-    {
-        // 默认实现为空操作
-        return Task.CompletedTask;
-    }
-
-    public virtual async Task MoveAsync(TEntity entity, TEntity? target)
-    {
-        var oldCode = entity.Code;
-        var newCode = await GetNextChildCodeAsync(target?.Id);
-        entity.SetCode(newCode);
-        await UpdateAsync(entity);
-        await Repository.MoveByCodeAsync(oldCode, newCode, CancellationToken);
-    }
-
-    public virtual async Task CopyAsync(List<Guid> sourceIds, Guid? targetId)
-    {
+        var source = await Repository.GetAsync(sourceId, false, CancellationToken);
         var target = targetId.HasValue ? await Repository.GetAsync(targetId.Value, false, CancellationToken) : null;
-        await CanMoveOrCopyAsync(sourceIds, target);
-
-
-        var sources = await Repository.GetListAsync(m => sourceIds.Contains(m.Id), false, CancellationToken);
+        await CanMoveOrCopyAsync(source, target);
         try
         {
-            await BeforeCopyAllAsync(sources, target);
-            foreach (var entity in sources)
+            await BeforeCopyAsync(source, target);
+            var newEntity = await CloneAsync(source);
+            newEntity.MoveTo(target?.Id);
+            await CreateAsync(newEntity);
+
+            var children = await Repository.GetAllChildrenByCodeAsync(source.Code, CancellationToken);
+            var adds = new List<TEntity>();
+            await CopyChildrenAsync(source, newEntity, children, adds);
+
+            if (adds.Count > 0)
             {
-                await CopyAsync(entity, target);
+                await Repository.InsertManyAsync(adds, true, CancellationToken);
             }
 
-            await AfterCopyAllAsync(sources, target);
+            await AfterCopyAsync(source, newEntity, target);
         }
         catch (Exception e)
         {
-            Logger.LogError(e, "Copy {sourceIds} to {targetId}", sourceIds, targetId);
+            Logger.LogError(e, "Move {source} to {target}", source.Name, target?.Name ?? targetId?.ToString());
             throw;
         }
     }
 
-// 定义在所有移动操作之前的虚方法
-    protected virtual Task BeforeCopyAllAsync(IEnumerable<TEntity> sources, TEntity? target)
-    {
-        // 默认实现为空操作
-        return Task.CompletedTask;
-    }
 
-// 定义在所有移动操作之后的虚方法
-    protected virtual Task AfterCopyAllAsync(IEnumerable<TEntity> sources, TEntity? target)
-    {
-        // 默认实现为空操作
-        return Task.CompletedTask;
-    }
-
-    public virtual async Task CopyAsync(TEntity entity, TEntity? newParent)
-    {
-        await BeforeCopyAsync(entity, newParent);
-        var newEntity = await CloneAsync(entity);
-        newEntity.MoveTo(newParent?.Id);
-        await CreateAsync(newEntity);
-
-        var children = await Repository.GetAllChildrenByCodeAsync(entity.Code, CancellationToken);
-        var adds = new List<TEntity>();
-        await CopyChildrenAsync(entity, newEntity, children, adds);
-
-        if (adds.Count > 0)
-        {
-            await Repository.InsertManyAsync(adds, true, CancellationToken);
-        }
-
-        await AfterCopyAsync(entity, newEntity, newParent);
-    }
-
+    /// <summary>
+    /// 复制子节点
+    /// </summary>
+    /// <param name="source"> 要复制的节点 </param>
+    /// <param name="target"> 目标节点 </param>
+    /// <param name="allChildren"> 所有子节点 </param>
+    /// <param name="adds"> 新增的节点 </param>
+    /// <returns></returns>
     public virtual async Task CopyChildrenAsync(TEntity source, TEntity target, List<TEntity> allChildren,
         List<TEntity> adds)
     {
@@ -146,119 +118,146 @@ public abstract partial class TreeManager<TEntity, TRepository, TResource>
         }
     }
 
-    public virtual async Task CanMoveOrCopyAsync(List<Guid> sourceIds, TEntity? target, bool isMove = true)
+    public virtual async Task CanMoveOrCopyAsync(TEntity source, TEntity? target, bool isMove = true)
     {
-        switch (sourceIds.Count)
-        {
-            case 0:
-                throw new NoSelectedItemFoundBusinessException();
-            case 1:
-            {
-                var sourceId = sourceIds[0];
-
-                // 验证单节点是否存在根目录冲突或子节点冲突
-                var hasConflict = await Repository.AnyAsync(m =>
-                    m.Id == sourceId && (
-                        (target == null && m.ParentId == null) || // 根目录冲突
-                        (target != null && target.Code.StartsWith(m.Code)) // 子节点冲突
-                    ), CancellationToken);
-
-                if (hasConflict)
-                {
-                    throw (target == null
-                        ? new CanNotMoveRootToRootBusinessException()
-                        : new CanNotMoveToChildNodeBusinessException());
-                }
-
-                await CanMoveOrCopyAdditionalValidationAsync(sourceIds, target, isMove);
-                return;
-            }
-        }
-
-        // 验证选择的节点数量
-        await ValidateMoveOrCopyNodeCountAsync(sourceIds.Count);
+        // 验证选择的节点是否与目标节点有冲突
+        await ValidateHasConflictAsync(source, target, isMove);
 
         // 验证选择的节点的子节点数量是否超过限制
-        await ValidateMoveOrCopyMaxChildNodeCountAsync(sourceIds);
+        await ValidateMoveOrCopyMaxChildNodeCountAsync(source);
 
-        // 验证多节点是否存在父子关系冲突
-        if (await Repository.HasParentChildConflictAsync(sourceIds, CancellationToken))
-        {
-            throw new CanNotMoveParentAndItsChildrenBusinessException();
-        }
+        // 验证选择的节点的子节点名称是否重复
+        await ValidateIsDuplicateNameAsync(source, target);
 
-        // 验证目标节点是否冲突
-        if (target == null)
-        {
-            // 如果目标是根节点，验证是否存在根目录冲突
-            var hasRootConflict = await Repository.AnyAsync(m =>
-                sourceIds.Contains(m.Id) && m.ParentId == null, CancellationToken);
-
-            if (hasRootConflict)
-            {
-                throw new CanNotMoveRootToRootBusinessException();
-            }
-
-            return;
-        }
-
-        // 验证目标节点是否冲突
-        var hasTargetConflict = await Repository.HasParentChildConflictAsync(sourceIds, target.Code, CancellationToken);
-        if (hasTargetConflict)
-        {
-            throw new CanNotMoveParentAndItsChildrenBusinessException();
-        }
-
-        await CanMoveOrCopyAdditionalValidationAsync(sourceIds, target, isMove);
+        //附加验证
+        await CanMoveOrCopyAdditionalValidationAsync(source, target, isMove);
     }
 
-    protected virtual Task CanMoveOrCopyAdditionalValidationAsync(List<Guid> sourceIds, TEntity? target,
+    protected virtual Task CanMoveOrCopyAdditionalValidationAsync(TEntity source, TEntity? target,
         bool isMove = true)
     {
         return Task.CompletedTask;
     }
 
-    protected virtual async Task ValidateMoveOrCopyNodeCountAsync(int count)
+    protected virtual Task ValidateHasConflictAsync(TEntity source, TEntity? target, bool isMove = true)
     {
-        var allowedCount = await GetMoveOrCopyMaxNodeCountPerRequestAsync();
-        if (count > allowedCount)
+        if (target == null && source.Parent == null)
         {
-            throw new CanNotMoveOrCopyMoreThanCountNodesBusinessException(allowedCount, count);
+            throw new CanNotMoveRootToRootBusinessException();
         }
+
+        if (target != null && target.Code.StartsWith(source.Code))
+        {
+            throw new CanNotMoveToChildNodeBusinessException();
+        }
+
+        return Task.CompletedTask;
     }
 
-    protected virtual async Task ValidateMoveOrCopyMaxChildNodeCountAsync(List<Guid> sourceIds)
+    /// <summary>
+    /// 验证选择的节点的子节点数量是否超过限制
+    /// </summary>
+    /// <param name="source"> 要移动或复制的节点 </param>
+    /// <returns></returns>
+    /// <exception cref="CanNotMoveOrCopyMoreThanCountChildNodesBusinessException"></exception>
+    protected virtual async Task ValidateMoveOrCopyMaxChildNodeCountAsync(TEntity source)
     {
         var maxChildNodeCount = await GetMoveOrCopyMacChildNodeCountAsync();
-        var childNodeCount = await Repository.GetAllChildrenCountAsync(sourceIds, CancellationToken);
+        var childNodeCount = await Repository.GetAllChildrenCountByCodeAsync(source.Code, CancellationToken);
         if (childNodeCount > maxChildNodeCount)
         {
             throw new CanNotMoveOrCopyMoreThanCountChildNodesBusinessException(maxChildNodeCount, childNodeCount);
         }
     }
 
-    protected virtual Task<int> GetMoveOrCopyMaxNodeCountPerRequestAsync()
+    /// <summary>
+    /// 验证选择的节点的子节点名称是否重复
+    /// </summary>
+    /// <param name="source"> 要移动或复制的节点 </param>
+    /// <param name="target"> 目标节点 </param>
+    /// <returns></returns>
+    /// <exception cref="DuplicateNameException"></exception>
+    protected virtual async Task ValidateIsDuplicateNameAsync(TEntity source, TEntity? target)
     {
-        return Task.FromResult(50);
+        if (target == null &&
+            await Repository.AnyAsync(m => m.ParentId == null && m.Name.ToLower() == source.Name.ToLower(),
+                CancellationToken))
+        {
+            throw new DuplicateNameException(source.Name);
+        }
+
+        if (target != null &&
+            await Repository.AnyAsync(m => m.ParentId == target.Id && m.Name.ToLower() == source.Name.ToLower(),
+                CancellationToken))
+        {
+            throw new DuplicateNameException(source.Name);
+        }
     }
 
+    /// <summary>
+    /// 获取移动或复制节点的最大子节点数量
+    /// </summary>
+    /// <returns> 最大子节点数量 </returns>
     protected virtual Task<int> GetMoveOrCopyMacChildNodeCountAsync()
     {
         return Task.FromResult(100);
     }
 
+    /// <summary>
+    /// 克隆节点
+    /// </summary>
+    /// <param name="source"> 要克隆的节点 </param>
+    /// <returns></returns>
     protected virtual Task<TEntity> CloneAsync(TEntity source)
     {
         throw new NotImplementedException();
     }
 
-    protected virtual Task BeforeCopyAsync(TEntity entity, TEntity? newParent)
+
+    /// <summary>
+    /// 复制节点之前的虚方法
+    /// </summary>
+    /// <param name="source"> 源节点 </param>
+    /// <param name="newParent"> 新父节点 </param>
+    /// <returns></returns>
+    protected virtual Task BeforeCopyAsync(TEntity source, TEntity? newParent)
     {
         return Task.CompletedTask;
     }
 
-    protected virtual Task AfterCopyAsync(TEntity entity, TEntity? newEntity, TEntity? newParent)
+    /// <summary>
+    /// 复制节点之后的虚方法
+    /// </summary>
+    /// <param name="source"> 源节点 </param>
+    /// <param name="target"> 目标节点 </param>
+    /// <param name="newParent"> 新父节点 </param>
+    /// <returns></returns>
+    protected virtual Task AfterCopyAsync(TEntity source, TEntity? target, TEntity? newParent)
     {
+        return Task.CompletedTask;
+    }
+
+    /// <summary>
+    /// 移动节点之前的虚方法
+    /// </summary>
+    /// <param name="source"> 源节点 </param>
+    /// <param name="target"> 目标节点 </param>
+    /// <returns></returns>
+    protected virtual Task BeforeMoveAsync(TEntity source, TEntity? target)
+    {
+        // 默认实现为空操作
+        return Task.CompletedTask;
+    }
+
+    /// <summary>
+    /// 移动节点之后的虚方法
+    /// </summary>
+    /// <param name="source"> 源节点 </param>
+    /// <param name="target"> 目标节点 </param>
+    /// <returns></returns>
+    protected virtual Task AfterMoveAsync(TEntity source, TEntity? target)
+    {
+        // 默认实现为空操作
         return Task.CompletedTask;
     }
 }
