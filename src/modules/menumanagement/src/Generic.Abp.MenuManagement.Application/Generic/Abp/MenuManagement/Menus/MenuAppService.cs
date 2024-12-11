@@ -133,9 +133,7 @@ public class MenuAppService(
     [UnitOfWork]
     public virtual async Task DeleteAsync(Guid id)
     {
-        var entity = await MenuManager.GetAsync(id);
-        CheckIsStaticAsync(entity);
-        await MenuManager.DeleteAsync(entity);
+        await MenuManager.DeleteAsync(id);
     }
 
     #region 多语言
@@ -298,13 +296,6 @@ public class MenuAppService(
         return Task.CompletedTask;
     }
 
-    protected virtual void CheckIsStaticAsync(Menu menu)
-    {
-        if (menu.IsStatic)
-        {
-            throw new StaticEntityCanNotBeUpdatedOrDeletedBusinessException(L["Menu"], menu.Name);
-        }
-    }
 
     protected virtual PermissionGrantInfoDto CreatePermissionGrantInfoDto(PermissionDefinition permission,
         List<string> permissions)

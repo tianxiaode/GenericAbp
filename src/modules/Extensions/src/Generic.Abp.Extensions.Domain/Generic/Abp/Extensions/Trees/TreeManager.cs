@@ -44,7 +44,11 @@ namespace Generic.Abp.Extensions.Trees
         public override async Task DeleteAsync(Guid id, bool autoSave = true)
         {
             var entity = await Repository.GetAsync(id, false, CancellationToken);
-            await BeforeDeleteAsync(entity);
+            if (!await BeforeDeleteAsync(entity))
+            {
+                return;
+            }
+
             await DeleteAsync(entity, autoSave);
             await AfterDeleteAsync(entity);
         }
@@ -118,9 +122,9 @@ namespace Generic.Abp.Extensions.Trees
         }
 
 
-        protected virtual Task BeforeDeleteAsync(TEntity entity)
+        protected virtual Task<bool> BeforeDeleteAsync(TEntity entity)
         {
-            return Task.CompletedTask;
+            return Task.FromResult(true);
         }
 
         protected virtual Task AfterDeleteAsync(TEntity entity)
