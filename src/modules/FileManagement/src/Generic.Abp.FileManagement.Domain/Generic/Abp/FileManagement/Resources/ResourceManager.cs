@@ -64,6 +64,14 @@ public partial class ResourceManager(
         }
     }
 
+    public virtual async Task<List<Resource>> GetListByPermissionAsync(ResourceQueryParams queryParams, Guid userId,
+        ResourcePermissionType permissionType)
+    {
+        var predicate = await BuildPredicateExpressionAsync(queryParams);
+        var list = await Repository.GetChildrenByPermissionAsync(predicate, queryParams, userId,
+            await PermissionManager.GetRolesAsync(userId), permissionType, CancellationToken);
+        return list;
+    }
 
     public override Task<Expression<Func<Resource, bool>>> BuildPredicateExpressionAsync(BaseQueryParams queryParams)
     {
@@ -75,6 +83,10 @@ public partial class ResourceManager(
 
         predicate = m => m.ParentId == query.ParentId;
 
+        if (query.ResourceType.HasValue)
+        {
+            predicate = predicate.AndIfNotTrue(m => m.Type == query.ResourceType.Value);
+        }
 
         if (!string.IsNullOrEmpty(query.Filter))
         {

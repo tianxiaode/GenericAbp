@@ -22,4 +22,16 @@ public class ResourceBaseDto : ExtensibleAuditedEntityDto<Guid>, IHasConcurrency
     public long? StorageQuota { get; set; } = default!;
     public long? UsedStorage { get; set; } = default!;
     public long? MaxFileSize { get; set; } = default!;
+    public int? AllowedFileCount { get; set; } = default!;
+
+    public ResourceBaseDto()
+    {
+    }
+
+    public ResourceBaseDto(Guid id, string name, string code)
+    {
+        Id = id;
+        Code = code;
+        Name = name;
+    }
 }

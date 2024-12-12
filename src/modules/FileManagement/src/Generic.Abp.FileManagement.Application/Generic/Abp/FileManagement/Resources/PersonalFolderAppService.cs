@@ -1,18 +1,16 @@
-﻿using Generic.Abp.Extensions.Extensions;
-using Generic.Abp.FileManagement.Files;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Generic.Abp.Extensions.Extensions;
 using Generic.Abp.FileManagement.FileInfoBases;
-using Generic.Abp.FileManagement.Resources;
+using Generic.Abp.FileManagement.Folders;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Authorization;
 using Volo.Abp.Identity;
-using ResourceManager = Generic.Abp.VirtualPaths.ResourceManager;
 
-namespace Generic.Abp.FileManagement.Folders;
+namespace Generic.Abp.FileManagement.Resources;
 
 //[Authorize]
 public class PersonalFolderAppService(

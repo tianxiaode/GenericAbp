@@ -1,20 +1,17 @@
-﻿using Generic.Abp.Extensions.Exceptions;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Generic.Abp.Extensions.Exceptions;
 using Generic.Abp.FileManagement.FileInfoBases;
 using Generic.Abp.FileManagement.Permissions;
-using Generic.Abp.FileManagement.Resources;
-using Microsoft.AspNetCore.Authorization;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Generic.Abp.FileManagement.Resources.Dtos;
+using Generic.Abp.FileManagement.Resources.Dtos.Folders;
+using Microsoft.AspNetCore.Authorization;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
-using Volo.Abp.Uow;
-using ResourceManager = Generic.Abp.VirtualPaths.ResourceManager;
-using Generic.Abp.FileManagement.Resources.Dtos.Folders;
+using Volo.Abp.Authorization;
 
-namespace Generic.Abp.FileManagement.Folders;
+namespace Generic.Abp.FileManagement.Resources;
 
 [RemoteService(false)]
 public class ResourceAppService(
@@ -34,10 +31,6 @@ public class ResourceAppService(
         var publicRoot = await ResourceManager.GetPublicRootFolderAsync();
         folderDtos.Add(new ResourceBaseDto(publicRoot.Id, publicRoot.Code, L[publicRoot.Name]));
 
-        //TODO: 允许管理用户文件夹的配额和最大文件大小，但不能管理文件？
-        var usersRoot = await ResourceManager.GetUsersRootFolderAsync();
-        folderDtos.Add(new ResourceBaseDto(usersRoot.Id, usersRoot.Code, L[usersRoot.Name]));
-
         var sharedRoot = await ResourceManager.GetSharedRootFolderAsync();
         folderDtos.Add(new ResourceBaseDto(sharedRoot.Id, sharedRoot.Code, L[sharedRoot.Name]));
         return new ListResultDto<ResourceBaseDto>(folderDtos);
@@ -51,24 +44,39 @@ public class ResourceAppService(
     }
 
     [Authorize(FileManagementPermissions.Resources.Default)]
-    public virtual async Task<ListResultDto<ResourceBaseDto>> GetFolderListAsync(ResourceGetListInput input)
+    public virtual async Task<ListResultDto<ResourceBaseDto>> GetFolderListAsync(Guid parentId,
+        ResourceGetListInput input)
     {
-        List<Resource> list = [];
-        if (!string.IsNullOrEmpty(input.Filter))
+        if (!CurrentUser.Id.HasValue)
         {
-            list = await ResourceManager.GetSearchFoldersAsync(input.Filter);
+            throw new AbpException(L["AccessDenied"]);
         }
-        else if (input.ParentId.HasValue)
+
+        var publicRoot = await ResourceManager.GetPublicRootFolderAsync();
+        var sharedRoot = await ResourceManager.GetSharedRootFolderAsync();
+        if (parentId != publicRoot.Id && parentId != sharedRoot.Id)
         {
-            list = await ResourceManager.GetChildrenFoldersAsync(input.ParentId.Value);
+            throw new EntityNotFoundBusinessException(L["Folder"], parentId);
         }
+
+        var queryParams = ObjectMapper.Map<ResourceGetListInput, ResourceQueryParams>(input);
+        queryParams.ParentId = parentId;
+        queryParams.ResourceType = ResourceType.Folder;
+
+        var list = await ResourceManager.GetListByPermissionAsync(queryParams, CurrentUser.Id.Value,
+            ResourcePermissionType.CanRead);
 
         return new ListResultDto<ResourceBaseDto>(ObjectMapper.Map<List<Resource>, List<ResourceBaseDto>>(list));
     }
 
-    [Authorize(FileManagementPermissions.Resources.Create)]
-    public async Task<ResourceBaseDto> CreateAsync(FolderCreateDto input)
+    [Authorize(FileManagementPermissions.Resources.Default)]
+    public async Task<ResourceBaseDto> CreateAsync(Guid parentId,FolderCreateDto input)
     {
+        if (!await ResourceManager.IsSharedFolderAsync(parentId))
+        {
+
+        }
+
         var entity = await ResourceManager.CreateFolderAsync(input.Name, input.ParentId, input.AllowedFileTypes,
             input.Quota, input.MaxFileSize, CurrentTenant.Id);
         return ObjectMapper.Map<Resource, ResourceBaseDto>(entity);

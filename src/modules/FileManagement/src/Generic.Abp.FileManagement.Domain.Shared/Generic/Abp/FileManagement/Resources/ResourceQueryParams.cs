@@ -10,6 +10,7 @@ public interface IResourceQueryParams : IBaseQueryParams, IHasCreationTimeQuery
     long? MinFileSize { get; set; }
     long? MaxFileSize { get; set; }
     Guid? OwnerId { get; set; }
+    ResourceType? ResourceType { get; set; }
 }
 
 [Serializable]
@@ -20,6 +21,7 @@ public class ResourceQueryParams : CreationTimeQueryParams, IResourceQueryParams
     public long? MaxFileSize { get; set; }
     public Guid? OwnerId { get; set; }
     public Guid ParentId { get; set; }
+    public ResourceType? ResourceType { get; set; }
 
     protected override HashSet<string> AllowedSortingFields { get; set; } =
     [

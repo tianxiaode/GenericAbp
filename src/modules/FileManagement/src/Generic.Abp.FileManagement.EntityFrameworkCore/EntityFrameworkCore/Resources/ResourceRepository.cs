@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
+using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.EntityFrameworkCore;
@@ -61,6 +62,35 @@ public partial class ResourceRepository(IDbContextProvider<IFileManagementDbCont
         return directFilesSize + childrenFilesSize;
     }
 
+    public virtual async Task<List<Resource>> GetChildrenByPermissionAsync(
+        Expression<Func<Resource, bool>> predicate,
+        ResourceQueryParams queryParams,
+        Guid userId,
+        IList<string> roles,
+        ResourcePermissionType permissionType,
+        CancellationToken cancellationToken = default)
+    {
+        var dbContext = await GetDbContextAsync();
+        var permissionDbSet = dbContext.Set<ResourcePermission>();
+        var resourceDbSet = dbContext.Set<Resource>();
+
+        var query = from resource in resourceDbSet.Where(predicate)
+            where permissionDbSet.Any(permission =>
+                permission.ResourceId == resource.Id &&
+                (
+                    permission.ProviderName == ProviderNames.AuthorizationUserProviderName ||
+                    (permission.ProviderName == ProviderNames.UserProviderName &&
+                     permission.ProviderKey == userId.ToString()) ||
+                    (permission.ProviderName == ProviderNames.RoleProviderName &&
+                     roles.Contains(permission.ProviderKey))
+                ) &&
+                (permission.Permissions & (int)permissionType) == (int)permissionType
+            )
+            select resource;
+
+        return await query.OrderBy(queryParams.GetSorting()).PageBy(queryParams.SkipCount, queryParams.MaxResultCount)
+            .ToListAsync(cancellationToken);
+    }
 
     public virtual async Task<Resource> GetParentWithConfiguration(string code,
         CancellationToken cancellationToken = default)

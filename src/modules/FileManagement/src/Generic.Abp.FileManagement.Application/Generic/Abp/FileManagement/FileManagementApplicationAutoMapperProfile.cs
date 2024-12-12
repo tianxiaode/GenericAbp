@@ -33,9 +33,14 @@ namespace Generic.Abp.FileManagement
                     opts => opts.MapFrom(m => m.HasConfiguration ? m.GetStorageQuota() : default!))
                 .ForMember(m => m.MaxFileSize,
                     opts => opts.MapFrom(m => m.HasConfiguration ? m.GetMaxFileSize() : default!))
+                .ForMember(m => m.AllowedFileCount,
+                    opts => opts.MapFrom(m => m.HasConfiguration ? m.GetAllowedFileCount() : default!))
                 .MapExtraProperties();
 
             CreateMap<ResourcePermission, ResourcePermissionDto>();
+            CreateMap<ResourceGetListInput, ResourceQueryParams>()
+                .Ignore(m => m.ParentId);
+
 
             CreateMap<VirtualPath, VirtualPathDto>().MapExtraProperties();
             CreateMap<VirtualPathGetListInput, VirtualPathQueryParams>();
