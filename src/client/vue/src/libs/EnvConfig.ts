@@ -56,3 +56,15 @@ class EnvConfig {
 }
 
 export const envConfig = new EnvConfig();
+
+export const getRouteUrl = (url: string = '') =>{
+    //确保baseUrl以/结尾
+    let baseUrl = envConfig.publishPath;
+    if(baseUrl && !baseUrl.endsWith('/')){
+        baseUrl += '/';
+    }
+    if(url.startsWith('/')){
+        url = url.slice(1);
+    }
+    return `${baseUrl}${url}`;
+}

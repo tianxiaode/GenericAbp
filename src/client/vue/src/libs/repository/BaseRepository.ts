@@ -192,8 +192,8 @@ export class BaseRepository<T extends EntityInterface> extends BaseClass {
 
     get pageSizeParamName(): string {
         return (
-            this.config.paging?.pageParamName ||
-            RepositoryGlobalConfig.pageParamName ||
+            this.config.paging?.pageSizeParamName ||
+            RepositoryGlobalConfig.pageSizeParamName ||
             "maxResultCount"
         );
     }

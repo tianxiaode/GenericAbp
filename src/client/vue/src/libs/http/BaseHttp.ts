@@ -9,6 +9,7 @@ export interface HttpOptions {
     authHeaderName?: string;
     authHeaderGenerator?: (token: string) => string; // 添加自定义授权头部生成函数
     isNestResponse?: boolean;
+    nestResponseSuccessCode?: number;
     responseDataName?: string;
     languageName?: string;
     xsrfCookieName?: string;
@@ -32,6 +33,7 @@ export interface HttpRequestOptions {
     onDownloadProgress?: (progressEvent: any) => void;
     retry?: number;
     retryInterval?: number;
+    isNoNEncapsulationData?: boolean;
 }
 
 export class BaseHttp {
@@ -41,6 +43,7 @@ export class BaseHttp {
     static authHeaderName: string = 'Authorization';
     static authHeaderGenerator?: (token: string) => string; // 可选的自定义授权头部生成函数
     static isNestResponse: boolean = false;
+    static nestResponseSuccessCode: number = 0;
     static responseDataName: string = '';
     static errorMessageHandler: ((error: HttpError) => void) | null = null;
     static customErrorHandler: ((deferred: HttpDeferred<any>, options: HttpRequestOptions, request: XMLHttpRequest) => void)  | null = null;

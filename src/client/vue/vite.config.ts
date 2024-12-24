@@ -17,7 +17,7 @@ const nodeEnv = process.env.NODE_ENV || "development";
 const env = loadEnv(nodeEnv, root); // 使用空字符串作为前缀
 const pathSrc = path.resolve(__dirname, "src");
 export default defineConfig({
-    base: env.VITE_PUBLIC_PATH,
+    base: env.VITE_PUBLISH_PATH,
     root: root,
     resolve: {
         alias: {

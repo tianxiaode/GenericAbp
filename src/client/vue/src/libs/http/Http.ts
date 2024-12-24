@@ -156,6 +156,9 @@ export class Http extends BaseHttp {
         xhr: XMLHttpRequest
     ) {
         let data = this.parseResponse(xhr, options);
+        if(options.isNoNEncapsulationData){
+            return deferred.resolve(data);
+        }
         if (
             BaseHttp.responseDataName &&
             data &&
@@ -168,10 +171,15 @@ export class Http extends BaseHttp {
             deferred.resolve(data as T);
             return;
         }
-        if (data.code === 200) {
+        if (data.code === BaseHttp.nestResponseSuccessCode) {
             deferred.resolve(data as T);
         } else {
-            this.handleError(deferred, options, xhr);
+            const err = new HttpError(data.msg || data.message || data.err_msg, data.code, data.data);
+            if (BaseHttp.errorMessageHandler) {
+                BaseHttp.errorMessageHandler(err);
+            }
+            deferred.reject(err);
+            //this.handleError(deferred, options, xhr);
         }
     }
 
