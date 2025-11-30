@@ -1,40 +1,6 @@
 import { account } from "../Account";
 import { LocalStorage } from "../LocalStorage";
-import { HttpDeferred } from "./HttpDeferred";
-import { HttpError } from "./HttpError";
-
-export interface HttpOptions {
-    baseUrl?: string;
-    tokenStorageName?: string;
-    authHeaderName?: string;
-    authHeaderGenerator?: (token: string) => string; // 添加自定义授权头部生成函数
-    isNestResponse?: boolean;
-    nestResponseSuccessCode?: number;
-    responseDataName?: string;
-    languageName?: string;
-    xsrfCookieName?: string;
-    xsrfHeaderName?: string;
-    timeout?: number;
-    errorMessageHandler?: (error: HttpError) => void;
-    customErrorHandler?: (deferred: HttpDeferred<any>, options: HttpRequestOptions, request: XMLHttpRequest) => void ;
-    createHeaders?: (options: HttpRequestOptions) => { [key: string]: string };
-}
-
-export interface HttpRequestOptions {
-    method?: string;
-    url?: string;
-    headers?: any;
-    data?: any;
-    params?: any;
-    responseType?: XMLHttpRequestResponseType;
-    timeout?: number;
-    withCredentials?: boolean;
-    onUploadProgress?: (progressEvent: any) => void;
-    onDownloadProgress?: (progressEvent: any) => void;
-    retry?: number;
-    retryInterval?: number;
-    isNoNEncapsulationData?: boolean;
-}
+import { HttpOptions, HttpRequestOptions, HttpDeferred, HttpError, ResponseHandler } from "./types"
 
 export class BaseHttp {
     static baseUrl: string = '';
@@ -53,8 +19,11 @@ export class BaseHttp {
     static initialized = false;
     static timeout: number = 30000;
     static createHeaders: ((options: HttpRequestOptions) => { [key: string]: string }) | null = null;
-
+    static responseHandler?: ResponseHandler;
     static init(options: HttpOptions) {
+        if (options.responseHandler) {
+            BaseHttp.responseHandler = options.responseHandler;
+        }
         Object.assign(BaseHttp, options);
         BaseHttp.initialized = true;
     }
@@ -77,7 +46,7 @@ export class BaseHttp {
         const headers: { [key: string]: string } = {
             'Accept-Language': LocalStorage.getLanguage(),
             'Content-Type': options.data instanceof FormData ? 'multipart/form-data' : 'application/json',
-            '__tenant': LocalStorage.getTenant(),
+            '__tenant': LocalStorage.getTenant() || '',
             ...options.headers
         };
 

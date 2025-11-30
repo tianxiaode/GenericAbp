@@ -1,7 +1,7 @@
 import { isEmpty, logger } from "../utils";
-import { BaseHttp, HttpRequestOptions } from "./BaseHttp";
+import { BaseHttp } from "./BaseHttp";
 import { HttpDeferred } from "./HttpDeferred";
-import { HttpError } from "./HttpError";
+import { HttpRequestOptions } from "./types";
 
 export class Http extends BaseHttp {
     $className = "Http";
@@ -29,15 +29,11 @@ export class Http extends BaseHttp {
         xhr.timeout = options.timeout || BaseHttp.timeout;
 
         xhr.onload = () => {
-            if (xhr.status >= 200 && xhr.status < 300) {
-                this.handleSuccess(deferred, options, xhr);
-            } else {
-                this.handleError(deferred, options, xhr);
-            }
+            BaseHttp.responseHandler?.handleResponse(xhr, options, deferred);
         };
 
         xhr.onerror = () => {
-            this.handleError(deferred, options, xhr);
+            BaseHttp.responseHandler?.handleResponse(xhr, options, deferred);
         };
 
         xhr.onprogress = (event) => {
@@ -144,127 +140,12 @@ export class Http extends BaseHttp {
         xhr.open(method, url, true);
         if (options.headers) {
             Object.keys(options.headers).forEach((key) => {
-                xhr.setRequestHeader(key, options.headers[key]);
+                xhr.setRequestHeader(key,  options.headers![key]);
             });
         }
         return xhr;
     }
 
-    protected handleSuccess<T>(
-        deferred: HttpDeferred<any>,
-        options: HttpRequestOptions,
-        xhr: XMLHttpRequest
-    ) {
-        let data = this.parseResponse(xhr, options);
-        if(options.isNoNEncapsulationData){
-            return deferred.resolve(data);
-        }
-        if (
-            BaseHttp.responseDataName &&
-            data &&
-            typeof data === "object" &&
-            data.hasOwnProperty(BaseHttp.responseDataName)
-        ) {
-            data = data[BaseHttp.responseDataName];
-        }
-        if (!BaseHttp.isNestResponse) {
-            deferred.resolve(data as T);
-            return;
-        }
-        if (data.code === BaseHttp.nestResponseSuccessCode) {
-            deferred.resolve(data as T);
-        } else {
-            const err = new HttpError(data.msg || data.message || data.err_msg, data.code, data.data);
-            if (BaseHttp.errorMessageHandler) {
-                BaseHttp.errorMessageHandler(err);
-            }
-            deferred.reject(err);
-            //this.handleError(deferred, options, xhr);
-        }
-    }
-
-    protected handleError(
-        deferred: HttpDeferred<any>,
-        options: HttpRequestOptions,
-        request: XMLHttpRequest
-    ) {
-        const { retry } = options;
-        if (retry) {
-            return this.retry(deferred, options);
-        }
-
-        if (BaseHttp.customErrorHandler) {
-            return BaseHttp.customErrorHandler(deferred, options, request);
-        }
-
-        let err: HttpError;
-        const code = request.status;
-        if (code === 0) {
-            err = new HttpError("Network Error", code);
-        } else {
-            let data = this.parseResponse(request, options);
-            if (
-                BaseHttp.responseDataName &&
-                data &&
-                typeof data === "object" &&
-                data.hasOwnProperty(BaseHttp.responseDataName)
-            ) {
-                data = data[BaseHttp.responseDataName];
-            }
-
-            let errorText =
-                data?.error?.message ||
-                data?.msg ||
-                data?.message ||
-                data ||
-                request.statusText ||
-                request.status ||
-                "unknownError";
-            if(errorText === request.status){
-                errorText = "Http." + errorText;
-            }
-            if (data?.error?.validationErrors) {
-                errorText = data.error.details.replaceAll("\r\n", "<br>");
-            }
-            err = new HttpError(errorText, code, data?.error?.validationErrors);
-        }
-
-        if (BaseHttp.errorMessageHandler) {
-            BaseHttp.errorMessageHandler(err);
-        }
-        deferred.reject(err);
-    }
-
-    protected parseResponse(
-        xhr: XMLHttpRequest,
-        options: HttpRequestOptions
-    ): any {
-        let responseType = options.responseType || "json";
-        let response: any;
-        switch (responseType) {
-            case "json":
-                if (xhr.responseText === "" || xhr.responseText === null) {
-                    response = null;
-                    break;
-                }
-                try {
-                    response = JSON.parse(xhr.responseText) || xhr.responseText;                    
-                } catch (error) {
-                    response = xhr.responseText;
-                }
-                break;
-            case "text":
-                response = xhr.responseText;
-                break;
-            case "blob":
-                response = { data: xhr.response };
-                break;
-            default:
-                response = xhr.response;
-                break;
-        }
-        return response;
-    }
 
     protected retry<T>(deferred: HttpDeferred<T>, options: HttpRequestOptions) {
         const retry = options.retry || 0;
