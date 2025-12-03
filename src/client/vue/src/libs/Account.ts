@@ -10,7 +10,6 @@ import { LocalStorage } from "./LocalStorage";
 import { appConfig } from "./AppConfig";
 import { http } from "./http";
 import { envConfig } from "./EnvConfig";
-import TenantForm from "~/components/admins/tenants/TenantForm.vue";
 
 class Account {
     $className = "Account";
@@ -66,7 +65,7 @@ class Account {
             }else{
                 message = 'Account.InvalidUserNameOrPassword'
             }
-            logger.error(this, ["login"], e);
+            logger.error(this, 'login', e);
             throw new Error(message);
             
         }
@@ -84,7 +83,7 @@ class Account {
             this.reloadConfig();
             window.location.href = "/";
         } catch (e: any) {
-            logger.error(this, ["logout"], e);
+            logger.error(this, "logout", e);
         }
     };
 
@@ -135,7 +134,7 @@ class Account {
                 "userId": userId,
                 "resetToken": resetToken
             }, {
-                headers:{ '__tenant': tenant}
+                headers:{ '__tenant': tenant || ""}
             });
         }catch(e){
             throw e;
@@ -212,7 +211,7 @@ class Account {
     }
 
     protected revocationToken = async () => { 
-        logger.debug(this, ["revocationToken"], "Starting token revocation");
+        logger.debug(this, "revocationToken", "Starting token revocation");
         const revocationEndpoint = await this.userManager!.metadataService.getRevocationEndpoint();
         if(!revocationEndpoint) return;
         const refreshToken = this.user?.refresh_token;

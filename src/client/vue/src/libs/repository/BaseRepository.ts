@@ -1,4 +1,4 @@
-import { BaseClass } from "../BaseClass";
+import { BaseClass } from "../core/BaseClass";
 import { http } from "../http";
 import { isEmpty, Plural, logger, camelCaseToDash, capitalize, isGranted } from "../utils";
 import { RepositoryGlobalConfig } from "./RepositoryGlobalConfig";
